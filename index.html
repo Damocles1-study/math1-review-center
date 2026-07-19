@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>数学一复盘中心</title>
+<style>
+  :root{
+    --bg:#f7f8fa; --card:#ffffff; --ink:#2b2d33; --muted:#7d8390;
+    --accent:#3d5a8a; --accent-soft:#e7edf6; --line:#e2e5ea;
+    --green:#3e7a4e; --green-soft:#e8f2ea;
+    --red:#b04a3a; --red-soft:#f9e9e6;
+    --amber:#a3762a; --amber-soft:#f7efdd;
+    --purple:#6d5a8e; --purple-soft:#eeeaf5;
+    --serif:"Georgia","Songti SC",serif;
+    --sans:-apple-system,"PingFang SC","Helvetica Neue",sans-serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#191b1f; --card:#23262c; --ink:#e6e7ea; --muted:#969ca8;
+      --accent:#8fb0dc; --accent-soft:#2a3240; --line:#363a42;
+      --green:#7fb98d; --green-soft:#26362b;
+      --red:#d98876; --red-soft:#3d2a26;
+      --amber:#d9b06a; --amber-soft:#3d3520;
+      --purple:#a996c8; --purple-soft:#302a3d;
+    }
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.7;padding-bottom:60px}
+  .wrap{max-width:1000px;margin:0 auto;padding:28px 20px}
+  header h1{font-family:var(--serif);font-size:1.8rem}
+  header .sub{color:var(--muted);margin-top:6px;font-size:.92rem}
+  section.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px;margin-top:24px}
+  h2{font-size:1.05rem;letter-spacing:.05em;color:var(--accent);margin-bottom:14px}
+  .stats{display:flex;gap:14px;flex-wrap:wrap;margin-top:14px}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px 18px}
+  .stat .v{font-size:1.4rem;font-weight:700;font-family:var(--serif);color:var(--accent)}
+  .stat .k{font-size:.78rem;color:var(--muted)}
+
+  .decks{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+  .deck{border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:block;text-decoration:none;color:var(--ink);transition:border-color .15s}
+  a.deck:hover{border-color:var(--accent)}
+  .deck h3{font-size:.95rem;margin-bottom:4px}
+  .deck p{font-size:.84rem;color:var(--muted)}
+  .deck .st{font-size:.72rem;border-radius:999px;padding:1px 8px;margin-left:6px;vertical-align:2px}
+  .st-on{background:var(--green-soft);color:var(--green)}
+  .st-off{background:var(--purple-soft);color:var(--purple)}
+  .deck.off{opacity:.6}
+
+  .gridwrap{overflow-x:auto}
+  table{border-collapse:collapse;width:100%;min-width:640px;font-size:.85rem}
+  th,td{border:1px solid var(--line);text-align:center;padding:6px 4px}
+  th{background:var(--accent-soft);color:var(--accent);font-weight:600;font-size:.8rem}
+  td.year{font-family:var(--serif);font-weight:700;background:var(--accent-soft);color:var(--accent)}
+  td .cell{display:block;border-radius:6px;padding:3px 2px;color:var(--muted)}
+  td a.cell{background:var(--green-soft);color:var(--green);font-weight:600;text-decoration:none}
+  td a.cell:hover{filter:brightness(.92)}
+  td span.cell{opacity:.45}
+  td span.lock{background:var(--amber-soft);color:var(--amber);opacity:1;font-weight:600}
+
+  .demo{margin-top:10px;font-size:.9rem}
+  .demo a{color:var(--accent)}
+
+  .how{display:grid;gap:12px}
+  .step{display:flex;gap:12px;align-items:flex-start}
+  .step .num{flex:0 0 26px;height:26px;border-radius:50%;background:var(--accent);color:var(--card);display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700}
+  .step p{font-size:.92rem}
+  .step p b{color:var(--accent)}
+  .note{margin-top:14px;font-size:.85rem;color:var(--muted);background:var(--amber-soft);border-left:3px solid var(--amber);border-radius:0 8px 8px 0;padding:10px 14px}
+  .note b{color:var(--amber)}
+  footer{color:var(--muted);font-size:.8rem;text-align:center;margin-top:34px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>数学一复盘中心</h1>
+    <div class="sub">双轴复盘:轴1 错题页(做完一套生成一页) · 轴2 公式与套路卡库(按专题,随时翻) · 2025/2026 两套留白做冲刺模拟</div>
+    <div class="stats" id="stats"></div>
+  </header>
+
+  <section class="card">
+    <h2>轴2 · 公式与套路卡库(按专题)</h2>
+    <div class="decks" id="decks"></div>
+    <p class="demo">🧪 样板间:先看 <a href="卡库_中值定理与级数判别.html">中值定理家族 + 级数判别法家族</a>,确认卡片形态后再批量铺开其余专题。</p>
+  </section>
+
+  <section class="card">
+    <h2>轴1 · 真题错题页进度(2010–2026)</h2>
+    <div class="gridwrap"><table id="grid"></table></div>
+    <p class="demo">🧪 样板间:<a href="DEMO_错题页样板.html">DEMO · 四层展开错题页</a>(经典题演示,非真题年份,展示错题页全部功能)</p>
+  </section>
+
+  <section class="card">
+    <h2>怎么用(复盘工作流)</h2>
+    <div class="how">
+      <div class="step"><div class="num">1</div><p><b>先自己限时做卷</b>(整卷 3 小时,或按专题刷题),记下每道卡壳/做错的题号和你卡在哪一步。</p></div>
+      <div class="step"><div class="num">2</div><p>告诉 Claude:<b>「生成 XXXX 年错题页,错了第 X、X 题,我卡在…」</b>。真题在本文件夹的 PDF 里,Claude 自己提取。</p></div>
+      <div class="step"><div class="num">3</div><p>Claude 盲做 + 独立写解答(市面解析只作交叉参考),按四层结构生成错题页,并点亮这里的格子。</p></div>
+      <div class="step"><div class="num">4</div><p>隔 1–3 天回到错题页:<b>先别点提示,把题重做一遍</b>;卡住了才逐层点开提示①→提示②→完整解答。</p></div>
+      <div class="step"><div class="num">5</div><p>每道错题勾上错因标签,页首统计条会显示你的失分模式;对应的公式卡库专题跟着翻一遍。</p></div>
+    </div>
+    <div class="note"><b>留白规则:</b>2025、2026 两套真题不做复盘页、不提前看题,留到冲刺期整卷模拟。格子上锁是刻意的。</div>
+  </section>
+
+  <footer>由 Claude 维护 · 解答均为 Claude 盲做后独立撰写,每题自查计算 · 新页面生成后更新 PAGES/DECKS 数据点亮格子</footer>
+</div>
+
+<script>
+/* 错题页:每生成一页,在这里加一行。key = 年份 或 专题名 */
+const PAGES = {
+  /* "2024": {file:"错题_2024.html", tip:"2024 数一错题复盘"} */
+};
+/* 卡库:每建一个专题 deck,在这里加一行 */
+const DECKS = [
+  {name:"中值定理家族 + 级数判别法", file:"卡库_中值定理与级数判别.html", desc:"微分/积分中值定理条件结论对比 · 正项/交错级数判别决策 · 触发器卡", on:true},
+  {name:"极限与无穷小工具箱", desc:"等价无穷小替换边界 · 泰勒展开常用八式 · 洛必达适用条件", on:false},
+  {name:"多元微分与二重积分套路", desc:"可微·偏导·连续关系图 · 换序/换极坐标触发条件", on:false},
+  {name:"曲线曲面积分与场论", desc:"格林/高斯/斯托克斯适用对照 · 补面补线套路", on:false},
+  {name:"线代:秩·方程组·特征值", desc:"秩的不等式家族 · 相似对角化条件链 · 二次型标准化", on:false},
+  {name:"概率:分布·数字特征·两大定理", desc:"常见分布速查 · 卷积/最值分布套路 · 大数定律与中心极限", on:false}
+];
+
+const decksEl=document.getElementById('decks');
+let deckOn=0;
+DECKS.forEach(d=>{
+  if(d.on){deckOn++;decksEl.insertAdjacentHTML('beforeend',
+    `<a class="deck" href="${d.file}"><h3>${d.name}<span class="st st-on">已上线</span></h3><p>${d.desc}</p></a>`)}
+  else{decksEl.insertAdjacentHTML('beforeend',
+    `<div class="deck off"><h3>${d.name}<span class="st st-off">待建</span></h3><p>${d.desc}</p></div>`)}
+});
+
+const YEARS=Array.from({length:17},(_,i)=>2026-i);
+const LOCKED=[2025,2026];
+const grid=document.getElementById('grid');
+let html='<tr><th>年份</th><th>错题复盘页</th></tr>',done=0;
+YEARS.forEach(y=>{
+  html+='<tr><td class="year">'+y+'</td>';
+  if(LOCKED.includes(y)){html+='<td><span class="cell lock">🔒 冲刺模拟留白</span></td>'}
+  else{
+    const p=PAGES[String(y)];
+    if(p){done++;html+='<td><a class="cell" href="'+p.file+'" title="'+(p.tip||'')+'">✓ '+(p.tip||'已生成')+'</a></td>'}
+    else html+='<td><span class="cell">· 待做题后生成</span></td>';
+  }
+  html+='</tr>';
+});
+grid.innerHTML=html;
+document.getElementById('stats').innerHTML=
+  '<div class="stat"><div class="v">'+done+'</div><div class="k">错题页已生成</div></div>'+
+  '<div class="stat"><div class="v">15</div><div class="k">可复盘年份(10–24)</div></div>'+
+  '<div class="stat"><div class="v">'+deckOn+'/'+DECKS.length+'</div><div class="k">卡库专题上线</div></div>';
+</script>
+</body>
+</html>

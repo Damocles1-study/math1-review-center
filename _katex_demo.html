@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>KaTeX 渲染验证</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});document.getElementById('status').textContent='✅ KaTeX 已加载并渲染'"></script>
+<style>body{font-family:-apple-system,"PingFang SC",sans-serif;max-width:700px;margin:40px auto;line-height:2;padding:0 20px}</style>
+</head>
+<body>
+<h2 id="status">⏳ 加载中…(若一直停在这里说明 CDN 不通)</h2>
+<p>行内:设 $f(x)$ 在 $[a,b]$ 连续,$(a,b)$ 可导,则存在 $\xi\in(a,b)$ 使 $f'(\xi)=\dfrac{f(b)-f(a)}{b-a}$。</p>
+<p>展示:</p>
+$$\lim_{n\to\infty}\left(1+\frac{1}{n}\right)^n = e,\qquad \int_0^{+\infty} e^{-x^2}\,dx=\frac{\sqrt{\pi}}{2}$$
+$$\sum_{n=1}^{\infty}\frac{1}{n^p}\ \begin{cases}\text{收敛}, & p>1\\ \text{发散}, & p\le 1\end{cases}
+\qquad
+A=\begin{pmatrix}1&2\\3&4\end{pmatrix},\ |A|=-2$$
+</body>
+</html>
