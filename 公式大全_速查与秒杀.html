@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>公式大全 · 速查与秒杀</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+<style>
+  :root{
+    --bg:#f7f8fa; --card:#ffffff; --ink:#2b2d33; --muted:#7d8390;
+    --accent:#3d5a8a; --accent-soft:#e7edf6; --line:#e2e5ea;
+    --green:#3e7a4e; --green-soft:#e8f2ea;
+    --red:#b04a3a; --red-soft:#f9e9e6;
+    --amber:#a3762a; --amber-soft:#f7efdd;
+    --purple:#6d5a8e; --purple-soft:#eeeaf5;
+    --serif:"Georgia","Songti SC",serif;
+    --sans:-apple-system,"PingFang SC","Helvetica Neue",sans-serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#191b1f; --card:#23262c; --ink:#e6e7ea; --muted:#969ca8;
+      --accent:#8fb0dc; --accent-soft:#2a3240; --line:#363a42;
+      --green:#7fb98d; --green-soft:#26362b;
+      --red:#d98876; --red-soft:#3d2a26;
+      --amber:#d9b06a; --amber-soft:#3d3520;
+      --purple:#a996c8; --purple-soft:#302a3d;
+    }
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.75;padding-bottom:80px}
+  .wrap{max-width:1000px;margin:0 auto;padding:24px 20px}
+  .back{font-size:.85rem;color:var(--muted);text-decoration:none}
+  .back:hover{color:var(--accent)}
+  header{margin:14px 0 20px}
+  header h1{font-family:var(--serif);font-size:1.6rem;line-height:1.35}
+  header .sub{color:var(--muted);margin-top:6px;font-size:.9rem}
+  .toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:18px;position:sticky;top:0;background:var(--bg);padding:10px 0;z-index:10}
+  .fbtn{font-size:.8rem;border:1px solid var(--line);background:var(--card);color:var(--muted);border-radius:999px;padding:4px 14px;cursor:pointer}
+  .fbtn.on{background:var(--accent);color:var(--card);border-color:var(--accent)}
+  .allbtn{margin-left:auto;font-size:.78rem;border:1px solid var(--accent);background:none;color:var(--accent);border-radius:8px;padding:4px 12px;cursor:pointer}
+  .cardk{background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:12px;overflow:hidden}
+  .cardk.kill{border-left:4px solid var(--red)}
+  .chead{padding:13px 18px;cursor:pointer;display:flex;align-items:center;gap:10px;user-select:none}
+  .chead:hover{background:var(--accent-soft)}
+  .chead .name{font-weight:650;font-size:.98rem}
+  .badge{font-size:.7rem;padding:1px 8px;border-radius:999px;white-space:nowrap}
+  .b-must{background:var(--accent-soft);color:var(--accent)}
+  .b-adv{background:var(--purple-soft);color:var(--purple)}
+  .b-kill{background:var(--red-soft);color:var(--red)}
+  .arrow{color:var(--muted);font-size:.75rem;transition:transform .2s}
+  .cardk.open .arrow{transform:rotate(90deg)}
+  .cbody{display:none;padding:4px 18px 16px;border-top:1px dashed var(--line)}
+  .cardk.open .cbody{display:block}
+  .row{margin-top:10px;font-size:.9rem;padding:9px 12px;border-radius:8px}
+  .row b{font-size:.72rem;display:block;margin-bottom:3px;letter-spacing:.08em}
+  .r-f{background:var(--accent-soft)} .r-f b{color:var(--accent)}
+  .r-intu{background:var(--green-soft)} .r-intu b{color:var(--green)}
+  .r-warn{background:var(--red-soft)} .r-warn b{color:var(--red)}
+  .cbody table{border-collapse:collapse;width:100%;font-size:.88rem;margin-top:10px}
+  .cbody th,.cbody td{border:1px solid var(--line);padding:6px 10px;text-align:left;vertical-align:top}
+  .cbody th{background:var(--accent-soft);color:var(--accent);font-weight:600;white-space:nowrap}
+  .tblwrap{overflow-x:auto}
+  .usage{font-size:.83rem;color:var(--muted);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin-bottom:18px}
+  .usage b{color:var(--accent)}
+  footer{color:var(--muted);font-size:.8rem;text-align:center;margin-top:30px}
+  .katex{font-size:1.02em}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="index.html">◀ 返回数学复盘中心</a>
+  <header>
+    <h1>公式大全 · 速查与秒杀</h1>
+    <div class="sub">14 张速查卡 · 三档标签:「必会」=考场上不许现推 ·「提升」=强化期补上 ·「秒杀」=选择填空的快枪 · 一切以做题为准,不深究理论</div>
+  </header>
+
+  <div class="usage"><b>用法:</b>学习期学到哪章翻哪张;考前两周把「必会」档从头默一遍。与卡库分工:卡库管「什么时候用、怎么不踩坑」,这里管「公式本体一秒查到」。</div>
+
+  <div class="toolbar">
+    <button class="fbtn on" data-f="all">全部</button>
+    <button class="fbtn" data-f="gs">高数</button>
+    <button class="fbtn" data-f="xd">线代</button>
+    <button class="fbtn" data-f="gl">概率</button>
+    <button class="fbtn" data-f="kill">秒杀专区</button>
+    <button class="allbtn" onclick="toggleAll()">全部展开 / 收起</button>
+  </div>
+
+  <div class="cardk" data-g="gs">
+    <div class="chead"><span class="badge b-must">必会</span><span class="name">导数表 + 高阶导数三件套</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-f"><b>基本导数(易忘的几个)</b>$$(\tan x)'=\sec^2x\quad(\cot x)'=-\csc^2x\quad(\sec x)'=\sec x\tan x$$$$(\arcsin x)'=\frac{1}{\sqrt{1-x^2}}\quad(\arctan x)'=\frac{1}{1+x^2}\quad(\ln|x|)'=\frac1x\quad(a^x)'=a^x\ln a$$</div>
+      <div class="row r-f"><b>高阶导数三件套</b>$$(e^{ax})^{(n)}=a^ne^{ax}\qquad(\sin ax)^{(n)}=a^n\sin\!\Big(ax+\frac{n\pi}2\Big)\qquad\Big(\frac{1}{x+a}\Big)^{(n)}=\frac{(-1)^n\,n!}{(x+a)^{n+1}}$$莱布尼茨公式:$(uv)^{(n)}=\sum_{k=0}^n C_n^k u^{(k)}v^{(n-k)}$($v$ 取多项式时只剩两三项)。</div>
+      <div class="row r-intu"><b>形象记法</b>正弦每求一次导=「相位快跑 $\frac\pi2$」;$\frac1{x+a}$ 求 $n$ 次导=「负号、阶乘、次数各涨一级」。求 $f^{(n)}(0)$ 的隐藏出口:写出麦克劳林级数,系数 $a_n=\frac{f^{(n)}(0)}{n!}$ 反解——比硬求导快得多。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="gs">
+    <div class="chead"><span class="badge b-must">必会</span><span class="name">积分表:基本款 + 六个「查表级」结论</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-f"><b>易忘基本款</b>$$\int\tan x\,dx=-\ln|\cos x|+C\qquad\int\sec x\,dx=\ln|\sec x+\tan x|+C$$$$\int\frac{dx}{x^2+a^2}=\frac1a\arctan\frac xa+C\qquad\int\frac{dx}{x^2-a^2}=\frac1{2a}\ln\Big|\frac{x-a}{x+a}\Big|+C$$</div>
+      <div class="row r-f"><b>根号三兄弟</b>$$\int\frac{dx}{\sqrt{a^2-x^2}}=\arcsin\frac xa+C\qquad\int\frac{dx}{\sqrt{x^2\pm a^2}}=\ln\big|x+\sqrt{x^2\pm a^2}\big|+C$$$$\int\sqrt{a^2-x^2}\,dx=\frac x2\sqrt{a^2-x^2}+\frac{a^2}2\arcsin\frac xa+C$$</div>
+      <div class="row r-intu"><b>形象记法</b>见 $\sqrt{a^2-x^2}$ 想「圆」(三角代换 $x=a\sin t$ 或直接几何面积);见 $\sqrt{x^2\pm a^2}$ 想「对数」。分部积分选 $u$ 的口诀「反对幂指三」——排在前面的当 $u$(留下),排在后面的进 $dv$(消掉)。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="gs">
+    <div class="chead"><span class="badge b-must">必会</span><span class="name">三角恒等式:考研用得上的那几条</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-f"><b>降幂(积分最常用)</b>$$\sin^2x=\frac{1-\cos2x}{2}\qquad\cos^2x=\frac{1+\cos2x}{2}\qquad\sin x\cos x=\frac{\sin2x}2$$</div>
+      <div class="row r-f"><b>倍角 / 和差</b>$$\cos2x=1-2\sin^2x=2\cos^2x-1\qquad 1+\cos x=2\cos^2\frac x2\qquad 1-\cos x=2\sin^2\frac x2$$$$\sin(A\pm B)=\sin A\cos B\pm\cos A\sin B\qquad\cos(A\pm B)=\cos A\cos B\mp\sin A\sin B$$</div>
+      <div class="row r-intu"><b>使用场景</b>积分里见平方就降幂;见 $1\pm\cos$ 就半角(去根号神器:$\sqrt{1+\cos x}=\sqrt2\,|\cos\frac x2|$);积化和差只在 $\int\sin ax\cos bx$ 型用一次,现场推即可不必硬背。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="gs">
+    <div class="chead"><span class="badge b-must">必会</span><span class="name">常用不等式(证明题的螺丝刀)</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-f"><b>结论</b>$$e^x\ge1+x\qquad \frac{x}{1+x}\le\ln(1+x)\le x\;(x\gt-1)\qquad \sin x\lt x\lt\tan x\;\Big(0\lt x\lt\frac\pi2\Big)$$$$\sqrt{ab}\le\frac{a+b}2\le\sqrt{\frac{a^2+b^2}2}\;(a,b\ge0)\qquad |ab|\le\frac{a^2+b^2}2\qquad (a+b)^2\le2(a^2+b^2)$$柯西不等式:$\Big(\int fg\Big)^2\le\int f^2\cdot\int g^2$。</div>
+      <div class="row r-intu"><b>形象记法</b>前三条全是「切线压弯线」:$e^x$ 的切线 $1+x$ 在下方、$\ln(1+x)$ 的切线 $x$ 在上方——画一次图这辈子不忘。证明不等式第一反应:构造 $F=$ 左 $-$ 右,求导定单调;第二反应:拉格朗日/泰勒。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="gs">
+    <div class="chead"><span class="badge b-must">必会</span><span class="name">微分方程解法速查表(数一全考点)</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="tblwrap"><table>
+        <tr><th>类型</th><th>长相</th><th>解法</th></tr>
+        <tr><td>可分离</td><td>$y'=f(x)g(y)$</td><td>分离后两边积分</td></tr>
+        <tr><td>齐次</td><td>$y'=\varphi(\frac yx)$</td><td>令 $u=\frac yx$,化可分离</td></tr>
+        <tr><td>一阶线性</td><td>$y'+P(x)y=Q(x)$</td><td>$y=e^{-\int P}\Big(\int Qe^{\int P}dx+C\Big)$(背死)</td></tr>
+        <tr><td>伯努利</td><td>$y'+Py=Qy^n$</td><td>令 $z=y^{1-n}$,化一阶线性</td></tr>
+        <tr><td>可降阶</td><td>$y''=f(x,y')$ 缺 $y$ / $y''=f(y,y')$ 缺 $x$</td><td>令 $p=y'$;缺 $x$ 时 $y''=p\frac{dp}{dy}$</td></tr>
+        <tr><td>二阶常系数齐次</td><td>$y''+py'+qy=0$</td><td>特征根:异实根 $C_1e^{r_1x}+C_2e^{r_2x}$;重根 $(C_1+C_2x)e^{rx}$;复根 $\alpha\pm\beta i$:$e^{\alpha x}(C_1\cos\beta x+C_2\sin\beta x)$</td></tr>
+        <tr><td>二阶非齐次特解</td><td>$f=P_m(x)e^{\lambda x}$</td><td>设 $y^*=x^k Q_m(x)e^{\lambda x}$,$k=\lambda$ 作为特征根的重数(0/1/2)</td></tr>
+        <tr><td></td><td>$f=e^{\lambda x}(A\cos\omega x+B\sin\omega x)$</td><td>设 $y^*=x^ke^{\lambda x}(a\cos\omega x+b\sin\omega x)$,$k$ 看 $\lambda\pm\omega i$ 是否特征根(0/1)</td></tr>
+        <tr><td>欧拉方程(数一)</td><td>$x^2y''+pxy'+qy=f$</td><td>令 $x=e^t$ 化常系数</td></tr>
+      </table></div>
+      <div class="row r-warn"><b>易错</b>特解设法里 $Q_m$ 是<b style="display:inline">完整 $m$ 次多项式</b>(系数全设,不能只设最高次);通解=齐次通解+特解,少一半丢一半分;由通解反求方程(近年爱考)→ 从解的形态反推特征根。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="gs">
+    <div class="chead"><span class="badge b-adv">提升</span><span class="name">多元与空间:梯度锤子 + 三重积分两法 + 空间解析几何最小包</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-f"><b>曲面切平面 / 曲线切线</b>曲面 $F(x,y,z)=0$ 在点 $P_0$ 的法向量 $=\nabla F(P_0)$;曲线 $\{x(t),y(t),z(t)\}$ 切向量 $=(x',y',z')$;交线切向量 $=\nabla F\times\nabla G$。一把梯度锤子敲所有「切/法」题。</div>
+      <div class="row r-f"><b>三重积分</b>先一后二(投影穿线):$\iiint=\iint_{D_{xy}}dxdy\int_{z_1}^{z_2}f\,dz$;先二后一(切片,$f$ 只含 $z$ 时首选):$\int_c^d dz\iint_{D_z}f\,dxdy=\int f(z)\cdot S(D_z)\,dz$。球坐标:$dV=r^2\sin\varphi\,dr\,d\varphi\,d\theta$($\varphi$ 从 $z$ 轴量起,$0$ 到 $\pi$)。</div>
+      <div class="row r-f"><b>平面与直线最小包</b>平面 $Ax+By+Cz+D=0$ 法向量 $(A,B,C)$;点到平面距离 $\frac{|Ax_0+By_0+Cz_0+D|}{\sqrt{A^2+B^2+C^2}}$;两向量夹角用点积,面积用叉积模。</div>
+      <div class="row r-intu"><b>形象记法</b>先二后一=「切萝卜片,每片面积好算就赢」——旋转体、球、椭球用它是降维打击。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="gs">
+    <div class="chead"><span class="badge b-adv">提升</span><span class="name">级数求和出口表(和函数题的终点站)</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-f"><b>五个终点站($|x|\lt1$)</b>$$\sum_{n=0}^{\infty}x^n=\frac1{1-x}\qquad\sum_{n=1}^{\infty}nx^{n-1}=\frac1{(1-x)^2}\qquad\sum_{n=1}^{\infty}\frac{x^n}{n}=-\ln(1-x)$$$$\sum_{n=0}^{\infty}\frac{x^n}{n!}=e^x\qquad\sum_{n=0}^{\infty}(-1)^n\frac{x^{2n+1}}{2n+1}=\arctan x$$</div>
+      <div class="row r-f"><b>数项级数常用值</b>$$\sum_{n=1}^{\infty}\frac{(-1)^{n-1}}{n}=\ln2\qquad\sum_{n=1}^{\infty}\frac1{n(n+1)}=1\qquad\sum_{n=1}^{\infty}\frac{1}{n^2}=\frac{\pi^2}{6}\text{(验算用)}\qquad\sum_{n=0}^{\infty}\frac1{n!}=e$$</div>
+      <div class="row r-intu"><b>用法</b>一切和函数题都是把通项「导/积/拆」到上面五站之一;数项级数求和 $\sum\frac n{2^n}$ 型 → 构造 $S(x)$ 代 $x=\frac12$(答案 2)。傅里叶(数一):狄利克雷收敛定理——间断点收敛到左右极限平均值,这是每年小题的唯一考点。</div>
+    </div>
+  </div>
+
+  <div class="cardk kill" data-g="gs kill">
+    <div class="chead"><span class="badge b-kill">秒杀</span><span class="name">定积分秒杀四件套(华里士 · 区间再现 · 对称 · 周期)</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-f"><b>华里士(点火)公式</b>$$\int_0^{\pi/2}\sin^nx\,dx=\int_0^{\pi/2}\cos^nx\,dx=\frac{(n-1)!!}{n!!}\times\begin{cases}\frac\pi2,&n\text{ 偶}\\1,&n\text{ 奇}\end{cases}$$</div>
+      <div class="row r-f"><b>区间再现</b>$$\int_a^bf(x)\,dx=\int_a^bf(a+b-x)\,dx\ \xrightarrow{\text{相加}}\ 2I=\int_a^b[f(x)+f(a+b-x)]dx$$王牌应用:$\int_0^\pi xf(\sin x)dx=\frac\pi2\int_0^\pi f(\sin x)dx$;$\int_0^{\pi/2}\frac{\sin x}{\sin x+\cos x}dx=\frac\pi4$。</div>
+      <div class="row r-f"><b>对称与周期</b>对称区间先拆奇偶(奇部归零);$\int_0^{2\pi}$ 的三角函数积分想「一个周期正负抵消」;$\int_a^{a+T}f=\int_0^Tf$(与起点无关)。广义积分特供:$\int_0^{+\infty}e^{-x^2}dx=\frac{\sqrt\pi}2$,$\int_0^{+\infty}x^ne^{-x}dx=n!$。</div>
+      <div class="row r-intu"><b>形象记法</b>区间再现=「把 $x$ 换成关于区间中点的镜像,积分不变」——被积函数不对称但区间对称时,镜像相加往往把丑东西消掉。</div>
+    </div>
+  </div>
+
+  <div class="cardk kill" data-g="gs kill">
+    <div class="chead"><span class="badge b-kill">秒杀</span><span class="name">几何量直接报数(定积分应用免算)</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-f"><b>结论</b>椭圆 $\frac{x^2}{a^2}+\frac{y^2}{b^2}=1$ 面积 $=\pi ab$;摆线一拱($x=a(t-\sin t),y=a(1-\cos t)$)下方面积 $=3\pi a^2$,弧长 $=8a$;心形线 $r=a(1+\cos\theta)$ 面积 $=\frac{3\pi a^2}2$,全长 $=8a$;双纽线 $r^2=a^2\cos2\theta$ 面积 $=a^2$。</div>
+      <div class="row r-f"><b>常用公式本体</b>极坐标面积 $S=\frac12\int r^2(\theta)d\theta$;弧长 $\int\sqrt{1+y'^2}\,dx$ 或 $\int\sqrt{r^2+r'^2}\,d\theta$;旋转体 $V_x=\pi\int y^2dx$,绕 $y$ 轴柱壳法 $V_y=2\pi\int xy\,dx$;旋转曲面侧面积 $S=2\pi\int y\sqrt{1+y'^2}\,dx$。</div>
+      <div class="row r-warn"><b>易错</b>柱壳法 $2\pi\int xy\,dx$ 要求 $x\ge0$、$y\ge0$ 那一块;极坐标面积别丢 $\frac12$;这些「报数结论」在大题里要写过程,只在小题直接用。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="xd">
+    <div class="chead"><span class="badge b-must">必会</span><span class="name">线代计算速查:行列式套路 + 逆矩阵 + 分块</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-f"><b>行列式四板斧</b>① 造零展开(某行只剩一两个非零元);② 爪型/三对角 → 逐行消成三角;③ 各行和相等 → 全加到第一列提公因子;④ 范德蒙德:$\prod_{1\le i\lt j\le n}(x_j-x_i)$。附:$|kA|=k^n|A|$,$|AB|=|A||B|$,$|A^T|=|A|$,$|A^{-1}|=|A|^{-1}$,$|A^*|=|A|^{n-1}$。</div>
+      <div class="row r-f"><b>二阶逆矩阵口诀</b>$$\begin{pmatrix}a&b\\c&d\end{pmatrix}^{-1}=\frac1{ad-bc}\begin{pmatrix}d&-b\\-c&a\end{pmatrix}\quad\text{「主对调,副变号」}$$</div>
+      <div class="row r-f"><b>分块对角</b>$$\begin{pmatrix}A&O\\O&B\end{pmatrix}^{-1}=\begin{pmatrix}A^{-1}&O\\O&B^{-1}\end{pmatrix}\qquad\begin{pmatrix}O&A\\B&O\end{pmatrix}^{-1}=\begin{pmatrix}O&B^{-1}\\A^{-1}&O\end{pmatrix}\text{(副对角:先换位再各自逆)}$$$\Big|\begin{smallmatrix}O&A_{m}\\B_{n}&O\end{smallmatrix}\Big|=(-1)^{mn}|A||B|$。</div>
+      <div class="row r-warn"><b>易错</b>$|A+B|\ne|A|+|B|$(没有这种公式!);求逆优先初等行变换 $(A|E)\to(E|A^{-1})$,伴随法只用于二阶。</div>
+    </div>
+  </div>
+
+  <div class="cardk kill" data-g="xd kill">
+    <div class="chead"><span class="badge b-kill">秒杀</span><span class="name">线代二级结论包(秩1矩阵是头号明星)</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-f"><b>秩 1 矩阵 $A=\alpha\beta^T$</b>$$\text{tr}A=\beta^T\alpha\qquad A^n=(\beta^T\alpha)^{n-1}A\qquad\text{特征值}=\underbrace{\beta^T\alpha}_{\text{即 tr}},0,\dots,0$$求 $A^{100}$ 见到秩 1 → 一步写答案;它可对角化 $\iff\text{tr}A\ne0$。</div>
+      <div class="row r-f"><b>其他快枪</b>$A^2=A$(幂等)→ 特征值 $\in\{0,1\}$,$r(A)+r(A-E)=n$,必可对角化;$A^2=E$(对合)→ 特征值 $\pm1$,$r(A+E)+r(A-E)=n$,必可对角化;$A^k=O$(幂零)→ 特征值全 0,$A+E$ 与 $E-A$ 都可逆,且 $A$ 不可对角化(除非 $A=O$);正交阵 → 特征值模长 1,实特征值 $\pm1$,$|A|=\pm1$。</div>
+      <div class="row r-intu"><b>形象记法</b>「$f(A)=O$ ⇒ 特征值是 $f$ 的根」是这一包的总开关,四条快枪全是它的特例。$r(A)+r(A-E)=n$ 型结论来自「两个零化因子把空间劈成两半」。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="gl">
+    <div class="chead"><span class="badge b-must">必会</span><span class="name">概率公式底座:古典三件套 + 期望方差运算律</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-f"><b>事件概率</b>加法 $P(A\cup B)=P(A)+P(B)-P(AB)$;条件 $P(A|B)=\frac{P(AB)}{P(B)}$;全概率 $P(B)=\sum P(A_i)P(B|A_i)$;贝叶斯=全概率的倒装(「由果找因」);独立 $\iff P(AB)=P(A)P(B)$。</div>
+      <div class="row r-f"><b>运算律</b>$$E(aX+bY)=aEX+bEY\text{(无条件成立)}\qquad D(aX+b)=a^2DX$$$$D(X\pm Y)=DX+DY\pm2\text{Cov}(X,Y)\qquad D(X)=E(X^2)-(EX)^2$$</div>
+      <div class="row r-f"><b>期望的懒人公式</b>$E[g(X)]=\int g(x)f(x)dx$、$E[g(X,Y)]=\iint g\,f(x,y)\,dxdy$——不必先求 $g(X)$ 的分布,直接积。</div>
+      <div class="row r-warn"><b>易错</b>$E(XY)=EX\,EY$ 要独立(或不相关);$D$ 没有线性性($D(X+Y)\ne DX+DY$ 除非不相关);$P(A|B)$ 与 $P(B|A)$ 别互换——贝叶斯就是干这个换算的。</div>
+    </div>
+  </div>
+
+  <div class="cardk kill" data-g="gl kill">
+    <div class="chead"><span class="badge b-kill">秒杀</span><span class="name">概率快枪:正态积分 · Γ 函数 · 常用期望技巧</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-f"><b>正态积分直接报数</b>$$\int_{-\infty}^{+\infty}e^{-\frac{(x-\mu)^2}{2\sigma^2}}dx=\sqrt{2\pi}\,\sigma\qquad\text{(密度归一化反着用,算 }\int e^{-ax^2}\text{ 型全靠它)}$$见 $\int x\cdot(\text{正态密度})$ → 那就是 $EX=\mu$;见 $\int x^2\cdot(\text{正态密度})$ → $E(X^2)=\mu^2+\sigma^2$。<b style="display:inline">把积分「认成期望」是概率最大的偷懒通道。</b></div>
+      <div class="row r-f"><b>Γ 函数</b>$$\Gamma(s)=\int_0^{+\infty}x^{s-1}e^{-x}dx,\quad\Gamma(n)=(n-1)!,\quad\Gamma(s+1)=s\Gamma(s),\quad\Gamma\Big(\frac12\Big)=\sqrt\pi$$指数分布的各阶矩:$X\sim E(\lambda)$ 则 $E(X^n)=\frac{n!}{\lambda^n}$。</div>
+      <div class="row r-f"><b>示性函数拆期望</b>「$n$ 个人/次中满足某条件的个数」的期望 → 拆成 $\sum$ 示性变量,$E=\sum p_i$,<b style="display:inline">不管独不独立都成立</b>——配对问题、空盒问题一步出答案。</div>
+    </div>
+  </div>
+
+  <div class="cardk kill" data-g="kill">
+    <div class="chead"><span class="badge b-kill">秒杀</span><span class="name">选择题通用战术(不分科)</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-f"><b>五板斧</b>① <b style="display:inline">特值/特函数</b>:抽象函数命题给 $f=x^2$、$f=e^x$、$f=0$ 试,矩阵命题给对角阵/单位阵试,一个反例杀三个选项;② <b style="display:inline">数值代入</b>:极限题代 $x=0.1$ 按计算器思维心算量级;③ <b style="display:inline">量纲/阶数检验</b>:答案的量纲、$n$ 的次数、$\pi$ 的有无对不上直接排除;④ <b style="display:inline">边界/单调检验</b>:概率必在 $[0,1]$、分布函数单调右连续、方差非负;⑤ <b style="display:inline">对称性检验</b>:题目对 $x,y$ 对称则答案也应对称。</div>
+      <div class="row r-intu"><b>使用纪律</b>战术是「验证器」不是「生成器」:先有候选答案再用它杀选项,20 秒内杀不掉就老实算。整卷时间管理:选择题单题超 5 分钟先标记跳过——这些技巧的真正价值是保住整卷节奏。</div>
+      <div class="row r-warn"><b>警告</b>特值法对「充要性」判断只能证伪不能证真——特值全过≠命题成立,只是没被杀掉。大题严禁只写结论,秒杀结论当草稿验算用。</div>
+    </div>
+  </div>
+
+  <footer>公式大全 · 速查与秒杀 · 14 张 · 由 Claude 编写并自查 · 与卡库/知识串联页配套使用</footer>
+</div>
+
+<script>
+document.querySelectorAll('.chead').forEach(h=>h.addEventListener('click',()=>{
+  h.parentElement.classList.toggle('open');
+}));
+let allOpen=false;
+function toggleAll(){
+  allOpen=!allOpen;
+  document.querySelectorAll('.cardk').forEach(c=>{
+    if(c.style.display!=='none')c.classList.toggle('open',allOpen);
+  });
+}
+document.querySelectorAll('.fbtn').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.fbtn').forEach(x=>x.classList.remove('on'));b.classList.add('on');
+  const f=b.dataset.f;
+  document.querySelectorAll('.cardk').forEach(c=>{
+    c.style.display=(f==='all'||(c.dataset.g||'').split(' ').includes(f))?'':'none';
+  });
+}));
+</script>
+</body>
+</html>

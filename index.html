@@ -82,11 +82,35 @@
   <section class="card">
     <h2>轴2 · 公式与套路卡库(按专题)</h2>
     <div class="decks" id="decks"></div>
-    <p class="demo">✅ 六个专题全部上线(共 108 张卡)。各卡「真题出处」随错题页生成逐步反链回填。</p>
+    <p class="demo">✅ 六个专题全部上线(共 108 张卡)。各卡「真题出处」随错题页生成逐步反链回填。每个卡库页内有「🎲 抽 5 张自测」按钮,或直接点 <a href="#" id="drawBtn">今日抽卡(随机专题)</a>。</p>
   </section>
 
   <section class="card">
-    <h2>轴1 · 真题错题页进度(2010–2026)</h2>
+    <h2>学习期导航(学到哪章,用哪些工具)</h2>
+    <div class="decks" style="margin-bottom:14px">
+      <a class="deck" href="公式大全_速查与秒杀.html"><h3>📖 公式大全 · 速查与秒杀<span class="st st-on">已上线</span></h3><p>必会/提升/秒杀三档 · 导数积分表 · 微分方程速查 · 华里士/区间再现 · 线代二级结论 · 选择题五板斧</p></a>
+      <a class="deck" href="知识串联_考纲主线.html"><h3>🗺️ 知识串联 · 考纲主线<span class="st st-on">已上线</span></h3><p>三科主线图+跨章枢纽 · 一物多面表(同一概念的马甲们) · 考纲覆盖对照(含诚实缺口)</p></a>
+    </div>
+    <div class="gridwrap"><table>
+      <tr><th>你正在学的章节</th><th>配套动作(学完当天过一遍)</th></tr>
+      <tr><td>极限与连续</td><td><a href="卡库_极限与无穷小工具箱.html">极限工具箱</a> 全部 + 公式页「不等式」</td></tr>
+      <tr><td>一元微分(含中值定理)</td><td>公式页「导数表」;学到中值定理 → <a href="卡库_中值定理与级数判别.html">中值定理家族</a></td></tr>
+      <tr><td>一元积分</td><td>公式页「积分表」「三角」「定积分秒杀」「几何量报数」</td></tr>
+      <tr><td>多元微分 / 二重积分</td><td><a href="卡库_多元微分与二重积分.html">多元与二重积分</a> 对应半区 + 公式页「多元与空间」</td></tr>
+      <tr><td>微分方程</td><td>公式页「微分方程速查表」(背表即可,暂不设卡)</td></tr>
+      <tr><td>无穷级数</td><td><a href="卡库_中值定理与级数判别.html">级数判别家族</a> + 公式页「级数求和出口」</td></tr>
+      <tr><td>曲线曲面积分(数一)</td><td><a href="卡库_曲线曲面积分与场论.html">场论专题</a>(先背四类总览和决策树)</td></tr>
+      <tr><td>线代(跟 9 讲全程)</td><td><a href="卡库_线代秩方程组特征值.html">线代专题</a> 按节推进 + 公式页「行列式套路」「二级结论」</td></tr>
+      <tr><td>概率(跟 9 讲全程)</td><td><a href="卡库_概率分布与两大定理.html">概率专题</a> 按节推进 + 公式页「概率底座」「快枪」</td></tr>
+      <tr><td>任何章节学完</td><td><a href="知识串联_考纲主线.html">串联页</a>看一眼「自己在地图哪一格」+ 该章触发器卡当自测</td></tr>
+    </table></div>
+  </section>
+
+  <section class="card">
+    <h2>轴1 · 错题页(真题 + 刷题,同一套四层结构)</h2>
+    <p class="demo" style="margin:0 0 10px">📝 <b>刷题错题页(学习期主力)</b>:1000 题/王道/讲义例题的错题同样值得四层复盘,而且比真题更便宜——学习期错题暴露的是概念漏洞。做完一章报「书名+章节+错题号+卡在哪」,生成一页,列表如下:</p>
+    <div class="decks" id="topicPages" style="margin-bottom:16px"></div>
+    <p class="demo" style="margin:0 0 10px"><b>真题错题页进度(2010–2026)</b>:</p>
     <div class="gridwrap"><table id="grid"></table></div>
     <p class="demo">🧪 样板间:<a href="DEMO_错题页样板.html">DEMO · 四层展开错题页</a>(经典题演示,非真题年份,展示错题页全部功能)</p>
   </section>
@@ -94,8 +118,8 @@
   <section class="card">
     <h2>怎么用(复盘工作流)</h2>
     <div class="how">
-      <div class="step"><div class="num">1</div><p><b>先自己限时做卷</b>(整卷 3 小时,或按专题刷题),记下每道卡壳/做错的题号和你卡在哪一步。</p></div>
-      <div class="step"><div class="num">2</div><p>告诉 Claude:<b>「生成 XXXX 年错题页,错了第 X、X 题,我卡在…」</b>。真题在本文件夹的 PDF 里,Claude 自己提取。</p></div>
+      <div class="step"><div class="num">1</div><p><b>学习期日常</b>:学到哪章 → 按「学习期导航」表过对应卡库/公式页;刷 1000 题记下错题号。<b>冲刺期</b>:限时做整卷真题。</p></div>
+      <div class="step"><div class="num">2</div><p>告诉 Claude:<b>「1000题第X章错了第X、X题,我卡在…」或「生成XXXX年错题页,错了…」</b>。题目在本文件夹 PDF 里,Claude 自己提取。</p></div>
       <div class="step"><div class="num">3</div><p>Claude 盲做 + 独立写解答(市面解析只作交叉参考),按四层结构生成错题页,并点亮这里的格子。</p></div>
       <div class="step"><div class="num">4</div><p>隔 1–3 天回到错题页:<b>先别点提示,把题重做一遍</b>;卡住了才逐层点开提示①→提示②→完整解答。</p></div>
       <div class="step"><div class="num">5</div><p>每道错题勾上错因标签,页首统计条会显示你的失分模式;对应的公式卡库专题跟着翻一遍。</p></div>
@@ -107,10 +131,14 @@
 </div>
 
 <script>
-/* 错题页:每生成一页,在这里加一行。key = 年份 或 专题名 */
+/* 真题错题页:每生成一页,在这里加一行。key = 年份 */
 const PAGES = {
   /* "2024": {file:"错题_2024.html", tip:"2024 数一错题复盘"} */
 };
+/* 刷题错题页(学习期):每生成一页加一行 */
+const TOPIC_PAGES = [
+  /* {name:"1000题·极限 第一章", file:"刷题错题_1000题_极限.html", desc:"错7题·主因:等价替换边界"} */
+];
 /* 卡库:每建一个专题 deck,在这里加一行 */
 const DECKS = [
   {name:"中值定理家族 + 级数判别法", file:"卡库_中值定理与级数判别.html", desc:"微分/积分中值定理条件结论对比 · 正项/交错级数判别决策 · 触发器卡", on:true},
@@ -130,6 +158,21 @@ DECKS.forEach(d=>{
     `<div class="deck off"><h3>${d.name}<span class="st st-off">待建</span></h3><p>${d.desc}</p></div>`)}
 });
 
+const tp=document.getElementById('topicPages');
+if(TOPIC_PAGES.length===0){
+  tp.innerHTML='<div class="deck off"><h3>还没有刷题错题页<span class="st st-off">等你报错题</span></h3><p>做完一章 1000 题 → 告诉 Claude 错题号 → 这里长出第一页</p></div>';
+}else{
+  TOPIC_PAGES.forEach(t=>tp.insertAdjacentHTML('beforeend',
+    `<a class="deck" href="${t.file}"><h3>${t.name}<span class="st st-on">已生成</span></h3><p>${t.desc||''}</p></a>`));
+}
+
+document.getElementById('drawBtn').addEventListener('click',e=>{
+  e.preventDefault();
+  const on=DECKS.filter(d=>d.on);
+  const pick=on[Math.floor(Math.random()*on.length)];
+  location.href=pick.file+'?draw=5';
+});
+
 const YEARS=Array.from({length:17},(_,i)=>2026-i);
 const LOCKED=[2025,2026];
 const grid=document.getElementById('grid');
@@ -146,7 +189,7 @@ YEARS.forEach(y=>{
 });
 grid.innerHTML=html;
 document.getElementById('stats').innerHTML=
-  '<div class="stat"><div class="v">'+done+'</div><div class="k">错题页已生成</div></div>'+
+  '<div class="stat"><div class="v">'+(done+TOPIC_PAGES.length)+'</div><div class="k">错题页已生成(真题+刷题)</div></div>'+
   '<div class="stat"><div class="v">15</div><div class="k">可复盘年份(10–24)</div></div>'+
   '<div class="stat"><div class="v">'+deckOn+'/'+DECKS.length+'</div><div class="k">卡库专题上线</div></div>';
 </script>

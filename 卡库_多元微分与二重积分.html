@@ -92,7 +92,8 @@
     <button class="fbtn" data-f="int">二重积分</button>
     <button class="fbtn" data-f="trig">触发器卡</button>
     <button class="fbtn" data-f="table">对比总表</button>
-    <button class="allbtn" onclick="toggleAll()">全部展开 / 收起</button>
+    <button class="allbtn" style="margin-left:auto" onclick="drawCards(5)" title="随机抽5张,点「全部」恢复">🎲 抽 5 张自测</button>
+    <button class="allbtn" style="margin-left:0" onclick="toggleAll()">全部展开 / 收起</button>
   </div>
 
   <h2 class="sect" data-g="diff"><span class="n">01</span>多元微分<span class="cnt">家族卡 5 + 触发器 3</span></h2>
@@ -270,6 +271,15 @@ function toggleAll(){
     if(c.style.display!=='none')c.classList.toggle('open',allOpen);
   });
 }
+function drawCards(n){
+  const cards=[...document.querySelectorAll('.cardk')];
+  const idx=cards.map((c,i)=>i).sort(()=>Math.random()-0.5).slice(0,n);
+  cards.forEach((c,i)=>{c.style.display=idx.includes(i)?'':'none';c.classList.remove('open')});
+  document.querySelectorAll('h2.sect').forEach(s=>s.style.display='none');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+const _draw=new URLSearchParams(location.search).get('draw');
+if(_draw)window.addEventListener('DOMContentLoaded',()=>drawCards(parseInt(_draw)||5));
 document.querySelectorAll('.fbtn').forEach(b=>b.addEventListener('click',()=>{
   document.querySelectorAll('.fbtn').forEach(x=>x.classList.remove('on'));b.classList.add('on');
   const f=b.dataset.f;

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>知识串联 · 考纲主线与跨章连接</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+<script type="module">
+import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+mermaid.initialize({startOnLoad:true, theme:'neutral', flowchart:{curve:'basis'}});
+</script>
+<style>
+  :root{
+    --bg:#f7f8fa; --card:#ffffff; --ink:#2b2d33; --muted:#7d8390;
+    --accent:#3d5a8a; --accent-soft:#e7edf6; --line:#e2e5ea;
+    --green:#3e7a4e; --green-soft:#e8f2ea;
+    --red:#b04a3a; --red-soft:#f9e9e6;
+    --amber:#a3762a; --amber-soft:#f7efdd;
+    --purple:#6d5a8e; --purple-soft:#eeeaf5;
+    --serif:"Georgia","Songti SC",serif;
+    --sans:-apple-system,"PingFang SC","Helvetica Neue",sans-serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#191b1f; --card:#23262c; --ink:#e6e7ea; --muted:#969ca8;
+      --accent:#8fb0dc; --accent-soft:#2a3240; --line:#363a42;
+      --green:#7fb98d; --green-soft:#26362b;
+      --red:#d98876; --red-soft:#3d2a26;
+      --amber:#d9b06a; --amber-soft:#3d3520;
+      --purple:#a996c8; --purple-soft:#302a3d;
+    }
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.75;padding-bottom:80px}
+  .wrap{max-width:1000px;margin:0 auto;padding:24px 20px}
+  .back{font-size:.85rem;color:var(--muted);text-decoration:none}
+  .back:hover{color:var(--accent)}
+  header{margin:14px 0 20px}
+  header h1{font-family:var(--serif);font-size:1.6rem;line-height:1.35}
+  header .sub{color:var(--muted);margin-top:6px;font-size:.9rem}
+  section.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;margin-bottom:22px}
+  h2{font-size:1.05rem;letter-spacing:.05em;color:var(--accent);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+  h2 .n{font-size:.72rem;background:var(--accent);color:var(--card);border-radius:6px;padding:1px 7px}
+  .note{font-size:.85rem;color:var(--muted);margin-bottom:12px}
+  .note b{color:var(--accent)}
+  pre.mermaid{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:14px;overflow-x:auto;display:flex;justify-content:center}
+  table{border-collapse:collapse;width:100%;font-size:.88rem;margin-top:8px}
+  th,td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
+  th{background:var(--accent-soft);color:var(--accent);font-weight:600;white-space:nowrap}
+  .tblwrap{overflow-x:auto}
+  td a{color:var(--accent)}
+  .gap{color:var(--red);font-weight:600}
+  .ok{color:var(--green);font-weight:600}
+  .hub{background:var(--amber-soft);border-left:3px solid var(--amber);border-radius:0 8px 8px 0;padding:10px 14px;font-size:.88rem;margin-top:12px}
+  .hub b{color:var(--amber)}
+  footer{color:var(--muted);font-size:.8rem;text-align:center;margin-top:30px}
+  .katex{font-size:1.02em}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="index.html">◀ 返回数学复盘中心</a>
+  <header>
+    <h1>知识串联 · 考纲主线与跨章连接</h1>
+    <div class="sub">学习期用来「站在地图上看自己在哪」:三科主线图 + 跨章枢纽 + 一物多面表 + 考纲覆盖对照(诚实标出站内缺口)</div>
+  </header>
+
+  <section class="card">
+    <h2><span class="n">01</span>高等数学主线:一条河,两次分叉</h2>
+    <p class="note"><b>读图法:</b>实线=知识依赖(先学左边才能学右边);虚线=跨章连接(考研大题最爱在虚线处命题)。</p>
+    <pre class="mermaid">
+flowchart LR
+  A["极限与连续<br/>(全书地基)"] --> B["一元微分<br/>导数·中值定理"]
+  B --> C["一元积分<br/>不定·定·反常"]
+  C --> D["多元微分<br/>偏导·极值"]
+  D --> E["重积分<br/>二重·三重"]
+  E --> F["曲线曲面积分<br/>场论(数一)"]
+  C --> G["无穷级数<br/>数项·幂·傅里叶"]
+  C --> H["微分方程"]
+  B -.泰勒公式.-> G
+  A -.变限积分求导.-> C
+  B -.中值定理桥.-> C
+  D -.格林/高斯把线面化成重积分.-> F
+  H -.级数解/由解反求方程.-> G
+    </pre>
+    <div class="hub"><b>三大枢纽(跨章命题高发区):</b>① <b>泰勒</b>——极限(佩亚诺余项)、中值证明(拉格朗日余项)、级数展开(麦克劳林)是同一个公式的三张面孔;② <b>变限积分</b> $F(x)=\int_a^x f\,dt$——把「积分」变成「函数」,于是极限、求导、单调性、方程根的全部工具都能砸向积分;③ <b>中值定理</b>——微分与积分的桥(积分中值定理去积分号 → 罗尔/拉格朗日收尾)。</div>
+  </section>
+
+  <section class="card">
+    <h2><span class="n">02</span>线性代数主线:「秩」是唯一的中枢</h2>
+    <pre class="mermaid">
+flowchart LR
+  A["行列式"] --> B["矩阵运算<br/>逆·伴随·初等变换"]
+  B --> R(("秩 r(A)"))
+  R --> C["向量组<br/>相关性·极大无关组"]
+  R --> D["方程组<br/>解的结构 n-r"]
+  C --> E["特征值·特征向量"]
+  E --> F["相似对角化"]
+  F --> G["二次型<br/>标准形·正定"]
+  A -.可逆判定 |A|≠0 即满秩.-> R
+  D -.特征向量=齐次方程组的解.-> E
+  R -.重根验对角化 n-r=重数.-> F
+  E -.正交变换的系数=特征值.-> G
+    </pre>
+    <div class="hub"><b>一句话总纲:</b>线代所有章节都在回答同一个问题——「$Ax$ 这个变换把空间压扁了多少」。压扁程度=秩;没压扁=可逆=行列式非零;压扁方向=齐次解空间;不被转向的方向=特征向量;换个好角度看变换=对角化;看二次曲面的正宗姿势=二次型标准化。串着想,九章变一章。</div>
+  </section>
+
+  <section class="card">
+    <h2><span class="n">03</span>概率统计主线:一条流水线</h2>
+    <pre class="mermaid">
+flowchart LR
+  A["事件与概率<br/>全概率·贝叶斯"] --> B["一维随机变量<br/>分布函数·密度"]
+  B --> C["多维随机变量<br/>联合·边缘·条件"]
+  C --> D["数字特征<br/>E·D·Cov·ρ"]
+  D --> E["极限定理<br/>大数·中心极限"]
+  E --> F["数理统计<br/>抽样分布·估计·检验"]
+  B -.Y=g(X) 分布函数法.-> C
+  D -.独立⇒不相关 单向.-> C
+  E -.样本均值的分布是统计的地基.-> F
+    </pre>
+    <div class="hub"><b>一句话总纲:</b>前半程(事件→分布→数字特征)是「描述一个随机世界」,后半程(极限定理→统计)是「用有限样本反推这个世界」。正态分布是全线主角:卷积封闭、中心极限的终点、三大抽样分布的原料——见到正态多想一步它在流水线的哪一站。</div>
+  </section>
+
+  <section class="card">
+    <h2><span class="n">04</span>一物多面表:同一张脸在不同章节的马甲</h2>
+    <p class="note">考研最爱的出题方式就是「换马甲」——认出它们是同一个东西,题目立刻降一档难度。</p>
+    <div class="tblwrap"><table>
+      <tr><th>本体</th><th>马甲们</th></tr>
+      <tr><td>导数 $f'(x_0)$</td><td>差商极限 $\lim\frac{f(x_0+h)-f(x_0)}{h}$(极限章)= 切线斜率(几何)= 泰勒一次项系数(级数章)= 变化率(应用题)。<b>抽象极限题里藏着导数定义是固定考点。</b></td></tr>
+      <tr><td>$e$ 与 $e^x$</td><td>重要极限 $(1+\frac1n)^n$ 的极限 = $1^\infty$ 型的出口 = $\sum\frac{x^n}{n!}$ 的和 = 微分方程 $y'=y$ 的解 = 一阶线性方程的积分因子</td></tr>
+      <tr><td>泰勒公式</td><td>求极限(佩亚诺)= 证明含高阶导的不等式(拉格朗日)= 幂级数展开(麦克劳林)= 近似计算误差估计</td></tr>
+      <tr><td>秩 $r(A)$</td><td>非零子式最高阶(行列式章)= 极大无关组个数(向量章)= $n-$解空间维数(方程组章)= 非零特征值个数(实对称,特征值章)= 正负惯性指数之和(二次型章)</td></tr>
+      <tr><td>$Ax=0$ 的解</td><td>方程组基础解系 = 「$AB=O$ 时 $B$ 的列」= 特征值 0 的特征向量 = 与 $A$ 各行正交的向量(内积视角)</td></tr>
+      <tr><td>正态分布</td><td>独立和的封闭家族(卷积)= 中心极限的普适终点 = $\chi^2/t/F$ 的原料 = 「不相关⇔独立」唯一特区</td></tr>
+      <tr><td>$\int_0^{+\infty}e^{-x^2}dx=\frac{\sqrt\pi}2$</td><td>二重积分换极坐标的产物(重积分章)= 正态密度归一化(概率章)= $\Gamma(\frac12)$(反常积分章)——一个值,三章共享</td></tr>
+      <tr><td>「单调有界」</td><td>数列收敛判别(极限章)= 递推数列大题(微分学应用:用导数判 $f$ 单调)= 级数部分和有界⇒正项级数收敛(级数章)</td></tr>
+    </table></div>
+  </section>
+
+  <section class="card">
+    <h2><span class="n">05</span>考纲覆盖对照:站内资源地图(含诚实缺口)</h2>
+    <p class="note">按考纲大块列出「学到这里该用什么」。<span class="ok">✓</span>=有深度覆盖;<span class="gap">△</span>=仅公式速查级覆盖,暂无专题卡库——这些缺口按你的学习进度决定要不要补,<b>不必为了全而全</b>。</p>
+    <div class="tblwrap"><table>
+      <tr><th>考纲大块</th><th>站内资源</th><th>覆盖</th></tr>
+      <tr><td>函数·极限·连续</td><td><a href="卡库_极限与无穷小工具箱.html">卡库·极限工具箱</a> + <a href="公式大全_速查与秒杀.html">公式页·不等式</a></td><td class="ok">✓</td></tr>
+      <tr><td>一元微分学(计算与应用)</td><td>公式页·导数表/高阶导;渐近线·间断点在极限卡库;<a href="卡库_中值定理与级数判别.html">中值定理家族</a></td><td class="ok">✓</td></tr>
+      <tr><td>一元积分学</td><td>公式页·积分表/三角/定积分秒杀/几何量报数</td><td class="gap">△ 计算套路无专题卡</td></tr>
+      <tr><td>多元微分学</td><td><a href="卡库_多元微分与二重积分.html">卡库·多元微分</a></td><td class="ok">✓</td></tr>
+      <tr><td>重积分</td><td>卡库·二重积分 + 公式页·三重积分两法</td><td class="ok">✓(三重略薄)</td></tr>
+      <tr><td>曲线曲面积分与场论</td><td><a href="卡库_曲线曲面积分与场论.html">卡库·场论专题</a></td><td class="ok">✓</td></tr>
+      <tr><td>无穷级数</td><td>卡库·级数判别 + 公式页·求和出口表;傅里叶仅一句(狄利克雷定理)</td><td class="ok">✓(傅里叶薄)</td></tr>
+      <tr><td>微分方程</td><td>公式页·解法速查表</td><td class="gap">△ 无专题卡</td></tr>
+      <tr><td>空间解析几何(数一)</td><td>公式页·最小包(平面/直线/切法)</td><td class="gap">△ 无专题卡</td></tr>
+      <tr><td>线性代数全部</td><td><a href="卡库_线代秩方程组特征值.html">卡库·线代</a> + 公式页·行列式套路/二级结论</td><td class="ok">✓</td></tr>
+      <tr><td>概率统计全部</td><td><a href="卡库_概率分布与两大定理.html">卡库·概率</a> + 公式页·底座/快枪</td><td class="ok">✓</td></tr>
+    </table></div>
+    <div class="hub"><b>缺口处理建议:</b>三个 △(积分计算、微分方程、空间解析几何)都是「套路固定、卡片价值低于刷题价值」的板块——先刷 1000 题对应章节,错题积累到 5 道以上再决定是否为它开专题卡库,错题页会自然长出这部分内容。</div>
+  </section>
+
+  <footer>知识串联 · 考纲主线 · 由 Claude 编写 · 虚线处=跨章命题高发区,学习期每完成一章回来看一眼自己在地图哪一格</footer>
+</div>
+</body>
+</html>
