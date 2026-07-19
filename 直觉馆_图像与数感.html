@@ -76,15 +76,41 @@
   <a class="back" href="index.html">◀ 返回数学复盘中心</a>
   <header>
     <h1>直觉馆 · 函数图像与数感</h1>
-    <div class="sub">图像直觉:考研常客函数「长什么样」要能闭眼画 · 数感:见到 0.693 要条件反射出 ln2 · 全部服务于「验算快、定位准」</div>
+    <div class="sub">20 张图像(底座 6 + 考研常客 14)+ 定义域值域总表 + 数感 6 卡 · 图像要能闭眼画,见到 0.693 要条件反射出 ln2 · 全部服务于「验算快、定位准」</div>
   </header>
 
   <div class="usage"><b>用法:</b>图像馆当画册翻,每张图配一句「考点钩子」;数感卡当自测——先遮住右列报数,再核对。这页管的是「快而糙的直觉」,严谨计算仍回卡库和公式页。</div>
 
-  <h2 class="sect"><span class="n">01</span>函数图像馆(考研常客 14 张)</h2>
+  <h2 class="sect"><span class="n">01</span>基本函数底座(6 张 · 定义域值域标在图说里)</h2>
+  <div class="plots" id="plots0"></div>
+
+  <div class="cardk" style="margin-top:14px">
+    <div class="chead"><span class="badge">总表</span><span class="name">基本初等函数:定义域 · 值域 · 性质一张表</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="tblwrap"><table>
+        <tr><th>函数</th><th>定义域</th><th>值域</th><th>单调性</th><th>奇偶</th><th>周期</th></tr>
+        <tr><td>$\sin x$</td><td>$\mathbb R$</td><td>$[-1,1]$</td><td>分段</td><td>奇</td><td>$2\pi$</td></tr>
+        <tr><td>$\cos x$</td><td>$\mathbb R$</td><td>$[-1,1]$</td><td>分段</td><td>偶</td><td>$2\pi$</td></tr>
+        <tr><td>$\tan x$</td><td>$x\ne k\pi+\frac\pi2$</td><td>$\mathbb R$</td><td>每支递增</td><td>奇</td><td>$\pi$</td></tr>
+        <tr><td>$\arcsin x$</td><td>$[-1,1]$</td><td>$[-\frac\pi2,\frac\pi2]$</td><td>增</td><td>奇</td><td>—</td></tr>
+        <tr><td>$\arccos x$</td><td>$[-1,1]$</td><td>$[0,\pi]$</td><td>减</td><td>非奇非偶</td><td>—</td></tr>
+        <tr><td>$\arctan x$</td><td>$\mathbb R$</td><td>$(-\frac\pi2,\frac\pi2)$</td><td>增</td><td>奇</td><td>—</td></tr>
+        <tr><td>$\text{arccot}\,x$</td><td>$\mathbb R$</td><td>$(0,\pi)$</td><td>减</td><td>非奇非偶</td><td>—</td></tr>
+        <tr><td>$e^x$(及 $a^x,a\gt1$)</td><td>$\mathbb R$</td><td>$(0,+\infty)$</td><td>增</td><td>非奇非偶</td><td>—</td></tr>
+        <tr><td>$\ln x$</td><td>$(0,+\infty)$</td><td>$\mathbb R$</td><td>增</td><td>—</td><td>—</td></tr>
+        <tr><td>$\sqrt x$</td><td>$[0,+\infty)$</td><td>$[0,+\infty)$</td><td>增</td><td>—</td><td>—</td></tr>
+        <tr><td>$\frac1x$</td><td>$x\ne0$</td><td>$y\ne0$</td><td>每支递减</td><td>奇</td><td>—</td></tr>
+        <tr><td>$|x|$</td><td>$\mathbb R$</td><td>$[0,+\infty)$</td><td>分段</td><td>偶</td><td>—</td></tr>
+      </table></div>
+      <div class="row r-warn"><b>求定义域五条军规(复合函数第一步)</b>① 分母 $\ne0$;② 偶次根号内 $\ge0$;③ 对数真数 $\gt0$;④ $\arcsin/\arccos$ 的参数 $\in[-1,1]$;⑤ $\tan$ 的参数 $\ne k\pi+\frac\pi2$。多条同时出现取<b style="display:inline">交集</b>。</div>
+      <div class="row r-intu"><b>值域小抄</b>$\arcsin$ 与 $\arctan$ 值域关于 0 对称(所以是奇函数),$\arccos$ 与 $\text{arccot}$ 值域从 0 起步(所以非奇非偶)——记「sin/tan 对称,cos/cot 起步于零」。$\arcsin x+\arccos x=\frac\pi2$,$\arctan x+\text{arccot}\,x=\frac\pi2$:两对搭档和恒为直角。</div>
+    </div>
+  </div>
+
+  <h2 class="sect"><span class="n">02</span>考研常客图像(14 张)</h2>
   <div class="plots" id="plots"></div>
 
-  <h2 class="sect"><span class="n">02</span>数感速查(见数反应 · 肌肉记忆)</h2>
+  <h2 class="sect"><span class="n">03</span>数感速查(见数反应 · 肌肉记忆)</h2>
 
   <div class="cardk">
     <div class="chead"><span class="badge">数感</span><span class="name">常数肌肉记忆表(考场心算的原料)</span><span class="arrow">▶</span></div>
@@ -218,7 +244,64 @@ function dot(ctx,S,x,y,color){ctx.fillStyle=color;ctx.beginPath();ctx.arc(S.sx(x
 function label(ctx,S,x,y,text,color){ctx.fillStyle=color;ctx.font='22px sans-serif';ctx.fillText(text,S.sx(x),S.sy(y));}
 
 const P=document.getElementById('plots');
+const P0=document.getElementById('plots0');
 const A=()=>css('--accent'),G=()=>css('--green'),R=()=>css('--red'),M=()=>css('--amber'),U=()=>css('--purple');
+function dash(ctx,S,x0,y0,x1,y1,color){
+  ctx.save();ctx.setLineDash([7,7]);ctx.strokeStyle=color||css('--plot-axis');ctx.lineWidth=1.3;
+  ctx.beginPath();ctx.moveTo(S.sx(x0),S.sy(y0));ctx.lineTo(S.sx(x1),S.sy(y1));ctx.stroke();ctx.restore();
+}
+
+/* ===== 底座 6 张 ===== */
+/* b1 sin cos */
+mkplot(P0,'sin x 与 cos x','蓝=sin(奇,过原点),红=cos(偶,从1出发)。<b>定义域 ℝ,值域 [−1,1],周期 2π。</b>钩子:cos x=sin(x+π/2)——红线就是蓝线左移 π/2。',(ctx,W,H)=>{
+  const S=frame(ctx,W,H,-6.6,6.6,-1.6,1.6);
+  dash(ctx,S,-6.6,1,6.6,1);dash(ctx,S,-6.6,-1,6.6,-1);
+  curve(ctx,S,Math.sin,-6.6,6.6,A());
+  curve(ctx,S,Math.cos,-6.6,6.6,R());
+  label(ctx,S,1.1,1.32,'cos',R());label(ctx,S,2.6,-1.35,'sin',A());
+});
+/* b2 tan */
+mkplot(P0,'tan x:一支一支的增','<b>定义域 x≠kπ+π/2,值域 ℝ,周期 π(比 sin 短一半!)。</b>虚线=渐近线。钩子:「每支内单调增」但整体不单调——不能笼统说 tan 递增。',(ctx,W,H)=>{
+  const S=frame(ctx,W,H,-4.6,4.6,-4,4);
+  [-3*Math.PI/2,-Math.PI/2,Math.PI/2,3*Math.PI/2].forEach(a=>dash(ctx,S,a,-4,a,4,css('--red')));
+  for(const k of [-1,0,1]){curve(ctx,S,Math.tan,k*Math.PI-1.35,k*Math.PI+1.35,A());}
+  label(ctx,S,0.55,2.9,'tan x',A());
+});
+/* b3 arcsin arccos */
+mkplot(P0,'arcsin x 与 arccos x','蓝=arcsin:<b>[−1,1]→[−π/2,π/2]</b>,奇、增;红=arccos:<b>[−1,1]→[0,π]</b>,减。钩子:两线相加恒为 π/2;端点导数为 ∞(竖切线)。',(ctx,W,H)=>{
+  const S=frame(ctx,W,H,-1.6,1.6,-1.9,3.4);
+  dash(ctx,S,-1.6,Math.PI/2,1.6,Math.PI/2);dash(ctx,S,-1.6,Math.PI,1.6,Math.PI);
+  curve(ctx,S,Math.asin,-1,1,A());
+  curve(ctx,S,Math.acos,-1,1,R());
+  label(ctx,S,0.55,0.35,'arcsin',A());label(ctx,S,-1.45,2.6,'arccos',R());label(ctx,S,1.15,1.75,'y=π/2',css('--plot-axis'));
+});
+/* b4 arctan arccot */
+mkplot(P0,'arctan x 与 arccot x','蓝=arctan:<b>ℝ→(−π/2,π/2)</b>,奇、增,水平渐近线 ±π/2;红=arccot:<b>ℝ→(0,π)</b>,减。钩子:arctan 的「两堵墙」是反常积分和极限题的常客。',(ctx,W,H)=>{
+  const S=frame(ctx,W,H,-5,5,-2,3.4);
+  dash(ctx,S,-5,Math.PI/2,5,Math.PI/2);dash(ctx,S,-5,-Math.PI/2,5,-Math.PI/2);dash(ctx,S,-5,Math.PI,5,Math.PI);
+  curve(ctx,S,Math.atan,-5,5,A());
+  curve(ctx,S,x=>Math.PI/2-Math.atan(x),-5,5,R());
+  label(ctx,S,2.6,0.75,'arctan',A());label(ctx,S,-4.5,2.55,'arccot',R());
+});
+/* b5 反函数镜像 */
+mkplot(P0,'反函数=关于 y=x 翻折:eˣ 与 ln x','虚线 y=x 是镜子。<b>定义域值域互换:eˣ: ℝ→(0,∞);ln x: (0,∞)→ℝ。</b>钩子:所有反函数对(sin↔arcsin 等)都是这个翻折;单调是存在反函数的通行证。',(ctx,W,H)=>{
+  const S=frame(ctx,W,H,-4,4,-4,4);
+  dash(ctx,S,-4,-4,4,4,css('--amber'));
+  curve(ctx,S,Math.exp,-4,1.38,A());
+  curve(ctx,S,Math.log,0.019,4,G());
+  label(ctx,S,0.75,3.3,'eˣ',A());label(ctx,S,2.6,0.5,'ln x',G());label(ctx,S,-3.1,-3.6,'y=x',css('--amber'));
+});
+/* b6 幂函数一家 */
+mkplot(P0,'幂函数一家:x², x³, √x, 1/x','x>0 时全体在 (1,1) 会师。<b>定义域各不同:√x 是 [0,∞),1/x 挖掉 0。</b>钩子:(0,1) 内大小关系与 (1,∞) 内恰好反过来——比较大小题的陷阱位。',(ctx,W,H)=>{
+  const S=frame(ctx,W,H,-2.4,3,-2.2,3.4);
+  curve(ctx,S,x=>x*x,-1.85,1.85,A());
+  curve(ctx,S,x=>x*x*x,-1.32,1.5,R());
+  curve(ctx,S,Math.sqrt,0,3,G());
+  curve(ctx,S,x=>1/x,0.3,3,U());
+  curve(ctx,S,x=>1/x,-2.4,-0.46,U());
+  dot(ctx,S,1,1,M());
+  label(ctx,S,-2.1,3.0,'x²',A());label(ctx,S,1.05,3.0,'x³',R());label(ctx,S,2.4,1.85,'√x',G());label(ctx,S,2.3,0.62,'1/x',U());
+});
 
 /* 1 三线夹 */
 mkplot(P,'三线夹:sin x ＜ x ＜ tan x','蓝=sin,灰=y=x,红=tan。<b>钩子:</b>(0,π/2) 上三线同起点、越走越分;两个重要极限、夹逼的几何真相。',(ctx,W,H)=>{
