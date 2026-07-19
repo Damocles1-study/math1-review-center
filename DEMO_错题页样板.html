@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DEMO · 错题页样板(四层展开)</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+<style>
+  :root{
+    --bg:#f7f8fa; --card:#ffffff; --ink:#2b2d33; --muted:#7d8390;
+    --accent:#3d5a8a; --accent-soft:#e7edf6; --line:#e2e5ea;
+    --green:#3e7a4e; --green-soft:#e8f2ea;
+    --red:#b04a3a; --red-soft:#f9e9e6;
+    --amber:#a3762a; --amber-soft:#f7efdd;
+    --purple:#6d5a8e; --purple-soft:#eeeaf5;
+    --serif:"Georgia","Songti SC",serif;
+    --sans:-apple-system,"PingFang SC","Helvetica Neue",sans-serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#191b1f; --card:#23262c; --ink:#e6e7ea; --muted:#969ca8;
+      --accent:#8fb0dc; --accent-soft:#2a3240; --line:#363a42;
+      --green:#7fb98d; --green-soft:#26362b;
+      --red:#d98876; --red-soft:#3d2a26;
+      --amber:#d9b06a; --amber-soft:#3d3520;
+      --purple:#a996c8; --purple-soft:#302a3d;
+    }
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.8;padding-bottom:80px}
+  .wrap{max-width:900px;margin:0 auto;padding:24px 20px}
+  .back{font-size:.85rem;color:var(--muted);text-decoration:none}
+  .back:hover{color:var(--accent)}
+  header{margin:14px 0 20px}
+  header h1{font-family:var(--serif);font-size:1.6rem;line-height:1.35}
+  header .sub{color:var(--muted);margin-top:6px;font-size:.9rem}
+  .warn{margin-top:12px;font-size:.88rem;background:var(--amber-soft);border-left:3px solid var(--amber);border-radius:0 8px 8px 0;padding:10px 14px}
+  .warn b{color:var(--amber)}
+
+  /* 归因统计条 */
+  .attr{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:22px}
+  .attr h2{font-size:.95rem;color:var(--accent);margin-bottom:10px}
+  .bar{display:flex;height:14px;border-radius:999px;overflow:hidden;background:var(--line)}
+  .bar div{transition:width .3s}
+  .b1{background:var(--red)} .b2{background:var(--amber)} .b3{background:var(--accent)} .b4{background:var(--purple)}
+  .legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:10px;font-size:.82rem;color:var(--muted)}
+  .legend .dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px}
+  .legend b{color:var(--ink)}
+
+  /* 题卡 */
+  .prob{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;margin-bottom:24px}
+  .phead{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+  .pno{font-family:var(--serif);font-weight:700;font-size:1.1rem;color:var(--accent)}
+  .ptag{font-size:.72rem;padding:2px 9px;border-radius:999px;background:var(--accent-soft);color:var(--accent)}
+  .pts{font-size:.78rem;color:var(--muted);margin-left:auto}
+  .stem{font-size:.97rem;background:var(--accent-soft);border-radius:10px;padding:14px 16px}
+  .stem .sub-q{margin-top:4px}
+
+  .layers{margin-top:14px;display:grid;gap:10px}
+  .layer{border:1px solid var(--line);border-radius:10px;overflow:hidden}
+  .lbtn{width:100%;text-align:left;border:none;background:none;color:var(--ink);padding:10px 14px;font-size:.9rem;cursor:pointer;display:flex;align-items:center;gap:8px;font-family:var(--sans)}
+  .lbtn:hover{background:var(--accent-soft)}
+  .lbtn .ln{font-size:.7rem;padding:1px 8px;border-radius:999px;white-space:nowrap}
+  .l-h1 .ln{background:var(--amber-soft);color:var(--amber)}
+  .l-h2 .ln{background:var(--purple-soft);color:var(--purple)}
+  .l-sol .ln{background:var(--green-soft);color:var(--green)}
+  .lbtn .tip{color:var(--muted);font-size:.8rem;margin-left:auto}
+  .lbody{display:none;padding:12px 16px 16px;border-top:1px dashed var(--line);font-size:.93rem}
+  .layer.open .lbody{display:block}
+  .layer.open .lbtn .tip{display:none}
+
+  .step{margin:10px 0;padding:10px 14px;background:var(--bg);border-radius:8px;position:relative}
+  .step .sc{position:absolute;right:10px;top:8px;font-size:.72rem;color:var(--green);background:var(--green-soft);border-radius:999px;padding:1px 8px}
+  .step b.t{color:var(--accent);font-size:.8rem;display:block;margin-bottom:3px;letter-spacing:.05em}
+  .pit{margin-top:12px;background:var(--red-soft);border-left:3px solid var(--red);border-radius:0 8px 8px 0;padding:10px 14px;font-size:.88rem}
+  .pit b{color:var(--red)}
+  .linkcard{margin-top:12px;font-size:.85rem}
+  .linkcard a{color:var(--accent)}
+
+  /* 错因标签 */
+  .tags{margin-top:14px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .tags .lab{font-size:.8rem;color:var(--muted)}
+  .tagbtn{font-size:.8rem;border:1px solid var(--line);background:none;color:var(--muted);border-radius:999px;padding:3px 12px;cursor:pointer;font-family:var(--sans)}
+  .tagbtn.on-1{background:var(--red-soft);color:var(--red);border-color:var(--red)}
+  .tagbtn.on-2{background:var(--amber-soft);color:var(--amber);border-color:var(--amber)}
+  .tagbtn.on-3{background:var(--accent-soft);color:var(--accent);border-color:var(--accent)}
+  .tagbtn.on-4{background:var(--purple-soft);color:var(--purple);border-color:var(--purple)}
+  footer{color:var(--muted);font-size:.8rem;text-align:center;margin-top:30px}
+  .katex{font-size:1.02em}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="index.html">◀ 返回数学复盘中心</a>
+  <header>
+    <h1>DEMO · 错题页样板(四层展开)</h1>
+    <div class="sub">经典题演示,非 2025/2026 真题 · 正式错题页将按「你报错题号 + 卡壳点」生成,结构与本页相同</div>
+    <div class="warn"><b>用法(先读这行):</b>回到本页时<b>先别点任何提示</b>,把题目重新做一遍。卡住了 → 只点「提示①方向」;还卡 → 再点「提示②关键步骤」;做完或彻底卡死 → 点「完整解答」核对采分点,勾错因标签。</div>
+  </header>
+
+  <div class="attr">
+    <h2>错因归因统计(勾选各题标签后自动更新)</h2>
+    <div class="bar" id="bar"></div>
+    <div class="legend" id="legend"></div>
+  </div>
+
+  <!-- ================= 题 1 ================= -->
+  <div class="prob" id="p1">
+    <div class="phead"><span class="pno">题 1</span><span class="ptag">证明题 · 微分中值</span><span class="pts">10 分 · 双中值点经典款</span></div>
+    <div class="stem">
+      设 $f(x)$ 在 $[0,1]$ 上连续,在 $(0,1)$ 内可导,且 $f(0)=0$,$f(1)=1$。证明:
+      <div class="sub-q">(1) 存在 $c\in(0,1)$,使得 $f(c)=1-c$;(4 分)</div>
+      <div class="sub-q">(2) 存在两个不同的点 $\xi,\eta\in(0,1)$,使得 $f'(\xi)\,f'(\eta)=1$。(6 分)</div>
+    </div>
+    <div class="layers">
+      <div class="layer l-h1">
+        <button class="lbtn"><span class="ln">提示① 方向</span>这是什么题型,第一步往哪想<span class="tip">卡住了再点</span></button>
+        <div class="lbody">(1) 的结论<b>不含导数</b> → 闭区间连续函数定理(零点/介值),把「$f(c)=1-c$」移项成「某函数 $=0$」。(2) 的结论有<b>两个不同的中值点</b> → 触发器:拆区间,在两个子区间上各用一次拉格朗日;分割点就用 (1) 找到的 $c$——第 (1) 问几乎总是给第 (2) 问搭桥的。</div>
+      </div>
+      <div class="layer l-h2">
+        <button class="lbtn"><span class="ln">提示② 关键步骤</span>突破口那一步,不给完整过程<span class="tip">还卡再点</span></button>
+        <div class="lbody">令 $g(x)=f(x)-(1-x)$,算 $g(0)$ 和 $g(1)$ 的符号。拿到 $c$ 后,在 $[0,c]$ 与 $[c,1]$ 上分别写拉格朗日,注意 $f(c)=1-c$ 会让两个导数值恰好互为倒数。</div>
+      </div>
+      <div class="layer l-sol">
+        <button class="lbtn"><span class="ln">完整解答</span>分步采分点 + 易错点<span class="tip">做完再点</span></button>
+        <div class="lbody">
+          <div class="step"><span class="sc">1 分</span><b class="t">(1) 构造函数</b>令 $g(x)=f(x)-1+x$,则 $g$ 在 $[0,1]$ 上连续。</div>
+          <div class="step"><span class="sc">2 分</span><b class="t">(1) 端点变号</b>$g(0)=f(0)-1+0=-1<0$,$\;g(1)=f(1)-1+1=1>0$。</div>
+          <div class="step"><span class="sc">1 分</span><b class="t">(1) 零点定理</b>由零点定理,存在 $c\in(0,1)$ 使 $g(c)=0$,即 $f(c)=1-c$。</div>
+          <div class="step"><span class="sc">2 分</span><b class="t">(2) 左区间拉格朗日</b>$f$ 在 $[0,c]$ 上满足拉格朗日条件,存在 $\xi\in(0,c)$:$$f'(\xi)=\frac{f(c)-f(0)}{c-0}=\frac{1-c}{c}.$$</div>
+          <div class="step"><span class="sc">2 分</span><b class="t">(2) 右区间拉格朗日</b>在 $[c,1]$ 上,存在 $\eta\in(c,1)$:$$f'(\eta)=\frac{f(1)-f(c)}{1-c}=\frac{1-(1-c)}{1-c}=\frac{c}{1-c}.$$</div>
+          <div class="step"><span class="sc">2 分</span><b class="t">(2) 相乘收尾</b>$f'(\xi)f'(\eta)=\dfrac{1-c}{c}\cdot\dfrac{c}{1-c}=1$;又 $\xi&lt;c&lt;\eta$,故 $\xi\ne\eta$。证毕。</div>
+          <div class="pit"><b>易错点:</b>① 忘写「$\xi&lt;c&lt;\eta$ 故两点不同」——题目要求 $\xi\ne\eta$,这半句是采分点;② (1) 不构造 $g$ 直接说「由介值定理」而不指明对哪个函数用,扣过程分;③ 想对整个 $[0,1]$ 用一次拉格朗日再「拆」出两个点——方向错误,一次拉格朗日只给一个点。</div>
+          <div class="linkcard">🔗 关联卡库:<a href="卡库_中值定理与级数判别.html">触发器 · 双中值点拆区间 / 零点定理卡</a></div>
+        </div>
+      </div>
+    </div>
+    <div class="tags" data-p="p1"><span class="lab">错因归因:</span></div>
+  </div>
+
+  <!-- ================= 题 2 ================= -->
+  <div class="prob" id="p2">
+    <div class="phead"><span class="pno">题 2</span><span class="ptag">解答题 · 幂级数</span><span class="pts">12 分 · 求收敛域与和函数</span></div>
+    <div class="stem">求幂级数 $\displaystyle\sum_{n=1}^{\infty}\frac{x^{n}}{n(n+1)}$ 的收敛域与和函数 $S(x)$。</div>
+    <div class="layers">
+      <div class="layer l-h1">
+        <button class="lbtn"><span class="ln">提示① 方向</span>这是什么题型,第一步往哪想<span class="tip">卡住了再点</span></button>
+        <div class="lbody">幂级数两问固定流程:① 比值法求收敛半径 $R$,<b>端点必须单独代入判别</b>;② 求和函数,目标永远是凑到 $\sum x^n=\frac1{1-x}$ 或 $\sum\frac{x^n}{n}=-\ln(1-x)$。系数分母是 $n(n+1)$ → 想裂项。</div>
+      </div>
+      <div class="layer l-h2">
+        <button class="lbtn"><span class="ln">提示② 关键步骤</span>突破口那一步,不给完整过程<span class="tip">还卡再点</span></button>
+        <div class="lbody">$\dfrac{1}{n(n+1)}=\dfrac1n-\dfrac1{n+1}$,于是级数拆成 $\sum\frac{x^n}{n}-\sum\frac{x^n}{n+1}$;第二个和式提出 $\frac1x$ 变成 $\frac1x\sum\frac{x^{n+1}}{n+1}$,两部分都能用 $-\ln(1-x)$ 表示。$x=0$ 和端点要单独说。</div>
+      </div>
+      <div class="layer l-sol">
+        <button class="lbtn"><span class="ln">完整解答</span>分步采分点 + 易错点<span class="tip">做完再点</span></button>
+        <div class="lbody">
+          <div class="step"><span class="sc">2 分</span><b class="t">收敛半径</b>$\lim\limits_{n\to\infty}\left|\dfrac{a_n}{a_{n+1}}\right|=\lim\dfrac{(n+1)(n+2)}{n(n+1)}=1$,故 $R=1$。</div>
+          <div class="step"><span class="sc">2 分</span><b class="t">端点判别</b>$x=\pm1$ 时 $\left|\dfrac{x^n}{n(n+1)}\right|\le\dfrac1{n^2}$,绝对收敛。<b>收敛域 $[-1,1]$</b>。</div>
+          <div class="step"><span class="sc">1 分</span><b class="t">裂项</b>$x\ne0$ 时,$S(x)=\displaystyle\sum_{n=1}^\infty\frac{x^n}{n}-\sum_{n=1}^\infty\frac{x^n}{n+1}$。</div>
+          <div class="step"><span class="sc">2 分</span><b class="t">第一部分</b>$\displaystyle\sum_{n=1}^\infty\frac{x^n}{n}=-\ln(1-x)$,$x\in[-1,1)$。</div>
+          <div class="step"><span class="sc">2 分</span><b class="t">第二部分</b>$\displaystyle\sum_{n=1}^\infty\frac{x^n}{n+1}=\frac1x\sum_{n=1}^\infty\frac{x^{n+1}}{n+1}=\frac1x\big(-\ln(1-x)-x\big)$。</div>
+          <div class="step"><span class="sc">1 分</span><b class="t">合并</b>$$S(x)=-\ln(1-x)+\frac{\ln(1-x)}{x}+1=1+\frac{1-x}{x}\ln(1-x),\quad x\in[-1,0)\cup(0,1).$$</div>
+          <div class="step"><span class="sc">2 分</span><b class="t">补点</b>$S(0)=0$(级数各项为 0);$x=1$ 时直接裂项求和:$S(1)=\sum\big(\frac1n-\frac1{n+1}\big)=1$,与 $\lim\limits_{x\to1^-}S(x)=1$ 一致(和函数在收敛域上连续)。</div>
+          <div class="pit"><b>易错点:</b>① 端点忘验或只验一端——$R=1$ 不等于收敛域是 $(-1,1)$,本题端点都收敛;② $x=1$ 处不能直接把 $x=1$ 代进 $-\ln(1-x)$(单独那一支发散),要用「原级数在 $x=1$ 收敛 + 和函数连续性」或直接裂项求和来说;③ 提出 $\frac1x$ 后忘记 $x=0$ 要单独补定义。验算:$S(\frac12)=1-\frac12\cdot2\ln2\cdot\frac{1/2}{1/2}$…代入 $\frac{1-x}{x}=1$,$S=1+\ln\frac12=1-\ln2\approx0.307$,与前几项部分和 $\frac{1/2}{2}+\frac{1/4}{6}+\frac{1/8}{12}\approx0.302$ 吻合。</div>
+          <div class="linkcard">🔗 关联卡库:<a href="卡库_中值定理与级数判别.html">触发器 · 幂级数求和/收敛域卡 · 基准级数库</a></div>
+        </div>
+      </div>
+    </div>
+    <div class="tags" data-p="p2"><span class="lab">错因归因:</span></div>
+  </div>
+
+  <!-- ================= 题 3 ================= -->
+  <div class="prob" id="p3">
+    <div class="phead"><span class="pno">题 3</span><span class="ptag">解答题 · 二重积分</span><span class="pts">10 分 · 交换积分次序</span></div>
+    <div class="stem">计算 $\displaystyle I=\int_0^1\!dx\int_x^1\sin(y^2)\,dy$。</div>
+    <div class="layers">
+      <div class="layer l-h1">
+        <button class="lbtn"><span class="ln">提示① 方向</span>这是什么题型,第一步往哪想<span class="tip">卡住了再点</span></button>
+        <div class="lbody">$\sin(y^2)$ 对 $y$ <b>没有初等原函数</b>——先对 $y$ 积分这条路是死的。累次积分算不动 → 触发器:<b>交换积分次序</b>(另一常见出路是换极坐标,本题区域是三角形,用换序)。</div>
+      </div>
+      <div class="layer l-h2">
+        <button class="lbtn"><span class="ln">提示② 关键步骤</span>突破口那一步,不给完整过程<span class="tip">还卡再点</span></button>
+        <div class="lbody">把区域画出来:$D=\{(x,y):0\le x\le1,\;x\le y\le1\}$ 是直线 $y=x$ 上方的三角形。改成先 $x$ 后 $y$:$y$ 从 0 到 1,$x$ 从 0 到 $y$。换序后内层被积函数与 $x$ 无关,直接出一个因子 $y$,凑微分即可。</div>
+      </div>
+      <div class="layer l-sol">
+        <button class="lbtn"><span class="ln">完整解答</span>分步采分点 + 易错点<span class="tip">做完再点</span></button>
+        <div class="lbody">
+          <div class="step"><span class="sc">2 分</span><b class="t">区域改写</b>$D=\{0\le x\le1,\;x\le y\le1\}=\{0\le y\le1,\;0\le x\le y\}$(画图:$y=x$ 与 $y=1$、$x=0$ 围成的三角形)。</div>
+          <div class="step"><span class="sc">3 分</span><b class="t">交换次序</b>$$I=\int_0^1\!dy\int_0^{y}\sin(y^2)\,dx$$</div>
+          <div class="step"><span class="sc">2 分</span><b class="t">内层积分</b>被积函数与 $x$ 无关:$\displaystyle\int_0^y\sin(y^2)\,dx=y\sin(y^2)$。</div>
+          <div class="step"><span class="sc">3 分</span><b class="t">凑微分</b>$$I=\int_0^1 y\sin(y^2)\,dy=\left[-\frac{\cos(y^2)}{2}\right]_0^1=\frac{1-\cos 1}{2}.$$</div>
+          <div class="pit"><b>易错点:</b>① 换序时内外限抄反(写成 $x$ 从 $y$ 到 1)——<b>必须画区域图</b>,别在脑子里换;② 最后一步符号:$\int y\sin(y^2)dy=-\frac12\cos(y^2)+C$,负号丢了答案变 $\frac{\cos1-1}{2}<0$,而被积函数在区域上非负,积分必为正——<b>用符号做体检</b>能当场抓住这类错;③ 答案保留 $\cos1$ 即可,别去算小数。</div>
+          <div class="linkcard">🔗 关联卡库:多元积分套路卡库(待建)· 触发条件:「对 $y$ 积不出 → 换序;圆域/含 $x^2+y^2$ → 极坐标」</div>
+        </div>
+      </div>
+    </div>
+    <div class="tags" data-p="p3"><span class="lab">错因归因:</span></div>
+  </div>
+
+  <!-- ================= 题 4 ================= -->
+  <div class="prob" id="p4">
+    <div class="phead"><span class="pno">题 4</span><span class="ptag">概念题 · 多元微分</span><span class="pts">4 分 · 连续/偏导/可微关系</span></div>
+    <div class="stem">
+      设 $f(x,y)=\begin{cases}\dfrac{xy}{\sqrt{x^2+y^2}}, & (x,y)\ne(0,0)\\[2mm] 0, & (x,y)=(0,0)\end{cases}$<br>
+      判断 $f$ 在点 $(0,0)$ 处:是否连续?偏导数是否存在?是否可微?
+    </div>
+    <div class="layers">
+      <div class="layer l-h1">
+        <button class="lbtn"><span class="ln">提示① 方向</span>这是什么题型,第一步往哪想<span class="tip">卡住了再点</span></button>
+        <div class="lbody">分段函数在分段点的性质,<b>全部回定义</b>,按「连续 → 偏导 → 可微」顺序查。连续用极坐标放缩最快;偏导就是两个一元极限 $\lim\limits_{x\to0}\frac{f(x,0)-f(0,0)}{x}$;可微用可微的<b>定义式极限</b>验证,别想当然。</div>
+      </div>
+      <div class="layer l-h2">
+        <button class="lbtn"><span class="ln">提示② 关键步骤</span>突破口那一步,不给完整过程<span class="tip">还卡再点</span></button>
+        <div class="lbody">$|f|=\dfrac{|xy|}{\sqrt{x^2+y^2}}\le\dfrac{\frac12(x^2+y^2)}{\sqrt{x^2+y^2}}=\dfrac r2\to0$。轴上 $f(x,0)\equiv0$、$f(0,y)\equiv0$。可微性验 $\lim\limits_{(h,k)\to(0,0)}\dfrac{f(h,k)-0-0\cdot h-0\cdot k}{\sqrt{h^2+k^2}}$ 是否为 0——<b>取路径 $k=h$ 试试</b>。</div>
+      </div>
+      <div class="layer l-sol">
+        <button class="lbtn"><span class="ln">完整解答</span>分步采分点 + 易错点<span class="tip">做完再点</span></button>
+        <div class="lbody">
+          <div class="step"><span class="sc">1 分</span><b class="t">连续 ✓</b>由 $|xy|\le\frac12(x^2+y^2)$:$|f(x,y)|\le\frac12\sqrt{x^2+y^2}\to0=f(0,0)$,连续。</div>
+          <div class="step"><span class="sc">1 分</span><b class="t">偏导存在 ✓</b>$f_x(0,0)=\lim\limits_{x\to0}\dfrac{f(x,0)-f(0,0)}{x}=\lim\limits_{x\to0}\dfrac{0-0}{x}=0$;同理 $f_y(0,0)=0$。</div>
+          <div class="step"><span class="sc">2 分</span><b class="t">不可微 ✗</b>若可微,应有 $\lim\limits_{(h,k)\to(0,0)}\dfrac{f(h,k)-f(0,0)-0\cdot h-0\cdot k}{\sqrt{h^2+k^2}}=\lim\dfrac{hk}{h^2+k^2}=0$。但沿 $k=h$:$\dfrac{h^2}{2h^2}=\dfrac12\ne0$,极限不存在,故<b>不可微</b>。</div>
+          <div class="step"><b class="t">结论</b>连续 ✓、偏导存在 ✓、不可微 ✗ —— 这是「连续 + 偏导存在 $\nRightarrow$ 可微」的标准反例,值得整个背下来。</div>
+          <div class="pit"><b>易错点(概念链):</b>可微 $\Rightarrow$ 连续、偏导存在;偏导<b>连续</b> $\Rightarrow$ 可微;其余方向全部不成立。选择题里「偏导存在」和「偏导连续」一字之差就是两道不同的题。判可微唯一可靠动作:写定义式极限,取两条路径验。</div>
+          <div class="linkcard">🔗 关联卡库:多元微分关系图卡库(待建)· 「可微·偏导·连续·方向导数」单向箭头图</div>
+        </div>
+      </div>
+    </div>
+    <div class="tags" data-p="p4"><span class="lab">错因归因:</span></div>
+  </div>
+
+  <footer>DEMO 错题页 · 解答由 Claude 盲做后独立撰写并自查计算 · 正式页将按你的实际错题生成 · 错因勾选保存在本机浏览器</footer>
+</div>
+
+<script>
+/* 四层展开 */
+document.querySelectorAll('.lbtn').forEach(b=>b.addEventListener('click',()=>{
+  b.parentElement.classList.toggle('open');
+}));
+
+/* 错因标签:每题可勾一个或多个,localStorage 持久化,统计条联动 */
+const TAGS=[["概念不清","1"],["计算失误","2"],["思路卡壳","3"],["套路没见过","4"]];
+const LS='demo_错题归因';
+let saved={};
+try{saved=JSON.parse(localStorage.getItem(LS)||'{}')}catch(e){}
+/* 样板预设:演示统计条效果,用户可自行改勾 */
+if(!localStorage.getItem(LS)){saved={p1:["3"],p2:["4"],p3:["2"],p4:["1"]}}
+
+document.querySelectorAll('.tags').forEach(box=>{
+  const pid=box.dataset.p;
+  TAGS.forEach(([name,cls])=>{
+    const btn=document.createElement('button');
+    btn.className='tagbtn';btn.textContent=name;
+    if((saved[pid]||[]).includes(cls))btn.classList.add('on-'+cls);
+    btn.addEventListener('click',()=>{
+      btn.classList.toggle('on-'+cls);
+      saved[pid]=[...box.querySelectorAll('.tagbtn')].map((b,i)=>b.className.includes('on-')?TAGS[i][1]:null).filter(Boolean);
+      localStorage.setItem(LS,JSON.stringify(saved));
+      renderBar();
+    });
+    box.appendChild(btn);
+  });
+});
+
+function renderBar(){
+  const cnt={1:0,2:0,3:0,4:0};
+  Object.values(saved).forEach(a=>(a||[]).forEach(c=>cnt[c]++));
+  const total=Object.values(cnt).reduce((s,v)=>s+v,0)||1;
+  document.getElementById('bar').innerHTML=[1,2,3,4].map(c=>
+    `<div class="b${c}" style="width:${cnt[c]/total*100}%"></div>`).join('');
+  const colors={1:'var(--red)',2:'var(--amber)',3:'var(--accent)',4:'var(--purple)'};
+  document.getElementById('legend').innerHTML=TAGS.map(([n,c])=>
+    `<span><span class="dot" style="background:${colors[c]}"></span>${n} <b>${cnt[c]}</b></span>`).join('');
+}
+renderBar();
+</script>
+</body>
+</html>
