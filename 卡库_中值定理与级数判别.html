@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>卡库 · 中值定理家族 + 级数判别法家族</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+<style>
+  :root{
+    --bg:#f7f8fa; --card:#ffffff; --ink:#2b2d33; --muted:#7d8390;
+    --accent:#3d5a8a; --accent-soft:#e7edf6; --line:#e2e5ea;
+    --green:#3e7a4e; --green-soft:#e8f2ea;
+    --red:#b04a3a; --red-soft:#f9e9e6;
+    --amber:#a3762a; --amber-soft:#f7efdd;
+    --purple:#6d5a8e; --purple-soft:#eeeaf5;
+    --serif:"Georgia","Songti SC",serif;
+    --sans:-apple-system,"PingFang SC","Helvetica Neue",sans-serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#191b1f; --card:#23262c; --ink:#e6e7ea; --muted:#969ca8;
+      --accent:#8fb0dc; --accent-soft:#2a3240; --line:#363a42;
+      --green:#7fb98d; --green-soft:#26362b;
+      --red:#d98876; --red-soft:#3d2a26;
+      --amber:#d9b06a; --amber-soft:#3d3520;
+      --purple:#a996c8; --purple-soft:#302a3d;
+    }
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.75;padding-bottom:80px}
+  .wrap{max-width:1000px;margin:0 auto;padding:24px 20px}
+  .back{font-size:.85rem;color:var(--muted);text-decoration:none}
+  .back:hover{color:var(--accent)}
+  header{margin:14px 0 20px}
+  header h1{font-family:var(--serif);font-size:1.6rem;line-height:1.35}
+  header .sub{color:var(--muted);margin-top:6px;font-size:.9rem}
+
+  .toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:18px;position:sticky;top:0;background:var(--bg);padding:10px 0;z-index:10}
+  .fbtn{font-size:.8rem;border:1px solid var(--line);background:var(--card);color:var(--muted);border-radius:999px;padding:4px 14px;cursor:pointer}
+  .fbtn.on{background:var(--accent);color:var(--card);border-color:var(--accent)}
+  .allbtn{margin-left:auto;font-size:.78rem;border:1px solid var(--accent);background:none;color:var(--accent);border-radius:8px;padding:4px 12px;cursor:pointer}
+
+  h2.sect{font-size:1.02rem;letter-spacing:.05em;color:var(--accent);margin:26px 0 12px;display:flex;align-items:center;gap:8px}
+  h2.sect .n{font-size:.72rem;background:var(--accent);color:var(--card);border-radius:6px;padding:1px 7px}
+  h2.sect .cnt{font-size:.75rem;color:var(--muted);font-weight:400}
+
+  .cardk{background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:12px;overflow:hidden}
+  .cardk.trig{border-left:4px solid var(--amber)}
+  .cardk.table{border-left:4px solid var(--purple)}
+  .chead{padding:13px 18px;cursor:pointer;display:flex;align-items:center;gap:10px;user-select:none}
+  .chead:hover{background:var(--accent-soft)}
+  .chead .name{font-weight:650;font-size:.98rem}
+  .chead .hintline{font-size:.8rem;color:var(--muted);margin-left:auto;text-align:right}
+  .badge{font-size:.7rem;padding:1px 8px;border-radius:999px;white-space:nowrap}
+  .b-fam{background:var(--accent-soft);color:var(--accent)}
+  .b-trig{background:var(--amber-soft);color:var(--amber)}
+  .b-table{background:var(--purple-soft);color:var(--purple)}
+  .arrow{color:var(--muted);font-size:.75rem;transition:transform .2s}
+  .cardk.open .arrow{transform:rotate(90deg)}
+  .cbody{display:none;padding:4px 18px 16px;border-top:1px dashed var(--line)}
+  .cardk.open .cbody{display:block}
+  .row{margin-top:10px;font-size:.9rem;padding:9px 12px;border-radius:8px}
+  .row b{font-size:.72rem;display:block;margin-bottom:3px;letter-spacing:.08em}
+  .r-cond{background:var(--accent-soft)} .r-cond b{color:var(--accent)}
+  .r-concl{background:var(--green-soft)} .r-concl b{color:var(--green)}
+  .r-when{background:var(--amber-soft)} .r-when b{color:var(--amber)}
+  .r-conf{background:var(--red-soft)} .r-conf b{color:var(--red)}
+  .r-src{background:none;border:1px dashed var(--line);color:var(--muted);font-size:.82rem} .r-src b{color:var(--muted)}
+
+  .cbody table{border-collapse:collapse;width:100%;font-size:.85rem;margin-top:10px}
+  .cbody th,.cbody td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
+  .cbody th{background:var(--accent-soft);color:var(--accent);font-weight:600;white-space:nowrap}
+  .tblwrap{overflow-x:auto}
+  .usage{font-size:.83rem;color:var(--muted);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin-bottom:18px}
+  .usage b{color:var(--accent)}
+  footer{color:var(--muted);font-size:.8rem;text-align:center;margin-top:30px}
+  .katex{font-size:1.02em}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="index.html">◀ 返回数学复盘中心</a>
+  <header>
+    <h1>中值定理家族 + 级数判别法家族</h1>
+    <div class="sub">22 张卡 · 每卡:条件 → 结论 → 何时用 → 易混点 → 真题出处 · 默认收起当自测:先自己背条件结论,再点开对答案</div>
+  </header>
+
+  <div class="usage"><b>自测用法:</b>看卡片标题,先在草稿纸上默写「条件 + 结论 + 什么时候用」,然后点开卡片核对。红色「易混点」是历年最常踩的坑,每次都要读。触发器卡(黄边)是反向索引:见到题目特征 → 该想到什么。</div>
+
+  <div class="toolbar">
+    <button class="fbtn on" data-f="all">全部</button>
+    <button class="fbtn" data-f="mvt">中值定理</button>
+    <button class="fbtn" data-f="series">级数判别</button>
+    <button class="fbtn" data-f="trig">触发器卡</button>
+    <button class="fbtn" data-f="table">对比总表</button>
+    <button class="allbtn" onclick="toggleAll()">全部展开 / 收起</button>
+  </div>
+
+  <!-- ================= 中值定理家族 ================= -->
+  <h2 class="sect" data-g="mvt"><span class="n">01</span>中值定理家族<span class="cnt">家族卡 7 + 触发器 4</span></h2>
+
+  <div class="cardk" data-g="mvt">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">闭区间连续函数三定理(有界最值 · 介值 · 零点)</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-cond"><b>条件</b>$f(x)$ 在闭区间 $[a,b]$ 上<b style="display:inline">连续</b>(仅此一条,不需要可导)。零点定理额外要 $f(a)\cdot f(b)<0$。</div>
+      <div class="row r-concl"><b>结论</b>① 有界且取得最大值 $M$、最小值 $m$;② 介值:$\forall\,\mu\in[m,M]$,存在 $\xi\in[a,b]$ 使 $f(\xi)=\mu$;③ 零点:存在 $\xi\in(a,b)$ 使 $f(\xi)=0$。</div>
+      <div class="row r-when"><b>何时用</b>要证「存在一点使<b style="display:inline">函数值</b>等于某数」(结论里<b style="display:inline">不含导数</b>)时。典型:证 $f(c)=c$(不动点)→ 对 $g(x)=f(x)-x$ 用零点定理。</div>
+      <div class="row r-conf"><b>易混点</b>结论含导数 → 中值定理;不含导数 → 本组三定理。零点定理要端点<b style="display:inline">异号</b>,拿到题先算端点值。介值定理的 $\mu$ 必须在 $[m,M]$ 内,不能随便取。</div>
+      <div class="row r-src"><b>真题出处</b>常作证明大题第 (1) 问铺垫(先零点定理找 $c$,第 (2) 问再上中值定理)。具体年份待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="mvt">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">罗尔定理 Rolle</span><span class="hintline">$f'(\xi)=0$</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-cond"><b>条件</b>① $f\in C[a,b]$;② 在 $(a,b)$ 内可导;③ $f(a)=f(b)$。三条缺一不可。</div>
+      <div class="row r-concl"><b>结论</b>存在 $\xi\in(a,b)$,使 $f'(\xi)=0$。</div>
+      <div class="row r-when"><b>何时用</b>要证「存在 $\xi$ 使某个<b style="display:inline">含导数的等式</b> $=0$」:把等式凑成 $F'(\xi)=0$ 的形状,构造辅助函数 $F$,验证 $F$ 在两端取等值,用罗尔。它是中值等式证明题的<b style="display:inline">最终执行者</b>,拉格朗日/柯西都是它的推论。</div>
+      <div class="row r-conf"><b>易混点</b>「两端相等」不一定是题目直接给的——常要先用零点定理/介值定理<b style="display:inline">找出</b>使函数值相等的两个点。另:$\xi$ 在开区间内,别写成闭区间。</div>
+      <div class="row r-src"><b>真题出处</b>中值等式证明大题的核心工具,数一几乎隔年一考。待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="mvt">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">拉格朗日中值定理 Lagrange</span><span class="hintline">$f(b)-f(a)=f'(\xi)(b-a)$</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-cond"><b>条件</b>① $f\in C[a,b]$;② 在 $(a,b)$ 内可导。(比罗尔少了「两端相等」)</div>
+      <div class="row r-concl"><b>结论</b>存在 $\xi\in(a,b)$,使 $f(b)-f(a)=f'(\xi)(b-a)$。</div>
+      <div class="row r-when"><b>何时用</b>① 见到<b style="display:inline">函数值之差</b> $f(b)-f(a)$(把差变成导数);② 用导数的界证不等式:$m(b-a)\le f(b)-f(a)\le M(b-a)$;③ 证「导数有界 ⇒ 函数一致连续/极限存在」类命题。</div>
+      <div class="row r-conf"><b>易混点</b>$\xi$ 依赖于 $a,b$,<b style="display:inline">不是常数</b>——对不同区间用两次拉格朗日得到的是两个不同的 $\xi$。当 $f(a)=f(b)$ 时退化为罗尔。别把结论写成 $f'(\xi)=\frac{f(b)-f(a)}{b-a}$ 后忘了 $b\ne a$ 的前提。</div>
+      <div class="row r-src"><b>真题出处</b>不等式证明、双中值点问题的标准部件。待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="mvt">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">柯西中值定理 Cauchy</span><span class="hintline">$\dfrac{f(b)-f(a)}{g(b)-g(a)}=\dfrac{f'(\xi)}{g'(\xi)}$</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-cond"><b>条件</b>$f,g\in C[a,b]$,在 $(a,b)$ 内可导,且 $g'(x)\ne 0$($x\in(a,b)$)。</div>
+      <div class="row r-concl"><b>结论</b>存在 $\xi\in(a,b)$,使 $\dfrac{f(b)-f(a)}{g(b)-g(a)}=\dfrac{f'(\xi)}{g'(\xi)}$。</div>
+      <div class="row r-when"><b>何时用</b>结论里出现<b style="display:inline">两个函数的增量比</b>,或同一点 $\xi$ 处两个导数的比。取 $g(x)=x$ 即退化为拉格朗日。也是洛必达法则的理论根基。</div>
+      <div class="row r-conf"><b>易混点</b>⚠️ 最高频陷阱:柯西中值定理<b style="display:inline">不是</b>「对 $f$、$g$ 分别用拉格朗日再相除」——那样得到 $\frac{f'(\xi_1)}{g'(\xi_2)}$,是<b style="display:inline">两个不同的点</b>!要同一个 $\xi$ 必须用柯西。</div>
+      <div class="row r-src"><b>真题出处</b>「存在 $\xi,\eta$ 使 …」类双点问题常一半用它。待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="mvt">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">泰勒中值定理(拉格朗日余项 / 佩亚诺余项)</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-cond"><b>条件</b>拉格朗日余项版:$f$ 在含 $x_0$ 的区间上 $n+1$ 阶可导。佩亚诺余项版:只需 $f$ 在 $x_0$ 处 $n$ 阶可导。</div>
+      <div class="row r-concl"><b>结论</b>$$f(x)=\sum_{k=0}^{n}\frac{f^{(k)}(x_0)}{k!}(x-x_0)^k+R_n(x)$$拉格朗日余项 $R_n=\dfrac{f^{(n+1)}(\xi)}{(n+1)!}(x-x_0)^{n+1}$($\xi$ 介于 $x_0,x$ 之间);佩亚诺余项 $R_n=o\big((x-x_0)^n\big)$。</div>
+      <div class="row r-when"><b>何时用</b><b style="display:inline">拉格朗日余项</b>:区间上的估计/证明,题面出现 $f''$、$f'''$ 的界或要证含高阶导数的不等式;<b style="display:inline">佩亚诺余项</b>:求极限、判断极值/拐点等 $x\to x_0$ 的局部问题。展开点选「信息最多的点」:中点、极值点($f'=0$)、端点。</div>
+      <div class="row r-conf"><b>易混点</b>两种余项不能混用:求极限用佩亚诺(拉格朗日余项反而难控制);整体估计必须用拉格朗日(佩亚诺只在一点附近有效)。展开阶数=「已知最高阶导数 $-1$」通常不够,应展到<b style="display:inline">能用上已知条件的最低阶</b>。</div>
+      <div class="row r-src"><b>真题出处</b>含 $f''(\xi)$ 的证明题基本都是它。待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="mvt">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">积分中值定理(含加权推广)</span><span class="hintline">$\int_a^b f\,dx=f(\xi)(b-a)$</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-cond"><b>条件</b>基本版:$f\in C[a,b]$。加权版:再加 $g\in C[a,b]$ 且 $g$ 在 $[a,b]$ 上<b style="display:inline">不变号</b>。</div>
+      <div class="row r-concl"><b>结论</b>基本版:存在 $\xi\in[a,b]$ 使 $\int_a^b f(x)dx=f(\xi)(b-a)$;加权版:$\int_a^b f g\,dx=f(\xi)\int_a^b g\,dx$。(用「变上限积分 + 拉格朗日」可把 $\xi$ 做到开区间 $(a,b)$ 内)</div>
+      <div class="row r-when"><b>何时用</b>要「<b style="display:inline">去掉积分号</b>」:把 $\int_a^b f$ 变成一点的函数值,常用于含积分条件的中值证明题(如已知 $\int_0^1 f=0$,先用它找出 $f(c)=0$ 的点)。</div>
+      <div class="row r-conf"><b>易混点</b>教材基本版给的是<b style="display:inline">闭区间</b> $[a,b]$;若题目要求 $\xi\in(a,b)$,要改走「令 $F(x)=\int_a^x f\,dt$,对 $F$ 用拉格朗日」这条路。加权版忘记「$g$ 不变号」直接套是常见错误。</div>
+      <div class="row r-src"><b>真题出处</b>含 $\int_0^1 f(x)dx$ 条件的证明题第一步高频。待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk table" data-g="mvt table">
+    <div class="chead"><span class="badge b-table">对比总表</span><span class="name">微分中值家族 · 一张表定位</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="tblwrap"><table>
+        <tr><th>定理</th><th>核心条件</th><th>结论形态</th><th>题目信号</th></tr>
+        <tr><td>零点/介值</td><td>连续</td><td>$f(\xi)=\mu$(无导数)</td><td>结论只有函数值</td></tr>
+        <tr><td>罗尔</td><td>连续+可导+两端等值</td><td>$F'(\xi)=0$</td><td>含导数的等式证明</td></tr>
+        <tr><td>拉格朗日</td><td>连续+可导</td><td>$f(b)-f(a)=f'(\xi)(b-a)$</td><td>函数值之差</td></tr>
+        <tr><td>柯西</td><td>两函数,$g'\ne0$</td><td>增量比=导数比(同一 $\xi$)</td><td>两函数之比</td></tr>
+        <tr><td>泰勒</td><td>高阶可导</td><td>含 $f^{(n+1)}(\xi)$</td><td>出现二阶及以上导数</td></tr>
+        <tr><td>积分中值</td><td>被积函数连续</td><td>$\int=f(\xi)(b-a)$</td><td>条件里有定积分</td></tr>
+      </table></div>
+      <div class="row r-when"><b>决策口诀</b>看<b style="display:inline">结论</b>选定理:无导数→介值/零点;一阶导→罗尔系(凑 $F'=0$);函数值差→拉格朗日;两函数→柯西;高阶导→泰勒;有积分→先积分中值去积分号。</div>
+    </div>
+  </div>
+
+  <div class="cardk trig" data-g="mvt trig">
+    <div class="chead"><span class="badge b-trig">触发器</span><span class="name">见 $f(b)-f(a)$ → 拉格朗日;见 $\dfrac{f(b)-f(a)}{g(b)-g(a)}$ → 柯西</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-when"><b>触发动作</b>题面或要证的式子里出现「同一函数在两点的值之差」,第一反应写 $f(b)-f(a)=f'(\xi)(b-a)$;出现「两个增量的商」,直接柯西,不要拆成两次拉格朗日。</div>
+      <div class="row r-conf"><b>易混点</b>差的两端也可能来自积分:$F(b)-F(a)=\int_a^b f$,此时「差」和「积分」可互相转化,选对方向是解题关键。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk trig" data-g="mvt trig">
+    <div class="chead"><span class="badge b-trig">触发器</span><span class="name">要证 $F'(\xi)=0$ 型等式 → 构造辅助函数 + 罗尔(常用构造对照)</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>常用构造</b>要证 $f'(\xi)+\lambda f(\xi)=0$ → 取 $F(x)=e^{\lambda x}f(x)$;要证 $f'(\xi)g(\xi)+f(\xi)g'(\xi)=0$ → $F=fg$;要证 $f'(\xi)g(\xi)-f(\xi)g'(\xi)=0$ → $F=f/g$;要证 $\xi f'(\xi)+f(\xi)=0$ → $F=xf(x)$;要证 $\xi f'(\xi)-f(\xi)=0$ → $F=f(x)/x$。</div>
+      <div class="row r-when"><b>通用方法</b>把要证的等式写成「某式 $=0$」,问自己:<b style="display:inline">谁的导数长这样?</b>(即求原函数)。看到 $f'+\lambda f$ 结构统一乘 $e^{\lambda x}$ 是万能起手式(一阶线性方程的积分因子思想)。</div>
+      <div class="row r-conf"><b>易混点</b>构造完 $F$ 别忘了<b style="display:inline">验证罗尔的第三个条件</b>($F$ 在某两点取等值)——这一步常需要先用零点/介值/积分中值定理找点,是采分点。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk trig" data-g="mvt trig">
+    <div class="chead"><span class="badge b-trig">触发器</span><span class="name">结论含两个中值点 $\xi\ne\eta$ → 拆区间 / 拉格朗日+柯西组合</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-when"><b>触发动作</b>要证「存在 $\xi,\eta$ 使 …」:① 若两点可以在<b style="display:inline">不同子区间</b>——先用介值/零点定理找分割点 $c$,在 $[a,c]$、$[c,b]$ 上各用一次拉格朗日;② 若式子里 $\xi,\eta$ 地位不同(一边像拉格朗日、一边像柯西)——同一区间上一次拉格朗日 + 一次柯西。</div>
+      <div class="row r-conf"><b>易混点</b>题目没写 $\xi\ne\eta$ 时两点允许相同,难点反而降低;写了 $\xi\ne\eta$ 则必须拆区间。分割点 $c$ 怎么选:让两段的「增量」都好算(常用介值定理取 $f(c)$ 为特定值,如 $f(c)=\frac{f(a)+f(b)}{2}$)。</div>
+      <div class="row r-src"><b>真题出处</b>数一大题经典款(样板错题页第 1 题即此型)。待反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk trig" data-g="mvt trig">
+    <div class="chead"><span class="badge b-trig">触发器</span><span class="name">见高阶导数 $f''(\xi)$、$f^{(n)}(\xi)$ → 泰勒展开,展开点选信息最多处</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-when"><b>触发动作</b>要证的式子含二阶及以上导数 → 基本不用罗尔硬凑,直接泰勒。<b style="display:inline">在谁处展开:</b>已知 $f'(x_0)=0$(极值点/驻点)→ 在 $x_0$ 展开;已知区间两端函数值 → 在中点展开再相加减;要估 $f''$ 的界 → 把端点代入展开式消去低阶项。</div>
+      <div class="row r-conf"><b>易混点</b>两个展开式相加减时,两个 $\xi_1,\xi_2$ 不能合并成一个,除非用「$f''$ 连续 + 介值定理」把 $\frac{f''(\xi_1)+f''(\xi_2)}{2}$ 收成一点 $f''(\eta)$——这步要写理由,直接合并是扣分点。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <!-- ================= 级数判别法家族 ================= -->
+  <h2 class="sect" data-g="series"><span class="n">02</span>级数判别法家族<span class="cnt">家族卡 7 + 触发器 4</span></h2>
+
+  <div class="cardk" data-g="series">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">基准级数库:$p$-级数 · 几何级数 · 对数修正级数</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论</b>$$\sum\frac{1}{n^p}\;\begin{cases}\text{收敛},&p>1\\\text{发散},&p\le1\end{cases}\qquad \sum aq^{n}\;\begin{cases}\text{收敛},&|q|<1\\\text{发散},&|q|\ge1\end{cases}$$$$\sum\frac{1}{n\ln^p n}\;\begin{cases}\text{收敛},&p>1\\\text{发散},&p\le1\end{cases}$$</div>
+      <div class="row r-when"><b>何时用</b>它们是比较判别法的<b style="display:inline">参照物</b>:一切分式型通项都往这三类上靠。先抓通项的「主部」(最高阶无穷小/大),对齐到 $\frac{1}{n^p}$。</div>
+      <div class="row r-conf"><b>易混点</b>$p=1$(调和级数)发散但通项 $\to 0$——「通项趋 0」只是必要条件不是充分条件,这是选择题的常年陷阱。$\sum\frac1{n\ln n}$ 发散(积分判别可验),别当成收敛。</div>
+      <div class="row r-src"><b>真题出处</b>选择题敛散性判断的地基。待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="series">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">比较判别法(不等式形式 + 极限形式)</span><span class="hintline">仅正项级数</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-cond"><b>条件</b>$a_n,b_n\ge 0$(<b style="display:inline">正项级数专用</b>)。</div>
+      <div class="row r-concl"><b>结论</b>不等式形式:$a_n\le b_n$ 时,大收敛⇒小收敛;小发散⇒大发散。极限形式:$\lim\frac{a_n}{b_n}=l$,当 $0<l<+\infty$ 时两者同敛散($l=0$ 时 $b$ 收敛⇒$a$ 收敛;$l=+\infty$ 时 $b$ 发散⇒$a$ 发散)。</div>
+      <div class="row r-when"><b>何时用</b>通项是分式、含根号、含 $\sin\frac1n$、$\ln(1+\frac1n)$ 等 → 用等价无穷小抓主部,与 $p$-级数比。这是<b style="display:inline">最常用</b>的判别法。</div>
+      <div class="row r-conf"><b>易混点</b>对<b style="display:inline">变号级数</b>直接用比较法是错误(先取绝对值)。$l=0$ 和 $l=\infty$ 时只有单向结论,别写「同敛散」。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="series">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">比值判别法(达朗贝尔)</span><span class="hintline">$\lim\frac{a_{n+1}}{a_n}=\rho$</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-cond"><b>条件</b>正项级数,极限 $\rho=\lim\limits_{n\to\infty}\dfrac{a_{n+1}}{a_n}$ 存在(或为 $+\infty$)。</div>
+      <div class="row r-concl"><b>结论</b>$\rho<1$ 收敛;$\rho>1$(含 $+\infty$)发散,且此时 $a_n\not\to0$;$\rho=1$ <b style="display:inline">判别失效</b>。</div>
+      <div class="row r-when"><b>何时用</b>通项含 $n!$、$a^n$、$n^n$ 或它们的混合(相邻项之比能大量约分)。也是幂级数求收敛半径的默认工具。</div>
+      <div class="row r-conf"><b>易混点</b>所有 $p$-级数都有 $\rho=1$——比值法对「多项式型」通项一律失效,别硬套,退回比较法。$\rho>1$ 时结论比「发散」更强:通项不趋于 0。</div>
+      <div class="row r-src"><b>真题出处</b>幂级数收敛域题第一步。待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="series">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">根值判别法(柯西)</span><span class="hintline">$\lim\sqrt[n]{a_n}=\rho$</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-cond"><b>条件</b>正项级数,$\rho=\lim\limits_{n\to\infty}\sqrt[n]{a_n}$。</div>
+      <div class="row r-concl"><b>结论</b>与比值法同形:$\rho<1$ 收敛,$\rho>1$ 发散,$\rho=1$ 失效。</div>
+      <div class="row r-when"><b>何时用</b>通项整体是 <b style="display:inline">$n$ 次幂</b>:$\left(\frac{n}{2n+1}\right)^n$、$\frac{2^n}{(1+\frac1n)^{n^2}}$ 之类,开 $n$ 次方根正好脱幂。常用极限 $\sqrt[n]{n}\to1$、$\sqrt[n]{c}\to1$ 要熟。</div>
+      <div class="row r-conf"><b>易混点</b>根值法<b style="display:inline">强于</b>比值法:比值极限存在则根值极限必存在且相等,反之不然。两者失效场景相同($\rho=1$),失效就换比较法,别来回换着硬算。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="series">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">莱布尼茨判别法(交错级数)</span><span class="hintline">$\sum(-1)^{n-1}a_n$</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-cond"><b>条件</b>交错级数 $\sum(-1)^{n-1}a_n$($a_n>0$):① $a_n$ 单调不增;② $a_n\to 0$。</div>
+      <div class="row r-concl"><b>结论</b>级数收敛,且余和 $|r_n|\le a_{n+1}$。</div>
+      <div class="row r-when"><b>何时用</b>见 $(-1)^n$ 且取绝对值后发散(绝对收敛判不出来)时的第二步。「单调减」可以从<b style="display:inline">某一项之后</b>才成立(前有限项不影响敛散)。验单调:相邻比 $\le1$、差 $\le0$、或对 $f(x)$ 求导。</div>
+      <div class="row r-conf"><b>易混点</b>条件不满足 ≠ 发散(莱布尼茨只是充分条件)。$a_n$ 不单调时可拆项:如 $\frac{(-1)^n}{\sqrt n+(-1)^n}$ 要有理化拆成「收敛交错级数 + 发散正项级数」→ 整体发散,直接套莱布尼茨会漏判。</div>
+      <div class="row r-src"><b>真题出处</b>选择题「条件收敛/绝对收敛」组合判断高频。待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="series">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">绝对收敛与条件收敛</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论</b>$\sum|a_n|$ 收敛 ⇒ $\sum a_n$ 收敛(绝对收敛)。$\sum a_n$ 收敛但 $\sum|a_n|$ 发散 = 条件收敛。绝对收敛级数任意重排和不变;条件收敛级数的正部、负部<b style="display:inline">都发散</b>。</div>
+      <div class="row r-when"><b>何时用</b>变号级数的<b style="display:inline">标准流程第一步</b>:先判 $\sum|a_n|$(回到正项级数世界,全部判别法可用),收敛则结束;发散再看是否交错→莱布尼茨。</div>
+      <div class="row r-conf"><b>易混点</b>①「$\sum|a_n|$ 发散」不能推出「$\sum a_n$ 发散」——<b style="display:inline">除非</b>发散是比值/根值法以 $\rho>1$ 判出的(那时通项不趋 0,原级数必发散)。② 条件收敛 + 条件收敛可能=绝对收敛(收敛性可加,「条件」性不可加)。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk table" data-g="series table">
+    <div class="chead"><span class="badge b-table">对比总表</span><span class="name">拿到 $\sum a_n$ 的判别决策树</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="tblwrap"><table>
+        <tr><th>第 0 步</th><td>$a_n\to 0$ 吗?不趋 0 → <b>直接发散</b>(必要条件,最快出局判据)</td></tr>
+        <tr><th>正项级数</th><td>含 $n!,a^n,n^n$ → <b>比值法</b>;整体 $n$ 次幂 → <b>根值法</b>;分式/根号型 → 抓主部,<b>比较法</b>对齐 $p$-级数;含 $\ln$ 修正 → 对数 $p$-级数/积分判别</td></tr>
+        <tr><th>变号级数</th><td>先判 $\sum|a_n|$:收敛 → 绝对收敛,完;发散(且非 $\rho>1$ 判出)→ 交错?→ <b>莱布尼茨</b>;$a_n$ 不单调 → 拆项/有理化后分别判</td></tr>
+        <tr><th>抽象级数</th><td>选择题给 $\sum a_n$ 性质推 $\sum f(a_n)$:用「收敛⇒$a_n\to0$⇒可用等价无穷小/泰勒比较 $a_n^2$ 等」;注意变号时 $\sum a_n^2$ 未必收敛(如 $\frac{(-1)^n}{\sqrt n}$)</td></tr>
+      </table></div>
+      <div class="row r-conf"><b>易混点</b>决策树的每一步都有「失效出口」:比值/根值 $\rho=1$ → 换比较;莱布尼茨条件不满足 → 换拆项。没有万能判别法,卡住就换路,别死磕一种。</div>
+    </div>
+  </div>
+
+  <div class="cardk trig" data-g="series trig">
+    <div class="chead"><span class="badge b-trig">触发器</span><span class="name">见 $n!$、$a^n$、$n^n$ → 比值法;见 $(\cdots)^n$ 整体幂 → 根值法</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-when"><b>触发动作</b>阶乘和指数的相邻比会大量约分:$\frac{(n+1)!}{n!}=n+1$、$\frac{a^{n+1}}{a^n}=a$;整体 $n$ 次幂开根号直接脱幂。两个特征同时出现优先比值法(阶乘开 $n$ 次方根很难算,除非记得 Stirling 级别的 $\sqrt[n]{n!}\sim \frac ne$)。</div>
+      <div class="row r-conf"><b>易混点</b>$\lim\left(1+\frac1n\right)^{n}=e$ 类「$1^\infty$」极限混在比值计算里最容易算错,写出来单独算,别心算。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk trig" data-g="series trig">
+    <div class="chead"><span class="badge b-trig">触发器</span><span class="name">见 $(-1)^n$ → 先验绝对收敛,再莱布尼茨;警惕「平方陷阱」</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-when"><b>触发动作</b>变号级数固定两步走:① $\sum|a_n|$ 收敛?→ 绝对收敛,结束;② 不收敛 → 交错且单调趋 0?→ 条件收敛。</div>
+      <div class="row r-conf"><b>易混点</b>经典反例背三个:$\sum\frac{(-1)^n}{\sqrt n}$ 条件收敛,但其<b style="display:inline">平方</b> $\sum\frac1n$ 发散(「$\sum a_n$ 收敛⇒$\sum a_n^2$ 收敛」对变号级数不成立);$\sum\frac{(-1)^n}{\sqrt n+(-1)^n}$ 发散(不单调,需拆项);$\sum\frac{(-1)^n}{n}$ 条件收敛=交错调和级数,和为 $-\ln 2$。</div>
+      <div class="row r-src"><b>真题出处</b>选择题反例题库核心。待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk trig" data-g="series trig">
+    <div class="chead"><span class="badge b-trig">触发器</span><span class="name">见 $\sum a_nx^n$ 求和/收敛域 → 比值求 $R$ + 端点单验;逐项求导/积分凑几何级数</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-when"><b>触发动作</b>① 收敛域:$R=\lim\left|\frac{a_n}{a_{n+1}}\right|$,<b style="display:inline">端点 $x=\pm R$ 必须代入单独判</b>;缺项级数($x^{2n}$ 型)别背公式,直接对整个通项用比值/根值。② 求和函数:分母有 $n$ → 先导后积;分子有 $n$ → 先积后导;目标都是化成 $\sum x^n=\frac{1}{1-x}$。③ 数项级数求和 $\sum\frac{n}{2^n}$ 型 → 构造幂级数 $S(x)$ 代 $x=\frac12$。</div>
+      <div class="row r-conf"><b>易混点</b>逐项求导/积分<b style="display:inline">不改变收敛半径,但端点敛散性可能变</b>,最后写和函数定义域时要回头查端点;积分起点选 0(保证 $S(0)$ 已知),分离出的 $\frac1x$ 因子在 $x=0$ 处要单独补定义。</div>
+      <div class="row r-src"><b>真题出处</b>幂级数大题固定套路(样板错题页第 2 题即此型)。待反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk trig" data-g="series trig">
+    <div class="chead"><span class="badge b-trig">触发器</span><span class="name">通项含定积分 / 递推定义 → 放缩估值 + 比较法</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-when"><b>触发动作</b>$a_n=\int_0^{1/n}f(x)dx$ 型 → 在积分区间上对被积函数放缩(或用积分中值定理),把 $a_n$ 夹到 $\frac{c}{n^p}$ 量级,再比较法。$a_{n+1}=f(a_n)$ 递推型 → 先证 $a_n$ 单调有界求极限,再用 $\frac{a_{n+1}}{a_n}\to\rho$ 或与等比放缩比。</div>
+      <div class="row r-conf"><b>易混点</b>放缩方向别搞反:证收敛要「放大后仍收敛」,证发散要「缩小后仍发散」。区间 $[0,\frac1n]$ 上 $\sin x\le x$、$\ln(1+x)\le x$、$1-\cos x\le\frac{x^2}2$ 是最常用的三把尺子。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <footer>数学一卡库 · 中值定理 + 级数判别 · 22 张 · 由 Claude 编写,真题出处随错题页生成逐步反链</footer>
+</div>
+
+<script>
+document.querySelectorAll('.chead').forEach(h=>h.addEventListener('click',()=>{
+  h.parentElement.classList.toggle('open');
+}));
+let allOpen=false;
+function toggleAll(){
+  allOpen=!allOpen;
+  document.querySelectorAll('.cardk').forEach(c=>{
+    if(c.style.display!=='none')c.classList.toggle('open',allOpen);
+  });
+}
+document.querySelectorAll('.fbtn').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.fbtn').forEach(x=>x.classList.remove('on'));b.classList.add('on');
+  const f=b.dataset.f;
+  document.querySelectorAll('.cardk').forEach(c=>{
+    c.style.display=(f==='all'||c.dataset.g.split(' ').includes(f))?'':'none';
+  });
+  document.querySelectorAll('h2.sect').forEach(s=>{
+    const g=s.dataset.g;
+    s.style.display=(f==='all'||f==='trig'||f==='table'||f===g)?'':'none';
+  });
+}));
+</script>
+</body>
+</html>
