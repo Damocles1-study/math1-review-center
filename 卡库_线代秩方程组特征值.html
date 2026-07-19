@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>卡库 · 线代:秩 · 方程组 · 特征值</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+<style>
+  :root{
+    --bg:#f7f8fa; --card:#ffffff; --ink:#2b2d33; --muted:#7d8390;
+    --accent:#3d5a8a; --accent-soft:#e7edf6; --line:#e2e5ea;
+    --green:#3e7a4e; --green-soft:#e8f2ea;
+    --red:#b04a3a; --red-soft:#f9e9e6;
+    --amber:#a3762a; --amber-soft:#f7efdd;
+    --purple:#6d5a8e; --purple-soft:#eeeaf5;
+    --serif:"Georgia","Songti SC",serif;
+    --sans:-apple-system,"PingFang SC","Helvetica Neue",sans-serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#191b1f; --card:#23262c; --ink:#e6e7ea; --muted:#969ca8;
+      --accent:#8fb0dc; --accent-soft:#2a3240; --line:#363a42;
+      --green:#7fb98d; --green-soft:#26362b;
+      --red:#d98876; --red-soft:#3d2a26;
+      --amber:#d9b06a; --amber-soft:#3d3520;
+      --purple:#a996c8; --purple-soft:#302a3d;
+    }
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.75;padding-bottom:80px}
+  .wrap{max-width:1000px;margin:0 auto;padding:24px 20px}
+  .back{font-size:.85rem;color:var(--muted);text-decoration:none}
+  .back:hover{color:var(--accent)}
+  header{margin:14px 0 20px}
+  header h1{font-family:var(--serif);font-size:1.6rem;line-height:1.35}
+  header .sub{color:var(--muted);margin-top:6px;font-size:.9rem}
+  .toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:18px;position:sticky;top:0;background:var(--bg);padding:10px 0;z-index:10}
+  .fbtn{font-size:.8rem;border:1px solid var(--line);background:var(--card);color:var(--muted);border-radius:999px;padding:4px 14px;cursor:pointer}
+  .fbtn.on{background:var(--accent);color:var(--card);border-color:var(--accent)}
+  .allbtn{margin-left:auto;font-size:.78rem;border:1px solid var(--accent);background:none;color:var(--accent);border-radius:8px;padding:4px 12px;cursor:pointer}
+  h2.sect{font-size:1.02rem;letter-spacing:.05em;color:var(--accent);margin:26px 0 12px;display:flex;align-items:center;gap:8px}
+  h2.sect .n{font-size:.72rem;background:var(--accent);color:var(--card);border-radius:6px;padding:1px 7px}
+  h2.sect .cnt{font-size:.75rem;color:var(--muted);font-weight:400}
+  .cardk{background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:12px;overflow:hidden}
+  .cardk.trig{border-left:4px solid var(--amber)}
+  .cardk.table{border-left:4px solid var(--purple)}
+  .chead{padding:13px 18px;cursor:pointer;display:flex;align-items:center;gap:10px;user-select:none}
+  .chead:hover{background:var(--accent-soft)}
+  .chead .name{font-weight:650;font-size:.98rem}
+  .chead .hintline{font-size:.8rem;color:var(--muted);margin-left:auto;text-align:right}
+  .badge{font-size:.7rem;padding:1px 8px;border-radius:999px;white-space:nowrap}
+  .b-fam{background:var(--accent-soft);color:var(--accent)}
+  .b-trig{background:var(--amber-soft);color:var(--amber)}
+  .b-table{background:var(--purple-soft);color:var(--purple)}
+  .arrow{color:var(--muted);font-size:.75rem;transition:transform .2s}
+  .cardk.open .arrow{transform:rotate(90deg)}
+  .cbody{display:none;padding:4px 18px 16px;border-top:1px dashed var(--line)}
+  .cardk.open .cbody{display:block}
+  .row{margin-top:10px;font-size:.9rem;padding:9px 12px;border-radius:8px}
+  .row b{font-size:.72rem;display:block;margin-bottom:3px;letter-spacing:.08em}
+  .r-cond{background:var(--accent-soft)} .r-cond b{color:var(--accent)}
+  .r-concl{background:var(--green-soft)} .r-concl b{color:var(--green)}
+  .r-when{background:var(--amber-soft)} .r-when b{color:var(--amber)}
+  .r-conf{background:var(--red-soft)} .r-conf b{color:var(--red)}
+  .r-src{background:none;border:1px dashed var(--line);color:var(--muted);font-size:.82rem} .r-src b{color:var(--muted)}
+  .cbody table{border-collapse:collapse;width:100%;font-size:.85rem;margin-top:10px}
+  .cbody th,.cbody td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
+  .cbody th{background:var(--accent-soft);color:var(--accent);font-weight:600;white-space:nowrap}
+  .tblwrap{overflow-x:auto}
+  .usage{font-size:.83rem;color:var(--muted);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin-bottom:18px}
+  .usage b{color:var(--accent)}
+  footer{color:var(--muted);font-size:.8rem;text-align:center;margin-top:30px}
+  .katex{font-size:1.02em}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="index.html">◀ 返回数学复盘中心</a>
+  <header>
+    <h1>线代:秩 · 方程组 · 特征值</h1>
+    <div class="sub">16 张卡 · 线代的主线只有一条:秩 → 解的结构 → 特征值 → 对角化 → 二次型,环环相扣</div>
+  </header>
+
+  <div class="usage"><b>自测用法:</b>先看标题默写内容再点开核对。「秩的不等式家族」「对角化条件链」「正定判定」是三张核心硬背卡;「三关系对照表」管选择题;触发器卡管大题第一步。</div>
+
+  <div class="toolbar">
+    <button class="fbtn on" data-f="all">全部</button>
+    <button class="fbtn" data-f="rank">秩与方程组</button>
+    <button class="fbtn" data-f="eig">特征值与二次型</button>
+    <button class="fbtn" data-f="trig">触发器卡</button>
+    <button class="fbtn" data-f="table">对比总表</button>
+    <button class="allbtn" onclick="toggleAll()">全部展开 / 收起</button>
+  </div>
+
+  <h2 class="sect" data-g="rank"><span class="n">01</span>秩与方程组<span class="cnt">家族卡 4 + 触发器 2</span></h2>
+
+  <div class="cardk" data-g="rank">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">秩的不等式家族(全员报数)</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论</b>$$r(A+B)\le r(A)+r(B)\qquad r(AB)\le\min\{r(A),r(B)\}$$$$r(AB)\ge r(A)+r(B)-n\ \text{($A$ 列数 $=B$ 行数 $=n$)}\qquad AB=O\Rightarrow r(A)+r(B)\le n$$$$r(A)=r(A^T)=r(A^TA)=r(AA^T)\qquad r(kA)=r(A)\,(k\ne0)$$初等变换、乘可逆阵不改变秩:$P,Q$ 可逆 $\Rightarrow r(PAQ)=r(A)$。</div>
+      <div class="row r-when"><b>何时用</b>抽象矩阵秩的选择题、证明题的弹药库;$AB=O$ 那条是「隐藏信息挖掘」的第一现场(见触发器)。</div>
+      <div class="row r-conf"><b>易混点</b>$r(AB)$ 与 $r(BA)$ 一般<b style="display:inline">不相等</b>;$r(A^TA)=r(A)$ 是<b style="display:inline">实</b>矩阵的专利;Sylvester 下界那条里 $n$ 是 $A$ 的<b style="display:inline">列数</b>,别代成行数。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="rank">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">线性方程组解的结构(判定 + 通解模板)</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论</b>$A$ 为 $m\times n$:①齐次 $Ax=0$:基础解系含 $n-r(A)$ 个向量;只有零解 $\iff r(A)=n$。②非齐次 $Ax=b$:$$r(A)\lt r(A\,|\,b)\Rightarrow\text{无解};\quad r(A)=r(A\,|\,b)=n\Rightarrow\text{唯一解};\quad r(A)=r(A\,|\,b)\lt n\Rightarrow\text{无穷多解}$$通解 $=$ 特解 $+$ 齐次通解:$x=\eta^*+k_1\xi_1+\cdots+k_{n-r}\xi_{n-r}$。</div>
+      <div class="row r-when"><b>何时用</b>解性质题:$\eta_1,\eta_2$ 都是 $Ax=b$ 的解 $\Rightarrow\eta_1-\eta_2$ 是 $Ax=0$ 的解;$k_1\eta_1+k_2\eta_2$ 是 $Ax=b$ 的解 $\iff k_1+k_2=1$。「$Ax=b$ 的 $s$ 个解的组合仍是解」全靠系数和判定。</div>
+      <div class="row r-conf"><b>易混点</b>基础解系个数是 $n-r$($n$ 是<b style="display:inline">未知数个数=列数</b>,不是行数);「$Ax=b$ 有无穷多解」$\Rightarrow$「$Ax=0$ 有非零解」,反向不成立($b$ 可能让它无解);非齐次解集<b style="display:inline">不构成</b>向量空间(不含零向量)。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="rank">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">线性相关/无关判定工具箱</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论(按优先级)</b>① 拼成矩阵求秩:$r=$ 个数 $\iff$ 无关;② 方阵 → 行列式:$|A|\ne0\iff$ 无关;③ 定义法(抽象题):设 $k_1\alpha_1+\cdots+k_s\alpha_s=0$,想办法(左乘矩阵/代特征值)证 $k_i$ 全零。速判:个数 $\gt$ 维数必相关;含零向量必相关;部分相关 $\Rightarrow$ 整体相关;整体无关 $\Rightarrow$ 部分无关;无关组每个向量<b style="display:inline">添加分量</b>后仍无关。</div>
+      <div class="row r-when"><b>何时用</b>抽象题固定招:向量组 $A\alpha_1,A\alpha_2$ 相关性 → 左乘;$\alpha,A\alpha,A^2\alpha$ 相关性 → 利用 $A$ 的特征值/零化多项式;不同特征值的特征向量无关(直接引用)。</div>
+      <div class="row r-conf"><b>易混点</b>「$\alpha_1,\dots,\alpha_s$ 线性相关」只保证<b style="display:inline">至少一个</b>可被其余表出,不是每个都行;「两向量相关=成比例」只对两个向量成立;相关性与排列顺序无关、与是否含零向量强相关。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="rank">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">伴随矩阵与逆矩阵公式束</span><span class="hintline">$AA^*=|A|E$</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论(源头只有一条:$AA^*=A^*A=|A|E$)</b>$$A^{-1}=\frac{A^*}{|A|}\qquad A^*=|A|A^{-1}\qquad |A^*|=|A|^{n-1}\qquad (A^*)^*=|A|^{n-2}A\ (n\ge2)$$$$r(A^*)=\begin{cases}n,&r(A)=n\\ 1,&r(A)=n-1\\ 0,&r(A)\le n-2\end{cases}$$$(AB)^{-1}=B^{-1}A^{-1}$,$(AB)^T=B^TA^T$,$(AB)^*=B^*A^*$(全反序)。</div>
+      <div class="row r-when"><b>何时用</b>一切含 $A^*$ 的等式,先左/右乘 $A$ 或用 $A^*=|A|A^{-1}$ 消掉 $A^*$ 回到 $A$ 的世界;$r(A^*)$ 三段论是选择题老熟人。</div>
+      <div class="row r-conf"><b>易混点</b>$A^*$ 的第 $(i,j)$ 元是 $A$ 的第 $(j,i)$ 元的代数余子式(<b style="display:inline">转置着放</b>);$|kA|=k^n|A|$(每行都提 $k$),别写成 $k|A|$;$A^*$ 存在不要求 $A$ 可逆(任何方阵都有伴随)。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk trig" data-g="rank trig">
+    <div class="chead"><span class="badge b-trig">触发器</span><span class="name">见 $AB=O$ → 立刻写出两条隐藏信息</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-when"><b>触发动作</b>① $B$ 的<b style="display:inline">每一列</b>都是 $Ax=0$ 的解(列视角);② $r(A)+r(B)\le n$。若再知 $B\ne O$,则 $Ax=0$ 有非零解 $\Rightarrow r(A)\lt n\Rightarrow|A|=0$。这三步是含参数题(「已知 $AB=O$,$B\ne O$,求 $a$」)的标准开局。</div>
+      <div class="row r-conf"><b>易混点</b>$AB=O$ <b style="display:inline">推不出</b> $A=O$ 或 $B=O$(矩阵没有零因子性质);同样 $A^2=O$ 推不出 $A=O$,但能推出 $r(A)\le\frac n2$ 与特征值全零。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk trig" data-g="rank trig">
+    <div class="chead"><span class="badge b-trig">触发器</span><span class="name">见含参数方程组 → 系数行列式定分岔,逐参代回</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-when"><b>触发动作</b>方阵系数 → 先算 $|A|$(含参行列式):$|A|\ne0$ 的参数值 → 唯一解(克拉默);$|A|=0$ 的每个参数值<b style="display:inline">逐个代回</b>增广矩阵作初等行变换,比较 $r(A)$ 与 $r(A|b)$ 分「无解/无穷多解」。非方阵直接行变换讨论。</div>
+      <div class="row r-conf"><b>易混点</b>行变换只能用「行」(增广矩阵动列会破坏 $b$ 的对应);讨论要<b style="display:inline">穷尽</b>每个使 $|A|=0$ 的参数值,漏一个丢一段分;答题时无穷多解要写出通解(特解+基础解系),别停在判定。</div>
+      <div class="row r-src"><b>真题出处</b>大题常年款。待错题页反链。</div>
+    </div>
+  </div>
+
+  <h2 class="sect" data-g="eig"><span class="n">02</span>特征值与二次型<span class="cnt">家族卡 5 + 总表 1 + 触发器 4</span></h2>
+
+  <div class="cardk" data-g="eig">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">特征值基本功:定义 · 两恒等式 · 函数搬运表</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论</b>$A\alpha=\lambda\alpha$($\alpha\ne0$);求法 $|\lambda E-A|=0$。两恒等式:$\sum\lambda_i=\text{tr}(A)$,$\prod\lambda_i=|A|$。搬运表($\alpha$ 不变):$$A\to\lambda;\quad A^k\to\lambda^k;\quad f(A)\to f(\lambda);\quad A^{-1}\to\frac1\lambda;\quad A^*\to\frac{|A|}{\lambda};\quad P^{-1}AP\to\lambda\ (\text{向量变}P^{-1}\alpha)$$不同特征值对应的特征向量线性无关。</div>
+      <div class="row r-when"><b>何时用</b>「$A$ 满足 $A^2-3A+2E=O$,求 $A^{-1}$ 的特征值」类:特征值只能取零化多项式的根,再逐个搬运。</div>
+      <div class="row r-conf"><b>易混点</b>① $A^T$ 与 $A$ 特征值相同但特征向量<b style="display:inline">一般不同</b>;② 零化多项式的根是特征值的<b style="display:inline">候选集</b>,不保证每个根都真是特征值(要结合 tr、秩等确认);③ $\lambda=0$ 是特征值 $\iff|A|=0$。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="eig">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">相似对角化条件链(判定固定动作)</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论</b>$A$ 可对角化 $\iff$ 有 $n$ 个线性无关特征向量 $\iff$ 对每个 $k_i$ 重特征值 $\lambda_i$ 都有 $n-r(\lambda_iE-A)=k_i$。充分条件:$n$ 个特征值互异;实对称矩阵<b style="display:inline">必</b>可(且可正交对角化)。$P=(\alpha_1,\dots,\alpha_n)$,$P^{-1}AP=\Lambda$,<b style="display:inline">$\Lambda$ 对角元顺序与 $P$ 列顺序一一对应</b>。</div>
+      <div class="row r-when"><b>何时用</b>判定题固定动作:求特征值 → 单根跳过 → 对每个重根算 $r(\lambda E-A)$ 验重数;求 $A^k$:$A^k=P\Lambda^kP^{-1}$。</div>
+      <div class="row r-conf"><b>易混点</b>「相似」与「可对角化」是两回事:$A\sim B$ 不要求谁可对角化;可对角化失败的唯一原因是<b style="display:inline">某个重根的特征向量不够数</b>;$k$ 重特征值的无关特征向量个数 $\le k$(几何重数≤代数重数),只可能少不可能多。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="eig">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">实对称矩阵专属性质包</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论</b>① 特征值全为实数;②<b style="display:inline">不同特征值的特征向量相互正交</b>;③ 必可正交对角化:存在正交阵 $Q$($Q^TQ=E$,$Q^{-1}=Q^T$)使 $Q^TAQ=\Lambda$;④ $r(A)=$ 非零特征值个数(重数计)。</div>
+      <div class="row r-when"><b>何时用</b>「已知部分特征值和特征向量,反求其余特征向量/反求 $A$」:未知特征向量与已知的<b style="display:inline">全部正交</b> → 解正交方程组直接得到;这是实对称独有的补全手段。</div>
+      <div class="row r-conf"><b>易混点</b>正交对角化流程中,<b style="display:inline">同一特征值的多个特征向量还要施密特正交化</b>(不同特征值的自动正交,不用做);$Q$ 的列必须单位化,否则 $Q^{-1}\ne Q^T$;普通矩阵不同特征值的特征向量只保证无关、<b style="display:inline">不保证正交</b>。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="eig">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">二次型标准化三法 + 惯性定理</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论</b>$f=x^TAx$($A$ 取实对称写法):①<b style="display:inline">正交变换法</b> $x=Qy$:$f=\sum\lambda_iy_i^2$,系数就是特征值——保长度、保几何形状,涉及「距离/曲面类型/在 $\|x\|=1$ 上的最值」<b style="display:inline">必须</b>用它;②<b style="display:inline">配方法</b>(可逆线性变换):系数一般不是特征值,但正负个数不变;③ 惯性定理:无论怎样的可逆变换,正、负惯性指数 $(p,q)$ 不变;规范形 $z_1^2+\cdots+z_p^2-\cdots-z_{p+q}^2$ 唯一。</div>
+      <div class="row r-when"><b>何时用</b>标准形只问正负个数 → 配方/求特征值符号即可;要写变换矩阵或有几何背景 → 正交变换法全流程。</div>
+      <div class="row r-conf"><b>易混点</b>二次型矩阵必须写成<b style="display:inline">对称</b>的(交叉项系数减半分两边);配方时若没有平方项、只有交叉项,先做 $x_1=y_1+y_2,x_2=y_1-y_2$ 造出平方项;正交变换下标准形系数=特征值,配方法下<b style="display:inline">不是</b>——选择题拿这个设坑。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="eig">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">正定判定家族(等价条件全家福)</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论</b>$A$ 实对称,以下等价:① $\forall x\ne0,\ x^TAx\gt0$;② 特征值全 $\gt0$;③ 各阶<b style="display:inline">顺序主子式</b>全 $\gt0$;④ 正惯性指数 $p=n$;⑤ 存在可逆 $D$ 使 $A=D^TD$;⑥ $A$ 与 $E$ 合同。必要条件(验坑用):$a_{ii}\gt0$、$|A|\gt0$。</div>
+      <div class="row r-when"><b>何时用</b>数字题用顺序主子式最快;抽象题(如证 $A^TA+kE$ 正定)用定义:算 $x^T(\cdot)x=\|Ax\|^2+k\|x\|^2\gt0$;含参讨论正定 → 顺序主子式列不等式组。</div>
+      <div class="row r-conf"><b>易混点</b>顺序主子式判别法只适用于<b style="display:inline">实对称</b>矩阵;「特征值全 $\gt0$」别弱化成「$|A|\gt0$」($|A|\gt0$ 可能是两负相乘);$A,B$ 正定 $\Rightarrow A+B$ 正定(定义直接加),但 $AB$ <b style="display:inline">未必</b>(可能不对称)。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk table" data-g="eig table">
+    <div class="chead"><span class="badge b-table">对比总表</span><span class="name">等价 · 相似 · 合同:三关系一张表</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="tblwrap"><table>
+        <tr><th>关系</th><th>定义</th><th>充要判据</th><th>不变量</th></tr>
+        <tr><td>等价</td><td>$B=PAQ$($P,Q$ 可逆)</td><td>同型 + $r(A)=r(B)$</td><td>秩</td></tr>
+        <tr><td>相似</td><td>$B=P^{-1}AP$</td><td>(一般矩阵无简单充要;实对称:特征值相同即相似)</td><td>特征多项式、特征值、tr、行列式、秩</td></tr>
+        <tr><td>合同</td><td>$B=C^TAC$($C$ 可逆)</td><td>(实对称)正负惯性指数相同</td><td>$(p,q)$、秩</td></tr>
+      </table></div>
+      <div class="row r-when"><b>用法</b>判断题流程:先比<b style="display:inline">不变量</b>排除(tr 不同必不相似;$(p,q)$ 不同必不合同);实对称阵:相似 $\Rightarrow$ 合同 $\Rightarrow$ 等价,一路单向。正交变换 $Q^TAQ$ 同时是相似<b style="display:inline">和</b>合同——正交对角化两头通吃的原因。</div>
+      <div class="row r-conf"><b>易混点</b>「特征值相同 $\Rightarrow$ 相似」对一般矩阵<b style="display:inline">不成立</b>(如 $\begin{pmatrix}0&1\\0&0\end{pmatrix}$ 与 $O$),对实对称成立;相似必等价,合同必等价,相似与合同互不包含(非对称时)。</div>
+    </div>
+  </div>
+
+  <div class="cardk trig" data-g="eig trig">
+    <div class="chead"><span class="badge b-trig">触发器</span><span class="name">见抽象矩阵等式求特征值 → 凑 $A\alpha=\lambda\alpha$ / 零化多项式</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-when"><b>触发动作</b>① 给向量等式(如 $A\alpha=2\alpha+\beta$?不行——必须凑成「$A\cdot$某向量$=$数$\cdot$同一向量」);② 给矩阵等式 $f(A)=O$ → 特征值 $\in\{f(\lambda)=0\text{ 的根}\}$;③ 给 $A$ 每行和为 $c$ → $A(1,1,\dots,1)^T=c(1,\dots,1)^T$,即 $c$ 是特征值——「行和相等」是隐藏最深的送分暗号。</div>
+      <div class="row r-conf"><b>易混点</b>由 $f(A)=O$ 判定具体哪些根真被取到:用 $\text{tr}(A)$、$r(A)$、$|A|$ 反推重数分配(如 $A^2=A$、$r(A)=r$ ⇒ 特征值 1 有 $r$ 个、0 有 $n-r$ 个)。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk trig" data-g="eig trig">
+    <div class="chead"><span class="badge b-trig">触发器</span><span class="name">见「已知特征值/向量反求 $A$」→ $A=P\Lambda P^{-1}$;实对称先正交补全</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-when"><b>触发动作</b>信息齐(n 组 $\lambda,\alpha$)→ 直接 $A=P\Lambda P^{-1}$;信息缺且 $A$ 实对称 → 用「与已知特征向量正交」解出缺失的特征向量再拼。正交阵情形 $A=Q\Lambda Q^T$ 免求逆,优先单位化走这条。</div>
+      <div class="row r-conf"><b>易混点</b>$P$ 的列顺序与 $\Lambda$ 对角元顺序必须对齐;求 $P^{-1}$ 别偷懒心算,2×2 用伴随公式,3×3 老实初等变换;结果验算:抽一组 $A\alpha\overset{?}{=}\lambda\alpha$,10 秒防翻车。</div>
+      <div class="row r-src"><b>真题出处</b>大题高频款。待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk trig" data-g="eig trig">
+    <div class="chead"><span class="badge b-trig">触发器</span><span class="name">见 $\|x\|=1$ 上求 $x^TAx$ 最值 → 最大/最小特征值</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-when"><b>触发动作</b>$\max_{\|x\|=1}x^TAx=\lambda_{\max}$,$\min=\lambda_{\min}$,取到的 $x$ 是对应的单位特征向量。原理:正交变换 $x=Qy$ 保 $\|x\|=\|y\|$,化成 $\sum\lambda_iy_i^2$ 一眼定界。不限长度时 $x^TAx$ 的正负性由特征值符号(惯性指数)定。</div>
+      <div class="row r-conf"><b>易混点</b>约束是 $\|x\|=1$ 才有此结论;若约束是别的二次型($y^TBy=1$)那是广义特征值问题,考研不涉及——见到就说明读错题了。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk trig" data-g="eig trig">
+    <div class="chead"><span class="badge b-trig">触发器</span><span class="name">见「$A$ 与 $B$ 相似吗」选择题 → 四道闸门顺序过</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-when"><b>触发动作</b>① 比 tr;② 比 $|A|$;③ 比特征值(特征多项式);④ 都同 → 若都可对角化于同一 $\Lambda$ 则相似;有重根且不对称时比 $r(\lambda E-A)$ 与 $r(\lambda E-B)$(几何重数)。任何一道闸不同即不相似,选完收工。</div>
+      <div class="row r-conf"><b>易混点</b>①②③全同也可能不相似(重根+几何重数不同);「都相似于同一个矩阵」⇒ 相似(相似的传递性)——题目给 $A\sim C$、$B\sim C$ 就是送这句话。</div>
+      <div class="row r-src"><b>真题出处</b>近年选择题热点。待错题页反链。</div>
+    </div>
+  </div>
+
+  <footer>数学一卡库 · 线代:秩·方程组·特征值 · 16 张 · 由 Claude 编写,真题出处随错题页生成逐步反链</footer>
+</div>
+
+<script>
+document.querySelectorAll('.chead').forEach(h=>h.addEventListener('click',()=>{
+  h.parentElement.classList.toggle('open');
+}));
+let allOpen=false;
+function toggleAll(){
+  allOpen=!allOpen;
+  document.querySelectorAll('.cardk').forEach(c=>{
+    if(c.style.display!=='none')c.classList.toggle('open',allOpen);
+  });
+}
+document.querySelectorAll('.fbtn').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.fbtn').forEach(x=>x.classList.remove('on'));b.classList.add('on');
+  const f=b.dataset.f;
+  document.querySelectorAll('.cardk').forEach(c=>{
+    c.style.display=(f==='all'||c.dataset.g.split(' ').includes(f))?'':'none';
+  });
+  document.querySelectorAll('h2.sect').forEach(s=>{
+    const g=s.dataset.g;
+    s.style.display=(f==='all'||f==='trig'||f==='table'||f===g)?'':'none';
+  });
+}));
+</script>
+</body>
+</html>

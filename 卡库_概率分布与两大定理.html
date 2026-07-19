@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>卡库 · 概率:分布 · 数字特征 · 两大定理</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+<style>
+  :root{
+    --bg:#f7f8fa; --card:#ffffff; --ink:#2b2d33; --muted:#7d8390;
+    --accent:#3d5a8a; --accent-soft:#e7edf6; --line:#e2e5ea;
+    --green:#3e7a4e; --green-soft:#e8f2ea;
+    --red:#b04a3a; --red-soft:#f9e9e6;
+    --amber:#a3762a; --amber-soft:#f7efdd;
+    --purple:#6d5a8e; --purple-soft:#eeeaf5;
+    --serif:"Georgia","Songti SC",serif;
+    --sans:-apple-system,"PingFang SC","Helvetica Neue",sans-serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#191b1f; --card:#23262c; --ink:#e6e7ea; --muted:#969ca8;
+      --accent:#8fb0dc; --accent-soft:#2a3240; --line:#363a42;
+      --green:#7fb98d; --green-soft:#26362b;
+      --red:#d98876; --red-soft:#3d2a26;
+      --amber:#d9b06a; --amber-soft:#3d3520;
+      --purple:#a996c8; --purple-soft:#302a3d;
+    }
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.75;padding-bottom:80px}
+  .wrap{max-width:1000px;margin:0 auto;padding:24px 20px}
+  .back{font-size:.85rem;color:var(--muted);text-decoration:none}
+  .back:hover{color:var(--accent)}
+  header{margin:14px 0 20px}
+  header h1{font-family:var(--serif);font-size:1.6rem;line-height:1.35}
+  header .sub{color:var(--muted);margin-top:6px;font-size:.9rem}
+  .toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:18px;position:sticky;top:0;background:var(--bg);padding:10px 0;z-index:10}
+  .fbtn{font-size:.8rem;border:1px solid var(--line);background:var(--card);color:var(--muted);border-radius:999px;padding:4px 14px;cursor:pointer}
+  .fbtn.on{background:var(--accent);color:var(--card);border-color:var(--accent)}
+  .allbtn{margin-left:auto;font-size:.78rem;border:1px solid var(--accent);background:none;color:var(--accent);border-radius:8px;padding:4px 12px;cursor:pointer}
+  h2.sect{font-size:1.02rem;letter-spacing:.05em;color:var(--accent);margin:26px 0 12px;display:flex;align-items:center;gap:8px}
+  h2.sect .n{font-size:.72rem;background:var(--accent);color:var(--card);border-radius:6px;padding:1px 7px}
+  h2.sect .cnt{font-size:.75rem;color:var(--muted);font-weight:400}
+  .cardk{background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:12px;overflow:hidden}
+  .cardk.trig{border-left:4px solid var(--amber)}
+  .cardk.table{border-left:4px solid var(--purple)}
+  .chead{padding:13px 18px;cursor:pointer;display:flex;align-items:center;gap:10px;user-select:none}
+  .chead:hover{background:var(--accent-soft)}
+  .chead .name{font-weight:650;font-size:.98rem}
+  .chead .hintline{font-size:.8rem;color:var(--muted);margin-left:auto;text-align:right}
+  .badge{font-size:.7rem;padding:1px 8px;border-radius:999px;white-space:nowrap}
+  .b-fam{background:var(--accent-soft);color:var(--accent)}
+  .b-trig{background:var(--amber-soft);color:var(--amber)}
+  .b-table{background:var(--purple-soft);color:var(--purple)}
+  .arrow{color:var(--muted);font-size:.75rem;transition:transform .2s}
+  .cardk.open .arrow{transform:rotate(90deg)}
+  .cbody{display:none;padding:4px 18px 16px;border-top:1px dashed var(--line)}
+  .cardk.open .cbody{display:block}
+  .row{margin-top:10px;font-size:.9rem;padding:9px 12px;border-radius:8px}
+  .row b{font-size:.72rem;display:block;margin-bottom:3px;letter-spacing:.08em}
+  .r-cond{background:var(--accent-soft)} .r-cond b{color:var(--accent)}
+  .r-concl{background:var(--green-soft)} .r-concl b{color:var(--green)}
+  .r-when{background:var(--amber-soft)} .r-when b{color:var(--amber)}
+  .r-conf{background:var(--red-soft)} .r-conf b{color:var(--red)}
+  .r-src{background:none;border:1px dashed var(--line);color:var(--muted);font-size:.82rem} .r-src b{color:var(--muted)}
+  .cbody table{border-collapse:collapse;width:100%;font-size:.85rem;margin-top:10px}
+  .cbody th,.cbody td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
+  .cbody th{background:var(--accent-soft);color:var(--accent);font-weight:600;white-space:nowrap}
+  .tblwrap{overflow-x:auto}
+  .usage{font-size:.83rem;color:var(--muted);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin-bottom:18px}
+  .usage b{color:var(--accent)}
+  footer{color:var(--muted);font-size:.8rem;text-align:center;margin-top:30px}
+  .katex{font-size:1.02em}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="index.html">◀ 返回数学复盘中心</a>
+  <header>
+    <h1>概率:分布 · 数字特征 · 两大定理</h1>
+    <div class="sub">21 张卡 · 概率的题型高度模板化:分布速查是地基,「分布函数法」和「独立与不相关」是两大主战场</div>
+  </header>
+
+  <div class="usage"><b>自测用法:</b>两张速查表(离散/连续分布)要背到「参数、$E$、$D$ 一秒报数」;「独立 vs 不相关」那张卡是选择题的常年考点;统计部分按流程卡机械执行即可。</div>
+
+  <div class="toolbar">
+    <button class="fbtn on" data-f="all">全部</button>
+    <button class="fbtn" data-f="dist">分布与变换</button>
+    <button class="fbtn" data-f="stat">数字特征·定理·统计</button>
+    <button class="fbtn" data-f="trig">触发器卡</button>
+    <button class="fbtn" data-f="table">对比总表</button>
+    <button class="allbtn" onclick="toggleAll()">全部展开 / 收起</button>
+  </div>
+
+  <h2 class="sect" data-g="dist"><span class="n">01</span>分布与随机变量变换<span class="cnt">速查表 2 + 家族卡 6 + 触发器 4</span></h2>
+
+  <div class="cardk table" data-g="dist table">
+    <div class="chead"><span class="badge b-table">对比总表</span><span class="name">离散分布速查表(参数 · 分布律 · $E$ · $D$)</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="tblwrap"><table>
+        <tr><th>分布</th><th>分布律</th><th>$E$</th><th>$D$</th><th>场景钩子</th></tr>
+        <tr><td>0-1 分布</td><td>$P(X=1)=p$</td><td>$p$</td><td>$p(1-p)$</td><td>单次成败</td></tr>
+        <tr><td>二项 $B(n,p)$</td><td>$C_n^kp^k(1-p)^{n-k}$</td><td>$np$</td><td>$np(1-p)$</td><td>$n$ 重伯努利计成功数</td></tr>
+        <tr><td>泊松 $P(\lambda)$</td><td>$\dfrac{\lambda^ke^{-\lambda}}{k!}$</td><td>$\lambda$</td><td>$\lambda$</td><td>单位时间稀有事件数</td></tr>
+        <tr><td>几何 $G(p)$</td><td>$(1-p)^{k-1}p$</td><td>$\dfrac1p$</td><td>$\dfrac{1-p}{p^2}$</td><td>首次成功等到第几次</td></tr>
+        <tr><td>超几何</td><td>$\dfrac{C_M^kC_{N-M}^{n-k}}{C_N^n}$</td><td>$n\frac MN$</td><td>—(不背)</td><td>不放回抽样</td></tr>
+      </table></div>
+      <div class="row r-conf"><b>易混点</b>泊松是唯一 $E=D$ 的常见分布(判「$E=D$ 推什么分布」题);几何分布有<b style="display:inline">无记忆性</b>(离散版);$B(n,p)$ 当 $n$ 大 $p$ 小时用泊松近似($\lambda=np$)。</div>
+    </div>
+  </div>
+
+  <div class="cardk table" data-g="dist table">
+    <div class="chead"><span class="badge b-table">对比总表</span><span class="name">连续分布速查表(密度 · $E$ · $D$ · 专属性质)</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="tblwrap"><table>
+        <tr><th>分布</th><th>密度 $f(x)$</th><th>$E$</th><th>$D$</th><th>专属性质</th></tr>
+        <tr><td>均匀 $U(a,b)$</td><td>$\dfrac1{b-a}$,$x\in(a,b)$</td><td>$\dfrac{a+b}2$</td><td>$\dfrac{(b-a)^2}{12}$</td><td>概率=长度比,几何概型</td></tr>
+        <tr><td>指数 $E(\lambda)$</td><td>$\lambda e^{-\lambda x}$,$x\gt0$</td><td>$\dfrac1\lambda$</td><td>$\dfrac1{\lambda^2}$</td><td><b>无记忆性</b> $P(X\gt s+t\,|\,X\gt s)=P(X\gt t)$</td></tr>
+        <tr><td>正态 $N(\mu,\sigma^2)$</td><td>$\dfrac1{\sqrt{2\pi}\sigma}e^{-\frac{(x-\mu)^2}{2\sigma^2}}$</td><td>$\mu$</td><td>$\sigma^2$</td><td>标准化 $\frac{X-\mu}{\sigma}\sim N(0,1)$</td></tr>
+      </table></div>
+      <div class="row r-conf"><b>易混点</b>指数分布两种参数写法($\lambda$ 与 $\theta=\frac1\lambda$)——先看密度确认;均匀分布方差分母是 <b style="display:inline">12</b>;正态密度前系数 $\sigma$ 在分母根号<b style="display:inline">外</b>。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="dist">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">正态分布运算规则包</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论</b>① $aX+b\sim N(a\mu+b,\ a^2\sigma^2)$;② 独立正态相加减仍正态:$X\pm Y\sim N(\mu_1\pm\mu_2,\ \sigma_1^2+\sigma_2^2)$(方差<b style="display:inline">都是加</b>);③ $\Phi(-x)=1-\Phi(x)$,$P(X\le\mu)=\frac12$;④ $P(|X-\mu|\lt\sigma)\approx0.683$,$\lt2\sigma\approx0.954$,$\lt3\sigma\approx0.997$。</div>
+      <div class="row r-when"><b>何时用</b>一切正态概率计算先标准化再查 $\Phi$;对称性技巧:$P(X\gt\mu+a)=P(X\lt\mu-a)$ 常让「未知 $\sigma$」的题不解自明。</div>
+      <div class="row r-conf"><b>易混点</b>$X-Y$ 的方差是 $\sigma_1^2\boldsymbol{+}\sigma_2^2$(独立时),手滑写减号是经典错误;「$X,Y$ 各自正态」相加未必正态——<b style="display:inline">独立</b>(或联合正态)才保证;$\Phi(0)=0.5$、$\Phi(1.96)\approx0.975$ 这两个数要熟。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="dist">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">分布函数法:求 $Y=g(X)$ 分布的万能流程</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>流程</b>① 先定 $Y$ 的取值范围(定分段的界);② 对范围内的 $y$:$F_Y(y)=P(g(X)\le y)$,把事件 $\{g(X)\le y\}$ 解成 $X$ 的区间,用 $F_X$ 或积分表达;③ 范围外直接写 0 或 1;④ 求导得 $f_Y$。单调可导捷径:$f_Y(y)=f_X(h(y))\,|h'(y)|$,$h=g^{-1}$。</div>
+      <div class="row r-when"><b>何时用</b>$Y=X^2$、$Y=e^X$、$Y=|X|$、分段 $g$ ——考研概率<b style="display:inline">最稳定的大题题型</b>之一。非单调($X^2$)必须走分布函数法:$P(X^2\le y)=P(-\sqrt y\le X\le\sqrt y)$。</div>
+      <div class="row r-conf"><b>易混点</b>忘写取值范围导致分段错误是第一大扣分;捷径公式要求 $g$ <b style="display:inline">严格单调</b>,$X^2$ 上来就套必错;最后记得验 $\int f_Y=1$ 粗查。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="dist">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">卷积公式与可加性家族</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论</b>$X,Y$ 独立,$Z=X+Y$:$$f_Z(z)=\int_{-\infty}^{+\infty}f_X(x)\,f_Y(z-x)\,dx$$可加性家族(独立同类相加不出族):二项 $B(n_1,p)+B(n_2,p)\to B(n_1+n_2,p)$(同 $p$!);泊松 $P(\lambda_1)+P(\lambda_2)\to P(\lambda_1+\lambda_2)$;正态;$\chi^2(n_1)+\chi^2(n_2)\to\chi^2(n_1+n_2)$。</div>
+      <div class="row r-when"><b>何时用</b>卷积积分的关键是<b style="display:inline">定积分限</b>:被积函数非零要求 $f_X(x)\ne0$ 且 $f_Y(z-x)\ne0$,联立两个不等式画 $x$ 的范围,按 $z$ 分段。</div>
+      <div class="row r-conf"><b>易混点</b>可加性前提全是<b style="display:inline">独立</b>;均匀+均匀<b style="display:inline">不是</b>均匀(是三角分布)、指数+指数不是指数(是 $\Gamma$)——「不在家族名单上的别乱加」;二项可加要求同 $p$。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="dist">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">最值分布:$\max$ 与 $\min$(系统寿命模型)</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论</b>$X_1,\dots,X_n$ 独立:$$F_{\max}(z)=\prod_{i=1}^{n}F_i(z)\qquad F_{\min}(z)=1-\prod_{i=1}^{n}\big[1-F_i(z)\big]$$独立同分布时 $F_{\max}=[F(z)]^n$,$F_{\min}=1-[1-F(z)]^n$。特例:独立指数的 $\min$ 仍是指数,参数 $\lambda_1+\lambda_2$。</div>
+      <div class="row r-when"><b>何时用</b>串联系统寿命=$\min$(一个坏就坏),并联=$\max$(全坏才坏);求密度再对 $z$ 求导。混合结构(先并后串)逐层套。</div>
+      <div class="row r-conf"><b>易混点</b>$\min$ 公式记「1 减 连乘(1 减)」,直接连乘 $F_i$ 是 $\max$ 的——两个别互串;推导逻辑记住比背公式稳:$\{\max\le z\}=$ 所有 $\{X_i\le z\}$ 同时发生。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="dist">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">二维分布要点:边缘 · 条件 · 独立判定</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论</b>边缘:$f_X(x)=\int f(x,y)\,dy$(把另一个变量积掉);条件:$f_{X|Y}(x|y)=\dfrac{f(x,y)}{f_Y(y)}$;独立 $\iff F(x,y)=F_X(x)F_Y(y)\iff f(x,y)=f_X(x)f_Y(y)$(处处);二维均匀分布:密度 $=\frac1{S(D)}$,概率=面积比。</div>
+      <div class="row r-when"><b>何时用</b>二维题第一步永远是<b style="display:inline">画出密度非零区域</b>;边缘积分的限随区域走(三角形区域上边缘不再均匀);求 $P((X,Y)\in G)$ = 在 $G\cap D$ 上积密度。</div>
+      <div class="row r-conf"><b>易混点</b>「非零区域是矩形且密度可分离变量」才可能独立——<b style="display:inline">三角形/圆形区域上的均匀分布必不独立</b>(区域形状本身就耦合了 $X,Y$),这是不用计算的秒判;条件密度是「联合除以边缘」,分母是<b style="display:inline">给定变量</b>的边缘。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="dist">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">二维正态四条专属结论</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论</b>$(X,Y)\sim N(\mu_1,\mu_2,\sigma_1^2,\sigma_2^2,\rho)$:① 边缘都是正态;②<b style="display:inline">独立 $\iff\rho=0$(不相关)</b>——独立与不相关在此等价,全考研唯一特区;③ $aX+bY$ 仍正态;④ 条件分布仍正态。</div>
+      <div class="row r-when"><b>何时用</b>选择题判「独立/不相关」关系时先看是否二维正态语境;计算 $P(aX+bY\lt c)$ → 线性组合正态化,算出新 $\mu,\sigma$ 标准化查表。</div>
+      <div class="row r-conf"><b>易混点</b>「$X,Y$ 各自正态且不相关 ⇒ 独立」是<b style="display:inline">错的</b>——前提必须是<b style="display:inline">联合</b>二维正态(边缘正态拼不出联合正态,有经典反例);线性组合正态的前提同样是联合正态或独立。</div>
+      <div class="row r-src"><b>真题出处</b>选择题常年埋伏点。待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk trig" data-g="dist trig">
+    <div class="chead"><span class="badge b-trig">触发器</span><span class="name">见 $Y=g(X)$ 求分布 → 先写取值范围,再分布函数法</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-when"><b>触发动作</b>第一笔永远是「$Y$ 的取值范围是 ___」;然后对每段 $y$ 写 $F_Y(y)=P(g(X)\le y)$ 解事件。$g$ 分段(如 $Y=\max(X,c)$、截断)时按 $g$ 的拐点分段;混合型结果(分布函数有跳跃)是正常的,别硬求密度——先答分布函数。</div>
+      <div class="row r-conf"><b>易混点</b>$Y=\max(X,c)$ 这类会产生「单点概率」($P(Y=c)=P(X\le c)\gt0$),$Y$ 既非纯离散也非纯连续,只能用分布函数描述——题目问「分布」而不是「密度」时就是这个信号。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk trig" data-g="dist trig">
+    <div class="chead"><span class="badge b-trig">触发器</span><span class="name">见串并联系统/「至少一个」「全部」→ $\min/\max$ 分布或对立事件</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-when"><b>触发动作</b>「$n$ 个元件至少一个工作」→ 对立事件「全不工作」连乘;寿命类「串联=min、并联=max」直接套最值分布;「第 $k$ 次才首次发生」→ 几何分布。事件语言与分布语言互相翻译是概率第一能力。</div>
+      <div class="row r-conf"><b>易混点</b>「至少一个发生」用 $1-P(\text{全不})$ 前提是<b style="display:inline">独立</b>;不独立就得容斥。题干「相互独立」四个字是公式的开关,没看到别按。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk trig" data-g="dist trig">
+    <div class="chead"><span class="badge b-trig">触发器</span><span class="name">见离散 × 连续混合(如 $Z=XY$,$X$ 两点分布)→ 全概率拆</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-when"><b>触发动作</b>一个离散一个连续求函数的分布 → 按离散变量取值全概率展开:$$F_Z(z)=\sum_k P(X=x_k)\,P(g(x_k,Y)\le z\,|\,X=x_k)$$独立时条件号可去。典型:$X\in\{-1,1\}$、$Z=XY$ → $F_Z(z)=P(X=1)F_Y(z)+P(X=-1)P(Y\ge-z)$。</div>
+      <div class="row r-conf"><b>易混点</b>结果常是「两个正态密度的混合」或对称化——最后检查 $F_Z$ 单调、右连续、极限 0 和 1;$Z$ 是否仍正态要重新验,混合正态一般<b style="display:inline">不是</b>正态。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk trig" data-g="dist trig">
+    <div class="chead"><span class="badge b-trig">触发器</span><span class="name">见二维均匀分布 → 概率=面积比,画图秒算</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-when"><b>触发动作</b>$(X,Y)$ 在区域 $D$ 上均匀 → 一切概率问题变几何:$P((X,Y)\in G)=\dfrac{S(G\cap D)}{S(D)}$。会面问题、比大小问题($P(X\gt Y)$=直线上方面积比)全是这一招。</div>
+      <div class="row r-conf"><b>易混点</b>边缘密度<b style="display:inline">不再均匀</b>(除非 $D$ 是矩形)——求边缘老实积分;条件分布在截线上倒是均匀的(均匀的条件还是均匀)。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <h2 class="sect" data-g="stat"><span class="n">02</span>数字特征 · 极限定理 · 数理统计<span class="cnt">家族卡 8 + 触发器 1</span></h2>
+
+  <div class="cardk" data-g="stat">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">数字特征公式束:$E$ · $D$ · $\text{Cov}$ · $\rho$</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论</b>$$D(X)=E(X^2)-(EX)^2\qquad D(X\pm Y)=DX+DY\pm2\,\text{Cov}(X,Y)$$$$\text{Cov}(X,Y)=E(XY)-EX\,EY\qquad \rho_{XY}=\frac{\text{Cov}(X,Y)}{\sqrt{DX}\sqrt{DY}}$$Cov 双线性:$\text{Cov}(aX+bY,Z)=a\,\text{Cov}(X,Z)+b\,\text{Cov}(Y,Z)$;$\text{Cov}(X,X)=DX$。独立时:$E(XY)=EX\,EY$,$D(X\pm Y)=DX+DY$。</div>
+      <div class="row r-when"><b>何时用</b>求 $\rho$ 的标准三步:$E(XY)$、$EX\,EY$、除以标准差;$D(2X-Y)$ 这类先展开成 $4DX+DY-4\text{Cov}$ 再代数。$E[g(X)]=\int g(x)f(x)dx$(不用先求 $g(X)$ 的分布——「懒人公式」)。</div>
+      <div class="row r-conf"><b>易混点</b>$D(X-Y)$ 展开中交叉项是 $-2\text{Cov}$,但独立时方差仍然<b style="display:inline">相加</b>;$D(aX)=a^2DX$(平方!);$\rho$ 只度量<b style="display:inline">线性</b>相关:$Y=X^2$($X$ 对称分布)时 $\rho=0$ 但强相关——「不相关≠没关系」。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="stat">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">独立 vs 不相关:单向链 + 两个特区</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论</b>独立 $\Rightarrow$ 不相关($\rho=0$),反向<b style="display:inline">不成立</b>。两个特区:① 二维<b style="display:inline">正态</b>:不相关 $\iff$ 独立;② 0-1 分布(两点分布)的 $X,Y$:不相关 $\iff$ 独立。</div>
+      <div class="row r-when"><b>何时用</b>选择题判定链;造反例的标准素材:$X\sim U(-1,1)$,$Y=X^2$ → 不相关但不独立。</div>
+      <div class="row r-conf"><b>易混点</b>「不相关」的三个等价说法:$\rho=0\iff\text{Cov}=0\iff E(XY)=EX\,EY\iff D(X+Y)=DX+DY$——考题会换着马甲出现,认出来它们是同一句话。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="stat">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">切比雪夫不等式:粗而万能的概率界</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-cond"><b>条件</b>只需 $EX=\mu$、$DX=\sigma^2$ 存在,分布不限。</div>
+      <div class="row r-concl"><b>结论</b>$$P(|X-\mu|\ge\varepsilon)\le\frac{\sigma^2}{\varepsilon^2}\qquad\text{等价地}\quad P(|X-\mu|\lt\varepsilon)\ge1-\frac{\sigma^2}{\varepsilon^2}$$</div>
+      <div class="row r-when"><b>何时用</b>「估计概率至少/至多」且不知道分布 → 只能用它;也是切比雪夫大数定律的引擎。给的界很粗,题目要「至少多少」时方向别写反。</div>
+      <div class="row r-conf"><b>易混点</b>不等式方向:「偏离大」的概率被<b style="display:inline">压上界</b>,「偏离小」被<b style="display:inline">保下界</b>——两个形式换着考;$\varepsilon$ 是「与期望的偏差」,题目给的往往是区间端点,先换算成偏差再套。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="stat">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">大数定律三件套(条件差异就是考点)</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论</b>都说「均值 $\overset{P}{\to}$ 期望」:①<b style="display:inline">切比雪夫</b>:两两不相关 + 方差一致有界;②<b style="display:inline">辛钦</b>:独立同分布 + $EX$ 存在(<b style="display:inline">不要求方差</b>);③<b style="display:inline">伯努利</b>:频率 $\frac{n_A}n\overset{P}{\to}p$(辛钦的特例)。依概率收敛定义:$\forall\varepsilon\gt0,\ \lim P(|Y_n-a|\ge\varepsilon)=0$。</div>
+      <div class="row r-when"><b>何时用</b>选择题问「下列条件哪个保证大数定律成立」——比对三套条件;$\frac1n\sum g(X_i)\overset{P}{\to}E[g(X)]$(辛钦推论)用于统计量的相合性。</div>
+      <div class="row r-conf"><b>易混点</b>辛钦不需要方差存在(柯西分布连期望都没有才失效);切比雪夫不需要同分布;伯努利里频率趋于的是<b style="display:inline">概率 $p$</b> 不是次数。三张条件卡各记一句差异即可满分。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="stat">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">中心极限定理:标准化三步走</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论</b>列维–林德伯格:$X_i$ 独立同分布,$EX_i=\mu$,$DX_i=\sigma^2$:$$\frac{\sum_{i=1}^nX_i-n\mu}{\sqrt n\,\sigma}\overset{\text{近似}}{\sim}N(0,1)\quad(n\text{ 大})$$棣莫弗–拉普拉斯(特例):$B(n,p)$ 近似 $N(np,\ np(1-p))$。</div>
+      <div class="row r-when"><b>何时用</b>「$n$ 个独立同分布量之和/平均,求近似概率」:① 算 $E\sum=n\mu$;② 算 $D\sum=n\sigma^2$;③ 标准化查 $\Phi$。保险索赔、误差累积、100 次射击类应用题全是这个模子。</div>
+      <div class="row r-conf"><b>易混点</b>分母是 $\sqrt{n}\,\sigma$(和的标准差),不是 $\sigma$ 也不是 $n\sigma$;大数定律说「趋向哪」(收敛),中心极限说「怎么分布」(波动形态)——问概率数值的是 CLT,问收敛的是大数律,别拿错工具。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="stat">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">三大抽样分布与正态总体结论包</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论</b>$\chi^2(n)=\sum_{i=1}^nZ_i^2$($Z_i$ iid $N(0,1)$),$E=n$,$D=2n$;$t(n)=\dfrac{Z}{\sqrt{\chi^2(n)/n}}$;$F(n_1,n_2)=\dfrac{\chi^2(n_1)/n_1}{\chi^2(n_2)/n_2}$,$\frac1F\sim F(n_2,n_1)$。正态总体 $N(\mu,\sigma^2)$ 抽样:$$\bar X\sim N\Big(\mu,\frac{\sigma^2}n\Big)\qquad \frac{(n-1)S^2}{\sigma^2}\sim\chi^2(n-1)\qquad \bar X\text{ 与 }S^2\text{ 独立}\qquad \frac{\bar X-\mu}{S/\sqrt n}\sim t(n-1)$$</div>
+      <div class="row r-when"><b>何时用</b>「以下统计量服从什么分布」拼图题:把给的表达式凑成三大分布的定义形;$E,D$ 计算直接引用 $\chi^2$ 的 $E=n,D=2n$。</div>
+      <div class="row r-conf"><b>易混点</b>$S^2$ 的分母是 $n-1$(所以自由度 $n-1$);拼 $t$ 时分子分母的<b style="display:inline">独立性</b>是定义的一部分($\bar X$ 与 $S^2$ 独立这条专门为此服务);$t$ 分布对称,$t_{1-\alpha}=-t_\alpha$。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="stat">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">参数估计:矩估计 · 最大似然 · 无偏性(流程卡)</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>流程</b>①<b style="display:inline">矩估计</b>:令 $EX(\theta)=\bar x$ 解 $\theta$(一个参数一阶矩,两个参数再加二阶矩 $EX^2=\overline{x^2}$);②<b style="display:inline">最大似然</b>:$L(\theta)=\prod f(x_i;\theta)$ → 取 $\ln$ → $\frac{d\ln L}{d\theta}=0$ 解之;<b style="display:inline">导数无零点时</b>(均匀分布 $U(0,\theta)$ 类)用单调性:$L$ 递减 → $\hat\theta=\max x_i$;③<b style="display:inline">无偏性</b>:验 $E(\hat\theta)=\theta$。</div>
+      <div class="row r-when"><b>何时用</b>统计大题的固定前两问;$E(S^2)=\sigma^2$($S^2$ 无偏)、$E(\bar X)=\mu$ 直接引用;似然函数含示性条件(样本都落在支撑内)时别丢范围。</div>
+      <div class="row r-conf"><b>易混点</b>均匀分布的最大似然是<b style="display:inline">边界值</b>不是求导解——「求导=0 无解」不是做错了,是换单调性判断的信号;$\hat\theta$ 无偏不代表 $g(\hat\theta)$ 无偏(期望不穿过非线性函数);矩估计与 MLE 结果可以不同,都算对。</div>
+      <div class="row r-src"><b>真题出处</b>统计大题每年必考。待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="stat">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">区间估计与假设检验速查(数一小考点)</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论</b>单正态总体 $\mu$ 的 $1-\alpha$ 置信区间:$\sigma$ 已知 → $\bar x\pm z_{\alpha/2}\frac{\sigma}{\sqrt n}$;$\sigma$ 未知 → $\bar x\pm t_{\alpha/2}(n-1)\frac{S}{\sqrt n}$。假设检验:第一类错误=真弃真(概率 $\alpha$=显著性水平),第二类错误=假取伪(概率 $\beta$);检验统计量与置信区间同源(拒绝域=区间之外)。</div>
+      <div class="row r-when"><b>何时用</b>数一考小题为主:代公式算区间端点、认两类错误的定义、由置信区间反推样本量。</div>
+      <div class="row r-conf"><b>易混点</b>置信水平 $1-\alpha$ 提高 → 区间<b style="display:inline">变宽</b>(更保守);两类错误概率此消彼长,同时降低只能加大 $n$;「置信区间包含 $\mu$ 的概率是 95%」的准确表述是对<b style="display:inline">随机区间</b>说的,别对具体数值区间说概率。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk trig" data-g="stat trig">
+    <div class="chead"><span class="badge b-trig">触发器</span><span class="name">见「$n$ 很大 + 求概率近似值」→ 中心极限定理三步</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-when"><b>触发动作</b>题面出现「100 台设备」「1000 次投掷」「保险公司 5000 份保单」+ 问概率 → 就是 CLT:总量 $S_n=\sum X_i$,算 $ES_n=n\mu$、$DS_n=n\sigma^2$,写 $P(S_n\le a)\approx\Phi\big(\frac{a-n\mu}{\sqrt n\sigma}\big)$ 查表。</div>
+      <div class="row r-conf"><b>易混点</b>先认清 $X_i$ 是什么(单台的指示变量?单次的金额?)再算 $\mu,\sigma^2$;二项场景直接用 $np,np(1-p)$;查表值 $\Phi(1.96)=0.975$、$\Phi(1.645)=0.95$ 常被题目直接给出,给了就必须用到。</div>
+      <div class="row r-src"><b>真题出处</b>应用题定式。待错题页反链。</div>
+    </div>
+  </div>
+
+  <footer>数学一卡库 · 概率:分布·数字特征·两大定理 · 21 张 · 由 Claude 编写,真题出处随错题页生成逐步反链</footer>
+</div>
+
+<script>
+document.querySelectorAll('.chead').forEach(h=>h.addEventListener('click',()=>{
+  h.parentElement.classList.toggle('open');
+}));
+let allOpen=false;
+function toggleAll(){
+  allOpen=!allOpen;
+  document.querySelectorAll('.cardk').forEach(c=>{
+    if(c.style.display!=='none')c.classList.toggle('open',allOpen);
+  });
+}
+document.querySelectorAll('.fbtn').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.fbtn').forEach(x=>x.classList.remove('on'));b.classList.add('on');
+  const f=b.dataset.f;
+  document.querySelectorAll('.cardk').forEach(c=>{
+    c.style.display=(f==='all'||c.dataset.g.split(' ').includes(f))?'':'none';
+  });
+  document.querySelectorAll('h2.sect').forEach(s=>{
+    const g=s.dataset.g;
+    s.style.display=(f==='all'||f==='trig'||f==='table'||f===g)?'':'none';
+  });
+}));
+</script>
+</body>
+</html>

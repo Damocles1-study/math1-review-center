@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>卡库 · 极限与无穷小工具箱</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+<style>
+  :root{
+    --bg:#f7f8fa; --card:#ffffff; --ink:#2b2d33; --muted:#7d8390;
+    --accent:#3d5a8a; --accent-soft:#e7edf6; --line:#e2e5ea;
+    --green:#3e7a4e; --green-soft:#e8f2ea;
+    --red:#b04a3a; --red-soft:#f9e9e6;
+    --amber:#a3762a; --amber-soft:#f7efdd;
+    --purple:#6d5a8e; --purple-soft:#eeeaf5;
+    --serif:"Georgia","Songti SC",serif;
+    --sans:-apple-system,"PingFang SC","Helvetica Neue",sans-serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#191b1f; --card:#23262c; --ink:#e6e7ea; --muted:#969ca8;
+      --accent:#8fb0dc; --accent-soft:#2a3240; --line:#363a42;
+      --green:#7fb98d; --green-soft:#26362b;
+      --red:#d98876; --red-soft:#3d2a26;
+      --amber:#d9b06a; --amber-soft:#3d3520;
+      --purple:#a996c8; --purple-soft:#302a3d;
+    }
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.75;padding-bottom:80px}
+  .wrap{max-width:1000px;margin:0 auto;padding:24px 20px}
+  .back{font-size:.85rem;color:var(--muted);text-decoration:none}
+  .back:hover{color:var(--accent)}
+  header{margin:14px 0 20px}
+  header h1{font-family:var(--serif);font-size:1.6rem;line-height:1.35}
+  header .sub{color:var(--muted);margin-top:6px;font-size:.9rem}
+  .toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:18px;position:sticky;top:0;background:var(--bg);padding:10px 0;z-index:10}
+  .fbtn{font-size:.8rem;border:1px solid var(--line);background:var(--card);color:var(--muted);border-radius:999px;padding:4px 14px;cursor:pointer}
+  .fbtn.on{background:var(--accent);color:var(--card);border-color:var(--accent)}
+  .allbtn{margin-left:auto;font-size:.78rem;border:1px solid var(--accent);background:none;color:var(--accent);border-radius:8px;padding:4px 12px;cursor:pointer}
+  h2.sect{font-size:1.02rem;letter-spacing:.05em;color:var(--accent);margin:26px 0 12px;display:flex;align-items:center;gap:8px}
+  h2.sect .n{font-size:.72rem;background:var(--accent);color:var(--card);border-radius:6px;padding:1px 7px}
+  h2.sect .cnt{font-size:.75rem;color:var(--muted);font-weight:400}
+  .cardk{background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:12px;overflow:hidden}
+  .cardk.trig{border-left:4px solid var(--amber)}
+  .cardk.table{border-left:4px solid var(--purple)}
+  .chead{padding:13px 18px;cursor:pointer;display:flex;align-items:center;gap:10px;user-select:none}
+  .chead:hover{background:var(--accent-soft)}
+  .chead .name{font-weight:650;font-size:.98rem}
+  .chead .hintline{font-size:.8rem;color:var(--muted);margin-left:auto;text-align:right}
+  .badge{font-size:.7rem;padding:1px 8px;border-radius:999px;white-space:nowrap}
+  .b-fam{background:var(--accent-soft);color:var(--accent)}
+  .b-trig{background:var(--amber-soft);color:var(--amber)}
+  .b-table{background:var(--purple-soft);color:var(--purple)}
+  .arrow{color:var(--muted);font-size:.75rem;transition:transform .2s}
+  .cardk.open .arrow{transform:rotate(90deg)}
+  .cbody{display:none;padding:4px 18px 16px;border-top:1px dashed var(--line)}
+  .cardk.open .cbody{display:block}
+  .row{margin-top:10px;font-size:.9rem;padding:9px 12px;border-radius:8px}
+  .row b{font-size:.72rem;display:block;margin-bottom:3px;letter-spacing:.08em}
+  .r-cond{background:var(--accent-soft)} .r-cond b{color:var(--accent)}
+  .r-concl{background:var(--green-soft)} .r-concl b{color:var(--green)}
+  .r-when{background:var(--amber-soft)} .r-when b{color:var(--amber)}
+  .r-conf{background:var(--red-soft)} .r-conf b{color:var(--red)}
+  .r-src{background:none;border:1px dashed var(--line);color:var(--muted);font-size:.82rem} .r-src b{color:var(--muted)}
+  .cbody table{border-collapse:collapse;width:100%;font-size:.85rem;margin-top:10px}
+  .cbody th,.cbody td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
+  .cbody th{background:var(--accent-soft);color:var(--accent);font-weight:600;white-space:nowrap}
+  .tblwrap{overflow-x:auto}
+  .usage{font-size:.83rem;color:var(--muted);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin-bottom:18px}
+  .usage b{color:var(--accent)}
+  footer{color:var(--muted);font-size:.8rem;text-align:center;margin-top:30px}
+  .katex{font-size:1.02em}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="index.html">◀ 返回数学复盘中心</a>
+  <header>
+    <h1>极限与无穷小工具箱</h1>
+    <div class="sub">17 张卡 · 极限是整张卷子的底层功夫:小题直接考,大题在算积分/级数/微分方程时处处用</div>
+  </header>
+
+  <div class="usage"><b>自测用法:</b>先看标题默写内容再点开核对。等价无穷小表和泰勒八式属于「必须一字不差」的硬背卡;触发器卡(黄边)管「见到什么想到什么」。</div>
+
+  <div class="toolbar">
+    <button class="fbtn on" data-f="all">全部</button>
+    <button class="fbtn" data-f="eq">无穷小与泰勒</button>
+    <button class="fbtn" data-f="meth">方法与判别</button>
+    <button class="fbtn" data-f="trig">触发器卡</button>
+    <button class="fbtn" data-f="table">对比总表</button>
+    <button class="allbtn" onclick="toggleAll()">全部展开 / 收起</button>
+  </div>
+
+  <h2 class="sect" data-g="eq"><span class="n">01</span>等价无穷小与泰勒<span class="cnt">家族卡 4 + 触发器 2</span></h2>
+
+  <div class="cardk" data-g="eq">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">等价无穷小基础表($x\to0$,必须全对)</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>一阶组</b>$\sin x\sim x$,$\tan x\sim x$,$\arcsin x\sim x$,$\arctan x\sim x$,$\ln(1+x)\sim x$,$e^x-1\sim x$,$a^x-1\sim x\ln a$,$(1+x)^\alpha-1\sim\alpha x$,$1-\cos x\sim\frac{x^2}{2}$。</div>
+      <div class="row r-concl"><b>高阶差值组(加减型救命卡)</b>$$x-\sin x\sim\frac{x^3}{6},\quad \tan x-x\sim\frac{x^3}{3},\quad x-\ln(1+x)\sim\frac{x^2}{2}$$$$\arcsin x-x\sim\frac{x^3}{6},\quad x-\arctan x\sim\frac{x^3}{3},\quad 1-\cos^\alpha x? \text{(不背,现场泰勒)}$$</div>
+      <div class="row r-conf"><b>易混点</b>三对符号最容易背反:$x-\sin x$(正)与 $\tan x-x$(正)——「$\tan$ 快 $\sin$ 慢,$x$ 居中」;$\arcsin$ 与 $\arctan$ 的差值符号跟 $\tan$、$\sin$ 相反。用 $x=0.1$ 心算验一次即可救回。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="eq">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">等价替换的边界:什么时候能换、什么时候不能</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论</b>①<b style="display:inline">乘除因子</b>可放心替换;② 加减项替换本质是「保留到某阶的泰勒展开」——只有当替换后<b style="display:inline">主部不被抵消</b>时才安全;③ 替换必须整体因子,不能替换「因子的一部分」。</div>
+      <div class="row r-when"><b>何时用</b>拿到极限先看结构:纯乘除 → 直接换,一步出主部;有加减 → 停,改用泰勒统一展开(见触发器卡)。</div>
+      <div class="row r-conf"><b>易混点</b>经典翻车:$\lim\limits_{x\to0}\dfrac{\tan x-\sin x}{x^3}$,把两项都换成 $x$ 得 0——错。正确:$\tan x-\sin x=\tan x(1-\cos x)\sim x\cdot\frac{x^2}2$,答案 $\frac12$。抵消了主部的替换=丢了信息。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="eq">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">泰勒展开常用八式(带到常用阶)</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论</b>$$e^x=1+x+\frac{x^2}{2!}+\frac{x^3}{3!}+o(x^3)\qquad \ln(1+x)=x-\frac{x^2}{2}+\frac{x^3}{3}+o(x^3)$$$$\sin x=x-\frac{x^3}{3!}+o(x^3)\qquad \cos x=1-\frac{x^2}{2!}+\frac{x^4}{4!}+o(x^4)$$$$(1+x)^\alpha=1+\alpha x+\frac{\alpha(\alpha-1)}{2}x^2+o(x^2)\qquad \frac{1}{1-x}=1+x+x^2+x^3+o(x^3)$$$$\tan x=x+\frac{x^3}{3}+o(x^3)\qquad \arctan x=x-\frac{x^3}{3}+o(x^3)\qquad \arcsin x=x+\frac{x^3}{6}+o(x^3)$$</div>
+      <div class="row r-when"><b>何时用</b>加减型未定式的通解;也是幂级数展开题(在 $x_0$ 处展开)的原料库。</div>
+      <div class="row r-conf"><b>易混点</b>$\ln(1+x)$ 二次项是<b style="display:inline">减</b>;$\arctan$ 与 $\arcsin$ 三次项一负一正;$\cos$ 没有奇次项。展开阶数不够=白展,阶数对齐规则见触发器卡。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="eq">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">无穷小阶的运算 + 变限积分升阶</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论</b>设 $m\le n$:$o(x^m)\pm o(x^n)=o(x^m)$;$x^m\cdot o(x^n)=o(x^{m+n})$;$o(x^m)\cdot o(x^n)=o(x^{m+n})$。<b style="display:inline">变限积分升一阶</b>:若 $f(x)\sim ax^k$($x\to0$),则 $\int_0^x f(t)\,dt\sim\frac{a}{k+1}x^{k+1}$。求导降一阶(条件更苛刻,慎用)。</div>
+      <div class="row r-when"><b>何时用</b>判断「$f(x)$ 是 $x$ 的几阶无穷小」的小题;含 $\int_0^{x}$ 或 $\int_0^{x^2}$ 的极限——先定阶再动手,心里有数不迷路。$\int_0^{x^2}$ 类:内层等价后整体代入,阶数 = 被积阶数加 1 再乘上限的次数。</div>
+      <div class="row r-conf"><b>易混点</b>$o(x^2)+o(x^3)$ 是 $o(x^2)$ 不是 $o(x^3)$——留下的是<b style="display:inline">低阶</b>(更粗)的那个。「$f$ 与 $g$ 同阶」指 $\lim f/g$ 为非零常数,等价是同阶的特例(常数=1)。</div>
+      <div class="row r-src"><b>真题出处</b>「几阶无穷小」选择题近年高频。待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk trig" data-g="eq trig">
+    <div class="chead"><span class="badge b-trig">触发器</span><span class="name">见加减型 $\frac00$ → 泰勒统一展开,阶数对齐到分母</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-when"><b>触发动作</b>分子是几项相加减 → 别逐项等价替换,全体泰勒展开。<b style="display:inline">对齐规则:分母是 $x^k$,分子每一项都展到 $x^k$ 为止</b>(不够会漏项,超出是浪费)。展开后低阶项应恰好抵消,剩下的 $x^k$ 系数就是答案。</div>
+      <div class="row r-conf"><b>易混点</b>若展开到 $x^k$ 后分子还是 0,说明分子阶数比分母高,极限=0,不是「做错了」;若低阶项抵消不掉,极限为 $\infty$。复合处展开(如 $e^{\sin x}$)要「先展外层再代内层展开」,内层也得展够阶。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk trig" data-g="eq trig">
+    <div class="chead"><span class="badge b-trig">触发器</span><span class="name">无穷大比阶链($n\to\infty$)→ 谁吃掉谁一眼定</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论</b>$$\ln^a n\;\ll\; n^b\;\ll\; c^n\;\ll\; n!\;\ll\; n^n\qquad(a,b\gt0,\;c\gt1)$$左边比右边低阶:相除极限为 0。$x\to+\infty$ 时同理:$\ln^a x\ll x^b\ll e^{x}$。</div>
+      <div class="row r-when"><b>何时用</b>数列极限、级数敛散抢答、比值法计算中快速定主部;$\lim\frac{n^{100}}{2^n}=0$ 这类不用算,链上一比即出。</div>
+      <div class="row r-conf"><b>易混点</b>链条只管「最终快慢」,不管前期大小($n^{100}$ 在 $n$ 不大时远大于 $2^n$)——它是 $n\to\infty$ 的断言。$x\to0^+$ 时是另一套:$x^b\ln^a x\to0$($b\gt0$),幂函数压死对数。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <h2 class="sect" data-g="meth"><span class="n">02</span>求极限方法与判别<span class="cnt">家族卡 5 + 总表 1 + 触发器 5</span></h2>
+
+  <div class="cardk" data-g="meth">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">洛必达法则:三个前提,一次一查</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-cond"><b>条件</b>① $\frac00$ 或 $\frac{\infty}{\infty}$ 型;② 去心邻域内 $f,g$ 可导且 $g'\ne0$;③ $\lim\frac{f'}{g'}$ 存在或为 $\infty$。</div>
+      <div class="row r-concl"><b>结论</b>$\lim\frac fg=\lim\frac{f'}{g'}$。<b style="display:inline">每用一次都要重新验一次型</b>。</div>
+      <div class="row r-when"><b>何时用</b>含变限积分、对数、反三角的 $\frac00$;求导后明显变简单的场合。求导后变复杂 → 立刻换泰勒。</div>
+      <div class="row r-conf"><b>易混点</b>① 条件③不满足时洛必达<b style="display:inline">失效但原极限可能存在</b>:$\lim\limits_{x\to0}\frac{x^2\sin\frac1x}{\sin x}=0$,洛完振荡无极限——失效就回定义/夹逼;② 数列极限不能直接洛(离散变量不可导),先换成函数极限再用归结原则收回;③ 洛必达与等价替换混用:先把乘除因子换干净再洛,省得越洛越长。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="meth">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">七种未定式与幂指型统一处理</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论</b>$\frac00,\ \frac{\infty}{\infty},\ 0\cdot\infty,\ \infty-\infty,\ 1^{\infty},\ 0^0,\ \infty^0$。转化路线:$0\cdot\infty\to$ 倒装成商;$\infty-\infty\to$ 通分/有理化/提大项;幂指型三兄弟统一 $u^v=e^{v\ln u}$,指数上变成 $0\cdot\infty$ 再处理。</div>
+      <div class="row r-when"><b>何时用</b>$1^\infty$ 有专用快线:$\lim u^v=e^{\lim v(u-1)}$(当 $u\to1,v\to\infty$)——比取对数快一拍。</div>
+      <div class="row r-conf"><b>易混点</b>$0^\infty$ 和 $\infty^\infty$ <b style="display:inline">不是</b>未定式(极限分别为 0 和 $\infty$);$1^\infty$ 速算公式里是 $v(u-1)$ 不是 $v\cdot u$;$\infty-\infty$ 含根号优先有理化。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="meth">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">极限存在性三件套:夹逼 · 单调有界 · 归结原则</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论</b>①<b style="display:inline">夹逼</b>:$g\le f\le h$ 且两端同极限 $A$ ⇒ $f\to A$;②<b style="display:inline">单调有界必有极限</b>(数列收敛的充分条件);③<b style="display:inline">归结(海涅)原则</b>:$\lim\limits_{x\to a}f(x)=A\iff$ 对任意 $x_n\to a$($x_n\ne a$)都有 $f(x_n)\to A$——反向常用来<b style="display:inline">证极限不存在</b>(找两列子列极限不同)。</div>
+      <div class="row r-when"><b>何时用</b>夹逼:$n$ 项和、含取整 $[x]$、含振荡因子;单调有界:递推数列;海涅:证 $\lim\sin\frac1x$ 型不存在。</div>
+      <div class="row r-conf"><b>易混点</b>夹逼两端必须<b style="display:inline">同</b>极限;单调有界给的是「存在」,极限值要靠递推方程 $A=f(A)$ 解出后<b style="display:inline">还要验根</b>(舍去不在界内的根)。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="meth">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">间断点分类:两类四种,判定三步</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论</b>第一类(左右极限都存在):相等=<b style="display:inline">可去</b>,不等=<b style="display:inline">跳跃</b>;第二类(至少一侧不存在):<b style="display:inline">无穷</b>间断($\to\infty$)、<b style="display:inline">振荡</b>间断(如 $\sin\frac1x$)。</div>
+      <div class="row r-when"><b>何时用</b>判定三步:① 找可疑点(分母为零、分段点、对数真数为零、$e^{\frac1{x-a}}$ 的 $a$ 处);② 分别算左右极限;③ 对号入座。</div>
+      <div class="row r-conf"><b>易混点</b>$e^{\frac1x}$ 在 $x=0$:右极限 $+\infty$、左极限 0——<b style="display:inline">必须分侧算</b>,是第二类;$\arctan\frac1x$ 在 0 处左右极限 $\mp\frac\pi2$ 都存在,是跳跃(第一类)。这两个是选择题常客。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="meth">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">渐近线三步法(顺序固定)</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论</b>① 水平:$\lim\limits_{x\to\pm\infty}f(x)=A$ ⇒ $y=A$(两侧分开看);② 垂直:找 $f\to\infty$ 的点 $x=a$(分母零点、$\ln$ 真数零点);③ 斜:$k=\lim\limits_{x\to\pm\infty}\frac{f(x)}{x}$,$b=\lim\limits_{x\to\pm\infty}(f(x)-kx)$,⇒ $y=kx+b$。</div>
+      <div class="row r-when"><b>何时用</b>「求曲线全部渐近线」小题;按①②③顺序不重不漏。某一侧有水平渐近线,该侧就不再有斜渐近线——先水平后斜能省一半计算。</div>
+      <div class="row r-conf"><b>易混点</b>$\pm\infty$ 两侧可能各不相同(如 $y=xe^{1/x}$?或 $y=\frac{|x|}x\cdot x$ 型),都要看;$k$ 存在但 $b$ 不存在 ⇒ 该侧无斜渐近线;垂直渐近线可以有多条,水平/斜每侧至多一条。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk table" data-g="meth table">
+    <div class="chead"><span class="badge b-table">对比总表</span><span class="name">求极限决策树:一张表选方法</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="tblwrap"><table>
+        <tr><th>看到的形态</th><th>首选方法</th><th>备胎</th></tr>
+        <tr><td>乘除因子型 $\frac00$</td><td>等价无穷小替换</td><td>洛必达</td></tr>
+        <tr><td>加减型 $\frac00$</td><td>泰勒展开(阶数对齐分母)</td><td>拆项+等价 / 洛必达</td></tr>
+        <tr><td>$1^\infty$</td><td>$e^{\lim v(u-1)}$ 速算</td><td>取对数</td></tr>
+        <tr><td>$0^0,\ \infty^0$</td><td>$e^{v\ln u}$ 取对数</td><td>—</td></tr>
+        <tr><td>$\infty-\infty$</td><td>通分 / 有理化 / 提大项</td><td>换元 $t=\frac1x$</td></tr>
+        <tr><td>含变限积分</td><td>洛必达 + 变限求导</td><td>积分中值/放缩</td></tr>
+        <tr><td>$n$ 项和数列</td><td>定积分定义 / 夹逼</td><td>级数敛散</td></tr>
+        <tr><td>递推数列 $a_{n+1}=f(a_n)$</td><td>单调有界 → 解 $A=f(A)$</td><td>压缩映象式放缩</td></tr>
+        <tr><td>含振荡因子 $\sin\frac1x$</td><td>夹逼(有界×无穷小)</td><td>证不存在用海涅</td></tr>
+      </table></div>
+      <div class="row r-conf"><b>易混点</b>方法选错的代价是绕远路不是做不出——但考场时间就是分数。先花 5 秒认型,再动笔。</div>
+    </div>
+  </div>
+
+  <div class="cardk trig" data-g="meth trig">
+    <div class="chead"><span class="badge b-trig">触发器</span><span class="name">见 $1^\infty$ → 写 $e^{\lim v(u-1)}$,指数上用等价/泰勒</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-when"><b>触发动作</b>底趋 1、指数趋 $\infty$ → 立刻写 $\lim u^v=e^{\lim v(u-1)}$,指数上的 $u-1$ 往往能等价替换(它是无穷小)。例:$\lim\limits_{x\to0}(\cos x)^{\frac1{x^2}}=e^{\lim\frac{\cos x-1}{x^2}}=e^{-\frac12}$。</div>
+      <div class="row r-conf"><b>易混点</b>公式成立前提是 $u\to1$——先验型再套;若指数上 $v(u-1)$ 仍是未定式,按加减型规则继续泰勒,别硬乘。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk trig" data-g="meth trig">
+    <div class="chead"><span class="badge b-trig">触发器</span><span class="name">见变限积分 → 洛必达 + 变限求导公式;被积函数含 $x$ 先处理</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>公式</b>$$\frac{d}{dx}\int_{\varphi(x)}^{\psi(x)}f(t)\,dt=f(\psi(x))\psi'(x)-f(\varphi(x))\varphi'(x)$$</div>
+      <div class="row r-when"><b>触发动作</b>极限里出现 $\int_0^x$、$\int_0^{x^2}$ → 十有八九洛必达。<b style="display:inline">先检查被积函数里是否混有 $x$</b>:有 → 换元(令 $u=x-t$ 之类)或把 $x$ 提到积分号外,再求导;直接对含 $x$ 的被积函数套公式是最常见错误。</div>
+      <div class="row r-conf"><b>易混点</b>$\int_0^x f(t)dt$ 求导是 $f(x)$,但 $\int_0^x t\,f(x-t)\,dt$ 必须先换元;定阶技巧:被积函数 $k$ 阶 ⇒ $\int_0^x$ 后 $k+1$ 阶,上限是 $x^2$ 再翻倍。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk trig" data-g="meth trig">
+    <div class="chead"><span class="badge b-trig">触发器</span><span class="name">见 $n$ 项和 → 定积分定义 / 夹逼 二选一</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-when"><b>触发动作</b>通项能写成 $\frac1n\,g\!\left(\frac in\right)$(每项同量级,分母「齐」)→ 定积分定义:$$\lim_{n\to\infty}\frac1n\sum_{i=1}^{n}g\!\left(\frac in\right)=\int_0^1 g(x)\,dx$$分母不齐(如 $\sum\frac{i}{n^2+i}$)→ 夹逼:对分母整体放缩成 $n^2$ 与 $n^2+n$ 两端。</div>
+      <div class="row r-conf"><b>易混点</b>判断标准:各项<b style="display:inline">同量级</b>用定积分,<b style="display:inline">量级有差</b>用夹逼;凑 $\frac in$ 时提出的必须恰是 $\frac1n$,系数错一倍是高频手误;区间不一定是 $[0,1]$,看 $\frac in$ 的跑动范围。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk trig" data-g="meth trig">
+    <div class="chead"><span class="badge b-trig">触发器</span><span class="name">见递推数列 $a_{n+1}=f(a_n)$ → 单调有界四步走</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-when"><b>触发动作</b>① 算前两三项猜单调方向和界;② 归纳法证「有界」(界常取不动点);③ 证单调:作差 $a_{n+1}-a_n$ 定号,或 $f$ 单调增时比较 $a_2$ 与 $a_1$ 定向;④ 令 $A=f(A)$ 解出极限并<b style="display:inline">舍去界外的根</b>。</div>
+      <div class="row r-conf"><b>易混点</b>$f$ 单调<b style="display:inline">减</b>时 $\{a_n\}$ 不单调(奇偶两支各自单调)——此时改证 $|a_{n+1}-A|\le k|a_n-A|$($0\lt k\lt1$)压缩式放缩;均值不等式是找界的第一工具($a_{n+1}=\frac12(a_n+\frac{c}{a_n})\ge\sqrt c$)。</div>
+      <div class="row r-src"><b>真题出处</b>数一大题常客。待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk trig" data-g="meth trig">
+    <div class="chead"><span class="badge b-trig">触发器</span><span class="name">已知极限值反求参数 → 主部匹配,三句话定型</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-when"><b>触发动作</b>「已知 $\lim\frac{f(x)}{x^k}=c\ne0$,求参数」类:把 $f$ 泰勒展开,<b style="display:inline">低于 $x^k$ 的项系数全部为 0</b>(否则极限为 $\infty$),$x^k$ 项系数 $=c$——每个条件给一个方程,联立解参数。</div>
+      <div class="row r-conf"><b>易混点</b>分母极限为 0 而商极限存在 ⇒ 分子极限必为 0(先用这条抢出一个方程);极限存在且分母是高阶 ⇒ 分子必须「更高阶地趋 0」。别上来就洛必达对参数求导,主部匹配是更稳的推理链。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <footer>数学一卡库 · 极限与无穷小工具箱 · 17 张 · 由 Claude 编写,真题出处随错题页生成逐步反链</footer>
+</div>
+
+<script>
+document.querySelectorAll('.chead').forEach(h=>h.addEventListener('click',()=>{
+  h.parentElement.classList.toggle('open');
+}));
+let allOpen=false;
+function toggleAll(){
+  allOpen=!allOpen;
+  document.querySelectorAll('.cardk').forEach(c=>{
+    if(c.style.display!=='none')c.classList.toggle('open',allOpen);
+  });
+}
+document.querySelectorAll('.fbtn').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.fbtn').forEach(x=>x.classList.remove('on'));b.classList.add('on');
+  const f=b.dataset.f;
+  document.querySelectorAll('.cardk').forEach(c=>{
+    c.style.display=(f==='all'||c.dataset.g.split(' ').includes(f))?'':'none';
+  });
+  document.querySelectorAll('h2.sect').forEach(s=>{
+    const g=s.dataset.g;
+    s.style.display=(f==='all'||f==='trig'||f==='table'||f===g)?'':'none';
+  });
+}));
+</script>
+</body>
+</html>

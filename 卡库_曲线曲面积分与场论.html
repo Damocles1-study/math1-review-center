@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>卡库 · 曲线曲面积分与场论</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+<style>
+  :root{
+    --bg:#f7f8fa; --card:#ffffff; --ink:#2b2d33; --muted:#7d8390;
+    --accent:#3d5a8a; --accent-soft:#e7edf6; --line:#e2e5ea;
+    --green:#3e7a4e; --green-soft:#e8f2ea;
+    --red:#b04a3a; --red-soft:#f9e9e6;
+    --amber:#a3762a; --amber-soft:#f7efdd;
+    --purple:#6d5a8e; --purple-soft:#eeeaf5;
+    --serif:"Georgia","Songti SC",serif;
+    --sans:-apple-system,"PingFang SC","Helvetica Neue",sans-serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#191b1f; --card:#23262c; --ink:#e6e7ea; --muted:#969ca8;
+      --accent:#8fb0dc; --accent-soft:#2a3240; --line:#363a42;
+      --green:#7fb98d; --green-soft:#26362b;
+      --red:#d98876; --red-soft:#3d2a26;
+      --amber:#d9b06a; --amber-soft:#3d3520;
+      --purple:#a996c8; --purple-soft:#302a3d;
+    }
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.75;padding-bottom:80px}
+  .wrap{max-width:1000px;margin:0 auto;padding:24px 20px}
+  .back{font-size:.85rem;color:var(--muted);text-decoration:none}
+  .back:hover{color:var(--accent)}
+  header{margin:14px 0 20px}
+  header h1{font-family:var(--serif);font-size:1.6rem;line-height:1.35}
+  header .sub{color:var(--muted);margin-top:6px;font-size:.9rem}
+  .toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:18px;position:sticky;top:0;background:var(--bg);padding:10px 0;z-index:10}
+  .fbtn{font-size:.8rem;border:1px solid var(--line);background:var(--card);color:var(--muted);border-radius:999px;padding:4px 14px;cursor:pointer}
+  .fbtn.on{background:var(--accent);color:var(--card);border-color:var(--accent)}
+  .allbtn{margin-left:auto;font-size:.78rem;border:1px solid var(--accent);background:none;color:var(--accent);border-radius:8px;padding:4px 12px;cursor:pointer}
+  h2.sect{font-size:1.02rem;letter-spacing:.05em;color:var(--accent);margin:26px 0 12px;display:flex;align-items:center;gap:8px}
+  h2.sect .n{font-size:.72rem;background:var(--accent);color:var(--card);border-radius:6px;padding:1px 7px}
+  h2.sect .cnt{font-size:.75rem;color:var(--muted);font-weight:400}
+  .cardk{background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:12px;overflow:hidden}
+  .cardk.trig{border-left:4px solid var(--amber)}
+  .cardk.table{border-left:4px solid var(--purple)}
+  .chead{padding:13px 18px;cursor:pointer;display:flex;align-items:center;gap:10px;user-select:none}
+  .chead:hover{background:var(--accent-soft)}
+  .chead .name{font-weight:650;font-size:.98rem}
+  .chead .hintline{font-size:.8rem;color:var(--muted);margin-left:auto;text-align:right}
+  .badge{font-size:.7rem;padding:1px 8px;border-radius:999px;white-space:nowrap}
+  .b-fam{background:var(--accent-soft);color:var(--accent)}
+  .b-trig{background:var(--amber-soft);color:var(--amber)}
+  .b-table{background:var(--purple-soft);color:var(--purple)}
+  .arrow{color:var(--muted);font-size:.75rem;transition:transform .2s}
+  .cardk.open .arrow{transform:rotate(90deg)}
+  .cbody{display:none;padding:4px 18px 16px;border-top:1px dashed var(--line)}
+  .cardk.open .cbody{display:block}
+  .row{margin-top:10px;font-size:.9rem;padding:9px 12px;border-radius:8px}
+  .row b{font-size:.72rem;display:block;margin-bottom:3px;letter-spacing:.08em}
+  .r-cond{background:var(--accent-soft)} .r-cond b{color:var(--accent)}
+  .r-concl{background:var(--green-soft)} .r-concl b{color:var(--green)}
+  .r-when{background:var(--amber-soft)} .r-when b{color:var(--amber)}
+  .r-conf{background:var(--red-soft)} .r-conf b{color:var(--red)}
+  .r-src{background:none;border:1px dashed var(--line);color:var(--muted);font-size:.82rem} .r-src b{color:var(--muted)}
+  .cbody table{border-collapse:collapse;width:100%;font-size:.85rem;margin-top:10px}
+  .cbody th,.cbody td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
+  .cbody th{background:var(--accent-soft);color:var(--accent);font-weight:600;white-space:nowrap}
+  .tblwrap{overflow-x:auto}
+  .usage{font-size:.83rem;color:var(--muted);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin-bottom:18px}
+  .usage b{color:var(--accent)}
+  footer{color:var(--muted);font-size:.8rem;text-align:center;margin-top:30px}
+  .katex{font-size:1.02em}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="index.html">◀ 返回数学复盘中心</a>
+  <header>
+    <h1>曲线曲面积分与场论</h1>
+    <div class="sub">16 张卡 · 数一专属版块,大题常驻;核心是「认类型 → 闭不闭 → 选公式(查条件!)→ 补线补面挖奇点」</div>
+  </header>
+
+  <div class="usage"><b>自测用法:</b>先背「四类积分总览」和决策树,建立地图;再逐张过公式卡,每张都盯紧红色易混点——这个版块的分几乎全丢在「忘验公式条件」(方向/侧/奇点)上。</div>
+
+  <div class="toolbar">
+    <button class="fbtn on" data-f="all">全部</button>
+    <button class="fbtn" data-f="line">曲线积分与格林</button>
+    <button class="fbtn" data-f="surf">曲面积分与场论</button>
+    <button class="fbtn" data-f="trig">触发器卡</button>
+    <button class="fbtn" data-f="table">对比总表</button>
+    <button class="allbtn" onclick="toggleAll()">全部展开 / 收起</button>
+  </div>
+
+  <h2 class="sect" data-g="line"><span class="n">01</span>曲线积分与格林公式<span class="cnt">总表 1 + 家族卡 4 + 触发器 2</span></h2>
+
+  <div class="cardk table" data-g="line table">
+    <div class="chead"><span class="badge b-table">对比总表</span><span class="name">四类积分总览:有没有方向,一张表分清</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="tblwrap"><table>
+        <tr><th>类型</th><th>记号</th><th>有无方向</th><th>物理意义</th><th>降维出口</th></tr>
+        <tr><td>一类曲线</td><td>$\int_L f\,ds$</td><td>无(弧长)</td><td>曲线质量</td><td>参数化 $ds=\sqrt{x'^2+y'^2}\,dt$</td></tr>
+        <tr><td>二类曲线</td><td>$\int_L P\,dx+Q\,dy$</td><td><b>有</b>(路径方向)</td><td>变力做功</td><td>参数化 / 格林 / 斯托克斯</td></tr>
+        <tr><td>一类曲面</td><td>$\iint_\Sigma f\,dS$</td><td>无(面积)</td><td>曲面质量</td><td>投影 $dS=\sqrt{1+z_x^2+z_y^2}\,dxdy$</td></tr>
+        <tr><td>二类曲面</td><td>$\iint_\Sigma P\,dydz+Q\,dzdx+R\,dxdy$</td><td><b>有</b>(侧)</td><td>流量</td><td>逐片投影 / 高斯 / 化一类</td></tr>
+      </table></div>
+      <div class="row r-conf"><b>易混点</b>方向反转:二类积分变号,一类不变——这是两类的本质区别,也是对称性结论相反的根源。所有公式(格林/高斯/斯托克斯)都服务于<b style="display:inline">二类</b>;一类的出路只有参数化/投影降维。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="line">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">一类曲线积分 $\int_L f\,ds$:参数化 + 两个专属技巧</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论</b>$L:x=x(t),y=y(t)$,$t\in[\alpha,\beta]$($\alpha\lt\beta$):$$\int_L f\,ds=\int_\alpha^\beta f(x(t),y(t))\sqrt{x'^2(t)+y'^2(t)}\,dt$$空间线加 $z'^2$;极坐标曲线 $r=r(\theta)$:$ds=\sqrt{r^2+r'^2}\,d\theta$。</div>
+      <div class="row r-when"><b>何时用</b>专属技巧:①<b style="display:inline">曲线方程可代入被积函数</b>(点在曲线上!):$L:x^2+y^2=a^2$ 上积 $\int_L(x^2+y^2)ds=a^2\cdot$ 弧长——常直接秒;② 对称性同一类通用:域对称+奇函数=0;轮换对称($x^2,y^2,z^2$ 地位相同)平均化。</div>
+      <div class="row r-conf"><b>易混点</b>一类积分下限必须小于上限($ds\gt0$,与走向无关);$\sqrt{x'^2+y'^2}$ 忘开根、忘平方是手误重灾区;代入技巧只对「曲线/曲面上的积分」合法,重积分(区域内部)不能代边界方程。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="line">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">二类曲线积分:参数化直接算 + 两类互化</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论</b>沿方向 $t:\alpha\to\beta$(起点参数到终点参数,<b style="display:inline">允许 $\alpha\gt\beta$</b>):$$\int_L P\,dx+Q\,dy=\int_\alpha^\beta\big[P\,x'(t)+Q\,y'(t)\big]dt$$两类互化:$\int_L P\,dx+Q\,dy=\int_L(P\cos\alpha+Q\cos\beta)\,ds$,$(\cos\alpha,\cos\beta)$ 为切向单位向量。</div>
+      <div class="row r-when"><b>何时用</b>非闭曲线且格林不划算(被积式简单/曲线好参数化)时直接算;曲线方程也可代入 $P,Q$ 化简(合法,积分在曲线上)。</div>
+      <div class="row r-conf"><b>易混点</b>二类的上下限跟<b style="display:inline">走向</b>走,不管大小——这与一类相反,两张卡对照记;逆走= 结果变号。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="line">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">格林公式:条件两条都要验(闭+偏导连续)</span><span class="hintline">$\oint=\iint(Q_x-P_y)$</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-cond"><b>条件</b>① $L$ 是<b style="display:inline">闭</b>曲线,取<b style="display:inline">正向</b>(沿走向区域在左手边,外边界=逆时针);② $P,Q$ 在 $D$ 上(含内部每一点!)一阶偏导连续——<b style="display:inline">分母能为零的点是奇点,必须排查</b>。</div>
+      <div class="row r-concl"><b>结论</b>$$\oint_{L^+} P\,dx+Q\,dy=\iint_D\Big(\frac{\partial Q}{\partial x}-\frac{\partial P}{\partial y}\Big)dxdy$$副产品面积公式:$S=\frac12\oint_{L^+}x\,dy-y\,dx$。</div>
+      <div class="row r-when"><b>何时用</b>平面二类闭曲线积分的默认首选;$Q_x-P_y$ 常为常数或极简。顺时针走向 → 前面添负号(或反向再用)。</div>
+      <div class="row r-conf"><b>易混点</b>①<b style="display:inline">奇点漏查是本章第一大丢分点</b>:$\frac{-y\,dx+x\,dy}{x^2+y^2}$ 原点在 $D$ 内时不能直接格林;② 方向错一个负号;③ $Q_x-P_y$ 别写成 $P_y-Q_x$(「后减前」:$Q$ 对 $x$ 在前)。</div>
+      <div class="row r-src"><b>真题出处</b>数一大题高频。待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="line">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">路径无关四等价 + 求原函数</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-cond"><b>条件</b>$P,Q$ 在<b style="display:inline">单连通</b>区域 $D$ 内一阶偏导连续。</div>
+      <div class="row r-concl"><b>结论(四者等价)</b>① $\frac{\partial P}{\partial y}=\frac{\partial Q}{\partial x}$ 处处成立;② 积分与路径无关;③ 沿任意闭曲线积分为 0;④ $P\,dx+Q\,dy$ 是某函数 $u$ 的全微分($du=P\,dx+Q\,dy$)。求 $u$:折线法 $u=\int_{x_0}^{x}P(t,y_0)dt+\int_{y_0}^{y}Q(x,t)dt$,或观察凑微分。</div>
+      <div class="row r-when"><b>何时用</b>验出 $P_y=Q_x$ → 立即把路径换成<b style="display:inline">平行坐标轴的折线</b>(或题目曲线的首尾直连),计算量骤降;「求 $du=P\,dx+Q\,dy$ 的 $u$」和全微分方程同源。</div>
+      <div class="row r-conf"><b>易混点</b><b style="display:inline">单连通</b>是①⇒②的前提:$\frac{-y\,dx+x\,dy}{x^2+y^2}$ 处处 $P_y=Q_x$ 但绕原点一圈 $=2\pi\ne0$(挖掉原点后区域不单连通)——这正是挖洞法的理论背景,也是选择题最爱。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk trig" data-g="line trig">
+    <div class="chead"><span class="badge b-trig">触发器</span><span class="name">见分母 $x^2+y^2$(或 $x^2+4y^2$)且原点被围 → 挖洞换线</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-when"><b>触发动作</b>原点是奇点、又在闭曲线内部 → 作小闭曲线 $l$ 围住原点(<b style="display:inline">形状按分母选</b>:分母 $x^2+y^2$ 挖小圆 $x^2+y^2=\varepsilon^2$;分母 $x^2+4y^2$ 挖小椭圆 $x^2+4y^2=\varepsilon^2$,目的是让分母在 $l$ 上变成常数 $\varepsilon^2$ 提出来);在两曲线之间的环域用格林(那里无奇点),得 $\oint_L=\oint_l$,再对 $l$ 参数化硬算或再用一次格林。</div>
+      <div class="row r-conf"><b>易混点</b>环域上格林时 $Q_x-P_y$ 通常恰为 0(所以才有 $\oint_L=\oint_l$),要写出验证过程;$l$ 的方向与 $L$ 同为逆时针(环域边界定向:外逆内顺,移项后同向);原点在曲线<b style="display:inline">外</b>时无需挖洞,直接格林。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk trig" data-g="line trig">
+    <div class="chead"><span class="badge b-trig">触发器</span><span class="name">见非闭曲线 + $Q_x-P_y$ 简单 → 补线用格林</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-when"><b>触发动作</b>曲线不闭但 $Q_x-P_y$ 是常数/多项式 → 补一条<b style="display:inline">最简单的线</b>(沿坐标轴的线段或折线,让 $dx$ 或 $dy$ 恒为 0)凑成闭曲线:$\int_L=\oint-\int_{\text{补}}$,补线上的积分参数化秒算。若验出 $P_y=Q_x$ 则更简单:直接换路径为折线。</div>
+      <div class="row r-conf"><b>易混点</b>补完后的闭曲线方向要统一成正向(不是正向就整体加负号);$\int_{\text{补}}$ 前的符号是<b style="display:inline">减</b>(把补的那段扣回来),口算时最容易错在这一步的正负账。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <h2 class="sect" data-g="surf"><span class="n">02</span>曲面积分与高斯 · 斯托克斯 · 场论<span class="cnt">家族卡 5 + 总表 1 + 触发器 3</span></h2>
+
+  <div class="cardk" data-g="surf">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">一类曲面积分 $\iint_\Sigma f\,dS$:投影降维 + 代入化简</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论</b>$\Sigma:z=z(x,y)$,投影域 $D_{xy}$:$$\iint_\Sigma f\,dS=\iint_{D_{xy}}f\big(x,y,z(x,y)\big)\sqrt{1+z_x^2+z_y^2}\;dxdy$$与侧无关(无方向)。</div>
+      <div class="row r-when"><b>何时用</b>①<b style="display:inline">曲面方程代入被积函数</b>:球面 $x^2+y^2+z^2=a^2$ 上 $\iint(x^2+y^2+z^2)dS=a^2\cdot S_\Sigma$;② 轮换对称:球面上 $\iint x^2dS=\frac13\iint(x^2+y^2+z^2)dS$;③ 奇偶对称同重积分。三板斧过完再投影。</div>
+      <div class="row r-conf"><b>易混点</b>根号里是 $1+z_x^2+z_y^2$(有个 1!);曲面分片时(如整球面对 $z$ 不是单值函数)要分上下两片各投影;选投影面的原则:曲面方程好解出哪个变量就往哪个坐标面投。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="surf">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">二类曲面积分:逐片投影定号 / 转化为一类 / 合一投影</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论</b>① 逐片投影:$\iint_\Sigma R\,dxdy=\pm\iint_{D_{xy}}R(x,y,z(x,y))\,dxdy$,法向量与 $z$ 轴正向夹角为锐角(上侧)取 $+$,钝角取 $-$;$P\,dydz$、$Q\,dzdx$ 同理各自投影。② 转化为一类:$\iint(P\cos\alpha+Q\cos\beta+R\cos\gamma)dS$,$(\cos\alpha,\cos\beta,\cos\gamma)$ 为指定侧的单位法向量。③ 合一投影(曲面 $z=z(x,y)$,上侧):$dydz\to(-z_x)dxdy$,$dzdx\to(-z_y)dxdy$,三项合成一个 $dxdy$ 积分。</div>
+      <div class="row r-when"><b>何时用</b>只有一两片、投影规则时逐片直接算;三项都有且曲面是显式 $z=z(x,y)$ → 合一投影;要用对称性/曲面几何性质 → 化一类。</div>
+      <div class="row r-conf"><b>易混点</b>每片每个坐标面的正负号<b style="display:inline">独立判断</b>,一个侧对三个投影方向的符号可能不同;圆柱面侧面对 $xy$ 面投影为零测集,$\iint R\,dxdy$ 那一项直接为 0——利用这点少算一片。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="surf">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">高斯公式:闭曲面 · 外侧 · 无奇点,三查后用</span><span class="hintline">$\oiint=\iiint\text{div}$</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-cond"><b>条件</b>① $\Sigma$ 是<b style="display:inline">闭</b>曲面,取<b style="display:inline">外</b>侧;② $P,Q,R$ 在 $\Omega$ 内(每一点)一阶偏导连续(排查奇点,典型:$\frac{(x,y,z)}{(x^2+y^2+z^2)^{3/2}}$ 的原点)。</div>
+      <div class="row r-concl"><b>结论</b>$$\iint_{\Sigma_{\text{外}}}P\,dydz+Q\,dzdx+R\,dxdy=\iiint_\Omega\Big(\frac{\partial P}{\partial x}+\frac{\partial Q}{\partial y}+\frac{\partial R}{\partial z}\Big)dV$$</div>
+      <div class="row r-when"><b>何时用</b>闭曲面二类积分默认首选;散度常为常数,右边变成「常数 × 体积」。内侧 → 添负号。三重积分接手后记得用「先二后一」/球坐标/对称性。</div>
+      <div class="row r-conf"><b>易混点</b>奇点在 $\Omega$ 内 → 挖小球(分母形状决定挖什么面),两曲面之间用高斯;<b style="display:inline">挖出的小球面上积分方向别搞反</b>(整体外侧=小球取内侧,移项后变外侧);散度为 0 不代表积分为 0——除非包围区域内无奇点。</div>
+      <div class="row r-src"><b>真题出处</b>数一大题高频。待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="surf">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">斯托克斯公式:空间闭曲线 → 旋度的曲面积分</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论</b>$$\oint_\Gamma P\,dx+Q\,dy+R\,dz=\iint_\Sigma\begin{vmatrix}dydz&dzdx&dxdy\\[1mm]\dfrac{\partial}{\partial x}&\dfrac{\partial}{\partial y}&\dfrac{\partial}{\partial z}\\[1mm]P&Q&R\end{vmatrix}$$$\Sigma$ 是以 $\Gamma$ 为边界的任意曲面,侧与 $\Gamma$ 方向成右手系。行列式按第一行展开,也可写成 $\iint(\text{rot}\,\boldsymbol F)\cdot\boldsymbol n\,dS$。</div>
+      <div class="row r-when"><b>何时用</b>空间闭曲线的二类曲线积分,直接参数化难(曲线是两曲面交线)时。<b style="display:inline">$\Sigma$ 自己选最简单的</b>——通常选平面片(交线所在平面),法向量是现成的。</div>
+      <div class="row r-conf"><b>易混点</b>右手系判向:四指沿 $\Gamma$,拇指=曲面法向;选平面片时先把平面的单位法向量写出来,用「化一类」的形式算最不容易错;旋度为零向量(无旋场)⇒ 空间路径无关,同平面版四等价。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="surf">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">场论三算子:梯度 · 散度 · 旋度</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论</b>$\boldsymbol F=(P,Q,R)$:$$\text{grad}\,u=\Big(\frac{\partial u}{\partial x},\frac{\partial u}{\partial y},\frac{\partial u}{\partial z}\Big)\qquad \text{div}\,\boldsymbol F=P_x+Q_y+R_z\qquad \text{rot}\,\boldsymbol F=\begin{vmatrix}\boldsymbol i&\boldsymbol j&\boldsymbol k\\\partial_x&\partial_y&\partial_z\\P&Q&R\end{vmatrix}$$梯度进散度=拉普拉斯:$\text{div}(\text{grad}\,u)=u_{xx}+u_{yy}+u_{zz}$。</div>
+      <div class="row r-when"><b>何时用</b>数一小题:给 $\boldsymbol F$ 算 $\text{div}$、$\text{rot}$ 代点;$\text{div}=0$ 无源场,$\text{rot}=\boldsymbol 0$ 无旋场(=有势场,存在原函数)。</div>
+      <div class="row r-conf"><b>易混点</b>梯度作用于<b style="display:inline">数量场</b>出向量;散度作用于<b style="display:inline">向量场</b>出数量;旋度作用于向量场出向量——输入输出类型对不上直接排除选项;$\text{rot}(\text{grad}\,u)\equiv\boldsymbol0$、$\text{div}(\text{rot}\,\boldsymbol F)\equiv0$ 两个恒等式选择题常用。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk table" data-g="surf table">
+    <div class="chead"><span class="badge b-table">对比总表</span><span class="name">曲线曲面积分决策树</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="tblwrap"><table>
+        <tr><th>认类型</th><td>$ds/dS$=一类(无方向,只能参数化/投影);$dx,dy,dydz$=二类(有方向,公式可用)</td></tr>
+        <tr><th>平面二类曲线</th><td>闭 → <b>格林</b>(查方向+奇点);不闭 → $P_y=Q_x$?是 → 换折线;否 → 补线格林 或 直接参数化</td></tr>
+        <tr><th>空间二类曲线</th><td>好参数化 → 直接算;难 → <b>斯托克斯</b>(选平面片,右手系)</td></tr>
+        <tr><th>二类曲面</th><td>闭 → <b>高斯</b>(查侧+奇点);不闭 → 补面高斯 或 逐片投影/合一投影</td></tr>
+        <tr><th>一类(线/面)</th><td>方程代入化简 → 对称性 → 参数化/投影,没有公式可抄近道</td></tr>
+      </table></div>
+      <div class="row r-conf"><b>易混点</b>每条公式路线都有三个检查位:<b style="display:inline">闭不闭、方向/侧对不对、奇点有没有</b>。习惯性写下这三查,分就不丢。</div>
+    </div>
+  </div>
+
+  <div class="cardk trig" data-g="surf trig">
+    <div class="chead"><span class="badge b-trig">触发器</span><span class="name">见非闭曲面 + 散度简单 → 补面用高斯(常补平面圆盘)</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-when"><b>触发动作</b>抛物面/锥面/半球面等「有口的」曲面 → 补一块平面片(通常是 $z=c$ 上的圆盘)封口:$\iint_\Sigma=\oiint-\iint_{\text{补}}$。补面上法向量沿坐标轴,三项中两项直接为 0,剩下一项是二重积分。</div>
+      <div class="row r-conf"><b>易混点</b>补面的侧要让整体成为<b style="display:inline">外侧</b>(开口朝上的碗补顶盖取上侧);扣回补面时符号是减;补完记得查奇点是否被封进了 $\Omega$。</div>
+      <div class="row r-src"><b>真题出处</b>数一大题最常见套路之一。待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk trig" data-g="surf trig">
+    <div class="chead"><span class="badge b-trig">触发器</span><span class="name">见曲线/曲面方程能化简被积函数 → 先代入再选方法</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-when"><b>触发动作</b>积分区域是曲线/曲面本身 → 它的方程在被积函数里就是恒等式,大胆代入:球面上 $x^2+y^2+z^2$ 换成 $a^2$;柱面上 $x^2+y^2$ 换成 $R^2$。代入常让积分退化成「常数×弧长/面积」或暴露对称性。</div>
+      <div class="row r-conf"><b>易混点</b>边界线:<b style="display:inline">用格林/高斯之前代入是合法的</b>(此时还是线/面积分);<b style="display:inline">用完之后不能再代</b>——格林/高斯把积分变到了区域/体内部,内部点不满足边界方程。顺序意识:先代入化简,再决定用不用公式。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk trig" data-g="surf trig">
+    <div class="chead"><span class="badge b-trig">触发器</span><span class="name">二类积分想用对称性 → 停,先想方向;拿不准就走公式</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-when"><b>触发动作</b>一类积分的对称性与重积分完全一致,放心用。<b style="display:inline">二类积分因为带方向,奇偶结论与一类相反</b>(如 $\Sigma$ 关于 $xy$ 面对称取外侧,$\iint R\,dxdy$ 中 $R$ 对 $z$ 为<b style="display:inline">偶</b>函数时两片抵消为 0,奇函数时加倍——恰好反过来)。</div>
+      <div class="row r-conf"><b>易混点</b>这里是本章最阴的坑:背错方向直接全丢。实用策略:二类积分<b style="display:inline">默认不用对称性</b>,先用高斯/斯托克斯化成重积分/一类积分,再在那边放心用对称性——绕一步但零风险。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <footer>数学一卡库 · 曲线曲面积分与场论 · 16 张 · 由 Claude 编写,真题出处随错题页生成逐步反链</footer>
+</div>
+
+<script>
+document.querySelectorAll('.chead').forEach(h=>h.addEventListener('click',()=>{
+  h.parentElement.classList.toggle('open');
+}));
+let allOpen=false;
+function toggleAll(){
+  allOpen=!allOpen;
+  document.querySelectorAll('.cardk').forEach(c=>{
+    if(c.style.display!=='none')c.classList.toggle('open',allOpen);
+  });
+}
+document.querySelectorAll('.fbtn').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.fbtn').forEach(x=>x.classList.remove('on'));b.classList.add('on');
+  const f=b.dataset.f;
+  document.querySelectorAll('.cardk').forEach(c=>{
+    c.style.display=(f==='all'||c.dataset.g.split(' ').includes(f))?'':'none';
+  });
+  document.querySelectorAll('h2.sect').forEach(s=>{
+    const g=s.dataset.g;
+    s.style.display=(f==='all'||f==='trig'||f==='table'||f===g)?'':'none';
+  });
+}));
+</script>
+</body>
+</html>

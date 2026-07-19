@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>卡库 · 多元微分与二重积分套路</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+<style>
+  :root{
+    --bg:#f7f8fa; --card:#ffffff; --ink:#2b2d33; --muted:#7d8390;
+    --accent:#3d5a8a; --accent-soft:#e7edf6; --line:#e2e5ea;
+    --green:#3e7a4e; --green-soft:#e8f2ea;
+    --red:#b04a3a; --red-soft:#f9e9e6;
+    --amber:#a3762a; --amber-soft:#f7efdd;
+    --purple:#6d5a8e; --purple-soft:#eeeaf5;
+    --serif:"Georgia","Songti SC",serif;
+    --sans:-apple-system,"PingFang SC","Helvetica Neue",sans-serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#191b1f; --card:#23262c; --ink:#e6e7ea; --muted:#969ca8;
+      --accent:#8fb0dc; --accent-soft:#2a3240; --line:#363a42;
+      --green:#7fb98d; --green-soft:#26362b;
+      --red:#d98876; --red-soft:#3d2a26;
+      --amber:#d9b06a; --amber-soft:#3d3520;
+      --purple:#a996c8; --purple-soft:#302a3d;
+    }
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.75;padding-bottom:80px}
+  .wrap{max-width:1000px;margin:0 auto;padding:24px 20px}
+  .back{font-size:.85rem;color:var(--muted);text-decoration:none}
+  .back:hover{color:var(--accent)}
+  header{margin:14px 0 20px}
+  header h1{font-family:var(--serif);font-size:1.6rem;line-height:1.35}
+  header .sub{color:var(--muted);margin-top:6px;font-size:.9rem}
+  .toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:18px;position:sticky;top:0;background:var(--bg);padding:10px 0;z-index:10}
+  .fbtn{font-size:.8rem;border:1px solid var(--line);background:var(--card);color:var(--muted);border-radius:999px;padding:4px 14px;cursor:pointer}
+  .fbtn.on{background:var(--accent);color:var(--card);border-color:var(--accent)}
+  .allbtn{margin-left:auto;font-size:.78rem;border:1px solid var(--accent);background:none;color:var(--accent);border-radius:8px;padding:4px 12px;cursor:pointer}
+  h2.sect{font-size:1.02rem;letter-spacing:.05em;color:var(--accent);margin:26px 0 12px;display:flex;align-items:center;gap:8px}
+  h2.sect .n{font-size:.72rem;background:var(--accent);color:var(--card);border-radius:6px;padding:1px 7px}
+  h2.sect .cnt{font-size:.75rem;color:var(--muted);font-weight:400}
+  .cardk{background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:12px;overflow:hidden}
+  .cardk.trig{border-left:4px solid var(--amber)}
+  .cardk.table{border-left:4px solid var(--purple)}
+  .chead{padding:13px 18px;cursor:pointer;display:flex;align-items:center;gap:10px;user-select:none}
+  .chead:hover{background:var(--accent-soft)}
+  .chead .name{font-weight:650;font-size:.98rem}
+  .chead .hintline{font-size:.8rem;color:var(--muted);margin-left:auto;text-align:right}
+  .badge{font-size:.7rem;padding:1px 8px;border-radius:999px;white-space:nowrap}
+  .b-fam{background:var(--accent-soft);color:var(--accent)}
+  .b-trig{background:var(--amber-soft);color:var(--amber)}
+  .b-table{background:var(--purple-soft);color:var(--purple)}
+  .arrow{color:var(--muted);font-size:.75rem;transition:transform .2s}
+  .cardk.open .arrow{transform:rotate(90deg)}
+  .cbody{display:none;padding:4px 18px 16px;border-top:1px dashed var(--line)}
+  .cardk.open .cbody{display:block}
+  .row{margin-top:10px;font-size:.9rem;padding:9px 12px;border-radius:8px}
+  .row b{font-size:.72rem;display:block;margin-bottom:3px;letter-spacing:.08em}
+  .r-cond{background:var(--accent-soft)} .r-cond b{color:var(--accent)}
+  .r-concl{background:var(--green-soft)} .r-concl b{color:var(--green)}
+  .r-when{background:var(--amber-soft)} .r-when b{color:var(--amber)}
+  .r-conf{background:var(--red-soft)} .r-conf b{color:var(--red)}
+  .r-src{background:none;border:1px dashed var(--line);color:var(--muted);font-size:.82rem} .r-src b{color:var(--muted)}
+  .cbody table{border-collapse:collapse;width:100%;font-size:.85rem;margin-top:10px}
+  .cbody th,.cbody td{border:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
+  .cbody th{background:var(--accent-soft);color:var(--accent);font-weight:600;white-space:nowrap}
+  .tblwrap{overflow-x:auto}
+  .usage{font-size:.83rem;color:var(--muted);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin-bottom:18px}
+  .usage b{color:var(--accent)}
+  footer{color:var(--muted);font-size:.8rem;text-align:center;margin-top:30px}
+  .katex{font-size:1.02em}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="index.html">◀ 返回数学复盘中心</a>
+  <header>
+    <h1>多元微分与二重积分套路</h1>
+    <div class="sub">16 张卡 · 多元微分管概念题和计算链,二重积分管「怎么把积分算出来」的四板斧</div>
+  </header>
+
+  <div class="usage"><b>自测用法:</b>先看标题默写内容再点开核对。「概念关系图」和「可微判定流程」两张卡对应选择题的高频陷阱,建议每轮都过;二重积分先背决策树,再逐个补技巧卡。</div>
+
+  <div class="toolbar">
+    <button class="fbtn on" data-f="all">全部</button>
+    <button class="fbtn" data-f="diff">多元微分</button>
+    <button class="fbtn" data-f="int">二重积分</button>
+    <button class="fbtn" data-f="trig">触发器卡</button>
+    <button class="fbtn" data-f="table">对比总表</button>
+    <button class="allbtn" onclick="toggleAll()">全部展开 / 收起</button>
+  </div>
+
+  <h2 class="sect" data-g="diff"><span class="n">01</span>多元微分<span class="cnt">家族卡 5 + 触发器 3</span></h2>
+
+  <div class="cardk" data-g="diff">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">概念关系图:可微 · 偏导 · 连续 · 方向导数(单向箭头)</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论(全部单向,反向均不成立)</b>偏导数<b style="display:inline">连续</b> $\Rightarrow$ 可微 $\Rightarrow$ 连续;可微 $\Rightarrow$ 偏导存在;可微 $\Rightarrow$ 任意方向的方向导数存在且 $\frac{\partial f}{\partial\boldsymbol l}=\nabla f\cdot\boldsymbol l^\circ$。</div>
+      <div class="row r-conf"><b>易混点(反例集,选择题弹药)</b>① 偏导存在 $\nRightarrow$ 连续:$f=\frac{xy}{x^2+y^2}$(补 0)在原点偏导存在但不连续;② 连续+偏导存在 $\nRightarrow$ 可微:$f=\frac{xy}{\sqrt{x^2+y^2}}$(DEMO 错题页题 4);③ 方向导数沿所有方向存在 $\nRightarrow$ 可微(如 $f=\sqrt{x^2+y^2}$ 在原点沿各方向导数存在?——注意它沿方向 $\boldsymbol l$ 的单侧方向导数为 1,但偏导 $f_x(0,0)$ 是双侧极限,不存在,更谈不上可微)。一元里「可导=可微」,多元里断开——这是出题点本身。</div>
+      <div class="row r-src"><b>真题出处</b>概念选择题几乎每两年一考。待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="diff">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">复合函数链式法则:画树定项,抽象函数记号 $f_1',f_2'$</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论</b>$z=f(u,v)$,$u=u(x,y)$,$v=v(x,y)$:$$\frac{\partial z}{\partial x}=f_1'\cdot\frac{\partial u}{\partial x}+f_2'\cdot\frac{\partial v}{\partial x}$$画变量树:$z\to(u,v)\to(x,y)$,<b style="display:inline">每条从 $z$ 到 $x$ 的路径贡献一项,路径上每段相乘</b>。</div>
+      <div class="row r-when"><b>何时用</b>抽象函数 $f(xy,\,x+y)$ 求二阶偏导是数一固定题型。关键意识:<b style="display:inline">$f_1'$ 本身仍是 $u,v$ 的函数</b>,再对 $x$ 求导时要再走一遍链式:$\frac{\partial f_1'}{\partial x}=f_{11}''u_x+f_{12}''v_x$。</div>
+      <div class="row r-conf"><b>易混点</b>① 二阶时漏掉 $f_1'$ 自己的链式(只对显式部分求导)是最高频错误;② $f_{12}''=f_{21}''$ 需要「二阶混合偏导连续」——题目说 $f$ 二阶连续可偏导即可合并,抽象题一般都给;③ $\frac{\partial z}{\partial x}$ 与 $\frac{dz}{dx}$ 区分:若 $z=f(x,y(x))$ 是一元复合,用全导数。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="diff">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">隐函数求导:公式法 · 微分法 · 方程组情形</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论</b>单方程 $F(x,y,z)=0$ 确定 $z=z(x,y)$:$$\frac{\partial z}{\partial x}=-\frac{F_x}{F_z},\qquad \frac{\partial z}{\partial y}=-\frac{F_y}{F_z}\quad(F_z\ne0)$$方程组(2 个方程定 2 个隐函数):对每个方程两边同时求(偏)导,联立解线性方程组;或全微分法一次到位。</div>
+      <div class="row r-when"><b>何时用</b>求二阶隐函数偏导时,<b style="display:inline">对一阶结果继续求导</b>,并且把其中出现的 $z_x$ 再用一阶公式回代。<b style="display:inline">全微分形式不变性</b>:对方程两边直接取 $d$,整理成 $dz=A\,dx+B\,dy$,一次拿到两个偏导——变量地位对称时最省事。</div>
+      <div class="row r-conf"><b>易混点</b>公式里的负号最容易丢;$F_x$ 是把 $x,y,z$ <b style="display:inline">全当独立变量</b>对 $x$ 求偏导(不做复合),这与「对方程两边求导时 $z$ 是 $x$ 的函数」是两套操作,别混在一次计算里。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="diff">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">多元极值:无条件判别式 + 条件极值拉格朗日 + 闭域最值</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论</b>①<b style="display:inline">无条件</b>:解 $f_x=f_y=0$ 得驻点;记 $A=f_{xx},B=f_{xy},C=f_{yy}$:$AC-B^2\gt0$ 是极值($A\gt0$ 极小,$A\lt0$ 极大);$AC-B^2\lt0$ 不是极值;$=0$ 判别法失效(回定义,沿路径试)。②<b style="display:inline">条件极值</b>:$L=f+\lambda\varphi$,对 $x,y,\lambda$ 求偏导联立。③<b style="display:inline">有界闭域最值</b>=内部驻点值 ∪ 边界最值(边界代入化为一元或拉格朗日),比大小。</div>
+      <div class="row r-when"><b>何时用</b>应用题(距离最近点、面积最大)几乎都是条件极值;「最值存在性」由闭域连续函数保证,故拉格朗日解出的候选点直接比大小,不必验二阶。</div>
+      <div class="row r-conf"><b>易混点</b>① 偏导不存在的点也可能是极值点(判别式只筛驻点);② 条件极值别忘了目标函数可先等价简化(距离平方代替距离);③ $AC-B^2=0$ 时不能下任何结论——「不是极值」是 $\lt0$ 的专利。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="diff">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">可微判定标准流程(分段函数在分段点)</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>流程</b>① 按定义算 $f_x(x_0,y_0)$、$f_y(x_0,y_0)$(一元极限);不存在 → 不可微,结束。② 存在 → 验可微定义:$$\lim_{(h,k)\to(0,0)}\frac{f(x_0+h,y_0+k)-f(x_0,y_0)-f_xh-f_yk}{\sqrt{h^2+k^2}}\overset{?}{=}0$$③ 极限为 0 → 可微;找到一条路径极限非 0 或不同路径不同值 → 不可微。</div>
+      <div class="row r-when"><b>何时用</b>「判断在 $(0,0)$ 处是否可微」的选择/解答题;常配合极坐标 $h=r\cos\theta,k=r\sin\theta$:若结果与 $\theta$ 无关且 $\to0$ 则可微,与 $\theta$ 有关则不可微。</div>
+      <div class="row r-conf"><b>易混点</b>「验证式里减的是 $f_xh+f_yk$」——先得把两个偏导数<b style="display:inline">算出来</b>再验,顺序不能反;沿坐标轴、$y=x$、$y=kx$ 都为 0 仍不够(还有 $y=x^2$ 等路径),<b style="display:inline">证可微必须放缩出与路径无关的界</b>,证不可微才用找路径。</div>
+      <div class="row r-src"><b>真题出处</b>DEMO 错题页题 4 即此流程。待反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk trig" data-g="diff trig">
+    <div class="chead"><span class="badge b-trig">触发器</span><span class="name">见抽象函数二阶偏导 → 画树;$f_1'$ 还要再走链式</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-when"><b>触发动作</b>见 $z=f(xy,\frac xy)$ 类:第一步在纸上画树标好 $u=xy$、$v=\frac xy$;一阶写完,对每个 $f_i'$ 继续视为 $f_i'(u,v)$ 求导。最后合并 $f_{12}''$ 与 $f_{21}''$。</div>
+      <div class="row r-conf"><b>易混点</b>符号纪律:全程用 $f_1',f_2',f_{11}''$ 记号,别写 $\frac{\partial f}{\partial x}$——$f$ 的自变量是 $u,v$ 不是 $x$,记号混了必错。检验:二阶结果里 $f_{11}'',f_{12}'',f_{22}'',f_1',f_2'$ 五类项都该出现(除非系数恰好为零)。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk trig" data-g="diff trig">
+    <div class="chead"><span class="badge b-trig">触发器</span><span class="name">见「方向导数最大值 / 变化最快方向」→ 梯度</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论</b>可微点处 $\frac{\partial f}{\partial\boldsymbol l}=\nabla f\cdot\boldsymbol l^\circ=|\nabla f|\cos\varphi$:最大方向 $=\nabla f$ 方向,最大值 $=|\nabla f|$;最小方向反向,值 $=-|\nabla f|$;与梯度垂直方向导数为 0(等值线切向)。</div>
+      <div class="row r-when"><b>触发动作</b>题目问「沿哪个方向增长最快/最大方向导数是多少」→ 算 $\nabla f=(f_x,f_y,f_z)$ 代点、取模。就这两步,别绕。</div>
+      <div class="row r-conf"><b>易混点</b>方向导数公式要求方向向量<b style="display:inline">单位化</b>;「方向导数存在」不需要可微(定义是单侧极限),但「用梯度点乘公式」需要可微——概念题会考这个缝。</div>
+      <div class="row r-src"><b>真题出处</b>数一小题高频。待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk trig" data-g="diff trig">
+    <div class="chead"><span class="badge b-trig">触发器</span><span class="name">见「在约束下证不等式」→ 条件极值求最值再放缩</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-when"><b>触发动作</b>要证「当 $g(x,y)=c$ 时 $f(x,y)\le M$」型 → 把它读成「$f$ 在约束 $g=c$ 下的最大值是 $M$」:拉格朗日求出候选点,算出最值即完成证明。均值不等式题、周长面积不等式常可这样机械化。</div>
+      <div class="row r-conf"><b>易混点</b>开域/无界域上要先说明最值存在(如「$f$ 连续,远处趋于 $0$ 或 $\infty$」),否则候选点比大小的逻辑不闭合——这半句话是采分点。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <h2 class="sect" data-g="int"><span class="n">02</span>二重积分<span class="cnt">家族卡 4 + 总表 1 + 触发器 3</span></h2>
+
+  <div class="cardk" data-g="int">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">对称性三板斧:奇偶 · 轮换 · 重心(算之前先看)</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论</b>①<b style="display:inline">奇偶</b>:$D$ 关于 $y$ 轴对称时,被积函数对 $x$ 为奇 → 积分为 0;为偶 → 取一半区域乘 2(关于 $x$ 轴对称同理看 $y$);②<b style="display:inline">轮换</b>:$D$ 关于 $y=x$ 对称 → $\iint_D f(x,y)=\iint_D f(y,x)$,常用 $\iint f=\frac12\iint[f(x,y)+f(y,x)]$ 化简;③<b style="display:inline">重心公式反用</b>:$\iint_D x\,dA=\bar x\cdot S(D)$,区域重心已知(圆、三角形)时秒杀一次项。</div>
+      <div class="row r-when"><b>何时用</b><b style="display:inline">动笔前的固定检查</b>:把被积函数拆成奇部+偶部,先消掉能消的项,再对剩余部分选坐标系。</div>
+      <div class="row r-conf"><b>易混点</b>奇偶性要求「区域对称」和「函数奇偶」<b style="display:inline">同时</b>成立,只有函数奇没有区域对称=白搭;轮换对称是关于 $y=x$ 的对称,不是任意区域都有。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="int">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">直角坐标定限与换序:穿线法,画图是硬规矩</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论</b>先 $y$ 后 $x$(竖线穿域):$\iint_D=\int_a^b dx\int_{y_1(x)}^{y_2(x)}dy$,竖线从下边界进、上边界出;换序 = 用横线重新穿一遍域。区域是「弓形/三角形被曲线分割」时可能要<b style="display:inline">分块</b>,换序常能把两块合成一块。</div>
+      <div class="row r-when"><b>何时用</b>累次积分算不动(内层无初等原函数)或题目直接给累次积分要求换序时。流程:累次限 → 画出 $D$ → 换方向重新定限。</div>
+      <div class="row r-conf"><b>易混点</b>换序不是「上下限互换抄一遍」,必须<b style="display:inline">过区域图</b>;内外限含义:外限是常数,内限是外变量的函数——写出「内限含内变量」立刻知道错了。</div>
+      <div class="row r-src"><b>真题出处</b>DEMO 错题页题 3。待反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="int">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">极坐标:何时换 · 怎么定限 · 三种极点位置</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论</b>$x=r\cos\theta,\ y=r\sin\theta$,$dx\,dy=r\,dr\,d\theta$(<b style="display:inline">别丢 $r$</b>)。定限:先定 $\theta$ 扫过的范围,再沿每条射线看 $r$ 进出:极点在域<b style="display:inline">内</b> → $r$ 从 0 到边界;在域<b style="display:inline">边界上</b> → $r$ 从 0 到边界曲线(如圆 $x^2+y^2=2ax$ → $r=2a\cos\theta$,$\theta\in[-\frac\pi2,\frac\pi2]$);在域<b style="display:inline">外</b> → $r$ 从内边界到外边界。</div>
+      <div class="row r-when"><b>何时用</b>域是圆/环/扇形,或被积函数含 $x^2+y^2$、$\frac yx$;两个信号占一个就值得换。</div>
+      <div class="row r-conf"><b>易混点</b>偏心圆 $r=2a\cos\theta$ 的 $\theta$ 范围是 $[-\frac\pi2,\frac\pi2]$ 不是 $[0,2\pi]$(超范围 $r$ 变负);丢雅可比 $r$ 是全国统一错误;$\theta$ 的范围由区域几何定,别默认 $[0,2\pi]$。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="int">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">进阶技巧包:一般换元 · 含参积分 · 分段被积函数</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论</b>①<b style="display:inline">一般换元</b>:$\iint_D f\,dxdy=\iint_{D'} f\cdot|J|\,dudv$,$J=\frac{\partial(x,y)}{\partial(u,v)}$(记得取绝对值;反向雅可比互为倒数);② 被积函数含 $\max/\min/|\cdot|$/取整 → <b style="display:inline">沿分界线把 $D$ 切开</b>分块积;③ 已知 $\iint_D f=A$ 当常数用:$f(x,y)=g(x,y)+\lambda\iint_D f$ 型方程,两边再积一次解出 $\lambda$ 相关量。</div>
+      <div class="row r-when"><b>何时用</b>域是平行四边形/由 $xy=c,\ y=kx$ 围成 → 换元 $u=xy,v=\frac yx$ 类;含 $|y-x^2|$ → 按 $y=x^2$ 切两块。</div>
+      <div class="row r-conf"><b>易混点</b>换元后<b style="display:inline">区域也要换</b>(新变量的范围重新描述);$|J|$ 忘取绝对值符号会整体反号;分段函数切块后每块的被积表达式不同,别抄串。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk table" data-g="int table">
+    <div class="chead"><span class="badge b-table">对比总表</span><span class="name">二重积分计算决策树</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="tblwrap"><table>
+        <tr><th>第 1 步</th><td>看<b>对称性</b>:区域对称?被积函数拆奇偶 → 消项/减半;$y=x$ 对称 → 轮换平均</td></tr>
+        <tr><th>第 2 步</th><td>选<b>坐标系</b>:圆/环/扇 或含 $x^2+y^2$ → 极坐标;否则直角坐标</td></tr>
+        <tr><th>第 3 步</th><td><b>定限</b>:画图 + 穿线法;分块域考虑换一个穿线方向合并</td></tr>
+        <tr><th>卡住时</th><td>内层积不出 → <b>换序</b>;域形状怪 → <b>换元</b>(雅可比);含 $\max/|\cdot|$ → 切块;一次项 → 重心公式</td></tr>
+      </table></div>
+      <div class="row r-conf"><b>易混点</b>顺序就是「对称性 → 坐标系 → 定限」,跳过第 1 步直接硬算是时间黑洞。</div>
+    </div>
+  </div>
+
+  <div class="cardk trig" data-g="int trig">
+    <div class="chead"><span class="badge b-trig">触发器</span><span class="name">见 $e^{\pm y^2}$、$\sin(y^2)$、$\frac{\sin y}{y}$、$\frac1{\ln y}$ → 这个方向积不出,换序</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-when"><b>触发动作</b>这几个函数没有初等原函数,谁的累次积分先碰它谁死——见到它们出现在内层,<b style="display:inline">无条件画域换序</b>,让「积不出的变量」放到外层,内层先把好积的变量积掉(通常恰好产生一个因子把它救活,如 $y\sin(y^2)$)。</div>
+      <div class="row r-conf"><b>易混点</b>换序后依然要它自己积的话,检查是不是漏了对称性或换元;$\int_0^{+\infty}e^{-x^2}dx=\frac{\sqrt\pi}2$ 是唯一「广义积分特例」,平方转极坐标得来,数一可以直接引用。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk trig" data-g="int trig">
+    <div class="chead"><span class="badge b-trig">触发器</span><span class="name">见圆域/含 $x^2+y^2$ → 极坐标;见 $x^2+4y^2$ → 广义极坐标</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-when"><b>触发动作</b>标准信号直接换极坐标。椭圆域 $\frac{x^2}{a^2}+\frac{y^2}{b^2}\le1$ → 广义极坐标 $x=ar\cos\theta,\ y=br\sin\theta$,雅可比为 $abr$,椭圆变单位圆。</div>
+      <div class="row r-conf"><b>易混点</b>广义极坐标下 $x^2+y^2$ <b style="display:inline">不再</b>等于 $r^2$(变成 $a^2r^2\cos^2\theta+b^2r^2\sin^2\theta$)——它只把「椭圆边界」变好,被积函数可能变丑,权衡后再换。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk trig" data-g="int trig">
+    <div class="chead"><span class="badge b-trig">触发器</span><span class="name">见对称区域 → 动笔前固定三问</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-when"><b>触发动作</b>① 区域关于坐标轴对称吗?→ 拆被积函数奇偶部;② 关于 $y=x$ 对称吗?→ $f(x,y)$ 与 $f(y,x)$ 平均(经典:$\iint_D\frac{af(x)+bf(y)}{f(x)+f(y)}dA=\frac{a+b}2S(D)$);③ 有一次项 $x$ 或 $y$ 吗?→ 重心公式。三问过完再选坐标系。</div>
+      <div class="row r-conf"><b>易混点</b>轮换平均那道经典题的前提是<b style="display:inline">区域关于 $y=x$ 对称</b>(正方形 $[a,b]^2$、圆心在 $y=x$ 上的圆),别对任意区域套。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <footer>数学一卡库 · 多元微分与二重积分 · 16 张 · 由 Claude 编写,真题出处随错题页生成逐步反链</footer>
+</div>
+
+<script>
+document.querySelectorAll('.chead').forEach(h=>h.addEventListener('click',()=>{
+  h.parentElement.classList.toggle('open');
+}));
+let allOpen=false;
+function toggleAll(){
+  allOpen=!allOpen;
+  document.querySelectorAll('.cardk').forEach(c=>{
+    if(c.style.display!=='none')c.classList.toggle('open',allOpen);
+  });
+}
+document.querySelectorAll('.fbtn').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.fbtn').forEach(x=>x.classList.remove('on'));b.classList.add('on');
+  const f=b.dataset.f;
+  document.querySelectorAll('.cardk').forEach(c=>{
+    c.style.display=(f==='all'||c.dataset.g.split(' ').includes(f))?'':'none';
+  });
+  document.querySelectorAll('h2.sect').forEach(s=>{
+    const g=s.dataset.g;
+    s.style.display=(f==='all'||f==='trig'||f==='table'||f===g)?'':'none';
+  });
+}));
+</script>
+</body>
+</html>
