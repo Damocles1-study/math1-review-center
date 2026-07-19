@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>直觉馆 · 函数图像与数感</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+<style>
+  :root{
+    --bg:#f7f8fa; --card:#ffffff; --ink:#2b2d33; --muted:#7d8390;
+    --accent:#3d5a8a; --accent-soft:#e7edf6; --line:#e2e5ea;
+    --green:#3e7a4e; --green-soft:#e8f2ea;
+    --red:#b04a3a; --red-soft:#f9e9e6;
+    --amber:#a3762a; --amber-soft:#f7efdd;
+    --purple:#6d5a8e; --purple-soft:#eeeaf5;
+    --serif:"Georgia","Songti SC",serif;
+    --sans:-apple-system,"PingFang SC","Helvetica Neue",sans-serif;
+    --plot-axis:#9aa0ab; --plot-grid:#e8eaee;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#191b1f; --card:#23262c; --ink:#e6e7ea; --muted:#969ca8;
+      --accent:#8fb0dc; --accent-soft:#2a3240; --line:#363a42;
+      --green:#7fb98d; --green-soft:#26362b;
+      --red:#d98876; --red-soft:#3d2a26;
+      --amber:#d9b06a; --amber-soft:#3d3520;
+      --purple:#a996c8; --purple-soft:#302a3d;
+      --plot-axis:#6b7280; --plot-grid:#2e323a;
+    }
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.75;padding-bottom:80px}
+  .wrap{max-width:1000px;margin:0 auto;padding:24px 20px}
+  .back{font-size:.85rem;color:var(--muted);text-decoration:none}
+  .back:hover{color:var(--accent)}
+  header{margin:14px 0 20px}
+  header h1{font-family:var(--serif);font-size:1.6rem;line-height:1.35}
+  header .sub{color:var(--muted);margin-top:6px;font-size:.9rem}
+  h2.sect{font-size:1.05rem;letter-spacing:.05em;color:var(--accent);margin:26px 0 12px;display:flex;align-items:center;gap:8px}
+  h2.sect .n{font-size:.72rem;background:var(--accent);color:var(--card);border-radius:6px;padding:1px 7px}
+  .usage{font-size:.83rem;color:var(--muted);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin-bottom:18px}
+  .usage b{color:var(--accent)}
+  .plots{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px}
+  .plot{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;overflow:hidden}
+  .plot h3{font-size:.92rem;margin-bottom:8px}
+  .plot canvas{width:100%;height:auto;display:block;border-radius:8px}
+  .plot .cap{font-size:.82rem;color:var(--muted);margin-top:8px}
+  .plot .cap b{color:var(--red)}
+  .cardk{background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:12px;overflow:hidden}
+  .chead{padding:13px 18px;cursor:pointer;display:flex;align-items:center;gap:10px;user-select:none}
+  .chead:hover{background:var(--accent-soft)}
+  .chead .name{font-weight:650;font-size:.98rem}
+  .badge{font-size:.7rem;padding:1px 8px;border-radius:999px;white-space:nowrap;background:var(--amber-soft);color:var(--amber)}
+  .arrow{color:var(--muted);font-size:.75rem;transition:transform .2s}
+  .cardk.open .arrow{transform:rotate(90deg)}
+  .cbody{display:none;padding:4px 18px 16px;border-top:1px dashed var(--line)}
+  .cardk.open .cbody{display:block}
+  .row{margin-top:10px;font-size:.9rem;padding:9px 12px;border-radius:8px}
+  .row b{font-size:.72rem;display:block;margin-bottom:3px;letter-spacing:.08em}
+  .r-f{background:var(--accent-soft)} .r-f b{color:var(--accent)}
+  .r-intu{background:var(--green-soft)} .r-intu b{color:var(--green)}
+  .r-warn{background:var(--red-soft)} .r-warn b{color:var(--red)}
+  .cbody table{border-collapse:collapse;width:100%;font-size:.88rem;margin-top:10px}
+  .cbody th,.cbody td{border:1px solid var(--line);padding:6px 10px;text-align:center;vertical-align:top}
+  .cbody th{background:var(--accent-soft);color:var(--accent);font-weight:600;white-space:nowrap}
+  .tblwrap{overflow-x:auto}
+  footer{color:var(--muted);font-size:.8rem;text-align:center;margin-top:30px}
+  .katex{font-size:1.02em}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="index.html">◀ 返回数学复盘中心</a>
+  <header>
+    <h1>直觉馆 · 函数图像与数感</h1>
+    <div class="sub">图像直觉:考研常客函数「长什么样」要能闭眼画 · 数感:见到 0.693 要条件反射出 ln2 · 全部服务于「验算快、定位准」</div>
+  </header>
+
+  <div class="usage"><b>用法:</b>图像馆当画册翻,每张图配一句「考点钩子」;数感卡当自测——先遮住右列报数,再核对。这页管的是「快而糙的直觉」,严谨计算仍回卡库和公式页。</div>
+
+  <h2 class="sect"><span class="n">01</span>函数图像馆(考研常客 14 张)</h2>
+  <div class="plots" id="plots"></div>
+
+  <h2 class="sect"><span class="n">02</span>数感速查(见数反应 · 肌肉记忆)</h2>
+
+  <div class="cardk">
+    <div class="chead"><span class="badge">数感</span><span class="name">常数肌肉记忆表(考场心算的原料)</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="tblwrap"><table>
+        <tr><th>$e$</th><th>$\frac1e$</th><th>$e^2$</th><th>$\sqrt2$</th><th>$\sqrt3$</th><th>$\sqrt5$</th><th>$\ln2$</th><th>$\ln3$</th><th>$\ln10$</th><th>$\pi$</th><th>$\pi^2$</th><th>$\frac\pi4$</th></tr>
+        <tr><td>2.718</td><td>0.368</td><td>7.389</td><td>1.414</td><td>1.732</td><td>2.236</td><td>0.693</td><td>1.099</td><td>2.303</td><td>3.142</td><td>9.870</td><td>0.785</td></tr>
+      </table></div>
+      <div class="row r-intu"><b>为什么值得背</b>数值代入验算(选择题五板斧之②)全靠它们;1 弧度 ≈ 57.3°,$\sqrt{10}\approx3.16$。谐音法:$\sqrt2$「意思意思」,$\sqrt3$「一起商量」,$e$「粮店粮店:2.718…」——用你自己的版本,能报数就行。</div>
+    </div>
+  </div>
+
+  <div class="cardk">
+    <div class="chead"><span class="badge">数感</span><span class="name">见数反应表(答案里出现这个数 → 它从哪来)</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="tblwrap"><table>
+        <tr><th>看到</th><th>反应</th><th>典型来源</th></tr>
+        <tr><td>$\ln2\approx0.693$</td><td>对数在场</td><td>$\int_0^1\frac{x}{1+x^2}dx=\frac{\ln2}2$;交错调和级数 $\sum\frac{(-1)^{n-1}}n=\ln2$;$\int_0^1\frac{dx}{1+x}$</td></tr>
+        <tr><td>$\frac\pi4\approx0.785$</td><td>$\arctan 1$</td><td>$\int_0^1\frac{dx}{1+x^2}$;莱布尼茨级数 $1-\frac13+\frac15-\cdots$;单位圆四分之一</td></tr>
+        <tr><td>$\frac1e\approx0.368$</td><td>$e$ 的倒数</td><td>$x^x$ 与 $x\ln x$ 的极值点都在 $x=\frac1e$;$\lim(1-\frac1n)^n$;泊松 $P(X=0)=e^{-\lambda}$ 当 $\lambda=1$</td></tr>
+        <tr><td>$\frac{\pi^2}6\approx1.645$</td><td>巴塞尔级数</td><td>$\sum\frac1{n^2}$;傅里叶级数经典副产品</td></tr>
+        <tr><td>$\frac{\sqrt\pi}2\approx0.886$</td><td>高斯积分</td><td>$\int_0^{+\infty}e^{-x^2}dx$;$\Gamma(\frac32)$;正态归一化</td></tr>
+        <tr><td>$\frac\pi2\approx1.571$</td><td>反正切的墙</td><td>$\arctan$ 的水平渐近线;$\int_0^{+\infty}\frac{dx}{1+x^2}$;华里士 $n$ 偶时的因子</td></tr>
+        <tr><td>$1-\frac1e\approx0.632$</td><td>指数分布一辈子</td><td>$P(X\le\frac1\lambda)=1-e^{-1}$:指数寿命「活不过平均寿命」的概率恒为 0.632</td></tr>
+      </table></div>
+      <div class="row r-intu"><b>用法</b>算出一个丑数时先查这张表:能认出来=大概率算对了;认不出来且题目「应该」出好数=回头查计算。这是最便宜的自我纠错器。</div>
+    </div>
+  </div>
+
+  <div class="cardk">
+    <div class="chead"><span class="badge">数感</span><span class="name">特殊角与反三角速报</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="tblwrap"><table>
+        <tr><th></th><th>$\frac\pi6$ (30°)</th><th>$\frac\pi4$ (45°)</th><th>$\frac\pi3$ (60°)</th><th>$\frac\pi2$ (90°)</th></tr>
+        <tr><td>$\sin$</td><td>$\frac12$</td><td>$\frac{\sqrt2}2$</td><td>$\frac{\sqrt3}2$</td><td>$1$</td></tr>
+        <tr><td>$\cos$</td><td>$\frac{\sqrt3}2$</td><td>$\frac{\sqrt2}2$</td><td>$\frac12$</td><td>$0$</td></tr>
+        <tr><td>$\tan$</td><td>$\frac{\sqrt3}3$</td><td>$1$</td><td>$\sqrt3$</td><td>—</td></tr>
+      </table></div>
+      <div class="row r-f"><b>反三角常用值</b>$\arctan1=\frac\pi4$,$\arctan\sqrt3=\frac\pi3$,$\arctan\frac{\sqrt3}3=\frac\pi6$,$\arcsin\frac12=\frac\pi6$,$\arcsin\frac{\sqrt2}2=\frac\pi4$。恒等式:$\arctan x+\arctan\frac1x=\frac\pi2$($x\gt0$),$\arcsin x+\arccos x=\frac\pi2$。</div>
+      <div class="row r-intu"><b>记法</b>sin 一排就是 $\frac{\sqrt1}2,\frac{\sqrt2}2,\frac{\sqrt3}2,\frac{\sqrt4}2$——根号里 1、2、3、4 数上去,cos 倒着数。</div>
+    </div>
+  </div>
+
+  <div class="cardk">
+    <div class="chead"><span class="badge">数感</span><span class="name">$x=0.1$ 验算表(等价无穷小的体温计)</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="tblwrap"><table>
+        <tr><th>$f(x)$</th><th>$x=0.1$ 时</th><th>验证的直觉</th></tr>
+        <tr><td>$\sin x$</td><td>0.09983</td><td>比 $x$ 小一点点 → $x-\sin x\approx\frac{x^3}6\approx0.00017$ ✓</td></tr>
+        <tr><td>$\tan x$</td><td>0.10033</td><td>比 $x$ 大一点点 → $\tan x-x\approx\frac{x^3}3\approx0.00033$ ✓</td></tr>
+        <tr><td>$\ln(1+x)$</td><td>0.0953</td><td>比 $x$ 小「半个 $x^2$」→ $x-\ln(1+x)\approx\frac{x^2}2=0.005$ ✓</td></tr>
+        <tr><td>$e^x$</td><td>1.1052</td><td>比 $1+x$ 大「半个 $x^2$」✓</td></tr>
+        <tr><td>$1-\cos x$</td><td>0.00500</td><td>正好 $\frac{x^2}2$ ✓</td></tr>
+        <tr><td>$(1+x)^{0.5}$</td><td>1.0488</td><td>$\approx1+\frac x2=1.05$,差的就是二阶项 ✓</td></tr>
+      </table></div>
+      <div class="row r-intu"><b>用法</b>等价无穷小差值的<b style="display:inline">符号和阶数</b>背混时,心算一遍 $x=0.1$ 立刻救回——「$\tan$ 快 $\sin$ 慢 $x$ 居中」在这张表里看得见摸得着。做选择题时同款操作直接杀选项。</div>
+    </div>
+  </div>
+
+  <div class="cardk">
+    <div class="chead"><span class="badge">数感</span><span class="name">阶乘 · 组合数 · 幂(概率计数的弹药)</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="tblwrap"><table>
+        <tr><th>$n$</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>10</th></tr>
+        <tr><td>$n!$</td><td>6</td><td>24</td><td>120</td><td>720</td><td>5040</td><td>40320</td><td>3628800</td></tr>
+        <tr><td>$2^n$</td><td>8</td><td>16</td><td>32</td><td>64</td><td>128</td><td>256</td><td>1024</td></tr>
+      </table></div>
+      <div class="row r-f"><b>组合数常用</b>$C_n^2=\frac{n(n-1)}2$:$C_4^2=6$,$C_5^2=10$,$C_6^2=15$,$C_{10}^2=45$;对称 $C_n^k=C_n^{n-k}$;$\sum_kC_n^k=2^n$。</div>
+      <div class="row r-intu"><b>用法</b>古典概型算完先问「分母 $2^n$/$n!$/$C$ 对上量级没」;二项分布 $B(n,\frac12)$ 的分母就是 $2^n$。408 那边 $2^{10}=1024=1$K 是另一套戏,别串场(K 在数学是 1000,在 408 是 1024)。</div>
+    </div>
+  </div>
+
+  <div class="cardk">
+    <div class="chead"><span class="badge">数感</span><span class="name">量级直觉:$n=10$ 与 $n=100$ 时谁大谁小</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="tblwrap"><table>
+        <tr><th></th><th>$\ln n$</th><th>$\sqrt n$</th><th>$n$</th><th>$n\ln n$</th><th>$n^2$</th><th>$2^n$</th><th>$n!$</th></tr>
+        <tr><td>$n=10$</td><td>2.3</td><td>3.2</td><td>10</td><td>23</td><td>100</td><td>1024</td><td>$3.6\times10^6$</td></tr>
+        <tr><td>$n=100$</td><td>4.6</td><td>10</td><td>100</td><td>460</td><td>$10^4$</td><td>$\approx10^{30}$</td><td>$\approx10^{158}$</td></tr>
+      </table></div>
+      <div class="row r-intu"><b>直觉锚点</b>$n$ 翻十倍,$\ln n$ 只加 2.3(对数是「加法选手」);$2^n$ 每 +10 就乘 1024(指数是「乘法怪物」)。这张表同时喂两门课:数学的比阶链 $\ln^an\ll n^b\ll c^n\ll n!$,和 408 算法复杂度的 $O(\log n)\lt O(n)\lt O(n\log n)\lt O(n^2)\lt O(2^n)$——同一个直觉,两处收钱。</div>
+    </div>
+  </div>
+
+  <footer>直觉馆 · 图像与数感 · 图像由页面现场绘制(Canvas),数值由 Claude 计算并自查 · 与卡库/公式页配套</footer>
+</div>
+
+<script>
+/* ---------- 通用绘图 ---------- */
+const css=v=>getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+function mkplot(host,title,capHTML,draw){
+  const div=document.createElement('div');div.className='plot';
+  div.innerHTML=`<h3>${title}</h3><canvas width="640" height="440"></canvas><div class="cap">${capHTML}</div>`;
+  host.appendChild(div);
+  const cv=div.querySelector('canvas'),ctx=cv.getContext('2d');
+  ctx.fillStyle=css('--card');ctx.fillRect(0,0,cv.width,cv.height);
+  draw(ctx,cv.width,cv.height);
+}
+function frame(ctx,W,H,xmin,xmax,ymin,ymax){
+  const sx=x=>(x-xmin)/(xmax-xmin)*(W-30)+15;
+  const sy=y=>H-15-(y-ymin)/(ymax-ymin)*(H-30);
+  ctx.strokeStyle=css('--plot-grid');ctx.lineWidth=1;
+  ctx.strokeStyle=css('--plot-axis');ctx.lineWidth=1.5;
+  ctx.beginPath();
+  if(ymin<=0&&ymax>=0){ctx.moveTo(sx(xmin),sy(0));ctx.lineTo(sx(xmax),sy(0));}
+  if(xmin<=0&&xmax>=0){ctx.moveTo(sx(0),sy(ymin));ctx.lineTo(sx(0),sy(ymax));}
+  ctx.stroke();
+  return {sx,sy};
+}
+function curve(ctx,S,f,x0,x1,color,w=2.5,N=1200){
+  ctx.strokeStyle=color;ctx.lineWidth=w;ctx.beginPath();let pen=false;
+  for(let i=0;i<=N;i++){
+    const x=x0+(x1-x0)*i/N;const y=f(x);
+    if(!isFinite(y)){pen=false;continue;}
+    const px=S.sx(x),py=S.sy(y);
+    if(py<-2000||py>3000){pen=false;continue;}
+    if(!pen){ctx.moveTo(px,py);pen=true;}else ctx.lineTo(px,py);
+  }
+  ctx.stroke();
+}
+function param(ctx,S,fx,fy,t0,t1,color,w=2.5,N=1500){
+  ctx.strokeStyle=color;ctx.lineWidth=w;ctx.beginPath();let pen=false;
+  for(let i=0;i<=N;i++){
+    const t=t0+(t1-t0)*i/N;const x=fx(t),y=fy(t);
+    if(!isFinite(x)||!isFinite(y)){pen=false;continue;}
+    if(!pen){ctx.moveTo(S.sx(x),S.sy(y));pen=true;}else ctx.lineTo(S.sx(x),S.sy(y));
+  }
+  ctx.stroke();
+}
+function dot(ctx,S,x,y,color){ctx.fillStyle=color;ctx.beginPath();ctx.arc(S.sx(x),S.sy(y),5,0,7);ctx.fill();}
+function label(ctx,S,x,y,text,color){ctx.fillStyle=color;ctx.font='22px sans-serif';ctx.fillText(text,S.sx(x),S.sy(y));}
+
+const P=document.getElementById('plots');
+const A=()=>css('--accent'),G=()=>css('--green'),R=()=>css('--red'),M=()=>css('--amber'),U=()=>css('--purple');
+
+/* 1 三线夹 */
+mkplot(P,'三线夹:sin x ＜ x ＜ tan x','蓝=sin,灰=y=x,红=tan。<b>钩子:</b>(0,π/2) 上三线同起点、越走越分;两个重要极限、夹逼的几何真相。',(ctx,W,H)=>{
+  const S=frame(ctx,W,H,0,1.45,0,3);
+  curve(ctx,S,x=>x,0,1.45,css('--plot-axis'),1.5);
+  curve(ctx,S,Math.sin,0,1.45,A());
+  curve(ctx,S,Math.tan,0,1.24,R());
+  label(ctx,S,1.15,0.75,'sin x',A());label(ctx,S,0.62,1.05,'x',css('--plot-axis'));label(ctx,S,0.86,2.6,'tan x',R());
+});
+/* 2 e^x 与 1+x */
+mkplot(P,'切线压弯线:e^x ≥ 1+x','切线 1+x 全程压在 e^x 下方,只在 x=0 相切。<b>钩子:</b>不等式证明的图像原型;泰勒展开「切线是一阶近似」。',(ctx,W,H)=>{
+  const S=frame(ctx,W,H,-2.2,1.6,-1.5,5);
+  curve(ctx,S,Math.exp,-2.2,1.6,A());
+  curve(ctx,S,x=>1+x,-2.2,1.6,R());
+  dot(ctx,S,0,1,M());
+  label(ctx,S,0.9,3.8,'eˣ',A());label(ctx,S,-1.9,-0.6,'1+x',R());
+});
+/* 3 ln 夹 */
+mkplot(P,'x/(1+x) ≤ ln(1+x) ≤ x','中间绿线是 ln(1+x),被上下两条挟着走。<b>钩子:</b>调和级数发散证明、数列极限放缩全用这三条。',(ctx,W,H)=>{
+  const S=frame(ctx,W,H,-0.7,3,-1.6,3);
+  curve(ctx,S,x=>x,-0.7,3,R());
+  curve(ctx,S,x=>Math.log(1+x),-0.69,3,G());
+  curve(ctx,S,x=>x/(1+x),-0.69,3,U());
+  label(ctx,S,2.2,2.5,'x',R());label(ctx,S,2.2,1.15,'ln(1+x)',G());label(ctx,S,2.2,0.35,'x/(1+x)',U());
+});
+/* 4 x^x */
+mkplot(P,'y = xˣ (x→0⁺ 趋于 1)','x→0⁺ 时悄悄回到 1(不是 0!),最低点在 x=1/e。<b>钩子:</b>0⁰ 型极限的标准答案;min=(1/e)^(1/e)≈0.69。',(ctx,W,H)=>{
+  const S=frame(ctx,W,H,0,2,0,4);
+  curve(ctx,S,x=>Math.pow(x,x),0.001,2,A());
+  dot(ctx,S,1/Math.E,Math.pow(1/Math.E,1/Math.E),R());
+  label(ctx,S,0.32,0.45,'(1/e, 0.69)',R());label(ctx,S,1.55,3.2,'xˣ',A());
+});
+/* 5 x ln x */
+mkplot(P,'y = x·ln x (x→0⁺ 趋于 0)','对数被幂函数「拖回」0,最低点 (1/e, −1/e)。<b>钩子:</b>x^b·lnx→0 的图像版;它就是 xˣ 的指数。',(ctx,W,H)=>{
+  const S=frame(ctx,W,H,0,2,-0.6,1.5);
+  curve(ctx,S,x=>x*Math.log(x),0.001,2,A());
+  dot(ctx,S,1/Math.E,-1/Math.E,R());
+  label(ctx,S,0.42,-0.45,'(1/e, −1/e)',R());label(ctx,S,1.6,1.0,'x ln x',A());
+});
+/* 6 sin(1/x) */
+mkplot(P,'y = sin(1/x):振荡间断','越靠近 0 抖得越疯,极限不存在。<b>钩子:</b>第二类间断(振荡型)的官方形象;海涅原则找两列子列的猎场。',(ctx,W,H)=>{
+  const S=frame(ctx,W,H,-1,1,-1.4,1.4);
+  curve(ctx,S,x=>Math.sin(1/x),-1,-0.004,A(),1.8,3000);
+  curve(ctx,S,x=>Math.sin(1/x),0.004,1,A(),1.8,3000);
+});
+/* 7 x sin(1/x) */
+mkplot(P,'y = x·sin(1/x):被夹死的振荡','外面 ±x 两条包络线把振荡压到 0——极限存在=可去间断;但补 0 后在 0 处不可导。<b>钩子:</b>「连续但不可导」「洛必达失效」双料明星。',(ctx,W,H)=>{
+  const S=frame(ctx,W,H,-0.8,0.8,-0.8,0.8);
+  curve(ctx,S,x=>x,-0.8,0.8,css('--plot-grid'),1.5);
+  curve(ctx,S,x=>-x,-0.8,0.8,css('--plot-grid'),1.5);
+  curve(ctx,S,x=>x*Math.sin(1/x),-0.8,-0.002,A(),1.8,3000);
+  curve(ctx,S,x=>x*Math.sin(1/x),0.002,0.8,A(),1.8,3000);
+});
+/* 8 e^{1/x} */
+mkplot(P,'y = e^(1/x):左右两副面孔','x→0⁺ 冲向 +∞,x→0⁻ 贴地归 0,右边还有水平渐近线 y=1。<b>钩子:</b>「必须分左右极限」的头号提醒者;第二类无穷间断。',(ctx,W,H)=>{
+  const S=frame(ctx,W,H,-3,3,-0.5,5);
+  curve(ctx,S,x=>Math.exp(1/x),-3,-0.02,A());
+  curve(ctx,S,x=>Math.exp(1/x),0.09,3,R());
+  curve(ctx,S,x=>1,-3,3,css('--plot-grid'),1.5);
+  label(ctx,S,-2.3,0.65,'x<0 → 0',A());label(ctx,S,0.75,4.2,'x>0 → +∞',R());label(ctx,S,2.2,1.35,'y=1',css('--plot-axis'));
+});
+/* 9 比阶 */
+mkplot(P,'无穷大比阶:ln x ≪ √x ≪ x ≪ eˣ','四条线起点相近,走到 x=6 已是四个世界。<b>钩子:</b>比阶链的图像版;极限里「谁吃掉谁」看斜率增长。',(ctx,W,H)=>{
+  const S=frame(ctx,W,H,0,6,0,12);
+  curve(ctx,S,Math.log,0.02,6,U());
+  curve(ctx,S,Math.sqrt,0,6,G());
+  curve(ctx,S,x=>x,0,6,A());
+  curve(ctx,S,Math.exp,0,2.5,R());
+  label(ctx,S,5,1.2,'ln x',U());label(ctx,S,5,2.9,'√x',G());label(ctx,S,5,5.6,'x',A());label(ctx,S,1.6,9.5,'eˣ',R());
+});
+/* 10 摆线 */
+mkplot(P,'摆线 x=a(t−sin t), y=a(1−cos t)','车轮上一点滚出来的轨迹,一拱宽 2πa、高 2a。<b>钩子:</b>一拱面积 3πa²、弧长 8a(公式页报数);尖点处不可导。',(ctx,W,H)=>{
+  const S=frame(ctx,W,H,0,13,-0.4,3);
+  param(ctx,S,t=>t-Math.sin(t),t=>1-Math.cos(t),0,4*Math.PI,A());
+  curve(ctx,S,x=>0,0,13,css('--plot-axis'),1);
+});
+/* 11 心形线 */
+mkplot(P,'心形线 r = a(1+cos θ)','极坐标常客,右尖左圆。<b>钩子:</b>面积 3πa²/2、周长 8a;极点处 θ=π——定限时 r 会走到 0。',(ctx,W,H)=>{
+  const S=frame(ctx,W,H,-1.2,2.4,-1.5,1.5);
+  param(ctx,S,t=>(1+Math.cos(t))*Math.cos(t),t=>(1+Math.cos(t))*Math.sin(t),0,2*Math.PI,R());
+});
+/* 12 双纽线 */
+mkplot(P,'双纽线 r² = a²·cos 2θ','8 字躺平,只在 cos2θ≥0 的扇区存在(θ∈[−π/4,π/4]∪…)。<b>钩子:</b>总面积 a²;定限最易错——θ 范围必须先解不等式。',(ctx,W,H)=>{
+  const S=frame(ctx,W,H,-1.4,1.4,-0.9,0.9);
+  const r=t=>{const c=Math.cos(2*t);return c>=0?Math.sqrt(c):NaN;};
+  param(ctx,S,t=>{const v=r(t);return v*Math.cos(t)},t=>{const v=r(t);return v*Math.sin(t)},-Math.PI/4,Math.PI/4,U());
+  param(ctx,S,t=>{const v=r(t);return v*Math.cos(t)},t=>{const v=r(t);return v*Math.sin(t)},3*Math.PI/4,5*Math.PI/4,U());
+});
+/* 13 星形线 */
+mkplot(P,'星形线 x=a·cos³t, y=a·sin³t','四个尖角内凹,x^(2/3)+y^(2/3)=a^(2/3)。<b>钩子:</b>面积 3πa²/8、周长 6a;尖点=不可导点,参数求导分母为零处。',(ctx,W,H)=>{
+  const S=frame(ctx,W,H,-1.4,1.4,-1.3,1.3);
+  param(ctx,S,t=>Math.pow(Math.cos(t),3),t=>Math.pow(Math.sin(t),3),0,2*Math.PI,G());
+});
+/* 14 正态 */
+mkplot(P,'正态密度:σ 定胖瘦,μ 定位置','蓝 σ=1,红 σ=2(矮胖),同 μ=0。<b>钩子:</b>68–95–99.7;拐点恰在 μ±σ——「拐点定 σ」是小题考点。',(ctx,W,H)=>{
+  const S=frame(ctx,W,H,-6,6,0,0.45);
+  const phi=(x,s)=>Math.exp(-x*x/(2*s*s))/(s*Math.sqrt(2*Math.PI));
+  curve(ctx,S,x=>phi(x,1),-6,6,A());
+  curve(ctx,S,x=>phi(x,2),-6,6,R());
+  dot(ctx,S,1,phi(1,1),M());dot(ctx,S,-1,phi(-1,1),M());
+  label(ctx,S,1.25,0.28,'拐点 x=±σ',M());label(ctx,S,-3.4,0.34,'σ=1',A());label(ctx,S,3.3,0.12,'σ=2',R());
+});
+
+/* 数感卡折叠 */
+document.querySelectorAll('.chead').forEach(h=>h.addEventListener('click',()=>h.parentElement.classList.toggle('open')));
+</script>
+</body>
+</html>
