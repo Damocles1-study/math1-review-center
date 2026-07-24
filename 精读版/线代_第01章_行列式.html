@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>精读版 · 线代 第1章 行列式</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../index.html">← 返回 数学一复盘中心</a>
+  <header>
+    <h1>精读版 · 线代第 1 章　行列式</h1>
+    <div class="sub">融合张宇《基础30讲·线代分册》第 1 讲（含第 0 讲零基础课要点）+《线代9讲》第 1 讲「行列式」、第 2 讲「余子式和代数余子式的计算」· 以张宇本章「三向解题法」为主干 · <span class="layer L-base">基础</span> 打地基、<span class="layer L-str">强化</span> 上题型 · <b>全部 25 道例题 + 11 道习题的答案均用 sympy 独立符号复算 / 数值对拍，零分歧</b> · 每节末跳去做 1000 题。</div>
+  </header>
+
+  <div class="legend">
+    <b>这一页的三层结构：</b>
+    <span class="layer L-base">基础</span>= 概念与必记（基础30讲的地基，标准线代理论，放心记）；
+    <span class="layer L-str">强化</span>= 张宇《线代9讲》的<b>专属题型与套路</b>（基础讲没有、真题真考的）。批注色块：
+    <span class="swatch" style="background:var(--blue)"></span><b style="color:var(--blue)">补讲</b>、
+    <span class="swatch" style="background:var(--amber)"></span><b style="color:var(--amber)">必记</b>、
+    <span class="swatch" style="background:var(--red)"></span><b style="color:var(--red)">陷阱</b>、
+    <span class="swatch" style="background:var(--green)"></span><b style="color:var(--green)">强化题型</b>。<br>
+    紫色 <b>例题</b> 卡里，<b>基</b>1.x = 基础30讲例题、<b>强</b>1.x = 线代9讲第 1 讲例题、<b>强</b>2.x = 第 2 讲例题（三本各自编号，别混）。<b>线代的答案我全部用程序独立复算</b>：行列式值、因式分解、特征值、代数余子式之和都能精确对拍，比高数更硬，所以本页每题都标 ✔。
+  </div>
+
+  <nav class="toc">
+    <a href="#s0">定位 · 线代在学什么 + 三向解题法</a>
+    <a href="#s1">三种定义 · 体积/逆序数/展开</a>
+    <a href="#s2">七大性质 · 每条都有几何解释</a>
+    <a href="#s3">「12+1」基本形速查</a>
+    <a href="#s4">具体型四法 · 题型库</a>
+    <a href="#s5">抽象型三路 · 题型库</a>
+    <a href="#s6">强化专题 · 代数余子式线性组合</a>
+    <a href="#s7">克拉默法则 + |A|=0 判据链</a>
+    <a href="#s8">习题自测（答案已复算）</a>
+  </nav>
+
+  <!-- ============ 定位 ============ -->
+  <h2 id="s0"><span class="idx">定位</span>线代到底在学什么 · 本章的位置</h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/线性代数/00_零基础课_线性代数入门/线代_第00章_基础30讲_零基础课.pdf">📄 零基础课</a>
+  <a class="pg" href="../../张宇系列_分章易识别版/线性代数/01_行列式/线代_第01章_基础30讲.pdf">📄 基础30讲</a>
+  <div class="mine"><span class="tag">补讲 · 先把「线代是干嘛的」钉死，否则六章会碎成一地公式</span>
+    张宇第 0 讲原话：<b>线性代数是一种代数结构，向量空间是基石，研究的是「向量与向量的关系」</b>。全书六讲分三块：<br>
+    · <b>基础版块</b>：行列式、矩阵 —— 造工具；<br>
+    · <b>主题版块</b>：向量组、方程组 —— 真正的主线（谁能被谁线性表出、方程有没有解）；<br>
+    · <b>应用版块</b>：<b>★特征值、★二次型</b> —— 张宇打了星，因为「<b>特征值、特征向量的出现才会真正展现线性代数的用途</b>」（基础例1.9 旁批原话）。<br>
+    一句话串起来：<b>矩阵 $\boldsymbol A$ 是一个作用在向量上的「变换」（对应法则，相当于高数里的函数 $f$）；方程组 $\boldsymbol{Ax}=\boldsymbol\beta$ 就是「已知变换和结果，反解原像」；而行列式 $|\boldsymbol A|$ 是给这个变换打的一个数——它把「这个变换有没有把空间压扁」一次性判定了。</b>
+  </div>
+  <div class="key"><span class="tag">必记 · 秩主线的第一颗钉子（本章在全局中的位置）</span>
+    线代六章其实只有一条主线：<b>$r(\boldsymbol A)$ 是多少</b>。本章给出这条主线上<b>最省事、但只对方阵有效</b>的那把尺子：
+    $$|\boldsymbol A|\ne0\iff r(\boldsymbol A)=n\iff \boldsymbol A\ \text{可逆}\iff \boldsymbol A\boldsymbol x=\boldsymbol 0\ \text{只有零解}\iff \boldsymbol A\ \text{的行(列)向量组线性无关}$$
+    <b>行列式只回答「是否满秩」这个 0/1 问题，回答不了「秩到底是几」</b>——那要等第 2 章的初等变换。所以本章题目的终点几乎全是两种：<b>算出一个数</b>，或者<b>令 $|\boldsymbol A|=0$ 解参数</b>。看到题里出现「有非零解 / $\boldsymbol B\ne\boldsymbol O$ 且 $\boldsymbol{AB}=\boldsymbol O$ / 向量组线性相关 / 有二重根」，几乎都是在喊「请令 $|\boldsymbol A|=0$」。
+  </div>
+  <div class="zy"><span class="tag">强化题型 · 张宇本章解题总图（《线代9讲》第 1 讲扉页「三向解题法」）</span>
+    <b>O（盯住目标）= 计算行列式</b>，往下只分两支，判据是<b>元素 $a_{ij}$ 给没给出来</b>：<br>
+    <b>O₁ 具体型（$a_{ij}$ 已给出）</b> —— 四条路：① <b>化为基本形</b>（「12+1」型，最主流）② <b>加边法</b> ③ <b>递推法</b>（高阶→低阶）④ <b>数学归纳法</b>（低阶→高阶）；<br>
+    <b>O₂ 抽象型（$a_{ij}$ 未给出）</b> —— 三条路：① <b>用行列式的性质</b> ② <b>用矩阵知识</b>（核心是 $|\boldsymbol{AB}|=|\boldsymbol A||\boldsymbol B|$）③ <b>用相似理论</b>（$|\boldsymbol A|=\prod\lambda_i$）。<br>
+    <b>第 2 讲单独把「余子式和代数余子式的线性组合」拎出来</b>，也是三条路：用行列式（逆用展开式）、用矩阵（$\boldsymbol A^*=|\boldsymbol A|\boldsymbol A^{-1}$）、用特征值（$A_{11}+A_{22}+A_{33}=\lambda_2\lambda_3+\lambda_1\lambda_3+\lambda_1\lambda_2$）。<br>
+    <b>做题第一步永远是先分「具体 / 抽象」</b>，分错了后面全是无用功（例：强 1.2 明明是含参方程组，硬按「讨论参数」走会算到崩溃，按具体型行列式走三行结束）。
+  </div>
+
+  <!-- ============ 三种定义 ============ -->
+  <h2 id="s1"><span class="idx">一</span>行列式的三种定义<span class="layer L-base" style="margin-left:10px">基础</span></h2>
+
+  <h3>1.1　第一种（本质定义）：行列式 = 体积</h3>
+  <p>把 $n$ 阶行列式的每一<b>行</b>看成一个 $n$ 维向量，行列式的值就是<b>以这 $n$ 个向量为邻边的 $n$ 维平行体的（有向）体积</b>。$n=2$ 是平行四边形面积，$n=3$ 是平行六面体体积。</p>
+  <div class="fml">$$\begin{vmatrix}a_{11}&a_{12}\\a_{21}&a_{22}\end{vmatrix}=a_{11}a_{22}-a_{12}a_{21}=S_{\square OABC}$$</div>
+  <div class="key"><span class="tag">必记 · 这一句话把七条性质全部解释掉了</span>
+    <b>行列式的本质属性是「测度」——面积、体积。</b>于是：<br>
+    · 有一行全 $0$ ⇒ 少一维 ⇒ <b>高维测不出低维，值为 $0$</b>（性质 2）；<br>
+    · 两行成比例 ⇒ 两向量共线，拼不出平行四边形 ⇒ <b>值为 $0$</b>（性质 6）；<br>
+    · 某行乘 $k$ ⇒ 一条边拉长 $k$ 倍 ⇒ <b>面积 $\times k$</b>（性质 3，注意只能乘到<u>一行</u>，乘到每行就是 $k^n$）；<br>
+    · 互换两行 ⇒ 转向由逆时针变顺时针 ⇒ <b>变号</b>（性质 5，代数学里面积有正负）；<br>
+    · $|\boldsymbol{AB}|=|\boldsymbol A||\boldsymbol B|$ ⇒ <b>复合变换的测度 = 两次测度相乘</b>，所以还等于 $|\boldsymbol{BA}|$（即使 $\boldsymbol{AB}\ne\boldsymbol{BA}$）。
+  </div>
+  <div class="mine"><span class="tag">补讲 · 三个必须当场记住的小结论（真题里当条件用）</span>
+    ① $\begin{vmatrix}1&2\\2&5\end{vmatrix}=1$、$\begin{vmatrix}1&2\\2&3\end{vmatrix}=-1$（负值 = 从第一行向量到第二行向量是<b>顺时针</b>走的）、$\begin{vmatrix}1&2\\2&4\end{vmatrix}=0$（共线）。<br>
+    ② <b>$D_3\ne0\iff$ 三个行向量线性无关；$D_3=0\iff$ 线性相关。</b>——这是第 3 章「向量组相关性」的判据在本章提前露面，见到就该条件反射。<br>
+    ③ <b>3 阶画线法（沙路法）只对 3 阶成立，4 阶起一律作废</b>：$\begin{vmatrix}5&2&1\\1&2&5\\34&1&34\end{vmatrix}=520$（已复算）。4 阶及以上必须用展开定理降阶。
+  </div>
+
+  <h3>1.2　第二种（逆序数法定义）：$n!$ 项之和</h3>
+  <div class="fml">$$\begin{vmatrix}a_{11}&\cdots&a_{1n}\\\vdots&&\vdots\\a_{n1}&\cdots&a_{nn}\end{vmatrix}=\sum_{j_1j_2\cdots j_n}(-1)^{\tau(j_1j_2\cdots j_n)}a_{1j_1}a_{2j_2}\cdots a_{nj_n}$$</div>
+  <p><b>行下标已顺排</b>，列下标跑遍所有 $n$ 级排列，故共 $n!$ 项；每项取自<b>不同行、不同列</b>；符号由列下标排列的<b>逆序数 $\tau$</b> 决定：奇排列取负、偶排列取正。$\tau(231546)=3$，$\tau(621534)=8$，自然排序 $\tau=0$。</p>
+  <div class="key"><span class="tag">必记 · 逆序数定义在考研里只干两件事</span>
+    ① <b>判某一项的正负号</b>：如「$a_{12}a_{31}a_{54}a_{43}a_{25}$」前的符号——先把行下标顺排成 $a_{12}a_{25}a_{31}a_{43}a_{54}$，再算列下标 $\tau(25134)=4$，偶排列 ⇒ <b>正号</b>。<br>
+    ② <b>证明「有规律的 $n$ 阶行列式」的公式</b>（主对角线型、副对角线型都靠它证），但<b>推理不用掌握，结论背下来即可</b>（张宇原批注：所有有规律的行列式，公式总结出来，记住即可）。<br>
+    ③ 一个常用副产品：<b>$n$ 阶行列式展开式共 $n!$ 项</b>，2 阶 2 项、3 阶 6 项、4 阶 24 项——例 1.5 的「X 型」陷阱就是拿这个反杀的。<br>
+    注意 <b>1 阶行列式 $|a|=a$ 可正可负</b>，$|-2|_{1\times1}=-2$，别跟绝对值混。
+  </div>
+
+  <h3>1.3　第三种（展开定理）：降阶</h3>
+  <p><b>余子式 $M_{ij}$</b>：划掉 $a_{ij}$ 所在的第 $i$ 行第 $j$ 列，剩下元素<b>按原来的相对位置</b>组成的 $n-1$ 阶行列式（不能动顺序）。<b>代数余子式 $A_{ij}=(-1)^{i+j}M_{ij}$</b>，反过来也有 $M_{ij}=(-1)^{i+j}A_{ij}$。</p>
+  <div class="fml">$$|\boldsymbol A|=\sum_{j=1}^{n}a_{ij}A_{ij}\ (\text{按第 }i\text{ 行})=\sum_{i=1}^{n}a_{ij}A_{ij}\ (\text{按第 }j\text{ 列})$$</div>
+  <div class="trap"><span class="tag">陷阱 · 展开定理的「异行（列）为零」是本章最高频考点</span>
+    <b>同行同配 = $|\boldsymbol A|$，异行异配 = $0$</b>：
+    $$a_{i1}A_{k1}+a_{i2}A_{k2}+\cdots+a_{in}A_{kn}=0\quad(i\ne k)$$
+    几何上就是「把第 $k$ 行换成第 $i$ 行后，行列式有两行相同 ⇒ 为 $0$」。<b>第 2 讲整整一讲的题型都建立在这一条上</b>（见 §6）。<br>
+    展开原则：<b>挑 $0$ 最多的那一行（列）展开</b>。代价意识要有：1 个 4 阶展成 4 个 3 阶，个数是增多的，所以要先用性质化出零元素再展。展到「12+1」型就停手套公式，别一路展到底。
+  </div>
+
+  <!-- ============ 七大性质 ============ -->
+  <h2 id="s2"><span class="idx">二</span>七大性质 · 全部由「体积」直观得到<span class="layer L-base" style="margin-left:10px">基础</span></h2>
+  <div class="gridwrap"><table>
+    <tr><th>性质</th><th>内容</th><th>几何解释（体积视角）</th><th>用法</th></tr>
+    <tr><td>1</td><td>$|\boldsymbol A|=|\boldsymbol A^{\mathrm T}|$（行列互换值不变）</td><td>转置后图形测度不变</td><td><b>行、列地位完全等价</b>，凡对行成立的对列也成立，下列性质只需证一组</td></tr>
+    <tr><td>2</td><td>某行（列）元素全为 $0$ ⇒ $|\boldsymbol A|=0$</td><td>至少降一维，高维空间测不出低维测度</td><td>见零行直接判 $0$</td></tr>
+    <tr><td>3</td><td>某行（列）有公因子 $k$ ⇒ $k$ 可提到外面</td><td>一条边变 $k$ 倍，体积变 $k$ 倍</td><td><b>「倍乘」</b>。逆用时 $k$ <b>只能乘到某一行</b>；乘到每一行就是 $k^n|\boldsymbol A|$</td></tr>
+    <tr><td>4</td><td>某<b>一</b>行元素均为两数之和 ⇒ 可拆成两个行列式之和</td><td>一个平行六面体拆成两个（只拆了一条边）</td><td><b>「单行可拆（加）性」</b>，正用逆用都要会；抽象型行列式主力（例 1.10）</td></tr>
+    <tr><td>5</td><td>互换两行（列），行列式<b>变号</b></td><td>转向由正变负，代数面积有正负</td><td><b>「互换」</b>。换奇数次反号、偶数次不变；换 $n$ 次得 $(-1)^n|\boldsymbol A|$</td></tr>
+    <tr><td>6</td><td>两行（列）相等或对应成比例 ⇒ $|\boldsymbol A|=0$</td><td>两向量共线，拼不出平行四边形</td><td>抽象型里「拆完发现两列相同 ⇒ 该项为 $0$」的杀手锏</td></tr>
+    <tr><td>7</td><td>某行（列）的 $k$ 倍加到另一行（列），值<b>不变</b></td><td>沿底边平移顶点，等底等高</td><td><b>「倍加」</b>。<b>唯一不改变值的变换，化零元素全靠它</b></td></tr>
+  </table></div>
+  <div class="trap"><span class="tag">陷阱 · 三个必错点，每年都有人栽</span>
+    ① <b>$k|\boldsymbol A|\ne k\boldsymbol A$</b>：$k\begin{vmatrix}a&b\\c&d\end{vmatrix}$ 是把 $k$ 乘到<u>一行</u>；$k\begin{bmatrix}a&b\\c&d\end{bmatrix}=\begin{bmatrix}ka&kb\\kc&kd\end{bmatrix}$ 是每个元素都乘。故 <b>$|k\boldsymbol A|=k^n|\boldsymbol A|$</b>（$n$ 阶）。<br>
+    ② <b>$|\boldsymbol A|+|\boldsymbol B|\ne|\boldsymbol A+\boldsymbol B|$</b>：行列式相加要求<b>只有对应的某一行（列）不同</b>，加的是那一行，其他行不动。矩阵相加是逐元素相加，完全两回事。<br>
+    ③ 性质 4 只能<b>拆一行</b>：$\begin{vmatrix}1&2&1\\2&1&4\\5&7&11\end{vmatrix}=\begin{vmatrix}1&2&1\\-1&1&2\\5&7&11\end{vmatrix}+\begin{vmatrix}1&2&1\\3&0&2\\5&7&11\end{vmatrix}$ —— 拆法有无穷多种，拆成哪些由题决定。
+  </div>
+
+  <!-- ============ 12+1 ============ -->
+  <h2 id="s3"><span class="idx">三</span>「12+1」型基本形行列式 · 化到这儿就收手<span class="layer L-base" style="margin-left:10px">基础</span></h2>
+  <p>张宇把 <b>12 个「基本形」+ 范德蒙德</b> 合称「12+1」型：<b>化到基本形就能直接出结果，不必再展开</b>。这是具体型计算的终点，务必背熟。</p>
+  <div class="key"><span class="tag">必记 · 12+1 全表（已逐条程序验证）</span>
+    <b>① 主对角线型（上/下三角、对角）</b>：$\displaystyle\prod_{i=1}^{n}a_{ii}$（三个形状都一样）。<br>
+    <b>② 副对角线型（左上/右下三角、副对角）</b>：$(-1)^{\frac{n(n-1)}{2}}a_{1n}a_{2,n-1}\cdots a_{n1}$。<br>
+    <span style="color:var(--red)">符号来源：把副对角线换到主对角线要交换 $(n-1)+(n-2)+\cdots+1=\frac{n(n-1)}{2}$ 次。$n=2,3$ 时为负，$n=4,5$ 时为正——别凭感觉写。</span><br>
+    <b>③ 拉普拉斯展开式（分块）</b>：设 $\boldsymbol A$ 为 $m$ 阶、$\boldsymbol B$ 为 $n$ 阶，
+    $$\begin{vmatrix}\boldsymbol A&\boldsymbol O\\\boldsymbol O&\boldsymbol B\end{vmatrix}=\begin{vmatrix}\boldsymbol A&\boldsymbol C\\\boldsymbol O&\boldsymbol B\end{vmatrix}=\begin{vmatrix}\boldsymbol A&\boldsymbol O\\\boldsymbol C&\boldsymbol B\end{vmatrix}=|\boldsymbol A||\boldsymbol B|,\qquad
+    \begin{vmatrix}\boldsymbol O&\boldsymbol A\\\boldsymbol B&\boldsymbol O\end{vmatrix}=\begin{vmatrix}\boldsymbol C&\boldsymbol A\\\boldsymbol B&\boldsymbol O\end{vmatrix}=\begin{vmatrix}\boldsymbol O&\boldsymbol A\\\boldsymbol B&\boldsymbol C\end{vmatrix}=(-1)^{mn}|\boldsymbol A||\boldsymbol B|$$
+    <span style="color:var(--red)">$(-1)^{mn}$ 的 $m,n$ 是<b>两个块各自的阶</b>，不是整个矩阵的阶。我已对 $m,n\le4$ 的全部 16 种组合数值验证过。</span><br>
+    <b>④ 范德蒙德</b>（第 2 行盯住，后项减前项，所有对乘起来）：
+    $$\begin{vmatrix}1&1&\cdots&1\\x_1&x_2&\cdots&x_n\\x_1^2&x_2^2&\cdots&x_n^2\\\vdots&\vdots&&\vdots\\x_1^{n-1}&x_2^{n-1}&\cdots&x_n^{n-1}\end{vmatrix}=\prod_{1\le i\lt j\le n}(x_j-x_i)$$
+  </div>
+  <div class="mine"><span class="tag">补讲 · 另外三个「准基本形」，出现频率不比上面低</span>
+    <b>Ⓐ 行和相等型（$a$ 在主对角线、其余全 $b$）</b>：$D_n=[a+(n-1)b](a-b)^{n-1}$。<b>Ⓑ 副对角线版</b>：$G_n=(-1)^{\frac{n(n-1)}{2}}[a+(n-1)b](a-b)^{n-1}$。<b>Ⓒ 爪形</b>（只有第 1 行、第 1 列和主对角线有元素）：用<b>斜爪消竖爪或平爪</b>（$a_{ii}$ 消 $a_{i1}$ 或 $a_{1i}$）化成三角形，共 <span style="color:var(--red)">$\ulcorner\ \urcorner\ \llcorner\ \lrcorner$ 四种朝向</span>。<br>
+    Ⓐ 的三个常考特例（已验证 $n\le6$）：$a=0,b=1\Rightarrow(n-1)(-1)^{n-1}$；$a=2,b=1\Rightarrow n+1$；<b>$a$ 取 $\lambda-a$ 时就是第 5 章求特征值的样子</b>：$\big|(\lambda-a)\boldsymbol E\text{ 型}\big|=[\lambda-a+(n-1)b](\lambda-a-b)^{n-1}$ —— 这就是为什么强 1.8 用它一步求出全部特征值。
+  </div>
+
+  <!-- ============ 具体型 ============ -->
+  <h2 id="s4"><span class="idx">四</span>具体型行列式（$a_{ij}$ 已给出）· 四法题型库<span class="layer L-str" style="margin-left:10px">基础＋强化</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/线性代数/01_行列式/线代_第01章_强化9讲_第1讲_行列式.pdf">📄 强化9讲·第1讲</a>
+  <div class="zy"><span class="tag">强化题型 · 「简单处理」的三个手段（强化第 1 讲的解题要诀，原书加粗）</span>
+    化基本形之前，先做这三步观察 —— 张宇管这叫 D₂₁「观察研究对象」：<br>
+    <b>① 按 $0$ 元素多的行（列）展开</b>；<br>
+    <b>② 对差别最小的「对应位置元素」下手</b>（倍加），尽可能多地化出 $0$，再按该行（列）展开；<br>
+    <b>③ 行和 / 列和相等 ⇒ 把所有列加到第 1 列（或所有行加到第 1 行），提公因式，再回到 ②</b>。<br>
+    另加一句判据：<b>元素里含 $x$ 或 $\lambda$ ⇒ 行列式必是 $x$（$\lambda$）的多项式</b>，题目多半在问次数、根的个数或某项系数。
+  </div>
+
+  <h3>4.1　法一：化为基本形（最主流）</h3>
+  <div class="eg">
+    <div class="q"><span class="no">基1.1</span>$D_4=\begin{vmatrix}2&-1&0&0\\0&2&-1&0\\0&0&2&-1\\-1&0&0&2\end{vmatrix}=$（　）(A) 17　(B) 15　(C) 13　(D) 11</div>
+    <div class="s"><span class="lab">解</span>第 1 列只有 $a_{11}=2$、$a_{41}=-1$ 非零，按第 1 列展开：$D_4=2\begin{vmatrix}2&-1&0\\0&2&-1\\0&0&2\end{vmatrix}+(-1)\cdot(-1)^{4+1}\begin{vmatrix}-1&0&0\\2&-1&0\\0&2&-1\end{vmatrix}$（右上三角 + 左下三角，都是基本形）$=2\cdot8+1\cdot(-1)=16-1=15$。选 $\boxed{\text{B}}$。<span class="ans"> ✔ 已复算</span></div>
+  </div>
+  <div class="eg">
+    <div class="q"><span class="no">基1.2</span>计算 $\begin{vmatrix}1&1&1&1\\1&2&0&0\\1&0&3&0\\1&0&0&4\end{vmatrix}$（爪形）</div>
+    <div class="s"><span class="lab">解</span>后三行分别提出 $2,3,4$ 得 $2\cdot3\cdot4\begin{vmatrix}1&1&1&1\\\frac12&1&0&0\\\frac13&0&1&0\\\frac14&0&0&1\end{vmatrix}$；再用<b>斜爪消平爪</b>：把第 2、3、4 行的 $(-1)$ 倍加到第 1 行（即用 $a_{22},a_{33},a_{44}$ 消掉 $a_{12},a_{13},a_{14}$），第 1 行变成 $\big(1-\frac12-\frac13-\frac14,\ 0,\ 0,\ 0\big)$，按第 1 行展开：$=24\big(1-\frac12-\frac13-\frac14\big)=24-12-8-6=\boxed{-2}$。<span class="ans"> ✔ 已复算</span></div>
+  </div>
+  <div class="key"><span class="tag">必记 · 爪形的口诀</span>
+    <b>「斜爪消竖爪或平爪」</b>：用主对角线上的 $a_{ii}$ 去消第 1 列的 $a_{i1}$（竖爪）或第 1 行的 $a_{1i}$（平爪），一步化成三角形。前提是 $a_{ii}\ne0$；若某个 $a_{ii}=0$，反过来用第 1 行（列）去消它。四种朝向都要认得。
+  </div>
+  <div class="eg">
+    <div class="q"><span class="no">基1.3</span>$\begin{vmatrix}1&-1&1&x-1\\1&-1&x+1&-1\\1&x-1&1&-1\\x+1&-1&1&-1\end{vmatrix}=$______</div>
+    <div class="s"><span class="lab">解</span>各行元素差别很小、第 1 列元素大多相同 ⇒ <b>用第 1 行的 $(-1)$ 倍加到其余各行</b>，得到只有 $x$ 散布的稀疏阵，再整理成<b>副对角线型</b>（四个 $x$ 落在副对角线上）：$=(-1)^{\frac{4\times3}{2}}x^4=(+1)x^4=\boxed{x^4}$。<span class="ans"> ✔ 已符号复算，$\det=x^4$ 恒成立</span></div>
+  </div>
+  <div class="eg">
+    <div class="q"><span class="no">基1.4</span>计算 $n$ 阶行列式 $D_n=\begin{vmatrix}a&b&\cdots&b\\b&a&\cdots&b\\\vdots&\vdots&&\vdots\\b&b&\cdots&a\end{vmatrix}$</div>
+    <div class="s"><span class="lab">解</span>每行元素都由 $1$ 个 $a$、$n-1$ 个 $b$ 构成 ⇒ <b>行和相等</b>。把第 $2\sim n$ 列全加到第 1 列，第 1 列变成 $a+(n-1)b$，提出；再用第 1 行的 $(-1)$ 倍加到其余各行，化成上三角：
+    $$D_n=[a+(n-1)b](a-b)^{n-1}$$
+    <span class="ans">✔ 已对 $n=2\!\sim\!5$ 符号复算，因式分解完全一致</span></div>
+  </div>
+  <div class="mine"><span class="tag">补讲 · 「行和相等」是个触发器，见到就加</span>
+    判据不是「元素长得像」，而是<b>每行元素之和相等</b>。只要行和相等（或列和相等），就把其余各列加到第 1 列、提公因子。这个动作在<b>第 5 章求特征值</b>会原样重演（强 1.8 就是），现在练熟了后面白赚。
+  </div>
+  <div class="eg">
+    <div class="q"><span class="no">基1.5</span>计算 $D_4=\begin{vmatrix}a_1&0&0&b_1\\0&a_2&b_2&0\\0&b_3&a_3&0\\b_4&0&0&a_4\end{vmatrix}$（X 型）</div>
+    <div class="s"><span class="lab">解</span>$0$ 元素分散，先<b>集中</b>：互换第 2、4 行再互换（两次互换，$(-1)^2=1$），凑成分块对角形，用拉普拉斯：$D_4=\begin{vmatrix}a_1&b_1\\b_4&a_4\end{vmatrix}\begin{vmatrix}a_3&b_3\\b_2&a_2\end{vmatrix}=(a_1a_4-b_1b_4)(a_2a_3-b_2b_3)$
+    $=\boxed{a_1a_2a_3a_4+b_1b_2b_3b_4-a_1a_4b_2b_3-a_2a_3b_1b_4}$。<span class="ans"> ✔ 已符号复算（4 项，与逐项展开完全一致）</span></div>
+  </div>
+  <div class="trap"><span class="tag">陷阱 · X 型最爱骗人的一步（原书专门用注框警告）</span>
+    <b>$D_4=a_1a_2a_3a_4-b_1b_2b_3b_4$ 是错的！</b>不要当成 2 阶行列式去「主对角减副对角」。4 阶展开式<b>共 4 项</b>（不是 2 项），且<b>副对角线元素乘积那一项取正号</b>。我程序展开的结果就是上面 4 项。<br>
+    通用结论（供二次型正定问题用）：主副对角线元素相同的 $2n$ 阶 X 型 $=(a^2-b^2)^n$；一般情形 $\displaystyle\prod_{i=1}^{k}(a_ia_{2k+1-i}-b_ib_{2k+1-i})$。
+  </div>
+  <div class="eg">
+    <div class="q"><span class="no">基1.6</span>计算 $\begin{vmatrix}a&b&c\\a^2&b^2&c^2\\b+c&a+c&a+b\end{vmatrix}$</div>
+    <div class="s"><span class="lab">解</span>第 1 行加到第 3 行，第 3 行变成 $(a+b+c,a+b+c,a+b+c)$，提出 $(a+b+c)$，剩下 $\begin{vmatrix}a&b&c\\a^2&b^2&c^2\\1&1&1\end{vmatrix}$；把第 3 行依次换到第 1 行（换 2 次，符号 $(-1)^2$）得<b>范德蒙德</b>：$=(a+b+c)(b-a)(c-a)(c-b)$。<span class="ans"> ✔ 已符号复算，因式分解一致</span></div>
+  </div>
+
+  <h3>4.2　法二：加边法</h3>
+  <p>对某些一上来不便用「互换 / 倍乘 / 倍加」的行列式，可把 $n$ 阶<b>升到 $n+1$ 阶</b>：在第 1 列添 $[1,0,\cdots,0]^{\mathrm T}$，则第 1 行其余元素<b>可以任意添</b>，值不变。观察原行列式元素的规律性，选合适的数填进去，让计算变简单。</p>
+  <div class="eg">
+    <div class="q"><span class="no">强1.3</span>设 $\boldsymbol\alpha=[x_1,x_2,\cdots,x_n]^{\mathrm T}\ne\boldsymbol 0$，则 $|\boldsymbol{\alpha\alpha}^{\mathrm T}+\boldsymbol E|=$______</div>
+    <div class="s"><span class="lab">解（法一 · 加边）</span>$\boldsymbol{\alpha\alpha}^{\mathrm T}+\boldsymbol E$ 的 $(i,j)$ 元是 $x_ix_j+\delta_{ij}$。加边成 $n+1$ 阶：第 1 行填 $[1,x_1,\cdots,x_n]$、第 1 列填 $[1,0,\cdots,0]^{\mathrm T}$，再用第 1 行的 $(-x_i)$ 倍加到第 $i+1$ 行，右下角化成单位阵，最后把各列的 $x_i$ 倍加回第 1 列，得上三角，值 $=1+\sum x_i^2$。<br>
+    <span class="lab">解（法二 · 特征值，更快）</span>$\boldsymbol{\alpha\alpha}^{\mathrm T}$ 秩为 1，其特征值为 $\sum x_i^2,\underbrace{0,\cdots,0}_{n-1}$（因 $\mathrm{tr}=\sum x_i^2$）。故 $\boldsymbol{\alpha\alpha}^{\mathrm T}+\boldsymbol E$ 的特征值为 $1+\sum x_i^2,\underbrace{1,\cdots,1}_{n-1}$，行列式 $=\boxed{1+\sum\limits_{i=1}^{n}x_i^2}$。<span class="ans"> ✔ 已对 $n=1\!\sim\!5$ 符号复算</span></div>
+  </div>
+  <div class="key"><span class="tag">必记 · 秩 1 矩阵的万能套路（贯穿全书，务必现在就记死）</span>
+    若 $\boldsymbol A=\boldsymbol{\alpha\beta}^{\mathrm T}$（秩 1），则 <b>$\boldsymbol A^2=(\boldsymbol\beta^{\mathrm T}\boldsymbol\alpha)\boldsymbol A$，特征值为 $\mathrm{tr}(\boldsymbol A)=\boldsymbol\beta^{\mathrm T}\boldsymbol\alpha$ 及 $n-1$ 个 $0$</b>。于是
+    $$|\boldsymbol{\alpha\beta}^{\mathrm T}+k\boldsymbol E|=k^{n-1}\big(k+\boldsymbol\beta^{\mathrm T}\boldsymbol\alpha\big)$$
+    这条在第 5、6 章会反复用。<b>看到 $\boldsymbol{\alpha\alpha}^{\mathrm T}$、$\boldsymbol{\alpha\beta}^{\mathrm T}$ 就想「秩 1 + 迹」</b>，几乎不用算行列式。
+  </div>
+
+  <h3>4.3　法三：递推法（高阶 → 低阶）</h3>
+  <div class="zy"><span class="tag">强化题型 · 递推法成立的两个硬条件</span>
+    ① 建立 $D_n$ 与 $D_{n-1}$（复杂的还要 $D_{n-2}$）的关系式；<br>
+    ② <b>$D_{n-1}$ 必须与 $D_n$ 有完全相同的元素分布规律，只是低一阶</b>。<br>
+    <span style="color:var(--red)">这决定了「按哪一行（列）展开」不是随便挑的</span>：强 1.4 里选第 1 列展开余子式才是 $D_{n-1}$，选第 $n$ 列展开就<b>破坏了元素分布规律，递推公式根本建不起来</b>。<br>
+    判断口诀：<b>命题直接要你「计算」 ⇒ 优先递推法；命题已给出结果要你「证明」 ⇒ 优先数学归纳法。</b>
+  </div>
+  <div class="eg">
+    <div class="q"><span class="no">基1.7</span>$D_4=\begin{vmatrix}1-a&a&0&0\\-1&1-a&a&0\\0&-1&1-a&a\\0&0&-1&1-a\end{vmatrix}=$（　）(A) $a^4+2a^3+6a^2+2a+1$　(B) $a^4-2a^3+6a^2+a$　(C) $a^4+a^3+a^2+a+1$　(D) $a^4-a^3+a^2-a+1$</div>
+    <div class="s"><span class="lab">解</span>宽对角（三对角）行列式。把第 1 行 1 倍加到第 2 行、再把新第 2 行 1 倍加到第 3 行……最后一行化为 $(-a,0,0,1)$，按此行展开得 $D_4=a^4+D_3$，同理 $D_3=-a^3+D_2$、$D_2=a^2+D_1$、$D_1=1-a$，累加得 $D_4=a^4-a^3+a^2-a+1$。选 $\boxed{\text{D}}$。<span class="ans"> ✔ 已符号复算</span></div>
+  </div>
+  <div class="mine"><span class="tag">补讲 · 三对角行列式的现成公式（记住能秒杀，考场省 5 分钟）</span>
+    对主对角线全 $k$、上对角线全 $b$、下对角线全 $c$ 的 $n$ 阶三对角行列式，记 $\Delta=k^2-4bc$：
+    $$D_n=\begin{cases}(n+1)\big(\frac k2\big)^n,&k^2=4bc,\\[6pt]\dfrac{(k+\sqrt\Delta)^{n+1}-(k-\sqrt\Delta)^{n+1}}{2^{n+1}\sqrt\Delta},&k^2\ne4bc.\end{cases}$$
+    <b>真题考过的特例</b>：$k=2a,\ bc=a^2$（即 $\Delta=0$）⇒ $D_n=(n+1)a^n$。我已对 $n=1\!\sim\!6$ 符号验证。<br>
+    用它回头验基 1.7：$a=-1$ 时 $(1-a)^2=4=-4a$ 属 $\Delta=0$ 支，$D_4=5\cdot(\frac{1-a}{2})^4=5$；代入 (D) 得 $1+1+1+1+1=5$ ✔ 对得上。
+  </div>
+
+  <h3>4.4　法四：数学归纳法（低阶 → 高阶）</h3>
+  <p><b>解题标志：题目给出行列式的结果，让你「证明」。</b>第一数学归纳法适用于 $F(D_n,D_{n-1})=0$；第二数学归纳法适用于 $F(D_n,D_{n-1},D_{n-2})=0$（要验 $n=1$ 和 $n=2$，假设 $n\lt k$ 成立）。</p>
+  <div class="eg">
+    <div class="q"><span class="no">强1.4</span>$D_n=\begin{vmatrix}b&-1&0&\cdots&0\\0&b&-1&\cdots&0\\\vdots&\vdots&\vdots&&\vdots\\0&0&0&\cdots&-1\\a_n&a_{n-1}&a_{n-2}&\cdots&b+a_1\end{vmatrix}=$______（异爪形）</div>
+    <div class="s"><span class="lab">解</span>按<b>第 1 列</b>展开（这样余子式才保持同样的分布规律）：$D_n=bD_{n-1}+a_n$。逐层代入 $D_n=b(bD_{n-2}+a_{n-1})+a_n=\cdots=b^{n-1}D_1+a_2b^{n-2}+\cdots+a_{n-1}b+a_n$，而 $D_1=b+a_1$，故
+    $$D_n=\boxed{b^n+a_1b^{n-1}+a_2b^{n-2}+\cdots+a_{n-1}b+a_n}$$
+    <span class="ans">✔ 已对 $n=2\!\sim\!5$ 符号复算，系数逐项吻合</span></div>
+  </div>
+  <div class="key"><span class="tag">必记 · 元素分布规律要「从右下角往左上看」</span>
+    这题原书特意提醒：$D_n$ 的规律要从右下角向左上角读，$D_k$ 的最后一行是 $(a_k,a_{k-1},\cdots,a_2,b+a_1)$。<b>如果按第 $n$ 列展开，余子式的最后一行就不是这个形状了，递推链直接断掉。</b>凡递推题，先写出 $D_{n-1}$ 长什么样再决定按哪列展开。
+  </div>
+  <div class="eg">
+    <div class="q"><span class="no">强1.5</span>证明 $n$ 阶行列式 $D_n=\begin{vmatrix}2a&1&0&\cdots&0\\a^2&2a&1&\cdots&0\\0&a^2&2a&\cdots&0\\\vdots&\vdots&\vdots&&\vdots\\0&0&0&\cdots&2a\end{vmatrix}=(n+1)a^n$</div>
+    <div class="s"><span class="lab">证</span>用<b>第二数学归纳法</b>。$n=1$：$D_1=2a=(1+1)a^1$ ✔；$n=2$：$D_2=4a^2-a^2=3a^2=(2+1)a^2$ ✔。设 $n\lt k$ 时成立，$n=k\ (\ge3)$ 时按第 1 列展开：$D_k=2aD_{k-1}+(-1)^{1+2}a^2D_{k-2}=2aD_{k-1}-a^2D_{k-2}$
+    $=2a\cdot k a^{k-1}-a^2(k-1)a^{k-2}=(2k-k+1)a^k=(k+1)a^k$ ✔。<span class="ans"> ✔ 已对 $n=1\!\sim\!6$ 符号复算</span></div>
+  </div>
+
+  <h3>4.5　补充题型：行列式表示的函数与方程</h3>
+  <div class="zy"><span class="tag">强化题型 · 元素含 $x$ / $\lambda$ 时，问的是多项式的性质</span>
+    <b>若 $a_{ij}$ 是具体数值，行列式就是一个数；若含 $x$ 或 $\lambda$，行列式是 $x$（$\lambda$）的多项式</b>，可以对它求极限、求导、积分。考研线代试题里<b>大多是 $\lambda$ 的多项式（即特征多项式）</b>。四种问法：<br>
+    ① 问<b>次数 / 根的个数</b>（别想当然认为 $n$ 阶就是 $n$ 次！习 1.1 是 4 阶但只有 2 次）；<br>
+    ② 问<b>某项系数</b>（用逆序数定义分析该项来自哪几处，习 1.3）；<br>
+    ③ 问<b>有二重根时参数取值</b>（基 1.9）；<br>
+    ④ <b>把两个行列式的等式转成方程</b>（强 1.1）。
+  </div>
+  <div class="eg">
+    <div class="q"><span class="no">基1.8</span>设 $f(x)=\begin{vmatrix}1&0&x\\1&2&x^2\\1&3&x^3\end{vmatrix}$，求 $f(x+1)-f(x)$</div>
+    <div class="s"><span class="lab">解</span>两个行列式<b>只有第 3 列不同</b>，可直接相减（单列可加性）：第 3 列变为 $\big((x+1)-x,\ (x+1)^2-x^2,\ (x+1)^3-x^3\big)^{\mathrm T}=(1,2x+1,3x^2+3x+1)^{\mathrm T}$，再用第 1、2 列消，化成主对角线型得 $\boxed{6x^2}$。（$f(x)=2x^3-3x^2+x$，直接作差同样得 $6x^2$。）<span class="ans"> ✔ 已符号复算</span></div>
+  </div>
+  <div class="trap"><span class="tag">陷阱 · 行列式的加减不同于矩阵的加减</span>
+    <b>只有对应的某<u>一</u>列（行）不同时才可加减，其他列必须完全相同</b>，加减的是那一列，其他列照抄。矩阵是逐元素加减，两回事。这题能一步走通，全靠 $f(x+1)$ 与 $f(x)$ 前两列一模一样。
+  </div>
+  <div class="eg">
+    <div class="q"><span class="no">基1.9</span>设关于 $\lambda$ 的方程 $\begin{vmatrix}\lambda-1&-2&3\\1&\lambda-4&3\\-1&a&\lambda-5\end{vmatrix}=0$ 有二重根，求参数 $a$</div>
+    <div class="s"><span class="lab">解</span>$a_{13}=a_{23}=3$ 相同 ⇒ 把第 2 行的 $(-1)$ 倍加到第 1 行，再把第 2 列 1 倍加到第 1 列，第 1 行出现两个 $0$，按第 1 行展开：
+    $$\text{原式}=(\lambda-2)\big[(\lambda-3)(\lambda-5)-3(a-1)\big]=(\lambda-2)(\lambda^2-8\lambda+18-3a)=0$$
+    ① 若 $\lambda=2$ 是二重根：代入 $\lambda^2-8\lambda+18-3a=0$ 得 $4-16+18-3a=0\Rightarrow a=2$（验证：三根为 $2,2,6$）；<br>
+    ② 若 $\lambda=2$ 不是二重根，则二次式有相等实根：$\Delta=64-4(18-3a)=0\Rightarrow a=\frac23$（此时 $\lambda=4$ 为二重根，三根为 $2,4,4$）。<br>
+    综上 $a=\boxed{2\ \text{或}\ \frac23}$。<span class="ans"> ✔ 已用判别式 + 重根检验独立复算，两解齐全</span></div>
+  </div>
+  <div class="mine"><span class="tag">补讲 · 「二重根」题必须分两种情况，漏一个丢一半分</span>
+    只要题目说「有二重根」而没说是哪个根，就一定要<b>分「已知的那个单根恰好也是二次式的根」与「二次式自身有重根」两种情况</b>。这是本章唯一的分类讨论题型，也是最容易只写一半的地方。<b>算完务必回代验证根的重数</b>（我程序验证过：$a=2$ 给 $\{6,2,2\}$，$a=\frac23$ 给 $\{2,4,4\}$，两者都真的有二重根）。
+  </div>
+  <div class="eg">
+    <div class="q"><span class="no">强1.1</span>已知 $f(x)=\begin{vmatrix}2x+1&3&2x+1&1\\2x&-3&4x&-2\\2x+1&2&2x+1&1\\2x&-4&4x&-2\end{vmatrix},\ g(x)=\begin{vmatrix}2x+1&1&2x+1&3\\5x+1&-2&4x&-3\\0&1&2x+1&2\\2x&-2&4x&-4\end{vmatrix}$，则方程 $f(x)=g(x)$ 的<b>不同的根</b>的个数为______</div>
+    <div class="s"><span class="lab">解</span>先各自化简（D₂₂ 转换等价表述：写出方程 = 算行列式）。<br>
+    $f(x)$：第 1 列与第 3 列<b>成比例吗</b>——用第 1 行的 $(-1)$ 倍加到第 3 行、第 2 行的 $(-1)$ 倍加到第 4 行后，第 3、4 行分别为 $(0,-1,0,0)$、$(0,-1,0,0)$，<b>两行相同 ⇒ $f(x)\equiv0$</b>。<br>
+    $g(x)$：按「用差别最小的对应位置元素倍加」化简，逐步降到 3 阶，得 $g(x)=-x(8x+2)$。<br>
+    于是 $f(x)=g(x)\iff -x(8x+2)=0\iff x=0$ 或 $x=-\frac14$，共 $\boxed{2}$ 个不同的根。<span class="ans"> ✔ 已符号复算：$f(x)\equiv0$、$g(x)=-2x(4x+1)$，根为 $\{0,-\frac14\}$</span></div>
+  </div>
+  <div class="eg">
+    <div class="q"><span class="no">强1.2</span>已知线性方程组 $\begin{cases}ax_1+x_3=1\\x_1+ax_2+x_3=0\\x_1+2x_2+ax_3=0\\ax_1+bx_2=2\end{cases}$ 有解（$a,b$ 为常数）。若 $\begin{vmatrix}a&0&1\\1&a&1\\1&2&a\end{vmatrix}=4$，则 $\begin{vmatrix}1&a&1\\1&2&a\\a&b&0\end{vmatrix}=$______</div>
+    <div class="s"><span class="lab">解</span>四个方程三个未知数。$\boldsymbol{Ax}=\boldsymbol b$ 有解 $\iff r(\boldsymbol A)=r([\boldsymbol A,\boldsymbol b])$。由题设 $\begin{vmatrix}a&0&1\\1&a&1\\1&2&a\end{vmatrix}=4\ne0$ 知 $r(\boldsymbol A)=3$，故 $r([\boldsymbol A,\boldsymbol b])=3\lt4$，<b>而 $[\boldsymbol A,\boldsymbol b]$ 是 4 阶方阵 ⇒ $|[\boldsymbol A,\boldsymbol b]|=0$</b>：
+    $$\begin{vmatrix}a&0&1&1\\1&a&1&0\\1&2&a&0\\a&b&0&2\end{vmatrix}=0\ \xRightarrow{\text{按第 4 列展开}}\ -\begin{vmatrix}1&a&1\\1&2&a\\a&b&0\end{vmatrix}+2\begin{vmatrix}a&0&1\\1&a&1\\1&2&a\end{vmatrix}=0$$
+    故所求 $=2\times4=\boxed{8}$。<span class="ans"> ✔ 已复算：由 $|A|=4$ 解得 $a\in\{-1,2\}$，两种情形下目标行列式均为 8</span></div>
+  </div>
+  <div class="zy"><span class="tag">强化题型 · 这题为什么不能按「含参方程组」的常规思路做（原书注框）</span>
+    按常规讨论参数 $a,b$ 再算行列式会<b>十分烦琐，与命题意图南辕北辙</b>。识别方法：<b>常规含参方程组求的是「通解或参数」，而本题求的是一个行列式的值</b> ⇒ 立刻切换到「具体型行列式计算」的角度。<br>
+    这里还藏着本章最重要的桥：<b>$m$ 个方程 $n$ 个未知数、$m=n+1$ 时，「有解」的等价说法就是「增广矩阵行列式为 $0$」</b>。以后见到「方程组有解 / 无解 / 有非零解」，第一反应查方阵行列式。
+  </div>
+
+  <!-- ============ 抽象型 ============ -->
+  <h2 id="s5"><span class="idx">五</span>抽象型行列式（$a_{ij}$ 未给出）· 三路题型库<span class="layer L-str" style="margin-left:10px">强化为主</span></h2>
+
+  <h3>5.1　路一：用行列式的性质（把所求化成已知）</h3>
+  <div class="eg">
+    <div class="q"><span class="no">基1.10</span>已知 4 阶行列式 $|\boldsymbol\alpha_1,\boldsymbol\alpha_2,\boldsymbol\alpha_3,\boldsymbol\beta|=a$，$|\boldsymbol\beta+\boldsymbol\gamma,\boldsymbol\alpha_2,\boldsymbol\alpha_3,\boldsymbol\alpha_1|=b$，则 $|\boldsymbol\alpha_2+\boldsymbol\alpha_3,\boldsymbol\alpha_1,\boldsymbol\alpha_3,\boldsymbol\gamma|=$______</div>
+    <div class="s"><span class="lab">解</span><b>第一步 · 拆</b>（单列可拆性）：$|\boldsymbol\alpha_2+\boldsymbol\alpha_3,\boldsymbol\alpha_1,\boldsymbol\alpha_3,\boldsymbol\gamma|=|\boldsymbol\alpha_2,\boldsymbol\alpha_1,\boldsymbol\alpha_3,\boldsymbol\gamma|+\underbrace{|\boldsymbol\alpha_3,\boldsymbol\alpha_1,\boldsymbol\alpha_3,\boldsymbol\gamma|}_{\text{第 1、3 列相同}=0}$，只剩第一项。<br>
+    <b>第二步 · 把已知也拆开</b>：$b=|\boldsymbol\beta+\boldsymbol\gamma,\boldsymbol\alpha_2,\boldsymbol\alpha_3,\boldsymbol\alpha_1|=|\boldsymbol\beta,\boldsymbol\alpha_2,\boldsymbol\alpha_3,\boldsymbol\alpha_1|+|\boldsymbol\gamma,\boldsymbol\alpha_2,\boldsymbol\alpha_3,\boldsymbol\alpha_1|$。其中 $|\boldsymbol\beta,\boldsymbol\alpha_2,\boldsymbol\alpha_3,\boldsymbol\alpha_1|$ 与 $|\boldsymbol\alpha_1,\boldsymbol\alpha_2,\boldsymbol\alpha_3,\boldsymbol\beta|=a$ 只差<b>一次列互换</b>（$c_1\leftrightarrow c_4$）$=-a$，故
+    $$|\boldsymbol\gamma,\boldsymbol\alpha_2,\boldsymbol\alpha_3,\boldsymbol\alpha_1|=a+b\qquad(**)$$
+    <b>第三步 · 把所求也对齐到 $(**)$</b>：$|\boldsymbol\alpha_2,\boldsymbol\alpha_1,\boldsymbol\alpha_3,\boldsymbol\gamma|\xlongequal{c_1\leftrightarrow c_2}-|\boldsymbol\alpha_1,\boldsymbol\alpha_2,\boldsymbol\alpha_3,\boldsymbol\gamma|\xlongequal{c_1\leftrightarrow c_4}+|\boldsymbol\gamma,\boldsymbol\alpha_2,\boldsymbol\alpha_3,\boldsymbol\alpha_1|=a+b$。<br>
+    综上 $=\boxed{a+b}$。<span class="ans"> ✔ 已用 20 个符号变量的一般 4 维列向量恒等式验证：所求 $-(a+b)\equiv0$</span></div>
+  </div>
+  <div class="key"><span class="tag">必记 · 抽象型「拆 + 换」的两条铁律</span>
+    <b>① 拆完必查「有没有两列相同 / 成比例」——有就直接扔掉那一项</b>，这是抽象型能算出来的唯一原因。<br>
+    <b>② 列的顺序不同就差若干次互换，换奇数次变号、偶数次不变</b>，对齐顺序时把互换次数数清楚（这是本类题唯一的失分点）。<br>
+    张宇总结：<b>「线代比高数的解题方法更容易训练：盯住要求的，转化为与已知有联系的，一步步去解决。」</b>
+  </div>
+
+  <h3>5.2　路二：用矩阵知识（核心公式 $|\boldsymbol{AB}|=|\boldsymbol A||\boldsymbol B|$）</h3>
+  <div class="key"><span class="tag">必记 · 抽象型行列式的公式包</span>
+    · $\boldsymbol C=\boldsymbol{AB}$（同阶方阵）$\Rightarrow|\boldsymbol C|=|\boldsymbol A||\boldsymbol B|=|\boldsymbol B||\boldsymbol A|=|\boldsymbol{BA}|$（即使 $\boldsymbol{AB}\ne\boldsymbol{BA}$）。<br>
+    · $|\boldsymbol A+\boldsymbol B|$ <b>没有</b>拆分公式，必须<b>恒等变形成乘积</b>：常用 $\boldsymbol E=\boldsymbol{AA}^{\mathrm T}$（正交阵）或 $\boldsymbol E=\boldsymbol{AA}^{-1}$。<br>
+    · $|k\boldsymbol A|=k^n|\boldsymbol A|$，$|\boldsymbol A^{\mathrm T}|=|\boldsymbol A|$，$|\boldsymbol A^{-1}|=|\boldsymbol A|^{-1}$。<br>
+    · <b>伴随矩阵</b>：$|\boldsymbol A^*|=|\boldsymbol A|^{n-1}$，$\big|(\boldsymbol A^*)^*\big|=\big||\boldsymbol A|^{n-2}\boldsymbol A\big|=|\boldsymbol A|^{(n-1)^2}$。<br>
+    · <b>善于发现 $\boldsymbol{AB}$ 的结构</b>：$[a\boldsymbol\alpha_1+b(\boldsymbol\alpha_2+\boldsymbol\alpha_3),\ \cdots]$ 这种「列的线性组合」总能写成 $[\boldsymbol\alpha_1,\boldsymbol\alpha_2,\boldsymbol\alpha_3]\boldsymbol B$ 的形式，其中 $\boldsymbol B$ 的<b>第 $j$ 列</b>装的是第 $j$ 个组合的系数。
+  </div>
+  <div class="eg">
+    <div class="q"><span class="no">基1.11</span>设 $\boldsymbol\alpha_1,\boldsymbol\alpha_2,\boldsymbol\alpha_3$ 为 3 维列向量，$\boldsymbol A=[\boldsymbol\alpha_1,\boldsymbol\alpha_2,\boldsymbol\alpha_3]$，$\boldsymbol B=[\boldsymbol\alpha_1-\boldsymbol\alpha_2+2\boldsymbol\alpha_3,\ 2\boldsymbol\alpha_1+3\boldsymbol\alpha_2-5\boldsymbol\alpha_3,\ \boldsymbol\alpha_1+2\boldsymbol\alpha_2-\boldsymbol\alpha_3]$，且 $|\boldsymbol A|=2$，则 $|\boldsymbol B-\boldsymbol A|=$______</div>
+    <div class="s"><span class="lab">解</span>矩阵相减 = 对应列相减：$\boldsymbol B-\boldsymbol A=[-\boldsymbol\alpha_2+2\boldsymbol\alpha_3,\ 2\boldsymbol\alpha_1+2\boldsymbol\alpha_2-5\boldsymbol\alpha_3,\ \boldsymbol\alpha_1+2\boldsymbol\alpha_2-2\boldsymbol\alpha_3]$。把系数<b>按列装成矩阵</b>：
+    $$\boldsymbol B-\boldsymbol A=[\boldsymbol\alpha_1,\boldsymbol\alpha_2,\boldsymbol\alpha_3]\begin{bmatrix}0&2&1\\-1&2&2\\2&-5&-2\end{bmatrix}$$
+    两边取行列式：$|\boldsymbol B-\boldsymbol A|=|\boldsymbol A|\cdot\begin{vmatrix}0&2&1\\-1&2&2\\2&-5&-2\end{vmatrix}=2\times5=\boxed{10}$。<span class="ans"> ✔ 已符号复算：$|\boldsymbol B-\boldsymbol A|/|\boldsymbol A|\equiv5$</span></div>
+  </div>
+  <div class="mine"><span class="tag">补讲 · 「系数按列装」是本章通往第 2、3 章的关键动作</span>
+    要熟练到条件反射：$x_1\boldsymbol\alpha_1+x_2\boldsymbol\alpha_2+x_3\boldsymbol\alpha_3=[\boldsymbol\alpha_1,\boldsymbol\alpha_2,\boldsymbol\alpha_3]\begin{bmatrix}x_1\\x_2\\x_3\end{bmatrix}$。<b>线性组合 ⇄ 矩阵乘积</b>，这一步在第 3 章「向量组线性表出」、第 4 章「方程组通解」里就是全部内容。张宇原书用三颗星标了这个 $(*)$ 处。
+  </div>
+  <div class="eg">
+    <div class="q"><span class="no">强1.6</span>设 $\boldsymbol A,\boldsymbol B$ 为 $n$ 阶正交矩阵，则 $n$ 为奇数时 $|(\boldsymbol A-\boldsymbol B)(\boldsymbol A+\boldsymbol B)|=$______</div>
+    <div class="s"><span class="lab">解</span>正交阵：$\boldsymbol{AA}^{\mathrm T}=\boldsymbol E$（即 $\boldsymbol A^{\mathrm T}=\boldsymbol A^{-1}$），$\boldsymbol{BB}^{\mathrm T}=\boldsymbol E$。<br>
+    一方面 $|(\boldsymbol A-\boldsymbol B)(\boldsymbol A+\boldsymbol B)|=|(\boldsymbol A-\boldsymbol B)^{\mathrm T}(\boldsymbol A+\boldsymbol B)|=|\boldsymbol A^{\mathrm T}\boldsymbol A-\boldsymbol B^{\mathrm T}\boldsymbol A+\boldsymbol A^{\mathrm T}\boldsymbol B-\boldsymbol B^{\mathrm T}\boldsymbol B|=|\boldsymbol A^{\mathrm T}\boldsymbol B-\boldsymbol B^{\mathrm T}\boldsymbol A|$（$\boldsymbol A^{\mathrm T}\boldsymbol A=\boldsymbol B^{\mathrm T}\boldsymbol B=\boldsymbol E$ 抵消）。<br>
+    另一方面 $|(\boldsymbol A-\boldsymbol B)(\boldsymbol A+\boldsymbol B)|=|(\boldsymbol A+\boldsymbol B)^{\mathrm T}(\boldsymbol A-\boldsymbol B)|=|\boldsymbol B^{\mathrm T}\boldsymbol A-\boldsymbol A^{\mathrm T}\boldsymbol B|=(-1)^n|\boldsymbol A^{\mathrm T}\boldsymbol B-\boldsymbol B^{\mathrm T}\boldsymbol A|$。<br>
+    $n$ 为奇数时 $M=-M\Rightarrow M=\boxed{0}$。<span class="ans"> ✔ 已数值验证：$n=3,5,7$ 各 200 组随机正交阵，$|\det|$ 最大 $1.7\times10^{-14}$（机器零）；$n=2,4$ 时一般不为 $0$，说明「奇数」条件必要</span></div>
+  </div>
+  <div class="key"><span class="tag">必记 · 判 $|\boldsymbol A|=0$ 的六条通道（强化第 1 讲注框，抄下来当检查表）</span>
+    ① $|\boldsymbol A|=k|\boldsymbol A|$ 且 $k\ne1$（最常考的是 $|\boldsymbol A|=(-1)^n|\boldsymbol A|$，$n$ 为奇数）；<br>
+    ② $\boldsymbol A$ 有特征值 $0$；<br>
+    ③ $\boldsymbol A_{n\times n}\boldsymbol x=\boldsymbol 0$ 有非零解；<br>
+    ④ $r(\boldsymbol A_{n\times n})\lt n$；<br>
+    ⑤ $\boldsymbol A$ 的极大无关组成员个数 $\lt n$（即行/列向量组线性相关）；<br>
+    ⑥ <b>正面走不通时用反证法</b>：设 $\boldsymbol A$ 可逆（$|\boldsymbol A|\ne0$），推出矛盾。<br>
+    <span style="color:var(--red)">这六条就是「秩主线」在本章的全部出口，$n$ 为奇数、$\boldsymbol{AB}=\boldsymbol O$ 且 $\boldsymbol B\ne\boldsymbol O$、有非零解 —— 全是同一件事的不同说法。</span>
+  </div>
+
+  <h3>5.3　路三：用相似理论（$|\boldsymbol A|=\prod\lambda_i$）</h3>
+  <p>若 $\boldsymbol A\sim\boldsymbol B$，则 $|\boldsymbol A|=|\boldsymbol B|$，且 $|\boldsymbol A|=\prod\limits_{i=1}^{n}\lambda_i$。主要考两件事：<b>用 $|\lambda\boldsymbol E-\boldsymbol A|=0$ 求特征值</b>、<b>用特征值求行列式</b>。</p>
+  <div class="key"><span class="tag">必记 · 特征值的传导表（第 5、7 讲会正式讲，本章先当工具用）</span>
+    <div class="gridwrap"><table style="min-width:0">
+      <tr><th>$\boldsymbol A$</th><th>$f(\boldsymbol A)$</th><th>$\boldsymbol A^{-1}$</th><th>$\boldsymbol A^*$</th></tr>
+      <tr><td>$\lambda$</td><td>$f(\lambda)$</td><td>$\lambda^{-1}$</td><td>$\dfrac{|\boldsymbol A|}{\lambda}$</td></tr>
+      <tr><td>$\boldsymbol\xi$</td><td>$\boldsymbol\xi$</td><td>$\boldsymbol\xi$</td><td>$\boldsymbol\xi$</td></tr>
+    </table></div>
+    <b>特征向量 $\boldsymbol\xi$ 全程不变，只有特征值在变</b>。于是 $|f(\boldsymbol A)|=\prod f(\lambda_i)$。
+  </div>
+  <div class="eg">
+    <div class="q"><span class="no">强1.7</span>设 $\boldsymbol A$ 是 4 阶矩阵，其伴随矩阵 $\boldsymbol A^*$ 的特征值为 $1,-1,-2,4$，则 $|\boldsymbol A^3+2\boldsymbol A^2-\boldsymbol A-3\boldsymbol E|=$______</div>
+    <div class="s"><span class="lab">解</span>$|\boldsymbol A^*|=1\times(-1)\times(-2)\times4=8\ne0$ ⇒ $\boldsymbol A^*$ 可逆 ⇒ $\boldsymbol A$ 可逆。又 $|\boldsymbol A^*|=|\boldsymbol A|^{n-1}=|\boldsymbol A|^3=8$ ⇒ $|\boldsymbol A|=2$。<br>
+    由 $\lambda_{\boldsymbol A^*}=\dfrac{|\boldsymbol A|}{\lambda_{\boldsymbol A}}$ 反解得 $\lambda_{\boldsymbol A}=\dfrac{|\boldsymbol A|}{\lambda_{\boldsymbol A^*}}$，即 $\boldsymbol A$ 的特征值为 $2,-2,-1,\frac12$。<br>
+    设 $f(t)=t^3+2t^2-t-3$：$f(2)=11$，$f(-2)=-1$，$f(-1)=-1$，$f(\frac12)=-\frac{23}8$。故
+    $$|f(\boldsymbol A)|=11\times(-1)\times(-1)\times\Big(-\frac{23}8\Big)=\boxed{-\frac{253}{8}}$$
+    <span class="ans">✔ 已复算</span></div>
+  </div>
+  <div class="eg">
+    <div class="q"><span class="no">强1.8</span>设 $\boldsymbol A=k\begin{bmatrix}1&a&\cdots&a\\a&1&\cdots&a\\\vdots&\vdots&&\vdots\\a&a&\cdots&1\end{bmatrix}_{n\times n}$，$0\lt a\le1$，$k\gt0$，求 $\boldsymbol A$ 的最大特征值</div>
+    <div class="s"><span class="lab">解</span>$|\lambda\boldsymbol E-\boldsymbol A|=\begin{vmatrix}\lambda-k&-ka&\cdots&-ka\\-ka&\lambda-k&\cdots&-ka\\\vdots&\vdots&&\vdots\\-ka&-ka&\cdots&\lambda-k\end{vmatrix}$ —— 正是 §3 的<b>行和相等型</b>，套 $[a+(n-1)b](a-b)^{n-1}$：
+    $$=\big[(\lambda-k)+(n-1)(-ka)\big]\big[(\lambda-k)+ka\big]^{n-1}=0$$
+    得 $\lambda_1=k+(n-1)ka=k[1+(n-1)a]$（单重），$\lambda_2=k-ka=k(1-a)$（$n-1$ 重）。<br>
+    由 $0\lt a\le1,k\gt0$ 知 $1+(n-1)a\gt1-a$，故最大特征值为 $\boxed{k[1+(n-1)a]}$。<span class="ans"> ✔ 已对 $n=3,4,5$ 符号求出特征多项式，两个根与上式完全一致</span></div>
+  </div>
+  <div class="mine"><span class="tag">补讲 · 这题就是「基 1.4 的公式白赚一道大题」</span>
+    第 5 章求特征值的主要工作量就是<b>展开 $|\lambda\boldsymbol E-\boldsymbol A|$</b>，而考研里的 $\boldsymbol A$ 十有八九是「行和相等型」或「秩 1 型」。<b>本章 §3 的三个准基本形，本质上是在给第 5 章存钱。</b>现在把它们背熟，第 5 章能省掉大半计算。
+  </div>
+
+  <!-- ============ 强化第2讲 ============ -->
+  <h2 id="s6"><span class="idx">六</span>强化专题：余子式和代数余子式的线性组合<span class="layer L-str" style="margin-left:10px">强化专属</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/线性代数/01_行列式/线代_第01章_强化9讲_第2讲_余子式和代数余子式的计算.pdf">📄 强化9讲·第2讲</a>
+  <div class="zy"><span class="tag">强化题型 · 三向解题法（第 2 讲扉页）</span>
+    <b>O = 求 $k_1A_{i1}+k_2A_{i2}+\cdots+k_nA_{in}$（或含 $M_{ij}$ 的混合组合）</b>，三条路：<br>
+    <b>① 用行列式（逆用展开式）</b>——最通用；<br>
+    <b>② 用矩阵</b>：$|\boldsymbol A|\ne0$ 时 $\boldsymbol A^*=|\boldsymbol A|\boldsymbol A^{-1}$，一次求出<b>全部</b> $A_{ij}$；<br>
+    <b>③ 用特征值</b>：3 阶时 $A_{11}+A_{22}+A_{33}=\mathrm{tr}(\boldsymbol A^*)=\lambda_2\lambda_3+\lambda_1\lambda_3+\lambda_1\lambda_2$。<br>
+    先把 $M_{ij}$ 统一换成 $A_{ij}$：$M_{ij}=(-1)^{i+j}A_{ij}$。
+  </div>
+  <div class="key"><span class="tag">必记 · 「大 A 配小 a」与「大 A 配小 k，k 把小 a 吃掉」（这一讲的全部内容）</span>
+    由展开定理（大 A 配小 a，同行同配）：
+    $$a_{i1}A_{i1}+a_{i2}A_{i2}+\cdots+a_{in}A_{in}=\begin{vmatrix}*\\a_{i1}\ \ a_{i2}\ \cdots\ a_{in}\\ *\end{vmatrix}=|\boldsymbol A|$$
+    <b>逆用</b>（大 A 配小 k，k 把小 a 吃掉）：
+    $$k_1A_{i1}+k_2A_{i2}+\cdots+k_nA_{in}=\begin{vmatrix}*\\k_1\ \ k_2\ \cdots\ k_n\\ *\end{vmatrix}$$
+    也就是：<b>把原行列式的第 $i$ 行元素换成系数 $k_1,\cdots,k_n$，其余行原封不动，算出来的行列式就是答案。</b>给不同的 $k$ 就得不同的行列式。<br>
+    <span style="color:var(--red)">关键查验：组合系数与<b>其他行（列）</b>的元素是否一致——若与某一行完全一致，则取值为 $0$（异行为零）。</span>
+  </div>
+  <div class="eg">
+    <div class="q"><span class="no">基1.12</span>设 $|\boldsymbol A|=\begin{vmatrix}2&-1&2&3\\0&1&-1&0\\2&3&4&5\\1&1&1&1\end{vmatrix}$，则 $A_{31}+A_{32}+A_{33}+M_{34}=$（　）(A) 8　(B) 6　(C) 4　(D) 2</div>
+    <div class="s"><span class="lab">解</span>先统一符号：$M_{34}=(-1)^{3+4}A_{34}=-A_{34}$，故所求 $=A_{31}+A_{32}+A_{33}-A_{34}$，系数为 $(1,1,1,-1)$。<b>把第 3 行换成 $(1,1,1,-1)$</b>：
+    $$\begin{vmatrix}2&-1&2&3\\0&1&-1&0\\1&1&1&-1\\1&1&1&1\end{vmatrix}=6$$
+    选 $\boxed{\text{B}}$。<span class="ans"> ✔ 已复算（$M_{34}=3$，$A_{34}=-3$）</span></div>
+  </div>
+  <div class="eg">
+    <div class="q"><span class="no">强2.1</span>设 $\begin{vmatrix}2&1&0&-1\\-1&2&-5&3\\3&0&a&b\\1&-3&5&0\end{vmatrix}=A_{41}-A_{42}+A_{43}+10$（$A_{ij}$ 为 $a_{ij}$ 的代数余子式），则 $a,b$ 的值为（　）(A) $a=4,b=1$　(B) $a=1,b=4$　(C) $a=4$，$b$ 为任意常数　(D) $a=1$，$b$ 为任意常数</div>
+    <div class="s"><span class="lab">解</span>$A_{41}-A_{42}+A_{43}=1\cdot A_{41}+(-1)A_{42}+1\cdot A_{43}+0\cdot A_{44}$ ⇒ 系数 $(1,-1,1,0)$ ⇒ 把<b>第 4 行</b>换成 $(1,-1,1,0)$ 得到的行列式。于是原式化为
+    $$\begin{vmatrix}2&1&0&-1\\-1&2&-5&3\\3&0&a&b\\1&-3&5&0\end{vmatrix}-\begin{vmatrix}2&1&0&-1\\-1&2&-5&3\\3&0&a&b\\1&-1&1&0\end{vmatrix}=10$$
+    两个行列式<b>只有第 4 行不同</b>，可直接相减（只减第 4 行，其余行照抄）：第 4 行变为 $(1,-3,5,0)-(1,-1,1,0)=(0,-2,4,0)$。再用倍加化简、按行展开，得
+    $$|\boldsymbol A|-(A_{41}-A_{42}+A_{43})=10(a-3)$$
+    令其 $=10$ 得 $a-3=1$，即 $a=4$；<b>整个过程中 $b$ 被消掉、根本不出现</b>，故 $b$ 为任意常数，选 $\boxed{\text{C}}$。<span class="ans"> ✔ 已符号复算：$|\boldsymbol A|-(A_{41}-A_{42}+A_{43}+10)=10(a-4)$，表达式中不含 $b$</span></div>
+  </div>
+  <div class="eg">
+    <div class="q"><span class="no">强2.2</span>设 $\boldsymbol A=\begin{bmatrix}0&0&0&5&6\\0&0&0&7&8\\1&2&3&0&0\\0&1&4&0&0\\0&0&1&0&0\end{bmatrix}$，则 $|\boldsymbol A|$ 中所有元素的代数余子式之和为______</div>
+    <div class="s"><span class="lab">解</span>用矩阵路：$\boldsymbol A=\begin{bmatrix}\boldsymbol O&\boldsymbol B\\\boldsymbol C&\boldsymbol O\end{bmatrix}$，$\boldsymbol B=\begin{bmatrix}5&6\\7&8\end{bmatrix}$（2 阶），$\boldsymbol C=\begin{bmatrix}1&2&3\\0&1&4\\0&0&1\end{bmatrix}$（3 阶）。<br>
+    $|\boldsymbol A|=(-1)^{2\times3}|\boldsymbol B||\boldsymbol C|=(-2)\times1=-2\ne0$，且 $\boldsymbol A^{-1}=\begin{bmatrix}\boldsymbol O&\boldsymbol C^{-1}\\\boldsymbol B^{-1}&\boldsymbol O\end{bmatrix}$。<br>
+    由 $\boldsymbol A^*=|\boldsymbol A|\boldsymbol A^{-1}=-2\boldsymbol A^{-1}$ 得到全部 $A_{ij}$。注意 $\boldsymbol A^*$ 的 $(i,j)$ 元是 $A_{ji}$，但<b>求「全部之和」时转置无所谓</b>：
+    $$\sum_{i=1}^{5}\sum_{j=1}^{5}A_{ij}=\text{（}\boldsymbol A^*\text{ 全部元素之和）}=-2\times\big(\text{$\boldsymbol A^{-1}$ 全部元素之和}\big)=-2\times2=\boxed{-4}$$
+    <span class="ans">✔ 已复算（$|\boldsymbol A|=-2$，25 个代数余子式逐个求和 $=-4$）</span></div>
+  </div>
+  <div class="mine"><span class="tag">补讲 · 什么时候走「矩阵路」</span>
+    题目要的是<b>全部（或一整片）代数余子式</b>时走矩阵路：$\boldsymbol A^*=|\boldsymbol A|\boldsymbol A^{-1}$ 一次性给出所有 $A_{ij}$。<b>前提也是限制：必须 $|\boldsymbol A|\ne0$。</b>如果 $|\boldsymbol A|=0$，这条路直接堵死，只能回到「逆用展开式」。<br>
+    还要记住分块矩阵的逆：$\begin{bmatrix}\boldsymbol O&\boldsymbol B\\\boldsymbol C&\boldsymbol O\end{bmatrix}^{-1}=\begin{bmatrix}\boldsymbol O&\boldsymbol C^{-1}\\\boldsymbol B^{-1}&\boldsymbol O\end{bmatrix}$（<b>对角块换位</b>，第 3 讲会正式讲）。
+  </div>
+  <div class="eg">
+    <div class="q"><span class="no">强2.3</span>已知 3 阶方阵 $\boldsymbol A$ 的特征值为 $-1,2,3$，则 $A_{11}+A_{22}+A_{33}=$______</div>
+    <div class="s"><span class="lab">解</span>$\boldsymbol A^*=\begin{bmatrix}A_{11}&A_{21}&A_{31}\\A_{12}&A_{22}&A_{32}\\A_{13}&A_{23}&A_{33}\end{bmatrix}$ ⇒ $A_{11}+A_{22}+A_{33}=\mathrm{tr}(\boldsymbol A^*)=\lambda_1^*+\lambda_2^*+\lambda_3^*$，而 $\lambda_i^*=\frac{|\boldsymbol A|}{\lambda_i}=\frac{\lambda_1\lambda_2\lambda_3}{\lambda_i}$，即
+    $$A_{11}+A_{22}+A_{33}=\lambda_2\lambda_3+\lambda_1\lambda_3+\lambda_1\lambda_2=2\cdot3+(-1)\cdot3+(-1)\cdot2=6-3-2=\boxed{1}$$
+    <span class="ans">✔ 已复算</span></div>
+  </div>
+  <div class="key"><span class="tag">必记 · 三阶的两条速算式（考场直接用）</span>
+    $$A_{11}+A_{22}+A_{33}=\mathrm{tr}(\boldsymbol A^*)=\lambda_2\lambda_3+\lambda_1\lambda_3+\lambda_1\lambda_2,\qquad |\boldsymbol A^*|=|\boldsymbol A|^{2}=(\lambda_1\lambda_2\lambda_3)^2$$
+    张宇原话：<b>「这些公式易记、好用，考生应熟知。」</b>它们同时也是特征多项式的系数：$|\lambda\boldsymbol E-\boldsymbol A|=\lambda^3-\mathrm{tr}(\boldsymbol A)\lambda^2+\big(\sum\lambda_i\lambda_j\big)\lambda-|\boldsymbol A|$，中间那个系数正是 $A_{11}+A_{22}+A_{33}$。
+  </div>
+  <div class="eg">
+    <div class="q"><span class="no">强2.4</span>设 $\boldsymbol A=(a_{ij})$ 为 3 阶矩阵，$A_{ij}$ 为 $a_{ij}$ 的代数余子式。若 $\boldsymbol A^{-1}$ 的<b>每行元素之和均为 2</b>，且 $|\boldsymbol A|=3$，则 $A_{13}+A_{23}+A_{33}=$______</div>
+    <div class="s"><span class="lab">解</span>「每行元素之和为 2」的等价表述（D₂₂）：$\boldsymbol A^{-1}\begin{bmatrix}1\\1\\1\end{bmatrix}=2\begin{bmatrix}1\\1\\1\end{bmatrix}$ ⇒ $\boldsymbol A^{-1}$ 有特征值 $2$、特征向量 $\boldsymbol\alpha=(1,1,1)^{\mathrm T}$ ⇒ $\boldsymbol A$ 有特征值 $\lambda=\frac12$、同一个特征向量。<br>
+    于是 $\boldsymbol A^*$ 有特征值 $\frac{|\boldsymbol A|}{\lambda}=\frac{3}{1/2}=6$，特征向量仍是 $\boldsymbol\alpha$：
+    $$\boldsymbol A^*\begin{bmatrix}1\\1\\1\end{bmatrix}=\begin{bmatrix}A_{11}+A_{21}+A_{31}\\A_{12}+A_{22}+A_{32}\\A_{13}+A_{23}+A_{33}\end{bmatrix}=6\begin{bmatrix}1\\1\\1\end{bmatrix}$$
+    取第 3 行即得 $A_{13}+A_{23}+A_{33}=\boxed{6}$。<span class="ans"> ✔ 已构造实例复算：取 $\boldsymbol A^{-1}=\begin{bmatrix}2&0&0\\0&2&0\\0&\frac{23}{12}&\frac1{12}\end{bmatrix}$（行和均 2、$\det=\frac13$），则 $|\boldsymbol A|=3$ 且三个代数余子式之和恰为 6</span></div>
+  </div>
+  <div class="trap"><span class="tag">陷阱 · $\boldsymbol A^*$ 的下标是<b>转置</b>的，别写错行列</span>
+    $\boldsymbol A^*$ 的 $(i,j)$ 元是 <b>$A_{ji}$</b>（不是 $A_{ij}$）。所以：<br>
+    · $\boldsymbol A^*\boldsymbol\alpha$ 的<b>第 $j$ 个分量</b>是 $A_{1j}+A_{2j}+A_{3j}$（<b>第 $j$ 列</b>的代数余子式之和）；<br>
+    · 求「某一<b>行</b>的代数余子式之和 $A_{i1}+A_{i2}+A_{i3}$」要用 $\boldsymbol\alpha^{\mathrm T}\boldsymbol A^*$ 或直接逆用展开式。<br>
+    强 2.4 问的是 $A_{13}+A_{23}+A_{33}$（<b>第 3 列</b>），正好对应 $\boldsymbol A^*\boldsymbol\alpha$ 的第 3 个分量，所以能一步取出。<b>换成 $A_{31}+A_{32}+A_{33}$ 就不能这么取了。</b>
+  </div>
+
+  <!-- ============ 克拉默 ============ -->
+  <h2 id="s7"><span class="idx">七</span>克拉默法则 + 本章的最终出口<span class="layer L-base" style="margin-left:10px">基础</span></h2>
+  <div class="key"><span class="tag">必记 · 克拉默法则（结论会用即可，计算价值已很低）</span>
+    <b>前提：$n$ 个方程、$n$ 个未知数（方阵）。</b><br>
+    <b>非齐次</b> $\boldsymbol{Ax}=\boldsymbol b$：若 $D=|\boldsymbol A|\ne0$，则有<b>唯一解</b> $x_i=\dfrac{D_i}{D}$，其中 $D_i$ 是把 $D$ 的<b>第 $i$ 列</b>换成常数项 $(b_1,\cdots,b_n)^{\mathrm T}$ 所得的行列式。<br>
+    <b>齐次</b> $\boldsymbol{Ax}=\boldsymbol 0$：$D\ne0\Rightarrow$ <b>只有零解</b>；$D=0\Rightarrow$ <b>有非零解</b>（这两条<b>反过来也成立，是充要条件</b>）。<br>
+    <span style="color:var(--red)">注意非齐次时 $D=0$ 只能推出「无解或有无穷多解」，<b>不能判定是哪一种</b>——那要等第 4 章用 $r(\boldsymbol A)$ 与 $r([\boldsymbol A,\boldsymbol b])$ 比较。</span>
+  </div>
+  <div class="mine"><span class="tag">补讲 · 克拉默在今天的真正用途</span>
+    张宇原批注：「随着计算机的发展，克拉默法则的地位逐渐降低，能对结论作简单记忆即可。」<b>考研里几乎不用它算解</b>，它的价值只剩<b>齐次方程组那两条充要条件</b>——而这两条正是「$|\boldsymbol A|=0$ 判据链」的第 ③ 条。<br>
+    验算示例（我已复算）：$\begin{cases}x_1-2x_2+x_3=1\\x_1=2\\x_2=5\end{cases}$，$D=1$，$D_1=2,D_2=5,D_3=9$ ⇒ $x=(2,5,9)$，与口算一致。
+  </div>
+  <div class="eg">
+    <div class="q"><span class="no">基1.13</span>已知 3 阶矩阵 $\boldsymbol B\ne\boldsymbol O$，且 $\boldsymbol B$ 的每一个列向量都是方程组 $\begin{cases}x_1+2x_2-2x_3=0\\2x_1-x_2+\lambda x_3=0\\3x_1+x_2-x_3=0\end{cases}$ 的解。(1) 求 $\lambda$；(2) 证明 $|\boldsymbol B|=0$</div>
+    <div class="s"><span class="lab">解 (1)</span>记 $\boldsymbol B=[\boldsymbol\beta_1,\boldsymbol\beta_2,\boldsymbol\beta_3]$。每列都是解 ⇒ $\boldsymbol A\boldsymbol\beta_i=\boldsymbol 0\ (i=1,2,3)$。由 $\boldsymbol B\ne\boldsymbol O$ 知 $\boldsymbol\beta_1,\boldsymbol\beta_2,\boldsymbol\beta_3$ <b>不全为零向量</b> ⇒ $\boldsymbol{Ax}=\boldsymbol 0$ <b>有非零解</b> ⇒ $|\boldsymbol A|=0$：
+    $$|\boldsymbol A|=\begin{vmatrix}1&2&-2\\2&-1&\lambda\\3&1&-1\end{vmatrix}=5(\lambda-1)=0\Rightarrow\lambda=\boxed{1}$$
+    <span class="lab">证 (2)</span>$\boldsymbol O=[\boldsymbol A\boldsymbol\beta_1,\boldsymbol A\boldsymbol\beta_2,\boldsymbol A\boldsymbol\beta_3]=\boldsymbol A[\boldsymbol\beta_1,\boldsymbol\beta_2,\boldsymbol\beta_3]=\boldsymbol{AB}$。<b>反证</b>：设 $|\boldsymbol B|\ne0$，则 $\boldsymbol B$ 可逆，$\boldsymbol{AB}=\boldsymbol O$ 两端右乘 $\boldsymbol B^{-1}$ 得 $\boldsymbol A=\boldsymbol O$，与 $\boldsymbol A=\begin{bmatrix}1&2&-2\\2&-1&1\\3&1&-1\end{bmatrix}\ne\boldsymbol O$ 矛盾。故 $|\boldsymbol B|=0$。<span class="ans"> ✔ 已复算：$|\boldsymbol A|=5(\lambda-1)$，唯一解 $\lambda=1$</span></div>
+  </div>
+  <div class="key"><span class="tag">必记 · 两条会考一辈子的结论（原书「必背结论」）</span>
+    <b>① $\boldsymbol{AB}=\boldsymbol O\Rightarrow\boldsymbol B$ 的列向量均是 $\boldsymbol{Ax}=\boldsymbol 0$ 的解。</b>（第 4 章求基础解系的常用入口）<br>
+    <b>② $\boldsymbol{AB}=\boldsymbol O$ 且 $|\boldsymbol B|\ne0\Rightarrow\boldsymbol A=\boldsymbol O$。</b><br>
+    <span style="color:var(--red)">注意 $|\boldsymbol{AB}|=0\Rightarrow|\boldsymbol A||\boldsymbol B|=0$ <b>从正面是解不出来的</b>——只知道两者至少一个为 0，判不出是哪个。正面无计可施时，果断反证法。</span><br>
+    第 2 章会把 ① 升级成秩不等式 $r(\boldsymbol A)+r(\boldsymbol B)\le n$，那才是这条结论的完全体。
+  </div>
+
+  <!-- ============ 习题自测 ============ -->
+  <h2 id="s8"><span class="idx">八</span>基础习题精练 · 答案速查（全部已程序复算）</h2>
+  <p>下面是基础30讲章末 11 道习题的<b>答案与一句话打法</b>。<b>先自己做完再看</b>——题面在 <a href="../../张宇系列_分章易识别版/线性代数/01_行列式/线代_第01章_基础30讲.pdf">基础30讲第 40–41 页</a>。</p>
+  <div class="gridwrap"><table>
+    <tr><th>题</th><th>答案</th><th>一句话打法 / 易错点</th></tr>
+    <tr><td>1.1</td><td>(B) 2 个根</td><td>各行差别小 ⇒ 倍加化简，结果 $f(x)=5x(x-1)$ 只是<b>二次</b>多项式。<span style="color:var(--red)">4 阶 ≠ 4 次，这是本题唯一的坑</span></td></tr>
+    <tr><td>1.2</td><td>(B) $-4$</td><td>$A_{11}-A_{12}=A_{11}-A_{12}+0\cdot A_{13}+0\cdot A_{14}$ ⇒ 把第 1 行换成 $(1,-1,0,0)$</td></tr>
+    <tr><td>1.3</td><td>$-5$</td><td>按第 1 行展开，只有第 2、4 项含 $x^3$，分别贡献 $-x^3$、$-4x^3$。（完整地 $f(x)=x^4-5x^3-2x^2+13x+5$）</td></tr>
+    <tr><td>1.4</td><td>$1-a^4$</td><td>按第 1 行展开成两个三角形行列式：$1-a\cdot a^3$</td></tr>
+    <tr><td>1.5</td><td>$160$</td><td>列和全为 $10$ ⇒ 所有行加到第 1 行提 $10$，再倍加化上三角</td></tr>
+    <tr><td>1.6</td><td>$24$</td><td>逐行倍加把 $a,b,c$ 全消掉，化成主对角线 $1,2,3,4$。<b>答案与 $a,b,c$ 无关</b></td></tr>
+    <tr><td>1.7</td><td>$\lambda=0$ 或 $4$</td><td>行和相等型变体，$D=\lambda^2(\lambda-4)$。<span style="color:var(--red)">别漏掉 $\lambda=0$（二重根）</span></td></tr>
+    <tr><td>1.8</td><td>$3(m+n)$</td><td>先拆 $m$，用互换对齐顺序得 $|\boldsymbol\alpha_1,\boldsymbol\alpha_2,\boldsymbol\alpha_3,\boldsymbol\beta|=m+n$，再提 $3$</td></tr>
+    <tr><td>1.9</td><td>$|\boldsymbol A|=-2$</td><td>$\boldsymbol A[\boldsymbol\alpha_1,\boldsymbol\alpha_2,\boldsymbol\alpha_3]=[\boldsymbol\alpha_1,\boldsymbol\alpha_2,\boldsymbol\alpha_3]\boldsymbol C$，两边取行列式约掉 $|\boldsymbol\alpha_1,\boldsymbol\alpha_2,\boldsymbol\alpha_3|\ne0$</td></tr>
+    <tr><td>1.10</td><td>$\lambda\ne1$</td><td>齐次只有零解 $\iff D\ne0$，$D=(\lambda-1)^2$</td></tr>
+    <tr><td>1.11</td><td>$\lambda=1$</td><td>$\boldsymbol{AB}=\boldsymbol O$、$\boldsymbol B\ne\boldsymbol O$ ⇒ 有非零解 ⇒ $|\boldsymbol A|=5(\lambda-1)=0$（与基 1.13 同题）</td></tr>
+  </table></div>
+
+  <!-- ============ 出口 ============ -->
+  <div class="outro">
+    <h3>📌 读完去做题（本章六件套 · 本地 PDF）</h3>
+    <div class="dolinks">
+      <div class="t">张宇分册 · 线代第 1 章</div>
+      <a href="../../张宇系列_分章易识别版/线性代数/01_行列式/线代_第01章_基础30讲.pdf">基础 30 讲</a>
+      <a href="../../张宇系列_分章易识别版/线性代数/01_行列式/线代_第01章_强化9讲_第1讲_行列式.pdf">线代9讲·第1讲</a>
+      <a href="../../张宇系列_分章易识别版/线性代数/01_行列式/线代_第01章_强化9讲_第2讲_余子式和代数余子式的计算.pdf">线代9讲·第2讲</a>
+      <a href="../../张宇系列_分章易识别版/线性代数/01_行列式/线代_第01章_1000题_基础_题目.pdf">1000题·基础篇</a>
+      <a href="../../张宇系列_分章易识别版/线性代数/01_行列式/线代_第01章_1000题_强化_题目_第1讲_行列式.pdf">1000题·强化·行列式</a>
+      <a href="../../张宇系列_分章易识别版/线性代数/01_行列式/线代_第01章_1000题_强化_题目_第2讲_余子式和代数余子式的计算.pdf">1000题·强化·代数余子式</a>
+      <div class="note">链接指向本地大 PDF（不推 GitHub，线上 Pages 打不开正常）。做错 → 回复盘中心报「1000题·线代第1章·错第X题·卡哪」生成四层错题页。</div>
+    </div>
+    <p><b>自测清单（合上页面能不能答出来）</b>：① 行列式的本质是什么？为什么「有两行成比例 ⇒ 为 0」是显然的？② $|k\boldsymbol A|$ 与 $k|\boldsymbol A|$ 差在哪？③ 副对角线行列式的符号 $(-1)^{?}$，$n=4$ 时是正是负？④ 拉普拉斯 $(-1)^{mn}$ 里的 $m,n$ 指什么？⑤ 「行和相等」触发什么动作？⑥ 递推法为什么不能随便挑一列展开？⑦ 求 $k_1A_{i1}+\cdots+k_nA_{in}$ 的通用动作是什么？⑧ $\boldsymbol A^*$ 的 $(i,j)$ 元是 $A_{ij}$ 还是 $A_{ji}$？⑨ 判 $|\boldsymbol A|=0$ 的六条通道能背几条？</p>
+    <p><b>真题锚点</b>：本章在数一里<b>极少单独出解答题</b>，落点是<b>选择填空</b>（具体型 4 阶计算、代数余子式线性组合、$|\boldsymbol A|=0$ 求参数）以及<b>作为大题的第一步</b>（第 5 章求特征值时展开 $|\lambda\boldsymbol E-\boldsymbol A|$、第 4 章判方程组解的情况）。所以本章的真正 KPI 不是「会算行列式」，而是<b>「行和相等型 / 三对角 / 秩 1」三个公式的肌肉记忆，以及见到「有非零解」就写 $|\boldsymbol A|=0$ 的反射</b>。</p>
+    <p><b>配套速查</b>：<a href="../卡库_线代秩方程组特征值.html">卡库·线代：秩/方程组/特征值</a> · <a href="../公式大全_速查与秒杀.html">公式大全</a> · <a href="../知识串联_考纲主线.html">知识串联</a>。<br>
+    <b>下一章</b>：线代第 2 章 <b>矩阵</b>（基础30讲 37 页 + 强化第 3 讲矩阵运算 27 页 + 第 4 讲矩阵的秩 8 页，是线代最大的一章）。届时会补上说好的两个交互模块：<b>「初等变换 → 行阶梯 → 秩/通解」步进器</b>与<b>「$|\boldsymbol A|\ne0\iff r=n\iff\cdots$」可点亮的等价命题网</b>——它们都要等秩的概念到位才有意义，本章先用上面那张「六条通道」检查表顶着。</p>
+  </div>
+
+  <footer>由 Claude 维护 · 融合张宇《基础30讲·线代》第 1 讲 +《线代9讲》第 1、2 讲 · 概念正文为标准线代理论 · <b>25 道例题 + 11 道习题答案全部经 sympy 符号复算 / 数值对拍，与原书零分歧</b> · 具体真题另经盲做后入错题页</footer>
+</div>
+</body>
+</html>
