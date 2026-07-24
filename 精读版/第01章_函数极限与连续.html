@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>精读版 · 高数 第1章 函数极限与连续</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../index.html">← 返回 数学一复盘中心</a>
+  <header>
+    <h1>精读版 · 高数第 1 章　函数极限与连续</h1>
+    <div class="sub">融合张宇《基础30讲》第 1 讲 + 《强化18讲》第 1 讲 · 以张宇「三向解题法」为主干 · <span class="layer L-base">基础</span> 打地基、<span class="layer L-str">强化</span> 上题型、例题均已逐字核对并独立复算 · 每节末跳去做 1000 题。</div>
+  </header>
+
+  <div class="legend">
+    <b>这一页的三层结构：</b>
+    <span class="layer L-base">基础</span>= 概念与必记（基础30讲的地基，标准高数理论，放心记）；
+    <span class="layer L-str">强化</span>= 张宇强化18讲的<b>专属题型与套路</b>（基础讲没有、真题真考的）。批注色块：
+    <span class="swatch" style="background:var(--blue)"></span><b style="color:var(--blue)">补讲</b>、
+    <span class="swatch" style="background:var(--amber)"></span><b style="color:var(--amber)">必记</b>、
+    <span class="swatch" style="background:var(--red)"></span><b style="color:var(--red)">陷阱</b>、
+    <span class="swatch" style="background:var(--green)"></span><b style="color:var(--green)">强化题型</b>。<br>
+    紫色 <b>例题</b> 卡是张宇强化例题（1.1–1.13），<b>答案我已逐题独立复算核对</b>，当"这类题长什么样"的锚点看。绿色虚线框「去做题」跳本章分章 PDF。
+  </div>
+
+  <nav class="toc">
+    <a href="#s0">本章定位·三向解题法</a>
+    <a href="#s1">预备 · 函数与极限概念</a>
+    <a href="#s2">O1 判定类型·做好计算</a>
+    <a href="#s3">O2 判定连续与间断</a>
+    <a href="#s4">O3 x→· 时的微观性态</a>
+  </nav>
+
+  <!-- ============ 定位 ============ -->
+  <h2 id="s0"><span class="idx">定位</span>考什么 · 张宇的「三向解题法」总图</h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/高等数学/01_函数极限与连续/高数_第01章_基础30讲.pdf">📄 基础30讲</a>
+  <p><b>考纲目标（基础30讲列了 10 条）</b>浓缩成一句：<b>会算函数极限</b>——理解极限/连续/间断的概念，掌握四则运算、两个重要极限、等价无穷小、洛必达、泰勒，会判间断点类型。<b>重难点只有两个（书上标 ★重中之重）：①洛必达法则　②泰勒公式。</b></p>
+  <div class="key"><span class="tag">必记 · 张宇「三向解题法」——本章一切题的分流器</span>
+    看到 $\displaystyle\lim_{x\to\bullet}f(x)$，先问「盯住哪个目标」：<br>
+    <b>O₁ 判定类型、做好计算</b>——绝大多数题（七种未定式的计算）；<br>
+    <b>O₂ 判定连续与间断</b>——连续/间断点题（本质是在分段点算左右极限）；<br>
+    <b>O₃ 研究 $x\to\bullet$ 时 $f(x)$ 的微观性态</b>——保号、夹逼、单调有界、证明题。<br>
+    每一向下面是统一的「D 操作」：<b>D₁ 常规操作</b>（化简、等价替换、提因子）→ <b>D₂₂ 转换等价表述</b>（$u^v=e^{v\ln u}$、拆左右极限）→ <b>D₂₃ 化归经典形式</b>（凑成 $\frac00,\frac\infty\infty$ 或差函数）。
+  </div>
+  <div class="mine"><span class="tag">补讲 · 时间怎么分配（数学命门就命在这一章的 O₁）</span>
+    十条目标里真正反复考的是 <b>O₁ 计算</b>。基础讲负责把「六个方法」教会你，<b>强化讲负责把这六个方法用到七八种刁钻题型上</b>（局部判定、变上限积分、带头大哥、$\infty-\infty$ 中值定理……）——这些才是拉开分差、也是最容易慌的地方。打法：概念部分（预备节）快速扫、记死三样（左右极限判据 / 保号性脱帽戴帽 / 等价无穷小表）；把主力时间砸在 O₁ 的强化题型上，每种题型都对着例题手推一遍。
+  </div>
+
+  <!-- ============ 预备：函数与极限概念 ============ -->
+  <h2 id="s1"><span class="idx">预备</span>函数特性 · 极限概念与性质<span class="layer L-base" style="margin-left:10px">基础为主</span></h2>
+
+  <h3>1　函数的四种特性（后续所有章的隐藏前提）</h3>
+  <div class="gridwrap"><table>
+    <tr><th>特性</th><th>判据</th><th>必记二级结论</th></tr>
+    <tr><td><b>有界性</b></td><td>存在 $M\gt0$，$|f(x)|\le M$ 恒成立</td><td>闭区间上连续 ⇒ 有界</td></tr>
+    <tr><td><b>单调性</b></td><td>$x_1\lt x_2\Rightarrow f(x_1)\lt f(x_2)$（增）</td><td>严格单调 ⇒ 有反函数</td></tr>
+    <tr><td><b>奇偶性</b></td><td>$f(-x)=\mp f(x)$（定义域须对称）</td><td>奇±奇=奇，奇×奇=偶；奇函数在 0 有定义则 $f(0)=0$</td></tr>
+    <tr><td><b>周期性</b></td><td>存在 $T\gt0$，$f(x+T)=f(x)$</td><td>周期 $T$ ⇒ $f(ax+b)$ 周期 $T/|a|$</td></tr>
+  </table></div>
+  <div class="key"><span class="tag">必记 · 奇偶性的求导/积分升降</span>
+    <b>奇函数求导变偶、偶函数求导变奇</b>；<b>奇函数的原函数全是偶函数</b>，偶函数的原函数里只有 $\int_0^x$ 那支是奇函数。后面「对称性简化积分」天天用。复合/反函数的坑几乎都在<b>定义域接不上</b>；反函数存在 ⟺ 严格单调，图像关于 $y=x$ 对称。图像底座见 <a href="../直觉馆_图像与数感.html">直觉馆</a>。
+  </div>
+
+  <h3>2　极限的概念与三大性质</h3>
+  <div class="key"><span class="tag">必记 · 左右极限判据（O₂ 的命根子）</span>
+    $$\lim_{x\to x_0}f(x)=A\iff \lim_{x\to x_0^-}f(x)=\lim_{x\to x_0^+}f(x)=A$$
+    凡遇<b>分段点、$|x|$、$\dfrac1x$、$e^{1/x}$、$\arctan\dfrac1x$、$x\to\infty$ 两侧行为不同</b>，一律先拆左右。
+  </div>
+  <div class="trap"><span class="tag">陷阱 · 三个「左右必分家」的怪物（$x\to0$）</span>
+    ① $\dfrac1x$：$0^+\!\to\!+\infty$，$0^-\!\to\!-\infty$；② $e^{1/x}$：$0^+\!\to\!+\infty$，$0^-\!\to\!0$；③ $\arctan\dfrac1x$：$0^+\!\to\!\frac\pi2$，$0^-\!\to\!-\frac\pi2$。它们是间断点题的固定弹药。
+  </div>
+  <p><b>三大局部性质</b>：唯一性；局部有界性（极限存在 ⇒ 邻域有界，<b>反之不真</b>，如 $\sin\frac1x$）；局部保号性。保号性在 O₃ 详讲。</p>
+
+  <h3>3　无穷小、无穷大与比阶</h3>
+  <p><b>无穷小</b>=以 0 为极限的量（是过程，不是"很小的数"）；<b>无穷大</b>=绝对值无限增大；非零无穷小与无穷大互为倒数。</p>
+  <div class="key"><span class="tag">必记 · 无穷小运算 + 比阶</span>
+    <b>有限个</b>无穷小的和/积仍是无穷小；<b>有界量 × 无穷小 = 无穷小</b>（如 $x\sin\frac1x\to0$）。比阶看 $\lim\frac\beta\alpha$：$0$→高阶 $o(\alpha)$，$\infty$→低阶，非零常数→同阶，$1$→等价，与 $\alpha^k$ 比为非零常数→ $k$ 阶。
+  </div>
+  <div class="key"><span class="tag">必记 · 等价无穷小表（$x\to0$，强化版——广义化 "$x\to$ 狗"）</span>
+    <b>一阶组</b>（张宇：任何无穷小"狗"都能替 $x$）：
+    $$\sin x\sim x,\ \tan x\sim x,\ \arcsin x\sim x,\ \arctan x\sim x,\ \ln(1+x)\sim x,\ e^x-1\sim x$$
+    $$\ln\!\big(x+\sqrt{1+x^2}\big)\sim x,\quad a^x-1\sim x\ln a,\quad (1+x)^\alpha-1\sim\alpha x,\quad 1-\cos x\sim\tfrac12x^2,\quad 1-\cos^\alpha x\sim\tfrac{\alpha}{2}x^2$$
+    <b>差函数组</b>（加减型救命，注意符号）：
+    $$x-\sin x\sim\tfrac{x^3}{6},\ \ \tan x-x\sim\tfrac{x^3}{3},\ \ \arcsin x-x\sim\tfrac{x^3}{6},\ \ x-\arctan x\sim\tfrac{x^3}{3},\ \ x-\ln(1+x)\sim\tfrac{x^2}{2},\ \ 1-\sqrt{\cos x}\sim\tfrac14x^2$$
+  </div>
+  <div class="trap"><span class="tag">陷阱 · 差值组符号口诀</span>
+    「$\tan$ 快、$\sin$ 慢、$x$ 居中」⇒ $\tan x\!-\!x\gt0$、$x\!-\!\sin x\gt0$；$\arcsin/\arctan$ 与 $\sin/\tan$ 反号。拿不准 $x=0.1$ 心算 10 秒验回。
+  </div>
+
+  <!-- ============ O1 计算 ============ -->
+  <h2 id="s2"><span class="idx">O₁</span>判定类型 · 做好计算　<span style="font-size:.8rem;color:var(--red)">← 全章重头戏</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/高等数学/01_函数极限与连续/高数_第01章_强化18讲.pdf">📄 强化18讲</a>
+
+  <h3>2.1　先定型 · 未定式的「整体判定」<span class="layer L-base">基础</span></h3>
+  <p>代入后出现下面七种之一才是极限题：</p>
+  <div class="fml">$$\tfrac00,\quad \tfrac{\infty}{\infty},\quad 0\cdot\infty,\quad \infty-\infty,\quad 1^{\infty},\quad 0^{0},\quad \infty^{0}$$</div>
+  <div class="mine"><span class="tag">补讲 · 张宇的归口：七种型塌缩成一个流程</span>
+    · $0\cdot\infty$：把一个因子<b>倒下去</b>→ $\frac00$ 或 $\frac\infty\infty$；· $\infty-\infty$：<b>通分/提因子/有理化/中值定理</b>凑成分式或积；· $1^\infty,0^0,\infty^0$（幂指型）：一律 <b>$u^v=e^{v\ln u}$</b> 把指数上的 $0\cdot\infty$ 拉下来。剩下 $\frac00,\frac\infty\infty$ 交给洛必达/泰勒。
+  </div>
+
+  <h3>2.2　未定式的「局部判定」<span class="layer L-str">强化专属</span></h3>
+  <div class="zy"><span class="tag">强化题型 · 见 $\lim f(n,x)$ 含参、含 $|x|^n$/$nx^{2n}$ → 先判局部表达式</span>
+    形如 $\lim\limits_{n\to\infty}\dfrac{1+x}{1+nx^2}$ 这类，<b>胜负手在里面那块局部式子的极限</b>。张宇要你背这几张局部表（$n\to\infty$）：
+    $$\lim|x|^n=\begin{cases}+\infty,&|x|\gt1\\ 1,&|x|=1\\ 0,&|x|\lt1\end{cases}\qquad
+      \lim nx^{2n}=\begin{cases}+\infty,&|x|\ge1\\ 0,&|x|\lt1\end{cases}\qquad
+      \lim e^{nx}=\begin{cases}+\infty,&x\gt0\\ 1,&x=0\\ 0,&x\lt0\end{cases}$$
+    以及 $\lim\limits_{x\to0^+}x^a$：$a\gt0$ 得 $0$，$a=0$ 得 $1$，$a\lt0$ 得 $+\infty$。<b>抓住这些关键点，$\lim f(n,x)$ 分段结果就出来了</b>；注意题目常把 $n\to\infty$ 写成 $t\to+\infty$、把 $x$ 写成 $t$ 来"变脸"，要认得出。
+  </div>
+
+  <h3>2.3　六大基础方法 · 决策树<span class="layer L-base">基础</span></h3>
+  <div class="mine"><span class="tag">补讲 · 拿到极限脑内跑这条线</span>
+    代入判型 → <b>能约先约、能提先提、乘除因子先等价替换</b> → 剩 $\frac00/\frac\infty\infty$：<b>加减型优先泰勒</b>（不易错），简单可洛必达（每次验型）→ 幂指型取对数 → 数列/递推用夹逼或单调有界。心法：<b>越早化简越不容易错，洛必达/泰勒最后上。</b>
+  </div>
+  <div class="gridwrap"><table>
+    <tr><th>方法</th><th>要点 / 条件</th><th>一句话陷阱</th></tr>
+    <tr><td><b>①四则运算</b></td><td>各部分极限存在才能拆</td><td>$\infty-\infty$ 不能拆</td></tr>
+    <tr><td><b>②两个重要极限</b></td><td>$\lim\limits_{x\to0}\frac{\sin x}{x}=1$；$\lim\limits_{x\to\infty}(1+\frac1x)^x=e$</td><td>$\frac{\sin\square}\square$ 要求角与分母同一个 $\square$ 且 $\to0$</td></tr>
+    <tr><td><b>③等价无穷小</b></td><td>只换<b>乘除因子</b></td><td>加减项乱换会抵消主部（见下例陷阱）</td></tr>
+    <tr><td><b>④洛必达 ★</b></td><td>$\frac00/\frac\infty\infty$ + 可导 $g'\ne0$ + $\lim\frac{f'}{g'}$ 存在或 $\infty$</td><td>失效≠原极限不存在；数列不能直接洛</td></tr>
+    <tr><td><b>⑤泰勒 ★</b></td><td>加减型通解，展开阶数<b>对齐分母</b></td><td>$\ln(1+x)$ 二次项是减；复合先展外层</td></tr>
+    <tr><td><b>⑥夹逼 / 单调有界</b></td><td>多用于数列（$n$ 项和 / 递推）</td><td>单调有界主要对数列</td></tr>
+  </table></div>
+  <div class="key"><span class="tag">必记 · 泰勒八式 & $1^\infty$ 公式</span>
+    $$e^{x}=1+x+\tfrac{x^2}{2!}+\tfrac{x^3}{3!}+o(x^3),\ \ \ln(1+x)=x-\tfrac{x^2}2+\tfrac{x^3}3+o(x^3),\ \ \sin x=x-\tfrac{x^3}{3!}+o(x^3),\ \ \cos x=1-\tfrac{x^2}{2!}+\tfrac{x^4}{4!}+o(x^4)$$
+    $$(1+x)^\alpha=1+\alpha x+\tfrac{\alpha(\alpha-1)}2x^2+o(x^2),\ \ \arctan x=x-\tfrac{x^3}3+o(x^3),\ \ \arcsin x=x+\tfrac{x^3}6+o(x^3),\ \ \tan x=x+\tfrac{x^3}3+o(x^3)$$
+    <b>$1^\infty$ 型</b>（$\lim f=1,\lim g=\infty$）：$\displaystyle\lim f^{\,g}=\exp\!\big(\lim g(f-1)\big)$。
+  </div>
+  <div class="trap"><span class="tag">陷阱 · 加减项乱换 = 抵消主部</span>
+    $\displaystyle\lim_{x\to0}\frac{\tan x-\sin x}{x^3}$：两项都换 $x$ 得 $0$（错）。正解 $\tan x-\sin x=\tan x(1-\cos x)\sim x\cdot\frac{x^2}2$，极限 $=\frac12$。加减处改用泰勒。
+  </div>
+
+  <h3>2.4　强化题型库 · 七种刁钻计算<span class="layer L-str">强化专属</span></h3>
+
+  <div class="zy"><span class="tag">强化题型 A · 幂指 $u^v$（$1^\infty$）先套公式再化归</span>
+    $\lim f=a\gt0,\ \lim g=b\Rightarrow\lim f^{\,g}=a^b$；$1^\infty$ 用 $\lim f^g=e^{\lim g(f-1)}$。关键动作：把 $u^v$ 写成 $e^{v\ln u}$，指数上就是可算的 $0\cdot\infty$。</div>
+  <div class="eg">
+    <div class="q"><span class="no">例1.1</span>$\displaystyle\lim_{x\to0^+}\frac{x^{x}-1}{\ln x\cdot\ln(1-x)}$</div>
+    <div class="s"><span class="lab">解</span>$x^x-1=e^{x\ln x}-1\sim x\ln x$，$\ln(1-x)\sim -x$，故原式 $=\dfrac{x\ln x}{\ln x\cdot(-x)}=\boxed{-1}$。<span class="ans"> ✔ 已复算</span></div>
+  </div>
+
+  <div class="zy"><span class="tag">强化题型 B · 复合函数型比阶 $f[g(x)]$</span>
+    $x\to0$，$f(x)\sim ax^m,\ g(x)\sim bx^n$（$ab\ne0$，$m,n$ 正整数）⇒ $f[g(x)]\sim a\,b^{m}x^{mn}$。<b>先各自定阶，再代进去乘</b>。</div>
+  <div class="eg">
+    <div class="q"><span class="no">例1.4</span>当 $x\to0$，$\cos\!\big(e^{x^2/2}-1\big)-1\sim c\,x^{k}$，求 $ck$。</div>
+    <div class="s"><span class="lab">解</span>外 $\cos u-1\sim-\tfrac12u^2$，内 $g=e^{x^2/2}-1\sim\tfrac12x^2$，故 $f[g]\sim-\tfrac12(\tfrac12)^2x^{4}=-\tfrac18x^4$，$c=-\tfrac18,k=4$，$ck=\boxed{-\tfrac12}$。<span class="ans"> ✔ 已复算</span></div>
+  </div>
+
+  <div class="zy"><span class="tag">强化题型 C · 变上限积分型（升阶）</span>
+    <b>一型（$f\to0$）</b>：$f(x)\sim ax^m\Rightarrow\displaystyle\int_0^x f(t)\,dt\sim\int_0^x at^m\,dt=\frac{a}{m+1}x^{m+1}$（升一阶）。<br>
+    <b>★二型（$f\not\to0$）</b>：$\lim f=A\ne0,\ \lim h=0\Rightarrow\displaystyle\int_0^{h(x)}f(t)\,dt\sim A\,h(x)$。<br>
+    <b>复合型</b>：$f\sim ax^m,g\sim bx^n\Rightarrow\displaystyle\int_0^{g(x)}f(t)\,dt\sim\int_0^{bx^n}at^m\,dt$。看到 $\dfrac{\int_0^{\square}\cdots}{x^\alpha}$ 先用它把分子定阶。</div>
+  <div class="eg">
+    <div class="q"><span class="no">例1.6</span>$f(x)=\dfrac{\int_0^x\ln(1+t^2)\,dt}{x^{\alpha}}$ 在 $(0,+\infty)$ 有界，求 $\alpha$ 范围。</div>
+    <div class="s"><span class="lab">解</span>$x\to+\infty$ 端：分子 $\to+\infty$，洛必达得 $\dfrac{\ln(1+x^2)}{\alpha x^{\alpha-1}}$，要极限存在需 $\alpha\gt1$；$x\to0^+$ 端：分子 $\sim\int_0^x t^2dt=\tfrac13x^3$，$f\sim\tfrac13x^{3-\alpha}$，有界需 $\alpha\le3$。合得 $\boxed{1\lt\alpha\le3}$。<span class="ans"> ✔ 已复算</span></div>
+  </div>
+
+  <div class="zy"><span class="tag">强化题型 D · 带头大哥型（$\alpha=o(\beta)$）</span>
+    $\alpha,\beta$ 同过程非零无穷小，且 $\alpha=o(\beta)$（$\beta$ 是"带头大哥"）⇒ ① $\alpha+\beta\sim\beta$；② $\alpha+\beta$ 与 $\beta$ 同号；③ $\alpha\beta=o(\beta^2)$。<b>和里只留最低阶那一项。</b></div>
+  <div class="eg">
+    <div class="q"><span class="no">例1.5</span>$f,g$ 在 $x=0$ 去心邻域有定义恒不为 0，$x\to0$ 时 $f$ 是 $g$ 的高阶无穷小，则（　）<br>(A) $f+g=o(g)$　(B) $fg=o(f^2)$　(C) $f=o(e^{g}-1)$　(D) $f=o(g^2)$</div>
+    <div class="s"><span class="lab">解</span>$g$ 是带头大哥：$f+g\sim g$（A 错）；$fg=o(g^2)$（B 错）；$e^{g}-1\sim g$，而 $f=o(g)=o(e^g-1)$，选 $\boxed{\text{C}}$。<span class="ans"> ✔ 已复算</span></div>
+  </div>
+
+  <div class="zy"><span class="tag">强化题型 E · $\infty-\infty$ 见"同型函数之差"→ 拉格朗日中值定理</span>
+    在 $\lim$ 里见 $f-f$ 型（三角、反三角、对数、指数之差，如 $\arctan(x+1)-\arctan x$、$\sqrt[n]2-\sqrt[n+1]2$），用 $f(b)-f(a)=f'(\xi)(b-a)$ 把差<b>拆成"导数 × 自变量差"</b>，自变量差往往是无穷小。</div>
+  <div class="eg">
+    <div class="q"><span class="no">例1.7</span>$\displaystyle\lim_{n\to\infty}n^2\big(\sqrt[n]{2}-\sqrt[n+1]{2}\big)$</div>
+    <div class="s"><span class="lab">解</span>对 $2^x$ 在 $[\tfrac1{n+1},\tfrac1n]$ 用中值定理：$\sqrt[n]2-\sqrt[n+1]2=2^{\xi}\ln2\cdot\big(\tfrac1n-\tfrac1{n+1}\big)$，$\xi\to0^+$ 故 $2^\xi\to1$。原式 $=\lim n^2\ln2\cdot\dfrac{1}{n(n+1)}=\boxed{\ln2}$。<span class="ans"> ✔ 已复算</span></div>
+  </div>
+
+  <div class="zy"><span class="tag">强化题型 F · 差函数"恒等变形创造" & $f_1^{g}-f_2^{g}$ 提公因子</span>
+    没有现成差函数就<b>造</b>一个：$x-\ln(1+\tan x)=(x-\tan x)+(\tan x-\ln(1+\tan x))$。幂之差 $[f_1]^{g}-[f_2]^{g}=[f_2]^{g}\big\{(f_1/f_2)^{g}-1\big\}$，$[f]^{g_1}-[f]^{g_2}=[f]^{g_2}\big\{f^{\,g_1-g_2}-1\big\}$——都是先提公因子再化 $e^{\square}-1$。</div>
+  <div class="eg">
+    <div class="q"><span class="no">例1.8</span>$\displaystyle\lim_{x\to+\infty}x^2\big(3^{1/x}-3^{1/(x+1)}\big)$</div>
+    <div class="s"><span class="lab">解</span>提公因子 $3^{1/(x+1)}$：$=\lim x^2\cdot3^{1/(x+1)}\big(3^{\frac1x-\frac1{x+1}}-1\big)\sim\lim x^2\cdot1\cdot\dfrac{\ln3}{x(x+1)}=\boxed{\ln3}$。<span class="ans"> ✔ 已复算</span></div>
+  </div>
+
+  <div class="zy"><span class="tag">强化题型 G · 见 $\lim[f(x)-ax]$ → 把 $f$ 与 $ax$ "合并"成乘除</span>
+    $\infty-\infty$ 的一个常见外壳。总方向：<b>提出主部、把"和差"化"积"</b>，再用 $e^{\square}-1\sim\square$ 或泰勒。</div>
+  <div class="eg">
+    <div class="q"><span class="no">例1.10</span>$\displaystyle\lim_{x\to+\infty}\Big[\frac{x^{1+x}}{(1+x)^x}-\frac{x}{e}\Big]$</div>
+    <div class="s"><span class="lab">解</span>提 $\tfrac xe$：$=\tfrac xe\big[e\cdot(\tfrac{x}{1+x})^x-1\big]=\tfrac xe\big[e^{\,1-x\ln(1+\frac1x)}-1\big]$。指数 $1-x\ln(1+\tfrac1x)=\tfrac1{2x}+o(\tfrac1x)$，故 $\sim\tfrac xe\cdot\tfrac1{2x}=\boxed{\tfrac1{2e}}$。<span class="ans"> ✔ 已复算</span></div>
+  </div>
+  <p style="font-size:.85rem;color:var(--muted)">同类可练：例1.2（$\lim[\frac{1+\int_0^x\frac{\sin t}t dt}{x}-\frac1{\ln(1+x)}]=\frac12$，先算"干扰项"再算差）、例1.9（$\lim_{x\to\infty}[x\ln(e+\frac1{x-1})-x]=\frac1e$）。三道都在强化18讲原文，去 PDF 手推。</p>
+
+  <!-- ============ O2 连续与间断 ============ -->
+  <h2 id="s3"><span class="idx">O₂</span>判定连续与间断（本质是算左右极限）</h2>
+
+  <h3>3.1　连续的定义（三个等价说法）<span class="layer L-base">基础</span></h3>
+  <div class="key"><span class="tag">必记 · $f$ 在 $x_0$ 连续 ⟺ 任一成立</span>
+    ① $\displaystyle\lim_{x\to x_0}f(x)=f(x_0)$（极限值=函数值）；② $\displaystyle\lim_{\Delta x\to0}\Delta y=0$；③ 左右连续且 $=f(x_0)$。缺哪个就从哪个断。<b>初等函数在定义区间内处处连续</b>——判连续的总开关。
+  </div>
+
+  <h3>3.2　强化流程 · 备选点判定 → 算三值 → 下结论<span class="layer L-str">强化专属</span></h3>
+  <div class="zy"><span class="tag">强化题型 · 第一步"盯住无定义点与分段点"（尤其分母表达式的零点）</span>
+    张宇列的常见备选点：① $e^{1/x}\!\Rightarrow\!x=0$；② $\dfrac1{\sin x}\!\Rightarrow\!x=k\pi$；③ $\dfrac1{\arctan x}\!\Rightarrow\!x=0$；④ $\dfrac1{|x|(x^2-1)}\!\Rightarrow\!x=0,\pm1$；⑤ $[x]\!\Rightarrow\!$ 整数点为分段点（$\lim_{x\to n^+}[x]=n,\ \lim_{x\to n^-}[x]=n-1$）；⑥ $|x|^{1/(\cdots)}$ 用 $u^v=e^{v\ln u}$ 变形再找无定义点。<b>找齐所有备选点，一个不漏。</b>
+  </div>
+  <div class="gridwrap"><table>
+    <tr><th>大类</th><th>小类</th><th>$x_0$ 处特征</th></tr>
+    <tr><td rowspan="2"><b>第一类</b>（左右极限都存在）</td><td>可去</td><td>$f(x_0^-)=f(x_0^+)\ne f(x_0)$ 或无定义</td></tr>
+    <tr><td>跳跃</td><td>$f(x_0^-)\ne f(x_0^+)$</td></tr>
+    <tr><td rowspan="2"><b>第二类</b>（至少一侧不存在）</td><td>无穷</td><td>某侧极限 $=\infty$</td></tr>
+    <tr><td>振荡</td><td>某侧振荡不存在</td></tr>
+  </table></div>
+  <div class="eg">
+    <div class="q"><span class="no">例1.11</span>$f(x)=|x|^{\frac{1}{(1-x)(x-2)}}$ 的第一类间断点个数为（　）(A)3 (B)2 (C)1 (D)0</div>
+    <div class="s"><span class="lab">解</span>无定义点 $x=0,1,2$。$|x|^{\frac1{(1-x)(x-2)}}=e^{\frac{\ln|x|}{(1-x)(x-2)}}$：$x\to0$ 指数 $\to+\infty$（第二类无穷）；$x\to1$ 指数 $\to$ 有限，$f\to e$（<b>第一类可去</b>）；$x\to2$ 指数 $\to+\infty$（第二类无穷）。第一类只有 $x=1$，选 $\boxed{\text{C}}$。<span class="ans"> ✔ 已复算</span></div>
+  </div>
+  <div class="trap"><span class="tag">陷阱 · 可去仍是间断点；别把 $x=k\pi$ 之类漏了</span>
+    可去间断点当下就是间断（虽可补定义）。$\frac1{\sin x}$ 别只盯 $x=0$，$\sin x=0$ 的 $x=k\pi$ 全是间断点。
+  </div>
+
+  <!-- ============ O3 微观性态 ============ -->
+  <h2 id="s4"><span class="idx">O₃</span>研究 $x\to\bullet$ 时 $f(x)$ 的微观性态<span class="layer L-str" style="margin-left:10px">强化 · 证明题主场</span></h2>
+  <p>这一向是<b>极限的定性使用</b>：不算数值，而是"证 $f\ge0$""证存在 $\xi$"。四把工具：定义法、局部保号性、夹逼、单调有界。</p>
+  <div class="key"><span class="tag">必记 · 局部保号性的"脱帽 / 戴帽"（极重要考点）</span>
+    <b>由极限定号（脱帽·严格→严格）</b>：$\lim f\gt0\Rightarrow$ 邻域内 $f\gt0$。<br>
+    <b>由函数定号（戴帽·带等→带等）</b>：邻域内 $f\ge0\Rightarrow\lim f\ge0$（可能 $=0$，如 $f=x^2$）。<br>
+    <b>方向反了、严格与带等混了，就掉坑。</b>证法：取 $\varepsilon=\frac A2$ 即得（定义法藏着 $|f-A|\lt\varepsilon$ 这把万能钥匙，$\varepsilon$ 可按需取）。
+  </div>
+  <div class="zy"><span class="tag">强化题型 · 单调 + 极限为 0 ⇒ 定号</span>
+    $f$ 单调减少且 $\lim\limits_{x\to+\infty}f=0\Rightarrow f\ge0$（数列同理）。套路：单调给出 $f(x)\ge f(x+t)$，再对 $t\to+\infty$ 取极限。</div>
+  <div class="eg">
+    <div class="q"><span class="no">例1.13</span>设 $f(x)$ 单调减少，$\displaystyle\lim_{x\to+\infty}f(x)=0$，证明 $f(x)\ge0$。</div>
+    <div class="s"><span class="lab">证</span>单调减 ⇒ 任意 $t\gt0$ 有 $f(x)\ge f(x+t)$，令 $t\to+\infty$：$f(x)\ge\lim\limits_{t\to+\infty}f(x+t)=\lim\limits_{u\to+\infty}f(u)=0$。得证。<span class="ans"> ✔ 思路已核对</span></div>
+  </div>
+  <p style="font-size:.85rem;color:var(--muted)">证明题进阶：例1.12（$\lim[x-f(x)]=0,f(1)\lt1$，用定义法取 $\varepsilon$ + 拉氏中值定理证存在 $\eta\gt1$ 使 $f'(\eta)\gt1$）在强化18讲，属 O₃ 的综合证明，建议第二轮再攻。</p>
+
+  <!-- ============ 出口 ============ -->
+  <div class="outro">
+    <h3>📌 读完去做题（本章六件套 · 本地 PDF）</h3>
+    <div class="dolinks">
+      <div class="t">张宇分册 · 第 1 讲</div>
+      <a href="../../张宇系列_分章易识别版/高等数学/01_函数极限与连续/高数_第01章_基础30讲.pdf">基础 30 讲</a>
+      <a href="../../张宇系列_分章易识别版/高等数学/01_函数极限与连续/高数_第01章_强化18讲.pdf">强化 18 讲</a>
+      <a href="../../张宇系列_分章易识别版/高等数学/01_函数极限与连续/高数_第01章_1000题_基础_题目.pdf">1000题·基础篇</a>
+      <a href="../../张宇系列_分章易识别版/高等数学/01_函数极限与连续/高数_第01章_1000题_强化_题目.pdf">1000题·强化篇</a>
+      <div class="note">链接指向本地大 PDF（不推 GitHub，线上 Pages 打不开正常）。做错 → 回复盘中心报「1000题·第1章·错第X题·卡哪」生成四层错题页。</div>
+    </div>
+    <p><b>真题锚点</b>：极限计算在统考里<b>几乎年年考</b>（选择/填空/解答都有落点），是全卷基本盘。等你做真题/1000 题遇到卡壳，报给我 → 盲做+逐字核对后写成错题页，并把该题回填到上面对应的强化题型旁（真题按<a href="../index.html">复盘中心</a>「错题驱动」补，不提前泄题）。</p>
+    <p><b>配套速查</b>：<a href="../卡库_极限与无穷小工具箱.html">卡库·极限工具箱</a> · <a href="../公式大全_速查与秒杀.html">公式大全</a> · <a href="../直觉馆_图像与数感.html">直觉馆</a>。<b>下一章</b>：<a href="第02章_数列极限.html">第 2 章 数列极限</a>（$n\to\infty$ 版，夹逼/单调有界当主角）。</p>
+  </div>
+
+  <footer>由 Claude 维护 · 融合张宇《基础30讲》+《强化18讲》第 1 讲 · 概念正文为标准高数理论 · 例题 1.1–1.13 题面照原书、答案经独立复算核对 · 具体真题另经盲做后入错题页</footer>
+</div>
+</body>
+</html>

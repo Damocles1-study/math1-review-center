@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>精读版 · 高数 第2章 数列极限</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../index.html">← 返回 数学一复盘中心</a>
+  <header>
+    <h1>精读版 · 高数第 2 章　数列极限</h1>
+    <div class="sub">融合张宇《基础30讲》第 2 讲 + 《强化18讲》第 2 讲 · 以张宇本章「一个目标 O + 五条分支」为主干 · <span class="layer L-base">基础</span> 打地基、<span class="layer L-str">强化</span> 上题型 · 例题答案均已逐题独立复算（递推数列另做数值迭代对拍）· 每节末跳去做 1000 题。</div>
+  </header>
+
+  <div class="legend">
+    <b>这一页的三层结构：</b>
+    <span class="layer L-base">基础</span>= 概念与必记（基础30讲的地基，标准高数理论，放心记）；
+    <span class="layer L-str">强化</span>= 张宇强化18讲的<b>专属题型与套路</b>（基础讲没有、真题真考的）。批注色块：
+    <span class="swatch" style="background:var(--blue)"></span><b style="color:var(--blue)">补讲</b>、
+    <span class="swatch" style="background:var(--amber)"></span><b style="color:var(--amber)">必记</b>、
+    <span class="swatch" style="background:var(--red)"></span><b style="color:var(--red)">陷阱</b>、
+    <span class="swatch" style="background:var(--green)"></span><b style="color:var(--green)">强化题型</b>。<br>
+    紫色 <b>例题</b> 卡里，<b>基</b>x.x = 基础30讲例题、<b>强</b>x.x = 强化18讲例题（两本书各自都从 2.1 编号，别混）。<b>答案我已逐题独立复算</b>，递推数列另用程序迭代对拍。绿色虚线框「去做题」跳本章分章 PDF。
+  </div>
+
+  <nav class="toc">
+    <a href="#s0">本章定位·一个目标五条分支</a>
+    <a href="#s1">预备 · 数列与极限定义</a>
+    <a href="#s2">性质 · 子列/保号/四则/收敛速度</a>
+    <a href="#s3">三大工具 · 海涅/夹逼/单调有界</a>
+    <a href="#s4">强化五支 · 递推数列题型库</a>
+  </nav>
+
+  <!-- ============ 定位 ============ -->
+  <h2 id="s0"><span class="idx">定位</span>考什么 · 一个目标 O + 五条分支</h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/高等数学/02_数列极限/高数_第02章_基础30讲.pdf">📄 基础30讲</a>
+  <p><b>基础30讲开篇原话</b>：考题 = <b>证明数列极限的存在性</b>；题型 = 选择、填空、解答题；重难点三条：<b>①海涅定理的应用　②通过放缩利用夹逼准则求极限　③单调有界准则证明极限存在</b>。第 1 章的 $x\to\bullet$ 换成 $n\to\infty$，多数计算技术照搬，<b>真正的新东西只有两样：递推数列 $x_{n+1}=f(x_n)$ 的收敛性，以及 $n$ 项和的放缩</b>。</p>
+  <div class="key"><span class="tag">必记 · 张宇本章解题总图（强化18讲第 2 讲扉页）</span>
+    本章只有<b>一个目标 O（盯住目标）</b>：<b>判断 $\{x_n\}$ 是否收敛（$\lim\limits_{n\to\infty}x_n$ 是否存在）</b>。往下分五条分支，每条配一套 D 操作：<br>
+    <b>① 见到 $f(x_n,x_{n+1})$ 且是<u>等式</u>关系</b>（D₁ 常规操作 + D₂₃ 化归经典形式）——递推数列主场；<br>
+    <b>② 见到 $f(x_n,x_{n+1})$ 且是<u>不等式</u>关系</b>（D₁）——比大小定单调、定上下界；<br>
+    <b>③ 初值 $x_1$ 对 $x_{n+1}=f(x_n)$ 敛散性的影响</b>（D₁）——分情况讨论；<br>
+    <b>④ 双通项 $a_n,b_n$ 问题</b>（D₁ + D₂₁ 观察研究对象 + D₂₃ 化归）——消元变单通项；<br>
+    <b>⑤ 复合函数的极限</b>（D₁ + D₂₁）——两条定理 + 反例。
+  </div>
+  <div class="mine"><span class="tag">补讲 · 本章和第 1 章的分工，别浪费时间</span>
+    第 1 章练的是「<b>会算</b>」，本章练的是「<b>会证存在</b>」。所以：<br>
+    · <b>数列极限的计算</b>（$\frac00,\frac\infty\infty$、$1^\infty$、$n$ 项和）——技术全在第 1 章，本章只补两把新钥匙：<b>海涅定理</b>（把数列化成函数才敢洛必达）与<b>夹逼放缩</b>。<br>
+    · <b>数列极限的存在性</b>——这是本章的命门，能出<b>解答题</b>。核心就一句：<b>单调 + 有界</b>，外加压缩映射。<br>
+    · $\varepsilon\text{-}N$ 定义<b>卷面上不考证明</b>（基础30讲原话），只在选择填空里考「对定义的理解」——即<b>收敛速度</b>那组题（见 2.5 节），别去死磕定义证明。
+  </div>
+
+  <!-- ============ 预备 ============ -->
+  <h2 id="s1"><span class="idx">预备</span>数列的家底 · 极限的定义<span class="layer L-base" style="margin-left:10px">基础为主</span></h2>
+
+  <h3>1.1　数列的本质与必备公式</h3>
+  <p>数列 $\{x_n\}$ 的本质是<b>「整标函数」</b>：$x_n=f(n),\ n\in\mathbf N_+$——自变量只取正整数，图像是一串<b>离散的点</b>。这句话决定了后面所有的「能与不能」：<b>数列不能求导、不能直接用洛必达</b>（要先经海涅定理化成函数），但可以用一切与连续性无关的工具（四则、等价无穷小、夹逼）。</p>
+  <div class="key"><span class="tag">必记 · 求和与常见数列（$n$ 项和题的原料）</span>
+    等差：$a_n=a_1+(n-1)d$，$S_n=\dfrac n2(a_1+a_n)$；等比：$a_n=a_1r^{\,n-1}$，$S_n=\dfrac{a_1(1-r^n)}{1-r}\ (r\ne1)$。
+    $$\sum_{k=1}^n k=\frac{n(n+1)}2,\qquad \sum_{k=1}^n k^2=\frac{n(n+1)(2n+1)}6,\qquad \sum_{k=1}^n\frac1{k(k+1)}=1-\frac1{n+1}\to1$$
+    最后一条是<b>裂项相消</b>的样板：$\dfrac1{k(k+1)}=\dfrac1k-\dfrac1{k+1}$。另记 $\Big\{\big(1+\frac1n\big)^n\Big\}$ <b>单调递增有上界</b>，极限为 $\mathrm e$——它本身就是「单调有界准则」最著名的实例。
+  </div>
+  <div class="mine"><span class="tag">补讲 · 「有限项和」与「无穷项和」是两个世界</span>
+    上面这些求和公式针对的都是<b>前 $n$ 项和（有限和）</b>，有限和不会发散；只有讨论<b>无穷项相加</b>时才有收敛/发散之说，那是第 16 章无穷级数的事。本章遇到的 $n$ 项和（项数随 $n$ 变多）既不能逐项取极限、也不能直接求和时，就交给<b>夹逼</b>（见 3.2 节）。
+  </div>
+
+  <h3>1.2　数列极限的定义（考理解，不考证明）</h3>
+  <div class="key"><span class="tag">必记 · $\varepsilon\text{-}N$ 定义</span>
+    $\displaystyle\lim_{n\to\infty}x_n=a\iff$ 对任意 $\varepsilon\gt0$，<b>存在正整数 $N$</b>，当 $n\gt N$ 时恒有 $|x_n-a|\lt\varepsilon$。<br>
+    对照函数版：$\displaystyle\lim_{x\to+\infty}f(x)=a\iff$ 任意 $\varepsilon\gt0$，存在 $X\gt0$，当 $x\gt X$ 时 $|f(x)-a|\lt\varepsilon$。<br>
+    无穷大版：$\lim x_n=\infty\iff$ 任意 $M\gt0$，存在 $N$，$n\gt N$ 时 $|x_n|\gt M$。<b>$\varepsilon$ 刻画「要多近有多近」，$N$ 只管「从某项之后」——前有限项爱怎样怎样，与敛散性无关。</b>
+  </div>
+  <div class="trap"><span class="tag">陷阱 · 数列极限 vs 函数极限，四处不一样</span>
+    <div class="gridwrap"><table>
+      <tr><th>对比项</th><th>函数极限 $\lim\limits_{x\to x_0}f(x)$</th><th>数列极限 $\lim\limits_{n\to\infty}x_n$</th></tr>
+      <tr><td>唯一性</td><td>唯一</td><td>唯一（<b>相同</b>）</td></tr>
+      <tr><td><b>有界性</b></td><td><b>局部</b>有界（某去心邻域内）</td><td><b>全局</b>有界：$|x_n|\le M$ 对<b>一切</b> $n$ 成立</td></tr>
+      <tr><td><b>保号性</b></td><td><b>局部</b>保号（某邻域内）</td><td>「<b>从某项起</b>」：存在 $N$，$n\gt N$ 时 $x_n\gt0$</td></tr>
+      <tr><td>洛必达</td><td>可用</td><td><b>不可直接用</b>（离散、不可导）→ 先用海涅</td></tr>
+      <tr><td>方向</td><td>可分左右极限</td><td>只有一个方向（$n\to+\infty$）</td></tr>
+    </table></div>
+    有界性这条最容易在选择题上翻车：数列收敛 $\Rightarrow$ 全局有界（因为前 $N$ 项只有有限个，取最大值即可）。
+  </div>
+
+  <!-- ============ 性质 ============ -->
+  <h2 id="s2"><span class="idx">性质</span>子列 · 保号 · 四则 · 收敛速度</h2>
+
+  <h3>2.1　子列定理：判<b>发散</b>的唯一利器<span class="layer L-base">基础</span></h3>
+  <div class="key"><span class="tag">必记 · 定理 1 及其逆否用法</span>
+    <b>数列收敛 $\Rightarrow$ 它的任何子列都收敛且极限相同。</b>逆否即判发散三招：<br>
+    ① 找到<b>一个发散的子列</b> ⇒ 原数列发散；② 找到<b>两个收敛到不同值的子列</b> ⇒ 原数列发散；③ 子列无界 ⇒ 原数列无界 ⇒ 发散。<br>
+    <b>推论（奇偶归并）</b>：$\lim a_n=a\iff\lim a_{2k}=\lim a_{2k-1}=a$。<b>注意只有奇、偶两支合起来才够</b>：$\lim a_{3k}=\lim a_{3k+1}=a$ 推不出 $\lim a_n=a$（$a_{3k+2}$ 这一支缺了）。
+  </div>
+  <div class="trap"><span class="tag">陷阱 · 反过来不成立</span>
+    某<b>一个</b>子列收敛，保证不了原数列收敛。如 $\{n^{(-1)^n}\}:\ \frac11,2,\frac13,4,\frac15,6,\cdots$，子列 $\{\frac1{2n-1}\}\to0$ 收敛，但子列 $\{2n\}$ 无界发散，故原数列发散。
+  </div>
+  <div class="eg">
+    <div class="q"><span class="no">基2.4</span>$x_n=\begin{cases}\dfrac{n^2+\sqrt n}{n},&n\ \text{为正奇数}\\[4pt]\dfrac1n,&n\ \text{为正偶数}\end{cases}$，则 $n\to\infty$ 时 $x_n$ 为（　）(A) 无穷大量　(B) 无穷小量　(C) 有界变量但不是无穷小量　(D) 无界变量但不是无穷大量</div>
+    <div class="s"><span class="lab">解</span>偶子列 $x_{2n}=\frac1{2n}\to0$；奇子列 $x_{2n-1}=\frac{(2n-1)^2+\sqrt{2n-1}}{2n-1}\to+\infty$。两支不同 ⇒ $\lim x_n$ 不存在；奇支无界 ⇒ 无界；但偶支始终 $\lt M$，<b>不满足「任意 $M$ 存在 $N$，$n\gt N$ 后<u>全部</u>项 $\gt M$」</b>，故不是无穷大量。选 $\boxed{\text{D}}$。<span class="ans"> ✔ 已复算</span></div>
+  </div>
+  <div class="key"><span class="tag">必记 · 无界 ≠ 无穷大</span>
+    <b>无穷大</b>要求「从某项起<b>全部</b>项都大」；<b>无界</b>只要「<b>存在</b>某些项要多大有多大」。无穷大 ⇒ 无界，反之不真——上题就是标准反例，函数版反例是 $\frac1x\sin\frac1x\ (x\to0)$（基础例2.7，用归结原则取 $x_n=\frac1{n\pi}$ 与 $x_n'=\frac1{(2n+\frac12)\pi}$ 得两个不同极限）。
+  </div>
+
+  <h3>2.2　收敛数列的三大性质 · 脱帽戴帽<span class="layer L-base">基础</span></h3>
+  <div class="key"><span class="tag">必记 · 保号性的两个方向（选择题高频）</span>
+    <b>脱帽法（由极限定号，严格 → 严格）</b>：$\lim x_n\gt a\Rightarrow$ 存在 $N$，$n\gt N$ 时 $x_n\gt a$。<br>
+    <b>戴帽法（由数列定号，非严格 → 非严格）</b>：$x_n\ge a$（从某项起）$\Rightarrow\lim x_n\ge a$。<br>
+    <b>戴帽时严格号会退化成等号</b>：$x_n\gt-1$ 只能得 $\lim x_n\ge-1$。这一条在「求出 $a$ 后取舍根」时天天用（见 4.x 各例的「舍去」步）。
+  </div>
+  <div class="eg">
+    <div class="q"><span class="no">基2.5</span>$a_n=1-\dfrac{(-1)^n}{n}$，则 $\{a_n\}$（　）(A) 有最大值，有最小值　(B) 有最大值，没有最小值　(C) 没有最大值，有最小值　(D) 都没有</div>
+    <div class="s"><span class="lab">解</span>$a_1=2,a_2=\frac12,a_3=\frac43,\cdots\to1$。由 $\lim(a_n-a_1)=1-2\lt0$ 及保号性，存在 $N_1$，$n\gt N_1$ 时 $a_n\lt a_1$；同理由 $\lim(a_n-a_2)=\frac12\gt0$，存在 $N_2$，$n\gt N_2$ 时 $a_n\gt a_2$。取 $N=\max\{N_1,N_2\}$，则 $n\gt N$ 的项<b>没资格参与最值竞争</b>，最值只能在前有限项里产生 —— 有限个数必有最大最小。选 $\boxed{\text{A}}$。<span class="ans"> ✔ 已复算</span></div>
+  </div>
+  <div class="mine"><span class="tag">补讲 · 这题的套路要抽出来</span>
+    <b>「最值是比较出来的」+「保号性把无穷多项一次性踢出局」</b>，是数列最值题的通用打法：先算出 $\lim a_n=A$，再找两个具体项把 $A$ 夹住，剩下有限项必有最值。
+  </div>
+  <div class="key"><span class="tag">必记 · 四则运算与它的三句口诀</span>
+    $\lim x_n=a,\lim y_n=b$ ⇒ $\lim(x_n\pm y_n)=a\pm b$、$\lim x_ny_n=ab$、$b\ne0$ 时 $\lim\frac{x_n}{y_n}=\frac ab$（<b>可推广到有限个</b>）。口诀：<br>
+    <b>存在 ± 存在 = 存在；存在 ± 不存在 = 不存在；不存在 ± 不存在 = 不确定。</b><br>
+    第三句是陷阱源：$\lim[\sin n+(-\sin n)]=0$ 存在，但两项各自都不存在。<b>反向拆分必须自己造存在的组合</b>——如已知 $\lim(a_n+b_n),\lim(a_n-b_n)$ 都存在，则 $a_n=\frac12[(a_n+b_n)+(a_n-b_n)]$ 存在（基础例2.6，选 B）。
+  </div>
+
+  <h3>2.3　收敛速度问题 · $\varepsilon$ 不许依赖 $n$<span class="layer L-base">基础 · 定义唯一的考法</span></h3>
+  <p>设 $x_n\to a,y_n\to a$，记 $u_n=|x_n-a|,v_n=|y_n-a|$，$I=\lim\frac{u_n}{v_n}$：$I=0$ 说明 $x_n$ 收敛<b>更快</b>（高阶）；$I=b\gt0$ 说明是 $y_n$ 速度的 $\frac1b$ 倍（同阶）；$I=\infty$ 说明<b>更慢</b>。<b>而数列极限的定义里根本不体现收敛速度</b>——这就是这组选择题的命题依据。</p>
+  <div class="eg">
+    <div class="q"><span class="no">基2.17</span>「存在正整数 $N$，当 $n\ge N$ 时恒有 $|x_n-a|\le\frac1n$」是 $\{x_n\}$ 收敛于 $a$ 的（　）(A) 充分不必要　(B) 必要不充分　(C) 充要　(D) 既不充分也不必要</div>
+    <div class="s"><span class="lab">解</span><b>充分</b>：任给 $\varepsilon\gt0$，取 $n\gt\max\{N,[\frac1\varepsilon]+1\}$ 即得 $|x_n-a|\le\frac1n\lt\varepsilon$。<b>不必要</b>：取 $x_n=a+\frac1{\sqrt n}$，它收敛于 $a$，但 $\frac1{\sqrt n}\gt\frac1n$，条件不成立。选 $\boxed{\text{A}}$。<span class="ans"> ✔ 已复算</span></div>
+  </div>
+  <div class="trap"><span class="tag">陷阱 · 把 $\frac1n$ 换成 $\frac1{2^k}$ 答案就变了</span>
+    基础例2.16：「对<b>任意给定的 $k\in\mathbf N_+$</b>，总存在 $N$，$n\gt N$ 时 $|x_n-a|\le\frac1{2^k}$」是<b>充要条件（C）</b>。区别在于：$\frac1{2^k}$ 里的 $k$ <b>与 $n$ 无关</b>，可任意小，就是货真价实的 $\varepsilon$；而 $\frac1n$ <b>依赖 $n$</b>，等于偷偷对收敛速度提了要求。<b>凡命题里的界含 $n$，先怀疑它多要了「速度」。</b>同理基础例2.18：$\lim a_n=a\ne0$ 时，$n$ 充分大只能保证 $|a_n|\gt\frac{|a|}2$（选 A），而 $a_n\gt a-\frac1n$ 之类<b>都是速度要求，一律不成立</b>。
+  </div>
+
+  <!-- ============ 三大工具 ============ -->
+  <h2 id="s3"><span class="idx">工具</span>三大准则 · 海涅 / 夹逼 / 单调有界</h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/高等数学/02_数列极限/高数_第02章_基础30讲.pdf">📄 基础30讲</a>
+
+  <h3>3.1　海涅定理（归结原则）★ 重难点一<span class="layer L-base">基础</span></h3>
+  <div class="key"><span class="tag">必记 · 数列极限 ⇄ 函数极限的唯一桥梁</span>
+    设 $f$ 在 $\mathring U(x_0,\delta)$ 内有定义，则 $\displaystyle\lim_{x\to x_0}f(x)=A$ 存在 $\iff$ 对<b>任何</b>以 $x_0$ 为极限的数列 $\{x_n\}\subset\mathring U$（$x_n\ne x_0$），都有 $\lim\limits_{n\to\infty}f(x_n)=A$。<br>
+    <b>正用（算）</b>：数列不能洛必达 → 换成函数算完再换回来。三个常用换法：<br>
+    ① $x\to0$ 取 $x_n=\frac1n$：若 $\lim\limits_{x\to0}f(x)=A$，则 $\lim\limits_{n\to\infty}f(\frac1n)=A$；<br>
+    ② $x\to+\infty$ 取 $x_n=n$：若 $\lim\limits_{x\to+\infty}f(x)=A$，则 $\lim\limits_{n\to\infty}f(n)=A$；<br>
+    ③ $x_n\to a$ 且 $x_n\ne a$：若 $\lim\limits_{x\to a}f(x)=A$，则 $\lim f(x_n)=A$。<br>
+    <b>反用（否）</b>：找两个趋于 $x_0$ 的数列使 $f(x_n)$ 极限不同 ⇒ $\lim\limits_{x\to x_0}f(x)$ <b>不存在</b>——这是证函数极限不存在的<b>标准武器</b>（狄利克雷函数、$\sin\frac1x$ 全靠它）。
+  </div>
+  <div class="mine"><span class="tag">补讲 · 记这一句就够用</span>
+    <b>「$\ln n/n$ 这种题，$n$ 不能洛，$x$ 能洛」</b>：$\lim\limits_{n\to\infty}\frac{\ln n}{n}=\lim\limits_{x\to+\infty}\frac{\ln x}{x}\overset{\text{L}}{=}\lim\frac{1/x}{1}=0$。写卷面时把「由海涅定理（归结原则）」这句话<b>写出来</b>，否则直接对数列洛必达是<b>硬伤</b>。
+  </div>
+  <div class="eg">
+    <div class="q"><span class="no">基2.8</span>求 $\displaystyle\lim_{n\to\infty}\sqrt[n]{\Big(\cos\frac1{\sqrt n}\Big)^{n^2}}$</div>
+    <div class="s"><span class="lab">解</span>原式 $=\lim\big(\cos\frac1{\sqrt n}\big)^{n}=\exp\big(\lim n\ln\cos\frac1{\sqrt n}\big)$（$1^\infty$）。转函数：$\lim\limits_{x\to+\infty}x\ln\big(1+\cos\frac1{\sqrt x}-1\big)=\lim x\big(\cos\frac1{\sqrt x}-1\big)=\lim x\cdot\big(-\frac12\cdot\frac1x\big)=-\frac12$。由海涅定理知 $\lim n\ln\cos\frac1{\sqrt n}=-\frac12$，故原式 $=\boxed{\mathrm e^{-1/2}}$。<span class="ans"> ✔ 已复算（$n=10^8$ 数值 0.60653066，$\mathrm e^{-1/2}=0.60653066$）</span></div>
+  </div>
+  <div class="key"><span class="tag">必记 · 由此派生的一个常考小结论</span>
+    $n\to\infty$ 时，$\big(1+\frac1n\big)^n-\mathrm e\ \sim\ -\dfrac{\mathrm e}{2n}$。（来源：$x\to0^+$ 时 $(1+x)^{1/x}-\mathrm e\sim-\frac{\mathrm e}2x$，令 $x=\frac1n$ 即得。）看到「$(1+\frac1n)^n-\mathrm e$ 与 $\frac an$ 等价」直接答 $a=-\frac{\mathrm e}2$。
+  </div>
+
+  <h3>3.2　夹逼准则 + 放缩工具箱 ★ 重难点二<span class="layer L-base">基础</span></h3>
+  <div class="key"><span class="tag">必记 · 夹逼准则</span>
+    若 ① <b>从某项起</b>（存在 $n_0$，$n\gt n_0$ 时）$y_n\le x_n\le z_n$；② $\lim y_n=\lim z_n=a$，则 $\lim x_n=a$。<br>
+    <b>两端不必验证等号</b>：$\lt$ 与 $\le$ 混用都行，夹出来的极限一样。
+  </div>
+  <div class="key"><span class="tag">必记 · 放缩第一招：$n$ 项和「统一分母 / 抓最大最小」</span>
+    $$n\cdot u_{\min}\ \le\ u_1+u_2+\cdots+u_n\ \le\ n\cdot u_{\max}\quad(\text{无穷项相加，项数随 }n\text{ 变})$$
+    做法固定：<b>分子不动，把分母放缩成同一个</b>（分母越大分数越小）。这是 $n$ 项和题的第一反应。
+  </div>
+  <div class="eg">
+    <div class="q"><span class="no">基2.9</span>$\displaystyle\lim_{n\to\infty}\Big(\frac1{n^2+n+1}+\frac2{n^2+n+2}+\cdots+\frac n{n^2+n+n}\Big)$</div>
+    <div class="s"><span class="lab">解</span>通项 $\frac{i}{n^2+n+i}$，分子和为 $\frac{n(n+1)}2$。分母统一放缩：
+      $$\frac{n(n+1)}{2(n^2+n+n)}\ \le\ \sum_{i=1}^n\frac{i}{n^2+n+i}\ \le\ \frac{n(n+1)}{2(n^2+n+1)}$$
+      两端极限都是 $\frac12$，故原式 $=\boxed{\dfrac12}$。<span class="ans"> ✔ 已复算（$n=2\times10^4$ 数值 0.4999833）</span></div>
+  </div>
+  <div class="eg">
+    <div class="q"><span class="no">基2.10</span>求 $\displaystyle\lim_{n\to\infty}\sqrt[n]{a_1^n+a_2^n+\cdots+a_m^n}$（$a_i\ge0$）</div>
+    <div class="s"><span class="lab">解</span>记 $a=\max\{a_1,\cdots,a_m\}$，则 $a^n\le a_1^n+\cdots+a_m^n\le m\,a^n$，开 $n$ 次方得 $a\le\sqrt[n]{\textstyle\sum a_i^n}\le a\sqrt[n]m$，而 $\lim\sqrt[n]m=1$，故极限 $=\boxed{\max\{a_1,\cdots,a_m\}}$。<span class="ans"> ✔ 已复算</span></div>
+  </div>
+  <div class="key"><span class="tag">必记 · 这条结论要背，它会变脸</span>
+    $\lim\sqrt[n]{a_1^n+\cdots+a_m^n}=\max\{a_i\}$ 的三种变脸：<br>
+    · $0\lt a\lt b$ 时 $\lim(a^{-n}+b^{-n})^{1/n}=\max\{\frac1a,\frac1b\}=\dfrac1a$；<br>
+    · $\lim\sqrt[n]{\sin^nx+\cos^nx}=\begin{cases}\cos x,&0\le x\le\frac\pi4\\ \sin x,&\frac\pi4\lt x\le\frac\pi2\end{cases}$（<b>用极限定义分段函数</b>，画图取大者）；<br>
+    · $\lim\sqrt[n]{1+|x|^{3n}}=\max\{1,|x|^3\}$。<b>它们都是「取最大」的同一件事。</b>
+  </div>
+  <div class="key"><span class="tag">必记 · 放缩第二招：重要不等式清单（背下来当子弹）</span>
+    <div class="gridwrap"><table>
+      <tr><th>不等式</th><th>适用范围</th><th>本章怎么用（考过的）</th></tr>
+      <tr><td>$\big||a|-|b|\big|\le|a\pm b|\le|a|+|b|$</td><td>实数</td><td>由 $\lim a_n=A$ 推 $\lim|a_n|=|A|$</td></tr>
+      <tr><td>$\sqrt{ab}\le\dfrac{a+b}2\le\sqrt{\dfrac{a^2+b^2}2}$</td><td>$a,b\ge0$</td><td><b>见 $\sqrt{A(B-A)}$ 型递推立刻用</b>（定上界）</td></tr>
+      <tr><td>$\sin x\lt x\lt\tan x$</td><td>$0\lt x\lt\frac\pi2$</td><td>$x_{n+1}=\sin x_n\lt x_n$ ⇒ 单调减</td></tr>
+      <tr><td>$\arctan x\le x\le\arcsin x$</td><td>$0\le x\le1$</td><td>$x_{n+1}=\arctan x_n\lt x_n$ ⇒ 单调减</td></tr>
+      <tr><td>$\mathrm e^x\ge x+1$</td><td>一切 $x$</td><td>$x_{n+1}=\mathrm e^{x_n}-1\ge x_n$ ⇒ 单调不减</td></tr>
+      <tr><td>$x-1\ge\ln x$</td><td>$x\gt0$</td><td>$x_{n+1}=\ln x_n+1\le x_n$ ⇒ 单调不增</td></tr>
+      <tr><td>$\dfrac1{1+x}\lt\ln\big(1+\dfrac1x\big)\lt\dfrac1x$</td><td>$x\gt0$</td><td>欧拉常数题（强2.6）的原料</td></tr>
+      <tr><td>$\sin x\gt\dfrac2\pi x$</td><td>$0\lt x\lt\frac\pi2$</td><td>三角放缩兜底</td></tr>
+    </table></div>
+    <b>看第三列</b>：$\sin/\arctan/\mathrm e^x-1/\ln x+1$ 这四个递推式的单调性<b>是直接由不等式读出来的，不用作差</b>——考场上省一大段。
+  </div>
+
+  <h3>3.3　单调有界准则 ★ 重难点三（解答题主场）<span class="layer L-base">基础</span></h3>
+  <div class="key"><span class="tag">必记 · 准则本体 + 半边省力法</span>
+    <b>单调增加且有上界 ⇒ 收敛；单调减少且有下界 ⇒ 收敛。</b>（学会用结论即可，不必证准则本身。）<br>
+    <b>省力点</b>：证出<b>单调增</b>后只需再证<b>有上界</b>，无须证下界（首项就是下界）；反之亦然。<b>一步都别多写。</b>
+  </div>
+  <div class="mine"><span class="tag">补讲 · 解答题的标准三段式，照抄这个骨架</span>
+    <b>第一段 证有界</b>（常用：基本不等式 $\sqrt{ab}\le\frac{a+b}2$ / 数学归纳法 / 求 $f(x)$ 的最值 / 放缩）；<br>
+    <b>第二段 证单调</b>（下面五法之一）；<br>
+    <b>第三段 求值</b>：由准则知 $\lim x_n$ <b>存在</b>，<u>记为 $a$</u>，在递推式 $x_{n+1}=f(x_n)$ <b>两端同时取极限</b>得 $a=f(a)$，解出后<b>用保号性（戴帽法）舍根</b>。<br>
+    <b>⚠️ 顺序不能反</b>：没证存在就设 $\lim x_n=a$ 是逻辑错误，直接扣分。
+  </div>
+  <div class="key"><span class="tag">必记 · 证单调五法（张宇标★的是常用）</span>
+    <b>★a. 作差</b> $x_{n+1}-x_n$ 定正负（<b>用得最多</b>）；<b>★a′. 作商</b> $\frac{x_{n+1}}{x_n}$ 与 1 比（前提：$x_{n+1}$ 与 $x_n$ <b>同号</b>）；<br>
+    <b>★b. 数学归纳法</b>（三步：验 $n=1$ → 设 $n=k$ 成立 → 证 $n=k+1$）；<br>
+    c. 利用重要不等式（见上表第三列）；　d. $x_n-x_{n-1}$ 与 $x_{n-1}-x_{n-2}$ 同号 ⇒ 单调；<br>
+    <b>★e. 利用 $f'$ 的结论</b>（见下方必记）。
+  </div>
+  <div class="key"><span class="tag">必记 · $x_{n+1}=f(x_n)$ 的单调性判据（基础例2.13，张宇批注「背」）</span>
+    设 $x_n$ 在区间 $I$ 上，$x_{n+1}=f(x_n)$：<br>
+    <b>若 $f'(x)\gt0$（$f$ 单调增）⇒ $\{x_n\}$ 单调</b>，且：$x_2\gt x_1$ 时单调<b>增加</b>；$x_2\lt x_1$ 时单调<b>减少</b>。<br>
+    <b>若 $f'(x)\lt0$（$f$ 单调减）⇒ $\{x_n\}$ <u>不</u>单调</b>（左右摆动，蛛网图上绕着 $y=x$ 打转）。<br>
+    <b>所以：$f$ 单调减时不要浪费时间证单调，直接转压缩映射（见 4.1）。</b>
+  </div>
+  <div style="text-align:center;margin:14px 0">
+  <svg viewBox="0 0 520 170" width="100%" style="max-width:520px;color:var(--muted)" xmlns="http://www.w3.org/2000/svg">
+    <g fill="none" stroke="currentColor" stroke-width="1">
+      <!-- 左图：f 单增，阶梯 -->
+      <line x1="30" y1="150" x2="230" y2="150"/><line x1="30" y1="150" x2="30" y2="20"/>
+      <line x1="30" y1="150" x2="200" y2="20" stroke-dasharray="3 3"/>
+      <path d="M30 150 Q 110 55 210 42" stroke="var(--accent)" stroke-width="1.6"/>
+      <path d="M60 150 L60 118 L92 118 L92 96 L114 96 L114 82 L130 82" stroke="var(--red)" stroke-width="1.4"/>
+      <!-- 右图：f 单减，螺旋 -->
+      <line x1="300" y1="150" x2="500" y2="150"/><line x1="300" y1="150" x2="300" y2="20"/>
+      <line x1="300" y1="150" x2="470" y2="20" stroke-dasharray="3 3"/>
+      <path d="M300 40 Q 380 80 480 145" stroke="var(--accent)" stroke-width="1.6"/>
+      <path d="M330 150 L330 78 L378 78 L378 100 L356 100 L356 89 L367 89" stroke="var(--red)" stroke-width="1.4"/>
+    </g>
+    <g font-size="10" fill="currentColor" font-family="sans-serif">
+      <text x="52" y="165">f′ &gt; 0：单调爬楼梯 ⇒ 数列单调</text>
+      <text x="322" y="165">f′ &lt; 0：绕圈收敛 ⇒ 数列不单调</text>
+      <text x="205" y="32" fill="var(--accent)">y=f(x)</text><text x="196" y="16">y=x</text>
+      <text x="466" y="16">y=x</text><text x="470" y="140" fill="var(--accent)">y=f(x)</text>
+    </g>
+  </svg>
+  </div>
+  <div class="eg">
+    <div class="q"><span class="no">基2.12</span>设 $0\lt x_1\lt3$，$x_{n+1}=\sqrt{x_n(3-x_n)}$，证明 $\lim x_n$ 存在并求之。<span style="color:var(--muted)">（本章解答题标准范式，务必默写级掌握）</span></div>
+    <div class="s"><span class="lab">证</span><b>① 有界</b>：$0\lt x_1\lt3$ ⇒ $x_1,3-x_1$ 均正，由基本不等式 $x_2=\sqrt{x_1(3-x_1)}\le\frac{x_1+3-x_1}2=\frac32$；归纳可得 $n\gt1$ 时 $0\lt x_n\le\frac32$。<br>
+      <b>② 单调</b>（$n\gt1$）：$x_{n+1}-x_n=\sqrt{x_n}\big(\sqrt{3-x_n}-\sqrt{x_n}\big)=\sqrt{x_n}\cdot\dfrac{3-2x_n}{\sqrt{3-x_n}+\sqrt{x_n}}\ge0$（因 $x_n\le\frac32$），故单调增加。<br>
+      <b>③ 求值</b>：由准则知 $\lim x_n$ 存在，记为 $a$。两端取极限 $a=\sqrt{a(3-a)}$，得 $a=\frac32$ 或 $a=0$；因 $\{x_n\}$ 单调增且 $x_n\gt0$，故 $a\gt0$，舍 $0$。$\lim x_n=\boxed{\dfrac32}$。<span class="ans"> ✔ 已复算（$x_1=0.1/1/2.9$ 迭代均 →1.5）</span></div>
+  </div>
+  <div class="mine"><span class="tag">补讲 · 「分子有理化」是这类题的通用手术刀</span>
+    根式差 $\sqrt A-\sqrt B=\dfrac{A-B}{\sqrt A+\sqrt B}$：<b>把「差的符号」问题转成「$A-B$ 的符号」问题</b>，分母恒正不用管。上题、强2.3 都靠它一步定单调。
+  </div>
+  <div class="eg">
+    <div class="q"><span class="no">基2.14</span>(1) 证明 $x=2\ln(1+x)$ 在 $(0,+\infty)$ 内有唯一实根 $\xi$；(2) 任取 $x_1\gt\xi$，令 $x_{n+1}=2\ln(1+x_n)$，证明 $\lim x_n$ 存在并求值。</div>
+    <div class="s"><span class="lab">证</span>(1) $F(x)=x-2\ln(1+x)$，$F'(x)=\frac{x-1}{1+x}$，$x=1$ 为唯一驻点：$(0,1)$ 减、$(1,+\infty)$ 增；$F(0)=0$，$F(1)=1-2\ln2\lt0$，$F(+\infty)=+\infty$ ⇒ 在 $(1,+\infty)$ 上有唯一零点 $\xi$。<br>
+      (2) 用归纳证 $x_n\gt x_{n+1}\gt\xi$：由 $x_1\gt2\ln(1+x_1)=x_2$ 且 $x_2=2\ln(1+x_1)\gt2\ln(1+\xi)=\xi$ 起步，$\ln(1+x)$ 单调增保证递推成立。故 $\{x_n\}$ 单调减有下界 $\xi$，极限 $a$ 存在，且 $a=2\ln(1+a)$；由唯一性 $a=\boxed{\xi}$（数值 $\approx2.5129$）。<span class="ans"> ✔ 已复算（$x_1=5$ 迭代 →2.5128624；$\xi$ 数值解一致）</span></div>
+  </div>
+  <div class="trap"><span class="tag">陷阱 · 「先证存在再取极限」不能反，且方程的根要选对</span>
+    第 (2) 问里 $a=2\ln(1+a)$ 有两个根（$0$ 与 $\xi$），必须用 <b>$x_n\gt\xi$ 这个下界 + 戴帽法</b>得 $a\ge\xi\gt0$ 才能舍掉 $0$。<b>凡「解出两个根」的题，回头找题设里的界。</b>
+  </div>
+
+  <!-- ============ 强化五支 ============ -->
+  <h2 id="s4"><span class="idx">强化</span>五条分支 · 递推数列题型库<span class="layer L-str" style="margin-left:10px">强化专属</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/高等数学/02_数列极限/高数_第02章_强化18讲.pdf">📄 强化18讲</a>
+  <p>下面五节完全按强化18讲第 2 讲的五条分支排。<b>本章强化讲不讲计算，只讲「收敛性怎么判」</b>——13 道例题全在这里。</p>
+
+  <h3>4.1　分支一 · 见 $f(x_n,x_{n+1})$ 的<b>等式</b>关系（D₁ + D₂₃）</h3>
+  <div class="zy"><span class="tag">强化题型 A · $x_{n+1}=f(x_n)$ 且 $f$ 易求导 → 压缩映射原理</span>
+    <b>解题信号</b>：$f$ 易求导，且能求得 $|f'(x)|\le k\lt1$（<b>$k$ 必须是严格小于 1 的<u>常数</u></b>）。<br>
+    <b>原理一</b>：若存在常数 $k\in(0,1)$ 使 $|x_{n+1}-a|\le k|x_n-a|$，则 $\{x_n\}$ 收敛于 $a$。<br>
+    <span style="font-size:.88em">证：$0\le|x_{n+1}-a|\le k|x_n-a|\le\cdots\le k^n|x_1-a|$，而 $\lim k^n=0$，夹逼即得。</span><br>
+    <b>原理二</b>：若 $x_{n+1}=f(x_n)$，$f$ 可导，<b>$a$ 是 $f(x)=x$ 的唯一解</b>，且对任意 $x$ 有 $|f'(x)|\le k\lt1$，则 $\{x_n\}$ 收敛于 $a$。<br>
+    <span style="font-size:.88em">证：$|x_{n+1}-a|=|f(x_n)-f(a)|\overset{\text{拉氏}}{=}|f'(\xi)||x_n-a|\le k|x_n-a|$，回到原理一。</span><br>
+    <b>⚠️ 考场上要把上面这段证明写出来，不能只报「由压缩映射原理」。</b>
+  </div>
+  <div class="trap"><span class="tag">陷阱 · $k$ 不是常数，结论就塌了</span>
+    张宇原批注：$k$ 必须是常数。反例 $\lim\limits_{n\to\infty}\big(1-\frac1n\big)^n=\frac1{\mathrm e}\ne0$——每步的「压缩比」$1-\frac1n$ 虽都小于 1，但趋于 1，乘无穷多次并不趋于 0。
+  </div>
+  <div class="eg">
+    <div class="q"><span class="no">强2.1</span>$x_1=1$，$x_{n+1}=\sqrt{4+3x_n}$，证明 $\{x_n\}$ 收敛并求 $\lim x_n$。</div>
+    <div class="s"><span class="lab">解</span>令 $f(x)=\sqrt{4+3x}\ (x\gt0)$，$f(4)=4$，且 $|f'(x)|=\dfrac3{2\sqrt{4+3x}}\le\dfrac3{2\sqrt4}=\dfrac34\lt1$。于是
+      $$|x_{n+1}-4|=|f(x_n)-f(4)|=|f'(\xi)||x_n-4|\le\tfrac34|x_n-4|\le\cdots\le\big(\tfrac34\big)^n|x_1-4|\to0$$
+      故 $\{x_n\}$ 收敛，$\lim x_n=\boxed4$（也可由 $a=\sqrt{4+3a}$ 解得 $a=4$，舍 $a=-1$）。<span class="ans"> ✔ 已复算（迭代 →4.0000）</span></div>
+  </div>
+  <div class="eg">
+    <div class="q"><span class="no">强2.2</span>$x_1=\pi$，$x_{n+1}=\dfrac\pi2+\dfrac12\cos x_n$，证明 $\{x_n\}$ 收敛并求 $\lim x_n$。</div>
+    <div class="s"><span class="lab">解</span>$f(x)=\frac\pi2+\frac12\cos x$，$f(\frac\pi2)=\frac\pi2$，$|f'(x)|=\big|-\frac12\sin x\big|\le\frac12\lt1$。同上得 $\big|x_{n+1}-\frac\pi2\big|\le\big(\frac12\big)^n\big|x_1-\frac\pi2\big|\to0$，故 $\lim x_n=\boxed{\dfrac\pi2}$。<span class="ans"> ✔ 已复算（迭代 →1.5707963）</span></div>
+  </div>
+  <div class="zy"><span class="tag">强化题型 B · $f$ 不易求导或 $|f'|\le k\lt1$ 不成立 → 回到单调有界，四条路</span>
+    <b>① 直接比较 $x_{n+1}$ 与 $x_n$ 的大小</b>（恒等变形凑出对比）；<br>
+    <b>② 作差 $x_{n+1}-x_n$ 定正负</b>；<br>
+    <b>③ 作商 $\frac{x_{n+1}}{x_n}$ 与 1 比</b>（要求 $x_{n+1},x_n$ 同号）；<br>
+    <b>④ 根据题设提示（往往是第 (1) 问）判有界或单调</b>——<b>解答题第 (1) 问就是给第 (2) 问喂的子弹，先看它</b>。
+  </div>
+  <div class="eg">
+    <div class="q"><span class="no">强2.3</span>$0\lt x_n\lt1$，$x_{n+1}=1-\sqrt{1-x_n}$，求 (1) $\lim x_n$；(2) $\lim\dfrac{x_{n+1}}{x_n}$。</div>
+    <div class="s"><span class="lab">解</span><b>先看为什么不能压缩映射</b>：$f(x)=1-\sqrt{1-x}$，$f'(x)=\frac1{2\sqrt{1-x}}\gt\frac12$，在 $x\to1^-$ 时无界，<b>取不到常数 $k\lt1$</b>，故改走「直接比较」。<br>
+      (1) 分子有理化：$x_{n+1}=1-\sqrt{1-x_n}=\dfrac{x_n}{1+\sqrt{1-x_n}}\lt x_n$，且 $0\lt x_n\lt1$ 有下界，故收敛。设 $\lim x_n=a$，则 $a=1-\sqrt{1-a}$，解得 $a=0$ 或 $a=1$。<b>舍 $a=1$</b>：若 $a=1$，因 $\{x_n\}$ 单调减且 $\lim x_n=1$ 就得 $x_n\ge1$，与 $x_n\lt1$ 矛盾。故 $\lim x_n=\boxed0$。<br>
+      (2) 由上式 $\dfrac{x_{n+1}}{x_n}=\dfrac1{1+\sqrt{1-x_n}}\to\dfrac1{1+1}=\boxed{\dfrac12}$。<span class="ans"> ✔ 已复算（高精度迭代比值 →0.50014→0.5）</span></div>
+  </div>
+  <div class="eg">
+    <div class="q"><span class="no">强2.4</span>$x_1\gt1$，$x_{n+1}=\dfrac{x_n^2}{2(x_n-1)}$，证明 $\{x_n\}$ 收敛并求 $\lim x_n$。</div>
+    <div class="s"><span class="lab">解</span>（$f(x)=\frac{x^2}{2(x-1)}$ 不易求导，作差）恒等变形先定下界：
+      $$x_{n+1}=\frac12\Big(x_n-1+\frac1{x_n-1}\Big)+1\ge\frac12\cdot2+1=2$$
+      再作差：$x_{n+1}-x_n=\dfrac{x_n^2-2x_n(x_n-1)}{2(x_n-1)}=\dfrac{x_n(2-x_n)}{2(x_n-1)}\le0$（$n\ge2$ 时 $x_n\ge2$）。单调减 + 有下界 2 ⇒ 收敛。设极限 $A$：$A=\frac{A^2}{2(A-1)}$ ⇒ $A^2-2A=0$ ⇒ $A=2$（$A=0$ 与 $A\ge2$ 矛盾，舍）。$\lim x_n=\boxed2$。<span class="ans"> ✔ 已复算（$x_1=1.5$ 与 $x_1=5$ 迭代均 →2）</span></div>
+  </div>
+  <div class="eg">
+    <div class="q"><span class="no">强2.5</span>$0\lt x_1\lt2$，$x_{n+1}=\sqrt{x_n(2-x_n)}$，证明极限存在并求值。</div>
+    <div class="s"><span class="lab">解</span>（<b>作商法</b>）① 有界：$0\lt x_2=\sqrt{x_1(2-x_1)}\le\frac{x_1+2-x_1}2=1$，归纳得 $n\gt1$ 时 $0\lt x_n\le1$。<br>
+      ② 单调：$n\gt1$ 时 $\dfrac{x_{n+1}}{x_n}=\sqrt{\dfrac{x_n(2-x_n)}{x_n^2}}=\sqrt{\dfrac2{x_n}-1}\ge1$（因 $x_n\le1$），故单调增加。<br>
+      ③ 由准则极限 $a$ 存在，$a=\sqrt{a(2-a)}$ ⇒ $a=1$ 或 $0$（舍 $0$，因单调增且 $x_n\gt0$）。$\lim x_n=\boxed1$。<span class="ans"> ✔ 已复算（$x_1=0.05/0.3/1.9$ 迭代均 →1）</span></div>
+  </div>
+  <div class="mine"><span class="tag">补讲 · 强2.5 与 基2.12 是同一道题的双胞胎，一起记</span>
+    $\sqrt{x_n(2-x_n)}\to1$、$\sqrt{x_n(3-x_n)}\to\frac32$——<b>凡 $x_{n+1}=\sqrt{x_n(c-x_n)}$，上界一律由基本不等式给出 $\frac c2$，极限就是 $\frac c2$</b>。前者作商、后者作差，两种手法都练一遍最划算。
+  </div>
+  <div class="eg">
+    <div class="q"><span class="no">强2.6</span>(1) 证明对任意正整数 $n$ 有 $\dfrac1{n+1}\lt\ln\big(1+\dfrac1n\big)\lt\dfrac1n$；(2) 设 $a_n=1+\dfrac12+\cdots+\dfrac1n-\ln n$，证明 $\{a_n\}$ 收敛。</div>
+    <div class="s"><span class="lab">证</span>(1) 令 $f(x)=\ln x$，在 $[n,n+1]$ 上用拉格朗日中值定理：$\ln(1+\frac1n)=\ln(n+1)-\ln n=\frac1\xi$，其中 $n\lt\xi\lt n+1$，故 $\frac1{n+1}\lt\frac1\xi\lt\frac1n$。<br>
+      (2)【<b>这就是「题设提示」型：第 (1) 问是子弹</b>】<br>
+      <b>单调</b>：$a_{n+1}-a_n=\dfrac1{n+1}-\ln\big(1+\dfrac1n\big)\lt0$（用 (1) 左半），单调减少。<br>
+      <b>有下界</b>：用 (1) 右半 $\frac1k\gt\ln(1+\frac1k)$ 逐项放大，
+      $$a_n\gt\ln(1+1)+\ln\Big(1+\frac12\Big)+\cdots+\ln\Big(1+\frac1n\Big)-\ln n=\ln(1+n)-\ln n\gt0$$
+      （中间用了裂项 $\sum\ln\frac{k+1}k=\ln(n+1)$）。单调减 + 有下界 ⇒ $\{a_n\}$ 收敛。<span class="ans"> ✔ 已复算（$n=2\times10^6$ 数值 0.5772159，即欧拉常数 $\gamma$）</span></div>
+  </div>
+
+  <h3>4.2　分支二 · 见 $f(x_n,x_{n+1})$ 的<b>不等式</b>关系（D₁）</h3>
+  <div class="zy"><span class="tag">强化题型 C · 题设直接给一条不等式 → 比大小 + 定上下界</span>
+    动作：把题设不等式和<b>基本不等式</b>接上，一步比出 $x_n$ 与 $x_{n+1}$ 的大小。<b>注意：这类题常顺带考 $f(x)$ 的最值。</b>求极限时<b>戴帽法别忘了等号</b>（严格不等取极限后变非严格）。
+  </div>
+  <div class="eg">
+    <div class="q"><span class="no">强2.7</span>若 $(1-x_{n+1})x_n\gt\dfrac14$，$0\lt x_n\lt1$，证明 $\{x_n\}$ 收敛并求 $\lim x_n$。</div>
+    <div class="s"><span class="lab">解</span>由题设与基本不等式：$\dfrac12\lt\sqrt{(1-x_{n+1})x_n}\le\dfrac{(1-x_{n+1})+x_n}2$，故 $1\lt1-x_{n+1}+x_n$，即 $x_n\gt x_{n+1}$。单调减 + 有下界 0 ⇒ 收敛，设 $\lim x_n=a$。<br>
+      <b>戴帽</b>：$(1-a)a\ge\frac14$；又 $x\in[0,1]$ 时恒有 $x-x^2\le\frac14$，即 $(1-a)a\le\frac14$。两边夹得 $(1-a)a=\frac14$，$a=\boxed{\dfrac12}$。<span class="ans"> ✔ 已复算</span></div>
+  </div>
+  <div class="trap"><span class="tag">陷阱 · 戴帽后必须写「$\ge$」</span>
+    题设是严格的 $\gt\frac14$，取极限后<b>只能得 $\ge\frac14$</b>。若这里写成 $\gt$，再配上 $\le\frac14$ 就自相矛盾、无解——张宇在原书这句旁批的就是「戴帽法，不要忘记等号」。
+  </div>
+
+  <h3>4.3　分支三 · 初值 $x_1$ 对敛散性的影响（D₁）</h3>
+  <div class="zy"><span class="tag">强化题型 D · 初值只给了范围 → 分情况讨论</span>
+    信号：题目只说 $a_1\gt c$ 之类。做法：<b>先用 $f(x)$ 的最值把 $a_2$ 之后的项圈进一个固定区间</b>（求 $[f(x)]_{\min}$ 是好办法），再按 $a_1$ 落在区间的哪一段分类，每类都归纳出 $3\lt a_{n+1}\lt a_n$ 这样的结论。
+  </div>
+  <div class="eg">
+    <div class="q"><span class="no">强2.8</span>数列 $\{a_n\}$ 满足 $a_1\gt2$，$a_{n+1}=a_n-\dfrac{a_n-3}{a_n-2}$，则（　）(A) 收敛于大于 3 的数　(B) 收敛于 3　(C) 发散　(D) 敛散性与 $a_1$ 有关</div>
+    <div class="s"><span class="lab">解</span>令 $f(x)=x-\dfrac{x-3}{x-2}\ (x\gt2)$，$f'(x)=1-\dfrac1{(x-2)^2}=0$ 得 $x=3$；$f''(x)=\dfrac2{(x-2)^3}\gt0$，故 $x=3$ 是 $(2,+\infty)$ 上的<b>最小值点</b>，$[f(x)]_{\min}=f(3)=3$。于是<b>无论 $a_1$ 如何，$a_{n+1}=f(a_n)\ge3$</b>。<br>
+      · 若 $a_1\gt3$：$a_2=a_1-\frac{a_1-3}{a_1-2}\lt a_1$ 且 $a_2=f(a_1)\gt f(3)=3$，归纳得 $3\lt a_{n+1}\lt a_n$，收敛；<br>
+      · 若 $2\lt a_1\lt3$：$a_2=f(a_1)\gt3$，从 $a_2$ 起转入上一种情形，仍收敛；<br>
+      · 若 $a_1=3$：$a_n\equiv3$。<br>
+      设 $\lim a_n=A$，取极限得 $A=A-\frac{A-3}{A-2}$ ⇒ $A=3$。选 $\boxed{\text{B}}$。<span class="ans"> ✔ 已复算（$a_1=2.5$ 与 $a_1=10$ 迭代均 →3）</span></div>
+  </div>
+  <div class="mine"><span class="tag">补讲 · 「求 $f(x)$ 的最值」是找有界性的好办法</span>
+    张宇原批注：若 $a_{n+1}=f(a_n)$ 且 $f$ 可导，<b>那么求 $f(x)$ 在区间 $I$ 上的最值，便是找（或证）$\{a_n\}$ 有界的一个好方法</b>——一句话把「有界性」变成第 5 章的求最值题。另注意本题 $f(x)=x-2+\frac1{x-2}+1\ge3$（基本不等式，$x=3$ 取等），比求导更快。
+  </div>
+
+  <h3>4.4　分支四 · 双通项 $a_n,b_n$ 问题（D₁ + D₂₁ + D₂₃）</h3>
+  <div class="zy"><span class="tag">强化题型 E · 两个数列纠缠 → 消元变单通项</span>
+    <b>(1)</b> 把 $a_n,b_n$ 满足的式子<b>联立消去其一</b>，转化为单通项问题。细节处理常用：①恒等变形；②无穷小比阶；③常见放缩；④函数单调性。<br>
+    <b>(2)</b> 若问的是比值，令 $c_n=\dfrac{a_n}{b_n}$ 直接求 $\lim c_n$，细节用：①单调有界准则；②夹逼准则；③极限保号性。<br>
+    <b>观察什么就化归什么</b>：题目问 $b_n$ 与 $b_{n-1}^{\,a}$ 同阶，就一定要把式子变成<b>只含 $b_n$ 与 $b_{n-1}$ 的递推</b>。
+  </div>
+  <div class="eg">
+    <div class="q"><span class="no">基2.11</span>$0\lt a_n\lt\frac\pi2$，$0\lt b_n\lt\frac\pi2$，$\cos a_n-a_n=\cos b_n$，且 $\lim b_n=0$，求 $\lim a_n$ 与 $\lim\dfrac{a_n}{b_n^2}$。<span style="color:var(--muted)">（双通项的基础版：分清约束式 / 关系式 / 定义式）</span></div>
+    <div class="s"><span class="lab">解</span>由 $\cos a_n-\cos b_n=a_n\gt0$ 及 $\cos x$ 在 $(0,\frac\pi2)$ 上<b>单调减</b>，得 $0\lt a_n\lt b_n$；$b_n\to0$，夹逼得 $\lim a_n=\boxed0$。<br>
+      又 $1-\cos b_n=(1-\cos a_n)+a_n$，故
+      $$\lim\frac{a_n}{b_n^2}=\lim\frac{1-\cos b_n}{b_n^2}\cdot\frac{a_n}{1-\cos b_n}=\frac12\lim\frac{a_n}{(1-\cos a_n)+a_n}=\frac12\cdot\frac1{\lim\frac{1-\cos a_n}{a_n}+1}=\boxed{\frac12}$$
+      （末步用 $1-\cos a_n\sim\frac12a_n^2=o(a_n)$）。<span class="ans"> ✔ 已复算（$b=10^{-4}$ 时数值 0.49999999）</span></div>
+  </div>
+  <div class="eg">
+    <div class="q"><span class="no">强2.9</span>$a_n+b_n=\dfrac\pi2$，$a_{n+1}=a_n+\cos a_n$，$a_1=1$。当 $n\to\infty$ 时 $b_n$ 与 $b_{n-1}^{\,a}$ 为同阶无穷小，则 $a=$（　）(A)1　(B)2　(C)3　(D)5</div>
+    <div class="s"><span class="lab">解</span><b>消 $a_n$</b>（题目问的是 $b$，就把 $a$ 消掉）：$a_n=\frac\pi2-b_n$，代入递推
+      $$b_n=\frac\pi2-a_n=\frac\pi2-a_{n-1}-\cos a_{n-1}=b_{n-1}-\cos\Big(\frac\pi2-b_{n-1}\Big)=b_{n-1}-\sin b_{n-1}\quad(n\ge2)$$
+      由 $a_1=1$ 得 $b_1=\frac\pi2-1\in(0,1)$，而 $0\lt b_n=b_{n-1}-\sin b_{n-1}\lt b_{n-1}$（用 $\sin x\lt x$），归纳得 $\{b_n\}$ 单调减有下界 0，收敛。设 $\lim b_n=A$，两端取极限 $A=A-\sin A$ ⇒ $\sin A=0$ ⇒ $A=0$。<br>
+      于是 $b_n\to0$，用泰勒 $x-\sin x\sim\frac{x^3}6$ 得 $b_n=b_{n-1}-\sin b_{n-1}\sim\dfrac16b_{n-1}^3$，故 $a=3$，选 $\boxed{\text{C}}$。<span class="ans"> ✔ 已复算（迭代 $b_n/b_{n-1}^3\to0.166669\approx\frac16$）</span></div>
+  </div>
+  <div class="eg">
+    <div class="q"><span class="no">强2.10</span>正项数列 $\{a_n\}$ 收敛于 0，$a_{n+1}=\cos b_n-\cos a_n$，$a_n,b_n\in(0,\frac\pi2)$，且 $(1-b_n)^n=\cos b_n$，则 $\lim b_n^{\frac{\ln\cos b_n}{n}}=$________</div>
+    <div class="s"><span class="lab">解</span>① <b>先定 $b_n\to0$</b>：$\cos b_n-\cos a_n=a_{n+1}\gt0$，而 $\cos x$ 在 $(0,\frac\pi2)$ 单调减，故 $0\lt b_n\lt a_n$；$a_n\to0$ 夹逼得 $\lim b_n=0$。<br>
+      ② <b>用约束式换掉指数</b>：$(1-b_n)^n=\cos b_n$ 两边取对数得 $\dfrac{\ln\cos b_n}{n}=\ln(1-b_n)$。于是
+      $$\lim b_n^{\frac{\ln\cos b_n}{n}}=\lim \mathrm e^{\ln(1-b_n)\cdot\ln b_n}=\mathrm e^{\lim(-b_n)\ln b_n}=\mathrm e^0=\boxed1$$
+      （$\ln(1-b_n)\sim-b_n$，而 $\lim\limits_{x\to0^+}x\ln x=0$）。<span class="ans"> ✔ 已复算</span></div>
+  </div>
+
+  <h3>4.5　分支五 · 复合函数的极限（D₁ + D₂₁）</h3>
+  <div class="key"><span class="tag">必记 · 定理一（因变量极限定理）及其致命第 ③ 条</span>
+    设 $y=f[g(x)]$，$u=g(x)$，$y=f(u)$。若 ① $\lim\limits_{x\to x_0}g(x)=u_0$；② $\lim\limits_{u\to u_0}f(u)=a$；<b>③ 当 $x\ne x_0$ 时 $g(x)\ne u_0$</b>，则 $\lim\limits_{x\to x_0}f[g(x)]=a$。<br>
+    <b>③ 是所有反例的来源</b>：$g$ 在 $x_0$ 的去心邻域里又碰到了 $u_0$，就把 $f$ 在 $u_0$ 的「洞」暴露出来了。<b>但若 $f(u)$ 在 $u_0$ 处<u>连续</u>，则不需要 ③</b>（没有洞）。
+  </div>
+  <div class="eg">
+    <div class="q"><span class="no">强2.11</span>$u=g(x)=\begin{cases}x,&x\ \text{有理}\\0,&x\ \text{无理}\end{cases}$，$y=f(u)=\begin{cases}1,&u\ne0\\0,&u=0\end{cases}$，则 $\lim\limits_{x\to0}f[g(x)]$（　）(A) 等于 0　(B) 等于 1　(C) 等于 $x$　(D) 不存在</div>
+    <div class="s"><span class="lab">解</span>题设满足 $\lim\limits_{x\to0}g(x)=0$、$\lim\limits_{u\to0}f(u)=1$，但<b>条件③不成立</b>（$x$ 取非零无理数时 $g(x)=0=u_0$）。直接算复合：
+      $$f[g(x)]=\begin{cases}1,&x\ \text{有理且}\ x\ne0\\0,&x\ \text{无理或}\ x=0\end{cases}$$
+      有理点列给 1、无理点列给 0，由海涅定理知极限<b>不存在</b>，选 $\boxed{\text{D}}$。<span class="ans"> ✔ 已复算</span></div>
+  </div>
+  <div class="key"><span class="tag">必记 · 定理二（中间变量极限定理）</span>
+    设 $u_n\in$ <b>有限区间</b> $I$（即 $\{u_n\}$ 有界），若 $f(x)$ 在 $I$ 上<b>严格单调</b>，且 $\lim\limits_{n\to\infty}f(u_n)$ 存在，则 $\lim\limits_{n\to\infty}u_n$ 存在。<br>
+    <b>一句话：外层函数单调，就能把极限「剥」回里层；外层不单调，剥不回去。</b>
+  </div>
+  <div class="eg">
+    <div class="q"><span class="no">强2.12</span>数列 $\{x_n\}$ 满足 $-\frac\pi2\le x_n\le\frac\pi2$，则（　）<br>(A) 若 $\lim\cos\sin x_n$ 存在，则 $\lim x_n$ 存在　(B) 若 $\lim\sin\cos x_n$ 存在，则 $\lim x_n$ 存在<br>(C) 若 $\lim\cos\sin x_n$ 存在，则 $\lim\sin x_n$ 存在，但 $\lim x_n$ 不一定存在　(D) 若 $\lim\sin\cos x_n$ 存在，则 $\lim\cos x_n$ 存在，但 $\lim x_n$ 不一定存在</div>
+    <div class="s"><span class="lab">解</span>关键看<b>外层函数在相应区间上是否严格单调</b>：<br>
+      · $\sin x$ 在 $[-\frac\pi2,\frac\pi2]$ 上<b>单调</b> ⇒ 由 $\lim\sin(\cos x_n)$ 存在可剥出 $\lim\cos x_n$ 存在；但 $\cos x$ 在 $[-\frac\pi2,\frac\pi2]$ 上<b>不单调</b>（偶函数），再剥不动，$\lim x_n$ 不一定存在（如 $x_n=(-1)^n\frac\pi3$）。⇒ (D) 对、(B) 错。<br>
+      · $\cos x$ 不单调 ⇒ 由 $\lim\cos(\sin x_n)$ 存在<b>推不出</b> $\lim\sin x_n$ 存在 ⇒ (A)(C) 均错。选 $\boxed{\text{D}}$。<span class="ans"> ✔ 已复算</span></div>
+  </div>
+  <div class="eg">
+    <div class="q"><span class="no">强2.13</span>设<b>正项</b>数列 $\{a_n\}$ <b>单调增加</b>，则以下选项中使得 $\{a_n\}$ 收敛的是（　）<br>(A) $\big\{(1+a_n)^{1/a_n}\big\}$ 收敛于 1　(B) $\big\{(1+\frac1{a_n})^{a_n}\big\}$ 收敛于 $\mathrm e$　(C) $\{a_n\ln a_n\}$ 收敛于 0　(D) $\big\{\frac{\ln a_n}{a_n}\big\}$ 收敛于 0</div>
+    <div class="s"><span class="lab">解</span>大前提：正项单调增 ⇒ 要么 $a_n\to+\infty$，要么 $a_n\to a$（收敛）。逐项<b>看函数图像反推 $a_n$ 的去向</b>：<br>
+      (A) $(1+x)^{1/x}$ 在 $x\gt0$ 上从 $\mathrm e$ 递减趋于 1 ⇒ 值趋于 1 只能 $a_n\to+\infty$，<b>发散</b>；<br>
+      (B) $(1+\frac1x)^x$ 递增趋于 $\mathrm e$ ⇒ 同理 $a_n\to+\infty$，<b>发散</b>；<br>
+      (C) $x\ln x$ 在 $(0,1)$ 为负、$x=1$ 处为 0、$x\gt1$ 递增趋于 $+\infty$ ⇒ $a_n\ln a_n\to0$ 只能 $a_n\to0^+$ 或 $a_n\to1$；而正项<b>单调增</b>不可能趋于 $0^+$，故 $a_n\to1^-$，<b>收敛</b>；<br>
+      (D) $\frac{\ln x}{x}\to0$ 有两处：$x\to1$ 与 $x\to+\infty$ ⇒ <b>可能收敛也可能发散</b>。<br>
+      选 $\boxed{\text{C}}$。<span class="ans"> ✔ 已复算</span></div>
+  </div>
+  <div class="mine"><span class="tag">补讲 · 这题是张宇新命制的，区分度高，套路要抽出来</span>
+    <b>「已知复合式的极限，反推内层数列的去向」= 画外层函数图像 + 数水平线交点</b>。极限值对应的水平线与图像有几个交点，内层就有几种可能；再用题设（正项、单调增）去掉不可能的那些。<b>唯一剩一种 ⇒ 收敛；剩两种及以上 ⇒ 不确定。</b>
+  </div>
+
+  <!-- ============ 出口 ============ -->
+  <div class="outro">
+    <h3>📌 读完去做题（本章六件套 · 本地 PDF）</h3>
+    <div class="dolinks">
+      <div class="t">张宇分册 · 第 2 讲</div>
+      <a href="../../张宇系列_分章易识别版/高等数学/02_数列极限/高数_第02章_基础30讲.pdf">基础 30 讲</a>
+      <a href="../../张宇系列_分章易识别版/高等数学/02_数列极限/高数_第02章_强化18讲.pdf">强化 18 讲</a>
+      <a href="../../张宇系列_分章易识别版/高等数学/02_数列极限/高数_第02章_1000题_基础_题目.pdf">1000题·基础篇</a>
+      <a href="../../张宇系列_分章易识别版/高等数学/02_数列极限/高数_第02章_1000题_强化_题目.pdf">1000题·强化篇</a>
+      <div class="note">链接指向本地大 PDF（不推 GitHub，线上 Pages 打不开正常）。做错 → 回复盘中心报「1000题·第2章·错第X题·卡哪」生成四层错题页。</div>
+    </div>
+    <p><b>自测清单（合上页面能不能答出来）</b>：① 数列极限与函数极限在<b>有界性、保号性</b>上各差在哪？② 为什么数列不能直接洛必达，怎么补救？③ 单调有界解答题的<b>三段式</b>顺序？④ $f'(x)\lt0$ 时 $\{x_n\}$ 单调吗，该转什么方法？⑤ 「$|x_n-a|\le\frac1n$」和「$|x_n-a|\le\frac1{2^k}$」哪个是充要条件，为什么？⑥ $\lim\sqrt[n]{a_1^n+\cdots+a_m^n}=?$</p>
+    <p><b>真题锚点</b>：本章在统考里的落点是<b>「证明数列极限存在并求值」的解答题</b>（单调有界三段式）与<b>数列极限概念辨析的选择题</b>（子列、保号性、收敛速度）。等你做真题 / 1000 题遇到卡壳，报给我 → 盲做 + 逐字核对后写成错题页，并把该题回填到上面对应的强化题型旁（不提前泄题）。</p>
+    <p><b>配套速查</b>：<a href="../卡库_极限与无穷小工具箱.html">卡库·极限工具箱</a> · <a href="../公式大全_速查与秒杀.html">公式大全</a> · <a href="../直觉馆_图像与数感.html">直觉馆</a>（$x\ln x$、$\frac{\ln x}x$、$(1+\frac1x)^x$ 三张图正好是强2.13 要用的）。<b>上一章</b>：<a href="第01章_函数极限与连续.html">第 1 章 函数极限与连续</a>。<b>下一章</b>：第 3 章 一元函数微分学的概念。</p>
+  </div>
+
+  <footer>由 Claude 维护 · 融合张宇《基础30讲》+《强化18讲》第 2 讲 · 概念正文为标准高数理论 · 例题题面照原书、答案经独立复算（递推数列另做数值迭代对拍）· 具体真题另经盲做后入错题页</footer>
+</div>
+</body>
+</html>

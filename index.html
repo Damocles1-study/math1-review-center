@@ -75,9 +75,16 @@
 <div class="wrap">
   <header>
     <h1>数学一复盘中心</h1>
-    <div class="sub">双轴复盘:轴1 错题页(做完一套生成一页) · 轴2 公式与套路卡库(按专题,随时翻) · 2025/2026 两套留白做冲刺模拟</div>
+    <div class="sub">三轴复盘:轴3 每章精讲(基础+强化合一,先读) · 轴2 公式与套路卡库(按专题,随时翻) · 轴1 错题页(做完一套生成一页) · 2025/2026 两套留白做冲刺模拟</div>
     <div class="stats" id="stats"></div>
   </header>
+
+  <section class="card">
+    <h2>轴3 · 每章精讲(基础+强化合一,先读这个)</h2>
+    <p class="demo" style="margin:0 0 12px">把张宇每讲的知识结构重排成「<b>考点主干 + 补讲/必记/陷阱三色批注 + KaTeX 公式 + 跳去做 1000 题</b>」。读一章 ≈ 把该讲的<b>基础30讲 + 强化18讲</b>框架过一遍;正文是标准高数理论,可直接当学习主线,再配卡库速查、错题页复盘。</p>
+    <div class="decks" id="jing"></div>
+    <p class="demo" style="margin-top:10px">📚 精讲取材于 <a href="../张宇系列_分章易识别版/">张宇系列 · 分章易识别版</a>(高数 18 章 + 线代 6 章,每章六件套)。已完成<b>高数第 1、2 章</b>(极限两章合成一个完整单元:第 1 章管"会算"、第 2 章管"会证存在"),其余章节按同一模板陆续长出。</p>
+  </section>
 
   <section class="card">
     <h2>轴2 · 公式与套路卡库(按专题)</h2>
@@ -111,7 +118,7 @@
     <h2>轴1 · 错题页(真题 + 刷题,同一套四层结构)</h2>
     <p class="demo" style="margin:0 0 10px">📝 <b>刷题错题页(学习期主力)</b>:1000 题/王道/讲义例题的错题同样值得四层复盘,而且比真题更便宜——学习期错题暴露的是概念漏洞。做完一章报「书名+章节+错题号+卡在哪」,生成一页,列表如下:</p>
     <div class="decks" id="topicPages" style="margin-bottom:16px"></div>
-    <p class="demo" style="margin:0 0 10px"><b>真题错题页进度(2010–2026)</b>:</p>
+    <p class="demo" style="margin:0 0 10px"><b>真题错题页进度(2010–2026)</b>　·　题面取自 <a href="../真题复盘中心易识别版/索引.html">真题复盘中心 · 易识别版</a>(图像保真 PDF,做题只认它):</p>
     <div class="gridwrap"><table id="grid"></table></div>
     <p class="demo">🧪 样板间:<a href="DEMO_错题页样板.html">DEMO · 四层展开错题页</a>(经典题演示,非真题年份,展示错题页全部功能)</p>
   </section>
@@ -140,6 +147,13 @@ const PAGES = {
 const TOPIC_PAGES = [
   /* {name:"1000题·极限 第一章", file:"刷题错题_1000题_极限.html", desc:"错7题·主因:等价替换边界"} */
 ];
+/* 每章精讲:每写完一章,把 on 改 true 并填 file */
+const JINGJIANG = [
+  {name:"高数第1章 · 函数极限与连续", file:"精读版/第01章_函数极限与连续.html", desc:"基础+强化融合 · 张宇三向解题法主干 · 7 大强化题型(局部判定/变上限积分/带头大哥/∞-∞中值…)+9 道例题已复算 · 间断点分类", on:true},
+  {name:"高数第2章 · 数列极限", file:"精读版/第02章_数列极限.html", desc:"基础+强化融合 · 一个目标O+五条分支 · 海涅/夹逼放缩/单调有界三大工具 · 递推数列题型库(压缩映射/作差作商/初值讨论/双通项/复合极限)+19 道例题已复算", on:true},
+  {name:"高数第3–7章 · 一元微分学", file:"", desc:"概念/计算/几何应用 · 中值定理家族 · 物理应用", on:false},
+  {name:"线代 · 行列式 → 二次型", file:"", desc:"跟 9 讲全程 · 秩/方程组/特征值主线 · 二级结论", on:false}
+];
 /* 卡库:每建一个专题 deck,在这里加一行 */
 const DECKS = [
   {name:"中值定理家族 + 级数判别法", file:"卡库_中值定理与级数判别.html", desc:"微分/积分中值定理条件结论对比 · 正项/交错级数判别决策 · 触发器卡", on:true},
@@ -149,6 +163,15 @@ const DECKS = [
   {name:"线代:秩·方程组·特征值", file:"卡库_线代秩方程组特征值.html", desc:"秩的不等式家族 · 相似对角化条件链 · 正定判定 · 三关系对照", on:true},
   {name:"概率:分布·数字特征·两大定理", file:"卡库_概率分布与两大定理.html", desc:"分布速查表 · 分布函数法/最值分布 · 大数定律与中心极限 · 估计流程", on:true}
 ];
+
+const jingEl=document.getElementById('jing');
+let jingOn=0;
+JINGJIANG.forEach(j=>{
+  if(j.on){jingOn++;jingEl.insertAdjacentHTML('beforeend',
+    `<a class="deck" href="${j.file}"><h3>${j.name}<span class="st st-on">已上线</span></h3><p>${j.desc}</p></a>`)}
+  else{jingEl.insertAdjacentHTML('beforeend',
+    `<div class="deck off"><h3>${j.name}<span class="st st-off">待建</span></h3><p>${j.desc}</p></div>`)}
+});
 
 const decksEl=document.getElementById('decks');
 let deckOn=0;
@@ -190,6 +213,7 @@ YEARS.forEach(y=>{
 });
 grid.innerHTML=html;
 document.getElementById('stats').innerHTML=
+  '<div class="stat"><div class="v">'+jingOn+'</div><div class="k">每章精讲已上线</div></div>'+
   '<div class="stat"><div class="v">'+(done+TOPIC_PAGES.length)+'</div><div class="k">错题页已生成(真题+刷题)</div></div>'+
   '<div class="stat"><div class="v">15</div><div class="k">可复盘年份(10–24)</div></div>'+
   '<div class="stat"><div class="v">'+deckOn+'/'+DECKS.length+'</div><div class="k">卡库专题上线</div></div>';
