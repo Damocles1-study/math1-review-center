@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>精读版 · 高数 第3章 一元函数微分学的概念</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],ignoredClasses:['nokatex']})"></script>
+<link rel="stylesheet" href="style.css">
+<style>
+/* ===== 本章专属：微观放大镜 + 左右导数对拍台 ===== */
+.tool{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:20px 0}
+.tool h4{margin:0 0 4px;font-size:1rem;color:var(--accent)}
+.tool .hint{color:var(--muted);font-size:.82rem;margin-bottom:12px;line-height:1.7}
+.ctl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0}
+.ctl button{font:inherit;font-size:.82rem;padding:4px 13px;border-radius:8px;cursor:pointer;
+  border:1px solid var(--line);background:var(--card);color:var(--muted)}
+.ctl button.on{background:var(--accent-soft);color:var(--accent);border-color:var(--accent);font-weight:700}
+.ctl button:hover{filter:brightness(.96)}
+.ctl select{font:inherit;font-size:.82rem;padding:4px 8px;border-radius:8px;max-width:100%;
+  border:1px solid var(--line);background:var(--card);color:var(--ink)}
+.ctl label{font-size:.8rem;color:var(--muted)}
+.ctl input[type=range]{flex:1 1 160px;min-width:130px;accent-color:var(--accent)}
+.ctl .val{font-family:var(--mono);font-size:.78rem;color:var(--accent);min-width:6.5em}
+.scene{background:var(--bg);border:1px solid var(--line);border-radius:10px;margin:10px 0}
+.scene svg{display:block;width:100%;height:auto}
+.say{background:var(--accent-soft);border-radius:8px;padding:9px 13px;margin:10px 0;
+  font-size:.86rem;color:var(--accent);line-height:1.75;min-height:2em}
+.say b{color:var(--accent)}
+.verdict{font-size:.9rem;font-weight:700;border-radius:8px;padding:7px 13px;margin:10px 0;display:block}
+.v-ok{background:var(--green-soft);color:var(--green)}
+.v-no{background:var(--red-soft);color:var(--red)}
+.v-inf{background:var(--amber-soft);color:var(--amber)}
+.dq{width:100%;min-width:0;font-size:.8rem;margin:6px 0}
+.dq th,.dq td{padding:4px 8px;font-family:var(--mono);text-align:right;white-space:nowrap}
+.dq th:first-child,.dq td:first-child{text-align:left}
+.dq td.diff{color:var(--red);font-weight:700}
+.dq td.same{color:var(--green)}
+.legend2{font-size:.78rem;color:var(--muted);line-height:1.7;margin-top:6px}
+.chip{display:inline-block;font-size:.72rem;border-radius:5px;padding:1px 7px;margin-right:6px}
+.c-b{background:var(--accent-soft);color:var(--accent)}
+.c-g{background:var(--green-soft);color:var(--green)}
+.c-r{background:var(--red-soft);color:var(--red)}
+.c-a{background:var(--amber-soft);color:var(--amber)}
+@media (max-width:560px){ .ctl{gap:6px} .dq{font-size:.72rem} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../index.html">← 返回 数学一复盘中心</a>
+  <header>
+    <h1>精读版 · 高数第 3 章　一元函数微分学的概念</h1>
+    <div class="sub">融合张宇《基础30讲·高数分册》第 3 讲 + 《高数18讲》第 3 讲 · 以《18讲》的<b>三向解题法五支线</b>为骨架 · <span class="layer L-base">基础</span> 打地基、<span class="layer L-str">强化</span> 上题型 · <b>基础 11 例 + 3 注例 + 1 一题一练 + 9 习题 + 强化 8 例，共 32 道，答案全部用 sympy 符号复算 / 数值对拍，零分歧</b> · 本章交付两个交互模块：<b>微观放大镜</b>（把张宇的「无牵无挂 / 相依相偎 / 靠得更近」做成可缩放的点阵）与 <b>左右导数对拍台</b>（10 个经典函数现场算左右差商）。</div>
+  </header>
+
+  <div class="legend">
+    <b>这一页的三层结构：</b>
+    <span class="layer L-base">基础</span>= 概念与必记（基础30讲的地基，标准微分学理论，放心记）；
+    <span class="layer L-str">强化</span>= 《高数18讲》的<b>专属题型与套路</b>（基础讲没有、真题真考的）。批注色块：
+    <span class="swatch" style="background:var(--blue)"></span><b style="color:var(--blue)">补讲</b>、
+    <span class="swatch" style="background:var(--amber)"></span><b style="color:var(--amber)">必记</b>、
+    <span class="swatch" style="background:var(--red)"></span><b style="color:var(--red)">陷阱</b>、
+    <span class="swatch" style="background:var(--green)"></span><b style="color:var(--green)">强化题型</b>。<br>
+    紫色 <b>例题</b> 卡里，<b>基</b>3.x = 基础30讲例题、<b>强</b>3.x = 高数18讲例题（两本各自编号，别混）。<b>每题都标 ✔</b> = 答案已被我用程序独立算过一遍，不是照抄扫描件。
+  </div>
+
+  <nav class="toc">
+    <a href="#s0">定位 · 五支线地图</a>
+    <a href="#s1">导数定义 · 增量式↔函数式</a>
+    <a href="#s2">可导的充要 / 必要条件</a>
+    <a href="#s3">🔬 微观放大镜</a>
+    <a href="#s4">微分 = 一阶泰勒公式</a>
+    <a href="#s5">几何意义 · 角点与无穷导数</a>
+    <a href="#s6">高阶导数 · 奇偶周期互换</a>
+    <a href="#s7">$f$ 与 $|f|$ 的关系总结</a>
+    <a href="#s8">🛠 左右导数对拍台</a>
+    <a href="#s9">导函数 $f'(x)$ 的性质</a>
+    <a href="#s10">一点求导的三大坑</a>
+    <a href="#s11">综合题 · 抽象函数与变限积分</a>
+    <a href="#s12">习题答案速查</a>
+  </nav>
+
+  <!-- ================= s0 定位 ================= -->
+  <h2 id="s0"><span class="idx">定位</span>这一章到底在学什么 · 五支线地图</h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/高等数学/03_一元函数微分学的概念/高数_第03章_基础30讲.pdf">📄 基础30讲</a>
+
+  <div class="mine"><span class="tag">补讲 · 一句话定位</span>
+    第 1、2 章的极限是<b>研究函数的变化趋势</b>（它往哪儿去），这一章的导数是<b>研究变化的快慢趋势</b>（它跑得多快）。张宇开篇用「王子/公主赶高铁」引入：零时刻家门口打车出发（$I_1$ 段不断催师傅加速）→ 到站后发现文件落家（$I_2$ 段人在站里没动）→ 放弃车次打车<b>匀速</b>回家（$I_3$ 段）。三段的差商极限分别是
+    $$\text{①}\ \lim_{\Delta t\to0}\frac{f(t+\Delta t)-f(t)}{\Delta t}=a\ (\text{存在}),\quad
+      \text{②}\ \lim\frac{0}{\Delta t}=0,\quad \text{③}=\text{定值}$$
+    注意 $a$ 是<b>瞬时</b>变化率而不是平均变化率；只有线性函数（$I_3$）的变化率才处处不变。<br>
+    <em>极限是研究函数变化趋势的，导数是研究变化快慢趋势的。</em>
+  </div>
+
+  <div class="key"><span class="tag">必记 · 本章的考试面貌（基础30讲章首卡片）</span>
+    <div class="gridwrap"><table>
+      <tr><th>项</th><th>内容</th></tr>
+      <tr><td>题型</td><td><b>选择题、填空题</b>（本章几乎不出大题，但它是后面所有大题的地基）</td></tr>
+      <tr><td>目标</td><td>①理解导数与微分的概念；②理解导数与微分的关系；③理解导数的几何意义</td></tr>
+      <tr><td>重难点</td><td>①高阶导数的计算；②导数几何意义的应用；③<b>可导充要条件的应用</b></td></tr>
+    </table></div>
+    知识结构四支：<b>导数 → 导数的几何意义 → 高阶导数 → 微分的概念</b>。最后一支旁边张宇批了一句要刻死的话：<b>一元函数 可导 ⇄ 可微（充要条件）</b>——注意这是<b>一元</b>专属特权，多元函数（第 13 章）里可微是比可导强得多的条件，那时这条会反过来坑你。
+  </div>
+
+  <div class="zy"><span class="tag">强化题型 · 《高数18讲》三向解题法：一个目标 O，五条支线</span>
+    <b>O（盯住目标）= 研究一元函数微分学的概念</b>，往下劈成五支，这五支就是本页 §一~§十 的骨架：
+    <div class="gridwrap"><table>
+      <tr><th>#</th><th>支线</th><th>张宇编码</th><th>本页位置</th></tr>
+      <tr><td>1</td><td><b>微分</b>——一阶泰勒公式</td><td>D₁ 常规操作 + <b>D₂ 脱胎换骨</b></td><td><a href="#s4">§四</a></td></tr>
+      <tr><td>2</td><td><b>导数</b>——因变量差与自变量差的比值极限</td><td>D₁ + <b>D₂₂ 转换等价表述</b></td><td><a href="#s1">§一</a><a href="#s2">§二</a></td></tr>
+      <tr><td>3</td><td>$f(x)$ 与 $|f(x)|$ <b>连续、可导的关系总结</b></td><td>D₁ + D₂₁ 观察研究对象 + <b>D₄₃ 数形结合</b></td><td><a href="#s3">§三</a><a href="#s7">§七</a></td></tr>
+      <tr><td>4</td><td><b>导函数 $f'(x)$ 的性质</b>总结</td><td>D₁ + D₂₁ 观察研究对象</td><td><a href="#s9">§九</a></td></tr>
+      <tr><td>5</td><td>函数<b>在一点求导</b>的问题</td><td>D₁ + <b>D₂₂ 转换等价表述</b></td><td><a href="#s10">§十</a></td></tr>
+    </table></div>
+    张宇给支线 3、4 贴的标签是「<b>隐含条件体系块</b>」，给支线 5 贴的是「<b>形式化归体系块</b>」——意思是：本章的题目八成不是让你算导数，而是<b>从题干的一句话里挖出隐含条件</b>（比如"$\lim\frac{|f(x)|}{x}$ 存在"能挖出 $f(0)=0$ 且 $f'(0)=0$），或者<b>把陌生形式化归成导数定义</b>。
+  </div>
+
+  <div class="dolinks">
+    <div class="t">本章体量（高数里偏小的一章，但地位极高）</div>
+    基础30讲第 3 讲 <b>p.99–118（20 页）</b> · 高数18讲第 3 讲 <b>p.23–33（11 页）</b>，共 <b>31 页</b>。
+    例题：基础 11 例 + 3 道注例 + 1 道一题一练 + 9 道习题 + 强化 8 例 = <b>32 道，本页全收</b>。
+    <div class="note">对比：第 2 章数列极限 19 例，线代第 2 章 64 例。本章题少，是因为它<b>不靠题量取胜，靠概念抠得细</b>。</div>
+  </div>
+
+  <!-- ================= s1 导数定义 ================= -->
+  <h2 id="s1"><span class="idx">一</span>导数的定义 · 增量式 ⇄ 函数式<span class="layer L-base">基础</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/高等数学/03_一元函数微分学的概念/高数_第03章_基础30讲.pdf">📄 基础30讲</a>
+
+  <p>设 $y=f(x)$ 定义在区间 $I$ 上，在 $x=x_0$ 处给自变量一个增量 $\Delta x$（<b>可正可负</b>，所以天然分 $\Delta x\to0^+$ 与 $\Delta x\to0^-$ 两侧），其中 $x_0\in I,\ x_0+\Delta x\in I$，函数增量 $\Delta y=f(x_0+\Delta x)-f(x_0)$。若下式的极限存在，则称 $f$ 在 $x_0$ 处<b>可导</b>，该极限称为 $f$ 在 $x_0$ 处的<b>导数</b>：</p>
+
+  <div class="fml">$$f'(x_0)=\lim_{\Delta x\to0}\frac{\Delta y}{\Delta x}=\lim_{\Delta x\to0}\frac{f(x_0+\Delta x)-f(x_0)}{\Delta x}\tag{$*$}$$</div>
+
+  <p>记号 $\dfrac{\mathrm dy}{\mathrm dx}\Big|_{x=x_0},\ \dfrac{\mathrm d[f(x)]}{\mathrm dx}\Big|_{x=x_0},\ y'(x_0),\ y'|_{x=x_0}$ 与 $f'(x_0)$ 完全等价。「导数」一词一般认为最先由<b>拉格朗日</b>使用（$f'(x_0)$ 这一支），<b>莱布尼茨</b>则偏爱 $\dfrac{\mathrm dy}{\mathrm dx}$（$\frac{微分}{微分}$ 的形式，也叫<b>微商</b>）——考研只用这两套写法。</p>
+
+  <div class="mine"><span class="tag">补讲 · 张宇的页脚长批注：莱布尼茨记号的普适意义</span>
+    符号 $\mathrm d$ 具有普适意义：要求 <b>$A$ 对 $B$ 的变化率</b>，就把 $A,B$ 填进 $\dfrac{\mathrm d\square}{\mathrm d\square}$ 得 $\dfrac{\mathrm dA}{\mathrm dB}$。它可以表示几乎所有变化率问题，而不仅仅是位移 $s$ 对时间 $t$ 的 $\dfrac{\mathrm ds}{\mathrm dt}=v$。<br>
+    比如 $\dfrac{\mathrm d(兴趣)}{\mathrm d(时间)}$ 往往小于零，你同意吗？再比如 $\dfrac{\mathrm d(利润)}{\mathrm d(价格)}$：若 $\gt0$，说明涨价可以增加利润，此时定价低了；若 $\lt0$，说明降价可以增加利润，此时定价高了；<b>当 $\dfrac{\mathrm d(利润)}{\mathrm d(价格)}=0$ 时利润最大，这就是导数为零时的价格，标在商品标签上的那个数字。</b><br>
+    懂了这些道理后，请回答：当 $\dfrac{\mathrm d(成绩)}{\mathrm d(努力)}\gt0$ 时，说明什么？
+  </div>
+
+  <h3>1.1　两个必须互认的写法：增量式与函数式</h3>
+
+  <div class="key"><span class="tag">必记 · 「狗」记法：命题人一定会把 $\Delta x$ 广义化</span>
+    <b>增量式（可套任何东西）</b>
+    $$f'(x_0)=\lim_{\Delta x\to0}\frac{f(x_0+\Delta x)-f(x_0)}{\Delta x}\ \xrightarrow{\ \text{广义化}\ }\ \lim_{\text{狗}\to0}\frac{f(x_0+\text{狗})-f(x_0)}{\text{狗}}\tag{$**$}$$
+    考题里的「狗」可能是 $-\Delta x$、$2\Delta x$、$(\Delta x)^2$、$\sin\Delta x$、$\frac1n$……<b>只要上下两处的「狗」是同一只，就是导数</b>。<br><br>
+    <b>函数式</b>（在 $(*)$ 中令 $x_0+\Delta x=x$）
+    $$f'(x_0)=\lim_{x\to x_0}\frac{f(x)-f(x_0)}{x-x_0}\tag{$***$}$$
+    $(**)\Leftrightarrow(***)$，考生会在各种场合见到这两种等价写法，<b>必须一眼互认</b>。
+  </div>
+
+  <div class="zy"><span class="tag">强化题型 · 张宇《18讲》对这条支线的加码：$f'(x_0)$ 是「一次项的系数」</span>
+    由 $(*)$ 知 $f(x_0+\Delta x)-f(x_0)=f'(x_0)\Delta x+o(\Delta x)$，所以 $f'(x_0)$ 就是<b>一次项的系数</b>，也称<b>微分系数</b>。这句话把 §一（导数）和 <a href="#s4">§四（微分＝一阶泰勒）</a> 焊在了一起——<b>导数是"比值极限"的视角，微分是"多项式系数"的视角，同一件事的两面。</b>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 3.2 ✔</span>（★★★ 分母的阶数决定成败）设 $f(x)$ 在 $(-1,1)$ 内有定义，且在 $x=0$ 处<b>连续</b>，则下列命题中：<br>
+      ① 当 $\lim\limits_{x\to0}\dfrac{f(x)}{\sqrt[3]{x}}=0$ 时，$f$ 在 $x=0$ 可导；　② 当 $\lim\limits_{x\to0}\dfrac{f(x)}{x^2}=0$ 时，$f$ 在 $x=0$ 可导；<br>
+      ③ 当 $f$ 在 $x=0$ 可导时，$\lim\limits_{x\to0}\dfrac{f(x)}{\sqrt[3]{x}}=0$；　④ 当 $f$ 在 $x=0$ 可导时，$\lim\limits_{x\to0}\dfrac{f(x)}{x^2}=0$。<br>
+      真命题的个数为（　）。(A) 1　(B) 2　(C) 3　(D) 4</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(A)，只有 ② 正确。</span><br>
+      <span class="lab">①</span>由 $\lim\frac{f(x)}{\sqrt[3]x}=0$ 得 $\lim\limits_{x\to0}f(x)=\lim\frac{f(x)}{\sqrt[3]x}\cdot\sqrt[3]x=0\cdot0=0$，又 $f$ 在 $0$ 连续，故 $f(0)=0$。于是
+      $$\lim_{x\to0}\frac{f(x)-f(0)}{x-0}=\lim_{x\to0}\frac{f(x)}{\sqrt[3]x}\cdot\frac{\sqrt[3]x}{x}$$
+      而 $\lim\limits_{x\to0}\frac{\sqrt[3]x}{x}=\infty$、$\lim\frac{f(x)}{\sqrt[3]x}=0$，是 <b>$0\cdot\infty$ 未定式</b>，存在性无法确定。<b>反例</b>：$f(x)=\sqrt{|x|}$ 满足 ① 的条件，但 $\lim\limits_{x\to0}\frac{\sqrt{|x|}}{x}=\infty$，在 $x=0$ 不可导。<br>
+      <span class="lab">②</span>同理 $f(0)=0$，且 $\lim\limits_{x\to0}\frac{f(x)}{x}=\lim\frac{f(x)}{x^2}\cdot x=0\cdot0=0$，故 $f'(0)$ 存在且为 $0$。<b>✔</b><br>
+      <span class="lab">③④</span>题目<b>没有给出 $f(0)=0$</b>，所以当 $f(0)\ne0$ 时这两个式子都是 $\frac10$ 型，都可能是无穷大，两个说法均不正确。<br>
+      <span class="lab">提炼</span>分母比 $x$ <b>高阶</b>（$x^2$）时"$\to0$ ⇒ 可导"成立；比 $x$ <b>低阶</b>（$\sqrt[3]x$）时不成立。反向命题必须先握有 $f(0)=0$ 才谈得上。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 3.4 ✔</span>设 $f(x)=(\mathrm e^x-1)(\mathrm e^{2x}-2)\cdots(\mathrm e^{nx}-n)$，$n$ 为正整数，则 $f'(0)=$（　）。<br>
+      (A) $(-1)^{n-1}(n-1)!$　(B) $(-1)^n(n-1)!$　(C) $(-1)^{n-1}n!$　(D) $(-1)^nn!$</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(A)</span>（已对 $n=1\sim7$ 逐个符号求导对拍：$1,-1,2,-6,24,-120,720$，与 $(-1)^{n-1}(n-1)!$ 完全吻合）<br>
+      <span class="lab">法一</span><b>导数定义（推荐）</b>：$f(0)=0$，
+      $$f'(0)=\lim_{x\to0}\frac{f(x)-f(0)}{x-0}=\lim_{x\to0}\frac{\mathrm e^x-1}{x}\cdot\lim_{x\to0}\big[(\mathrm e^{2x}-2)\cdots(\mathrm e^{nx}-n)\big]=1\cdot(1-2)(1-3)\cdots(1-n)=(-1)^{n-1}(n-1)!$$
+      <span class="lab">法二</span>公式法：$f'(x)=\sum$（逐项求导），代 $x=0$ 后只剩<b>第一项</b>（其余每项都含因子 $\mathrm e^0-1=0$），得同样结果。<br>
+      <span class="lab">法三</span>令 $g(x)=(\mathrm e^{2x}-2)\cdots(\mathrm e^{nx}-n)$（<b>把不为 0 的项打包成 $g$</b>），则 $f=(\mathrm e^x-1)g$，$f'(x)=\mathrm e^xg(x)+(\mathrm e^x-1)g'(x)$，$f'(0)=g(0)+0$。<br>
+      <span class="lab">注</span>多项相乘<b>不建议</b>用法二：一方面多项相乘公式不一定记得住，另一方面就算记得，写起来也很烦琐。关键点是 $\mathrm e^0-1=0$ 而 $(\mathrm e^0-2)\cdots(\mathrm e^0-n)\ne0$。<br>
+      <span class="lab">必背</span>$(uv)'=u'v+uv'$；推广 $(u_1u_2u_3)'=u_1'u_2u_3+u_1u_2'u_3+u_1u_2u_3'$。
+    </div>
+  </div>
+
+  <!-- ================= s2 充要条件 ================= -->
+  <h2 id="s2"><span class="idx">二</span>可导的充要条件与必要条件 · 单侧导数<span class="layer L-base">基础</span></h2>
+
+  <div class="key"><span class="tag">必记 · 三种提法等价（张宇批「考研必考」）</span>
+    ① $y=f(x)$ 在 $x_0$ 处<b>可导</b>；② $y=f(x)$ 在 $x_0$ 处<b>导数存在</b>；③ $f'(x_0)=A$，其中 <b>$A$ 为有限数</b>。<br>
+    第 ③ 条里"有限数"三个字是命题人最爱的开关：一旦极限是 $\infty$（无穷导数），在"高等数学"的规矩里就算<b>导数不存在</b>。
+  </div>
+
+  <h3>2.1　充要条件：单侧导数</h3>
+  <div class="fml">
+    $$\lim_{\Delta x\to0^-}\frac{f(x_0+\Delta x)-f(x_0)}{\Delta x}\xlongequal{\ 记\ }f'_-(x_0)\quad(\text{左边瞬时变化率})$$
+    $$\lim_{\Delta x\to0^+}\frac{f(x_0+\Delta x)-f(x_0)}{\Delta x}\xlongequal{\ 记\ }f'_+(x_0)\quad(\text{右边瞬时变化率})$$
+  </div>
+  <div class="fml">$$\boxed{\,f'(x_0)\ \text{存在}\iff f'_-(x_0)\ \text{与}\ f'_+(x_0)\ \text{均存在}\ \textbf{且相等}\,}$$</div>
+  <p>这与极限存在的充要条件（左、右极限均存在且相等）完全对应，<b>因为导数的定义本质上就是一个极限问题</b>。实际问题里读作：一点可导 ⟺ 左、右变化率都有且一样。几何上是：<b>有斜的切线或水平的切线，但没有铅直切线</b>。</p>
+
+  <div class="trap"><span class="tag">陷阱 · "均存在"≠"可导"</span>
+    《18讲》例 3.4 的 ③ 就是拿这个坑人的：<b>"若 $f'_-(0)$ 与 $f'_+(0)$ 均存在，则 $f'(0)$ 存在"是错的</b>——$f(x)=|x|$ 两侧导数都存在（$-1$ 与 $1$），但不相等，$f'(0)$ 不存在。<b>存在 ≠ 相等，四个字必须都读到。</b>
+  </div>
+
+  <h3>2.2　必要条件：可导 ⇒ 连续（反之未必）</h3>
+  <div class="mine"><span class="tag">补讲 · 一行证明（张宇眉批）</span>
+    已知 $\lim\limits_{\Delta x\to0}\dfrac{f(x_0+\Delta x)-f(x_0)}{\Delta x}=a$，则
+    $$\lim_{\Delta x\to0}\big[f(x_0+\Delta x)-f(x_0)\big]=\lim_{\Delta x\to0}\frac{f(x_0+\Delta x)-f(x_0)}{\Delta x}\cdot\Delta x=a\cdot0=0$$
+    即 $\lim\limits_{\Delta x\to0}f(x_0+\Delta x)=f(x_0)$，这正是连续的定义。<b>关键动作：把差商乘回 $\Delta x$。</b>
+  </div>
+
+  <div class="key"><span class="tag">必记 · 两个"反之未必"的标准反例</span>
+    <b>反例一</b>：$f(x)=|x|$ 在 $x=0$——连续，但左右导数 $-1\ne1$。<br>
+    <b>反例二（更凶）</b>：$f(x)=\begin{cases}x^2,&x\in\mathbb Q\\0,&x\notin\mathbb Q\end{cases}=x^2D(x)$（$D$ 为狄利克雷函数）。它在 $x=0$ 处
+    $$f'(0)=\lim_{x\to0}\frac{f(x)-f(0)}{x-0}=\lim_{x\to0}\frac{x^2D(x)}{x}=\lim_{x\to0}xD(x)=0\qquad(\text{无穷小}\times\text{有界量}=\text{无穷小})$$
+    <b>这个函数只在 $x=0$ 这一个点可导（也只在这一点连续），别处处处不连续。</b>记住它——凡是问"可导点集能不能只有一个点"，答案就是它。
+  </div>
+
+  <!-- ================= s3 微观放大镜 ================= -->
+  <h2 id="s3"><span class="idx">三</span>🔬 微观放大镜：无牵无挂 / 相依相偎 / 靠得更近<span class="layer L-base">基础</span><span class="layer L-str">强化</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/高等数学/03_一元函数微分学的概念/高数_第03章_强化18讲.pdf">📄 强化18讲</a>
+
+  <div class="zy"><span class="tag">强化题型 · D₄₃ 数形结合：张宇跨两本书讲同一套图（基础图 3-2~3-9 ＝ 18讲图 (a)~(l)）</span>
+    张宇把"在 $x_0$ 处把函数放大足够多倍"后看到的<b>点阵</b>分成三档，这是本章最有辨识度的一段讲法：
+    <div class="gridwrap"><table>
+      <tr><th>档</th><th>名字</th><th>数学表述</th><th>点阵长什么样</th></tr>
+      <tr><td>存在</td><td><b>无牵无挂</b></td><td>$f(x)=y,\ f(X)=Y$</td><td>给了 $x$ 就有 $y$ 对应在那里；附近点 $X$ 的 $Y$ 们<b>只是在那里</b>，与 $y$ 无关</td></tr>
+      <tr><td>连续</td><td><b>相依相偎</b></td><td>$\lim\limits_{X\to x}f(X)=y$</td><td>$Y$ 们充分靠近 $y$，彼此距离小到无法用正实数表达，只能用超实数「无穷小」衡量</td></tr>
+      <tr><td>可导</td><td><b>靠得更近</b></td><td>$\lim\limits_{X\to x}\dfrac{f(X)-y}{X-x}=\begin{cases}0\\a\ne0\end{cases}$</td><td>$Y\to y$ 的<b>速度不比 $X\to x$ 慢</b>：$0$ 表示更快，$a\ne0$ 表示差不多快</td></tr>
+    </table></div>
+    <em>连续曲线不是曲线不断开，恰恰相反，它每一个位置都是断开的。就算 $Y$ 们靠得更近（可导），也只是靠得更近而已，依然是断开的。</em>
+  </div>
+
+  <div class="tool">
+    <h4>🔬 微观放大镜 · 等比例放大下的三种点阵</h4>
+    <div class="hint">把 $x_0$ 附近的一小段<b>横纵等比例</b>放大（这才是"放大足够多倍"的正确含义）。拖动放大倍数，看三种情形的点阵如何分道扬镳——<b>只有"可导"这一档在无限放大下稳定成一条直线，这就是微分＝线性逼近的全部含义</b>。开启「取绝对值」可复现图 3-8：可导且 $f(x_0)=0,\ f'(x_0)\ne0$ 时，$|f|$ 折成 V 形而不可导。</div>
+    <div class="ctl">
+      <button class="mode on" data-m="exist">① 存在（不连续）</button>
+      <button class="mode" data-m="cont">② 连续不可导</button>
+      <button class="mode" data-m="diff">③ 可导</button>
+      <button id="absBtn">取绝对值 $|f|$：关</button>
+    </div>
+    <div class="ctl">
+      <label>放大倍数</label>
+      <input type="range" id="zoom" min="0" max="60" value="0">
+      <span class="val" id="zoomv">×1</span>
+    </div>
+    <div class="scene"><svg id="lens" viewBox="0 0 660 300" xmlns="http://www.w3.org/2000/svg"></svg></div>
+    <div class="gridwrap"><table class="dq" id="qtab"></table></div>
+    <div class="say" id="lensSay"></div>
+    <div class="legend2">
+      <span class="chip c-b">蓝点</span>$x_0$ 处的值 $y_0=f(x_0)$
+      <span class="chip c-g">绿点</span>邻近点的值 $Y=f(X)$
+      <span class="chip c-r">红箭头</span>已被放大出画面（说明它相对于 $\Delta x$ 跑得太快）<br>
+      上表把三档在<b>同一放大倍数</b>下的差商并排列出——点飞不飞出画面只是表象，<b>差商的阶</b>才是三者真正的分水岭。
+    </div>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 这台放大镜到底证明了什么</span>
+    设 $\delta$ 是放大后仍在画面里的横向尺度。三档在<b>等比例</b>缩放 $1/\delta$ 下的纵坐标分别是：<br>
+    ① 存在：$Y-y_0\sim c$（常数）$\Rightarrow$ 画面纵坐标 $\sim c/\delta\to\infty$，<b>点直接飞出画面</b>；<br>
+    ② 连续不可导：$Y-y_0\sim\sqrt{\delta}$ $\Rightarrow$ 画面纵坐标 $\sim1/\sqrt\delta\to\infty$，<b>点阵越拉越陡，最终竖直化</b>（差商 $\to\infty$）；<br>
+    ③ 可导：$Y-y_0=a(X-x_0)$ $\Rightarrow$ 画面纵坐标 $=a\cdot k$，<b>纹丝不动地趴在一条斜率为 $a$ 的直线上</b>。<br>
+    所以 <em>可导 = 在无穷小尺度下看起来是直线</em>，$f'(x_0)$ 就是那条直线的斜率。这正是 <a href="#s4">§四</a> 说的"微分是一阶泰勒公式"。
+  </div>
+
+  <!-- ================= s4 微分 ================= -->
+  <h2 id="s4"><span class="idx">四</span>微分 = 一阶泰勒公式<span class="layer L-base">基础</span><span class="layer L-str">强化</span></h2>
+
+  <h3>4.1　引例：一个正方形的面积增量</h3>
+  <p>边长为 1 的正方形，边长增加 $\Delta x$ 时面积增量</p>
+  <div class="fml">$$\Delta S=(1+\Delta x)^2-1^2=\underbrace{2\Delta x}_{\text{线性主部}}+\underbrace{(\Delta x)^2}_{\text{误差}}$$</div>
+  <p>$2\Delta x$ 是图中<b>两个小长方形</b>的面积（$\Delta x$ 的一次项），$(\Delta x)^2$ 是<b>右上角那个小正方形</b>的面积，满足 $\lim\limits_{\Delta x\to0}\frac{(\Delta x)^2}{\Delta x}=0$，即 $(\Delta x)^2=o(\Delta x)$。$\Delta x$ 足够小时 $\Delta S\approx2\Delta x$——<b>丢掉的正是那个小角落</b>。</p>
+
+  <h3>4.2　定义与"可微 ⇔ 可导"</h3>
+  <p>设 $y=f(x)$ 在 $x_0$ 某邻域内有定义，$x_0+\Delta x$ 在该邻域内。若<b>存在与 $\Delta x$ 无关的常数 $A$</b> 使</p>
+  <div class="fml">$$\Delta y=f(x_0+\Delta x)-f(x_0)=A\Delta x+o(\Delta x)$$</div>
+  <p>则称 $f$ 在 $x_0$ 处<b>可微</b>，并把增量的主要部分 $A\Delta x$ 称为<b>线性主部</b>，也叫 $f$ 在 $x_0$ 处的<b>微分</b>，记 $\mathrm dy|_{x=x_0}=A\Delta x=f'(x_0)\mathrm dx$。</p>
+
+  <div class="mine"><span class="tag">补讲 · 可微 ⇔ 可导 的两行证明，以及 $\mathrm dx=\Delta x$ 的由来</span>
+    $$f'(x_0)=\lim_{\Delta x\to0}\frac{\Delta y}{\Delta x}=\lim_{\Delta x\to0}\frac{A\Delta x}{\Delta x}+\lim_{\Delta x\to0}\frac{o(\Delta x)}{\Delta x}=A$$
+    所以 $\mathrm dy|_{x=x_0}=A\Delta x=f'(x_0)\Delta x$。又对 $y=x$ 用同一个定义：$\Delta x=\underbrace{1\cdot\Delta x}_{\mathrm dx}+\underbrace{0}_{o(\Delta x)}$，故 <b>$\mathrm dx=\Delta x$</b>，于是 $\mathrm dy|_{x=x_0}=f'(x_0)\mathrm dx$。<br>
+    <b>$\mathrm dx=\Delta x$ 这一步很多人没想过为什么，其实就是把微分定义用在恒等函数上。</b>
+  </div>
+
+  <div class="key"><span class="tag">必记 · 可微的判别三步（张宇批：判别可微首先考虑第 3 条）</span>
+    ① 写增量 $\Delta y=f(x_0+\Delta x)-f(x_0)$；② 写线性增量 $A\Delta x=f'(x_0)\Delta x$；③ 作极限 $\lim\limits_{\Delta x\to0}\dfrac{\Delta y-A\Delta x}{\Delta x}$。<b>该极限等于 0 则可微，否则不可微。</b><br>
+    但实战顺序反过来：<b>一元函数"可微 ⇔ 可导"互为充要条件</b>，所以先直接判可导（考生更熟）；只有拿不到 $f'(x_0)$ 的信息时，才回头走三步法。<br>
+    <b>可微的几何意义</b>：$f$ 在 $x_0$ 可微 ⇒ 在 $(x_0,y_0)$ 附近可以用<b>切线段近似代替曲线段</b>——这正是 <a href="#s3">§三放大镜</a> 第 ③ 档看到的画面。
+  </div>
+
+  <div class="fml" style="padding:6px 4px">
+    <svg viewBox="0 0 600 260" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:auto;max-width:600px">
+      <!-- 坐标轴 -->
+      <line x1="60" y1="220" x2="560" y2="220" stroke="var(--line)" stroke-width="1.5"/>
+      <line x1="60" y1="220" x2="60" y2="24" stroke="var(--line)" stroke-width="1.5"/>
+      <text x="566" y="225" font-size="13" fill="var(--muted)">x</text>
+      <text x="52" y="20" font-size="13" fill="var(--muted)">y</text>
+      <text x="48" y="235" font-size="12" fill="var(--muted)">O</text>
+      <!-- 曲线 y=f(x)：一段上凸的弧 -->
+      <path d="M 90 196 Q 250 150 420 46" fill="none" stroke="var(--accent)" stroke-width="2.4"/>
+      <text x="300" y="128" font-size="13" fill="var(--accent)">y = f(x)</text>
+      <!-- 切线（在 x0 处），延伸到 x0+Δx -->
+      <line x1="140" y1="196" x2="440" y2="118" stroke="var(--green)" stroke-width="1.8" stroke-dasharray="6 4"/>
+      <!-- x0 与 x0+Δx 的竖直参考线 -->
+      <line x1="190" y1="220" x2="190" y2="174" stroke="var(--line)" stroke-width="1" stroke-dasharray="3 3"/>
+      <line x1="400" y1="220" x2="400" y2="58" stroke="var(--line)" stroke-width="1" stroke-dasharray="3 3"/>
+      <!-- 水平参考线 y0 -->
+      <line x1="60" y1="174" x2="400" y2="174" stroke="var(--line)" stroke-width="1" stroke-dasharray="3 3"/>
+      <text x="34" y="179" font-size="12" fill="var(--muted)">y₀</text>
+      <!-- Δx 标注 -->
+      <line x1="190" y1="204" x2="400" y2="204" stroke="var(--muted)" stroke-width="1.4"/>
+      <path d="M190 204 l7 -4 M190 204 l7 4 M400 204 l-7 -4 M400 204 l-7 4" stroke="var(--muted)" stroke-width="1.4" fill="none"/>
+      <text x="285" y="199" font-size="13" fill="var(--muted)">Δx = dx</text>
+      <!-- dy：切线抬升 174 -> 118 -->
+      <line x1="382" y1="174" x2="382" y2="118" stroke="var(--green)" stroke-width="2.4"/>
+      <path d="M382 174 l-4 -7 M382 174 l4 -7 M382 118 l-4 7 M382 118 l4 7" stroke="var(--green)" stroke-width="2" fill="none"/>
+      <text x="330" y="152" font-size="13" fill="var(--green)" font-weight="700">dy</text>
+      <!-- Δy：真实增量 174 -> 58 -->
+      <line x1="418" y1="174" x2="418" y2="58" stroke="var(--amber)" stroke-width="2.4"/>
+      <path d="M418 174 l-4 -7 M418 174 l4 -7 M418 58 l-4 7 M418 58 l4 7" stroke="var(--amber)" stroke-width="2" fill="none"/>
+      <text x="428" y="120" font-size="13" fill="var(--amber)" font-weight="700">Δy（真实增量）</text>
+      <!-- o(Δx)：切线与曲线之差 118 -> 58 -->
+      <line x1="400" y1="118" x2="400" y2="58" stroke="var(--red)" stroke-width="3"/>
+      <text x="408" y="42" font-size="13" fill="var(--red)" font-weight="700">o(Δx)</text>
+      <!-- 点 -->
+      <circle cx="190" cy="174" r="4.5" fill="var(--accent)"/>
+      <circle cx="400" cy="58" r="4.5" fill="var(--accent)"/>
+      <circle cx="400" cy="118" r="4" fill="var(--green)"/>
+      <text x="168" y="238" font-size="12" fill="var(--muted)">x₀</text>
+      <text x="372" y="238" font-size="12" fill="var(--muted)">x₀+Δx</text>
+    </svg>
+    <div style="font-size:.78rem;color:var(--muted);margin-top:2px">图 3-15　<b style="color:var(--green)">dy</b>（沿<b>切线</b>抬升，= $f'(x_0)\Delta x$）＋ <b style="color:var(--red)">o(Δx)</b>（切线与曲线之差）＝ <b style="color:var(--amber)">Δy</b>（沿<b>曲线</b>的真实增量）</div>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 这张图是习题 3.3 / 3.4 与一题一练的全部依据</span>
+    三条竖线的长度关系 $\Delta y=\mathrm dy+o(\Delta x)$ 一旦画出来，三道题就都是"看图说话"：<br>
+    · <b>红线相对于绿线</b>是什么阶？$\dfrac{o(\Delta x)}{f'(x_0)\Delta x}\to0$，<b>高阶</b>（习 3.4，前提 $f'(x_0)\ne0$，否则绿线长度为 0 没得比）；<br>
+    · <b>绿线相对于横线 $\Delta x$</b> 是什么阶？$\dfrac{\mathrm dy}{\Delta x}=f'(x_0)$，$f'(x_0)=1$ 时<b>等价</b>（习 3.3）；<br>
+    · <b>黄线减绿线再除以横线</b>？$\dfrac{\Delta y-\mathrm dy}{\Delta x}=\dfrac{o(\Delta x)}{\Delta x}\to0$（一题一练）。<br>
+    <b>Δx 越小，红线相对于绿线缩得越快——这就是"用切线段代替曲线段"为什么合法。</b>
+  </div>
+
+  <div class="zy"><span class="tag">强化题型 · 《18讲》的核心升级：微分学的一句话总纲</span>
+    《18讲》把"连续 / 可导 / $n$ 阶可导"写成同一个模板（D₂ 脱胎换骨），这是全章最值钱的三行：
+    <div class="fml">
+      $$\text{连续}:\quad f(x+\Delta x)-f(x)=o(1),\qquad \Delta x\to0$$
+      $$\text{可导}:\quad f(x+\Delta x)-f(x)=f'(x)\Delta x+o(\Delta x),\qquad \Delta x\to0$$
+      $$\text{泰勒}:\quad f(x+\Delta x)-f(x)=f'(x)\Delta x+\frac{1}{2!}f''(x)(\Delta x)^2+\cdots+\frac{1}{n!}f^{(n)}(x)(\Delta x)^n+o((\Delta x)^n)$$
+    </div>
+    <em>微分学就是将 $f(x+\Delta x)-f(x)$ 表示成一个多项式和一个余项的和；在一点处，多项式次数越高，则函数的性质越强（可导阶数越高），表示得越精确，误差越小。</em><br>
+    所以<b>微分公式就是一阶泰勒公式</b>：
+    $$\boxed{f(x)=f(x_0)+f'(x_0)(x-x_0)+o(x-x_0),\qquad x\to x_0}$$
+    <b>注（记号 $o(1)$）</b>：若 $\lim\limits_{x\to x_0}f(x)=0$，则称 $f(x)$ 是 $x\to x_0$ 时的无穷小量，记 $f(x)=o(1)$。如 $\lim\limits_{n\to\infty}\dfrac{o(1/n)}{1/n}=0$，故 $o\!\left(\frac1n\right)\cdot n=o(1),\ n\to\infty$。
+  </div>
+
+  <div class="key"><span class="tag">必记 · 可导与可微在"实际意义"上的分工（张宇原话，值得抄进错题本）</span>
+    "虽然一元函数在一点处可导与在一点处可微是等价的，但是从实际意义上说，<b>一点处可导是借用这一点附近的值来刻画这一点的变化率</b>，而<b>一点处可微是借用这一点的值来刻画这一点附近的值的大小</b>。"<br>
+    对照着看就清楚了：可导 $f'(x_0)=\lim\limits_{x\to x_0}\frac{f(x)-f(x_0)}{x-x_0}$（<b>由外围推中心</b>）；可微 $\Delta y=f'(x_0)\Delta x+o(\Delta x)$（<b>由中心推外围</b>）。
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 与数一空间解析几何的接口（《18讲》注 3）</span>
+    因为 $\boldsymbol\tau=(1,f'(x_0))$ 是曲线 $y=f(x)$ 在点 $(x_0,f(x_0))$ 处切线的<b>方向向量</b>，所以
+    $$\mathrm dx\cdot\boldsymbol\tau=(\mathrm dx,\ f'(x_0)\mathrm dx)=(\mathrm dx,\mathrm dy)$$
+    也是该切线的方向向量。<b>$(\mathrm dx,\mathrm dy)$ 本身就是切向量</b>——第 17、18 章讲曲线积分的弧微分 $\mathrm ds=\sqrt{(\mathrm dx)^2+(\mathrm dy)^2}$ 时，就是这句话的直接后果。
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 3.1 ✔</span>设 $f(x)=2-x^x-x+o(x-1)$，$x\to1$，且 $f'(1)=a$，则 $a=$ ______。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$-2$</span><br>
+      <span class="lab">解</span>$f(1)=2-1-1+0=0$，故
+      $$a=f'(1)=\lim_{x\to1}\frac{f(x)-f(1)}{x-1}=\lim_{x\to1}\frac{1-x^x-(x-1)+o(x-1)}{x-1}=\lim_{x\to1}\frac{1-\mathrm e^{x\ln x}}{x-1}-1$$
+      $$\xlongequal{x-1=t}\lim_{t\to0}\frac{1-\mathrm e^{(t+1)\ln(t+1)}}{t}-1=-1-1=-2$$
+      （末步用 $(t+1)\ln(t+1)\sim t$，故 $1-\mathrm e^{(t+1)\ln(t+1)}\sim-t$。）<br>
+      <span class="lab">机关</span>题干直接给的就是<b>一阶泰勒展开式</b>：$f(x)=f(1)+a(x-1)+o(x-1)$。把 $2-x^x-x$ 拆成 $\underbrace{1-x^x}_{\to0}-\underbrace{(x-1)}_{\text{一次项}}$，一次项系数一眼看出含 $-1$，剩下的只需算 $\lim\frac{1-x^x}{x-1}$。<b>见到 $o(x-x_0)$ 就想"这是在给我泰勒系数"。</b>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 3.10 ✔</span>设函数 $y=f(x)$ 在任意点 $x$ 处的增量 $\Delta y=\dfrac{y\Delta x}{x+\sqrt{x^2+y^2}}+o(\Delta x)$，且 $f(0)=1$，则 $y=f(x)$ 在 $x=0$ 处的微分 $\mathrm dy=$（　）。<br>(A) $0$　(B) $\mathrm dx$　(C) $2\mathrm dx$　(D) $3\mathrm dx$</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(B)</span><br>
+      <span class="lab">解</span>概念题，把增量式<b>转化成导数</b>再代数值即可。由 $\Delta y=A\Delta x+o(\Delta x)$ 中 $A=y'$，读出
+      $$\frac{\mathrm dy}{\mathrm dx}=y'=\frac{y}{x+\sqrt{x^2+y^2}}$$
+      又 $f(0)=1$，得 $y'(0)=\dfrac{1}{0+\sqrt{0+1}}=1$，进而 $\mathrm dy|_{x=0}=y'(0)\mathrm dx=\mathrm dx$。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 3.11 ✔</span>设函数 $f(u)$ 可导，$y=f(x^2)$。当自变量 $x$ 在 $x=-1$ 处取得增量 $\Delta x=-0.1$ 时，相应的函数增量 $\Delta y$ 的<b>线性主部</b>为 $0.1$，则 $f'(1)=$（　）。<br>(A) $-1$　(B) $0.1$　(C) $0.5$　(D) $1$</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(C)</span><br>
+      <span class="lab">解</span>"线性主部"就是 $\mathrm dy=y'\mathrm dx=y'\Delta x$。而
+      $$\mathrm dy=f'(x^2)\,\mathrm d(x^2)=2xf'(x^2)\mathrm dx=2xf'(x^2)\Delta x$$
+      代入 $x=-1,\ \Delta x=-0.1$：$0.1=-2f'(1)\cdot(-0.1)$，解得 $f'(1)=0.5$。<br>
+      <span class="lab">易错</span>不少人把"线性主部为 0.1"当成"$\Delta y=0.1$"或"$f'(1)\Delta x=0.1$"——注意 $y$ 是<b>复合</b>函数，链式法则的 $2x$ 必须带上，而且 $x=-1$ 时 $2x=-2$ 是<b>负</b>的，两个负号才凑出正的 $0.1$。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 · 一题一练 ✔</span>设 $f(x)$ 在 $x=1$ 处可导，$\Delta f(1)$ 是 $f$ 在增量为 $\Delta x$ 时的函数值增量，则 $\lim\limits_{\Delta x\to0}\dfrac{\Delta f(1)-\mathrm df|_{x=1}}{\Delta x}=$（　）。<br>(A) $f'(1)$　(B) $1$　(C) $\infty$　(D) $0$</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(D)</span>（已用 $f=x^3,\sin x,\mathrm e^x$ 三个具体函数各验一遍，极限均为 0）<br>
+      <span class="lab">秒杀</span>$\Delta y=\mathrm dy+o(\Delta x)$ ⇒ $\Delta f(1)-\mathrm d[f(x)]|_{x=1}=o(\Delta x)$，除以 $\Delta x$ 当然趋于 0。<br>
+      <span class="lab">拆开算</span>$\lim\dfrac{\Delta f(1)}{\Delta x}=\lim\dfrac{f(1+\Delta x)-f(1)}{\Delta x}=f'(1)$；$\lim\dfrac{\mathrm df|_{x=1}}{\Delta x}=\lim\dfrac{f'(1)\mathrm dx}{\Delta x}=\lim\dfrac{f'(1)\Delta x}{\Delta x}=f'(1)$。原式 $=f'(1)-f'(1)=0$。
+    </div>
+  </div>
+
+  <!-- ================= s5 几何意义 ================= -->
+  <h2 id="s5"><span class="idx">五</span>导数的几何意义 · 角点与无穷导数<span class="layer L-base">基础</span></h2>
+
+  <p>$f'(x_0)$ 就是曲线 $y=f(x)$ 在点 $(x_0,y_0)$ 处<b>切线的斜率</b> $k$，于是</p>
+  <div class="fml">
+    $$\text{切线：}\ y-y_0=f'(x_0)(x-x_0)\qquad\qquad \text{法线：}\ y-y_0=-\frac{1}{f'(x_0)}(x-x_0)\ \ \big(f'(x_0)\ne0\big)$$
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 张宇的切线直觉：一把刀 + 一只铁饼</span>
+    什么是切线？它就像<b>一把锋利无比的刀，"嗖"地切过点 $(x_0,y_0)$</b>；在此瞬间，切线的方向就是点 $(x_0,y_0)$ 运动的方向。想想看，掷铁饼（作为质点）时，运动员旋转轨迹每一点的切线方向就是铁饼<b>那一瞬时的运动方向</b>；在那一瞬时脱手，铁饼就会沿着该点的切线方向飞出去。
+  </div>
+
+  <div class="key"><span class="tag">必记 · ★★★ 两条铁律：切线与导数不是一回事</span>
+    <b>切线存在不代表导数存在，但导数存在切线一定存在。</b>具体两种崩坏：
+    <div class="gridwrap"><table>
+      <tr><th>情形</th><th>典型</th><th>左右导数</th><th>切线</th><th>导数</th></tr>
+      <tr><td><b>角点（尖点）</b></td><td>$y=|x|$ 在 $x=0$</td><td>$k_+=1\ne k_-=-1$</td><td><b>没有</b>（有两条<b>单侧</b>切线 $y=x$ 与 $y=-x$，夹成一个角）</td><td>不存在</td></tr>
+      <tr><td><b>无穷导数</b></td><td>$y=x^{1/3}$、$y=-x^{1/3}$ 在 $x=0$</td><td>$f'_\pm(0)=+\infty$</td><td><b>有</b>，是铅直切线 $x=0$</td><td>不存在（按高数规矩）</td></tr>
+    </table></div>
+    <b>无穷导数的验算</b>：$\dfrac{\Delta y}{\Delta x}=\dfrac{(\Delta x)^{1/3}}{\Delta x}=\dfrac{1}{(\Delta x)^{2/3}}$，而 $(\Delta x)^{2/3}=\sqrt[3]{(\Delta x)^2}\gt0$ 恒成立，所以<b>两侧都是 $+\infty$</b>（不是一正一负！）。<br>
+    <b>曲线在 $P(x_0,y_0)$ 处有垂直于 $x$ 轴的切线 $\iff f'(x_0)=+\infty$ 或 $-\infty$。</b>
+  </div>
+
+  <div class="trap"><span class="tag">陷阱 · "无穷导数"的身份争议，考场上只认一种</span>
+    张宇原话：$\pm\infty$ 被叫作广义的数，所以无穷导数在<b>有些数学场合</b>也可被视为导数存在的特殊情形。<b>不过要强调的是，学"高等数学"这门课程的考生，还是将无穷导数视为导数不存在为好，因为这是"高等数学"里的"规矩"。</b>——考场上一律按<b>不存在</b>处理。
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 3.8 ✔</span>设曲线 $y=f(x)=x^n$ 在点 $(1,1)$ 处的切线与 $x$ 轴的交点为 $(\xi_n,0)$，则 $\lim\limits_{n\to\infty}f(\xi_n)=$ ______。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$\dfrac1{\mathrm e}$</span><br>
+      <span class="lab">解</span>$f'(1)=nx^{n-1}\big|_{x=1}=n$，切线 $y-1=n(x-1)$，令 $y=0$ 得 $\xi_n=1-\dfrac1n$。于是
+      $$\lim_{n\to\infty}f(\xi_n)=\lim_{n\to\infty}\xi_n^{\,n}=\lim_{n\to\infty}\left(1-\frac1n\right)^n=\frac1{\mathrm e}$$
+      <span class="lab">机关</span>这里的 $f$ 其实是<b>函数列</b> $f_n(x)=x^n$：$f_1'(1)=1,f_2'(1)=2,\cdots,f_n'(1)=n$。所以 $f(\xi_n)$ 里的<b>下标 $n$ 与幂次 $n$ 必须同步变化</b>——写成 $\xi_n^{\,n}$ 而不是 $\xi_n^{\,m}$，这是全题唯一的坎。跨章接口：末步用的是第 2 章的 $\left(1+\frac{a}{n}\right)^n\to\mathrm e^a$。
+    </div>
+  </div>
+
+  <!-- ================= s6 高阶导数 ================= -->
+  <h2 id="s6"><span class="idx">六</span>高阶导数 · 奇偶周期互换 + 连带效应<span class="layer L-base">基础</span></h2>
+
+  <p>二阶导数 $f''(x_0)=\lim\limits_{\Delta x\to0}\dfrac{f'(x_0+\Delta x)-f'(x_0)}{\Delta x}=\lim\limits_{x\to x_0}\dfrac{f'(x)-f'(x_0)}{x-x_0}$；一般地（张宇框住并批「记住」）：</p>
+  <div class="fml">$$\boxed{\,f^{(n)}(x_0)=\lim_{x\to x_0}\frac{f^{(n-1)}(x)-f^{(n-1)}(x_0)}{x-x_0}\,}$$</div>
+  <p>写法：$f'(x),f''(x),f'''(x)$，$n\ge4$ 时要写 $f^{(n)}(x)$。<b>高阶导数研究的依然是整体阶数。</b></p>
+
+  <div class="key"><span class="tag">必记 · 高阶导数存在的「连带效应」（考研常考的隐含条件）</span>
+    <b>(1)</b> 若 $f$ 在 $x_0$ 有<b>二阶导数</b>，则 $f$ 在 $x_0$ 的<b>某个邻域内有一阶导数</b>，且 $f'$ 在 $x_0$ 处<b>连续</b>。<br>
+    <span style="color:var(--muted)">（证：已知 $f''(x_0)=\lim\limits_{x\to x_0}\frac{f'(x)-f'(x_0)}{x-x_0}=a$ 存在，则 $\lim[f'(x)-f'(x_0)]=\lim\frac{f'(x)-f'(x_0)}{x-x_0}\cdot(x-x_0)=0$，即 $\lim\limits_{x\to x_0}f'(x)=f'(x_0)$。——<b>又是"乘回去"那一招</b>。）</span><br>
+    <b>(2)</b> 若 $f$ 在 $x_0$ 有 $n$ 阶导数，则 $f$ 在 $x_0$ 某邻域内有 $1\sim(n-1)$ 阶的<b>各阶</b>导数。<br><br>
+    <b>三行总结（必背）：</b>
+    $$f'(x_0)\ \text{存在}\Rightarrow f(x)\ \text{在}\ x_0\ \text{附近有定义且在}\ x_0\ \text{连续}$$
+    $$f''(x_0)\ \text{存在}\Rightarrow f'(x)\ \text{在}\ x_0\ \text{附近有定义且在}\ x_0\ \text{连续}$$
+    $$f^{(n)}(x_0)\ \text{存在}\Rightarrow f^{(n-1)}(x)\ \text{在}\ x_0\ \text{附近有定义且在}\ x_0\ \text{连续}$$
+    <b>用法</b>：题干只要写"$f$ 二阶可导"，你就白得了"$f'$ 在该点邻域存在且连续"——这条经常是解题的钥匙。
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 3.1 ✔</span>以下命题，<b>错误</b>的是（　）。<br>
+      (A) 若 $f(x)$ 是可导的偶函数，则 $f'(x)$ 是奇函数　　(B) 若 $f(x)$ 是可导的奇函数，则 $f'(x)$ 是偶函数<br>
+      (C) 若 $f(x)$ 是可导的以 $T$ 为周期的周期函数，则 $f'(x)$ 也是以 $T$ 为周期的周期函数<br>
+      (D) 若 $f(x)$ 是可导的有界函数，则 $f'(x)$ 是有界函数</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(D)</span><br>
+      <span class="lab">(A)</span>$f'(-x)=\lim\limits_{\Delta x\to0}\dfrac{f(-x+\Delta x)-f(-x)}{\Delta x}=\lim\dfrac{f(x-\Delta x)-f(x)}{\Delta x}=(-1)\lim\limits_{-\Delta x\to0}\dfrac{f(x-\Delta x)-f(x)}{-\Delta x}=-f'(x)$。<br>
+      <span class="lab">(B)</span>$f'(-x)=\lim\dfrac{-f(x-\Delta x)+f(x)}{\Delta x}=\lim\limits_{-\Delta x\to0}\dfrac{f(x-\Delta x)-f(x)}{-\Delta x}=f'(x)$。<br>
+      <span class="lab">(C)</span>$f'(x+T)=\lim\dfrac{f(x+T+\Delta x)-f(x+T)}{\Delta x}\xlongequal{f(x+T)=f(x)}\lim\dfrac{f(x+\Delta x)-f(x)}{\Delta x}=f'(x)$。<br>
+      <span class="lab">(D) 反例</span>$f(x)=\sqrt x\ \big(x\in(0,1]\big)$ 有界，而 $f'(x)=\dfrac{1}{2\sqrt x}$ 在 $(0,1]$ 上<b>无界</b>（$x\to0^+$ 时 $\to+\infty$）。<br>
+      <span class="lab">★结论卡</span>把 (A)(B)(C) 当结论背下来，会用即可：<b>求导一次，奇偶性互换一次；周期性不变；有界性不保。</b>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 · 注例 1 ✔</span>设 $f(x)=\ln(1-x)-\ln(1+x),\ -1\lt x\lt1$，则 $f''(0)=$ ______。</div>
+    <div class="s"><span class="lab">答案</span><span class="ans">$0$</span>
+      $f(x)=\ln\dfrac{1-x}{1+x}$ 是<b>奇函数</b>；每求导一次奇偶性互换一次，故 $f'$ 偶、$f''$ <b>奇</b>，所以 $f''(0)=0$。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 · 注例 2 ✔</span>设 $f(x)=\dfrac{1}{2^x+1},\ x\in\mathbb R$，则 $f^{(4)}(0)=$ ______。</div>
+    <div class="s"><span class="lab">答案</span><span class="ans">$0$</span><br>
+      <span class="lab">解</span>凑奇函数：$f(x)=\underbrace{\dfrac{1}{2^x+1}-\dfrac12}_{g(x)}+\dfrac12$。验证
+      $$g(-x)+g(x)=\frac{1}{2^{-x}+1}-\frac12+\frac{1}{2^{x}+1}-\frac12=\frac{2^x}{2^x+1}+\frac{1}{2^x+1}-1=0$$
+      故 $g$ 奇 ⇒ $g^{(4)}$ <b>奇</b> ⇒ $g^{(4)}(0)=0$，而常数 $\frac12$ 求四次导为 0，所以 $f^{(4)}(0)=g^{(4)}(0)=0$。<br>
+      <span class="lab">套路</span>见到 $\dfrac{1}{a^x+1}$ 就<b>减去 $\frac12$ 凑奇函数</b>，这是固定动作（同类：$\frac{a^x-1}{a^x+1}$ 本身就是奇函数）。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 · 注 2 ✔</span>由例 3.1 的结论，若 $f(x)=\sin(\cos x)+\cos(\sin x)$，则 $f^{(5)}(2\pi)=$ ______。</div>
+    <div class="s"><span class="lab">答案</span><span class="ans">$0$</span><br>
+      <span class="lab">解</span><b>复合函数奇偶性口诀：内偶则偶，内奇同外。</b>$\cos x$ 偶 ⇒ $\sin(\cos x)$ 偶；$\sin x$ 奇、外层 $\cos$ 偶 ⇒ $\cos(\sin x)$ 偶。故 $f$ 偶，$f^{(5)}$ <b>奇</b>；又 $f$ 以 $2\pi$ 为周期，$f^{(5)}$ 也以 $2\pi$ 为周期，所以 $f^{(5)}(2\pi)=f^{(5)}(0)=0$。<br>
+      <span class="lab">两把钥匙同时用</span>周期把 $2\pi$ 搬回 $0$，奇性把 $0$ 处的值判死为 $0$。<b>缺一不可。</b>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 3.2 ✔</span>设 $f(x)$ 是二阶可导且以 2 为周期的<b>奇函数</b>，$f\!\left(\frac12\right)\gt0$，$f'\!\left(\frac12\right)\gt0$，记 $M=f\!\left(-\frac12\right),\ N=f'\!\left(\frac32\right),\ K=f''(0)$，则（　）。<br>(A) $M\lt N\lt K$　(B) $M\gt N\gt K$　(C) $M\lt K\lt N$　(D) $M\gt K\gt N$</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(C)　$M\lt K\lt N$</span><br>
+      <span class="lab">$M$</span>$f$ 奇 ⇒ $M=f\!\left(-\frac12\right)=-f\!\left(\frac12\right)\lt0$。<br>
+      <span class="lab">$K$</span>由 3.1(B)：$f$ 奇 ⇒ $f'$ 偶；由 3.1(A)：$f'$ 偶 ⇒ $f''$ <b>奇</b>。<b>$f''$ 奇且 $f''(0)$ 存在（题给二阶可导）⇒ $K=f''(0)=0$。</b><br>
+      <span class="lab">$N$</span>由 3.1(C)：$f'$ 也以 2 为周期 ⇒ $N=f'\!\left(\frac32\right)=f'\!\left(\frac32-2\right)=f'\!\left(-\frac12\right)\xlongequal{f'\text{偶}}f'\!\left(\frac12\right)\gt0$。<br>
+      <span class="lab">★眉批必背</span>若 $f$ 无穷阶可导，则<b>每求导一次，奇偶性即互换一次</b>。「奇函数在 0 处的值为 0」这一步的前提是<b>该点函数值存在</b>——本题靠"二阶可导"白送。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 3.9 ✔</span>设 $f(x)$ 在 $x=x_0$ 处二阶可导，且 $f'(x_0)=0,\ f''(x_0)\ne0$。证明：(1) 若 $f''(x_0)\lt0$，则 $f$ 在 $x_0$ 取得极大值；(2) 若 $f''(x_0)\gt0$，则取得极小值。</div>
+    <div class="s">
+      <span class="lab">来源</span>这就是<b>极值第二充分条件</b>的证明，考纲内可考证明题。核心工具是<b>函数极限的局部保号性</b>：
+      $$\lim_{x\to x_0}f(x)=A\lt0\ \Rightarrow\ f(x)\lt0\ \big(x\in\mathring U(x_0,\delta)\big);\qquad A\gt0\ \Rightarrow\ f(x)\gt0$$
+      <span class="lab">证 (1)</span>由二阶导数定义 $f''(x_0)=\lim\limits_{x\to x_0}\dfrac{f'(x)-f'(x_0)}{x-x_0}\lt0$，由局部保号性，存在去心邻域 $\mathring U(x_0,\delta)$ 使 $\dfrac{f'(x)-f'(x_0)}{x-x_0}\lt0$。因 $f'(x_0)=0$，上式即 $\dfrac{f'(x)}{x-x_0}\lt0$，故 <b>$f'(x)$ 与 $x-x_0$ 符号相反</b>：$x\lt x_0$ 时 $f'\gt0$，$x\gt x_0$ 时 $f'\lt0$（左增右减）。由<b>极值第一充分条件</b>，$f$ 在 $x_0$ 取极大值。<br>
+      <span class="lab">证 (2)</span>同理 $\dfrac{f'(x)}{x-x_0}\gt0$，$f'(x)$ 与 $x-x_0$ <b>符号相同</b>（左减右增），取极小值。<br>
+      <span class="lab">套路</span><b>"二阶导的符号 → 差商的符号 → 一阶导的符号 → 单调性"</b>，四步链条一气呵成，全程只用定义 + 局部保号性，不需要泰勒。
+    </div>
+  </div>
+
+  <!-- ================= s7 f 与 |f| ================= -->
+  <h2 id="s7"><span class="idx">七</span>$f(x)$ 与 $|f(x)|$ 的连续、可导关系总结<span class="layer L-base">基础</span><span class="layer L-str">强化</span></h2>
+
+  <div class="key"><span class="tag">必记 · ★★★ 全章最高频的结论卡（基础讲与 18 讲一字不差地讲了两遍）</span>
+    <b>(1)</b> 设 $f$ 在 $x_0$ 处<b>连续</b>，则 $|f|$ 在 $x_0$ 处连续；<b>反之不真</b>。<br>
+    <b>(2)</b> 设 $f$ 在 $x_0$ 处<b>可导</b>，则
+    $$\text{①}\ f(x_0)\ne0\ \Rightarrow\ |f|\ \text{在}\ x_0\ \text{可导，且}\ \big[|f(x)|\big]'\Big|_{x=x_0}=\begin{cases}f'(x_0),&f(x_0)\gt0\\-f'(x_0),&f(x_0)\lt0\end{cases}$$
+    $$\text{②}\ f(x_0)=0\ \text{时}\quad\begin{cases}f'(x_0)=0\ \Rightarrow\ |f|\ \text{在}\ x_0\ \text{可导，且}\ \big[|f(x)|\big]'\big|_{x=x_0}=0\\[3pt] f'(x_0)\ne0\ \Rightarrow\ |f|\ \text{在}\ x_0\ \textbf{不可导}\end{cases}$$
+    <b>一句话记忆：绝对值只在"函数值为 0 且斜率不为 0"的地方折出尖角。</b>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 为什么连续能传递、可导不能（张宇的点阵解释，对应图 3-5~3-9）</span>
+    <b>连续能传递</b>：点点相依相偎的三种微观形态（↘ / ↗ / ↘↗），加上绝对值（把 $x$ 轴下方的整片翻上来）后<b>依然相依相偎</b>，所以 $|f|$ 仍连续。<b>反过来不对</b>：$|f|$ 可以相依相偎、连续，而 $f$ 的点一半在上一半在下、<b>相距甚远</b>，自然不连续。<br>
+    <b>可导不能传递</b>：可导不仅要相依相偎，还要 $\lim\limits_{x\to x_0}\dfrac{f(x)-f(x_0)}{x-x_0}$ 存在（是<b>唯一的数</b>）。若 $f$ 在 $x_0$ 可导、$f(x_0)=0$、$f'(x_0)\ne0$，点阵是穿过 $x$ 轴的一条斜线；取绝对值后
+    $$\lim_{x\to x_0^-}\frac{|f(x)|-|f(x_0)|}{x-x_0}\lt0,\qquad \lim_{x\to x_0^+}\frac{|f(x)|-|f(x_0)|}{x-x_0}\gt0$$
+    一负一正，极限不存在，<b>$|f|$ 必不可导</b>。反之若 $f(x_0)\ne0$，整片点阵在 $x$ 轴同侧，取绝对值只是整体翻折，形态不变，<b>必可导</b>。<br>
+    <b>提示（考研中常用）</b>：对于连续或可导函数，只要 $f(x_0)\gt0\ (\lt0)$，无论 $f(x_0)$ 与 0 的距离多小，它旁边相依相偎的 $f(x)$ <b>一定</b> $\gt0\ (\lt0)$。这就是局部保号性的"相依相偎"版说法，也是下面所有题的脱绝对值总开关。
+  </div>
+
+  <div class="zy"><span class="tag">强化题型 · 《18讲》把它化归成两条可操作公式</span>
+    <b>(1) 连续不可导 × 可导 = ?</b>　设 $F(x)=f(x)g(x)$，$f$ 在 $x_0$ 处<b>连续但不可导</b>，$g$ 在 $x_0$ 处可导，则
+    $$\boxed{F(x)\ \text{在}\ x_0\ \text{可导}\iff g(x_0)=0}$$
+    <span style="color:var(--muted)">推导（张宇眉批）：拆项
+    $$F'(x_0)=\lim_{x\to x_0}\frac{f(x)g(x)-f(x_0)g(x_0)}{x-x_0}=\lim_{x\to x_0}f(x)\frac{g(x)-g(x_0)}{x-x_0}+\lim_{x\to x_0}g(x_0)\frac{f(x)-f(x_0)}{x-x_0}$$
+    第一项 $=f(x_0)g'(x_0)$ 一定存在；第二项里 $\lim\frac{f(x)-f(x_0)}{x-x_0}$ <b>不存在</b>（$f$ 不可导），所以只有系数 $g(x_0)=0$ 才能把它抹掉。</span><br>
+    特别地，$F(x)=|x-x_0|g(x)$（$g$ 在 $x_0$ 可导）在 $x_0$ 可导 $\iff g(x_0)=0$。<br><br>
+    <b>(2) 绝对值的求导公式</b>　$|f(x)|=\sqrt{f^2(x)}$，于是
+    $$\big[|f(x)|\big]'=\left[\sqrt{f^2(x)}\right]'=\frac{1}{2\sqrt{f^2(x)}}\cdot2f(x)f'(x)=\frac{f(x)f'(x)}{|f(x)|}=\operatorname{sgn}[f(x)]\cdot f'(x)$$
+    <b>这是把"分段讨论"变成"一个公式"的关键化归</b>，在 $f(x)\ne0$ 处随便用。
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 3.5 ✔</span>（★可当结论直接记住）设 $f(x)$ 在 $x=a$ 处连续，$F(x)=f(x)|x-a|$，则 $f(a)=0$ 是 $F(x)$ 在 $x=a$ 处可导的（　）。<br>(A) 充要条件　(B) 充分非必要　(C) 必要非充分　(D) 既非充分又非必要</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(A) 充要条件</span>（已用 $f(x)=x-a+c$ 符号验证：$F'_-(a)=-c,\ F'_+(a)=c$，相等 $\iff c=f(a)=0$）<br>
+      <span class="lab">解</span>拆掉绝对值：
+      $$F(x)=\begin{cases}-(x-a)f(x),&x\lt a\\0,&x=a\\(x-a)f(x),&x\gt a\end{cases}$$
+      $$F'_-(a)=\lim_{x\to a^-}\frac{-(x-a)f(x)}{x-a}=-\lim_{x\to a^-}f(x)=-f(a),\qquad F'_+(a)=\lim_{x\to a^+}\frac{(x-a)f(x)}{x-a}=f(a)$$
+      两者相等 $\iff -f(a)=f(a)\iff f(a)=0$。<br>
+      <span class="lab">★升格为结论</span><b>若 $\varphi$ 在 $x_0$ 连续，则 $f(x)=|x-x_0|\varphi(x)$ 在 $x_0$ 可导 $\iff\varphi(x_0)=0$。</b>（这正是 18 讲那条公式的特例，只是把 $g$ 的条件从"可导"放宽到了"连续"。）
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 3.6 ✔</span>设
+      $$f_1(x)=(x^2-1)\left|x^3+x^2-2x-2\right|,\quad f_2(x)=(x^2-1)\left|x^3-2x^2-x+2\right|,\quad f_3(x)=(x^2-1)\left|x^3+3x^2-2x-6\right|$$
+      将 $f_i(x)\ (i=1,2,3)$ 的<b>不可导点个数</b>记为 $n_i$，则（　）。<br>
+      (A) $n_2\lt n_1\lt n_3$　(B) $n_1\lt n_2\lt n_3$　(C) $n_3\lt n_2\lt n_1$　(D) $n_2\lt n_3\lt n_1$</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(A)　$n_1=2,\ n_2=1,\ n_3=3$</span>（已用符号因式分解 + 每个候选点的<b>数值左右导数</b>双重对拍，见下表）<br>
+      <span class="lab">先分解</span>三个三次式都用<b>分组提公因式</b>：
+      $$|x^3+x^2-2x-2|=|x^2(x+1)-2(x+1)|=|x+1|\,|x+\sqrt2|\,|x-\sqrt2|$$
+      $$|x^3-2x^2-x+2|=|x^2(x-2)-(x-2)|=|x-2|\,|x-1|\,|x+1|$$
+      $$|x^3+3x^2-2x-6|=|x^2(x+3)-2(x+3)|=|x-\sqrt2|\,|x+\sqrt2|\,|x+3|$$
+      <span class="lab">再逐点判</span>由基 3.5 的结论：在 $|x-r|$ 的零点 $r$ 处可导 $\iff$ <b>其余因子在 $r$ 处的乘积为 0</b>。
+      <div class="gridwrap"><table>
+        <tr><th></th><th>完整形式</th><th>候选点</th><th>判定</th><th>$n_i$</th></tr>
+        <tr><td>$f_1$</td><td>$(x+1)(x-1)|x+\sqrt2||x-\sqrt2||x+1|$</td><td>$-\sqrt2,\ \sqrt2,\ -1$</td><td>$\pm\sqrt2$ 处余因子 $\ne0$ ⇒ <b>不可导</b>；$-1$ 处余因子含 $(x+1)$ 为 0 ⇒ 可导</td><td><b>2</b></td></tr>
+        <tr><td>$f_2$</td><td>$(x+1)(x-1)|x-2||x-1||x+1|$</td><td>$2,\ 1,\ -1$</td><td>只有 $x=2$ 处余因子 $\ne0$ ⇒ <b>不可导</b></td><td><b>1</b></td></tr>
+        <tr><td>$f_3$</td><td>$(x+1)(x-1)|x-\sqrt2||x+\sqrt2||x+3|$</td><td>$-\sqrt2,\ \sqrt2,\ -3,\ -1$</td><td>$\pm\sqrt2,\ -3$ 三处均 <b>不可导</b>；$-1$ 可导</td><td><b>3</b></td></tr>
+      </table></div>
+      故 $n_2\lt n_1\lt n_3$，选 (A)。<br>
+      <span class="lab">程序对拍</span>取 $h=10^{-12}$ 数值算左右差商：$f_1$ 在 $\pm\sqrt2$ 处得 $(-1.17,+1.17)$ 与 $(-6.83,+6.83)$，在 $-1$ 处两侧都是 $0$；$f_2$ 在 $2$ 处得 $(-9,+9)$，在 $1,-1$ 处两侧相等；$f_3$ 在 $-3$ 处得 $(-56,+56)$。<b>与上表逐点吻合。</b><br>
+      <span class="lab">★速判口诀</span>把整个函数写成 $\prod|x-r_i|^{m_i}\times(\text{多项式})$：<b>$|x-r|$ 出现<u>奇数</u>次、且把它抽掉后剩下的东西在 $r$ 处非零 ⇒ 该点不可导</b>；出现偶数次（如 $|x-1|\cdot(x-1)$）或余因子在该点为 0 ⇒ 可导。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 3.7 ✔</span>设 $f(x)$ 处处可导，$f(0)=-1$，$f'(0)=1$，令 $g(x)=|f(x-1)|$，则（　）。<br>
+      (A) $g$ 在 $x=0$ 处必可导　(B) $g$ 在 $x=0$ 处必不可导　(C) $g$ 在 $x=1$ 处必可导　(D) $g$ 在 $x=1$ 处必不可导</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(C)</span><br>
+      <span class="lab">解</span>因为 $f$ 处处可导，所以 $g(x)=|f(x-1)|$ <b>可能不可导的点，有且仅有使 $f(x-1)=0$ 的点</b>。<br>
+      · $x=0$ 时，$f(0-1)=f(-1)$ 的值<b>不得而知</b>，故 $g$ 在 $x=0$ 可能可导也可能不可导 ⇒ (A)(B) 都不能选；<br>
+      · $x=1$ 时，$f(1-1)=f(0)=-1\ne0$，由结论卡 (2)① ⇒ $g$ 在 $x=1$ <b>必可导</b>。<br>
+      <span class="lab">选项设计</span>四个选项都带"必"字，这是在考<b>"不确定"也是一种答案</b>：条件没给 $f(-1)$，就绝不能对 $x=0$ 下任何断言。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 3.6 ✔</span>（基 3.7 的强化版：这次要算出导数值）设 $f(x)$ 处处可导，$f(0)=-1$，$f'(0)=1$，令 $g(x)=|f(x-1)|$，则 $g'(1)=$ ______。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$-1$</span>（已用 $f=x-1,\ \mathrm e^x-2,\ \sin x-1$ 三个满足条件的具体函数各验一遍，$g'(1)$ 均为 $-1$）<br>
+      <span class="lab">法一（局部保号性脱绝对值）</span>$f$ 处处可导（从而连续），$f(0)=-1\lt0$，所以存在 $x=1$ 的某个邻域，在其中 $f(x-1)\lt0$，即 $g(x)=-f(x-1)$，从而 $g'(x)=-f'(x-1)$，$g'(1)=-f'(0)=-1$。<br>
+      <span class="lab">法二（公式法）</span>
+      $$g'(x)=\left[\sqrt{f^2(x-1)}\right]'=\frac{1}{2\sqrt{f^2(x-1)}}\cdot2f(x-1)f'(x-1)=\frac{f(x-1)f'(x-1)}{|f(x-1)|}$$
+      故 $g'(1)=\operatorname{sgn}[f(0)]\cdot f'(0)=(-1)\cdot1=-1$。<br>
+      <span class="lab">取舍</span>法一更快也更安全（只要判个符号）；法二在<b>符号不定、需要保留一般式</b>时更好用。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 3.3 ✔</span>（★★★ 本讲最硬的一题）设函数 $f(x)$ 连续，给出下列 4 个条件：<br>
+      ① $\lim\limits_{x\to0}\dfrac{|f(x)|-f(0)}{x}$ 存在；　② $\lim\limits_{x\to0}\dfrac{f(x)-|f(0)|}{x}$ 存在；<br>
+      ③ $\lim\limits_{x\to0}\dfrac{|f(x)|}{x}$ 存在；　④ $\lim\limits_{x\to0}\dfrac{|f(x)|-|f(0)|}{x}$ 存在。<br>
+      其中可得到"$f(x)$ 在 $x=0$ 处可导"的条件个数为（　）。(A) 1　(B) 2　(C) 3　(D) 4</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(D)——四个全都可以</span><br>
+      <span class="lab">先看 ③（钥匙题）</span>记 $\lim\limits_{x\to0}\dfrac{|f(x)|}{x}=a$。$x\to0^+$ 时 $\frac{|f|}{x}\ge0$ ⇒ $a\ge0$；$x\to0^-$ 时 $\frac{|f|}{x}\le0$ ⇒ $a\le0$。<b>故 $a=0$</b>。于是
+      $$f(0)=\lim_{x\to0}f(x)=\lim_{x\to0}|f(x)|=\lim_{x\to0}\frac{|f(x)|}{x}\cdot x=0\cdot0=0$$
+      再由极限定义：对任意 $\varepsilon\gt0$，在 $x=0$ 的某邻域内 $\left|\dfrac{f(x)}{x}-0\right|=\left|\left|\dfrac{f(x)}{x}\right|-0\right|\lt\varepsilon$，故 $\lim\limits_{x\to0}\dfrac{f(x)}{x}=0$，即 <b>$f'(0)=0$</b>。<br>
+      <span class="lab">① </span>记极限为 $b$。分母 $\to0$ 而极限存在 ⇒ 分子 $\to0$，得 $f(0)=\lim|f(x)|=\lim f(x)\ge0$。若 $f(0)=0$ 则同 ③；若 $f(0)\gt0$，则 $x\to0$ 时 $f(x)\gt0$（局部保号），$|f|=f$，$f'(0)=\lim\dfrac{f(x)-f(0)}{x}=b$。<br>
+      <span class="lab">② </span>记极限为 $c$。同理 $f(0)=|f(0)|\ge0$。$f(0)=0$ 时 $f'(0)=\lim\frac{f(x)}{x}=c$；$f(0)\gt0$ 时亦有 $f'(0)=c$。<br>
+      <span class="lab">④ </span>记极限为 $d$。得 $|f(0)|=\lim|f(x)|\ge0$。$f(0)=0$ 时同 ③；$f(0)\gt0$ 时 $f(x)\gt0$，$f'(0)=d$；<b>$f(0)\lt0$ 时 $f(x)\lt0$，$|f|=-f$，$f'(0)=-d$</b>。<br>
+      <span class="lab">★套路提炼</span>见到"$\dfrac{\text{含绝对值的差}}{x}$ 存在"，固定三步：<b>①由"分母趋 0 且极限存在"逼出分子趋 0，定出 $f(0)$；②必要时用左右侧的符号夹出 $a=0$；③按 $f(0)=0/\gt0/\lt0$ 分三支，用局部保号性脱掉绝对值。</b>注意最后一支要多一个负号，这是全题唯一容易漏的地方。
+    </div>
+  </div>
+
+  <!-- ================= s8 对拍台 ================= -->
+  <h2 id="s8"><span class="idx">八</span>🛠 左右导数对拍台<span class="layer L-base">基础</span><span class="layer L-str">强化</span></h2>
+
+  <div class="tool">
+    <h4>🛠 差商探针 · 现场算 $f'_-(x_0)$ 与 $f'_+(x_0)$</h4>
+    <div class="hint">本章所有"可导 / 不可导"的判断，说到底都是<b>把 $h$ 一路缩小，看两侧差商收不收敛、收到的数一不一样</b>。这台探针把 10 个经典函数（角点、无穷导数、振荡、公式法失效……）全放在一起，让你亲眼看到四种崩坏方式的区别。表格列的是
+    $\ \dfrac{f(x_0-h)-f(x_0)}{-h}\ $ 与 $\ \dfrac{f(x_0+h)-f(x_0)}{h}$。</div>
+    <div class="ctl">
+      <label>函数</label>
+      <select id="fsel"></select>
+    </div>
+    <div class="say" id="fdesc"></div>
+    <div class="scene"><svg id="probe" viewBox="0 0 660 240" xmlns="http://www.w3.org/2000/svg"></svg></div>
+    <div class="gridwrap"><table class="dq" id="dqtab"></table></div>
+    <span class="verdict" id="verdict"></span>
+    <div class="legend2">判定规则：两侧数列都稳定收敛且<b>极限相等</b> ⇒ 可导；稳定但<b>不等</b> ⇒ 角点；都冲向 $\infty$ ⇒ 无穷导数（有铅直切线但导数不存在）；<b>不收敛地上下乱跳</b> ⇒ 振荡，极限不存在。</div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 3.7 ✔</span>下列函数中，在 $x=0$ 处<b>不可导</b>的是（　）。<br>
+      (A) $f(x)=|x|\tan|x|$　(B) $f(x)=|x|\tan\sqrt{|x|}$　(C) $f(x)=\sqrt{\cos|x|}$　(D) $f(x)=\cos\sqrt{|x|}$</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(D)</span>（四个选项都已在上面的对拍台里，可逐个切过去看数值）<br>
+      <span class="lab">(A)</span>$f'(0)=\lim\limits_{x\to0}\dfrac{|x|\tan|x|}{x}=\lim\limits_{x\to0}\dfrac{x^2}{x}=0$（$|x|\tan|x|\sim|x|\cdot|x|=x^2$）。<br>
+      <span class="lab">(B)</span>$f'(0)=\lim\limits_{x\to0}\dfrac{|x|\tan\sqrt{|x|}}{x}=\lim\limits_{x\to0}\left(\dfrac{|x|}{x}\cdot\tan\sqrt{|x|}\right)=0$（<b>有界 $\pm1$ × 无穷小</b>）。<br>
+      <span class="lab">(C)</span>$f'(0)=\lim\limits_{x\to0}\dfrac{\sqrt{\cos|x|}-1}{x}=\lim\limits_{x\to0}\dfrac{\cos|x|-1}{x\left(\sqrt{\cos|x|}+1\right)}=\lim\limits_{x\to0}\dfrac{-\frac12x^2}{2x}=0$。（或直接用 $1-\cos^\alpha x\sim\frac12\alpha x^2$。）<br>
+      <span class="lab">(D)</span>$\lim\limits_{x\to0}\dfrac{\cos\sqrt{|x|}-1}{x}=\lim\limits_{x\to0}\dfrac{-\frac12|x|}{x}$，左侧 $=\frac12$、右侧 $=-\frac12$，<b>$f'(0)$ 不存在</b>。<br>
+      <span class="lab">★速判口诀</span>把 $|x|$ 当成一个整体，看<b>分子相对于 $x$ 的阶</b>：分子是 $x^2$ 级（高于一阶）⇒ 必可导（A/B/C）；分子恰好是 $|x|$ 一阶 ⇒ 除以 $x$ 得 $\pm$ 常数，左右差符号 ⇒ 不可导（D）。<b>凡是 $\sqrt{|x|}$ 套在外层三角/指数里，展开后必出 $|x|$ 一次项，几乎必不可导。</b>
+    </div>
+  </div>
+
+  <!-- ================= s9 导函数性质 ================= -->
+  <h2 id="s9"><span class="idx">九</span>导函数 $f'(x)$ 的性质总结<span class="layer L-str">强化</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/高等数学/03_一元函数微分学的概念/高数_第03章_强化18讲.pdf">📄 强化18讲</a>
+
+  <div class="zy"><span class="tag">强化题型 · 隐含条件体系块（这一节基础30讲完全没有，是 18 讲的独家）</span>
+    <b>1. 关于 $f'(x)$ 本身</b><br>
+    ① 如果导函数 $f'(x)$ 存在，则<b>当导函数在一点极限存在时，导函数在这一点必连续</b>（即 $\lim\limits_{x\to x_0}f'(x)=f'(x_0)$）。<br>
+    ② 如果导函数在一点存在，则这一点<b>一定不会是导函数的第一类间断点</b>。<br>
+    ③ 若 $f$ 可导，则 $f'$ <b>可能连续，也可能含有振荡间断点</b>（第二类）。<br>
+    ④ <b>导函数介值定理</b>（达布定理）：$f'$ 即使不连续，也具有介值性。<br><br>
+    <b>2. 关于 $\lim\limits_{x\to+\infty}f'(x)$（两个反直觉的反例，必须背下来）</b><br>
+    ① $\lim\limits_{x\to+\infty}f(x)$ 存在（<b>有水平渐近线</b>），但 $\lim\limits_{x\to+\infty}f'(x)$ <b>不一定存在</b>。
+    　反例：$f(x)=\dfrac{\sin x^2}{x}\to0$，而 $f'(x)=2\cos x^2-\dfrac{\sin x^2}{x^2}$ 无极限。<br>
+    ② $f$ 在 $(0,+\infty)$ 可导且曲线在 $x\to+\infty$ 时有<b>斜渐近线</b>，但 $\lim\limits_{x\to+\infty}f'(x)$ 不一定存在。
+    　反例：$y=x+\dfrac{\sin x^2}{x}$ 有斜渐近线 $y=x$，而 $f'(x)=1+2\cos x^2-\dfrac{\sin x^2}{x^2}$ 无极限。<br>
+    <b>造反例的统一配方：$\dfrac{\sin x^2}{x}$——函数值被 $\frac1x$ 压到 0，但求导时链式法则送出一个 $2x$，正好把压下去的抵消掉，留下一个纯振荡的 $2\cos x^2$。</b>
+  </div>
+
+  <div class="trap"><span class="tag">陷阱 · ①②③ 的分工，一句话理清</span>
+    这三条说的是同一件事的三个侧面：<b>可导函数的导函数，要么在该点连续，要么就必须"坏得很彻底"（第二类的振荡型）。</b>
+    它绝不会出现"左右极限都存在但不等"或"极限存在却不等于函数值"这种<b>第一类</b>间断。
+    所以考场上看到"$f$ 可导且 $f'$ 在 $x_0$ 有跳跃间断点"，可以直接判<b>题设矛盾</b>。
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 3.4 ✔</span>设 $f(x)$ 在 $x=0$ 处连续，下列结论：<br>
+      ① 若 $f'_-(0)$ 存在，则 $f'_+(0)$ 存在；　② 若 $\lim\limits_{x\to0^-}f'(x)$ 存在，则 $\lim\limits_{x\to0^+}f'(x)$ 存在；<br>
+      ③ 若 $f'_-(0)$ 与 $f'_+(0)$ 均存在，则 $f'(0)$ 存在；　④ 若 $\lim\limits_{x\to0}f'(x)$ 存在，则 $f'(0)$ 存在。<br>
+      正确结论的个数为（　）。(A) 1　(B) 2　(C) 3　(D) 4</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(A)，只有 ④ 正确</span>（三个反例都已数值验证：① 右差商 $\sin\frac1h$ 在 $(-1,1)$ 内乱跳；② $2x\sin\frac1x-\cos\frac1x$ 同样乱跳；③ $|x|$ 两侧 $\mp1$）<br>
+      <span class="lab">① 反例</span>$f(x)=\begin{cases}-x,&x\le0\\ x\sin\frac1x,&x\gt0\end{cases}$：$f'_-(0)=-1$ 存在，但 $\lim\limits_{x\to0^+}\dfrac{x\sin\frac1x}{x}=\lim\limits_{x\to0^+}\sin\frac1x$ <b>不存在</b>。<br>
+      <span class="lab">② 反例</span>$f(x)=\begin{cases}-x,&x\le0\\ x^2\sin\frac1x,&x\gt0\end{cases}$：$\lim\limits_{x\to0^-}f'(x)=-1$ 存在，但 $\lim\limits_{x\to0^+}f'(x)=\lim\limits_{x\to0^+}\left(2x\sin\frac1x-\cos\frac1x\right)$ <b>不存在</b>。<br>
+      <span class="lab">③ 反例</span>$f(x)=|x|$：$f'_-(0)=-1,\ f'_+(0)=1$ 都存在，但<b>不相等</b>，$f'(0)$ 不存在。<br>
+      <span class="lab">④ 证明 ✔</span>若 $\lim\limits_{x\to0}f'(x)$ 存在，记 $\lim\limits_{x\to0^+}f'(x)=\lim\limits_{x\to0^-}f'(x)=a$，则由<b>洛必达</b>（$f$ 在 0 连续保证分子 $\to0$）
+      $$f'_+(0)=\lim_{x\to0^+}\frac{f(x)-f(0)}{x-0}=\lim_{x\to0^+}f'(x)=a,\qquad f'_-(0)=\lim_{x\to0^-}f'(x)=a$$
+      故 $f'(0)$ 存在且 $=a$。<br>
+      <span class="lab">★这就是"导数极限定理"</span>见下面的<b>习题 3.7</b>——它是本章唯一的证明题，也是 ④ 的一般形式。<b>注意单向性：$\lim f'$ 不存在时，$f'(x_0)$ 仍可能存在。</b>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 · 习题 3.7 ✔</span>（导数极限定理）证明：<br>
+      (1) 若 $F(x)$ 在 $[x_0,x_0+\delta)\ (\delta\gt0)$ 连续，在 $(x_0,x_0+\delta)$ 内可导，当 $\lim\limits_{x\to x_0^+}F'(x)=A$（存在）时，有 $F'_+(x_0)=A$；<br>
+      (2) 若 $F(x)$ 在 $(x_0-\delta,x_0]$ 连续，在 $(x_0-\delta,x_0)$ 内可导，当 $\lim\limits_{x\to x_0^-}F'(x)=A$（存在）时，有 $F'_-(x_0)=A$。</div>
+    <div class="s">
+      <span class="lab">证</span>两条一模一样，都是<b>洛必达</b>（$\frac00$ 型，分子 $F(x)-F(x_0)\to0$ 由连续保证）：
+      $$F'_+(x_0)=\lim_{x\to x_0^+}\frac{F(x)-F(x_0)}{x-x_0}\xlongequal{\text{洛必达}}\lim_{x\to x_0^+}\frac{F'(x)}{1}=A,\qquad F'_-(x_0)\xlongequal{\text{洛必达}}\lim_{x\to x_0^-}F'(x)=A$$
+      <span class="lab">★★★ 单向性（极易错）</span>满足条件时 $\lim\limits_{x\to x_0^\pm}F'(x)=A\ \Rightarrow\ F'_\pm(x_0)=A$；<b>但 $\lim\limits_{x\to x_0^\pm}F'(x)$ 不存在时，$F'_\pm(x_0)$ 亦可能存在。</b><br>
+      <span class="lab">标准反例</span>$F(x)=\begin{cases}x^2\sin\frac1x,&x\ne0\\0,&x=0\end{cases}$：
+      $F'(0)=\lim\limits_{x\to0}\dfrac{F(x)-F(0)}{x-0}=\lim\limits_{x\to0}x\sin\dfrac1x=0$ <b>存在</b>；
+      而 $x\ne0$ 时 $F'(x)=2x\sin\dfrac1x-\cos\dfrac1x$，$\lim\limits_{x\to0^+}F'(x)$ <b>不存在</b>。<br>
+      <span class="lab">用法</span>这条定理是<b>求分段函数在分段点导数的合法捷径</b>：先算 $\lim f'$，成功就直接得到 $f'(x_0)$；失败（极限不存在）<b>什么也说明不了</b>，必须退回定义。$x^2\sin\frac1x$ 正是那个"失败但函数其实可导"的经典。
+    </div>
+  </div>
+
+  <!-- ================= s10 一点求导三大坑 ================= -->
+  <h2 id="s10"><span class="idx">十</span>函数在一点求导的三大坑<span class="layer L-str">强化</span></h2>
+
+  <div class="zy"><span class="tag">强化题型 · 形式化归体系块：$f'(x_0)$ 与 $f'(x)$ 根本不是一回事</span>
+    在对一个<b>具体</b>函数 $f(x)$ 求导时：<br>
+    <b>(1)</b> $f'(x_0)$ 是指 <b>$x_0$ 点处的导数</b>（<span style="color:var(--green)">定义法</span>，D₂₂ 转换等价表述）；<br>
+    <b>(2)</b> $f'(x)$ 是指 $f$ 用<b>求导法则</b>求出的导函数，也就是<b>求导法则成立时</b>的导函数表达式（<span style="color:var(--green)">公式法</span>，D₁ 常规操作）；<br>
+    <b>(3) ★★★</b> 当 $f'(x)$ 这个表达式在 $x_0$ 处<b>无定义</b>时，也就是求导法则在 $x_0$ 处不成立，<b>并不是说 $f$ 在 $x_0$ 处不可导</b>，也即 $f'(x_0)$ 不一定不存在，<b>要用定义求 $f'(x_0)$</b>。
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 3.5 ✔</span>设 $f(x)=x^{\frac23}\sin x$，求 $f'(x)$。</div>
+    <div class="s">
+      <span class="lab">答案</span>
+      $$f'(x)=\begin{cases}\dfrac{2}{3\sqrt[3]{x}}\sin x+\sqrt[3]{x^2}\cos x,&x\ne0\\[6pt]0,&x=0\end{cases}$$
+      （公式部分已符号对拍；$x\lt0$ 一侧另用实立方根做了 $x=-2,-0.5,-0.1$ 三点数值验证，与数值导数吻合到 $10^{-11}$）<br>
+      <span class="lab">解</span>$x\ne0$ 时按乘法法则直接求；$x=0$ 时法则失效（$\frac{2}{3\sqrt[3]x}$ 无定义），<b>回到定义</b>：
+      $$f'(0)=\lim_{x\to0}\frac{f(x)-f(0)}{x-0}=\lim_{x\to0}\frac{x^{2/3}\sin x}{x}=\lim_{x\to0}\sqrt[3]{x^2}\cdot\frac{\sin x}{x}=0\cdot1=0$$
+      <span class="lab">★ 注（本讲最容易被扣分的地方）</span>若由 $f'(x)=\dfrac{2}{3\sqrt[3]x}\sin x+\sqrt[3]{x^2}\cos x$ <b>在 $x=0$ 无定义</b>就得出"$f'(0)$ 不存在"，<b>这无疑是错误的</b>。<br>
+      <span class="lab">赠品</span>张宇顺手给的一条：若 $F(x)=f(x)\cdot g(x)$，$f$ 在 $x=x_0$ 处<b>不可导</b>，但 $F(x)$ 在 $x=x_0$ 处<b>可能是可导的</b>（这正是 <a href="#s7">§七</a> 那条 $g(x_0)=0$ 公式的另一种说法）。
+    </div>
+  </div>
+
+  <div class="key"><span class="tag">必记 · 三大坑一图流</span>
+    <div class="gridwrap"><table>
+      <tr><th>坑</th><th>长相</th><th>正确动作</th><th>本页例题</th></tr>
+      <tr><td>坑一<br>公式法失效</td><td>$f'(x)$ 表达式在 $x_0$ 无定义（含 $\sqrt[3]x$、$\ln|x|$、$\frac1x$…）</td><td><b>用定义算 $f'(x_0)$</b>，别急着判不可导</td><td>强 3.5</td></tr>
+      <tr><td>坑二<br>绝对值</td><td>$|f(x)|$、$|x-x_0|g(x)$、$(x^2-1)|P(x)|$</td><td>先找 $f=0$ 的点，再用 <a href="#s7">§七结论卡</a> 或 $g(x_0)=0$ 判据</td><td>基 3.5 / 3.6 / 3.7、强 3.6</td></tr>
+      <tr><td>坑三<br>分段点</td><td>分段函数在接缝处</td><td>先用连续性定常数，再<b>分别</b>算 $f'_\pm(x_0)$；不要直接对两段的导函数取极限（那是习 3.7 的定理，有前提）</td><td>强 3.7、习 3.1 / 3.8</td></tr>
+    </table></div>
+  </div>
+
+  <!-- ================= s11 综合题 ================= -->
+  <h2 id="s11"><span class="idx">十一</span>综合题：抽象函数与变限积分<span class="layer L-base">基础</span><span class="layer L-str">强化</span></h2>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 3.3 ✔</span>设 $f(x)$ 在 $x=0$ 的某邻域内有定义，并且 $|f(x)|\le1-\cos x$，则 $f(x)$ 在 $x=0$ 处（　）。<br>
+      (A) 极限存在但不连续　(B) 连续但不可导　(C) 可导且 $f'(0)=0$　(D) 可导且 $f'(0)\ne0$</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(C)</span>（已取两个"顶格"函数 $f=\pm(1-\cos x)$ 验证，$f'(0)$ 均为 0）<br>
+      <span class="lab">第一层次</span><b>夹逼找极限</b>：$0\le|f(x)|\le1-\cos x$，$\lim\limits_{x\to0}(1-\cos x)=0$ ⇒ $\lim|f(x)|=0$ ⇒ $\lim\limits_{x\to0}f(x)=0$。<br>
+      <span class="lab">第二层次</span><b>特殊点找函数值</b>：把 $x=0$ 代入所给不等式，$|f(0)|\le1-\cos0=0$ ⇒ <b>$f(0)=0$</b>，故 $\lim\limits_{x\to0}f(x)=f(0)$，$f$ 在 0 连续，且 $|f(x)-f(0)|=|f(x)|\le1-\cos x$。<br>
+      <span class="lab">第三层次</span><b>再夹逼，此时极限就是导数定义</b>：
+      $$0\le\left|\frac{f(x)-f(0)}{x-0}\right|\le\frac{1-\cos x}{|x|},\qquad \lim_{x\to0}\frac{1-\cos x}{|x|}=\lim_{x\to0}\frac{\frac12x^2}{|x|}=0$$
+      故 $\left|\dfrac{f(x)-f(0)}{x-0}\right|\to0$，即 $f'(0)=0$。<br>
+      <span class="lab">★方法总结</span>$f$ 是<b>抽象函数</b>，利用抽象函数与具体函数的<b>关系式</b>，通过具体函数的信息去求抽象函数的<b>点信息</b>。三层次的顺序不能乱：<b>先极限 → 再函数值 → 最后导数</b>，每一层都为下一层提供弹药。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 3.8 ✔</span>（综合题举例 · 本讲收官）已知函数 $g(x)$ 连续。设 $f(x)=\displaystyle\int_0^{x^2}g(xt)\,\mathrm dt$，求 $f'(x)$ 的表达式，并判断 $f'(x)$ 在 $x=0$ 处的连续性。</div>
+    <div class="s">
+      <span class="lab">答案</span>
+      $$f'(x)=\begin{cases}\dfrac{-\displaystyle\int_0^{x^3}g(u)\,\mathrm du}{x^2}+3xg(x^3),&x\ne0\\[8pt]0,&x=0\end{cases}\qquad f'(x)\ \text{在}\ x=0\ \textbf{连续}$$
+      （已取 $g=\cos u,\ 1+u,\ \mathrm e^u$ 三个具体函数，把"直接对原式求导"与"书上的公式"符号相减，$x\ne0$ 处恒为 0；$f'(0)$ 与 $\lim\limits_{x\to0}f'(x)$ 也都算出 0）<br>
+      <span class="lab">第一步 · 把 $x$ 赶出积分号</span>$x\ne0$ 时令 $u=xt$（$\mathrm du=x\,\mathrm dt$，上限 $x^2\mapsto x^3$）：
+      $$f(x)=\frac1x\int_0^{x^3}g(u)\,\mathrm du$$
+      <b>这是全题第一道关</b>：原式里 $x$ <u>既在积分限里、又在被积函数里</u>，不换元根本没法用变限积分求导公式。<br>
+      <span class="lab">第二步 · 乘法法则 + 变限积分求导</span>（$g$ 连续保证可导）
+      $$f'(x)=-\frac{1}{x^2}\int_0^{x^3}g(u)\mathrm du+\frac1x\cdot g(x^3)\cdot3x^2=\frac{-\int_0^{x^3}g(u)\mathrm du}{x^2}+3xg(x^3)\qquad(x\ne0)$$
+      <span class="lab">第三步 · 分段点回定义</span>依题设 $f(0)=0$，
+      $$f'(0)=\lim_{x\to0}\frac{f(x)-f(0)}{x}=\lim_{x\to0}\frac{\int_0^{x^3}g(u)\mathrm du}{x^2}\xlongequal{\text{洛必达}}\lim_{x\to0}\frac{g(x^3)\cdot3x^2}{2x}=0$$
+      <span class="lab">第四步 · 判连续性</span>
+      $$\lim_{x\to0}f'(x)=\lim_{x\to0}\left[\frac{-\int_0^{x^3}g(u)\mathrm du}{x^2}+3xg(x^3)\right]=-\lim_{x\to0}\frac{g(x^3)\cdot3x^2}{2x}+0=0=f'(0)$$
+      故 $f'$ 在 $x=0$ 连续。<br>
+      <span class="lab">为什么放在收官</span>这道题把本章<b>四个模块串成一条线</b>：换元（形式化归）→ 公式法求 $f'(x)$ → 分段点用<b>定义</b>补 $f'(0)$（<a href="#s10">§十坑一</a>）→ 用 $\lim f'(x)$ 与 $f'(0)$ 比较判连续（<a href="#s9">§九</a>）。<b>会做这一道，本章就通了。</b>
+    </div>
+  </div>
+
+  <!-- ================= s12 习题 ================= -->
+  <h2 id="s12"><span class="idx">十二</span>基础习题 3.1–3.9 · 答案速查<span class="layer L-base">基础</span></h2>
+
+  <div class="mine"><span class="tag">补讲 · 这 9 道题的分工</span>
+    3.1、3.8 练<b>分段点可导性</b>；3.2 练<b>绝对值充要条件</b>（就是基 3.5 换了件衣服）；3.3、3.4 练<b>微分与无穷小阶的比较</b>；3.5 练<b>公式法陷阱</b>；3.6 练<b>把陌生极限凑成导数定义</b>；3.7 是<b>导数极限定理</b>（已在 <a href="#s9">§九</a> 展开）；3.9 练<b>泰勒反推导数</b>。<b>九道题正好覆盖全章。</b>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 3.1 ✔</span>设 $f(x)=\begin{cases}\dfrac{1-\cos x}{\sqrt x},&x\gt0\\[4pt] x^2g(x),&x\le0\end{cases}$，其中 $g(x)$ 是<b>有界函数</b>，则 $f(x)$ 在 $x=0$ 处（　）。<br>(A) 极限不存在　(B) 极限存在但不连续　(C) 连续但不可导　(D) 可导</div>
+    <div class="s"><span class="lab">答案</span><span class="ans">(D)</span>（$g$ 取 $\sin\frac1x,\cos\frac1x,1$ 三种都验过，左导数均为 0）<br>
+      $$f'_+(0)=\lim_{x\to0^+}\frac{f(x)-f(0)}{x}=\lim_{x\to0^+}\frac{1-\cos x}{x^{3/2}}=\lim_{x\to0^+}\frac{\frac12x^2}{x^{3/2}}=0,\qquad f'_-(0)=\lim_{x\to0^-}\frac{x^2g(x)}{x}=\lim_{x\to0^-}xg(x)=0$$
+      第二式用到 <b>有界函数乘以无穷小量仍是无穷小量</b>（$g$ 只说有界，不说有极限，这是全题的机关）。左导数 = 右导数 ⇒ 可导。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 3.2 ✔</span>设 $f(x)=\left|x^3-1\right|\varphi(x)$，其中 $\varphi(x)$ 在 $x=1$ 处连续，则 $\varphi(1)=0$ 是 $f(x)$ 在 $x=1$ 处可导的（　）。<br>(A) 充分必要条件　(B) 充分但非必要　(C) 必要但非充分　(D) 既非充分又非必要</div>
+    <div class="s"><span class="lab">答案</span><span class="ans">(A)</span>（符号验证：取 $\varphi=x-1+c$ 得 $f'_+(1)=3c,\ f'_-(1)=-3c$，相等 $\iff c=\varphi(1)=0$）<br>
+      <span class="lab">充分性</span>设 $\varphi(1)=0$，则 $f'_+(1)=\lim\limits_{x\to1^+}\dfrac{|x^3-1|\varphi(x)}{x-1}=\lim\limits_{x\to1^+}(x^2+x+1)\varphi(x)=0$，$f'_-(1)=-\lim\limits_{x\to1^-}(x^2+x+1)\varphi(x)=0$，故 $f'(1)=0$。<br>
+      <span class="lab">必要性</span>设 $f$ 在 $x=1$ 可导（注意 $f(1)=0$），则 $f'_+(1)=3\varphi(1)$、$f'_-(1)=-3\varphi(1)$，由两者相等得 $3\varphi(1)=-3\varphi(1)$，故 $\varphi(1)=0$。<br>
+      <span class="lab">要害</span>$|x^3-1|=|x-1|(x^2+x+1)$，而 $x^2+x+1$ 在 $x=1$ 处 $=3\ne0$ 且恒正，所以整题就是基 3.5 的结论套一层壳。<b>$3$ 这个系数在两边同时出现，最后被约掉——不影响结论。</b>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 3.3 ✔ / 3.4 ✔</span>（微分与无穷小的阶）<br>
+      <b>3.3</b> $f$ 可导，曲线 $y=f(x)$ 在 $(x_0,f(x_0))$ 处的切线与直线 $y=2-x$ <b>垂直</b>，则 $\Delta x\to0$ 时该函数在 $x_0$ 处的微分 $\mathrm dy$ 是（　）。(A) 与 $\Delta x$ 同阶但非等价　(B) 与 $\Delta x$ 等价　(C) 比 $\Delta x$ 高阶　(D) 比 $\Delta x$ 低阶<br>
+      <b>3.4</b> $y=f(x)$ 在 $x_0$ 可导且 $f'(x_0)\ne0$，$\Delta x\to0$ 时 $\Delta y-\mathrm dy$ 是 $\mathrm dy$ 的（　）。(A) 高阶无穷小　(B) 低阶　(C) 同阶非等价　(D) 等价</div>
+    <div class="s">
+      <span class="lab">3.3 答案</span><span class="ans">(B)</span>　垂直 ⇒ 斜率之积为 $-1$，$f'(x_0)\cdot(-1)=-1$ ⇒ <b>$f'(x_0)=1$</b>。于是 $\mathrm dy|_{x_0}=f'(x_0)\Delta x=\Delta x$，$\lim\limits_{\Delta x\to0}\dfrac{\mathrm dy}{\Delta x}=1$，是<b>等价</b>无穷小。<br>
+      <span class="lab">3.4 答案</span><span class="ans">(A)</span>　由微分定义 $\Delta y-\mathrm dy=o(\Delta x)$，而 $\mathrm dy=f'(x_0)\Delta x$，由 $f'(x_0)\ne0$：
+      $$\lim_{\Delta x\to0}\frac{\Delta y-\mathrm dy}{\mathrm dy}=\lim_{\Delta x\to0}\frac{o(\Delta x)}{f'(x_0)\Delta x}=\frac{1}{f'(x_0)}\cdot\lim_{\Delta x\to0}\frac{o(\Delta x)}{\Delta x}=0$$
+      故是<b>高阶</b>无穷小。<b>$f'(x_0)\ne0$ 这个条件不能少</b>——否则 $\mathrm dy\equiv0$，分母为 0，比较无从谈起。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 3.5 ✔</span>设 $f(x)=(x-a)\cdot\varphi(x)$，其中 $\varphi(x)$ <b>连续</b>，则 $f'(a)=$ ______。</div>
+    <div class="s"><span class="lab">答案</span><span class="ans">$\varphi(a)$</span><br>
+      <span class="lab">★经典错法警示</span>有的同学用公式法：$f'(a)=\big[\varphi(x)+(x-a)\varphi'(x)\big]\big|_{x=a}=\varphi(a)+0=\varphi(a)$——<b>答案对了，但解法是错的</b>！因为 $\varphi$ <b>仅连续</b>，$\varphi'(x)$ 不一定存在，你写下 $\varphi'(x)$ 那一刻就已经违规了。<br>
+      <span class="lab">正解（导数定义）</span>
+      $$f'(a)=\lim_{x\to a}\frac{f(x)-f(a)}{x-a}=\lim_{x\to a}\frac{(x-a)\varphi(x)-0}{x-a}=\lim_{x\to a}\varphi(x)=\varphi(a)$$
+      <span class="lab">注</span><b>求导数时，当函数不具备"导数存在"的条件时，往往只能用"导数定义"求。</b>（已用 $\varphi=|x-a|+3$ 这个连续不可导的函数验证：定义法给出 $3=\varphi(a)$，正确。）
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 3.6 ✔</span>设 $f(x)$ 满足 $f(0)=0$，且 $f'(0)$ 存在，则 $\lim\limits_{x\to0}\dfrac{f(1-\sqrt{\cos x})}{\ln(1-x\sin x)}=$ ______。</div>
+    <div class="s"><span class="lab">答案</span><span class="ans">$-\dfrac14f'(0)$</span>（已用 $f=Bx$ 符号验证，结果恰为 $-B/4$）<br>
+      <span class="lab">解</span><b>凑导数定义</b>——分子分母同乘 $(1-\sqrt{\cos x})$：
+      $$\text{原式}=\lim_{x\to0}\underbrace{\frac{f(1-\sqrt{\cos x})-f(0)}{(1-\sqrt{\cos x})-0}}_{\to\,f'(0)}\cdot\lim_{x\to0}\frac{1-\sqrt{\cos x}}{\ln(1-x\sin x)}$$
+      再用等价无穷小：$1-\sqrt{\cos x}=1-\cos^{1/2}x\sim\frac12\cdot\frac12x^2=\frac14x^2$（公式 $1-\cos^\alpha x\sim\frac{\alpha}{2}x^2$），$\ln(1-x\sin x)\sim-x\sin x\sim-x^2$。故
+      $$\text{原式}=f'(0)\cdot\lim_{x\to0}\frac{\frac14x^2}{-x^2}=-\frac14f'(0)$$
+      <span class="lab">要害</span>$f$ 是<b>抽象</b>函数，唯一能用的信息就是 $f(0)=0$ 与 $f'(0)$ 存在，所以<b>必须把 $1-\sqrt{\cos x}$ 整体当成"趋于 0 的自变量"去凑差商</b>。这一步凑出来，题就结束了。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 3.8 ✔</span>设 $f(x)=\begin{cases}x^2\sin\dfrac{\pi}{x},&x\lt0\\ A,&x=0\\ ax^2+b,&x\gt0\end{cases}$，求常数 $A,a,b$ 的值使 $f(x)$ 在 $x=0$ 处可导，并求 $f'(0)$。</div>
+    <div class="s"><span class="lab">答案</span><span class="ans">$A=b=0$，$a$ 可以为<b>任意</b>常数，$f'(0)=0$</span><br>
+      <span class="lab">第一步 · 连续（可导的必要条件）</span>$\lim\limits_{x\to0^-}x^2\sin\dfrac{\pi}{x}=0$（无穷小 × 有界），$\lim\limits_{x\to0^+}(ax^2+b)=b$，两者都要等于 $f(0)=A$，故 <b>$A=b=0$</b>。<br>
+      <span class="lab">第二步 · 可导</span>
+      $$f'_-(0)=\lim_{x\to0^-}\frac{x^2\sin\frac{\pi}{x}-0}{x-0}=\lim_{x\to0^-}x\sin\frac{\pi}{x}=0,\qquad f'_+(0)=\lim_{x\to0^+}\frac{ax^2-0}{x-0}=0$$
+      两侧恒为 0，<b>与 $a$ 无关</b>，所以 $a$ 可取任意常数，$f'(0)=0$。<br>
+      <span class="lab">陷阱</span>很多人条件反射地"三个未知数就要解出三个值"，结果硬凑一个 $a$ 出来。<b>这题的答案就是"$a$ 自由"</b>——$ax^2$ 是 $x$ 的高阶无穷小，无论 $a$ 多大都影响不到一阶导数。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 3.9 ✔</span>设 $\delta\gt0$，$f(x)$ 在 $[-\delta,\delta]$ 上有定义，$f(0)=1$，且满足 $\lim\limits_{x\to0}\dfrac{\ln(1-2x)+2xf(x)}{x^2}=0$。证明：$f(x)$ 在 $x=0$ 处可导，并求 $f'(0)$。</div>
+    <div class="s"><span class="lab">答案</span><span class="ans">$f'(0)=1$</span>（已双向验证：取 $f=1+x+dx^2$ 时极限恒为 0 且与 $d$ 无关；取 $f=1+1.5x$ 时极限为 1 $\ne$ 0，说明斜率必须是 1）<br>
+      <span class="lab">证</span>对 $\ln(1-2x)$ 用<b>泰勒公式</b>展到二阶：$\ln(1-2x)=-2x-\dfrac12(2x)^2+o(x^2)=-2x-2x^2+o(x^2)$。代入
+      $$0=\lim_{x\to0}\frac{-2x-2x^2+o(x^2)+2xf(x)}{x^2}=\lim_{x\to0}\frac{2x\big[f(x)-1\big]}{x^2}-2+0=2\lim_{x\to0}\frac{f(x)-1}{x}-2$$
+      于是 $\lim\limits_{x\to0}\dfrac{f(x)-f(0)}{x-0}=1$，这个极限<b>存在</b>即说明 $f$ 在 $x=0$ 可导，且 $f'(0)=1$。<br>
+      <span class="lab">要害</span>题干<b>只给了 $f(0)=1$，没给 $f$ 连续或可导</b>——"可导"是要你<u>证</u>出来的，途径就是<b>证明差商的极限存在</b>。把已知极限里的 $f$ 分离成 $\frac{f(x)-1}{x}$ 的形式，剩下的全是可算的具体函数，这就是<a href="#s11">基 3.3</a> 说的"用具体函数的信息去求抽象函数的点信息"。
+    </div>
+  </div>
+
+  <!-- ================= outro ================= -->
+  <div class="outro">
+    <h3>收官 · 本章带走什么</h3>
+    <ol>
+      <li><b>一个模板</b>：连续 $=o(1)$、可导 $=f'\Delta x+o(\Delta x)$、$n$ 阶 $=$ 泰勒。<b>微分学就是把 $f(x+\Delta x)-f(x)$ 写成"多项式 + 余项"，次数越高性质越强。</b>后面第 4~7 章的一切都是这句话的展开。</li>
+      <li><b>一张判定表</b>：可导 ⇔ 左右导数存在<u>且相等</u>；可导 ⇒ 连续（反之不然）；无穷导数 = 有铅直切线但<b>不可导</b>；角点 = <b>连切线都没有</b>。</li>
+      <li><b>一条结论卡</b>：$|f|$ 只在"$f(x_0)=0$ 且 $f'(x_0)\ne0$"处不可导。所有含绝对值的题都从这里出发。</li>
+      <li><b>三个坑</b>：公式法在一点失效 ≠ 不可导（回定义）；$\lim f'(x)$ 不存在 ≠ $f'(x_0)$ 不存在（$x^2\sin\frac1x$）；两侧导数"均存在" ≠ 可导。</li>
+      <li><b>一套隐含条件挖掘术</b>：题干给"某个含绝对值的差商极限存在"，先逼出 $f(x_0)$，再按符号分三支脱绝对值（强 3.3）。</li>
+    </ol>
+    <p><b>配套速查</b>：<a href="../卡库_极限与无穷小工具箱.html">卡库·极限工具箱</a>（$1-\cos^\alpha x\sim\frac\alpha2x^2$ 在习 3.6 里直接用到） · <a href="../公式大全_速查与秒杀.html">公式大全</a> · <a href="../直觉馆_图像与数感.html">直觉馆</a>（$x^{1/3}$、$x^2\sin\frac1x$ 两张图正好是本章 §五、§九 的主角）。<b>上一章</b>：<a href="第02章_数列极限.html">第 2 章 数列极限</a>。<b>下一章</b>：第 4 章 一元函数微分学的计算。</p>
+    <div class="dolinks">
+      <div class="t">去做题</div>
+      <a href="../../张宇系列_分章易识别版/高等数学/03_一元函数微分学的概念/高数_第03章_基础30讲.pdf">基础 30 讲</a>
+      <a href="../../张宇系列_分章易识别版/高等数学/03_一元函数微分学的概念/高数_第03章_强化18讲.pdf">强化 18 讲</a>
+      <a href="../../张宇系列_分章易识别版/高等数学/03_一元函数微分学的概念/高数_第03章_1000题_基础_题目.pdf">1000题·基础篇</a>
+      <a href="../../张宇系列_分章易识别版/高等数学/03_一元函数微分学的概念/高数_第03章_1000题_强化_题目.pdf">1000题·强化篇</a>
+      <div class="note">本章 1000 题体量很小（基础篇 2 页、强化篇 3 页），建议<b>一次刷完</b>，重点盯"含绝对值 / 分段点 / 抽象函数差商"三类。</div>
+    </div>
+  </div>
+
+  <footer>
+    精读版 · 高数第 3 章　一元函数微分学的概念<br>
+    张宇《基础30讲·高数分册》p.99–118 + 《高数18讲》p.23–33，共 31 页　·　32 道例题与习题答案已全部程序复算
+  </footer>
+</div>
+
+<script>
+/* ============ 模块一：微观放大镜 ============ */
+(function(){
+  const svg = document.getElementById('lens');
+  const say = document.getElementById('lensSay');
+  const zoomEl = document.getElementById('zoom'), zoomv = document.getElementById('zoomv');
+  const absBtn = document.getElementById('absBtn');
+  let mode = 'exist', useAbs = false;
+
+  const W=660,H=300,CX=330,CY=150,SX=62,SY=30;   // 每格像素
+  // 邻近点的编号（k=0 是 x0 本身）
+  const KS=[-4,-3,-2,-1,1,2,3,4];
+  // 各档在"真实"尺度上的纵向偏移规律 c(k)
+  const OFFS={
+    exist:{'-4':0.86,'-3':-0.62,'-2':0.44,'-1':-0.78,'1':0.71,'2':-0.5,'3':0.9,'4':-0.66},
+    cont :{'-4':-1,'-3':-1,'-2':-1,'-1':-1,'1':1,'2':1,'3':1,'4':1}
+  };
+  const A=0.8;   // 可导档的斜率
+
+  function yreal(k, delta){
+    if(mode==='diff')  return A*k*delta;                       // 线性：Y-y0 = a·Δx
+    if(mode==='cont')  return OFFS.cont[k]*Math.sqrt(Math.abs(k)*delta); // 连续不可导：√Δx 级
+    return OFFS.exist[k];                                      // 不连续：常数级
+  }
+  function esc(s){return s;}
+
+  function draw(){
+    const z = +zoomEl.value;
+    const delta = Math.pow(10, -z/10);        // 真实横向单位
+    const scale = 1/delta;                    // 等比例放大倍数
+    zoomv.textContent = '×' + (scale>=1e4 ? scale.toExponential(0).replace('e+','e') : Math.round(scale));
+
+    let s = '';
+    // 坐标轴
+    s += `<line x1="30" y1="${CY}" x2="${W-16}" y2="${CY}" stroke="var(--line)" stroke-width="1.5"/>`;
+    s += `<line x1="${CX}" y1="18" x2="${CX}" y2="${H-14}" stroke="var(--line)" stroke-width="1.5" stroke-dasharray="4 4"/>`;
+    s += `<text x="${W-30}" y="${CY-8}" font-size="12" fill="var(--muted)">X</text>`;
+    s += `<text x="${CX+7}" y="26" font-size="12" fill="var(--muted)">Y</text>`;
+    s += `<text x="${CX-8}" y="${H-2}" font-size="11" fill="var(--muted)" text-anchor="middle">x₀</text>`;
+
+    // 可导档：把那条极限直线画出来
+    if(mode==='diff'){
+      if(!useAbs){
+        s += `<line x1="${CX-4*SX}" y1="${CY-A*(-4)*SY}" x2="${CX+4*SX}" y2="${CY-A*4*SY}" stroke="var(--green)" stroke-width="1.2" stroke-dasharray="5 5" opacity=".75"/>`;
+      }else{
+        s += `<polyline points="${CX-4*SX},${CY-Math.abs(A*4)*SY} ${CX},${CY} ${CX+4*SX},${CY-Math.abs(A*4)*SY}" fill="none" stroke="var(--green)" stroke-width="1.2" stroke-dasharray="5 5" opacity=".75"/>`;
+      }
+    }
+
+    // 中心点 y0
+    let y0 = 0;
+    if(useAbs) y0 = Math.abs(y0);
+    s += `<circle cx="${CX}" cy="${CY - y0*SY}" r="5.5" fill="var(--accent)"/>`;
+
+    let escaped = 0;
+    KS.forEach(k=>{
+      let dy = yreal(k, delta);
+      if(useAbs) dy = Math.abs(dy);
+      const vy = dy/delta;                      // 等比例放大后的画面纵坐标（单位：格）
+      const X  = CX + k*SX;
+      const Y  = CY - vy*SY;
+      if(Y < 14 || Y > H-10){
+        escaped++;
+        const top = Y < 14;
+        const ay = top ? 22 : H-18;
+        s += `<path d="M ${X} ${ay} l -5 ${top?9:-9} M ${X} ${ay} l 5 ${top?9:-9} M ${X} ${ay} L ${X} ${top?ay+22:ay-22}" stroke="var(--red)" stroke-width="2" fill="none" stroke-linecap="round"/>`;
+      }else{
+        s += `<circle cx="${X}" cy="${Y}" r="4.5" fill="var(--green)"/>`;
+      }
+    });
+
+    svg.innerHTML = s;
+
+    // 三档差商同屏对照：这才是三者真正的分水岭（阶数不同）
+    const q = {
+      exist: OFFS.exist['4']/(4*delta),
+      cont : Math.sqrt(4*delta)/(4*delta),
+      diff : A
+    };
+    const nm = {exist:'① 存在（不连续）',cont:'② 连续不可导',diff:'③ 可导'};
+    const od = {exist:'$\\propto 1/\\Delta x$',cont:'$\\propto 1/\\sqrt{\\Delta x}$',diff:'常数'};
+    const num = v => Math.abs(v)>=1e5 ? v.toExponential(2) : v.toFixed(3);
+    let qt = '<tr><th>档</th><th>差商 $\\frac{Y-y_0}{X-x_0}$（取 k=4）</th><th>随放大倍数的阶</th></tr>';
+    ['exist','cont','diff'].forEach(m=>{
+      const cur = (m===mode);
+      qt += `<tr${cur?' style="background:var(--accent-soft)"':''}><td>${cur?'▶ ':''}${nm[m]}</td>`
+          + `<td class="${m==='diff'?'same':'diff'}">${num(q[m])}</td><td>${od[m]}</td></tr>`;
+    });
+    document.getElementById('qtab').innerHTML = qt;
+
+    const msgs = {
+      exist: `<b>① 存在（不连续）</b>：邻近点的值 $Y$ 与 $y_0$ <b>毫无关系</b>，$Y-y_0$ 是固定大小的常数。等比例放大 ${zoomv.textContent} 后，它们相对于 $\\Delta x$ 大得离谱，<b>${escaped>0?'全部飞出画面（红箭头）':'即将飞出画面'}</b>——这就是「无牵无挂」。`,
+      cont : `<b>② 连续不可导</b>：$Y\\to y_0$（相依相偎），但 $Y-y_0\\sim\\sqrt{\\Delta x}$，<b>比 $\\Delta x$ 低阶</b>。放大 ${zoomv.textContent} 后点阵${escaped>0?'已被拉出画面':'越拉越陡'}，差商 $\\to\\infty$——靠得近，<b>但不够快</b>。`,
+      diff : `<b>③ 可导</b>：$Y-y_0=a\\,\\Delta x$ 严格线性。无论放大多少倍，点阵<b>纹丝不动地趴在斜率 $a=0.8$ 的绿色虚线上</b>。<em>可导 = 在无穷小尺度下看起来是直线</em>，这条直线就是切线，$a$ 就是 $f'(x_0)$。`
+    };
+    let m = msgs[mode];
+    if(useAbs){
+      if(mode==='diff') m += ` 取绝对值后（$f(x_0)=0,\\ f'(x_0)=a\\ne0$）折成 <b>V 形</b>：左侧差商 $-a$、右侧 $+a$，<b>$|f|$ 在此不可导</b>——这正是基础讲图 3-8 / 18讲图 (i)(j) 的画面。`;
+      else m += ` 取绝对值只是把下方的点整体翻上来，<b>形态不变</b>（图 3-5→3-6）。`;
+    }
+    say.innerHTML = m;
+    if(window.renderMathInElement){
+      const dl={delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]};
+      renderMathInElement(say,dl);
+      renderMathInElement(document.getElementById('qtab'),dl);
+    }
+  }
+
+  document.querySelectorAll('.mode').forEach(b=>{
+    b.addEventListener('click',()=>{
+      document.querySelectorAll('.mode').forEach(o=>o.classList.remove('on'));
+      b.classList.add('on'); mode=b.dataset.m; draw();
+    });
+  });
+  absBtn.addEventListener('click',()=>{
+    useAbs=!useAbs;
+    absBtn.textContent = '取绝对值 |f|：' + (useAbs?'开':'关');
+    absBtn.classList.toggle('on', useAbs);
+    draw();
+  });
+  zoomEl.addEventListener('input',draw);
+  draw();
+})();
+
+/* ============ 模块二：左右导数对拍台 ============ */
+(function(){
+  const sel=document.getElementById('fsel'), tab=document.getElementById('dqtab'),
+        vd=document.getElementById('verdict'), desc=document.getElementById('fdesc'),
+        svg=document.getElementById('probe');
+
+  const FS=[
+    {n:'|x|　（角点·最经典）', x0:0, f:x=>Math.abs(x),
+     d:'基础讲注例 1：原点是<b>角点（尖点）</b>，两条单侧切线 $y=x$ 与 $y=-x$ 夹成一个角。$f\'_+(0)=1\\ne-1=f\'_-(0)$，<b>不可导，也没有切线</b>。也是强 3.4 的 ③ 反例。'},
+    {n:'x^(1/3)　（无穷导数·铅直切线）', x0:0, f:x=>Math.cbrt(x),
+     d:'基础讲注例 2：$\\frac{\\Delta y}{\\Delta x}=\\frac{1}{(\\Delta x)^{2/3}}$，而 $(\\Delta x)^{2/3}>0$ 恒成立，所以<b>两侧都是 $+\\infty$</b>。曲线有<b>铅直切线 $x=0$</b>，但按高数规矩<b>导数不存在</b>。'},
+    {n:'x²sin(1/x)　（可导，但 f\' 振荡）', x0:0, f:x=>x===0?0:x*x*Math.sin(1/x),
+     d:'习题 3.7 的标准反例：$f\'(0)=\\lim x\\sin\\frac1x=0$ <b>存在</b>；但 $x\\ne0$ 时 $f\'(x)=2x\\sin\\frac1x-\\cos\\frac1x$，$\\lim\\limits_{x\\to0}f\'(x)$ <b>不存在</b>。<b>「$\\lim f\'$ 不存在」推不出「$f\'(x_0)$ 不存在」。</b>'},
+    {n:'x·sin(1/x)　（连续不可导·振荡）', x0:0, f:x=>x===0?0:x*Math.sin(1/x),
+     d:'强 3.4 的 ① 反例：差商 $=\\sin\\frac1h$ 在 $[-1,1]$ 内<b>永远乱跳、不收敛</b>。这是与「角点」完全不同的第二种不可导方式——<b>连单侧极限都没有</b>。'},
+    {n:'cos√|x|　（强3.7 D·不可导）', x0:0, f:x=>Math.cos(Math.sqrt(Math.abs(x))),
+     d:'强 3.7 的正确答案：$\\cos\\sqrt{|x|}-1\\sim-\\frac12|x|$，除以 $x$ 得 $\\mp\\frac12$，<b>左 $\\frac12$、右 $-\\frac12$，不可导</b>。凡是 $\\sqrt{|x|}$ 套在外层，展开必出 $|x|$ 一次项。'},
+    {n:'√cos|x|　（强3.7 C·可导）', x0:0, f:x=>Math.sqrt(Math.cos(Math.abs(x))),
+     d:'强 3.7 的 (C)：$\\sqrt{\\cos|x|}-1\\sim-\\frac14x^2$，是 $x$ 的<b>二阶</b>无穷小，除以 $x$ 后 $\\to0$。<b>与上一个函数只差一个"根号套在里面还是外面"，结论天差地别。</b>'},
+    {n:'|x|·tan|x|　（强3.7 A·可导）', x0:0, f:x=>Math.abs(x)*Math.tan(Math.abs(x)),
+     d:'强 3.7 的 (A)：$|x|\\tan|x|\\sim x^2$，除以 $x$ 后 $\\to0$。<b>两个绝对值相乘，把一阶的坏毛病抵消掉了。</b>'},
+    {n:'x^(2/3)·sin x　（强3.5·公式法失效）', x0:0, f:x=>Math.cbrt(x*x)*Math.sin(x),
+     d:'强 3.5：公式法给出的 $f\'(x)=\\frac{2}{3\\sqrt[3]{x}}\\sin x+\\sqrt[3]{x^2}\\cos x$ 在 $x=0$ <b>无定义</b>，但用定义算 $f\'(0)=\\lim\\sqrt[3]{x^2}\\cdot\\frac{\\sin x}{x}=0$ <b>存在</b>。<b>表达式无定义 ≠ 不可导。</b>'},
+    {n:'(x²−1)|x³+x²−2x−2| 在 x=√2', x0:Math.SQRT2, r:0.06, f:x=>(x*x-1)*Math.abs(x*x*x+x*x-2*x-2),
+     d:'基 3.6 的 $f_1$ 在 $x=\\sqrt2$：分解为 $(x+1)(x-1)|x+\\sqrt2||x-\\sqrt2||x+1|$，抽掉 $|x-\\sqrt2|$ 后余因子在 $\\sqrt2$ 处<b>非零</b>，故<b>不可导</b>。'},
+    {n:'(x²−1)|x³+x²−2x−2| 在 x=−1', x0:-1, r:0.3, f:x=>(x*x-1)*Math.abs(x*x*x+x*x-2*x-2),
+     d:'同一个 $f_1$ 换到 $x=-1$：这里 $|x+1|$ 与外面的因子 $(x+1)$ <b>凑成偶数次</b>，余因子在 $-1$ 处为 0，所以<b>可导（导数为 0）</b>。对比上一条，这就是"奇数次 + 余因子非零"判据的两面。'}
+  ];
+
+  FS.forEach((o,i)=>{const op=document.createElement('option');op.value=i;op.textContent=o.n;sel.appendChild(op);});
+
+  const HS=[1e-1,1e-2,1e-3,1e-4,1e-5,1e-6,1e-7];
+  function fmt(v){
+    if(!isFinite(v)) return '∞';
+    if(Math.abs(v)>=1e6) return v.toExponential(2);
+    if(Math.abs(v)<1e-9) return '0.000000';
+    return v.toFixed(6);
+  }
+  function run(){
+    const o=FS[+sel.value], x0=o.x0, f0=o.f(x0);
+    let rows='<tr><th>h</th><th>左差商 f′₋</th><th>右差商 f′₊</th><th>左−右</th></tr>';
+    const Ls=[],Rs=[];
+    HS.forEach(h=>{
+      const L=(o.f(x0-h)-f0)/(-h), R=(o.f(x0+h)-f0)/h;
+      Ls.push(L);Rs.push(R);
+      const gap=L-R;
+      const cls = Math.abs(gap)<1e-4 ? 'same' : 'diff';
+      rows+=`<tr><td>1e${Math.round(Math.log10(h))}</td><td>${fmt(L)}</td><td>${fmt(R)}</td><td class="${cls}">${fmt(gap)}</td></tr>`;
+    });
+    tab.innerHTML=rows;
+
+    // 判定：先看是否单调发散（无穷导数），再看是否收敛（振荡），最后比较两侧
+    const tail=(a,k)=>a.slice(-k);
+    const diverging=a=>{
+      const t=tail(a,4).map(Math.abs);
+      return t[3]>1e3 && t[3]>t[2] && t[2]>t[1] && t[1]>t[0];
+    };
+    const converged=a=>{
+      const t=tail(a,3);
+      const sc=Math.max(1,...t.map(v=>Math.abs(v)));
+      return (Math.max(...t)-Math.min(...t))/sc < 5e-3;
+    };
+    const Lv=Ls[Ls.length-1], Rv=Rs[Rs.length-1];
+    const scale=Math.max(1,Math.abs(Lv),Math.abs(Rv));
+    let cls,txt;
+    if(diverging(Ls)&&diverging(Rs)){
+      const same = Lv*Rv>0;
+      cls='v-inf';
+      txt='⚡ 无穷导数：两侧差商都单调冲向 '+(same?(Lv>0?'+∞':'−∞'):'∞（异号）')
+        +' ⇒ 曲线在此有铅直切线，但按高数规矩 f′(x₀) 不存在。';
+    }else if(!converged(Ls)||!converged(Rs)){
+      cls='v-no';txt='🌀 振荡：差商随 h 缩小上下乱跳、既不收敛也不发散 ⇒ 单侧极限都不存在，f′(x₀) 不存在。';
+    }else if(Math.abs(Lv-Rv)/scale<5e-3){
+      cls='v-ok';txt='✔ 可导：两侧差商都收敛且相等，f′(x₀) ≈ '+fmt((Lv+Rv)/2)+'。';
+    }else{
+      cls='v-no';txt='✘ 角点：两侧差商各自收敛（'+fmt(Lv)+' 与 '+fmt(Rv)+'）但不相等 ⇒ f′(x₀) 不存在，此处也没有切线。';
+    }
+    vd.className='verdict '+cls; vd.textContent=txt;
+
+    desc.innerHTML=o.d;
+    if(window.renderMathInElement) renderMathInElement(desc,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});
+
+    // 画曲线（x0 附近）
+    const W=660,H=240,PX=330,PY=125,R=(o.r||0.9);
+    let pts='',mn=Infinity,mx=-Infinity,vals=[];
+    for(let i=0;i<=300;i++){
+      const x=x0-R+2*R*i/300, y=o.f(x);
+      vals.push([x,y]); if(isFinite(y)){mn=Math.min(mn,y);mx=Math.max(mx,y);}
+    }
+    const span=Math.max(mx-mn,1e-6), sy=95/span;
+    vals.forEach(([x,y],i)=>{
+      const px=PX+(x-x0)/R*300, py=PY+ (f0-y)*sy;
+      if(isFinite(py)) pts+=(pts?' ':'')+px.toFixed(1)+','+Math.max(8,Math.min(H-8,py)).toFixed(1);
+    });
+    let s=`<line x1="20" y1="${PY+(f0-0)*sy>H-8||PY+(f0-0)*sy<8?PY:PY+f0*sy}" x2="${W-20}" y2="${PY+(f0-0)*sy>H-8||PY+(f0-0)*sy<8?PY:PY+f0*sy}" stroke="var(--line)" stroke-width="1"/>`;
+    s+=`<line x1="${PX}" y1="10" x2="${PX}" y2="${H-10}" stroke="var(--line)" stroke-width="1" stroke-dasharray="4 4"/>`;
+    s+=`<polyline points="${pts}" fill="none" stroke="var(--accent)" stroke-width="2"/>`;
+    s+=`<circle cx="${PX}" cy="${PY}" r="4.5" fill="var(--red)"/>`;
+    s+=`<text x="${PX+8}" y="${PY-8}" font-size="11" fill="var(--muted)">x₀=${x0===0?'0':x0.toFixed(4)}</text>`;
+    s+=`<text x="${W-24}" y="${H-6}" font-size="10" fill="var(--muted)" text-anchor="end">横向窗口 x₀±${R}</text>`;
+    svg.innerHTML=s;
+  }
+  sel.addEventListener('change',run);
+  run();
+})();
+</script>
+</body>
+</html>
