@@ -1,0 +1,1473 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>精读版 · 线代 第2章 矩阵</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],ignoredClasses:['nokatex']})"></script>
+<link rel="stylesheet" href="style.css">
+<style>
+/* ===== 本章专属：初等变换步进器 + 等价命题网 ===== */
+.tool{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:20px 0}
+.tool h4{margin:0 0 4px;font-size:1rem;color:var(--accent)}
+.tool .hint{color:var(--muted);font-size:.82rem;margin-bottom:12px;line-height:1.7}
+.stepbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0}
+.stepbar button{font:inherit;font-size:.84rem;padding:4px 14px;border-radius:8px;cursor:pointer;
+  border:1px solid var(--line);background:var(--accent-soft);color:var(--accent)}
+.stepbar button:hover:not(:disabled){filter:brightness(.94)}
+.stepbar button:disabled{opacity:.4;cursor:default}
+.stepbar select{font:inherit;font-size:.84rem;padding:4px 8px;border-radius:8px;
+  border:1px solid var(--line);background:var(--card);color:var(--ink)}
+.stepbar .cnt{font-family:var(--mono);font-size:.8rem;color:var(--muted);margin-left:auto}
+.mxrow{display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:center;margin:10px 0}
+.mxbox{text-align:center}
+.mxbox .cap{font-size:.74rem;color:var(--muted);margin-bottom:4px}
+table.mx{border-collapse:collapse;margin:0 auto;min-width:0;width:auto;font-size:.9rem}
+table.mx td{border:none;padding:3px 10px;text-align:center;font-family:var(--mono);
+  vertical-align:middle;transition:background .25s}
+table.mx{border-left:2px solid var(--ink);border-right:2px solid var(--ink);border-radius:3px}
+table.mx td.hi{background:var(--amber-soft);color:var(--amber);font-weight:700;border-radius:4px}
+table.mx td.hi2{background:var(--blue-soft);color:var(--blue);border-radius:4px}
+table.mx td.piv{background:var(--green-soft);color:var(--green);font-weight:700;border-radius:4px}
+.oplog{background:var(--accent-soft);border-radius:8px;padding:8px 12px;margin:10px 0;
+  font-size:.86rem;color:var(--accent);min-height:1.9em}
+.oplog b{color:var(--accent)}
+.resbox{border-top:1px dashed var(--line);margin-top:12px;padding-top:10px;font-size:.88rem}
+.arrow{font-size:1.4rem;color:var(--muted)}
+
+/* 等价命题网 */
+.netwrap{margin:14px 0}
+.netgrp{margin:12px 0}
+.netgrp .gt{font-size:.78rem;font-weight:700;letter-spacing:.05em;color:var(--muted);margin-bottom:6px}
+.netgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(215px,1fr));gap:8px}
+.nd{border:1px solid var(--line);border-radius:10px;padding:8px 11px;background:var(--card);
+  cursor:pointer;font-size:.84rem;line-height:1.6;transition:all .2s;position:relative}
+.nd:hover{border-color:var(--accent)}
+.nd .n{display:inline-block;font-size:.68rem;font-weight:700;color:#fff;background:var(--muted);
+  border-radius:4px;padding:0 6px;margin-right:6px;vertical-align:1px}
+.nd.on{background:var(--accent-soft);border-color:var(--accent)}
+.nd.on .n{background:var(--accent)}
+.nd .why{display:none;margin-top:6px;padding-top:6px;border-top:1px dashed var(--line);
+  font-size:.79rem;color:var(--muted);line-height:1.65}
+.nd.on .why{display:block}
+.nd.quiz .body{filter:blur(4.5px);user-select:none}
+.nd.quiz.on .body{filter:none}
+@media (max-width:560px){ .netgrid{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../index.html">← 返回 数学一复盘中心</a>
+  <header>
+    <h1>精读版 · 线代第 2 章　矩阵</h1>
+    <div class="sub">融合张宇《基础30讲·线代分册》第 2 讲「矩阵」+《线代9讲》第 3 讲「矩阵运算」、第 4 讲「矩阵的秩」· 以张宇两讲的「三向解题法」为双主干 · <span class="layer L-base">基础</span> 打地基、<span class="layer L-str">强化</span> 上题型 · <b>全部 49 道例题 + 15 道习题答案，以及 17 条秩公式、伴随矩阵公式表，均用 sympy 符号复算 / 随机矩阵批量对拍，零分歧</b> · 本章交付 ch1 说好的两个交互模块：<b>初等变换步进器</b> 与 <b>可逆等价命题网（30 条）</b>。</div>
+  </header>
+
+  <div class="legend">
+    <b>这一页的三层结构：</b>
+    <span class="layer L-base">基础</span>= 概念与必记（基础30讲的地基，标准线代理论，放心记）；
+    <span class="layer L-str">强化</span>= 张宇《线代9讲》的<b>专属题型与套路</b>（基础讲没有、真题真考的）。批注色块：
+    <span class="swatch" style="background:var(--blue)"></span><b style="color:var(--blue)">补讲</b>、
+    <span class="swatch" style="background:var(--amber)"></span><b style="color:var(--amber)">必记</b>、
+    <span class="swatch" style="background:var(--red)"></span><b style="color:var(--red)">陷阱</b>、
+    <span class="swatch" style="background:var(--green)"></span><b style="color:var(--green)">强化题型</b>。<br>
+    紫色 <b>例题</b> 卡里，<b>基</b>2.x = 基础30讲例题、<b>强</b>3.x = 线代9讲第 3 讲例题、<b>强</b>4.x = 第 4 讲例题（三本各自编号，别混）。<b>每题都标 ✔</b> = 答案已被我用程序独立算过一遍，不是照抄扫描件。
+  </div>
+
+  <nav class="toc">
+    <a href="#s0">定位 · 双主干 + 秩主线</a>
+    <a href="#s1">定义与运算 · 三大坑</a>
+    <a href="#s2">乘法形状大观 · 10 形</a>
+    <a href="#s3">重要矩阵 + 分块 · 狗猫口诀</a>
+    <a href="#s4">求 $\boldsymbol A^n$ · 五法</a>
+    <a href="#s5">逆矩阵</a>
+    <a href="#s6">伴随矩阵 · 公式表</a>
+    <a href="#s7">初等变换 🛠步进器</a>
+    <a href="#s8">矩阵方程</a>
+    <a href="#s9">等价标准形 + 秩的 17 条公式</a>
+    <a href="#s10">🕸 等价命题网 30 条</a>
+    <a href="#s11">证 $\boldsymbol A=\boldsymbol O$ + 收官难题</a>
+    <a href="#s12">习题答案速查</a>
+  </nav>
+
+  <!-- ================= s0 定位 ================= -->
+  <h2 id="s0"><span class="idx">定位</span>矩阵到底在学什么 · 本章的双主干</h2>
+
+  <div class="mine"><span class="tag">补讲 · 一句话定位</span>
+    第 1 章的行列式是<b>一个数</b>（把方阵压成一个体积），压完就丢掉了大量信息。矩阵这一章要做的事正相反：<b>把信息留住</b>。张宇开篇用「英语系 98 女 2 男 / 机械系 95 男 5 女」的表格引入——
+    $\begin{bmatrix}2&95\\98&5\end{bmatrix}$ 的第 1 列是英语系的男女人数，第 1 行是各系的男生人数。<b>矩阵的初步认识 = 表达系统信息</b>，它本身<b>不是一个对应法则、不涉及运算</b>（行列式那两道竖线才是法则），所以 $\boldsymbol A\ne\boldsymbol O$ 推不出 $|\boldsymbol A|\ne0$。
+  </div>
+
+  <div class="key"><span class="tag">必记 · 全书主线：秩 $r(\boldsymbol A)$ 在这一章正式登场</span>
+    张宇给了两个「重要观点」，它们串起整个线代：<br>
+    <b>观点 1</b>：矩阵是由若干<b>行（列）向量拼成</b>的。$\begin{bmatrix}1&2&3\\6&7&9\\2&4&6\end{bmatrix}$ 可看成三个行向量，也可看成三个列向量。<br>
+    <b>观点 2</b>：矩阵不能运算，但其行（列）向量之间<b>可能存在线性关系</b>——上面 $[1,2,3]$ 与 $[2,4,6]$ 平行，而与 $[6,7,9]$ 无关。<em>这种关系反映了矩阵的本质，就是矩阵的秩</em>，此阵秩为 2。<br>
+    <b>所以第 2 章的落点不是"会乘矩阵"，而是把「秩」这把尺子立起来</b>：第 3 章向量组、第 4 章方程组、第 5 章特征值全都要用它量。本章末的<a href="#s10">等价命题网</a>就是这把尺子的全景图。
+  </div>
+
+  <div class="zy"><span class="tag">强化题型 · 本章的两条主干（张宇三向解题法）</span>
+    线代9讲把本章拆成<b>两讲</b>，两张树状图就是本页的骨架：<br><br>
+    <b>第 3 讲「矩阵运算」（O 盯住目标）六支线：</b>
+    <div class="gridwrap"><table>
+      <tr><th>#</th><th>支线</th><th>张宇编码</th><th>本页位置</th></tr>
+      <tr><td>1</td><td>矩阵乘法的<b>形状大观</b></td><td>D₁ 常规操作 + D₂₃ 化归经典形式</td><td><a href="#s2">§二</a></td></tr>
+      <tr><td>2</td><td>证 $\boldsymbol A=\boldsymbol O$</td><td>O₁ + D₁ + D₂₃</td><td><a href="#s11">§十一</a></td></tr>
+      <tr><td>3</td><td>计算 $\boldsymbol A^n$</td><td>O₂ + D₁ + D₂₃</td><td><a href="#s4">§四</a></td></tr>
+      <tr><td>4</td><td>$\boldsymbol A^{\mathrm T}\boldsymbol A,\ \boldsymbol A^*,\ \boldsymbol A^{-1}$ 与初等矩阵</td><td>O₃ + D₁ + D₂ <b>脱胎换骨</b></td><td><a href="#s5">§五</a><a href="#s6">§六</a><a href="#s7">§七</a></td></tr>
+      <tr><td>5</td><td>分块矩阵</td><td>O₄ + D₁ + D₂₃</td><td><a href="#s3">§三</a></td></tr>
+      <tr><td>6</td><td>求解矩阵方程</td><td>O₅ + D₁ + D₂ <b>脱胎换骨</b></td><td><a href="#s8">§八</a></td></tr>
+    </table></div>
+    <b>第 4 讲「矩阵的秩」</b>只有两条腿：<b>定义</b>（最大非零子式的阶数，D₁）+ <b>17 条公式</b>（D₁ + D₂ 脱胎换骨 + D₄₁ 试取特殊情形 + P₁₂ 反向思路）→ <a href="#s9">§九</a>。<br>
+    <span style="color:var(--green)"><b>怎么用这张表</b>：考场上拿到一道矩阵题，先问「我在求什么」（O），落到六支线之一；再问「这个形式我见过吗」（D₂₃ 化归）。本章 90% 的题就是这两步。</span>
+  </div>
+
+  <div class="dolinks">
+    <div class="t">本章体量（线代最大的一章）</div>
+    基础30讲第 2 讲 <b>p.45–81（37 页）</b> · 线代9讲第 3 讲 <b>p.14–40（27 页）</b> · 第 4 讲 <b>p.41–48（8 页）</b>，共 <b>72 页</b>。
+    例题：基础 20 道 + 习题 15 道 + 强化第3讲 20 道 + 强化第4讲 9 道 = <b>64 道，本页全收</b>。
+  </div>
+
+  <!-- ================= s1 定义与运算 ================= -->
+  <h2 id="s1"><span class="idx">一</span>矩阵的定义与基本运算 · 三大坑<span class="layer L-base">基础</span></h2>
+
+  <h3>1.1　定义与前三种运算（和中学代数一样，不必紧张）</h3>
+  <p>由 $m\times n$ 个数 $a_{ij}$ 排成的 $m$ 行 $n$ 列矩形表格称为 <b>$m\times n$ 矩阵</b>，记 $\boldsymbol A=(a_{ij})_{m\times n}$；$m=n$ 时称 <b>$n$ 阶方阵</b>。行数列数都相等的两个矩阵叫<b>同型矩阵</b>。</p>
+  <ul>
+    <li><b>相等</b>：同型 <b>且</b> 对应元素全相等（表示两矩阵包含的信息完全一致）。</li>
+    <li><b>加法</b>：必须同型，对应元素相加。</li>
+    <li><b>数乘</b>：$k\boldsymbol A=(ka_{ij})$，<b>每一个元素都要乘 $k$</b>。</li>
+  </ul>
+  <p>加法与数乘统称<b>线性运算</b>，满足交换律、结合律、分配律 $k(\boldsymbol A+\boldsymbol B)=k\boldsymbol A+k\boldsymbol B$、$(k+l)\boldsymbol A=k\boldsymbol A+l\boldsymbol A$、$k(l\boldsymbol A)=(kl)\boldsymbol A$——<b>跟中学一模一样</b>。</p>
+
+  <div class="trap"><span class="tag">陷阱 · 第 1 章带过来的第一个坑：数乘</span>
+    $$\boxed{|k\boldsymbol A|=k^{n}|\boldsymbol A|}\qquad\text{而}\qquad k|\boldsymbol A|=\begin{vmatrix}ka_{11}&ka_{12}\\a_{21}&a_{22}\end{vmatrix}$$
+    <b>数乘矩阵要乘遍所有元素</b>（保证系统性不变，行列间比例不动）；<b>数乘行列式只需乘某一行（列）</b>。这两句必须刻死。$n\ge2$、$k\ne0,1$ 时 $|k\boldsymbol A|\ne k|\boldsymbol A|$。
+  </div>
+
+  <h3>1.2　乘法：能不能乘、怎么乘</h3>
+  <p>$\boldsymbol A_{m\times s}\boldsymbol B_{s\times n}=\boldsymbol C_{m\times n}$，<b>作乘法的条件是「A 的列数 = B 的行数」</b>，且
+  $$c_{ij}=\sum_{k=1}^{s}a_{ik}b_{kj}=a_{i1}b_{1j}+a_{i2}b_{2j}+\cdots+a_{is}b_{sj}$$
+  即 <b>C 的第 $i$ 行第 $j$ 列 = A 的第 $i$ 行与 B 的第 $j$ 列作内积</b>。满足结合律、分配律、数乘结合律。</p>
+
+  <div class="trap"><span class="tag">陷阱 · 乘法三大坑（★★★ 年年出题）</span>
+    <b>坑一：不满足交换律，$\boldsymbol{AB}\ne\boldsymbol{BA}$。</b>
+    取 $\boldsymbol A=\begin{bmatrix}1&1\\-1&-1\end{bmatrix},\boldsymbol B=\begin{bmatrix}1&-1\\-1&1\end{bmatrix}$，则 $\boldsymbol{AB}=\boldsymbol O$ 而 $\boldsymbol{BA}=\begin{bmatrix}2&2\\-2&-2\end{bmatrix}$。<br>
+    <b>坑二：$\boldsymbol{AB}=\boldsymbol O\ \nRightarrow\ \boldsymbol A=\boldsymbol O$ 或 $\boldsymbol B=\boldsymbol O$。</b>（上例即是）<br>
+    <b>坑三：不满足消去律。</b>$\boldsymbol{AB}=\boldsymbol{AC}\Rightarrow\boldsymbol A(\boldsymbol B-\boldsymbol C)=\boldsymbol O$，此时即使 $\boldsymbol A\ne\boldsymbol O$ 也一般推不出 $\boldsymbol B=\boldsymbol C$。<br>
+    <span style="color:var(--green)"><b>但坑三有解药</b>（第 4 讲公式 5，本章的高频考点）：若 $\boldsymbol{CA}=\boldsymbol{CB}$ 且 $\boldsymbol C$ <b>列满秩</b>，则 $\boldsymbol A=\boldsymbol B$；若 $\boldsymbol{AC}=\boldsymbol{BC}$ 且 $\boldsymbol C$ <b>行满秩</b>，则 $\boldsymbol A=\boldsymbol B$。见 <a href="#eg43">强4.2、强4.3</a>。</span>
+  </div>
+
+  <h3>1.3　转置、幂、方阵的行列式</h3>
+  <p><b>转置</b> $\boldsymbol A^{\mathrm T}$：行列互换。$(\boldsymbol A^{\mathrm T})^{\mathrm T}=\boldsymbol A$，$(k\boldsymbol A)^{\mathrm T}=k\boldsymbol A^{\mathrm T}$，$(\boldsymbol A+\boldsymbol B)^{\mathrm T}=\boldsymbol A^{\mathrm T}+\boldsymbol B^{\mathrm T}$，<b>$(\boldsymbol{AB})^{\mathrm T}=\boldsymbol B^{\mathrm T}\boldsymbol A^{\mathrm T}$</b>，推广 $(\boldsymbol{ABC})^{\mathrm T}=\boldsymbol C^{\mathrm T}\boldsymbol B^{\mathrm T}\boldsymbol A^{\mathrm T}$。</p>
+  <div class="key"><span class="tag">必记 · 「穿脱原则」</span>
+    转置、求逆、伴随三者<b>都反序</b>：$(\boldsymbol{AB})^{\mathrm T}=\boldsymbol B^{\mathrm T}\boldsymbol A^{\mathrm T}$，$(\boldsymbol{AB})^{-1}=\boldsymbol B^{-1}\boldsymbol A^{-1}$，$(\boldsymbol{AB})^{*}=\boldsymbol B^{*}\boldsymbol A^{*}$。
+    张宇的记法：<b>先穿内再穿外，先脱外再脱内</b>。而行列式不反序：$|\boldsymbol{AB}|=|\boldsymbol A||\boldsymbol B|=|\boldsymbol B||\boldsymbol A|$（数可交换）。
+  </div>
+  <p><b>方阵的幂</b> $\boldsymbol A^{m}=\underbrace{\boldsymbol{AA}\cdots\boldsymbol A}_{m}$。</p>
+  <div class="trap"><span class="tag">陷阱 · 因乘法无交换律而全部失效的初中公式</span>
+    $$(\boldsymbol A+\boldsymbol B)^2=\boldsymbol A^2+\boldsymbol{AB}+\boldsymbol{BA}+\boldsymbol B^2\ \ne\ \boldsymbol A^2+2\boldsymbol{AB}+\boldsymbol B^2$$
+    $$(\boldsymbol A+\boldsymbol B)(\boldsymbol A-\boldsymbol B)=\boldsymbol A^2+\boldsymbol{BA}-\boldsymbol{AB}-\boldsymbol B^2\ne\boldsymbol A^2-\boldsymbol B^2,\qquad (\boldsymbol{AB})^{m}\ne\boldsymbol A^{m}\boldsymbol B^{m}$$
+    <span style="color:var(--green)"><b>唯一的例外是 $\boldsymbol E$</b>（以及任何 $k\boldsymbol E$）：因为 $\boldsymbol{AE}=\boldsymbol{EA}$，所以
+    $\boldsymbol A^2-\boldsymbol E=(\boldsymbol A-\boldsymbol E)(\boldsymbol A+\boldsymbol E)$、$(\boldsymbol A\pm\boldsymbol E)^2=\boldsymbol A^2\pm2\boldsymbol A+\boldsymbol E$、$(\boldsymbol A\pm\boldsymbol E)^3=\boldsymbol A^3\pm3\boldsymbol A^2+3\boldsymbol A\pm\boldsymbol E$ 全都成立。<b>习题 2.1 考的就是这个反差</b>。</span><br>
+    ★ 由此得<b>矩阵多项式</b>：$f(x)=a_0+a_1x+\cdots+a_mx^{m}\Rightarrow f(\boldsymbol A)=a_0\boldsymbol E+a_1\boldsymbol A+\cdots+a_m\boldsymbol A^{m}$——<b>常数项变成 $a_0\boldsymbol E$，不是 $a_0$</b>（习题 2.2 就考这个）。
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">习 2.1</span>
+    $\boldsymbol A=\begin{bmatrix}3&4\\-1&-2\end{bmatrix},\boldsymbol B=\begin{bmatrix}1&1\\-3&-2\end{bmatrix}$，求 $\boldsymbol A^2-\boldsymbol B^2$ 与 $(\boldsymbol A-\boldsymbol B)(\boldsymbol A+\boldsymbol B)$。</div>
+    <div class="s"><span class="lab">解</span>$\boldsymbol A^2-\boldsymbol B^2=\begin{bmatrix}5&4\\-1&0\end{bmatrix}-\begin{bmatrix}-2&-1\\3&1\end{bmatrix}=\begin{bmatrix}7&5\\-4&-1\end{bmatrix}$；
+    $(\boldsymbol A-\boldsymbol B)(\boldsymbol A+\boldsymbol B)=\begin{bmatrix}2&3\\2&0\end{bmatrix}\begin{bmatrix}4&5\\-4&-4\end{bmatrix}=\begin{bmatrix}-4&-2\\8&10\end{bmatrix}$。<br>
+    <span class="ans">答案：两者不等，选 (C)。</span> ✔ 已复算<br>
+    <span style="color:var(--red)">这题的全部意义就是让你亲眼看见 $\boldsymbol A^2-\boldsymbol B^2\ne(\boldsymbol A-\boldsymbol B)(\boldsymbol A+\boldsymbol B)$。</span></div></div>
+
+  <div class="eg"><div class="q"><span class="no">习 2.2</span>
+    $f(x)=x^2-5x+3$，$\boldsymbol A=\begin{bmatrix}2&-1\\-3&3\end{bmatrix}$，$f(\boldsymbol A)=\boldsymbol A^2-5\boldsymbol A+3\boldsymbol E$，求 $f(\boldsymbol A)$。</div>
+    <div class="s"><span class="lab">解</span>$\begin{bmatrix}7&-5\\-15&12\end{bmatrix}-\begin{bmatrix}10&-5\\-15&15\end{bmatrix}+\begin{bmatrix}3&0\\0&3\end{bmatrix}=\begin{bmatrix}0&0\\0&0\end{bmatrix}$。
+    <span class="ans">答案：$\boldsymbol O$，选 (C)。</span> ✔ 已复算<br>
+    <span style="color:var(--amber)">常数项 $3\to3\boldsymbol A^{0}=3\boldsymbol E$；运算顺序：先幂与数乘，后加减。</span></div></div>
+
+  <div class="trap"><span class="tag">陷阱 · 方阵行列式的五条易混（第 1 章的账在这里结）</span>
+    ① $|k\boldsymbol A|=k^{n}|\boldsymbol A|\ne k|\boldsymbol A|$　② 一般地 $|\boldsymbol A+\boldsymbol B|\ne|\boldsymbol A|+|\boldsymbol B|$
+    ★★ ③ <b>$\boldsymbol A\ne\boldsymbol O\nRightarrow|\boldsymbol A|\ne0$</b>（对应法则不同，推不出测度不同）　④ $\boldsymbol A\ne\boldsymbol B\nRightarrow|\boldsymbol A|\ne|\boldsymbol B|$
+    ⑤ $|\boldsymbol A^{\mathrm T}|=|\boldsymbol A|$　⑥ 同阶方阵 $|\boldsymbol{AB}|=|\boldsymbol A||\boldsymbol B|$
+  </div>
+
+  <!-- ================= s2 形状大观 ================= -->
+  <h2 id="s2"><span class="idx">二</span>矩阵乘法的形状大观 · 10 形<span class="layer L-str">强化</span></h2>
+
+  <div class="zy"><span class="tag">强化题型 · 张宇第 3 讲支线 1（D₁ + D₂₃）</span>
+    基础讲只教「怎么乘」，强化讲教<b>「看形状就知道结果长什么样」</b>。张宇原书是一整页只画形状不写数的框图，眉批四个字：<b>熟记形状</b>。这是本章最值钱的一节——后面 $\boldsymbol A^n$、秩、二次型的很多"神来之笔"都只是在套这 10 个形状。
+  </div>
+
+  <div class="gridwrap"><table>
+    <tr><th>#</th><th>形状</th><th>结果</th><th>关键身份 / 用法</th></tr>
+    <tr><td>1</td><td>行 × 列</td><td><b>数</b></td>
+      <td>内积 = 大小 + 角度。$\boldsymbol\alpha^{\mathrm T}\boldsymbol\beta=(\boldsymbol\alpha^{\mathrm T}\boldsymbol\beta)^{\mathrm T}=\boldsymbol\beta^{\mathrm T}\boldsymbol\alpha$（<b>是数，转置等于自身</b>）。<br>
+      列 1 阵 ⇒ 行向求和 $[x_1,x_2,x_3]\begin{bmatrix}1\\1\\1\end{bmatrix}=\sum x_i$；行 1 阵 ⇒ 列向求和。</td></tr>
+    <tr><td>2</td><td>列 × 行</td><td><b>方阵</b></td>
+      <td>★★★ <b>秩 1 阵</b> $\boldsymbol A=\boldsymbol\alpha\boldsymbol\beta^{\mathrm T}$，则 $\boldsymbol A^{n}=[\operatorname{tr}(\boldsymbol A)]^{n-1}\boldsymbol A$。<br>
+      列 1 阵 ⇒ 行向量复制 $\begin{bmatrix}1\\1\\1\end{bmatrix}\boldsymbol\alpha^{\mathrm T}=\begin{bmatrix}\boldsymbol\alpha^{\mathrm T}\\\boldsymbol\alpha^{\mathrm T}\\\boldsymbol\alpha^{\mathrm T}\end{bmatrix}$；行 1 阵 ⇒ 列向量复制 $\boldsymbol\beta[1,1,1]=[\boldsymbol\beta,\boldsymbol\beta,\boldsymbol\beta]$。</td></tr>
+    <tr><td>3</td><td>行1阵 × 方阵</td><td><b>行</b></td>
+      <td>列向求和。$\frac13[1,1,1]\boldsymbol X=[\bar x_1,\bar x_2,\bar x_3]$ —— <b>质心阵</b>。</td></tr>
+    <tr><td>4</td><td>方阵 × 列1阵</td><td><b>列</b></td>
+      <td>行向求和。若各行和都等于 $\lambda$，就是 $\boldsymbol A\begin{bmatrix}1\\1\\1\end{bmatrix}=\lambda\begin{bmatrix}1\\1\\1\end{bmatrix}$
+      —— <em>「行和相等」直接把特征值和特征向量交出来了</em>（第 1 章的行和相等型 → 第 5 章的特征值，同一件事）。</td></tr>
+    <tr><td>5</td><td>行1 × 方阵 × 列1</td><td><b>数</b></td>
+      <td>全体元素求和 $\sum_i\sum_j x_{ij}$。<b>这就是二次型 $\boldsymbol x^{\mathrm T}\boldsymbol{Ax}$ 的基本表达</b>，而且它是 $1\times1$ 即普通数，故 $a^{\mathrm T}=a$（第 9 讲反复用）。</td></tr>
+    <tr><td>6</td><td>方阵 × 对角</td><td>列放缩</td>
+      <td>$[\boldsymbol\alpha_1,\boldsymbol\alpha_2,\boldsymbol\alpha_3]\operatorname{diag}(\lambda_1,\lambda_2,\lambda_3)=[\lambda_1\boldsymbol\alpha_1,\lambda_2\boldsymbol\alpha_2,\lambda_3\boldsymbol\alpha_3]$　<b>右乘对角 = 缩列</b></td></tr>
+    <tr><td>7</td><td>对角 × 方阵</td><td>行放缩</td>
+      <td>$\operatorname{diag}(\lambda_1,\lambda_2,\lambda_3)\begin{bmatrix}\boldsymbol\beta_1\\\boldsymbol\beta_2\\\boldsymbol\beta_3\end{bmatrix}=\begin{bmatrix}\lambda_1\boldsymbol\beta_1\\\lambda_2\boldsymbol\beta_2\\\lambda_3\boldsymbol\beta_3\end{bmatrix}$　<b>左乘对角 = 缩行</b></td></tr>
+    <tr><td>8</td><td>对角 × 方阵 × 对角</td><td>行列同缩</td>
+      <td>$(i,j)$ 元变成 $\lambda_i\lambda_j a_{ij}$。$\operatorname{diag}(\lambda_1,\lambda_2)\begin{bmatrix}a_{11}&a_{12}\\a_{21}&a_{22}\end{bmatrix}\operatorname{diag}(\lambda_1,\lambda_2)=\begin{bmatrix}\lambda_1^2a_{11}&\lambda_1\lambda_2a_{12}\\\lambda_1\lambda_2a_{21}&\lambda_2^2a_{22}\end{bmatrix}$</td></tr>
+    <tr><td>9</td><td>方阵 × 副对角1阵</td><td>换列阵</td>
+      <td>$[\boldsymbol\alpha_1,\boldsymbol\alpha_2,\boldsymbol\alpha_3]\begin{bmatrix}&&1\\&1&\\1&&\end{bmatrix}=[\boldsymbol\alpha_3,\boldsymbol\alpha_2,\boldsymbol\alpha_1]$　（一般地：$\boldsymbol E$ 换过哪两行，就换哪两列）</td></tr>
+    <tr><td>10</td><td>方阵 × 对角 × 方阵</td><td><b>相似变换</b></td>
+      <td>旋转–放缩–旋转。$\boldsymbol P^{-1}\boldsymbol{AP}=\boldsymbol\Lambda\Rightarrow\boldsymbol A=\boldsymbol P\boldsymbol\Lambda\boldsymbol P^{-1}$。<span style="color:var(--green)">张宇眉批：7~9 讲经常出现</span></td></tr>
+  </table></div>
+
+  <div class="mine"><span class="tag">补讲 · 形状大观真正的用法（这才是考点）</span>
+    这 10 形不是让你背表格，是让你在题目里<b>反向识别</b>。三个最常触发的信号：<br>
+    <b>① 看到一个方阵每行成比例</b> → 立刻写成 $\boldsymbol\alpha\boldsymbol\beta^{\mathrm T}$（形 2），$\boldsymbol A^n$ 秒出。见 <a href="#eg21">基2.1</a>、<a href="#eg32">强3.2</a>、习 2.7。<br>
+    <b>② 看到 $\boldsymbol\beta^{\mathrm T}\boldsymbol\alpha$ 夹在中间</b>（形 1）→ 它是<b>数</b>，可以自由提到最前面。这是"结合律简化"的全部秘密。<br>
+    <b>③ 看到 $\boldsymbol A\boldsymbol\xi=\lambda\boldsymbol\xi$ 的影子</b>（形 4）→ 行和相等、列和相等都是它的伪装。<br>
+    <span style="color:var(--blue)">张宇眉批还提醒了一个细节：<b>"行×列"的结果比"列×行"的结果要简单得多</b>（前者是一个数，后者是一整个方阵）。所以化简时永远想办法把内积凑到中间。</span>
+  </div>
+
+  <div class="eg" id="eg21"><div class="q"><span class="no">基 2.1</span>
+    设 $\boldsymbol\alpha=[a_1,a_2,a_3]^{\mathrm T}$，$\boldsymbol\beta=[b_1,b_2,b_3]^{\mathrm T}$，$\boldsymbol A=\boldsymbol\alpha\boldsymbol\beta^{\mathrm T}$，求 $\boldsymbol A^{n}$。</div>
+    <div class="s"><span class="lab">解</span>观察：$\boldsymbol\alpha\boldsymbol\beta^{\mathrm T}$ 是矩阵，而 <b>$\boldsymbol\beta^{\mathrm T}\boldsymbol\alpha$ 是数</b>，于是
+    $$\boldsymbol A^{n}=\boldsymbol\alpha(\boldsymbol\beta^{\mathrm T}\boldsymbol\alpha)(\boldsymbol\beta^{\mathrm T}\boldsymbol\alpha)\cdots(\boldsymbol\beta^{\mathrm T}\boldsymbol\alpha)\boldsymbol\beta^{\mathrm T}=(\boldsymbol\beta^{\mathrm T}\boldsymbol\alpha)^{n-1}\boldsymbol\alpha\boldsymbol\beta^{\mathrm T}$$
+    <span class="ans">答案：$\boldsymbol A^{n}=\Big(\sum\limits_{i=1}^{3}a_ib_i\Big)^{n-1}\boldsymbol A=[\operatorname{tr}(\boldsymbol A)]^{n-1}\boldsymbol A$。</span> ✔ 已复算<br>
+    <span class="lab">推广</span>对秩为 1 的 $m$ 阶方阵一律成立。两个常考特例：<br>
+    　$\boldsymbol\alpha=[1,2,3]^{\mathrm T},\boldsymbol\beta=\big[1,\tfrac12,\tfrac13\big]^{\mathrm T}\Rightarrow(\boldsymbol\alpha\boldsymbol\beta^{\mathrm T})^{n}=3^{n-1}\begin{bmatrix}1&\frac12&\frac13\\2&1&\frac23\\3&\frac32&1\end{bmatrix}$；<br>
+    　$\boldsymbol\alpha=\boldsymbol\beta\Rightarrow(\boldsymbol\alpha\boldsymbol\alpha^{\mathrm T})^{n}=\Big(\sum a_i^2\Big)^{n-1}\boldsymbol\alpha\boldsymbol\alpha^{\mathrm T}$。</div></div>
+
+  <div class="key"><span class="tag">必记 · 秩 1 阵的「满秩分解」（本章最高频的一个动作）</span>
+    $r(\boldsymbol A)=1$ ⟺ 行向量（列向量）成比例 ⟺ 可以拆成<b>一列 × 一行</b>：
+    $$\begin{bmatrix}a_1b_1&a_1b_2&a_1b_3\\a_2b_1&a_2b_2&a_2b_3\\a_3b_1&a_3b_2&a_3b_3\end{bmatrix}=\begin{bmatrix}a_1\\a_2\\a_3\end{bmatrix}[b_1,b_2,b_3]$$
+    <b>从右到左是乘法，从左到右就是分解</b>（张宇眉批：也叫矩阵 $\boldsymbol A$ 的满秩分解）。<br>
+    <span style="color:var(--amber)">实操口诀：<b>第一列写"各行的比例"，剩下的凑成行</b>。如 $\begin{bmatrix}2&6&-4\\-1&-3&2\\3&9&-6\end{bmatrix}$，三行的比例是 $2:-1:3$，所以左边写 $[2,-1,3]^{\mathrm T}$，右边配 $[1,3,-2]$——恰好是恒等变形。</span><br>
+    这个动作在 <a href="#eg317">强3.17</a> 被升级成一般矩阵的满秩分解 $\boldsymbol A_{4\times4}=\boldsymbol B_{4\times2}\boldsymbol C_{2\times4}$，那是本章天花板题。
+  </div>
+
+  <!-- ================= s3 重要矩阵 + 分块 ================= -->
+  <h2 id="s3"><span class="idx">三</span>几种重要矩阵 + 分块矩阵 · 狗猫口诀<span class="layer L-base">基础</span><span class="layer L-str">强化</span></h2>
+
+  <h3>3.1　九种重要矩阵（★ 标注为张宇原书标星数）</h3>
+  <div class="gridwrap"><table>
+    <tr><th>名称</th><th>定义</th><th>要点</th></tr>
+    <tr><td>零矩阵 $\boldsymbol O$</td><td>全 0</td><td>$\boldsymbol A\ne\boldsymbol O\nRightarrow|\boldsymbol A|\ne0$；$r(\boldsymbol A)=0\iff\boldsymbol A=\boldsymbol O$</td></tr>
+    <tr><td>单位矩阵 $\boldsymbol E$</td><td>主对角全 1</td><td>与任何同阶方阵<b>可交换</b>——初中公式唯一的活路</td></tr>
+    <tr><td>数量矩阵 $k\boldsymbol E$</td><td>$k$ 乘 $\boldsymbol E$</td><td>$k\boldsymbol{EA}=\boldsymbol Ak\boldsymbol E$，也可交换</td></tr>
+    <tr><td>★★★ 对角矩阵 $\boldsymbol\Lambda$</td><td>非主对角全 0</td><td>形 6/7/8 的主角；第 5 章相似对角化的终点</td></tr>
+    <tr><td>上（下）三角</td><td>$i>j$（$i\lt j$）时 $a_{ij}=0$</td><td>几何上是<b>剪切变形</b>；主对角为 0 的上三角 $\boldsymbol B$ 满足 $\boldsymbol B^{k}=\boldsymbol O$（幂零），求 $\boldsymbol A^n$ 的关键</td></tr>
+    <tr><td>★★★ 对称矩阵</td><td>$\boldsymbol A^{\mathrm T}=\boldsymbol A\iff a_{ij}=a_{ji}$</td><td><b>$\boldsymbol A^{\mathrm T}\boldsymbol A$ 必为对称阵，无论 $\boldsymbol A$ 是不是方阵</b>；转置后还是它本身</td></tr>
+    <tr><td>反对称矩阵</td><td>$\boldsymbol A^{\mathrm T}=-\boldsymbol A$</td><td>主对角<b>必全为 0</b>，对称位置互为相反数。<b>奇数阶反对称阵必有 $|\boldsymbol A|=0$</b>（<a href="#eg311">强3.11</a> 的题眼）</td></tr>
+    <tr><td>行 / 列矩阵</td><td>只有一行 / 一列</td><td>线代中向量 $\boldsymbol\alpha$ 默认<b>列</b>向量，$\boldsymbol\alpha^{\mathrm T}$ 是行向量。$\boldsymbol\alpha^{\mathrm T}\boldsymbol\alpha$ 是数，$\boldsymbol\alpha\boldsymbol\alpha^{\mathrm T}$ 是方阵</td></tr>
+    <tr><td>★★★ 分块矩阵</td><td>把子块当元素</td><td>见 3.2</td></tr>
+  </table></div>
+
+  <div class="mine"><span class="tag">补讲 · 三句几何直觉（张宇原文，很好用）</span>
+    (1) <b>正交矩阵</b>其实就是对数据作一个<b>旋转</b>；<br>
+    (2) <b>上三角、下三角矩阵</b>实际上是对数据作一个<b>剪切变形</b>；<br>
+    (3) <b>$\boldsymbol A+\boldsymbol B$、$\boldsymbol A-\boldsymbol B$</b> 实际上是作数据<b>平移</b>。<br>
+    配套：可逆阵能分解成有限个初等矩阵之积 $\boldsymbol A=\boldsymbol P_1\boldsymbol P_2\cdots\boldsymbol P_s$，所以 $\boldsymbol A\boldsymbol\alpha$ 就是对 $\boldsymbol\alpha$ 依次施加<b>剪切、旋转、平移、压缩</b>——这就是"矩阵 = 变换"的来源。
+  </div>
+
+  <div class="key"><span class="tag">必记 · $\boldsymbol A^{\mathrm T}\boldsymbol A$（格拉姆矩阵）· 隐含条件富矿</span>
+    记 $\boldsymbol A=[\boldsymbol\alpha_1,\boldsymbol\alpha_2,\boldsymbol\alpha_3]$，则
+    $$\boldsymbol A^{\mathrm T}\boldsymbol A=\begin{bmatrix}\|\boldsymbol\alpha_1\|^2&(\boldsymbol\alpha_1,\boldsymbol\alpha_2)&(\boldsymbol\alpha_1,\boldsymbol\alpha_3)\\(\boldsymbol\alpha_2,\boldsymbol\alpha_1)&\|\boldsymbol\alpha_2\|^2&(\boldsymbol\alpha_2,\boldsymbol\alpha_3)\\(\boldsymbol\alpha_3,\boldsymbol\alpha_1)&(\boldsymbol\alpha_3,\boldsymbol\alpha_2)&\|\boldsymbol\alpha_3\|^2\end{bmatrix}$$
+    <b>主对角是长度平方，非主对角是内积</b>。由此一眼读出五个隐含条件：<br>
+    ① 若 $\boldsymbol A^{\mathrm T}\boldsymbol A=\operatorname{diag}(1,2,3)$ ⇒ $\|\boldsymbol\alpha_1\|=1,\|\boldsymbol\alpha_2\|=\sqrt2,\|\boldsymbol\alpha_3\|=\sqrt3$ 且三者<b>两两正交</b>；<br>
+    ② <b>$\operatorname{tr}(\boldsymbol A^{\mathrm T}\boldsymbol A)=0\Rightarrow\boldsymbol A=\boldsymbol O$</b>（各列长度平方之和为 0）——<a href="#eg31">强3.1</a> 的钥匙；<br>
+    ③ $\boldsymbol A^{\mathrm T}\boldsymbol A\boldsymbol x=\boldsymbol 0$ 与 $\boldsymbol{Ax}=\boldsymbol 0$ <b>同解</b>；<br>
+    ④ $r(\boldsymbol A)=r(\boldsymbol A^{\mathrm T})=r(\boldsymbol A^{\mathrm T}\boldsymbol A)=r(\boldsymbol A\boldsymbol A^{\mathrm T})$（第 4 讲公式 10）；<br>
+    ⑤ 把各列模长划掉就得到<b>余弦相似度矩阵</b> $[\cos\theta_{ij}]$——这是主成分分析的入口，也是张宇解释"为什么要学特征值"的地方。
+  </div>
+
+  <h3>3.2　分块矩阵：运算 + 两条★★★结论</h3>
+  <p>用横竖线把矩阵切成<b>子块</b>，把子块当元素就得到分块矩阵。加法要求同型<b>且分法一致</b>；数乘逐块乘；乘法
+  $\begin{bmatrix}\boldsymbol A&\boldsymbol B\\\boldsymbol C&\boldsymbol D\end{bmatrix}\begin{bmatrix}\boldsymbol X&\boldsymbol Y\\\boldsymbol Z&\boldsymbol W\end{bmatrix}=\begin{bmatrix}\boldsymbol{AX}+\boldsymbol{BZ}&\boldsymbol{AY}+\boldsymbol{BW}\\\boldsymbol{CX}+\boldsymbol{DZ}&\boldsymbol{CY}+\boldsymbol{DW}\end{bmatrix}$，
+  <b>要可乘、可加，且左边的仍在左边、右边的仍在右边</b>（分块也没有交换律）。</p>
+  <p>幂：$\begin{bmatrix}\boldsymbol A&\boldsymbol O\\\boldsymbol O&\boldsymbol B\end{bmatrix}^{k}=\begin{bmatrix}\boldsymbol A^{k}&\boldsymbol O\\\boldsymbol O&\boldsymbol B^{k}\end{bmatrix}$；转置 $\begin{bmatrix}\boldsymbol A&\boldsymbol B\\\boldsymbol C&\boldsymbol D\end{bmatrix}^{\mathrm T}=\begin{bmatrix}\boldsymbol A^{\mathrm T}&\boldsymbol C^{\mathrm T}\\\boldsymbol B^{\mathrm T}&\boldsymbol D^{\mathrm T}\end{bmatrix}$（<b>注意转置后 B 与 C 换位</b>）。求逆见 <a href="#s5">§五</a>。</p>
+
+  <div class="key"><span class="tag">必记 · ★★★ 结论一：$\boldsymbol{AB}=\boldsymbol O$ 的三重读法</span>
+    设 $\boldsymbol A_{m\times n}\boldsymbol B_{n\times s}=\boldsymbol O$，把 $\boldsymbol B$ 按列分块 $\boldsymbol B=[\boldsymbol\beta_1,\cdots,\boldsymbol\beta_s]$：
+    $$\boldsymbol{AB}=[\boldsymbol A\boldsymbol\beta_1,\cdots,\boldsymbol A\boldsymbol\beta_s]=[\boldsymbol 0,\cdots,\boldsymbol 0]$$
+    ① <b>$\boldsymbol B$ 的每一列都是 $\boldsymbol{Ax}=\boldsymbol 0$ 的解</b>（第 4 章的桥）；<br>
+    ② <b>$r(\boldsymbol A)+r(\boldsymbol B)\le n$</b>（$n$ = A 的列数 = B 的行数）；<br>
+    ③ 若 $\boldsymbol B\ne\boldsymbol O$ 则 $r(\boldsymbol B)\ge1$，于是 $r(\boldsymbol A)\le n-1$，<b>$\boldsymbol A$ 列不满秩</b>，即 $\boldsymbol A$ 的列向量组线性相关。<br>
+    <span style="color:var(--blue)">还有一个"正交"版本：若 $\boldsymbol A$ 的<b>任一行</b>与 $\boldsymbol B$ 的<b>任一列</b>都正交，则 $\boldsymbol{AB}=[(\boldsymbol\alpha_i,\boldsymbol\beta_j)]=\boldsymbol O$，同样得 $r(\boldsymbol A)+r(\boldsymbol B)\le n$。</span>
+  </div>
+
+  <div class="key"><span class="tag">必记 · ★★★ 结论二：$\boldsymbol{AB}=\boldsymbol C$ 与「狗猫」口诀</span>
+    把 $\boldsymbol B,\boldsymbol C$ 按<b>行</b>分块 ⇒ $\boldsymbol\gamma_i=a_{i1}\boldsymbol\beta_1+\cdots+a_{in}\boldsymbol\beta_n$，即
+    <b>$\boldsymbol{AB}$ 的行向量是 $\boldsymbol B$ 的行向量组的线性组合</b>；<br>
+    把 $\boldsymbol A,\boldsymbol C$ 按<b>列</b>分块 ⇒ <b>$\boldsymbol{AB}$ 的列向量是 $\boldsymbol A$ 的列向量组的线性组合</b>。<br><br>
+    <em>张宇把它编成「狗猫」口诀（把 $\boldsymbol{AB}$ 读成"狗猫"，A=狗、B=猫）：</em>
+    <div class="gridwrap"><table>
+      <tr><th>口诀</th><th>含义</th><th>动作</th><th>例</th></tr>
+      <tr><td><b>横拼左同多化零</b></td><td>（狗猫）的<b>列</b>可由<b>狗</b>的列表示</td><td>横着拼时，谁在左边和它<b>同</b>，多出来的那块就能<b>化零</b></td>
+        <td>$[\boldsymbol{AB},\boldsymbol A]\to[\boldsymbol O,\boldsymbol A]$；$[\boldsymbol A,\boldsymbol{AB}]\to[\boldsymbol A,\boldsymbol O]$；$[\boldsymbol A\boldsymbol B^{\mathrm T}\boldsymbol A,\boldsymbol A\boldsymbol B^{\mathrm T}]\to[\boldsymbol O,\boldsymbol A\boldsymbol B^{\mathrm T}]$</td></tr>
+      <tr><td><b>竖拼右同多化零</b></td><td>（狗猫）的<b>行</b>可由<b>猫</b>的行表示</td><td>竖着拼时，谁在右边和它同，多的化零</td>
+        <td>$\begin{bmatrix}\boldsymbol{AB}\\\boldsymbol B\end{bmatrix}\to\begin{bmatrix}\boldsymbol O\\\boldsymbol B\end{bmatrix}$；$\begin{bmatrix}\boldsymbol{ABC}\\\boldsymbol{BC}\end{bmatrix}\to\begin{bmatrix}\boldsymbol O\\\boldsymbol{BC}\end{bmatrix}$；$\begin{bmatrix}\boldsymbol A^{\mathrm T}\boldsymbol A\\\boldsymbol B^{\mathrm T}\boldsymbol A\end{bmatrix}\to\begin{bmatrix}\boldsymbol A\\\boldsymbol O\end{bmatrix}$</td></tr>
+    </table></div>
+    <b>最重要的一条推论</b>：由 $\begin{bmatrix}\boldsymbol{AB}\\\boldsymbol B\end{bmatrix}\to\begin{bmatrix}\boldsymbol O\\\boldsymbol B\end{bmatrix}$ 得 $r\Big(\begin{bmatrix}\boldsymbol{AB}\\\boldsymbol B\end{bmatrix}\Big)=r(\boldsymbol B)$，于是
+    $$\boxed{r(\boldsymbol{AB})=r(\boldsymbol B)\iff \boldsymbol{ABx}=\boldsymbol 0\ \text{与}\ \boldsymbol{Bx}=\boldsymbol 0\ \text{同解}}$$
+    这是<a href="#eg41">强4.1</a>、<a href="#eg47">强4.7</a> 的总开关，也是第 4 章"同解方程组"的源头。
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 分块矩阵的三条解题思路（张宇原文）</span>
+    ① 熟练掌握上面的运算与两条结论；<br>
+    ② <b>记住：分块矩阵也是矩阵</b>。矩阵满足的公式（如 $\boldsymbol{AA}^{*}=|\boldsymbol A|\boldsymbol E$），分块矩阵照样满足：
+    $\begin{bmatrix}\boldsymbol A&\boldsymbol B\\\boldsymbol C&\boldsymbol D\end{bmatrix}\begin{bmatrix}\boldsymbol A&\boldsymbol B\\\boldsymbol C&\boldsymbol D\end{bmatrix}^{*}=\begin{vmatrix}\boldsymbol A&\boldsymbol B\\\boldsymbol C&\boldsymbol D\end{vmatrix}\begin{bmatrix}\boldsymbol E&\boldsymbol O\\\boldsymbol O&\boldsymbol E\end{bmatrix}$
+    —— <a href="#eg39">强3.9</a> 就是靠"逐个验证 $\boldsymbol M\boldsymbol M^{*}=|\boldsymbol M|\boldsymbol E$"秒杀的；<br>
+    ③ 见到新的分块矩阵，要么想 ①②，要么<b>直接上初等变换</b>（把分块当元素作行/列变换）——第 4 讲那几条秩不等式的证明全是这么来的。
+  </div>
+
+  <div class="eg" id="eg318"><div class="q"><span class="no">强 3.18</span>
+    设 $\boldsymbol A,\boldsymbol B$ 为 $n$ 阶矩阵，则（　）。<br>
+    (A) $r([\boldsymbol A,\boldsymbol{AB}])=r(\boldsymbol A)$　(B) $r([\boldsymbol A,\boldsymbol{BA}])=r(\boldsymbol A)$　(C) $r([\boldsymbol A,\boldsymbol B])=\max\{r(\boldsymbol A),r(\boldsymbol B)\}$　(D) $r([\boldsymbol A,\boldsymbol B])=r([\boldsymbol A^{\mathrm T},\boldsymbol B^{\mathrm T}])$</div>
+    <div class="s"><span class="lab">法一</span>一方面 $\boldsymbol A$ 是 $[\boldsymbol A,\boldsymbol{AB}]$ 的子矩阵，故 $r([\boldsymbol A,\boldsymbol{AB}])\ge r(\boldsymbol A)$；另一方面
+    <b>$[\boldsymbol A,\boldsymbol{AB}]=\boldsymbol A[\boldsymbol E,\boldsymbol B]$</b>，故 $r([\boldsymbol A,\boldsymbol{AB}])\le r(\boldsymbol A)$。两边夹得等号。<br>
+    <span class="lab">法二</span>就是"横拼左同多化零"：$\boldsymbol{AB}$ 的列可由 $\boldsymbol A$ 的列表示 ⇒ 拼上去不涨秩。<br>
+    <span class="ans">答案：(A)。</span> ✔ 已复算（三个反例均已程序验证）<br>
+    <span class="lab">反例</span>（都取 $\boldsymbol A=\begin{bmatrix}1&0\\0&0\end{bmatrix}$，$r(\boldsymbol A)=1$）：<br>
+    　(B) 取 $\boldsymbol B=\begin{bmatrix}0&1\\1&0\end{bmatrix}$，$\boldsymbol{BA}=\begin{bmatrix}0&0\\1&0\end{bmatrix}$，$r([\boldsymbol A,\boldsymbol{BA}])=2\ne1$；<br>
+    　(C) 取 $\boldsymbol B=\begin{bmatrix}0&0\\1&0\end{bmatrix}$，$r(\boldsymbol A)=r(\boldsymbol B)=1$ 而 $r([\boldsymbol A,\boldsymbol B])=2$；<br>
+    　(D) 取 $\boldsymbol B=\begin{bmatrix}0&1\\0&0\end{bmatrix}$，$r([\boldsymbol A,\boldsymbol B])=1$ 而 $r([\boldsymbol A^{\mathrm T},\boldsymbol B^{\mathrm T}])=2$。<br>
+    <span style="color:var(--red)"><b>为什么 (B) 不行</b>：法一里 $[\boldsymbol A,\boldsymbol{AB}]=\boldsymbol A[\boldsymbol E,\boldsymbol B]$ 成立，但 $[\boldsymbol A,\boldsymbol{BA}]\ne[\boldsymbol E,\boldsymbol B]\boldsymbol A$——<b>不满足乘法规则</b>。口诀里的"左同"是有方向的，别背反。</span></div></div>
+
+  <!-- ================= s4 求 A^n ================= -->
+  <h2 id="s4"><span class="idx">四</span>计算 $\boldsymbol A^{n}$ · 五法题型库<span class="layer L-base">基础</span><span class="layer L-str">强化</span></h2>
+
+  <div class="zy"><span class="tag">强化题型 · 张宇第 3 讲支线 3（O₂ + D₁ + D₂₃）· 本章第一大题型</span>
+    <b>拿到 $\boldsymbol A^{n}$ 先按顺序过这五道闸，第一道过不去再走第二道：</b>
+    <div class="gridwrap"><table>
+      <tr><th>法</th><th>触发信号</th><th>动作</th><th>例题</th></tr>
+      <tr><td><b>一</b></td><td>各行（列）<b>成比例</b>，即 $r(\boldsymbol A)=1$</td><td>拆 $\boldsymbol A=\boldsymbol\alpha\boldsymbol\beta^{\mathrm T}$，套 $\boldsymbol A^{n}=[\operatorname{tr}\boldsymbol A]^{n-1}\boldsymbol A$</td><td>基2.1、强3.2、习2.7</td></tr>
+      <tr><td><b>二</b></td><td>算不出规律就<b>先试算 $\boldsymbol A^2$（或 $\boldsymbol A^3$）</b></td><td>$\boldsymbol A^2=k\boldsymbol A\Rightarrow\boldsymbol A^{n}=k^{n-1}\boldsymbol A$；$\boldsymbol A^2=k\boldsymbol E\Rightarrow$ 分奇偶</td><td>基2.2、习2.8</td></tr>
+      <tr><td><b>三</b></td><td>主对角是常数、上方有零星元素</td><td>拆 $\boldsymbol A=\boldsymbol B+\boldsymbol C$（一般 $\boldsymbol B=\boldsymbol E$ 或 $k\boldsymbol E$），二项展开</td><td>基2.3、强3.3、强3.5</td></tr>
+      <tr><td><b>四</b></td><td>题目给的是 $\boldsymbol P_1^{m}\boldsymbol A\boldsymbol P_2^{n}$，$\boldsymbol P_i$ 是初等矩阵</td><td>翻译成"作了 $m$ 次行变换、$n$ 次列变换"</td><td>强3.6</td></tr>
+      <tr><td><b>五</b></td><td>题目给了 $\boldsymbol P^{-1}\boldsymbol{AP}=\boldsymbol\Lambda$ 或能凑出来</td><td>$\boldsymbol A^{n}=\boldsymbol P\boldsymbol\Lambda^{n}\boldsymbol P^{-1}$　<b>【重点考查】</b></td><td>强3.7、强3.16、强3.17</td></tr>
+    </table></div>
+    <span style="color:var(--red)"><b>什么时候法五用不了</b>：$\boldsymbol A$ 不可相似对角化时。<a href="#eg35">强3.5</a> 的 $\boldsymbol A$ 只有 1 个线性无关的特征向量，只能走法三。<b>拿到题先别急着求特征值。</b></span><br>
+    <span style="color:var(--blue)">考到 $\boldsymbol A^{-n}$ 不要慌，写 $\boldsymbol A^{-n}=(\boldsymbol A^{n})^{-1}$ 即可（<a href="#eg34">强3.4</a>）。</span>
+  </div>
+
+  <h3>4.1　法一：秩 1 阵</h3>
+  <div class="eg" id="eg32"><div class="q"><span class="no">强 3.2</span>
+    $\boldsymbol A=\begin{bmatrix}2&6&-4\\-1&-3&2\\3&9&-6\end{bmatrix}$，则 $\boldsymbol A^{10}=$ ______</div>
+    <div class="s"><span class="lab">解</span>三行成比例 $2:(-1):3$ ⇒ $\boldsymbol A=\begin{bmatrix}2\\-1\\3\end{bmatrix}[1,3,-2]$，$\operatorname{tr}(\boldsymbol A)=2-3-6=-7$。
+    <span class="ans">$\boldsymbol A^{10}=(-7)^{9}\boldsymbol A=-7^{9}\boldsymbol A$。</span> ✔ 已复算<br>
+    <span style="color:var(--amber)">张宇眉批：<b>第一列元素写"原矩阵各行的比例"，使其为恒等变形</b>——这是最容易写错的一步，写完随手乘一下第一个元素验一验。$(-7)^9$ 是 9 个负数相乘，结果为负，别把负号丢了。</span></div></div>
+
+  <div class="eg"><div class="q"><span class="no">习 2.7</span>
+    $\boldsymbol A=\begin{bmatrix}1&2&-1\\-2&-4&2\\3&6&-3\end{bmatrix}$，则 $\boldsymbol A^{n}=$ ______</div>
+    <div class="s"><span class="lab">解</span>$\boldsymbol A=[1,-2,3]^{\mathrm T}[1,2,-1]$，$\boldsymbol\beta^{\mathrm T}\boldsymbol\alpha=1-4-3=-6$。
+    <span class="ans">$\boldsymbol A^{n}=(-6)^{n-1}\boldsymbol A$。</span> ✔ 已复算</div></div>
+
+  <h3>4.2　法二：试算 $\boldsymbol A^2$ / $\boldsymbol A^3$ 找规律<span class="layer L-base">基础</span></h3>
+  <div class="key"><span class="tag">必记 · 试算后的两种归宿</span>
+    (1) 若 $\boldsymbol A^2=k\boldsymbol A$，则 $\boldsymbol A^{n}=k^{n-1}\boldsymbol A$（法一是它的特例）。<br>
+    (2) 若 $\boldsymbol A^2=k\boldsymbol E$，则 $\boldsymbol A^{2n}=k^{n}\boldsymbol E$，$\boldsymbol A^{2n+1}=k^{n}\boldsymbol A$（$k=-1$ 时 $\boldsymbol A^4=\boldsymbol E$）。<br>
+    也可能要试到 $\boldsymbol A^3$（如 $\boldsymbol A^3=k\boldsymbol A$），<b>但次数不会太高</b>——试到 3 次还没规律就换法三或法五。
+  </div>
+  <div class="eg"><div class="q"><span class="no">基 2.2</span>
+    $\boldsymbol A=\begin{bmatrix}1&-1&-1&-1\\-1&1&-1&-1\\-1&-1&1&-1\\-1&-1&-1&1\end{bmatrix}$，则 $\boldsymbol A^{9}=$ ______</div>
+    <div class="s"><span class="lab">解</span>试算：$\boldsymbol A^2=4\boldsymbol E$。故 $\boldsymbol A^{9}=(\boldsymbol A^2)^4\boldsymbol A=4^4\boldsymbol A$。
+    <span class="ans">$\boldsymbol A^{9}=256\boldsymbol A$。</span> ✔ 已复算<br>
+    <span class="lab">直觉</span>张宇在此配了个二阶的类比：$\begin{bmatrix}0&-1\\1&0\end{bmatrix}$ 作用在向量上是<b>旋转 90°</b>，转 4 次回到原位，所以它的 4 次方是 $\boldsymbol E$。<b>"幂之后回到自己"= 几何上转了一圈</b>，这是法二的物理意义。</div></div>
+
+  <div class="eg"><div class="q"><span class="no">习 2.8</span>
+    $\boldsymbol A=\begin{bmatrix}0&1&0\\1&0&-1\\0&-1&0\end{bmatrix}$，当 $n\ge2$ 时 $\boldsymbol A^{n}=$ ______</div>
+    <div class="s"><span class="lab">解</span>$\boldsymbol A^2=\begin{bmatrix}1&0&-1\\0&2&0\\-1&0&1\end{bmatrix}$，$\boldsymbol A^3=2\boldsymbol A$，$\boldsymbol A^4=2\boldsymbol A^2$，规律出现：<b>每加 2 次幂翻一倍</b>。
+    <span class="ans">$\boldsymbol A^{n}=\begin{cases}2^{k-1}\boldsymbol A^{2},&n=2k\\ 2^{k}\boldsymbol A,&n=2k+1\end{cases}\ (k=1,2,\cdots)$</span> ✔ 已复算（$k=1\sim6$ 全部验过）<br>
+    <span style="color:var(--red)">此题必须<b>分奇偶</b>作答，只写一个式子直接扣分。</span></div></div>
+
+  <h3>4.3　法三：拆成 $\boldsymbol B+\boldsymbol C$ 用二项展开<span class="layer L-base">基础</span><span class="layer L-str">强化</span></h3>
+  <div class="key"><span class="tag">必记 · 用二项展开的前提与套路</span>
+    若 $\boldsymbol A=\boldsymbol B+\boldsymbol C$ 且 <b>$\boldsymbol{BC}=\boldsymbol{CB}$</b>（这一条是命根子），则可以像初中一样展开：
+    $$\boldsymbol A^{n}=\boldsymbol B^{n}+n\boldsymbol B^{n-1}\boldsymbol C+\frac{n(n-1)}{2!}\boldsymbol B^{n-2}\boldsymbol C^{2}+\cdots+\boldsymbol C^{n}$$
+    <b>实操里 $\boldsymbol B$ 几乎总是取 $\boldsymbol E$（或 $k\boldsymbol E$）</b>，因为只有它保证可交换。于是
+    $\boldsymbol A^{n}=(\boldsymbol E+\boldsymbol C)^{n}=\boldsymbol E+n\boldsymbol C+\frac{n(n-1)}{2}\boldsymbol C^{2}+\cdots$。<br>
+    <b>这个和一定会截断</b>：$\boldsymbol C$ 是主对角为 0 的上三角（幂零阵），$3$ 阶时 $\boldsymbol C^{3}=\boldsymbol O$，所以最多写三项。<br>
+    特例：若 $\boldsymbol{BC}=\boldsymbol{CB}=\boldsymbol O$，则 $\boldsymbol A^{n}=\boldsymbol B^{n}+\boldsymbol C^{n}$。
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">基 2.3</span>已知 $\boldsymbol A=\begin{bmatrix}1&1&0\\0&1&1\\0&0&1\end{bmatrix}$，求 $\boldsymbol A^{n}$。</div>
+    <div class="s"><span class="lab">解</span>$\boldsymbol A=\boldsymbol E+\boldsymbol B$，$\boldsymbol B=\begin{bmatrix}0&1&0\\0&0&1\\0&0&0\end{bmatrix}$，$\boldsymbol B^{2}=\begin{bmatrix}0&0&1\\0&0&0\\0&0&0\end{bmatrix}$，$\boldsymbol B^{3}=\boldsymbol O$。故
+    $$\boldsymbol A^{n}=\boldsymbol E+n\boldsymbol B+\frac{n(n-1)}{2}\boldsymbol B^{2}$$
+    <span class="ans">$\boldsymbol A^{n}=\begin{bmatrix}1&n&\frac{n(n-1)}{2}\\0&1&n\\0&0&1\end{bmatrix}$</span> ✔ 已复算（$n=2,3,5,9$ 逐个对拍）</div></div>
+
+  <div class="eg" id="eg33"><div class="q"><span class="no">强 3.3</span>若 $\boldsymbol A=\begin{bmatrix}1&a&b\\0&1&a\\0&0&1\end{bmatrix}$，则当 $n\ge2$ 时 $\boldsymbol A^{n}=$ ______</div>
+    <div class="s"><span class="lab">解</span>试算 $\boldsymbol A^2=\begin{bmatrix}1&2a&a^2+2b\\0&1&2a\\0&0&1\end{bmatrix}$，$\boldsymbol A^3=\begin{bmatrix}1&3a&3a^2+3b\\0&1&3a\\0&0&1\end{bmatrix}$，$\boldsymbol A^4=\begin{bmatrix}1&4a&6a^2+4b\\0&1&4a\\0&0&1\end{bmatrix}$。
+    右上角系数 $1,3,6,\cdots=\binom{n}{2}$。
+    <span class="ans">$\boldsymbol A^{n}=\begin{bmatrix}1&na&\frac{n(n-1)}{2}a^{2}+nb\\0&1&na\\0&0&1\end{bmatrix}$</span> ✔ 已复算（$n=2,3,4,7$ 符号对拍）<br>
+    <span style="color:var(--amber)">这是基 2.3 的带参版。<b>右上角 = $\binom n2a^2+nb$，两项别漏</b>——$a^2$ 项来自 $\boldsymbol B^2$，$b$ 项来自 $\boldsymbol B$ 本身。</span></div></div>
+
+  <div class="eg" id="eg35"><div class="q"><span class="no">强 3.5</span>设 $\boldsymbol A=\begin{bmatrix}1&1&-1\\0&1&1\\0&0&1\end{bmatrix}$，则 $\boldsymbol A^{10}=$ ______</div>
+    <div class="s"><span class="lab">解</span>$\boldsymbol A=\boldsymbol E+\boldsymbol B$，$\boldsymbol B=\begin{bmatrix}0&1&-1\\0&0&1\\0&0&0\end{bmatrix}$，$\boldsymbol B^{2}=\begin{bmatrix}0&0&1\\0&0&0\\0&0&0\end{bmatrix}$，$\boldsymbol B^{3}=\boldsymbol O$：
+    $$\boldsymbol A^{10}=\boldsymbol E+10\boldsymbol B+\tfrac{10\times9}{2}\boldsymbol B^{2}=\boldsymbol E+\begin{bmatrix}0&10&-10\\0&0&10\\0&0&0\end{bmatrix}+\begin{bmatrix}0&0&45\\0&0&0\\0&0&0\end{bmatrix}$$
+    <span class="ans">$\boldsymbol A^{10}=\begin{bmatrix}1&10&35\\0&1&10\\0&0&1\end{bmatrix}$</span> ✔ 已复算（$-10+45=35$）<br>
+    <span style="color:var(--red)"><b>张宇特意加的注</b>：本题 $\boldsymbol A$ <b>只有 1 个线性无关的特征向量，不可相似对角化</b>，所以<b>不能</b>用 $\boldsymbol A^{n}=\boldsymbol P\boldsymbol\Lambda^{n}\boldsymbol P^{-1}$。这就是"法五不是万能"的官方例证。</span></div></div>
+
+  <h3>4.4　法四：初等矩阵的幂 $\boldsymbol P_1^{m}\boldsymbol A\boldsymbol P_2^{n}$<span class="layer L-str">强化</span></h3>
+  <div class="zy"><span class="tag">强化题型 · 把幂"翻译"成变换次数</span>
+    若 $\boldsymbol P_1,\boldsymbol P_2$ 均为初等矩阵，则 $\boldsymbol P_1^{m}\boldsymbol A\boldsymbol P_2^{n}$ 表示：<b>先对 $\boldsymbol A$ 作 $m$ 次与 $\boldsymbol P_1$ 相同的初等行变换，再对结果作 $n$ 次与 $\boldsymbol P_2$ 相同的初等列变换</b>。
+    还可以综合考 $\boldsymbol P_1^{\mathrm T}\boldsymbol A\boldsymbol P_2^{2}$、$\boldsymbol P_1^{-2}\boldsymbol A\boldsymbol P_2^{\mathrm T}$、$\boldsymbol P_1^{3}\boldsymbol A\boldsymbol P_2^{-3}$ 等——<b>先用初等矩阵的性质把 $^{\mathrm T}$、$^{-1}$ 化掉，再数次数</b>（见 <a href="#s7">§七</a> 的性质表）。
+  </div>
+  <div class="eg"><div class="q"><span class="no">强 3.6</span>
+    $\begin{bmatrix}1&0\\-1&1\end{bmatrix}^{3}\begin{bmatrix}1&2\\-1&3\end{bmatrix}\begin{bmatrix}0&1\\1&0\end{bmatrix}^{-5}=$ ______</div>
+    <div class="s"><span class="lab">解</span>记 $\boldsymbol A=\begin{bmatrix}1&2\\-1&3\end{bmatrix}$，$\boldsymbol B=\begin{bmatrix}1&0\\-1&1\end{bmatrix}$（第 1 行 $\times(-1)$ 加到第 2 行），$\boldsymbol C=\begin{bmatrix}0&1\\1&0\end{bmatrix}$（互换）。<br>
+    ① $\boldsymbol B^3\boldsymbol A$：把 $\boldsymbol A$ 的第 1 行的 $(-1)$ 倍加到第 2 行、<b>重复 3 次</b> ⇒ 第 2 行变为 $(-1-3,\ 3-6)=(-4,-3)$，得 $\begin{bmatrix}1&2\\-4&-3\end{bmatrix}$。<br>
+    ② $\boldsymbol C^{-5}=(\boldsymbol C^{5})^{-1}=\boldsymbol C^{5}=\boldsymbol C$（互换阵自逆，奇次幂等于自身）⇒ <b>只互换 1 次</b>列。
+    <span class="ans">原式 $=\begin{bmatrix}2&1\\-3&-4\end{bmatrix}$</span> ✔ 已复算<br>
+    <span style="color:var(--amber)">$\boldsymbol C^{-5}$ 这一步是本题唯一的坎：$\boldsymbol E_{ij}^{-1}=\boldsymbol E_{ij}$，所以负幂直接变正幂，再对 2 取余。</span></div></div>
+
+  <h3>4.5　法五：相似理论（重点考查）<span class="layer L-str">强化</span></h3>
+  <div class="key"><span class="tag">必记</span>
+    (1) $\boldsymbol A\sim\boldsymbol B$ 即 $\boldsymbol P^{-1}\boldsymbol{AP}=\boldsymbol B$ ⇒ $\boldsymbol A=\boldsymbol{PBP}^{-1}$，$\boldsymbol A^{n}=\boldsymbol{PB}^{n}\boldsymbol P^{-1}$。<br>
+    (2) $\boldsymbol A\sim\boldsymbol\Lambda$ ⇒ <b>$\boldsymbol A^{n}=\boldsymbol P\boldsymbol\Lambda^{n}\boldsymbol P^{-1}$</b>（$\boldsymbol\Lambda^{n}$ 只是把对角元各自 $n$ 次方）。<br>
+    <span style="color:var(--blue)">实操提醒：算完不要真去乘 $\boldsymbol P\boldsymbol\Lambda^{n}\boldsymbol P^{-1}$ 三个矩阵。改写成 $\boldsymbol A^{n}\boldsymbol P=\boldsymbol P\boldsymbol\Lambda^{n}$，对 $\begin{bmatrix}\boldsymbol P\\\boldsymbol P\boldsymbol\Lambda^{n}\end{bmatrix}$ 作<b>初等列变换</b>化成 $\begin{bmatrix}\boldsymbol E\\\boldsymbol A^{n}\end{bmatrix}$，省一次求逆（<a href="#eg316">强3.16</a> 的官方解法）。</span>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">强 3.7</span>
+    $\boldsymbol A,\boldsymbol B,\boldsymbol C$ 均 3 阶，$\boldsymbol{AB}=\boldsymbol B^{2}-\boldsymbol{BC}$，其中 $\boldsymbol B=\begin{bmatrix}1&1&1\\0&1&1\\0&0&1\end{bmatrix}$，$\boldsymbol C=\begin{bmatrix}0&1&1\\0&0&1\\0&0&1\end{bmatrix}$，求 $\boldsymbol A^{99}$。</div>
+    <div class="s"><span class="lab">解</span>$|\boldsymbol B|=1\ne0$ 可逆，由 $\boldsymbol{AB}=\boldsymbol B(\boldsymbol B-\boldsymbol C)$ 得 $\boldsymbol A=\boldsymbol B(\boldsymbol B-\boldsymbol C)\boldsymbol B^{-1}$，于是<b>中间的 $\boldsymbol B^{-1}\boldsymbol B$ 连锁抵消</b>：
+    $$\boldsymbol A^{99}=\boldsymbol B(\boldsymbol B-\boldsymbol C)^{99}\boldsymbol B^{-1}$$
+    而 $\boldsymbol B-\boldsymbol C=\operatorname{diag}(1,1,0)$，$(\boldsymbol B-\boldsymbol C)^{99}=\boldsymbol B-\boldsymbol C$（幂等）。又 $\boldsymbol B^{-1}=\begin{bmatrix}1&-1&0\\0&1&-1\\0&0&1\end{bmatrix}$。
+    <span class="ans">$\boldsymbol A^{99}=\begin{bmatrix}1&0&-1\\0&1&-1\\0&0&0\end{bmatrix}$</span> ✔ 已复算（并回代验证 $\boldsymbol{AB}=\boldsymbol B^2-\boldsymbol{BC}$）</div></div>
+
+  <div class="key"><span class="tag">必记 · ★ 两类互为逆矩阵的「最终归宿」矩阵（张宇原话）</span>
+    $$\begin{bmatrix}1&1&1&\cdots&1\\0&1&1&\cdots&1\\0&0&1&\cdots&1\\\vdots&&&\ddots&\vdots\\0&0&0&\cdots&1\end{bmatrix}_n^{-1}=\begin{bmatrix}1&-1&0&\cdots&0\\0&1&-1&\cdots&0\\0&0&1&\cdots&0\\\vdots&&&\ddots&\vdots\\0&0&0&\cdots&1\end{bmatrix}_n$$
+    <b>原阵：主对角线及右上方全 1；逆阵：主对角线仍是 1，紧挨着的那条斜线是 $-1$，其余全 0。</b>
+    这个"看一眼就能写出逆"的结构，强 3.7 用了，习 2.15 也用了（那里是 $\begin{bmatrix}1&2&3&4\\0&1&2&3\\0&0&1&2\\0&0&0&1\end{bmatrix}$ 的转置求逆），值得当公式背。<br>
+    <span style="color:var(--blue)">更一般（$a\ne0$）：$\begin{bmatrix}a&-1&0&\cdots\\0&a&-1&\cdots\\&&\ddots&\\0&0&\cdots&a\end{bmatrix}$ 的逆是第一行为 $\frac1a,\frac1{a^2},\cdots,\frac1{a^n}$ 的上三角。如 $\begin{bmatrix}-2&-1&0\\0&-2&-1\\0&0&-2\end{bmatrix}^{-1}=\begin{bmatrix}-\frac12&\frac14&-\frac18\\0&-\frac12&\frac14\\0&0&-\frac12\end{bmatrix}$。</span>
+  </div>
+
+  <div class="eg" id="eg34"><div class="q"><span class="no">强 3.4</span>
+    设 $\boldsymbol A=\begin{bmatrix}\frac12&-\frac{\sqrt3}{2}\\\frac{\sqrt3}{2}&\frac12\end{bmatrix}$，则 $\boldsymbol A^{-11}=$ ______</div>
+    <div class="s"><span class="lab">解</span>识别：$\begin{bmatrix}\cos\theta&-\sin\theta\\\sin\theta&\cos\theta\end{bmatrix}$ 是<b>正交矩阵</b>，几何意义是把向量绕原点<b>逆时针旋转 $\theta$</b>。本题 $\theta=\frac\pi3$。<br>
+    于是 $\boldsymbol A^{3}$ = 转 $\pi$ = $-\boldsymbol E$，$\boldsymbol A^{6}=\boldsymbol E$；$\boldsymbol A^{-1}$ = 顺时针转 $\frac\pi3$ = $\begin{bmatrix}\frac12&\frac{\sqrt3}{2}\\-\frac{\sqrt3}{2}&\frac12\end{bmatrix}$。<br>
+    $\boldsymbol A^{11}=\boldsymbol A^{12}\boldsymbol A^{-1}=\boldsymbol A^{-1}$，故 $\boldsymbol A^{-11}=(\boldsymbol A^{11})^{-1}=(\boldsymbol A^{-1})^{-1}=\boldsymbol A$。
+    <span class="ans">$\boldsymbol A^{-11}=\boldsymbol A=\begin{bmatrix}\frac12&-\frac{\sqrt3}{2}\\\frac{\sqrt3}{2}&\frac12\end{bmatrix}$</span> ✔ 已复算<br>
+    <span style="color:var(--green)"><b>这题不算，只需要"转了多少圈"</b>：$11=12-1$，转 $12\times60°=720°$ 回原位，再倒转一次。<b>几何直觉 &gt; 硬算</b>，这是张宇放这题的用意。</span></div></div>
+
+  <div class="eg" id="eg316"><div class="q"><span class="no">强 3.16</span>
+    $\boldsymbol P=\begin{bmatrix}1&1&3\\1&2&2\\0&0&2\end{bmatrix}$，$\boldsymbol P^{-1}\boldsymbol{AP}=\operatorname{diag}(-1,-2,0)$，求 $\boldsymbol A^{99}$。</div>
+    <div class="s"><span class="lab">解</span>由 $\boldsymbol P^{-1}\boldsymbol{AP}=\boldsymbol B$ 得 $\boldsymbol P^{-1}\boldsymbol A^{99}\boldsymbol P=\boldsymbol B^{99}$，即 <b>$\boldsymbol A^{99}\boldsymbol P=\boldsymbol P\boldsymbol B^{99}$</b>。
+    $\boldsymbol B^{99}=\operatorname{diag}((-1)^{99},(-2)^{99},0)=\operatorname{diag}(-1,-2^{99},0)$，
+    $\boldsymbol P\boldsymbol B^{99}=\begin{bmatrix}-1&-2^{99}&0\\-1&-2^{100}&0\\0&0&0\end{bmatrix}$。
+    对 $\begin{bmatrix}\boldsymbol P\\\boldsymbol P\boldsymbol B^{99}\end{bmatrix}$ 作初等<b>列</b>变换化为 $\begin{bmatrix}\boldsymbol E\\\boldsymbol A^{99}\end{bmatrix}$：
+    <span class="ans">$\boldsymbol A^{99}=\begin{bmatrix}2^{99}-2&1-2^{99}&2-2^{98}\\2^{100}-2&1-2^{100}&2-2^{99}\\0&0&0\end{bmatrix}$</span> ✔ 已复算</div></div>
+
+  <div class="eg" id="eg317"><div class="q"><span class="no">强 3.17</span>★★★
+    $\boldsymbol A=\begin{bmatrix}1&1&1&1\\1&1&1&1\\2&1&0&-1\\-1&0&1&2\end{bmatrix}$，$\boldsymbol B=\begin{bmatrix}1&1\\1&1\\0&1\\1&0\end{bmatrix}$，$\boldsymbol A=\boldsymbol{BC}$。(1) 求 $\boldsymbol C$；(2) 计算 $\boldsymbol A^{10}$。</div>
+    <div class="s"><span class="lab">思路</span><span style="color:var(--green)">张宇眉批：<b>"线性代数的研究对象是向量，这是解命题的突破口。牢牢抓住一个学科的研究对象是基本思考方向，也是绝招之一。"</b></span><br>
+    <span class="lab">(1)</span>记 $\boldsymbol A=[\boldsymbol\alpha_1,\boldsymbol\alpha_2,\boldsymbol\alpha_3,\boldsymbol\alpha_4]$，作初等行变换得行最简形 $\begin{bmatrix}1&0&-1&-2\\0&1&2&3\\0&0&0&0\\0&0&0&0\end{bmatrix}$。
+    因 $\boldsymbol B=[\boldsymbol\alpha_3,\boldsymbol\alpha_2]$，取 $\boldsymbol\alpha_2,\boldsymbol\alpha_3$ 为极大无关组，读出 $\boldsymbol\alpha_1=-\boldsymbol\alpha_3+2\boldsymbol\alpha_2$，$\boldsymbol\alpha_4=2\boldsymbol\alpha_3-\boldsymbol\alpha_2$。
+    <span class="ans">$\boldsymbol C=\begin{bmatrix}-1&0&1&2\\2&1&0&-1\end{bmatrix}$</span> ✔ 已复算（$\boldsymbol{BC}=\boldsymbol A$ 验证通过）<br>
+    <span class="lab">(2)</span><b>降维的关键结构</b>：$\boldsymbol A_{4\times4}=\boldsymbol B_{4\times2}\boldsymbol C_{2\times4}$ ⇒ $\boldsymbol A^{10}=\boldsymbol B(\boldsymbol{CB})^{9}\boldsymbol C$，把 4 阶的 10 次方<b>压成 2 阶的 9 次方</b>。
+    $\boldsymbol{CB}=\begin{bmatrix}1&0\\2&3\end{bmatrix}$，$|\lambda\boldsymbol E-\boldsymbol{CB}|=(\lambda-1)(\lambda-3)$，$\boldsymbol\xi_1=[1,-1]^{\mathrm T}$，$\boldsymbol\xi_2=[0,1]^{\mathrm T}$，
+    $\boldsymbol P=\begin{bmatrix}1&0\\-1&1\end{bmatrix}$，$(\boldsymbol{CB})^{9}=\boldsymbol P\operatorname{diag}(1,3^{9})\boldsymbol P^{-1}=\begin{bmatrix}1&0\\3^{9}-1&3^{9}\end{bmatrix}$。
+    <span class="ans">$\boldsymbol A^{10}=\begin{bmatrix}3^{9}&3^{9}&3^{9}&3^{9}\\3^{9}&3^{9}&3^{9}&3^{9}\\3^{9}+1&3^{9}&3^{9}-1&3^{9}-2\\-1&0&1&2\end{bmatrix}$</span> ✔ 已复算（直接幂与 $\boldsymbol B(\boldsymbol{CB})^9\boldsymbol C$ 两路对拍一致）<br>
+    <span style="color:var(--green)">张宇眉批：<b>"这是求 $\boldsymbol A^{n}$ 的主要方法，综合性强，尚未考过。"</b>——尚未考过 = 值得盯。它把<b>满秩分解 + 极大无关组 + 相似对角化</b>三章内容缝在一起。</span></div></div>
+
+  <!-- ================= s5 逆矩阵 ================= -->
+  <h2 id="s5"><span class="idx">五</span>逆矩阵<span class="layer L-base">基础</span><span class="layer L-str">强化</span></h2>
+
+  <p><b>定义</b>：$\boldsymbol A,\boldsymbol B$ 是 $n$ 阶<b>方阵</b>，若 $\boldsymbol{AB}=\boldsymbol{BA}=\boldsymbol E$，则称 $\boldsymbol A$ 可逆、$\boldsymbol B$ 是 $\boldsymbol A$ 的逆矩阵，<b>逆矩阵唯一</b>，记 $\boldsymbol A^{-1}$。
+  <span style="color:var(--blue)">（$\boldsymbol A_{m\times n}$ 可以加减乘，但<b>一涉及逆就必须是方阵</b>。）</span><br>
+  <b>充要条件：$\boldsymbol A$ 可逆 $\iff|\boldsymbol A|\ne0$。</b></p>
+
+  <div class="key"><span class="tag">必记 · 三组"同记"公式（横着背比竖着背省一半力气）</span>
+    <div class="gridwrap"><table>
+      <tr><th></th><th>转置</th><th>求逆</th><th>行列式</th><th>伴随</th></tr>
+      <tr><th>自反</th><td>$(\boldsymbol A^{\mathrm T})^{\mathrm T}=\boldsymbol A$</td><td>$(\boldsymbol A^{-1})^{-1}=\boldsymbol A$</td><td>$\big||\boldsymbol A|\big|=|\boldsymbol A|$</td><td>$(\boldsymbol A^{*})^{*}=|\boldsymbol A|^{n-2}\boldsymbol A$</td></tr>
+      <tr><th>数乘</th><td>$(k\boldsymbol A)^{\mathrm T}=k\boldsymbol A^{\mathrm T}$</td><td>$(k\boldsymbol A)^{-1}=\frac1k\boldsymbol A^{-1}$</td><td>$|k\boldsymbol A|=k^{n}|\boldsymbol A|$</td><td>$(k\boldsymbol A)^{*}=k^{n-1}\boldsymbol A^{*}$</td></tr>
+      <tr><th>乘积（穿脱）</th><td>$(\boldsymbol{AB})^{\mathrm T}=\boldsymbol B^{\mathrm T}\boldsymbol A^{\mathrm T}$</td><td>$(\boldsymbol{AB})^{-1}=\boldsymbol B^{-1}\boldsymbol A^{-1}$</td><td>$|\boldsymbol{AB}|=|\boldsymbol A||\boldsymbol B|$</td><td>$(\boldsymbol{AB})^{*}=\boldsymbol B^{*}\boldsymbol A^{*}$</td></tr>
+      <tr><th>互换</th><td colspan="4">$(\boldsymbol A^{\mathrm T})^{-1}=(\boldsymbol A^{-1})^{\mathrm T}$，$(\boldsymbol A^{*})^{\mathrm T}=(\boldsymbol A^{\mathrm T})^{*}$，$(\boldsymbol A^{*})^{-1}=(\boldsymbol A^{-1})^{*}$，$|\boldsymbol A^{-1}|=|\boldsymbol A|^{-1}$，$|\boldsymbol A^{*}|=|\boldsymbol A|^{n-1}$</td></tr>
+    </table></div>
+    <span style="color:var(--red)"><b>唯一的例外行：加法</b>。$(\boldsymbol A+\boldsymbol B)^{-1}\ne\boldsymbol A^{-1}+\boldsymbol B^{-1}$，$(\boldsymbol A+\boldsymbol B)^{*}\ne\boldsymbol A^{*}+\boldsymbol B^{*}$，$|\boldsymbol A+\boldsymbol B|\ne|\boldsymbol A|+|\boldsymbol B|$。
+    ★ <b>只有转置对加法友好</b>：$(\boldsymbol A+\boldsymbol B)^{\mathrm T}=\boldsymbol A^{\mathrm T}+\boldsymbol B^{\mathrm T}$。</span>
+  </div>
+
+  <h3>5.1　求 $\boldsymbol A^{-1}$ 的三条路 + 抽象型两招</h3>
+  <div class="gridwrap"><table>
+    <tr><th>类型</th><th>方法</th><th>要点</th></tr>
+    <tr><td rowspan="2"><b>具体型</b>（给了数）</td><td>① 伴随法 $\boldsymbol A^{-1}=\frac{1}{|\boldsymbol A|}\boldsymbol A^{*}$</td><td>要算 $n^2$ 个 $n-1$ 阶行列式，<b>只适合 2、3 阶</b></td></tr>
+    <tr><td>② 初等行变换 $[\boldsymbol A\ \vdots\ \boldsymbol E]\to[\boldsymbol E\ \vdots\ \boldsymbol A^{-1}]$</td><td><b>主流方法</b>，见 <a href="#s7">§七步进器</a></td></tr>
+    <tr><td rowspan="2"><b>抽象型</b>（只给关系式）</td><td>③ 恒等变形<b>创造</b> $\boldsymbol{AB}=\boldsymbol E$</td><td>则 $\boldsymbol A^{-1}=\boldsymbol B$。<b>本章最常考</b></td></tr>
+    <tr><td>④ 分解 $\boldsymbol A=\boldsymbol{BC}$，$\boldsymbol B,\boldsymbol C$ 均可逆</td><td>则 $\boldsymbol A^{-1}=\boldsymbol C^{-1}\boldsymbol B^{-1}$</td></tr>
+  </table></div>
+
+  <div class="key"><span class="tag">必记 · 抽象型的"和差化积"三件套</span>
+    考场上给你一个 $\boldsymbol{AB}=\boldsymbol A+\boldsymbol B$ 这类式子，目标是<b>把左端变成"待求逆的矩阵 × 另一个矩阵"，右端变成 $\boldsymbol E$</b>。三个动作：<br>
+    <b>① 移项凑常数</b>：把一定倍数的 $\boldsymbol E$ 移到等号右边（这一步最容易想不到）；<br>
+    <b>② 提公因子</b>：<em>左边的矩阵往左提，右边的矩阵往右提</em>；<br>
+    <b>③ 类比初中因式分解</b>：$ab=a+b\Rightarrow(a-1)(b-1)=1$，矩阵照抄 $\Rightarrow(\boldsymbol A-\boldsymbol E)(\boldsymbol B-\boldsymbol E)=\boldsymbol E$。<br>
+    <span style="color:var(--blue)">张宇的建议：<b>先用普通字母 $a,b$ 在草稿上分解一遍，再原样翻译成矩阵</b>——这招在例 2.4、2.5、习 2.9 都直接命中。</span>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">基 2.4</span>
+    $\boldsymbol A,\boldsymbol B$ 均 $n$ 阶，$\boldsymbol{AB}=\boldsymbol A+\boldsymbol B$，则（　）。<br>
+    (A) $\boldsymbol A-\boldsymbol E$ 可逆　(B) $\boldsymbol A+\boldsymbol E$ 可逆　(C) $\boldsymbol A-2\boldsymbol E$ 可逆　(D) $\boldsymbol B+\boldsymbol E$ 可逆</div>
+    <div class="s"><span class="lab">分析</span>$ab=a+b\Rightarrow a(b-1)-(b-1)=1\Rightarrow(a-1)(b-1)=1$。<br>
+    <span class="lab">解</span>$\boldsymbol{AB}-\boldsymbol A-\boldsymbol B+\boldsymbol E=\boldsymbol E\Rightarrow\boldsymbol A(\boldsymbol B-\boldsymbol E)-(\boldsymbol B-\boldsymbol E)=\boldsymbol E\Rightarrow(\boldsymbol A-\boldsymbol E)(\boldsymbol B-\boldsymbol E)=\boldsymbol E$。
+    <span class="ans">答案：(A)，且 $(\boldsymbol A-\boldsymbol E)^{-1}=\boldsymbol B-\boldsymbol E$。</span> ✔ 已复算<br>
+    <span class="lab">排除</span>取 $\boldsymbol A=-\boldsymbol E,\boldsymbol B=\frac{\boldsymbol E}{2}$ ⇒ $\boldsymbol A+\boldsymbol E=\boldsymbol O$ 不可逆，排 (B)；
+    取 $\boldsymbol A=\boldsymbol B=2\boldsymbol E$ ⇒ $\boldsymbol A-2\boldsymbol E=\boldsymbol O$，排 (C)；
+    取 $\boldsymbol A=\frac{\boldsymbol E}{2},\boldsymbol B=-\boldsymbol E$ ⇒ $\boldsymbol B+\boldsymbol E=\boldsymbol O$，排 (D)。<br>
+    <span style="color:var(--green)"><b>D₄₁ 试取特殊情形</b>：这三个反例都取"$\boldsymbol A,\boldsymbol B$ 都是 $k\boldsymbol E$"，把矩阵方程退化成一元方程 $ab=a+b$ 解出 $k$ ——这是选择题的通用暴力手段。</span></div></div>
+
+  <div class="eg"><div class="q"><span class="no">基 2.5</span>
+    $\boldsymbol A,\boldsymbol B$ 是同阶可逆方阵，且 $\boldsymbol A^{-1}+\boldsymbol B^{-1}$ 可逆，证明 $\boldsymbol A+\boldsymbol B$ 可逆并求 $(\boldsymbol A+\boldsymbol B)^{-1}$。</div>
+    <div class="s"><span class="lab">分析</span>$a+b=a(1+a^{-1}b)=a(b^{-1}+a^{-1})b$。<br>
+    <span class="lab">证</span>$\boldsymbol A+\boldsymbol B=\boldsymbol A+\boldsymbol{EB}=\boldsymbol A+\boldsymbol{AA}^{-1}\boldsymbol B=\boldsymbol A(\boldsymbol E+\boldsymbol A^{-1}\boldsymbol B)=\boldsymbol A(\boldsymbol B^{-1}\boldsymbol B+\boldsymbol A^{-1}\boldsymbol B)=\boldsymbol A(\boldsymbol B^{-1}+\boldsymbol A^{-1})\boldsymbol B$。
+    三个因子都可逆，故 $\boldsymbol A+\boldsymbol B$ 可逆，
+    <span class="ans">$(\boldsymbol A+\boldsymbol B)^{-1}=\boldsymbol B^{-1}(\boldsymbol A^{-1}+\boldsymbol B^{-1})^{-1}\boldsymbol A^{-1}$</span><br>
+    <span style="color:var(--amber)"><b>"提公因子是和、差化积的一个好办法"</b>。这里表面上 $\boldsymbol A+\boldsymbol B$ 没有公因子，靠<b>插入 $\boldsymbol E=\boldsymbol{AA}^{-1}$ 和 $\boldsymbol E=\boldsymbol B^{-1}\boldsymbol B$ 硬造</b>出来。</span><br>
+    <span style="color:var(--red)"><b>反向提醒</b>：$\boldsymbol A,\boldsymbol B$ 均可逆<b>推不出</b> $\boldsymbol A+\boldsymbol B$ 可逆（取 $\boldsymbol B=-\boldsymbol A$）。必须有"$\boldsymbol A^{-1}+\boldsymbol B^{-1}$ 可逆"这个额外条件。</span></div></div>
+
+  <div class="eg"><div class="q"><span class="no">强 3.12</span>
+    $n$ 阶方阵 $\boldsymbol A$ 满足 $\boldsymbol A^{3}-2\boldsymbol A^{2}+3\boldsymbol A-4\boldsymbol E=\boldsymbol O$，则 $(\boldsymbol A-\boldsymbol E)^{-1}=$ ______</div>
+    <div class="s"><span class="lab">解</span><b>长除法</b>（D₁ 常规操作，要练熟）：$\lambda^{3}-2\lambda^{2}+3\lambda-4$ 除以 $\lambda-1$，商 $\lambda^{2}-\lambda+2$、余 $-2$。翻译成矩阵：
+    $$(\boldsymbol A-\boldsymbol E)(\boldsymbol A^{2}-\boldsymbol A+2\boldsymbol E)-2\boldsymbol E=\boldsymbol O\Rightarrow(\boldsymbol A-\boldsymbol E)\Big[\tfrac12(\boldsymbol A^{2}-\boldsymbol A+2\boldsymbol E)\Big]=\boldsymbol E$$
+    <span class="ans">$(\boldsymbol A-\boldsymbol E)^{-1}=\frac12(\boldsymbol A^{2}-\boldsymbol A+2\boldsymbol E)$</span> ✔ 已复算（商与余符号验证 + 友矩阵精确回代）<br>
+    <span style="color:var(--amber)"><b>通法</b>：见到 $f(\boldsymbol A)=\boldsymbol O$ 求 $(\boldsymbol A-c\boldsymbol E)^{-1}$，就把 $f(\lambda)$ 除以 $(\lambda-c)$，<b>余数就是要挪到右边的那个常数</b>。习 2.9 是它的简化版（$\boldsymbol A^{2}+\boldsymbol A-4\boldsymbol E=\boldsymbol O$，凑 $(\boldsymbol A-\boldsymbol E)(\boldsymbol A+2\boldsymbol E)=2\boldsymbol E$）。</span></div></div>
+
+  <div class="eg"><div class="q"><span class="no">强 3.13</span>
+    $\boldsymbol A=\begin{bmatrix}0&1&\cdots&1\\1&\ddots&\ddots&\vdots\\\vdots&\ddots&\ddots&1\\1&\cdots&1&0\end{bmatrix}_n$（主对角为 0，其余为 1），求 $\boldsymbol A^{-1}$。</div>
+    <div class="s"><span class="lab">解</span><b>观察 + 化归</b>：$\boldsymbol A=\boldsymbol\alpha\boldsymbol\alpha^{\mathrm T}-\boldsymbol E$，其中 $\boldsymbol\alpha=[1,\cdots,1]^{\mathrm T}$，$\boldsymbol\alpha^{\mathrm T}\boldsymbol\alpha=n$。设逆为 $k\boldsymbol\alpha\boldsymbol\alpha^{\mathrm T}-\boldsymbol E$：
+    $$(\boldsymbol\alpha\boldsymbol\alpha^{\mathrm T}-\boldsymbol E)(k\boldsymbol\alpha\boldsymbol\alpha^{\mathrm T}-\boldsymbol E)=kn\boldsymbol\alpha\boldsymbol\alpha^{\mathrm T}-(1+k)\boldsymbol\alpha\boldsymbol\alpha^{\mathrm T}+\boldsymbol E=[k(n-1)-1]\boldsymbol\alpha\boldsymbol\alpha^{\mathrm T}+\boldsymbol E$$
+    取 $k=\frac{1}{n-1}$ 即得 $\boldsymbol{AB}=\boldsymbol E$。
+    <span class="ans">$\boldsymbol A^{-1}=\frac{\boldsymbol\alpha\boldsymbol\alpha^{\mathrm T}}{n-1}-\boldsymbol E=\frac{1}{n-1}\begin{bmatrix}2-n&1&\cdots&1\\1&2-n&\cdots&1\\\vdots&&&\vdots\\1&1&\cdots&2-n\end{bmatrix}$</span> ✔ 已复算（$n=3,4,5$ 逐个验证）<br>
+    <span style="color:var(--green)">张宇眉批：<b>"这种'观察'和'化归'是考生要着重训练的。"</b> 触发点还是<a href="#s2">形状大观</a>形 2——看到"全 1 阵"就写 $\boldsymbol\alpha\boldsymbol\alpha^{\mathrm T}$。</span></div></div>
+
+  <div class="eg"><div class="q"><span class="no">强 3.14</span>
+    $\boldsymbol A$ 为 $n$ 阶非零矩阵，$\boldsymbol A^{3}=\boldsymbol O$，则（　）。<br>
+    (A) $\boldsymbol E-\boldsymbol A$、$\boldsymbol E+\boldsymbol A$ 都不可逆　(B) $\boldsymbol E-\boldsymbol A$ 不可逆、$\boldsymbol E+\boldsymbol A$ 可逆　(C) 都可逆　(D) $\boldsymbol E-\boldsymbol A$ 可逆、$\boldsymbol E+\boldsymbol A$ 不可逆</div>
+    <div class="s"><span class="lab">法一（定义）</span>$\boldsymbol E=\boldsymbol E\pm\boldsymbol A^{3}=(\boldsymbol E\pm\boldsymbol A)(\boldsymbol E\mp\boldsymbol A+\boldsymbol A^{2})$，两边都造出了 $\boldsymbol{XY}=\boldsymbol E$，故都可逆。<br>
+    <span class="lab">法二（特征值）</span><span style="color:var(--green)">眉批：<b>见到 $f(\boldsymbol A)=\boldsymbol O$，就想 $f(\lambda)=0$</b></span>。设 $\lambda$ 是 $\boldsymbol A$ 的特征值，由 $\boldsymbol A^{3}=\boldsymbol O$ 得 $\lambda^{3}=0$ ⇒ $\lambda=0$，即 $\boldsymbol A$ 的特征值只有 0。于是 $\boldsymbol E\pm\boldsymbol A$ 的特征值只有 1，$0$ 不是特征值 ⇒ 可逆。
+    <span class="ans">答案：(C)。</span> ✔ 已复算<br>
+    <span style="color:var(--amber)">法一用<b>定义</b>，法二用<b>「0 不是特征值」</b>——正好是<a href="#s10">等价命题网</a>的第 1 条和第 24 条。同一道题打通两条通道，这就是等价命题网的用法。</span></div></div>
+
+  <h3>5.2　分块矩阵求逆（考研要求较高）<span class="layer L-base">基础</span></h3>
+  <div class="key"><span class="tag">必记 · 四个基本型 + 一条推广（不必背，会推即可）</span>
+    设 $\boldsymbol B$（$r$ 阶）、$\boldsymbol C$（$s$ 阶）均可逆：
+    $$\begin{bmatrix}\boldsymbol B&\boldsymbol O\\\boldsymbol O&\boldsymbol C\end{bmatrix}^{-1}=\begin{bmatrix}\boldsymbol B^{-1}&\boldsymbol O\\\boldsymbol O&\boldsymbol C^{-1}\end{bmatrix},\qquad
+    \begin{bmatrix}\boldsymbol O&\boldsymbol B\\\boldsymbol C&\boldsymbol O\end{bmatrix}^{-1}=\begin{bmatrix}\boldsymbol O&\boldsymbol C^{-1}\\\boldsymbol B^{-1}&\boldsymbol O\end{bmatrix}$$
+    <span style="color:var(--red)"><b>副对角型注意换位置</b>：右上是 $\boldsymbol B$，逆的右上却是 $\boldsymbol C^{-1}$。验证 $\begin{bmatrix}\boldsymbol O&\boldsymbol B\\\boldsymbol C&\boldsymbol O\end{bmatrix}\begin{bmatrix}\boldsymbol O&\boldsymbol C^{-1}\\\boldsymbol B^{-1}&\boldsymbol O\end{bmatrix}=\begin{bmatrix}\boldsymbol E&\boldsymbol O\\\boldsymbol O&\boldsymbol E\end{bmatrix}$。</span><br>
+    带角块的四型（$\boldsymbol D$ 在哪个角，$-\boldsymbol X^{-1}\boldsymbol D\boldsymbol Y^{-1}$ 就出现在对角的另一侧）：
+    $$\begin{bmatrix}\boldsymbol B&\boldsymbol O\\\boldsymbol D&\boldsymbol C\end{bmatrix}^{-1}=\begin{bmatrix}\boldsymbol B^{-1}&\boldsymbol O\\-\boldsymbol C^{-1}\boldsymbol{DB}^{-1}&\boldsymbol C^{-1}\end{bmatrix},\qquad
+    \begin{bmatrix}\boldsymbol B&\boldsymbol D\\\boldsymbol O&\boldsymbol C\end{bmatrix}^{-1}=\begin{bmatrix}\boldsymbol B^{-1}&-\boldsymbol B^{-1}\boldsymbol{DC}^{-1}\\\boldsymbol O&\boldsymbol C^{-1}\end{bmatrix}$$
+    $$\begin{bmatrix}\boldsymbol O&\boldsymbol B\\\boldsymbol C&\boldsymbol D\end{bmatrix}^{-1}=\begin{bmatrix}-\boldsymbol C^{-1}\boldsymbol{DB}^{-1}&\boldsymbol C^{-1}\\\boldsymbol B^{-1}&\boldsymbol O\end{bmatrix},\qquad
+    \begin{bmatrix}\boldsymbol D&\boldsymbol B\\\boldsymbol C&\boldsymbol O\end{bmatrix}^{-1}=\begin{bmatrix}\boldsymbol O&\boldsymbol C^{-1}\\\boldsymbol B^{-1}&-\boldsymbol B^{-1}\boldsymbol{DC}^{-1}\end{bmatrix}$$
+    <b>推广</b>：副对角线分块阵（右上到左下依次 $\boldsymbol A_1,\cdots,\boldsymbol A_s$）的逆，副对角线上是 $\boldsymbol A_s^{-1},\cdots,\boldsymbol A_1^{-1}$ ——<b>顺序反转</b>。主对角型则原位取逆、不反转。<br>
+    <span style="color:var(--green)"><b>张宇原话：这类求逆公式不必记忆，但应理解推导方法，要用时临时推导即可。</b>推法见基 2.16。</span>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">基 2.16</span>
+    $\boldsymbol A=\begin{bmatrix}\boldsymbol B&\boldsymbol O\\\boldsymbol D&\boldsymbol C\end{bmatrix}$，$\boldsymbol B$ 是 $r$ 阶可逆、$\boldsymbol C$ 是 $s$ 阶可逆。证明 $\boldsymbol A$ 可逆并求 $\boldsymbol A^{-1}$。</div>
+    <div class="s"><span class="lab">证</span>$|\boldsymbol A|=|\boldsymbol B||\boldsymbol C|\ne0$，故可逆。设 $\boldsymbol A^{-1}=\begin{bmatrix}\boldsymbol X&\boldsymbol Y\\\boldsymbol Z&\boldsymbol W\end{bmatrix}$（<b>牢记这个推导过程</b>）：
+    $$\begin{bmatrix}\boldsymbol B&\boldsymbol O\\\boldsymbol D&\boldsymbol C\end{bmatrix}\begin{bmatrix}\boldsymbol X&\boldsymbol Y\\\boldsymbol Z&\boldsymbol W\end{bmatrix}=\begin{bmatrix}\boldsymbol{BX}&\boldsymbol{BY}\\\boldsymbol{DX}+\boldsymbol{CZ}&\boldsymbol{DY}+\boldsymbol{CW}\end{bmatrix}=\begin{bmatrix}\boldsymbol E&\boldsymbol O\\\boldsymbol O&\boldsymbol E\end{bmatrix}$$
+    逐块比较：$\boldsymbol{BX}=\boldsymbol E\Rightarrow\boldsymbol X=\boldsymbol B^{-1}$；$\boldsymbol{BY}=\boldsymbol O\Rightarrow\boldsymbol Y=\boldsymbol O$；$\boldsymbol{DX}+\boldsymbol{CZ}=\boldsymbol O\Rightarrow\boldsymbol Z=-\boldsymbol C^{-1}\boldsymbol{DB}^{-1}$；$\boldsymbol{DY}+\boldsymbol{CW}=\boldsymbol E\Rightarrow\boldsymbol W=\boldsymbol C^{-1}$。
+    <span class="ans">$\boldsymbol A^{-1}=\begin{bmatrix}\boldsymbol B^{-1}&\boldsymbol O\\-\boldsymbol C^{-1}\boldsymbol{DB}^{-1}&\boldsymbol C^{-1}\end{bmatrix}$</span></div></div>
+
+  <div class="eg"><div class="q"><span class="no">基 2.15</span>
+    $\boldsymbol A=\begin{bmatrix}0&0&0&2&-1\\0&0&1&1&2\\0&0&-1&-1&-1\\1&3&0&0&0\\-1&2&0&0&0\end{bmatrix}$，求 $\boldsymbol A^{-1}$。</div>
+    <div class="s"><span class="lab">解</span>左上、右下都是零块 ⇒ 按副对角型分块 $\boldsymbol A=\begin{bmatrix}\boldsymbol O&\boldsymbol B\\\boldsymbol C&\boldsymbol O\end{bmatrix}$，
+    $\boldsymbol B=\begin{bmatrix}0&2&-1\\1&1&2\\-1&-1&-1\end{bmatrix}$（正是基 2.12 那个），$\boldsymbol C=\begin{bmatrix}1&3\\-1&2\end{bmatrix}$。<br>
+    $\boldsymbol B^{-1}=\begin{bmatrix}-\frac12&-\frac32&-\frac52\\\frac12&\frac12&\frac12\\0&1&1\end{bmatrix}$；$\boldsymbol C^{-1}=\frac{1}{5}\begin{bmatrix}2&-3\\1&1\end{bmatrix}$
+    <span style="color:var(--amber)">（2 阶求逆口诀：<b>主对调，副变号，乘行列式的倒数</b>）</span>
+    <span class="ans">$\boldsymbol A^{-1}=\begin{bmatrix}\boldsymbol O&\boldsymbol C^{-1}\\\boldsymbol B^{-1}&\boldsymbol O\end{bmatrix}=\begin{bmatrix}0&0&0&\frac25&-\frac35\\0&0&0&\frac15&\frac15\\-\frac12&-\frac32&-\frac52&0&0\\\frac12&\frac12&\frac12&0&0\\0&1&1&0&0\end{bmatrix}$</span> ✔ 已复算<br>
+    <span style="color:var(--red)"><b>注意零矩阵的形状</b>：$\boldsymbol C^{-1}$ 是 2 阶跑到了右上、$\boldsymbol B^{-1}$ 是 3 阶跑到了左下，两个零块因此是 $2\times3$ 和 $3\times2$，<b>不是方的</b>。抄错形状是这题唯一的失分点。</span></div></div>
+
+  <!-- ================= s6 伴随矩阵 ================= -->
+  <h2 id="s6"><span class="idx">六</span>伴随矩阵 $\boldsymbol A^{*}$ · 公式表<span class="layer L-base">基础</span><span class="layer L-str">强化</span></h2>
+
+  <div class="key"><span class="tag">必记 · 定义里唯一会错的地方：下标要不要转</span>
+    $$\boldsymbol A^{*}=\begin{bmatrix}A_{11}&A_{21}&\cdots&A_{n1}\\A_{12}&A_{22}&\cdots&A_{n2}\\\vdots&\vdots&&\vdots\\A_{1n}&A_{2n}&\cdots&A_{nn}\end{bmatrix},\qquad \boldsymbol{AA}^{*}=\boldsymbol A^{*}\boldsymbol A=|\boldsymbol A|\boldsymbol E$$
+    <b>$\boldsymbol A$ 的第 $i$ <u>行</u>元素的代数余子式，写在 $\boldsymbol A^{*}$ 的第 $i$ <u>列</u>上</b>（"行的代数余子式列向排列"）。
+    换句话说 <b>$\boldsymbol A^{*}$ 的 $(i,j)$ 元是 $A_{ji}$</b>，位置正好在 $\boldsymbol A$ 的元素 $a_{ji}$ 的地方。<br>
+    <span style="color:var(--amber)"><b>2 阶特例（考场上直接用）</b>：$\begin{bmatrix}a&b\\c&d\end{bmatrix}^{*}=\begin{bmatrix}d&-b\\-c&a\end{bmatrix}$ —— <b>主对调，副变号</b>。且仅当 $n=2$ 时 $(\boldsymbol A^{*})^{*}=\boldsymbol A$。</span>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">基 2.6</span>
+    已知 $\boldsymbol A=\begin{bmatrix}a_{11}&a_{12}\\a_{21}&a_{22}\end{bmatrix}$，$\boldsymbol A^{*}=\begin{bmatrix}A_{11}&A_{21}\\A_{12}&A_{22}\end{bmatrix}$，计算 $\boldsymbol{AA}^{*}$。</div>
+    <div class="s"><span class="lab">解</span>由行列式<b>展开定理</b>，主对角线上是"本行元素配本行代数余子式"：
+    $a_{11}A_{11}+a_{12}A_{12}=|\boldsymbol A|$，$a_{21}A_{21}+a_{22}A_{22}=|\boldsymbol A|$；<br>
+    非主对角线上是"本行元素配<b>他行</b>代数余子式"，等于一个<b>有两行相同的行列式</b>：
+    $a_{11}A_{21}+a_{12}A_{22}=\begin{vmatrix}a_{11}&a_{12}\\a_{11}&a_{12}\end{vmatrix}=0$，$a_{21}A_{11}+a_{22}A_{12}=\begin{vmatrix}a_{21}&a_{22}\\a_{21}&a_{22}\end{vmatrix}=0$。
+    <span class="ans">$\boldsymbol{AA}^{*}=\begin{bmatrix}|\boldsymbol A|&0\\0&|\boldsymbol A|\end{bmatrix}=|\boldsymbol A|\boldsymbol E$</span><br>
+    <span style="color:var(--amber)"><b>这就是 $\boldsymbol{AA}^{*}=|\boldsymbol A|\boldsymbol E$ 的来历</b>——第 1 章那条"异行相乘为零"的展开定理，在这里变成了矩阵等式。$\boldsymbol A^{*}$ 的下标之所以要"转"，正是为了让这个乘法对得上。</span></div></div>
+
+  <div class="eg"><div class="q"><span class="no">基 2.7</span>
+    $\boldsymbol A=\begin{bmatrix}a&b\\c&d\end{bmatrix}$，写出 $\boldsymbol A$ 可逆的一个充要条件；可逆时求 $\boldsymbol A^{-1}$。</div>
+    <div class="s"><span class="lab">解</span>$\boldsymbol A$ 可逆 $\iff|\boldsymbol A|=ad-bc\ne0$，此时
+    $$\boldsymbol A^{-1}=\frac{1}{|\boldsymbol A|}\boldsymbol A^{*}=\frac{1}{ad-bc}\begin{bmatrix}d&-b\\-c&a\end{bmatrix}$$
+    <span class="ans">（$A_{11}=d,\ A_{12}=-c,\ A_{21}=-b,\ A_{22}=a$）</span><br>
+    <span style="color:var(--green)"><b>这是全书使用频率最高的公式之一</b>，务必做到不假思索：<b>主对调、副变号、除以行列式</b>。基 2.15 里求 $\boldsymbol C^{-1}$ 用的就是它。</span></div></div>
+
+  <div class="eg"><div class="q"><span class="no">基 2.8</span>
+    求 $\boldsymbol A=\begin{bmatrix}1&0&1\\2&1&0\\-3&2&-5\end{bmatrix}$ 的逆矩阵（伴随法）。</div>
+    <div class="s"><span class="lab">解</span>$|\boldsymbol A|=2\ne0$，可逆。<b>伴随法的关键是把 9 个代数余子式算对</b>：
+    $A_{11}=-5,\ A_{12}=10,\ A_{13}=7$；$A_{21}=2,\ A_{22}=-2,\ A_{23}=-2$；$A_{31}=-1,\ A_{32}=2,\ A_{33}=1$。
+    按"行的代数余子式列向排列"拼成 $\boldsymbol A^{*}$：
+    $$\boldsymbol A^{-1}=\frac{1}{2}\begin{bmatrix}-5&2&-1\\10&-2&2\\7&-2&1\end{bmatrix}=\begin{bmatrix}-\frac52&1&-\frac12\\5&-1&1\\\frac72&-1&\frac12\end{bmatrix}$$
+    <span class="ans">✔ 已复算</span><br>
+    <span style="color:var(--red)"><b>三个易错点</b>：① 别忘了除以 $|\boldsymbol A|$；② $A_{ij}=(-1)^{i+j}M_{ij}$ 的正负号（$A_{12},A_{21},A_{23},A_{32}$ 要变号）；③ <b>拼进 $\boldsymbol A^{*}$ 时要"转位置"</b>——$A_{12}$ 放在第 2 行第 1 列。<br>
+    <span style="color:var(--green)">这个矩阵也放进了<a href="#stepper">步进器</a>（预设「一般演示 [A⋮E] 求逆（基2.8）」），可以对照初等变换法验算一遍。</span></span></div></div>
+
+  <div class="key"><span class="tag">必记 · 11 条公式（⑤⑥⑦ 需 $\boldsymbol A$ 可逆，其余对任意方阵成立）</span>
+    <div class="gridwrap"><table>
+      <tr><th>#</th><th>公式</th><th>#</th><th>公式</th></tr>
+      <tr><td>①</td><td><b>$\boldsymbol{AA}^{*}=\boldsymbol A^{*}\boldsymbol A=|\boldsymbol A|\boldsymbol E$</b>（定义式，<b>不论 $|\boldsymbol A|$ 是否为 0 都成立</b>）</td>
+          <td>⑦</td><td>$(\boldsymbol A^{*})^{-1}=\frac{1}{|\boldsymbol A|}\boldsymbol A=(\boldsymbol A^{-1})^{*}$</td></tr>
+      <tr><td>②</td><td>$|\boldsymbol A^{*}|=|\boldsymbol A|^{n-1}$</td><td>⑧</td><td>$(\boldsymbol A^{*})^{*}=|\boldsymbol A|^{n-2}\boldsymbol A$</td></tr>
+      <tr><td>③</td><td>$(\boldsymbol A^{\mathrm T})^{*}=(\boldsymbol A^{*})^{\mathrm T}$</td><td>⑨</td><td>$|(\boldsymbol A^{*})^{*}|=|\boldsymbol A|^{(n-1)^{2}}$</td></tr>
+      <tr><td>④</td><td>$(k\boldsymbol A)^{*}=k^{n-1}\boldsymbol A^{*}$，$(-\boldsymbol A)^{*}=(-1)^{n-1}\boldsymbol A^{*}$</td>
+          <td>⑩</td><td><b>$(\boldsymbol{AB})^{*}=\boldsymbol B^{*}\boldsymbol A^{*}$</b>（穿脱）</td></tr>
+      <tr><td>⑤</td><td>$\boldsymbol A^{-1}=\frac{1}{|\boldsymbol A|}\boldsymbol A^{*}$</td>
+          <td>⑪</td><td>若 $r(\boldsymbol A)=n-1$，则 $(\boldsymbol A^{*})^{n}=[\operatorname{tr}(\boldsymbol A^{*})]^{n-1}\boldsymbol A^{*}$（此时 $r(\boldsymbol A^{*})=1$，套秩 1 阵公式）</td></tr>
+      <tr><td>⑥</td><td>$\boldsymbol A^{*}=|\boldsymbol A|\boldsymbol A^{-1}$（<b>$\boldsymbol A$ 可逆时 $\boldsymbol A^{*}$ 与 $\boldsymbol A^{-1}$ 只差非零倍数</b>）</td>
+          <td colspan="2">✔ ①②③④⑧⑩ 已用 $n=2,3,4$ 各 200 组随机整数阵批量对拍</td></tr>
+    </table></div>
+  </div>
+
+  <div class="key"><span class="tag">必记 · ★ $r(\boldsymbol A^{*})$ 三分法（每年必考的一个点）</span>
+    $$r(\boldsymbol A^{*})=\begin{cases}n,&r(\boldsymbol A)=n\\[2pt] 1,&r(\boldsymbol A)=n-1\\[2pt] 0,&r(\boldsymbol A)\lt n-1\end{cases}$$
+    <b>直觉</b>：$r(\boldsymbol A)=n-1$ 时 $\boldsymbol A$ 至少有一个 $n-1$ 阶子式非零 ⇒ $\boldsymbol A^{*}\ne\boldsymbol O$；同时 $\boldsymbol{AA}^{*}=|\boldsymbol A|\boldsymbol E=\boldsymbol O$ ⇒ $r(\boldsymbol A)+r(\boldsymbol A^{*})\le n$ ⇒ $r(\boldsymbol A^{*})\le1$。两边夹得 $=1$。<br>
+    ✔ 已用 $n=2,3,4$ 各 300 组随机矩阵全量验证。<br>
+    <span style="color:var(--blue)">配套：$(\boldsymbol A^{*})^{*}$ 的三种情形——① $n=2$ 时恒等于 $\boldsymbol A$；② $n>2$ 且 $\boldsymbol A$ 可逆时 $=|\boldsymbol A|^{n-2}\boldsymbol A$；③ $n>2$ 且 $\boldsymbol A$ 不可逆时 $=\boldsymbol O$。</span>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 扰动法（摄动法）· 抽象伴随题的万能补丁</span>
+    伴随矩阵的公式大多先在 $|\boldsymbol A|\ne0$ 下证出来，<b>$|\boldsymbol A|=0$ 的情形怎么办？</b>令 $\boldsymbol A_1=\boldsymbol A+t\boldsymbol E$。因为 $|\boldsymbol A+t\boldsymbol E|$ 是 $t$ 的多项式，只有有限个零点，故当 $t$ 充分小且非零时 $\boldsymbol A_1$ 可逆，结论对 $\boldsymbol A_1$ 成立；两边元素都是 $t$ 的<b>连续函数</b>，令 $t\to0$ 即得 $\boldsymbol A$ 的情形。<br>
+    <b>标准表述</b>：在 $n$ 阶矩阵 $\boldsymbol B$ 满足条件 T 时，令 $\boldsymbol A+t\boldsymbol E=\boldsymbol B$，$\boldsymbol A+t\boldsymbol E$ 亦满足 T；由于考研范围内 $\boldsymbol A+t\boldsymbol E$ 的元素均是 $t$ 的多项式即连续函数，故 $t\to0$ 时 $\boldsymbol A+t\boldsymbol E\to\boldsymbol A$，$\boldsymbol A$ 亦满足条件。<br>
+    <span style="color:var(--green)">强 3.8 的四个小问全部靠它收尾。<b>会写这段话本身就是采分点。</b></span>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">强 3.8</span>
+    $\boldsymbol A,\boldsymbol B$ 为 $n$ 阶矩阵，下列结论正确的个数是（　）。<br>
+    ① $\boldsymbol{AB}=\boldsymbol{BA}\Rightarrow\boldsymbol A^{*}\boldsymbol B=\boldsymbol{BA}^{*}$；② $\boldsymbol A$ 与 $\boldsymbol B$ 等价 $\Rightarrow\boldsymbol A^{*}$ 与 $\boldsymbol B^{*}$ 等价；③ 相似 ⇒ 相似；④ 合同 ⇒ 合同。</div>
+    <div class="s"><span class="ans">答案：(D) 4 个全对。</span><br>
+    <span class="lab">①</span>$\boldsymbol A$ 可逆时：$\boldsymbol{AB}=\boldsymbol{BA}$ 两端<b>左乘且右乘 $\boldsymbol A^{*}$</b>，用 $\boldsymbol{AA}^{*}=\boldsymbol A^{*}\boldsymbol A=|\boldsymbol A|\boldsymbol E$ 得 $|\boldsymbol A|\boldsymbol{BA}^{*}=|\boldsymbol A|\boldsymbol A^{*}\boldsymbol B$，约掉 $|\boldsymbol A|\ne0$。不可逆时扰动。<br>
+    <span class="lab">②</span>等价 $\iff$ 秩相等。由 $r(\boldsymbol A^{*})$ 三分法，$r(\boldsymbol A)=r(\boldsymbol B)\Rightarrow r(\boldsymbol A^{*})=r(\boldsymbol B^{*})$。<br>
+    <span class="lab">③</span>$\boldsymbol P^{-1}\boldsymbol{AP}=\boldsymbol B$ 且 $|\boldsymbol A|=|\boldsymbol B|$，两边取逆得 $\boldsymbol B^{-1}=\boldsymbol P^{-1}\boldsymbol A^{-1}\boldsymbol P$，乘 $|\boldsymbol B|=|\boldsymbol A|$ 得 $\boldsymbol B^{*}=\boldsymbol P^{-1}\boldsymbol A^{*}\boldsymbol P$。<br>
+    <span class="lab">④</span>$\boldsymbol C^{\mathrm T}\boldsymbol{AC}=\boldsymbol B$ 取逆得 $\boldsymbol B^{-1}=\boldsymbol C^{-1}\boldsymbol A^{-1}(\boldsymbol C^{-1})^{\mathrm T}$，整理得 $\frac{|\boldsymbol A|}{|\boldsymbol B|}\boldsymbol B^{*}=\boldsymbol C^{-1}\boldsymbol A^{*}(\boldsymbol C^{-1})^{\mathrm T}$，
+    故 $\boldsymbol A^{*}$ 与 $\frac{|\boldsymbol A|}{|\boldsymbol B|}\boldsymbol B^{*}$ 合同，而后者与 $\boldsymbol B^{*}$ 合同，由<b>合同的传递性</b>得证。<br>
+    <span style="color:var(--amber)">这题是伴随矩阵与「等价 / 相似 / 合同」三大关系的总复习。<b>四问的共同套路：先在可逆情形下算，再用扰动法补上不可逆情形。</b></span></div></div>
+
+  <div class="eg" id="eg39"><div class="q"><span class="no">强 3.9</span>
+    $\boldsymbol A,\boldsymbol B$ 为 $n(n\ge2)$ 阶可逆矩阵，下列说法<b>不正确</b>的是（　）。<br>
+    (A) $\begin{bmatrix}\boldsymbol A&\boldsymbol O\\\boldsymbol O&\boldsymbol B\end{bmatrix}^{*}=\begin{bmatrix}|\boldsymbol B|\boldsymbol A^{*}&\boldsymbol O\\\boldsymbol O&|\boldsymbol A|\boldsymbol B^{*}\end{bmatrix}$
+    (B) $\begin{bmatrix}\boldsymbol O&\boldsymbol A\\\boldsymbol B&\boldsymbol O\end{bmatrix}^{*}=(-1)^{n^{2}}\begin{bmatrix}\boldsymbol O&|\boldsymbol A|\boldsymbol B^{*}\\|\boldsymbol B|\boldsymbol A^{*}&\boldsymbol O\end{bmatrix}$<br>
+    (C) $\begin{bmatrix}\boldsymbol A&\boldsymbol C\\\boldsymbol O&\boldsymbol B\end{bmatrix}^{*}=\begin{bmatrix}|\boldsymbol B|\boldsymbol A^{*}&-\boldsymbol A^{*}\boldsymbol{CB}^{*}\\\boldsymbol O&|\boldsymbol A|\boldsymbol B^{*}\end{bmatrix}$
+    (D) $\begin{bmatrix}\boldsymbol A&\boldsymbol O\\\boldsymbol C&\boldsymbol B\end{bmatrix}^{*}=\begin{bmatrix}|\boldsymbol B|\boldsymbol A^{*}&\boldsymbol O\\-\boldsymbol A^{*}\boldsymbol{CB}^{*}&|\boldsymbol A|\boldsymbol B^{*}\end{bmatrix}$</div>
+    <div class="s"><span class="lab">解</span><b>统一验证手段：分块矩阵也是矩阵，只需检验 $\boldsymbol M\boldsymbol M^{*}=|\boldsymbol M|\boldsymbol E$。</b>
+    (D) 乘出来左下块是 $|\boldsymbol B|\boldsymbol{CA}^{*}-\boldsymbol{BA}^{*}\boldsymbol{CB}^{*}$，一般不为 $\boldsymbol O$。
+    <span class="ans">答案：(D)。</span> ✔ 已复算（取具体 $\boldsymbol A,\boldsymbol B,\boldsymbol C$ 验证 (A)(C) 成立、(D) 不成立）<br>
+    <span style="color:var(--amber)"><b>为什么 (C) 对而 (D) 错</b>：$\boldsymbol C$ 在右上角时，交叉项 $-\boldsymbol A^{*}\boldsymbol{CB}^{*}$ 也在右上角，左右因子的顺序恰好能被消掉；搬到左下角后顺序不匹配。<b>不要凭对称性猜，直接乘一遍最快。</b></span></div></div>
+
+  <div class="eg"><div class="q"><span class="no">基 2.10</span>
+    $\boldsymbol A,\boldsymbol B$ 均 2 阶，$|\boldsymbol A|=2,|\boldsymbol B|=3$，则 $\begin{bmatrix}\boldsymbol O&\boldsymbol A\\\boldsymbol B&\boldsymbol O\end{bmatrix}^{*}=$（　）</div>
+    <div class="s"><span class="lab">解</span>$\begin{vmatrix}\boldsymbol O&\boldsymbol A\\\boldsymbol B&\boldsymbol O\end{vmatrix}=(-1)^{2\times2}|\boldsymbol A||\boldsymbol B|=6\ne0$ 可逆，且 $\begin{bmatrix}\boldsymbol O&\boldsymbol A\\\boldsymbol B&\boldsymbol O\end{bmatrix}^{-1}=\begin{bmatrix}\boldsymbol O&\boldsymbol B^{-1}\\\boldsymbol A^{-1}&\boldsymbol O\end{bmatrix}$，于是
+    $$\boldsymbol M^{*}=|\boldsymbol M|\boldsymbol M^{-1}=6\begin{bmatrix}\boldsymbol O&\boldsymbol B^{-1}\\\boldsymbol A^{-1}&\boldsymbol O\end{bmatrix}=\begin{bmatrix}\boldsymbol O&2\cdot3\boldsymbol B^{-1}\\3\cdot2\boldsymbol A^{-1}&\boldsymbol O\end{bmatrix}=\begin{bmatrix}\boldsymbol O&2\boldsymbol B^{*}\\3\boldsymbol A^{*}&\boldsymbol O\end{bmatrix}$$
+    <span class="ans">答案：(B)。</span> ✔ 已复算<br>
+    <span style="color:var(--amber)"><b>拆 6 的技巧</b>：右上要凑 $\boldsymbol B^{*}=|\boldsymbol B|\boldsymbol B^{-1}=3\boldsymbol B^{-1}$，所以 $6=2\times3$ 里的 3 归 $\boldsymbol B$、剩下 2 留在外面；左下同理。<b>哪个块就用哪个块自己的行列式去凑。</b></span></div></div>
+
+  <div class="eg"><div class="q"><span class="no">基 2.9 / 基 2.11</span>
+    (a) $\boldsymbol A=\begin{bmatrix}1&2&0\\2&2&0\\3&4&5\end{bmatrix}$，求 $(\boldsymbol A^{*})^{-1}$。　(b) $|\boldsymbol A|=2,|\boldsymbol B|=-4$（$n$ 阶），求 $|2\boldsymbol B^{*}\boldsymbol A^{-1}|$。</div>
+    <div class="s"><span class="lab">(a)</span>由 $\boldsymbol{AA}^{*}=|\boldsymbol A|\boldsymbol E$ 得 $\frac{\boldsymbol A}{|\boldsymbol A|}\boldsymbol A^{*}=\boldsymbol E$，故 $(\boldsymbol A^{*})^{-1}=\frac{\boldsymbol A}{|\boldsymbol A|}$ —— <b>不用先求 $\boldsymbol A^{*}$</b>。$|\boldsymbol A|=-10$：
+    <span class="ans">$(\boldsymbol A^{*})^{-1}=-\frac{1}{10}\begin{bmatrix}1&2&0\\2&2&0\\3&4&5\end{bmatrix}$</span> ✔ 已复算<br>
+    <span class="lab">(b)</span>$|2\boldsymbol B^{*}\boldsymbol A^{-1}|=2^{n}|\boldsymbol B^{*}||\boldsymbol A^{-1}|=2^{n}|\boldsymbol B|^{n-1}\cdot\frac{1}{|\boldsymbol A|}=2^{n}(-4)^{n-1}\cdot\frac12=(-8)^{n-1}$。
+    <span class="ans">$(-8)^{n-1}$</span> ✔ 已复算（$n=2,3,4$ 逐个构造验证）<br>
+    <span style="color:var(--amber)">四个公式串行使用：$|k\boldsymbol A|=k^{n}|\boldsymbol A|$ → $|\boldsymbol{AB}|=|\boldsymbol A||\boldsymbol B|$ → $|\boldsymbol B^{*}|=|\boldsymbol B|^{n-1}$ → $|\boldsymbol A^{-1}|=1/|\boldsymbol A|$。<b>$2^n$ 的 $n$ 与 $(-4)^{n-1}$ 的 $n-1$ 不要写混。</b></span></div></div>
+
+  <div class="eg"><div class="q"><span class="no">强 3.10</span>
+    3 阶行列式 $|\boldsymbol A|$ 的元素 $a_{ij}$ 均为实数且不全为 0，若 $a_{ij}=-A_{ij}$，则 $|\boldsymbol A|=$ ______</div>
+    <div class="s"><span class="lab">解</span>由定义，$a_{ij}=-A_{ij}$ 意味着 <b>$\boldsymbol A^{*}=-\boldsymbol A^{\mathrm T}$</b>。两边取行列式：$|\boldsymbol A|^{3-1}=(-1)^{3}|\boldsymbol A|$，即
+    $$|\boldsymbol A|^{2}=-|\boldsymbol A|\ \Longrightarrow\ |\boldsymbol A|\big(|\boldsymbol A|+1\big)=0\qquad(*)$$
+    再由 $a_{ij}$ 不全为 0，存在 $a_{kj}\ne0$，按第 $k$ 行展开：
+    $$|\boldsymbol A|=a_{k1}A_{k1}+a_{k2}A_{k2}+a_{k3}A_{k3}=-a_{k1}^{2}-a_{k2}^{2}-a_{k3}^{2}\lt0$$
+    结合 $(*)$ 得 <span class="ans">$|\boldsymbol A|=-1$</span> ✔ 已复算<br>
+    <span style="color:var(--green)"><b>我的独立验证</b>：穷举全部 $3^{9}=19683$ 个元素取自 $\{-1,0,1\}$ 的矩阵，满足 $\boldsymbol A^{*}=-\boldsymbol A^{\mathrm T}$ 的共 25 个——其中 24 个 $|\boldsymbol A|=-1$，另 1 个是零矩阵（被"不全为 0"排除）。<b>与书答完全一致。</b>
+    更本质地：$\boldsymbol A^{*}=-\boldsymbol A^{\mathrm T}\Rightarrow|\boldsymbol A|\boldsymbol E=-\boldsymbol{AA}^{\mathrm T}$，取行列式得 $|\boldsymbol A|^{2}=-|\boldsymbol A|^{3}$，且 $\boldsymbol{AA}^{\mathrm T}=\boldsymbol E$ ——<b>这些 $\boldsymbol A$ 全是行列式为 $-1$ 的正交矩阵</b>（如 $\operatorname{diag}(-1,1,1)$）。</span><br>
+    <span style="color:var(--amber)"><b>两步缺一不可</b>：$(*)$ 只把答案缩到 $\{0,-1\}$，必须靠"按行展开得负数"排掉 0。只写第一步是半分不给的。</span></div></div>
+
+  <div class="eg" id="eg311"><div class="q"><span class="no">强 3.11</span>
+    $n$ 阶矩阵 $\boldsymbol A$ 满足 $|\boldsymbol A|=1$，元素 $a_{ij}=-a_{ji}$，$\boldsymbol x=[1,1,\cdots,1]^{\mathrm T}$，则 $\boldsymbol x^{\mathrm T}\boldsymbol A^{*}\boldsymbol x=$ ______</div>
+    <div class="s"><span class="lab">解</span>条件即 $\boldsymbol A^{\mathrm T}=-\boldsymbol A$（反对称）。<b>第一步定 $n$ 的奇偶</b>：$|\boldsymbol A^{\mathrm T}|=(-1)^{n}|\boldsymbol A|$，若 $n$ 为奇数则 $|\boldsymbol A|=-|\boldsymbol A|\Rightarrow|\boldsymbol A|=0$，与 $|\boldsymbol A|=1$ 矛盾，故 <b>$n$ 必为偶数</b>。<br>
+    于是 $(\boldsymbol A^{*})^{\mathrm T}=(\boldsymbol A^{\mathrm T})^{*}=(-\boldsymbol A)^{*}=(-1)^{n-1}\boldsymbol A^{*}=-\boldsymbol A^{*}$，即 <b>$\boldsymbol A^{*}$ 也是反对称的</b>，$A_{ij}=-A_{ji}$。
+    而 $\boldsymbol x^{\mathrm T}\boldsymbol A^{*}\boldsymbol x=\sum_i\sum_j A_{ij}$，反对称阵全体元素之和为 0（主对角为 0，其余两两抵消）。
+    <span class="ans">$\boldsymbol x^{\mathrm T}\boldsymbol A^{*}\boldsymbol x=0$</span> ✔ 已复算（$n=2,4$ 构造验证；$n=3$ 验证反对称必 $|\boldsymbol A|=0$）<br>
+    <span style="color:var(--blue)">中间那步 $(-\boldsymbol A)^{*}=(-1)^{n-1}\boldsymbol A^{*}$ 的来历：$(-\boldsymbol A)^{*}=|-\boldsymbol A|(-\boldsymbol A)^{-1}=(-1)^{n}|\boldsymbol A|\cdot(-1)\boldsymbol A^{-1}=(-1)^{n-1}\boldsymbol A^{*}$。$n$ 偶 ⇒ 系数是 $-1$。</span><br>
+    <span style="color:var(--green)">这题用到了<a href="#s2">形状大观</a>的形 5：$\boldsymbol x^{\mathrm T}\boldsymbol M\boldsymbol x$（行1×方阵×列1）= 全体元素之和。<b>认出形状，这题就只剩一句话。</b></span></div></div>
+
+  <!-- ================= s7 初等变换 + 步进器 ================= -->
+  <h2 id="s7"><span class="idx">七</span>初等变换与初等矩阵 🛠<span class="layer L-base">基础</span><span class="layer L-str">强化</span></h2>
+
+  <div class="mine"><span class="tag">补讲 · 初等变换是代数里的"基本初等函数"</span>
+    张宇原书眉批：矩阵作用在一个向量或矩阵上，<b>相当于一个对应法则</b>。这个对应法则在代数学里是怎么提出来的？就像高数里初等函数由<b>基本初等函数</b>经有限次四则运算与复合构成一样——<b>初等变换就是代数里的对应法则，它也有最基本的三种</b>：
+    <b>倍乘</b>（非零常数乘某一行/列）、<b>互换</b>（两行/列互换）、<b>倍加</b>（某行/列的 $k$ 倍加到另一行/列）。
+  </div>
+
+  <div class="key"><span class="tag">必记 · 左行右列（本章最该刻在脑子里的一句话）</span>
+    <b>由单位矩阵经过<u>一次</u>初等变换得到的矩阵称为初等矩阵。</b>
+    $$\boxed{\text{对 }\boldsymbol A\text{ 作初等\textbf{行}变换}=\text{在\textbf{左}边乘相应初等矩阵}\qquad
+    \text{初等\textbf{列}变换}=\text{在\textbf{右}边乘}}$$
+    <div class="gridwrap"><table>
+      <tr><th>记号</th><th>含义</th><th>3 阶样例</th></tr>
+      <tr><td>$\boldsymbol E_i(k)$，$k\ne0$</td><td>$\boldsymbol E$ 的第 $i$ 行（列）乘 $k$ —— <b>倍乘</b></td><td>$\boldsymbol E_2(k)=\begin{bmatrix}1&0&0\\0&k&0\\0&0&1\end{bmatrix}$</td></tr>
+      <tr><td>$\boldsymbol E_{ij}$</td><td>$\boldsymbol E$ 的第 $i,j$ 行（列）互换 —— <b>互换</b></td><td>$\boldsymbol E_{12}=\begin{bmatrix}0&1&0\\1&0&0\\0&0&1\end{bmatrix}$</td></tr>
+      <tr><td>$\boldsymbol E_{ij}(k)$</td><td>$\boldsymbol E$ 的第 $j$ 行的 $k$ 倍加到第 $i$ 行（<b>或</b>第 $i$ 列的 $k$ 倍加到第 $j$ 列）—— <b>倍加</b></td><td>$\boldsymbol E_{31}(k)=\begin{bmatrix}1&0&0\\0&1&0\\k&0&1\end{bmatrix}$</td></tr>
+    </table></div>
+    <span style="color:var(--red)"><b>$\boldsymbol E_{ij}(k)$ 的行、列含义是互相翻转的</b>（行：$j\to i$；列：$i\to j$）。基 2.14 就卡在这一点上。</span>
+  </div>
+
+  <div class="key"><span class="tag">必记 · 初等矩阵的四条性质（第 3 讲法四要用）</span>
+    <div class="gridwrap"><table>
+      <tr><th></th><th>互换 $\boldsymbol E_{ij}$</th><th>倍乘 $\boldsymbol E_i(k)$</th><th>倍加 $\boldsymbol E_{ij}(k)$</th></tr>
+      <tr><th>行列式</th><td>$-1$</td><td>$k$</td><td>$1$</td></tr>
+      <tr><th>转置</th><td>$\boldsymbol E_{ij}^{\mathrm T}=\boldsymbol E_{ij}$</td><td>$\boldsymbol E_i^{\mathrm T}(k)=\boldsymbol E_i(k)$</td><td><b>$\boldsymbol E_{ij}^{\mathrm T}(k)=\boldsymbol E_{ji}(k)$</b></td></tr>
+      <tr><th>逆</th><td>$\boldsymbol E_{ij}^{-1}=\boldsymbol E_{ij}$（<b>自逆</b>）</td><td>$\boldsymbol E_i^{-1}(k)=\boldsymbol E_i\big(\frac1k\big)$</td><td>$\boldsymbol E_{ij}^{-1}(k)=\boldsymbol E_{ij}(-k)$</td></tr>
+      <tr><th>伴随</th><td>$\boldsymbol E_{ij}^{*}=-\boldsymbol E_{ij}$</td><td>$\boldsymbol E_i^{*}(k)=k\boldsymbol E_i\big(\frac1k\big)$</td><td>$\boldsymbol E_{ij}^{*}(k)=\boldsymbol E_{ij}(-k)$</td></tr>
+    </table></div>
+    <b>三类初等矩阵的逆仍是同一类型的初等矩阵</b>，且都可逆。<br>
+    ★ <b>矩阵分解</b>：$\boldsymbol A$ 可逆 $\Rightarrow\boldsymbol A=\boldsymbol P_1\boldsymbol P_2\cdots\boldsymbol P_s$（有限个初等矩阵之积）$\Rightarrow$ 一定可以经有限次初等行变换化为 $\boldsymbol E$，即 $\boldsymbol Q_s\cdots\boldsymbol Q_1\boldsymbol A=\boldsymbol E$。
+  </div>
+
+  <!-- ============ 交互模块 1：初等变换步进器 ============ -->
+  <div class="tool" id="stepper">
+    <h4>🛠 交互模块 · 初等变换步进器（行阶梯形 → 行最简形 → 秩 / 逆）</h4>
+    <div class="hint">
+      这是线代 ch1 页尾答应你的第一个模块。<b>左边是当前矩阵，右边是这一步对应的初等矩阵 $\boldsymbol P_k$，最下面是累乘的 $\boldsymbol P=\boldsymbol P_k\cdots\boldsymbol P_1$</b>，随时满足 $\boldsymbol{PA}=$ 当前矩阵。
+      黄色 = 本步被改写的行，蓝色 = 本步用作"源"的行，绿色 = 已确定的主元。选 <b>[A⋮E] 求逆</b> 模式时，右半边会同步变成 $\boldsymbol A^{-1}$。全部用<b>精确分数</b>运算，不会出现浮点误差。
+    </div>
+    <div class="stepbar">
+      <select id="stPreset"></select>
+      <button id="stPrev">← 上一步</button>
+      <button id="stNext">下一步 →</button>
+      <button id="stAuto">▶ 自动播放</button>
+      <button id="stReset">⟲ 重来</button>
+      <span class="cnt" id="stCnt"></span>
+    </div>
+    <div class="oplog" id="stOp"></div>
+    <div class="mxrow">
+      <div class="mxbox"><div class="cap" id="stCapM">当前矩阵</div><div id="stM"></div></div>
+      <div class="arrow">←</div>
+      <div class="mxbox"><div class="cap">本步初等矩阵 $\boldsymbol P_k$</div><div id="stE"></div></div>
+      <div class="mxbox"><div class="cap">累计 $\boldsymbol P$（满足 $\boldsymbol{PA}_0=$ 当前）</div><div id="stP"></div></div>
+    </div>
+    <div class="resbox" id="stRes"></div>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 初等变换的 9 个使用场合（张宇原书列举，考点分布图）</span>
+    <b>一个数学工具在若干场合下均可使用，则必考该知识点</b>——所以要（一）全面归纳出各种情形，（二）区分各情形下条件、过程、结论的不同。
+    <ol>
+      <li><b>联系变换前后行列式</b>：$\boldsymbol E_{ij}\boldsymbol A=\boldsymbol B\Rightarrow|\boldsymbol B|=-|\boldsymbol A|$；$\boldsymbol E_i(k)\boldsymbol A=\boldsymbol B\Rightarrow|\boldsymbol B|=k|\boldsymbol A|$；$\boldsymbol E_{ij}(k)\boldsymbol A=\boldsymbol B\Rightarrow|\boldsymbol B|=|\boldsymbol A|$。</li>
+      <li><b>求逆矩阵</b>：$[\boldsymbol A,\boldsymbol E]\xrightarrow{行}[\boldsymbol E,\boldsymbol A^{-1}]$ 或 $\begin{bmatrix}\boldsymbol A\\\boldsymbol E\end{bmatrix}\xrightarrow{列}\begin{bmatrix}\boldsymbol E\\\boldsymbol A^{-1}\end{bmatrix}$。</li>
+      <li><b>求矩阵的秩</b>（行、列变换<b>可混用</b>）。</li>
+      <li><b>解线性方程组</b>（<b>只能用行变换</b>）：$[\boldsymbol A,\boldsymbol\beta]\xrightarrow{行}$ 行阶梯形 / 行最简形。</li>
+      <li><b>解矩阵方程</b>：$\boldsymbol{AX}=\boldsymbol B$（$\boldsymbol A$ 可逆）⇒ $[\boldsymbol A,\boldsymbol B]\xrightarrow{行}[\boldsymbol E,\boldsymbol A^{-1}\boldsymbol B]$；$\boldsymbol{XA}=\boldsymbol B$ ⇒ $\begin{bmatrix}\boldsymbol A\\\boldsymbol B\end{bmatrix}\xrightarrow{列}\begin{bmatrix}\boldsymbol E\\\boldsymbol{BA}^{-1}\end{bmatrix}$；<br>
+      求 $\boldsymbol P^{-1}\boldsymbol{AP}=\boldsymbol B$ 中的 $\boldsymbol A$ ⇒ 写成 $\boldsymbol{AP}=\boldsymbol{PB}$，对 $\begin{bmatrix}\boldsymbol P\\\boldsymbol{PB}\end{bmatrix}\xrightarrow{列}\begin{bmatrix}\boldsymbol E\\\boldsymbol A\end{bmatrix}$（<a href="#eg316">强3.16</a> 用的就是这条）。</li>
+      <li><b>求极大线性无关组</b>：初等<b>行</b>变换不改变列向量组的相关性。化行阶梯形后，台阶数为 $r$，按列挑出 $r$ 个无关列（<a href="#eg317">强3.17</a>）。</li>
+      <li><b>求等价标准形及分解</b>：对 $\begin{bmatrix}\boldsymbol A&\boldsymbol E_m\\\boldsymbol E_n&\boldsymbol O\end{bmatrix}$ 的前 $m$ 行作行变换、前 $n$ 列作列变换化为 $\begin{bmatrix}\boldsymbol S&\boldsymbol P\\\boldsymbol Q&\boldsymbol O\end{bmatrix}$，则 $\boldsymbol{PAQ}=\boldsymbol S=\begin{bmatrix}\boldsymbol E_r&\boldsymbol O\\\boldsymbol O&\boldsymbol O\end{bmatrix}$。</li>
+      <li><b>满秩分解</b>：$\boldsymbol A=\boldsymbol P^{-1}\begin{bmatrix}\boldsymbol E_r\\\boldsymbol O\end{bmatrix}[\boldsymbol E_r,\boldsymbol O]\boldsymbol Q^{-1}=\boldsymbol P_1\boldsymbol Q_1$，$\boldsymbol P_1$ 列满秩、$\boldsymbol Q_1$ 行满秩。<br>
+      　<span style="color:var(--blue)">附：$\boldsymbol A_{m\times n}$ 列满秩 $\iff\exists\boldsymbol P$ 可逆使 $\boldsymbol A=\boldsymbol P\begin{bmatrix}\boldsymbol E_n\\\boldsymbol O\end{bmatrix}$；行满秩 $\iff\boldsymbol A=[\boldsymbol E_m,\boldsymbol O]\boldsymbol Q$。</span></li>
+      <li>（数一）<b>求基和维数</b>——概念与 ⑥ 不同但方法一致。</li>
+    </ol>
+  </div>
+
+  <div class="trap"><span class="tag">陷阱 · 行、列变换什么时候可以混用</span>
+    <b>可以混用的场合</b>：(1) 计算行列式；(2) 求矩阵的秩；(3) 求向量组的秩；(4) 求等价标准形；(5) 成对初等变换（必须混用）。<br>
+    <span style="color:var(--red)"><b>除此之外一律不能混</b></span>，尤其<b>解方程组只能用行变换</b>（列变换会打乱未知数的对应关系）。<br>
+    实操记法：<b>"列拼"配行变换</b>（$[\boldsymbol A,\boldsymbol E]\xrightarrow{行}$），<b>"行拼"配列变换</b>（$\begin{bmatrix}\boldsymbol A\\\boldsymbol E\end{bmatrix}\xrightarrow{列}$）。<br>
+    <span style="color:var(--blue)">张宇本人还在这条注里写了个第 (1) 种情形：<b>"不考虑对错，想撕卷子的时候。"</b>——原文如此。</span>
+  </div>
+
+  <h3>7.1　行阶梯形与行最简阶梯形</h3>
+  <p><b>行阶梯形</b>：① 若有零行，零行全部位于非零行的下方；② 各非零行左起第一个非零元素的<b>列指标由上至下严格增大</b>。<br>
+  <b>行最简阶梯形</b>：在行阶梯形基础上，非零行的首个非零元为 <b>1</b>，且该元素所在列的其他元素全为 <b>0</b>。</p>
+  <div class="key"><span class="tag">必记</span>
+    对任何非零矩阵，总可经有限次初等行变换化为行阶梯形与行最简形；<b>对可逆矩阵，它的行最简形就是 $\boldsymbol E$</b>。<br>
+    <span style="color:var(--amber)">眉批提醒：<b>求解线性方程组时不必化到行最简形，化到行阶梯形即可</b>（能读出秩和自由变量个数就够了）——化到底纯属浪费时间，但求逆和求通解表达式时必须化到底。</span>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">基 2.12</span>★★★
+    $\boldsymbol A=\begin{bmatrix}0&2&-1\\1&1&2\\-1&-1&-1\end{bmatrix}$，求 $\boldsymbol A^{-1}$。</div>
+    <div class="s"><span class="lab">解</span>用 $[\boldsymbol A\vdots\boldsymbol E]\xrightarrow{初等行变换}[\boldsymbol E\vdots\boldsymbol A^{-1}]$：先互换 1、2 行（把 1 提到左上角），再逐步消元。
+    <span class="ans">$\boldsymbol A^{-1}=\begin{bmatrix}-\frac12&-\frac32&-\frac52\\\frac12&\frac12&\frac12\\0&1&1\end{bmatrix}$</span> ✔ 已复算<br>
+    <span style="color:var(--green)"><b>👆 这个矩阵已经放进上面的步进器</b>（预设「基2.12 [A⋮E] 求逆」），可以一步步看着它变成 $\boldsymbol E$。</span><br>
+    <span style="color:var(--red)"><b>张宇的两条告诫</b>：(1) 伴随法要算 $n^2$ 个 $n-1$ 阶行列式外加 $|\boldsymbol A|$，<b>只适合 2、3 阶</b>；初等行变换才是"更方便且实用"的方法。<b>"每年的试卷中这类数值运算的出错率是很高的。"</b>
+    (2) <b>求出逆矩阵后应予验证：$\boldsymbol{AA}^{-1}=\boldsymbol E$。</b>——花 20 秒验一次，比重算一遍便宜。</span></div></div>
+
+  <div class="eg"><div class="q"><span class="no">基 2.13</span>
+    $\boldsymbol A$ 是 3 阶可逆矩阵，将 $\boldsymbol A$ 的第 1、2 行互换得 $\boldsymbol B$，已知 $\boldsymbol A^{-1}=(a_{ij})$，则 $\boldsymbol B^{-1}=$ ______</div>
+    <div class="s"><span class="lab">解</span>行变换 ⇒ 左乘：$\boldsymbol B=\boldsymbol E_{12}\boldsymbol A$。取逆（穿脱）：$\boldsymbol B^{-1}=\boldsymbol A^{-1}\boldsymbol E_{12}^{-1}=\boldsymbol A^{-1}\boldsymbol E_{12}$。
+    <b>右乘 ⇒ 列变换</b>，所以是把 $\boldsymbol A^{-1}$ 的第 1、2 <b>列</b>互换：
+    <span class="ans">$\boldsymbol B^{-1}=\begin{bmatrix}a_{12}&a_{11}&a_{13}\\a_{22}&a_{21}&a_{23}\\a_{32}&a_{31}&a_{33}\end{bmatrix}$</span><br>
+    <span style="color:var(--amber)"><b>本题的机关：原矩阵动"行"，逆矩阵就动"列"。</b>因为求逆时因子会跑到另一边去。这是本节最爱考的一个反转。</span></div></div>
+
+  <div class="eg"><div class="q"><span class="no">基 2.14</span>
+    $\boldsymbol A$ 是 3 阶矩阵，将 $\boldsymbol A$ 的第 1 列与第 2 列互换得 $\boldsymbol B$，再将 $\boldsymbol B$ 的第 2 列加到第 3 列得 $\boldsymbol C$，则满足 $\boldsymbol{AQ}=\boldsymbol C$ 的可逆矩阵 $\boldsymbol Q$ 为（　）</div>
+    <div class="s"><span class="lab">解</span>两次都是<b>列</b>变换，都右乘：
+    $\boldsymbol{AE}_{12}=\boldsymbol B$，$\boldsymbol{BE}_{23}(1)=\boldsymbol C$，故
+    $$\boldsymbol Q=\boldsymbol E_{12}\boldsymbol E_{23}(1)=\begin{bmatrix}0&1&0\\1&0&0\\0&0&1\end{bmatrix}\begin{bmatrix}1&0&0\\0&1&1\\0&0&1\end{bmatrix}=\begin{bmatrix}0&1&1\\1&0&0\\0&0&1\end{bmatrix}$$
+    <span class="ans">答案：(D)。</span><br>
+    <span style="color:var(--red)"><b>两个坑</b>：① <b>顺序</b>——先做的变换写在左边（$\boldsymbol E_{12}$ 先乘），别写反；② <b>$\boldsymbol E_{23}(1)$ 到底长什么样</b>：定义里"第 $i$ 列的 $k$ 倍加到第 $j$ 列"，所以"第 2 列加到第 3 列"是 $\boldsymbol E_{23}(1)$，$(2,3)$ 位置为 1。若按行读则是"第 3 行的 1 倍加到第 2 行"。<b>行列含义翻转，这里最容易翻车。</b></span></div></div>
+
+  <div class="eg"><div class="q"><span class="no">强 3.15</span>
+    $\boldsymbol A$ 是 3 阶可逆矩阵，交换 $\boldsymbol A$ 的第 1 列和第 2 列得 $\boldsymbol B$，则 $\boldsymbol B^{*}$ 可由（　）得到。<br>
+    (A) $\boldsymbol A^{*}$ 的第 1、2 列互换　(B) $\boldsymbol A^{*}$ 的第 1、2 行互换　(C) $-\boldsymbol A^{*}$ 的第 1、2 列互换　(D) $-\boldsymbol A^{*}$ 的第 1、2 行互换</div>
+    <div class="s"><span class="lab">解</span>$\boldsymbol B=\boldsymbol{AE}_{12}$，由穿脱与 $\boldsymbol E_{12}^{*}=-\boldsymbol E_{12}$：
+    $$\boldsymbol B^{*}=(\boldsymbol{AE}_{12})^{*}=\boldsymbol E_{12}^{*}\boldsymbol A^{*}=-\boldsymbol E_{12}\boldsymbol A^{*}=\boldsymbol E_{12}(-\boldsymbol A^{*})$$
+    左乘 ⇒ 行变换。<span class="ans">答案：(D)。</span> ✔ 已复算（200 组随机可逆阵验证）<br>
+    <span style="color:var(--amber)"><b>三个反转叠在一起</b>：列变换 → 右乘；伴随穿脱 → 跑到左边；$\boldsymbol E_{12}^{*}=-\boldsymbol E_{12}$ → 多个负号。三个都翻对才能选 (D)。</span></div></div>
+
+<script>
+(function(){
+  /* ---------- 精确分数 ---------- */
+  function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){[a,b]=[b,a%b];}return a||1;}
+  function F(n,d){ d=(d===undefined?1:d); if(d<0){n=-n;d=-d;} var g=gcd(n,d); return {n:n/g,d:d/g}; }
+  var add=(a,b)=>F(a.n*b.d+b.n*a.d, a.d*b.d),
+      mul=(a,b)=>F(a.n*b.n, a.d*b.d),
+      neg=a=>F(-a.n,a.d),
+      inv=a=>F(a.d,a.n),
+      isZ=a=>a.n===0;
+  function tex(a){ if(a.d===1) return ''+a.n; return (a.n<0?'-':'')+'\\frac{'+Math.abs(a.n)+'}{'+a.d+'}'; }
+  function M(rows){ return rows.map(r=>r.map(v=>Array.isArray(v)?F(v[0],v[1]):F(v))); }
+  function idn(n){ return Array.from({length:n},(_,i)=>Array.from({length:n},(_,j)=>F(i===j?1:0))); }
+  function clone(A){ return A.map(r=>r.map(x=>F(x.n,x.d))); }
+  function matmul(A,B){ return A.map(r=>B[0].map((_,j)=>r.reduce((s,v,k)=>add(s,mul(v,B[k][j])),F(0)))); }
+
+  /* ---------- 预设 ---------- */
+  var PRESETS=[
+    { name:'基2.12　[A⋮E] 求逆（3阶）', split:3, full:true,
+      m:M([[0,2,-1,1,0,0],[1,1,2,0,1,0],[-1,-1,-1,0,0,1]]),
+      note:'左半化成 E 时，右半就是 A⁻¹。' },
+    { name:'基2.19　求秩：t=3 时秩为 2', split:null, full:false,
+      m:M([[1,2,-1,1],[2,0,3,0],[0,-4,5,-2]]),
+      note:'代入 t=3。台阶数（非零行数）就是秩。' },
+    { name:'基2.18　A → 行最简形（a=−4）', split:null, full:true,
+      m:M([[1,0,1],[-1,-1,1],[0,2,-4]]),
+      note:'r(A)=2，与 B 等价；累计的 P 就是满足 PA=B 的矩阵。' },
+    { name:'习2.6　含参 A（t=0）：秩为 2', split:null, full:false,
+      m:M([[1,2,0],[3,0,18],[2,4,0],[1,8,-18]]),
+      note:'AB=O 且 B≠O ⇒ r(A)+r(B)≤3，由 r(A)=2 得 r(B)=1。' },
+    { name:'强3.17　A → 行最简形（读极大无关组）', split:null, full:true,
+      m:M([[1,1,1,1],[1,1,1,1],[2,1,0,-1],[-1,0,1,2]]),
+      note:'主元列 α₁,α₂ 是一个极大无关组；原题因 B=[α₃,α₂] 而改取 α₂,α₃ —— 极大无关组不唯一，谁方便取谁。非主元列的系数直接读出线性表示式。' },
+    { name:'一般演示　[A⋮E] 求逆（基2.8）', split:3, full:true,
+      m:M([[1,0,1,1,0,0],[2,1,0,0,1,0],[-3,2,-5,0,0,1]]),
+      note:'|A|=2≠0，可逆。' }
+  ];
+
+  /* ---------- 消元，记录步骤 ---------- */
+  function build(P){
+    var A=clone(P.m), m=A.length, n=A[0].length;
+    var cols = P.split!==null ? P.split : n;
+    var steps=[], row=0, pivots=[];
+    for(var c=0;c<cols && row<m;c++){
+      var p=-1;
+      for(var i=row;i<m;i++) if(!isZ(A[i][c])){p=i;break;}
+      if(p<0) continue;
+      if(p!==row){ steps.push({t:'swap',i:row,j:p,c:c}); var tmp=A[row];A[row]=A[p];A[p]=tmp; }
+      if(P.full && !(A[row][c].n===1&&A[row][c].d===1)){
+        var k=inv(A[row][c]);
+        steps.push({t:'scale',i:row,k:k,c:c});
+        A[row]=A[row].map(v=>mul(v,k));
+      }
+      for(var i2=0;i2<m;i2++){
+        if(i2===row) continue;
+        if(!P.full && i2<row) continue;          /* 只求秩时不回消上方 */
+        if(isZ(A[i2][c])) continue;
+        var k2=neg(mul(A[i2][c],inv(A[row][c])));
+        steps.push({t:'add',i:i2,j:row,k:k2,c:c});
+        A[i2]=A[i2].map((v,q)=>add(v,mul(k2,A[row][q])));
+      }
+      pivots.push([row,c]); row++;
+    }
+    return {steps:steps, rank:pivots.length, pivots:pivots, cols:cols};
+  }
+
+  function applyStep(A,s){
+    var B=clone(A);
+    if(s.t==='swap'){ var t=B[s.i]; B[s.i]=B[s.j]; B[s.j]=t; }
+    else if(s.t==='scale'){ B[s.i]=B[s.i].map(v=>mul(v,s.k)); }
+    else { B[s.i]=B[s.i].map((v,q)=>add(v,mul(s.k,B[s.j][q]))); }
+    return B;
+  }
+  function elemMat(s,m){
+    var E=idn(m);
+    if(s.t==='swap'){ E[s.i][s.i]=F(0);E[s.j][s.j]=F(0);E[s.i][s.j]=F(1);E[s.j][s.i]=F(1); }
+    else if(s.t==='scale'){ E[s.i][s.i]=s.k; }
+    else { E[s.i][s.j]=s.k; }
+    return E;
+  }
+  function opText(s){
+    var r=i=>'r_{'+(i+1)+'}';
+    if(s.t==='swap')  return '<b>互换</b>：$'+r(s.i)+'\\leftrightarrow '+r(s.j)+'$　（对应 $\\boldsymbol E_{'+(s.i+1)+(s.j+1)+'}$，$|\\boldsymbol E|=-1$）';
+    if(s.t==='scale') return '<b>倍乘</b>：$'+r(s.i)+'\\times '+tex(s.k)+'$　（对应 $\\boldsymbol E_{'+(s.i+1)+'}('+tex(s.k)+')$，把主元化为 1）';
+    return '<b>倍加</b>：$'+r(s.i)+'+('+tex(s.k)+')\\,'+r(s.j)+'$　（对应 $\\boldsymbol E_{'+(s.i+1)+(s.j+1)+'}('+tex(s.k)+')$，$|\\boldsymbol E|=1$，<span style="color:var(--green)">不改变行列式</span>）';
+  }
+
+  /* ---------- 渲染 ---------- */
+  function render(A,opt){
+    opt=opt||{};
+    var h='<table class="mx"><tbody>';
+    for(var i=0;i<A.length;i++){
+      h+='<tr>';
+      for(var j=0;j<A[i].length;j++){
+        var cls='';
+        if(opt.hi&&opt.hi.indexOf(i)>=0) cls='hi';
+        else if(opt.hi2&&opt.hi2.indexOf(i)>=0) cls='hi2';
+        if(opt.piv&&opt.piv.some(p=>p[0]===i&&p[1]===j)) cls='piv';
+        var sep=(opt.split!==null&&opt.split!==undefined&&j===opt.split)?' style="border-left:1px dashed var(--muted)"':'';
+        h+='<td class="'+cls+'"'+sep+'>$'+tex(A[i][j])+'$</td>';
+      }
+      h+='</tr>';
+    }
+    return h+'</tbody></table>';
+  }
+
+  var sel=document.getElementById('stPreset');
+  PRESETS.forEach((p,i)=>{ var o=document.createElement('option'); o.value=i; o.textContent=p.name; sel.appendChild(o); });
+
+  var cur=0, t=0, info=null, timer=null;
+  function load(i){
+    cur=i; t=0; info=build(PRESETS[i]); stop(); draw();
+  }
+  function draw(){
+    var P=PRESETS[cur], A=clone(P.m), m=A.length;
+    var acc=idn(m);
+    for(var k=0;k<t;k++){ acc=matmul(elemMat(info.steps[k],m),acc); A=applyStep(A,info.steps[k]); }
+    var s = t<info.steps.length ? info.steps[t] : null;
+    var opt={split:P.split};
+    if(s){ opt.hi=[s.i]; if(s.t!=='scale') opt.hi2=[s.j]; }
+    else { opt.piv=info.pivots; }
+    document.getElementById('stM').innerHTML=render(A,opt);
+    document.getElementById('stE').innerHTML = s? render(elemMat(s,m),{}) : '<span style="color:var(--muted);font-size:.8rem">（已结束）</span>';
+    document.getElementById('stP').innerHTML = render(acc,{});
+    document.getElementById('stCapM').textContent = P.split!==null ? '当前 [A ⋮ E]' : '当前矩阵';
+    document.getElementById('stOp').innerHTML = s ? ('第 '+(t+1)+' 步　'+opText(s))
+      : '<b style="color:var(--green)">✓ 化简完成。</b>' ;
+    document.getElementById('stCnt').textContent = t+' / '+info.steps.length+' 步';
+    document.getElementById('stPrev').disabled = (t===0);
+    document.getElementById('stNext').disabled = (t>=info.steps.length);
+    var res='';
+    if(t>=info.steps.length){
+      res='<b>秩 $r(\\boldsymbol A)='+info.rank+'$</b>（台阶数 = 非零行数）';
+      if(P.split!==null){
+        res += info.rank===P.split
+          ? '　⇒ 左半已化为 $\\boldsymbol E$，<b>右半就是 $\\boldsymbol A^{-1}$</b>（绿色为主元）。'
+          : '　⇒ 左半化不成 $\\boldsymbol E$，<b>$\\boldsymbol A$ 不可逆</b>。';
+      }else{
+        res += '　主元位于第 '+info.pivots.map(p=>p[1]+1).join('、')+' 列 ⇒ <b>这几列构成列向量组的极大线性无关组</b>。';
+      }
+      res += '<br><span style="color:var(--muted);font-size:.83rem">'+P.note+'</span>';
+    }else{
+      res='<span style="color:var(--muted);font-size:.83rem">'+P.note+'</span>';
+    }
+    document.getElementById('stRes').innerHTML=res;
+    if(window.renderMathInElement){
+      ['stM','stE','stP','stOp','stRes'].forEach(function(id){
+        renderMathInElement(document.getElementById(id),
+          {delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});
+      });
+    }
+  }
+  function stop(){ if(timer){clearInterval(timer);timer=null;document.getElementById('stAuto').textContent='▶ 自动播放';} }
+  document.getElementById('stNext').onclick=function(){ if(t<info.steps.length){t++;draw();} };
+  document.getElementById('stPrev').onclick=function(){ if(t>0){t--;draw();} };
+  document.getElementById('stReset').onclick=function(){ t=0;stop();draw(); };
+  document.getElementById('stAuto').onclick=function(){
+    if(timer){stop();return;}
+    this.textContent='⏸ 暂停';
+    timer=setInterval(function(){ if(t>=info.steps.length){stop();return;} t++;draw(); },1100);
+  };
+  sel.onchange=function(){ load(+this.value); };
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',function(){load(0);});
+  else setTimeout(function(){load(0);},300);
+})();
+</script>
+
+  <!-- ================= s8 矩阵方程 ================= -->
+  <h2 id="s8"><span class="idx">八</span>矩阵方程<span class="layer L-base">基础</span><span class="layer L-str">强化</span></h2>
+
+  <div class="mine"><span class="tag">补讲 · 什么叫"方程"（张宇的定义观）</span>
+    含未知<b>函数</b>的是函数方程；含未知函数<b>导数</b>的是导数方程（导数可写成微分，故也叫微分方程）；含未知函数<b>积分</b>的是积分方程；含<b>偏导数</b>的是偏微分方程。
+    <b>一个等式中未知对象是什么，就把那个等式称为该未知对象的方程</b>——所以含未知<b>矩阵</b>的等式就是<b>矩阵方程</b>。
+    解方程是用含未知数的等式求未知数，解矩阵方程就是用含未知矩阵的等式求未知矩阵。
+  </div>
+
+  <div class="key"><span class="tag">必记 · 三个标准型与"乘哪边"</span>
+    先恒等变形化成下面三型之一，再<b>两边同乘逆矩阵</b>——<b>因为没有交换律，左乘右乘不能搞错</b>：
+    $$\boldsymbol{AX}=\boldsymbol B\ \xrightarrow{两边\textbf{左}乘\boldsymbol A^{-1}}\ \boldsymbol X=\boldsymbol A^{-1}\boldsymbol B,\qquad
+      \boldsymbol{XA}=\boldsymbol B\ \xrightarrow{两边\textbf{右}乘\boldsymbol A^{-1}}\ \boldsymbol X=\boldsymbol{BA}^{-1}$$
+    $$\boldsymbol{AXB}=\boldsymbol C\ \xrightarrow{左乘\boldsymbol A^{-1}、右乘\boldsymbol B^{-1}}\ \boldsymbol X=\boldsymbol A^{-1}\boldsymbol{CB}^{-1}$$
+    <span style="color:var(--amber)"><b>口诀：未知矩阵在哪边，逆就从哪边贴上去。</b>$\boldsymbol{AX}$ 里 $\boldsymbol A$ 在左，就左乘；$\boldsymbol{XA}$ 里 $\boldsymbol A$ 在右，就右乘。</span>
+  </div>
+
+  <h3>8.1　化简的四把工具</h3>
+  <div class="gridwrap"><table>
+    <tr><th>工具</th><th>内容</th></tr>
+    <tr><td><b>① 消公因式</b></td><td>$\boldsymbol{CA}=\boldsymbol{CB}$ 且 $\boldsymbol C$ 可逆 ⇒ $\boldsymbol A=\boldsymbol B$。
+      <span style="color:var(--green)">★★★ 放宽版：$\boldsymbol C$ <b>列满秩</b>即可（$\boldsymbol{CA}=\boldsymbol{CB}$）；$\boldsymbol{AC}=\boldsymbol{BC}$ 时 $\boldsymbol C$ <b>行满秩</b>即可。</span></td></tr>
+    <tr><td><b>② 提公因式</b></td><td>$\boldsymbol{CA}+\boldsymbol{CB}=\boldsymbol C(\boldsymbol A+\boldsymbol B)$。<b>左边的往左提，右边的往右提。</b></td></tr>
+    <tr><td><b>③ 移项</b></td><td>已知表达式与未知表达式分别移到方程两边；必要时<b>补一个 $\boldsymbol E$ 凑因式分解</b>。</td></tr>
+    <tr><td><b>④ 用公式</b></td><td>$\boldsymbol{AA}^{*}=|\boldsymbol A|\boldsymbol E$、$\boldsymbol A^{*}=|\boldsymbol A|\boldsymbol A^{-1}$、$(\boldsymbol A^{*})^{*}=|\boldsymbol A|^{n-2}\boldsymbol A$；
+      $\boldsymbol A^{2}-\boldsymbol E=(\boldsymbol A\pm\boldsymbol E)(\boldsymbol A\mp\boldsymbol E)$，$\boldsymbol A^{3}\pm\boldsymbol E=(\boldsymbol A\pm\boldsymbol E)(\boldsymbol A^{2}\mp\boldsymbol A+\boldsymbol E)$；
+      $\boldsymbol A^{\mathrm T}\boldsymbol B^{\mathrm T}=(\boldsymbol{BA})^{\mathrm T}$、$\boldsymbol A^{*}\boldsymbol B^{*}=(\boldsymbol{BA})^{*}$、$\boldsymbol A^{-1}\boldsymbol B^{-1}=(\boldsymbol{BA})^{-1}$。</td></tr>
+  </table></div>
+
+  <h3>8.2　求解：$\boldsymbol A$ 可逆 / 不可逆 / 都不行</h3>
+  <div class="key"><span class="tag">必记 · 三条路 + 一条有解判据</span>
+    (1) <b>$\boldsymbol A$ 可逆</b> ⇒ 直接乘逆（上面三个标准型）。<br>
+    (2) <b>$\boldsymbol A$ 不可逆</b> ⇒ 把 $\boldsymbol X,\boldsymbol B$ <b>按列分块</b>：$\boldsymbol A[\boldsymbol\xi_1,\cdots,\boldsymbol\xi_n]=[\boldsymbol\beta_1,\cdots,\boldsymbol\beta_n]$，
+    即 $\boldsymbol A\boldsymbol\xi_i=\boldsymbol\beta_i$ —— <b>退化成 $n$ 个线性方程组</b>，逐个解出再拼回去。<br>
+    (3) <b>化不成标准型</b> ⇒ 设 $\boldsymbol X=(x_{ij})$ <b>待定元素法</b>，代入后逐元素比较，解线性方程组（<a href="#eg320">强3.20</a>）。<br>
+    ★ <b>有解判据</b>：$\boldsymbol A_{m\times n}\boldsymbol X=\boldsymbol B_{m\times s}$ 有解 $\iff r(\boldsymbol A)=r([\boldsymbol A,\boldsymbol B])$。<span style="color:var(--blue)">（第 4 章的判据提前用在这里）</span>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">基 2.17</span>
+    $\boldsymbol A^{*}=\begin{bmatrix}1&0&0&0\\0&1&0&0\\1&0&1&0\\0&-3&0&8\end{bmatrix}$，且 $\boldsymbol{ABA}^{-1}=\boldsymbol{BA}^{-1}+3\boldsymbol E$（$\boldsymbol E$ 为 4 阶），求 $\boldsymbol B$。</div>
+    <div class="s"><span class="lab">解</span><b>先化简再计算</b>。由题设 $(\boldsymbol A-\boldsymbol E)\boldsymbol{BA}^{-1}=3\boldsymbol E$，同时左乘 $(\boldsymbol A-\boldsymbol E)^{-1}$、右乘 $\boldsymbol A$：
+    $$\boldsymbol B=3(\boldsymbol A-\boldsymbol E)^{-1}\boldsymbol A=3(\boldsymbol A-\boldsymbol E)^{-1}(\boldsymbol A^{-1})^{-1}=3\big[\boldsymbol A^{-1}(\boldsymbol A-\boldsymbol E)\big]^{-1}=3(\boldsymbol E-\boldsymbol A^{-1})^{-1}=3\Big(\boldsymbol E-\frac{\boldsymbol A^{*}}{|\boldsymbol A|}\Big)^{-1}$$
+    <span style="color:var(--amber)">这一串变形的目的：<b>把 $\boldsymbol A$ 全部换成 $\boldsymbol A^{*}$</b>，因为题目只给了 $\boldsymbol A^{*}$。</span><br>
+    由 $|\boldsymbol A^{*}|=|\boldsymbol A|^{n-1}$ 得 $|\boldsymbol A|^{3}=|\boldsymbol A^{*}|=8$，故 $|\boldsymbol A|=2$，$\boldsymbol B=6(2\boldsymbol E-\boldsymbol A^{*})^{-1}$。
+    算得 $2\boldsymbol E-\boldsymbol A^{*}=\begin{bmatrix}1&0&0&0\\0&1&0&0\\-1&0&1&0\\0&3&0&-6\end{bmatrix}$，其逆为 $\begin{bmatrix}1&0&0&0\\0&1&0&0\\1&0&1&0\\0&\frac12&0&-\frac16\end{bmatrix}$。
+    <span class="ans">$\boldsymbol B=\begin{bmatrix}6&0&0&0\\0&6&0&0\\6&0&6&0\\0&3&0&-1\end{bmatrix}$</span> ✔ 已复算（并回代验证 $\boldsymbol{ABA}^{-1}=\boldsymbol{BA}^{-1}+3\boldsymbol E$）<br>
+    <span style="color:var(--green)">关键台阶是 $|\boldsymbol A|^{3}=|\boldsymbol A^{*}|=8\Rightarrow|\boldsymbol A|=2$ ——<b>先从 $\boldsymbol A^{*}$ 反解出 $|\boldsymbol A|$</b>，否则式子里那个 $|\boldsymbol A|$ 落不了地。</span></div></div>
+
+  <div class="eg"><div class="q"><span class="no">强 3.19</span>
+    $\boldsymbol A=\begin{bmatrix}1&2&a\\1&3&0\\2&7&-a\end{bmatrix}$ 可经初等<b>列</b>变换化为 $\boldsymbol B=\begin{bmatrix}1&a&2\\0&1&1\\-1&1&1\end{bmatrix}$。(1) 求 $a$；(2) 求满足 $\boldsymbol{AP}=\boldsymbol B$ 的可逆矩阵 $\boldsymbol P$。</div>
+    <div class="s"><span class="lab">(1)</span><span style="color:var(--green)"><b>D₂₂ 术语翻译</b>：初等列变换属于初等变换 ⇒ $\boldsymbol A$ 与 $\boldsymbol B$ 等价 ⇒ $r(\boldsymbol A)=r(\boldsymbol B)$。</span>
+    分别行变换化简：$\boldsymbol A\to\begin{bmatrix}1&0&3a\\0&1&-a\\0&0&0\end{bmatrix}$，$\boldsymbol B\to\begin{bmatrix}1&0&0\\0&1&1\\0&0&2-a\end{bmatrix}$，令秩相等得
+    <span class="ans">$a=2$</span> ✔ 已复算（$a=1$ 时秩不等，已排除）<br>
+    <span class="lab">(2)</span>对 $[\boldsymbol A,\boldsymbol B]$ 行变换得 $\begin{bmatrix}1&0&6&3&4&4\\0&1&-2&-1&-1&-1\\0&0&0&0&0&0\end{bmatrix}$ ⇒ $r(\boldsymbol A)=r([\boldsymbol A,\boldsymbol B])$，<b>有解</b>。
+    由 $\boldsymbol A[-6,2,1]^{\mathrm T}=\boldsymbol 0$ 及三个特解，得通解
+    <span class="ans">$\boldsymbol P=\begin{bmatrix}3-6k_1&4-6k_2&4-6k_3\\-1+2k_1&-1+2k_2&-1+2k_3\\k_1&k_2&k_3\end{bmatrix}$，其中 $|\boldsymbol P|=k_3-k_2$，故要求 <b>$k_2\ne k_3$</b>，$k_1$ 任意。</span> ✔ 已复算（通解回代 $\boldsymbol{AP}=\boldsymbol B$ 恒成立；$|\boldsymbol P|=k_3-k_2$ 符号验证）<br>
+    <span style="color:var(--red)"><b>本题两个"声东击西"</b>：① 说的是列变换，做题却全用行变换（因为要的只是"秩相等"这个结论）；② 求的是<b>可逆</b> $\boldsymbol P$，所以必须再算 $|\boldsymbol P|$ 并附加 $k_2\ne k_3$ ——<b>只写通解不写可逆条件，这一问就废了</b>。</span></div></div>
+
+  <!-- ================= s9 矩阵的秩 ================= -->
+  <h2 id="s9"><span class="idx">九</span>等价标准形 + 矩阵的秩 · 17 条公式<span class="layer L-base">基础</span><span class="layer L-str">强化</span></h2>
+
+  <p><b>定义</b>：$\boldsymbol A$ 中<b>最大的不为零的子式的阶数</b>称为 $\boldsymbol A$ 的秩。等价说法：若存在 $k$ 阶子式不为零，而任意 $k+1$ 阶子式（如果有）全为零，则 $r(\boldsymbol A)=k$。
+  <span style="color:var(--blue)">（"$k$ 阶子式"= 任取 $k$ 行、$k$ 列构成的 $k$ 阶行列式；<b>只要有一个非零就行</b>。）</span></p>
+  <p><b>向量语言</b>：$\boldsymbol A$ 存在 $k$ 个线性无关的行（列）向量，且任意 $k+1$ 个向量线性相关 $\iff r(\boldsymbol A)=k$。<br>
+  <b>求法</b>：初等行变换化为行阶梯形，<b>非零行数（台阶数）就是秩</b>（用<a href="#stepper">上面的步进器</a>可以一步步看）。<br>
+  <b>方阵特例</b>：$r(\boldsymbol A_{n\times n})=n\iff|\boldsymbol A|\ne0\iff\boldsymbol A$ 可逆。</p>
+
+  <h3>9.1　等价矩阵与等价标准形（秩的"标准形态"）<span class="layer L-base">基础</span></h3>
+  <p>设 $\boldsymbol A,\boldsymbol B$ 均为 $m\times n$ 矩阵，若存在<b>可逆</b>矩阵 $\boldsymbol P_{m\times m},\boldsymbol Q_{n\times n}$ 使 $\boldsymbol{PAQ}=\boldsymbol B$，则称 $\boldsymbol A,\boldsymbol B$ 是<b>等价矩阵</b>，记 $\boldsymbol A\cong\boldsymbol B$。
+  <span style="color:var(--blue)">（等价 = $\boldsymbol A$ 经初等变换可以变成 $\boldsymbol B$；$\boldsymbol P$ 管行变换，$\boldsymbol Q$ 管列变换。）</span></p>
+  <div class="key"><span class="tag">必记 · 等价标准形与判据</span>
+    任一 $m\times n$ 矩阵 $\boldsymbol A$ 都等价于 $\begin{bmatrix}\boldsymbol E_r&\boldsymbol O\\\boldsymbol O&\boldsymbol O\end{bmatrix}$，<b>其中 $r$ 恰是 $r(\boldsymbol A)$</b>，称为 $\boldsymbol A$ 的<b>等价标准形</b>，且<b>唯一</b>。即存在可逆 $\boldsymbol P,\boldsymbol Q$ 使
+    $$\boldsymbol{PAQ}=\begin{bmatrix}\boldsymbol E_r&\boldsymbol O\\\boldsymbol O&\boldsymbol O\end{bmatrix}$$
+    $$\boxed{\boldsymbol A\cong\boldsymbol B\ (\text{同型})\iff r(\boldsymbol A)=r(\boldsymbol B)}$$
+    <span style="color:var(--amber)"><b>怎么正确地"读" $\boldsymbol{PAQ}$</b>（张宇眉批）：不要把它看成 3 个矩阵相乘，而要看成——<b>先把 $\boldsymbol P$ 作用在 $\boldsymbol A$ 上，使 $\boldsymbol A$ 作相应的初等行变换得到新矩阵 $\boldsymbol{PA}$；再把 $\boldsymbol Q$ 作用在 $\boldsymbol{PA}$ 上，使这个已作过行变换的矩阵继续作列变换</b>。</span><br>
+    <span style="color:var(--blue)"><b>推链子的示例</b>：若 $\boldsymbol P_1\boldsymbol A\boldsymbol Q_1=\begin{bmatrix}\boldsymbol E_r&\boldsymbol O\\\boldsymbol O&\boldsymbol O\end{bmatrix}$、$\boldsymbol P_3\boldsymbol B\boldsymbol Q_3=\begin{bmatrix}\boldsymbol E_r&\boldsymbol O\\\boldsymbol O&\boldsymbol O\end{bmatrix}$，
+    则由 $\boldsymbol P_1\boldsymbol A\boldsymbol Q_1=\boldsymbol P_3\boldsymbol B\boldsymbol Q_3$ 得 $\boldsymbol B=\boldsymbol P_3^{-1}\boldsymbol P_1\boldsymbol A\boldsymbol Q_1\boldsymbol Q_3^{-1}$，即 $\boldsymbol P_2=\boldsymbol P_3^{-1}\boldsymbol P_1$、$\boldsymbol Q_2=\boldsymbol Q_1\boldsymbol Q_3^{-1}$。</span><br>
+    <span style="color:var(--red)"><b>别和"相似""合同"混</b>：等价只要求 $\boldsymbol P,\boldsymbol Q$ 可逆（最松，只看秩）；相似要求 $\boldsymbol Q=\boldsymbol P^{-1}$；合同要求 $\boldsymbol Q=\boldsymbol P^{\mathrm T}$。<b>三者一个比一个严</b>，第 8、9 讲会正式区分。</span>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">基 2.18</span>
+    $\boldsymbol A=\begin{bmatrix}1&0&1\\-1&-1&1\\0&2&a\end{bmatrix}$，$\boldsymbol B=\begin{bmatrix}1&0&1\\0&-1&2\\0&0&0\end{bmatrix}$。(1) $a$ 为何值时 $\boldsymbol A$ 与 $\boldsymbol B$ 等价？(2) 等价时求一个可逆 $\boldsymbol P$ 使 $\boldsymbol{PA}=\boldsymbol B$。</div>
+    <div class="s"><span class="lab">(1)</span>同型，故 $\boldsymbol A\cong\boldsymbol B\iff r(\boldsymbol A)=r(\boldsymbol B)$。显然 $r(\boldsymbol B)=2$。
+    由 $\begin{vmatrix}1&0\\-1&-1\end{vmatrix}\ne0$ 知 $r(\boldsymbol A)\ge2$，要恰为 2 须 $|\boldsymbol A|=0$：
+    $$|\boldsymbol A|=\begin{vmatrix}1&0&1\\-1&-1&1\\0&2&a\end{vmatrix}=\begin{vmatrix}1&0&1\\0&-1&2\\0&0&a+4\end{vmatrix}=-(a+4)=0$$
+    <span class="ans">$a=-4$</span> ✔ 已复算<br>
+    <span style="color:var(--blue)"><b>另一条路（等价标准形）</b>：$\boldsymbol B\to\begin{bmatrix}\boldsymbol E_2&\boldsymbol O\\\boldsymbol O&\boldsymbol O\end{bmatrix}$，$\boldsymbol A\to\begin{bmatrix}1&0&0\\0&1&0\\0&0&a+4\end{bmatrix}$，令 $a+4=0$ 同样得 $a=-4$。</span><br>
+    <span style="color:var(--red)"><b>张宇特别提醒</b>：有的题目会求出<b>多个 $a$</b>，但并不是每个都符合条件——<b>算出 $a$ 后必须代回去验 $r(\boldsymbol A)$ 是否真的等于 $r(\boldsymbol B)$</b>。习 2.12（$a=2$ 或 $-1$，只有 2 对）和习 2.5（$a=-2b$ 且 $a\ne b$）都是这个坑。</span><br>
+    <span class="lab">(2)</span>$a=-4$ 时对 $\boldsymbol A$ 作两次行变换消去 $a_{21},a_{32}$：
+    $$\boldsymbol E_{21}(1)\boldsymbol A=\begin{bmatrix}1&0&1\\0&-1&2\\0&2&-4\end{bmatrix}=\boldsymbol C,\qquad \boldsymbol E_{32}(2)\boldsymbol C=\boldsymbol B$$
+    故 $\boldsymbol B=\boldsymbol E_{32}(2)\boldsymbol E_{21}(1)\boldsymbol A$，取
+    <span class="ans">$\boldsymbol P=\boldsymbol E_{32}(2)\boldsymbol E_{21}(1)=\begin{bmatrix}1&0&0\\0&1&0\\0&2&1\end{bmatrix}\begin{bmatrix}1&0&0\\1&1&0\\0&0&1\end{bmatrix}=\begin{bmatrix}1&0&0\\1&1&0\\2&2&1\end{bmatrix}$</span> ✔ 已复算（$\boldsymbol{PA}=\boldsymbol B$ 验证通过）<br>
+    <span style="color:var(--green)"><b>找 $\boldsymbol P$ 的通法：把你实际做的每一次行变换写成初等矩阵，按<u>后做的在左</u>的顺序乘起来。</b>不用解方程。这个矩阵也在<a href="#stepper">步进器</a>里（预设「基2.18 A → 行最简形」），累计的那个 $\boldsymbol P$ 就是它（差一步：步进器化到行最简形，比本题多做一步倍乘）。</span><br>
+    <span class="lab">进阶</span>若改问"<b>全部</b>满足条件的可逆 $\boldsymbol P$"：转置成 $\boldsymbol A^{\mathrm T}\boldsymbol P^{\mathrm T}=\boldsymbol B^{\mathrm T}$，把 $\boldsymbol P^{\mathrm T}$ 按列分块解三个方程组，得
+    $\boldsymbol P^{\mathrm T}=\begin{bmatrix}2k_1+1&2k_2+1&2k_3\\2k_1&2k_2+1&2k_3\\k_1&k_2&k_3\end{bmatrix}$，其中 $k_1,k_2$ 任意、<b>$k_3\ne0$</b>（保证 $\boldsymbol P$ 可逆）。
+    <span style="color:var(--amber)">与强 3.19 同一个套路：<b>先求通解，再用"可逆"追加约束</b>。</span></div></div>
+
+  <div class="key"><span class="tag">必记 · 17 条公式全表（第 4 讲的全部家当）· ✔ 6–12 条已随机对拍</span>
+    <div class="gridwrap"><table>
+      <tr><th>#</th><th>公式</th><th>用法 / 注</th></tr>
+      <tr><td>1</td><td>$0\le r(\boldsymbol A_{m\times n})\le\min\{m,n\}$</td><td>$r(\boldsymbol A)=0\iff\boldsymbol A=\boldsymbol O$</td></tr>
+      <tr><td>2</td><td>$r(k\boldsymbol A)=r(\boldsymbol A)\ (k\ne0)$</td><td>由定义</td></tr>
+      <tr><td>3</td><td>$r(\boldsymbol A)=r(\boldsymbol{PA})=r(\boldsymbol{AQ})=r(\boldsymbol{PAQ})$（$\boldsymbol P,\boldsymbol Q$ 可逆）</td><td><b>初等变换不改变秩</b>。推论：若 $r(\boldsymbol{AB})\lt r(\boldsymbol A)$（$\boldsymbol B$ 为 $n$ 阶），则 $r(\boldsymbol B)\lt n$</td></tr>
+      <tr><td>4</td><td>$\boldsymbol A_{m\times n}$ <b>列满秩</b>（$r=n$）⇒ $r(\boldsymbol{AB})=r(\boldsymbol B)$；$\boldsymbol B_{n\times s}$ <b>行满秩</b>（$r=n$）⇒ $r(\boldsymbol{AB})=r(\boldsymbol A)$</td><td><b>满秩阵乘上去不掉秩</b> —— 强4.1 的钥匙</td></tr>
+      <tr><td>5</td><td>$\boldsymbol{CA}=\boldsymbol{CB}$、$\boldsymbol C$ 列满秩 ⇒ $\boldsymbol A=\boldsymbol B$；$\boldsymbol{AC}=\boldsymbol{BC}$、$\boldsymbol C$ 行满秩 ⇒ $\boldsymbol A=\boldsymbol B$</td><td><b>消去律的正确版本</b>（强4.2、强4.3）</td></tr>
+      <tr><td>6</td><td>$r(\boldsymbol{AB})\le\min\{r(\boldsymbol A),r(\boldsymbol B)\}$</td><td><span style="color:var(--green)"><b>矩阵越乘秩越小</b></span>。见到 $\boldsymbol{ABC}$ 想单调性 $r(\boldsymbol{ABC})\le r(\boldsymbol{AB})\le r(\boldsymbol A)$</td></tr>
+      <tr><td>7</td><td>$r(\boldsymbol A+\boldsymbol B)\le r([\boldsymbol A,\boldsymbol B])\le r(\boldsymbol A)+r(\boldsymbol B)$</td><td>推论 $r(\boldsymbol A-\boldsymbol B)\le r(\boldsymbol A)+r(\boldsymbol B)$，且 $r(\boldsymbol A-\boldsymbol B)\ge|r(\boldsymbol A)-r(\boldsymbol B)|$</td></tr>
+      <tr><td>8</td><td><b>$r(\boldsymbol{AB})\ge r(\boldsymbol A)+r(\boldsymbol B)-n$</b>（$\boldsymbol A_{m\times n},\boldsymbol B_{n\times s}$）</td><td><b>西尔维斯特不等式</b>，与 6 一起夹逼。$\boldsymbol{AB}=\boldsymbol O$ 时即 $r(\boldsymbol A)+r(\boldsymbol B)\le n$</td></tr>
+      <tr><td>9</td><td>$r(\boldsymbol{ABC})\ge r(\boldsymbol{AB})+r(\boldsymbol{BC})-r(\boldsymbol B)$</td><td><b>弗罗贝尼乌斯不等式</b>，8 的推广（$\boldsymbol B=\boldsymbol E$ 就退回 8）</td></tr>
+      <tr><td>10</td><td>$r(\boldsymbol A)=r(\boldsymbol A^{\mathrm T})=r(\boldsymbol A\boldsymbol A^{\mathrm T})=r(\boldsymbol A^{\mathrm T}\boldsymbol A)$</td><td>因 $\boldsymbol A^{\mathrm T}\boldsymbol{Ax}=\boldsymbol 0$ 与 $\boldsymbol{Ax}=\boldsymbol 0$ 同解，故 $\boldsymbol A^{\mathrm T}\boldsymbol A$ 与 $\boldsymbol A$ 的<b>行向量组等价</b></td></tr>
+      <tr><td>11</td><td>$r(\boldsymbol A^{*})=n\,/\,1\,/\,0$（按 $r(\boldsymbol A)=n\,/\,n-1\,/\,\lt n-1$）</td><td>见 <a href="#s6">§六</a></td></tr>
+      <tr><td>12</td><td>$\boldsymbol A^{2}-(k_1+k_2)\boldsymbol A+k_1k_2\boldsymbol E=\boldsymbol O$、$k_1\ne k_2$ ⇒ $r(\boldsymbol A-k_1\boldsymbol E)+r(\boldsymbol A-k_2\boldsymbol E)=n$</td><td>见下方专栏</td></tr>
+      <tr><td>13</td><td>$\boldsymbol{Ax}=\boldsymbol 0$ 的基础解系含 $s=n-r(\boldsymbol A)$ 个向量</td><td>第 4 章的门票</td></tr>
+      <tr><td>14</td><td>$\boldsymbol A_{m\times n}\boldsymbol x=\boldsymbol 0$ 与 $\boldsymbol B_{s\times n}\boldsymbol x=\boldsymbol 0$ 同解 $\iff r(\boldsymbol A)=r\Big(\begin{bmatrix}\boldsymbol A\\\boldsymbol B\end{bmatrix}\Big)=r(\boldsymbol B)$</td><td><span style="color:var(--green)"><b>三秩相等！</b></span></td></tr>
+      <tr><td>15</td><td>$r(\mathrm I)=r(\mathrm{II})=r(\mathrm I,\mathrm{II})\iff$ 向量组 (I) 与 (II) 等价</td><td>第 3 章</td></tr>
+      <tr><td>16</td><td>$\boldsymbol A\sim\boldsymbol\Lambda\Rightarrow n_i=n-r(\lambda_i\boldsymbol E-\boldsymbol A)$（$\lambda_i$ 是 $n_i$ 重根）</td><td>第 5 章</td></tr>
+      <tr><td>17</td><td>$\boldsymbol A\sim\boldsymbol\Lambda\Rightarrow r(\boldsymbol A)=$ 非零特征值的个数（重根按重数算）</td><td>第 5 章</td></tr>
+    </table></div>
+  </div>
+
+  <div class="zy"><span class="tag">强化题型 · 公式 8 的证明手法（会这一招，9 和一堆秩不等式全解决）</span>
+    <b>核心是"分块矩阵 + 初等变换"</b>。证 $r(\boldsymbol{AB})+n\ge r(\boldsymbol A)+r(\boldsymbol B)$：
+    $$\begin{bmatrix}\boldsymbol E&\boldsymbol O\\\boldsymbol O&\boldsymbol{AB}\end{bmatrix}
+    \xrightarrow{左边乘\boldsymbol A加至下}\begin{bmatrix}\boldsymbol E&\boldsymbol O\\\boldsymbol A&\boldsymbol{AB}\end{bmatrix}
+    \xrightarrow{右边乘(-\boldsymbol B)加至}\begin{bmatrix}\boldsymbol E&-\boldsymbol B\\\boldsymbol A&\boldsymbol O\end{bmatrix}
+    \xrightarrow{\times(-\boldsymbol E)}\begin{bmatrix}-\boldsymbol B&\boldsymbol E\\\boldsymbol O&\boldsymbol A\end{bmatrix}
+    \xrightarrow{P_{12}反向思路}\begin{bmatrix}\boldsymbol B&\boldsymbol E\\\boldsymbol O&\boldsymbol A\end{bmatrix}$$
+    左端秩 $=r(\boldsymbol{AB})+n$，右端 $\ge r(\boldsymbol A)+r(\boldsymbol B)$，证毕。<br>
+    同法证公式 9：$\begin{bmatrix}\boldsymbol{ABC}&\boldsymbol O\\\boldsymbol O&\boldsymbol B\end{bmatrix}\to\cdots\to\begin{bmatrix}\boldsymbol{AB}&\boldsymbol O\\\boldsymbol B&\boldsymbol{BC}\end{bmatrix}$，得 $r(\boldsymbol{ABC})+r(\boldsymbol B)\ge r(\boldsymbol{AB})+r(\boldsymbol{BC})$。<br>
+    <span style="color:var(--amber)"><b>套路总结：把要比较的两组东西塞进一个大分块矩阵的对角线上，用"左边乘 X 加至 / 右边乘 Y 加至"把它们挪到同一侧，秩只会不增。</b></span>
+  </div>
+
+  <div class="key"><span class="tag">必记 · $\boldsymbol{AB}=\boldsymbol O$ 的六条读法（公式 8 的注）</span>
+    ① $\boldsymbol{AB}=\boldsymbol O\Rightarrow r(\boldsymbol A)+r(\boldsymbol B)\le n$；<br>
+    ② $\boldsymbol{AB}$ 为 $n$ 阶可逆 ⇒ $r(\boldsymbol{AB})=n$，$r(\boldsymbol A)+r(\boldsymbol B)\le2n$；<br>
+    ③ $\boldsymbol B$ 的列向量均为 $\boldsymbol{Ax}=\boldsymbol 0$ 的解 ⇒ 同 ①；<br>
+    ④ 再加 $\boldsymbol B\ne\boldsymbol O$ ⇒ $r(\boldsymbol B)\ge1\Rightarrow r(\boldsymbol A)\le n-1$，<b>$\boldsymbol A$ 列向量组线性相关</b>；<br>
+    ⑤ $\boldsymbol A$ 的任一行与 $\boldsymbol B$ 的任一列正交 ⇒ $\boldsymbol{AB}=[(\boldsymbol\alpha_i,\boldsymbol\beta_j)]=\boldsymbol O$ ⇒ 同 ①；<br>
+    ⑥ 由 $\boldsymbol{AB}=\boldsymbol O$ 得 $\boldsymbol B^{\mathrm T}\boldsymbol A^{\mathrm T}=\boldsymbol O$，<b>把 ①–⑤ 转置着再读一遍</b>。
+  </div>
+
+  <div class="eg" id="eg41"><div class="q"><span class="no">强 4.1</span>
+    $\boldsymbol A$ 为 $4\times3$ 矩阵，$\boldsymbol B$ 为 3 阶方阵，$r(\boldsymbol A)=3$，则（　）。<br>
+    (A) $\boldsymbol{ABx}=\boldsymbol 0$ 与 $\boldsymbol{Bx}=\boldsymbol 0$ 同解　(B) 与 $\boldsymbol{Ax}=\boldsymbol 0$ 同解　(C) $\boldsymbol B^{\mathrm T}\boldsymbol A^{\mathrm T}\boldsymbol x=\boldsymbol 0$ 与 $\boldsymbol A^{\mathrm T}\boldsymbol x=\boldsymbol 0$ 同解　(D) 与 $\boldsymbol B^{\mathrm T}\boldsymbol x=\boldsymbol 0$ 同解</div>
+    <div class="s"><span class="lab">解</span>由公式 6 与 8 夹逼：
+    $$r(\boldsymbol A)+r(\boldsymbol B)-3\le r(\boldsymbol{AB})\le\min\{r(\boldsymbol A),r(\boldsymbol B)\}\qquad(*)$$
+    $r(\boldsymbol A)=3$（列满秩）代入：$r(\boldsymbol B)\le r(\boldsymbol{AB})\le r(\boldsymbol B)$ ⇒ <b>$r(\boldsymbol{AB})=r(\boldsymbol B)$</b>。
+    又 $\boldsymbol{Bx}=\boldsymbol 0$ 的解显然满足 $\boldsymbol{ABx}=\boldsymbol 0$，加上秩相等（解空间维数相同），故同解。
+    <span class="ans">答案：(A)。</span><br>
+    <span style="color:var(--amber)"><b>对称提醒</b>：若换成 $r(\boldsymbol B)=3$（行满秩），则 $(*)$ 给出 $r(\boldsymbol{AB})=r(\boldsymbol A)$，此时 $\boldsymbol B^{\mathrm T}\boldsymbol A^{\mathrm T}\boldsymbol x=\boldsymbol 0$ 与 $\boldsymbol A^{\mathrm T}\boldsymbol x=\boldsymbol 0$ 同解，即选 (C)。<b>看清楚是谁满秩。</b></span><br>
+    <span style="color:var(--green)"><b>那个 $(*)$ 夹逼式是第 4 讲的万能开局</b>，几乎每道秩的选择题都从它写起。</span></div></div>
+
+  <div class="eg" id="eg43"><div class="q"><span class="no">强 4.2 / 强 4.3</span>
+    (a) $\boldsymbol B$ 是 $n$ 阶，$\boldsymbol C$ 是 $n\times m$ 且 $r(\boldsymbol C)=n$，判断：① $\boldsymbol{BC}=\boldsymbol O\Rightarrow\boldsymbol B=\boldsymbol O$；② $\boldsymbol{BC}=\boldsymbol C\Rightarrow\boldsymbol B=\boldsymbol E$；③ $\boldsymbol{BC}=\boldsymbol O\Rightarrow1\le r(\boldsymbol B)\lt n$；④ $\boldsymbol{BC}=\boldsymbol C\Rightarrow r(\boldsymbol B)=n$。<br>
+    (b) $\boldsymbol A_{3\times2},\boldsymbol B_{2\times3}$ 实矩阵，$\boldsymbol{AB}=\begin{bmatrix}8&0&-4\\-\frac32&9&-6\\-2&0&1\end{bmatrix}$，求 $\boldsymbol{BA}$。</div>
+    <div class="s"><span class="lab">(a)</span>$\boldsymbol C$ 行满秩（$r=n$ = 行数）。① $\boldsymbol{BC}=\boldsymbol O=\boldsymbol{OC}$，由公式 5 得 $\boldsymbol B=\boldsymbol O$ ✔；② $\boldsymbol{BC}=\boldsymbol C=\boldsymbol{EC}$ ⇒ $\boldsymbol B=\boldsymbol E$ ✔；③ 由 ① 知 $\boldsymbol B=\boldsymbol O$，$r(\boldsymbol B)=0$，③ 错；④ 由 ② 得 $r(\boldsymbol B)=n$ ✔。
+    <span class="ans">答案：①②④，选 (A)。</span><br>
+    <span class="lab">(b)</span>$|\boldsymbol{AB}|=0$ 而 $r(\boldsymbol{AB})=2$；由 $2=r(\boldsymbol{AB})\le r(\boldsymbol A),r(\boldsymbol B)\le2$ 得 $r(\boldsymbol A)=r(\boldsymbol B)=2$，即 <b>$\boldsymbol A$ 列满秩、$\boldsymbol B$ 行满秩</b>。
+    又实测 $(\boldsymbol{AB})^{2}=9\boldsymbol{AB}$，即 $\boldsymbol{ABAB}=9\boldsymbol{AB}$：
+    $$\boldsymbol A(\boldsymbol{BAB})=\boldsymbol A(9\boldsymbol B)\xrightarrow{\boldsymbol A列满秩}\boldsymbol{BAB}=9\boldsymbol B=(9\boldsymbol E_2)\boldsymbol B\xrightarrow{\boldsymbol B行满秩}\boldsymbol{BA}=9\boldsymbol E_2$$
+    <span class="ans">$\boldsymbol{BA}=\begin{bmatrix}9&0\\0&9\end{bmatrix}$</span> ✔ 已复算（$|\boldsymbol{AB}|=0$、$r=2$、$(\boldsymbol{AB})^2=9\boldsymbol{AB}$ 三项均验证）<br>
+    <span style="color:var(--green)"><b>这题是公式 5 的教科书式应用：连续两次"消去"，一次消左边一次消右边。</b>先算出 $(\boldsymbol{AB})^2=9\boldsymbol{AB}$ 是题眼——看到一个具体矩阵，先试试它的平方。</span></div></div>
+
+  <div class="eg"><div class="q"><span class="no">强 4.4</span>
+    $n$ 阶 $\boldsymbol A,\boldsymbol B,\boldsymbol C$ 满足 $\boldsymbol{ABC}=\boldsymbol O$，记 $\begin{bmatrix}\boldsymbol O&\boldsymbol A\\\boldsymbol{BC}&\boldsymbol E\end{bmatrix}$、$\begin{bmatrix}\boldsymbol{AB}&\boldsymbol C\\\boldsymbol O&\boldsymbol E\end{bmatrix}$、$\begin{bmatrix}\boldsymbol E&\boldsymbol{AB}\\\boldsymbol{AB}&\boldsymbol O\end{bmatrix}$ 的秩为 $r_1,r_2,r_3$，则（　）</div>
+    <div class="s"><span class="lab">解</span>用<b>可逆分块阵左乘（不改变秩）</b>逐个化简：<br>
+    $\begin{bmatrix}\boldsymbol E&-\boldsymbol A\\\boldsymbol O&\boldsymbol E\end{bmatrix}\begin{bmatrix}\boldsymbol O&\boldsymbol A\\\boldsymbol{BC}&\boldsymbol E\end{bmatrix}=\begin{bmatrix}-\boldsymbol{ABC}&\boldsymbol O\\\boldsymbol{BC}&\boldsymbol E\end{bmatrix}=\begin{bmatrix}\boldsymbol O&\boldsymbol O\\\boldsymbol{BC}&\boldsymbol E\end{bmatrix}\Rightarrow r_1=n$；<br>
+    $\begin{bmatrix}\boldsymbol E&-\boldsymbol C\\\boldsymbol O&\boldsymbol E\end{bmatrix}\begin{bmatrix}\boldsymbol{AB}&\boldsymbol C\\\boldsymbol O&\boldsymbol E\end{bmatrix}=\begin{bmatrix}\boldsymbol{AB}&\boldsymbol O\\\boldsymbol O&\boldsymbol E\end{bmatrix}\Rightarrow r_2=r(\boldsymbol{AB})+n$；<br>
+    $\begin{bmatrix}\boldsymbol E&\boldsymbol O\\-\boldsymbol{AB}&\boldsymbol E\end{bmatrix}\begin{bmatrix}\boldsymbol E&\boldsymbol{AB}\\\boldsymbol{AB}&\boldsymbol O\end{bmatrix}\to\begin{bmatrix}\boldsymbol E&\boldsymbol O\\\boldsymbol O&-\boldsymbol{ABAB}\end{bmatrix}\Rightarrow r_3=r(\boldsymbol{ABAB})+n$。<br>
+    由<span style="color:var(--green)"><b>矩阵越乘秩越小</b></span>：$r(\boldsymbol{AB})\ge r(\boldsymbol{ABAB})\ge0$，故 $n\le r_3\le r_2$。
+    <span class="ans">答案：$r_1\le r_3\le r_2$，选 (B)。</span><br>
+    <span style="color:var(--amber)"><b>这题不需要算任何具体数</b>，全靠"左乘可逆阵不改变秩"把三个分块阵化成对角形，再比 $r(\boldsymbol{AB})$ 与 $r(\boldsymbol{ABAB})$ 的大小。</span></div></div>
+
+  <div class="eg"><div class="q"><span class="no">强 4.5 / 强 4.6 / 强 4.7</span>
+    (a) $\boldsymbol A_{m\times n},\boldsymbol B_{n\times m}$，$\boldsymbol C$ 为 $n$ 阶可逆，$r(\boldsymbol A)=r\lt n$，$\boldsymbol A(\boldsymbol C+\boldsymbol{BA})=\boldsymbol O$，求 $r(\boldsymbol C+\boldsymbol{BA})$。<br>
+    (b) $n$ 阶 $\boldsymbol A,\boldsymbol B,\boldsymbol C$ 满足 $r(\boldsymbol A)+r(\boldsymbol B)+r(\boldsymbol C)=r(\boldsymbol{ABC})+2n$，判断 ① $r(\boldsymbol{ABC})+n=r(\boldsymbol{AB})+r(\boldsymbol C)$；② $r(\boldsymbol{AB})+n=r(\boldsymbol A)+r(\boldsymbol B)$；③ $r(\boldsymbol A)=r(\boldsymbol B)=r(\boldsymbol C)=n$；④ $r(\boldsymbol{AB})=r(\boldsymbol{BC})=n$。<br>
+    (c) $r(\boldsymbol{AB})=r(\boldsymbol B)$，证明对任意 $\boldsymbol C_{s\times t}$ 有 $r(\boldsymbol{ABC})=r(\boldsymbol{BC})$。</div>
+    <div class="s"><span class="lab">(a)</span>$\boldsymbol A(\boldsymbol C+\boldsymbol{BA})=\boldsymbol O\Rightarrow r(\boldsymbol A)+r(\boldsymbol C+\boldsymbol{BA})\le n\Rightarrow r(\boldsymbol C+\boldsymbol{BA})\le n-r$。
+    另一边用公式 7 的推论：$r(\boldsymbol C+\boldsymbol{BA})=r[\boldsymbol C-(-\boldsymbol{BA})]\ge r(\boldsymbol C)-r(\boldsymbol{BA})\ge n-r(\boldsymbol A)=n-r$。
+    <span class="ans">$r(\boldsymbol C+\boldsymbol{BA})=n-r$</span><br>
+    <span class="lab">(b)</span><b>法一（取等分析）</b>：
+    $$r(\boldsymbol A)+r(\boldsymbol B)+r(\boldsymbol C)=r(\boldsymbol{ABC})+2n\ \overset{公式9}{\ge}\ r(\boldsymbol{AB})+r(\boldsymbol C)+n\ \overset{公式8}{\ge}\ r(\boldsymbol A)+r(\boldsymbol B)+r(\boldsymbol C)$$
+    <b>首尾相等 ⇒ 中间每个 $\ge$ 都必须取等</b>，故 ①② 成立。
+    <b>法二（D₄₁ 试取特殊情形排除）</b>：取 $\boldsymbol A=\begin{bmatrix}1&0\\0&0\end{bmatrix},\boldsymbol B=\begin{bmatrix}0&0\\0&1\end{bmatrix},\boldsymbol C=\boldsymbol E$，
+    则 $r=1,1,2$ 满足条件，但 $r(\boldsymbol A)\ne n$、$r(\boldsymbol{AB})=0\ne n$，排除 ③④。
+    <span class="ans">答案：①②，选 (A)。</span><br>
+    <span class="lab">(c)</span>由公式 9：$r(\boldsymbol{ABC})\ge r(\boldsymbol{AB})+r(\boldsymbol{BC})-r(\boldsymbol B)=r(\boldsymbol{BC})$（用了 $r(\boldsymbol{AB})=r(\boldsymbol B)$）；
+    又由公式 6 $r(\boldsymbol{ABC})\le r(\boldsymbol{BC})$。<span class="ans">故 $r(\boldsymbol{ABC})=r(\boldsymbol{BC})$。</span><br>
+    <span style="color:var(--green)">张宇注：<b>"此证法极简。若研究 $\boldsymbol{ABCx}=\boldsymbol0$ 与 $\boldsymbol{BCx}=\boldsymbol0$ 同解，亦可得证，但不如此证法简便。"</b>——秩不等式能一行搞定的，别去做同解分析。</span><br>
+    <span style="color:var(--amber)"><b>(b) 的"夹逼取等"是本讲最漂亮的手法</b>：写出一串 $\ge$，发现首尾相同，于是全部是等号，一次性读出两个结论。</span></div></div>
+
+  <div class="eg"><div class="q"><span class="no">强 4.8 / 强 4.9</span>
+    (a) $\boldsymbol A,\boldsymbol B$ 为 $n$ 阶实矩阵，下列<b>不成立</b>的是（　）：
+    (A) $r\Big(\begin{bmatrix}\boldsymbol A&\boldsymbol{AB}\\\boldsymbol O&\boldsymbol A^{\mathrm T}\end{bmatrix}\Big)=2r(\boldsymbol A)$
+    (B) $r\Big(\begin{bmatrix}\boldsymbol A&\boldsymbol O\\\boldsymbol O&\boldsymbol A^{\mathrm T}\boldsymbol A\end{bmatrix}\Big)=2r(\boldsymbol A)$
+    (C) $r\Big(\begin{bmatrix}\boldsymbol A&\boldsymbol{BA}\\\boldsymbol O&\boldsymbol A\boldsymbol A^{\mathrm T}\end{bmatrix}\Big)=2r(\boldsymbol A)$
+    (D) $r\Big(\begin{bmatrix}\boldsymbol A&\boldsymbol O\\\boldsymbol{BA}&\boldsymbol A^{\mathrm T}\end{bmatrix}\Big)=2r(\boldsymbol A)$<br>
+    (b) $\boldsymbol A$ 为 4 阶，$\boldsymbol A(\boldsymbol A-\boldsymbol A^{*})=\boldsymbol O$ 且 $\boldsymbol A\ne\boldsymbol A^{*}$，则 $r(\boldsymbol A)=$（　）</div>
+    <div class="s"><span class="lab">(a)</span>由公式 10，(B) 显然成立。(A)：$\boldsymbol{AB}$ 的列可由 $\boldsymbol A$ 的列表示（狗猫·横拼左同多化零）⇒ 化成 $\begin{bmatrix}\boldsymbol A&\boldsymbol O\\\boldsymbol O&\boldsymbol A^{\mathrm T}\end{bmatrix}$，成立。(D) 同理（竖拼）。
+    (C) 取 $\boldsymbol A=\begin{bmatrix}0&1\\0&1\end{bmatrix},\boldsymbol B=\begin{bmatrix}0&0\\1&1\end{bmatrix}$，秩为 3 而 $2r(\boldsymbol A)=2$。
+    <span class="ans">答案：(C)。</span> ✔ 已复算（反例秩实测 $=3\ne2$；(A)(B)(D) 均验证成立）<br>
+    <span style="color:var(--red)"><b>(C) 为什么塌了</b>：$\boldsymbol{BA}$ 的列<b>不能</b>由 $\boldsymbol A$ 的列表示（$\boldsymbol A$ 在右边），口诀不适用。<b>和强3.18 的 (B) 是同一个坑</b>。</span><br>
+    <span class="lab">(b)</span>由 $\boldsymbol A(\boldsymbol A-\boldsymbol A^{*})=\boldsymbol O$ 得 $r(\boldsymbol A)+r(\boldsymbol A-\boldsymbol A^{*})\le4$，又 $\boldsymbol A\ne\boldsymbol A^{*}$ ⇒ $r(\boldsymbol A-\boldsymbol A^{*})\ge1$ ⇒ $r(\boldsymbol A)\le3$ ⇒ $|\boldsymbol A|=0$。
+    于是 $\boldsymbol A(\boldsymbol A-\boldsymbol A^{*})=\boldsymbol A^{2}-|\boldsymbol A|\boldsymbol E=\boldsymbol A^{2}=\boldsymbol O$，故 $2r(\boldsymbol A)\le4$，$r(\boldsymbol A)\le2$；
+    此时 $r(\boldsymbol A)\lt n-1=3$ ⇒ $r(\boldsymbol A^{*})=0$ ⇒ $\boldsymbol A^{*}=\boldsymbol O$，又 $\boldsymbol A\ne\boldsymbol A^{*}$ ⇒ $\boldsymbol A\ne\boldsymbol O$ ⇒ $r(\boldsymbol A)\ge1$。
+    <span class="ans">$r(\boldsymbol A)=1$ 或 $2$，选 (D)。</span> ✔ 已复算<br>
+    <span style="color:var(--amber)"><b>三次收紧</b>：$\le3\to\le2\to\ge1$。每一步都换一个公式（$\boldsymbol{AB}=\boldsymbol O$ 的秩不等式 → $\boldsymbol{AA}^{*}=|\boldsymbol A|\boldsymbol E$ → $r(\boldsymbol A^{*})$ 三分法）。<b>这是伴随+秩的综合模板题。</b></span></div></div>
+
+  <div class="key"><span class="tag">必记 · 公式 12 及其两个王牌推论（$f(\boldsymbol A)=\boldsymbol O$ 型的标准动作）</span>
+    <b>证</b>：由 $(\boldsymbol A-k_1\boldsymbol E)(\boldsymbol A-k_2\boldsymbol E)=\boldsymbol O$ 得 $r(\boldsymbol A-k_1\boldsymbol E)+r(\boldsymbol A-k_2\boldsymbol E)\le n$；
+    又 $r(k_1\boldsymbol E-\boldsymbol A)+r(\boldsymbol A-k_2\boldsymbol E)\ge r\big[(k_1-k_2)\boldsymbol E\big]=n$。<b>两边夹，等号成立。</b><br>
+    <b>推论①（$\boldsymbol A^{2}=\boldsymbol A$，幂等阵）</b>：<span style="color:var(--green)">见到 $f(\boldsymbol A)$ 想 $f(\lambda)$，$\lambda^2=\lambda\Rightarrow\lambda=0$ 或 $1$</span>
+    <ul style="margin:6px 0 6px 20px">
+      <li>a. $r(\boldsymbol A)+r(\boldsymbol A-\boldsymbol E)=n$</li>
+      <li>b. $\boldsymbol A$ <b>可相似对角化</b></li>
+      <li>c. $\boldsymbol A+\boldsymbol E$ 可逆（$|\boldsymbol A+\boldsymbol E|\ne0$，因 $-1$ 不是特征值）</li>
+      <li>d. $(\boldsymbol A+\boldsymbol E)^{m}=\boldsymbol E+(2^{m}-1)\boldsymbol A$　<span style="color:var(--blue)">（涉及幂的命题，考虑数学归纳法）</span></li>
+    </ul>
+    <b>推论②（$\boldsymbol A^{2}=\boldsymbol E$，对合阵）</b>：$r(\boldsymbol A+\boldsymbol E)+r(\boldsymbol A-\boldsymbol E)=n$。<br>
+    ✔ 两条推论已用随机可对角化矩阵批量验证。
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">基 2.19 / 基 2.20</span>
+    (a) $\begin{bmatrix}1&2&-1&1\\2&0&t&0\\0&-4&5&-2\end{bmatrix}$ 的秩为 2，求 $t$。　(b) $\boldsymbol A_{m\times n},\boldsymbol B_{n\times m}$，$\boldsymbol{AB}=\boldsymbol E_m$，则（　）</div>
+    <div class="s"><span class="lab">(a) 法一</span>秩为 2 ⇒ 所有 3 阶子式为零，只需算含 $t$ 的一个：$\begin{vmatrix}1&2&-1\\2&0&t\\0&-4&5\end{vmatrix}=-12+4t=0\Rightarrow t=3$。
+    <span class="lab">法二</span>初等变换化阶梯形 $\to\begin{bmatrix}1&2&-1&1\\0&-4&t+2&-2\\0&0&3-t&0\end{bmatrix}$，$t=3$ 时秩为 2。
+    <span class="ans">$t=3$，选 (D)。</span> ✔ 已复算（$t=0,1$ 时秩为 3，已排除）<br>
+    <span class="lab">(b)</span>$r(\boldsymbol A)\le\min\{m,n\}\le m$，$r(\boldsymbol B)\le m$；又 $m=r(\boldsymbol E_m)=r(\boldsymbol{AB})\le\min\{r(\boldsymbol A),r(\boldsymbol B)\}$ ⇒ 两者都 $\ge m$。
+    <span class="ans">$r(\boldsymbol A)=r(\boldsymbol B)=m$，选 (A)。</span><br>
+    <span style="color:var(--amber)"><b>"上下夹"是秩题的通用姿势</b>：一边用 $r(\boldsymbol{AB})\le\min$ 压上界，一边用已知的可逆块顶下界。</span></div></div>
+
+  <!-- ================= s10 等价命题网 ================= -->
+  <h2 id="s10"><span class="idx">十</span>🕸 可逆的等价命题网 · 30 条<span class="layer L-str">强化</span></h2>
+
+  <div class="zy"><span class="tag">强化题型 · 为什么这张网是线代的"总配电盘"</span>
+    张宇在这里写了本讲最重的一句眉批：<br>
+    <em>"D₂₂（转换等价表达）是线性代数考题中'<b>脱胎换骨</b>'的核心。<b>若对于一个知识点有多种等价说法，或对于一个命题有多种充要条件，那么这里的 D₂₂ 就成了极为重要的考点。</b>"</em><br><br>
+    换句话说：<b>考研线代的题目 90% 不是在考你会不会算，而是在考你能不能把题设的说法翻译成另一种说法。</b>
+    「$\boldsymbol{Ax}=\boldsymbol 0$ 只有零解」「$|\boldsymbol A|\ne0$」「列向量组线性无关」「0 不是特征值」——是同一件事的四张脸。
+    <b>下面 30 条全部互为充要条件</b>，任意两条之间都可以直接跳。这就是 ch1 页尾答应你的第二个模块。
+  </div>
+
+  <div class="tool">
+    <h4>🕸 交互模块 · 点开任意一条看「它为什么等价 / 什么时候用它」</h4>
+    <div class="hint">
+      <b>三种用法</b>：① <b>浏览</b>——点卡片展开一句话理由；② <b>自测</b>——开自测模式后正文被模糊，只看编号和分组回忆内容，点开验证；③ <b>找路</b>——做题时先看题设落在哪一组，再看目标在哪一组，中间那几组就是你要搭的桥。
+    </div>
+    <div class="stepbar">
+      <button id="nwAll">全部展开</button>
+      <button id="nwNone">全部收起</button>
+      <button id="nwQuiz">🙈 自测模式：关</button>
+      <button id="nwRand">🎲 随机抽 5 条</button>
+      <span class="cnt" id="nwCnt">已展开 0 / 30</span>
+    </div>
+    <div class="netwrap" id="netwrap"></div>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 这张网怎么用在具体题目上（三个真实走位）</span>
+    <b>走位一（强3.14）</b>：题设 $\boldsymbol A^{3}=\boldsymbol O$，问 $\boldsymbol E\pm\boldsymbol A$ 可逆吗？<br>
+    　→ 走 <b>第 1 条</b>（造 $\boldsymbol{XY}=\boldsymbol E$）：$\boldsymbol E=\boldsymbol E\pm\boldsymbol A^{3}=(\boldsymbol E\pm\boldsymbol A)(\boldsymbol E\mp\boldsymbol A+\boldsymbol A^{2})$；<br>
+    　→ 或走 <b>第 24 条</b>（0 不是特征值）：$\lambda^{3}=0\Rightarrow\lambda=0\Rightarrow\boldsymbol E\pm\boldsymbol A$ 的特征值全是 1。<br>
+    <b>走位二（强4.1）</b>：题设 $r(\boldsymbol A)=3$（$\boldsymbol A$ 是 $4\times3$），问同解。<br>
+    　→ 落在 <b>第 9/10 条</b>（列满秩 ⇒ $r(\boldsymbol{AC})=r(\boldsymbol C)$）→ 跳到 <b>第 14 条</b>（$\boldsymbol{Ax}=\boldsymbol 0$ 只有零解）→ 解空间维数相同 ⇒ 同解。<br>
+    <b>走位三（第 9 讲预告）</b>：题设"$\boldsymbol A^{\mathrm T}\boldsymbol A$ 正定"，问 $\boldsymbol A$ 可逆吗？<br>
+    　→ 直接是 <b>第 25 条</b>。正定这一组（25–30）是二次型那一章反过来喂给本章的，现在先混个脸熟。<br><br>
+    <span style="color:var(--red)"><b>⚠️ 使用前提：这 30 条全部要求 $\boldsymbol A$ 是 $n$ 阶<u>方阵</u>。</b>非方阵没有"可逆"可言，只有"列满秩 / 行满秩"，别把这张网套到 $\boldsymbol A_{m\times n}$ 上。</span>
+  </div>
+
+  <!-- ================= s11 证 A=O + 收官 ================= -->
+  <h2 id="s11"><span class="idx">十一</span>证 $\boldsymbol A=\boldsymbol O$ 专题 + 收官难题<span class="layer L-str">强化</span></h2>
+
+  <div class="zy"><span class="tag">强化题型 · 张宇第 3 讲支线 2（O₁ 盯住目标 1）· 四条通道</span>
+    考场上要你证一个抽象矩阵是零矩阵，只有这四条路：
+    <ol>
+      <li><b>$r(\boldsymbol A)=0\Rightarrow\boldsymbol A=\boldsymbol O$</b>（定义，最直接）</li>
+      <li><b>$r(\boldsymbol A)\lt n-1\Rightarrow\boldsymbol A^{*}=\boldsymbol O$</b>（证的是伴随为零时用）</li>
+      <li><b>$\operatorname{tr}(\boldsymbol{AA}^{\mathrm T})=0\Rightarrow\boldsymbol A=\boldsymbol O$</b>　<span style="color:var(--green)">张宇在原书这里留了一句："思考一下为什么？…<b>此处若出题，就是难题。</b>"</span></li>
+      <li><b>$\boldsymbol A$ 的行向量与 $\boldsymbol B$ 的列向量均正交 $\Rightarrow\boldsymbol{AB}=\boldsymbol O$</b>，且 $r(\boldsymbol A)+r(\boldsymbol B)\le\boldsymbol A$ 的列数</li>
+    </ol>
+    <b>第 3 条的理由</b>（就是 <a href="#s3">§三</a> 格拉姆矩阵的隐含条件 ②）：$\operatorname{tr}(\boldsymbol{AA}^{\mathrm T})=\sum_i\|\boldsymbol\alpha_i\|^{2}$，
+    <b>实数平方和为零 ⇒ 每一项都是零 ⇒ 每一行都是零向量</b>。<span style="color:var(--red)">注意这条只对<b>实</b>矩阵成立。</span>
+  </div>
+
+  <div class="eg" id="eg31"><div class="q"><span class="no">强 3.1</span>
+    设 $\boldsymbol A$ 为 3 阶实矩阵，$(\boldsymbol A^{\mathrm T}-\boldsymbol A)\boldsymbol A=\boldsymbol O$，证明 $\boldsymbol A=\boldsymbol A^{\mathrm T}$。</div>
+    <div class="s"><span class="lab">思路</span>目标"$\boldsymbol A=\boldsymbol A^{\mathrm T}$"改写成"$\boldsymbol B=\boldsymbol O$"，其中 $\boldsymbol B=\boldsymbol A^{\mathrm T}-\boldsymbol A$，然后走通道 3。<br>
+    <span class="lab">证</span>由题设 $\boldsymbol A^{\mathrm T}\boldsymbol A=\boldsymbol A^{2}$。令 $\boldsymbol B=\boldsymbol A^{\mathrm T}-\boldsymbol A$，则
+    $$\boldsymbol{BB}^{\mathrm T}=(\boldsymbol A^{\mathrm T}-\boldsymbol A)(\boldsymbol A-\boldsymbol A^{\mathrm T})=\boldsymbol A^{\mathrm T}\boldsymbol A-(\boldsymbol A^{\mathrm T})^{2}-\boldsymbol A^{2}+\boldsymbol{AA}^{\mathrm T}
+    \overset{\boldsymbol A^{\mathrm T}\boldsymbol A=\boldsymbol A^{2}}{=}\boldsymbol{AA}^{\mathrm T}-(\boldsymbol A^{2})^{\mathrm T}=\boldsymbol{AA}^{\mathrm T}-\boldsymbol A^{\mathrm T}\boldsymbol A$$
+    取迹：$\operatorname{tr}(\boldsymbol{BB}^{\mathrm T})=\operatorname{tr}(\boldsymbol{AA}^{\mathrm T})-\operatorname{tr}(\boldsymbol A^{\mathrm T}\boldsymbol A)=0$（这两个迹相等，都等于全体元素平方和）。
+    <span class="ans">故 $\boldsymbol B=\boldsymbol O$，即 $\boldsymbol A=\boldsymbol A^{\mathrm T}$。</span><br>
+    <span style="color:var(--amber)"><b>两个关键动作</b>：① 把 $(\boldsymbol A^{\mathrm T})^{2}$ 写成 $(\boldsymbol A^{2})^{\mathrm T}$ 再用题设换掉；② <b>$\operatorname{tr}(\boldsymbol{AA}^{\mathrm T})=\operatorname{tr}(\boldsymbol A^{\mathrm T}\boldsymbol A)$</b>——这一步是全题的支点，两者都等于 $\sum_{i,j}a_{ij}^{2}$。</span></div></div>
+
+  <div class="eg" id="eg320"><div class="q"><span class="no">强 3.20</span>★★★ 本讲收官
+    $\boldsymbol A=\begin{bmatrix}0&1&2\\0&0&3\\0&0&0\end{bmatrix}$。(1) 求可逆 $\boldsymbol P$ 使 $\boldsymbol P^{-1}\boldsymbol{AP}=\begin{bmatrix}0&1&0\\0&0&1\\0&0&0\end{bmatrix}$；(2) 是否存在 3 阶 $\boldsymbol B$ 使 $\boldsymbol B^{2}=\boldsymbol A$？</div>
+    <div class="s"><span class="lab">(1)</span>令 $\boldsymbol P=[\boldsymbol\xi_1,\boldsymbol\xi_2,\boldsymbol\xi_3]$，由 $\boldsymbol{AP}=\boldsymbol P\boldsymbol J$ 逐列比较得 <b>$\boldsymbol A\boldsymbol\xi_1=\boldsymbol 0$，$\boldsymbol A\boldsymbol\xi_2=\boldsymbol\xi_1$，$\boldsymbol A\boldsymbol\xi_3=\boldsymbol\xi_2$</b>（一条"链"）。
+    依次解：$\boldsymbol\xi_1=[1,0,0]^{\mathrm T}$，$\boldsymbol\xi_2=[0,1,0]^{\mathrm T}$，$\boldsymbol\xi_3=\big[0,-\frac23,\frac13\big]^{\mathrm T}$。
+    <span class="ans">$\boldsymbol P=\begin{bmatrix}1&0&0\\0&1&-\frac23\\0&0&\frac13\end{bmatrix}$</span> ✔ 已复算<br>
+    <span class="lab">(2)</span>若存在 $\boldsymbol B$ 使 $\boldsymbol B^{2}=\boldsymbol A$，则 <b>$\boldsymbol{BA}=\boldsymbol{BB}^{2}=\boldsymbol B^{2}\boldsymbol B=\boldsymbol{AB}$</b>——先挖出"$\boldsymbol B$ 与 $\boldsymbol A$ 可交换"。
+    设 $\boldsymbol B=(x_{ij})$ 代入 $\boldsymbol{BA}=\boldsymbol{AB}$ 逐元素比较，得 $\boldsymbol B$ 必形如 $\begin{bmatrix}x_{11}&x_{12}&x_{13}\\0&x_{11}&3x_{12}\\0&0&x_{11}\end{bmatrix}$。
+    再代回 $\boldsymbol B^{2}=\boldsymbol A$：
+    $$\begin{bmatrix}x_{11}^{2}&2x_{11}x_{12}&2x_{11}x_{13}+3x_{12}^{2}\\0&x_{11}^{2}&6x_{11}x_{12}\\0&0&x_{11}^{2}\end{bmatrix}=\begin{bmatrix}0&1&2\\0&0&3\\0&0&0\end{bmatrix}$$
+    由 $x_{11}^{2}=0$ 得 $x_{11}=0$，但又要 $2x_{11}x_{12}=1$ 即 $x_{11}x_{12}=\frac12\ne0$，<b>矛盾</b>。
+    <span class="ans">不存在这样的 $\boldsymbol B$。</span> ✔ 已复算（对 9 个未知元直接 solve，解集为空）<br>
+    <span style="color:var(--green)"><b>张宇为这题写的方法论（本讲最后一段，值得抄进错题本）</b>：<br>
+    "本讲最后一个例题是作者有意安排的难题，命题要求考生能够<b>透过所给条件的表象，寻找到其背后的实际考点</b>。如何寻找？<br>
+    ① 依靠题设条件及设问 (1) 的<b>提示</b>；<br>
+    ② 依靠 D₂₁（<b>观察研究对象</b>），对照自己的知识结构，寻找隐含条件；<br>
+    ③ 依靠 D₂₃（<b>化归经典形式</b>），对照自己的知识结构，做好形式化归。<br>
+    本题中 $\boldsymbol B^{2}=\boldsymbol A$，由 D₂₁ 想到 '$\boldsymbol B^{n}$ 即矩阵的 $n$ 次幂' 是合理的，但由于 $\boldsymbol A$ 是非正定矩阵，走 $\boldsymbol B=\sqrt{\boldsymbol A}$ 的路子行不通；<b>试着在 $\boldsymbol B^{2}=\boldsymbol A$ 两边分别乘以等量 $\boldsymbol A=\boldsymbol B^{2}$，得 $\boldsymbol B^{2}\boldsymbol A=\boldsymbol{AB}^{2}$，还能试简单一些的形式吗？$\boldsymbol{BA}=\boldsymbol{AB}$ 成立吗？</b>于是有了本题答案。"</span><br>
+    <span style="color:var(--amber)"><b>可迁移的一招</b>：证"不存在满足 $g(\boldsymbol B)=\boldsymbol A$ 的 $\boldsymbol B$"，先想办法<b>推出 $\boldsymbol B$ 与 $\boldsymbol A$ 可交换</b>，用交换性把 $\boldsymbol B$ 的形状锁死，再代回去找矛盾。</span></div></div>
+
+<script>
+(function(){
+  var GROUPS=[
+    {t:'与定义联系', items:[
+      ['1','存在方阵 $\\boldsymbol B$ 使 $\\boldsymbol{AB}=\\boldsymbol{BA}=\\boldsymbol E$','原始定义。抽象题里最常用——把题设恒等变形，<b>凑出一个 $\\boldsymbol{XY}=\\boldsymbol E$</b> 就赢了（基2.4、基2.5、强3.12、强3.13、强3.14）。'],
+      ['2','存在 $\\boldsymbol B$ 使 $\\boldsymbol{BA}=\\boldsymbol E$','<b>方阵只需验一边</b>：左逆存在即可逆，且右逆自动等于它。非方阵没这好事。'],
+      ['3','存在 $\\boldsymbol B$ 使 $\\boldsymbol{AB}=\\boldsymbol E$','同上。考场上凑出任意一边就可以收笔，不必两边都验。']
+    ]},
+    {t:'与行列式联系', items:[
+      ['4','$|\\boldsymbol A|\\ne0$','最好用的判据，也是第 1 章与第 2 章的接口。<b>反过来：要证不可逆，就证 $|\\boldsymbol A|=0$</b>。']
+    ]},
+    {t:'与初等变换、初等矩阵联系', items:[
+      ['5','$\\boldsymbol A$ 的等价标准形为 $\\boldsymbol E$','即 $\\begin{bmatrix}\\boldsymbol E_r&\\boldsymbol O\\\\\\boldsymbol O&\\boldsymbol O\\end{bmatrix}$ 中 $r=n$，退化成 $\\boldsymbol E$。'],
+      ['6','可经初等<b>行</b>变换化为 $\\boldsymbol E$，即 $\\boldsymbol P_s\\cdots\\boldsymbol P_1\\boldsymbol A=\\boldsymbol E$','这就是 $[\\boldsymbol A,\\boldsymbol E]\\to[\\boldsymbol E,\\boldsymbol A^{-1}]$ 能work的原因，见上面的<b>步进器</b>。'],
+      ['7','可经初等<b>列</b>变换化为 $\\boldsymbol E$，即 $\\boldsymbol{AP}_1\\cdots\\boldsymbol P_s=\\boldsymbol E$','对应 $\\begin{bmatrix}\\boldsymbol A\\\\\\boldsymbol E\\end{bmatrix}\\to\\begin{bmatrix}\\boldsymbol E\\\\\\boldsymbol A^{-1}\\end{bmatrix}$。'],
+      ['8','$\\boldsymbol A$ 可分解为若干个初等矩阵的乘积','几何含义：可逆变换 = 有限次剪切/旋转/伸缩的复合。']
+    ]},
+    {t:'与秩联系', items:[
+      ['9','$r(\\boldsymbol A)=n$（满秩）','<b>本章主线</b>。所有"秩"型题的终点站。'],
+      ['10','$\\forall\\boldsymbol C_{n\\times s}$，$r(\\boldsymbol{AC})=r(\\boldsymbol C)$','<b>乘可逆阵不掉秩</b>（秩公式 3、4）。强4.1 走的就是这条。'],
+      ['11','$\\forall\\boldsymbol C_{n\\times n}$，$r(\\boldsymbol{AC})=r(\\boldsymbol C)$','10 的方阵版。'],
+      ['12','$\\forall\\boldsymbol C_{n\\times n}$，$r(\\boldsymbol{CA})=r(\\boldsymbol C)$','左乘版。'],
+      ['13','$\\forall\\boldsymbol C_{s\\times n}$，$r(\\boldsymbol{CA})=r(\\boldsymbol C)$','左乘的一般版。<b>10–13 合起来 = "$\\boldsymbol A$ 是秩的中性元"</b>。']
+    ]},
+    {t:'与方程组的解联系', items:[
+      ['14','$\\boldsymbol{Ax}=\\boldsymbol 0$ <b>只有零解</b>','第 4 章的门。反面：<b>"有非零解" $\\iff|\\boldsymbol A|=0$</b>——这是选择填空最爱考的反射。'],
+      ['15','$\\forall\\boldsymbol\\beta$，$\\boldsymbol{Ax}=\\boldsymbol\\beta$ 有<b>唯一</b>解','克拉默法则的适用条件。'],
+      ['16','$\\forall\\boldsymbol\\beta$，$\\boldsymbol{Ax}=\\boldsymbol\\beta$ <b>有解</b>','注意：只要求"有解"就够了，"唯一"是白送的。'],
+      ['17','$\\boldsymbol{AX}=\\boldsymbol O_{n\\times s}$（$\\forall s$）只有零解','14 的矩阵版：$\\boldsymbol X$ 的每一列都只能是零向量。'],
+      ['18','$\\forall\\boldsymbol C_{n\\times s}$，$\\boldsymbol{AX}=\\boldsymbol C$ 有唯一解','矩阵方程 $\\boldsymbol X=\\boldsymbol A^{-1}\\boldsymbol C$（§八）。'],
+      ['19','$\\forall\\boldsymbol C_{n\\times s}$，$\\boldsymbol{AX}=\\boldsymbol C$ 有解','配合有解判据 $r(\\boldsymbol A)=r([\\boldsymbol A,\\boldsymbol C])$ 使用。']
+    ]},
+    {t:'与向量组线性表示联系', items:[
+      ['20','$\\boldsymbol A$ 的<b>列</b>向量组线性无关 $\\iff$ 任一列都不能由其余列表示','第 3 章的接口。$\\boldsymbol{AB}=\\boldsymbol O$、$\\boldsymbol B\\ne\\boldsymbol O$ 时列相关，就是它的否定。'],
+      ['21','$\\boldsymbol A$ 的<b>行</b>向量组线性无关','行秩 = 列秩，所以行、列两说等价。']
+    ]},
+    {t:'与基联系（仅数学一）', items:[
+      ['22','$\\boldsymbol A$ 的列向量组是 $\\mathbf R^{n}$ 的一个<b>基</b>','$n$ 个无关向量张成整个空间。'],
+      ['23','$\\boldsymbol A$ 的行向量组是 $\\mathbf R^{n}$ 的一个基','同上。数二数三不考这两条。']
+    ]},
+    {t:'与特征值联系', items:[
+      ['24','<b>0 不是 $\\boldsymbol A$ 的特征值</b>','$|\\boldsymbol A|=\\prod\\lambda_i\\ne0$。强3.14 法二用的就是它——<b>见到 $f(\\boldsymbol A)=\\boldsymbol O$ 就求 $f(\\lambda)=0$ 定出全部可能特征值</b>。']
+    ]},
+    {t:'与正定性联系（第 9 讲反哺）', items:[
+      ['25','$\\boldsymbol A^{\\mathrm T}\\boldsymbol A$ <b>正定</b>','$\\boldsymbol x\\ne\\boldsymbol 0\\Rightarrow\\boldsymbol{Ax}\\ne\\boldsymbol 0\\Rightarrow\\boldsymbol x^{\\mathrm T}\\boldsymbol A^{\\mathrm T}\\boldsymbol{Ax}=\\|\\boldsymbol{Ax}\\|^{2}>0$。'],
+      ['26','$\\boldsymbol{AA}^{\\mathrm T}$ 正定','同理（转置版）。'],
+      ['27','$\\boldsymbol A^{\\mathrm T}\\boldsymbol A$ 的特征值<b>全为正</b>','正定的特征值刻画。'],
+      ['28','$\\boldsymbol A^{\\mathrm T}\\boldsymbol A$ 与 $\\boldsymbol E$ 合同','正定的合同刻画。'],
+      ['29','$\\boldsymbol A^{\\mathrm T}\\boldsymbol A$ 的<b>正惯性指数为 $n$</b>','正定的惯性指数刻画。'],
+      ['30','$\\boldsymbol A^{\\mathrm T}\\boldsymbol A$ 的<b>顺序主子式全为正</b>','正定的行列式判别法（实用性最强）。']
+    ]}
+  ];
+
+  var wrap=document.getElementById('netwrap'), total=0;
+  GROUPS.forEach(function(g){
+    var d=document.createElement('div'); d.className='netgrp';
+    var h='<div class="gt">'+g.t+'</div><div class="netgrid">';
+    g.items.forEach(function(it){
+      total++;
+      h+='<div class="nd" data-n="'+it[0]+'"><div class="body"><span class="n">'+it[0]+'</span>'+it[1]+'</div>'
+       + '<div class="why">'+it[2]+'</div></div>';
+    });
+    d.innerHTML=h+'</div>'; wrap.appendChild(d);
+  });
+
+  var cards=[].slice.call(wrap.querySelectorAll('.nd'));
+  function cnt(){ document.getElementById('nwCnt').textContent='已展开 '+wrap.querySelectorAll('.nd.on').length+' / '+total; }
+  function typeset(el){
+    if(window.renderMathInElement) renderMathInElement(el,
+      {delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});
+  }
+  cards.forEach(function(c){ c.onclick=function(){ c.classList.toggle('on'); cnt(); }; });
+  document.getElementById('nwAll').onclick=function(){ cards.forEach(c=>c.classList.add('on')); cnt(); };
+  document.getElementById('nwNone').onclick=function(){ cards.forEach(c=>c.classList.remove('on')); cnt(); };
+  document.getElementById('nwQuiz').onclick=function(){
+    var on=!cards[0].classList.contains('quiz');
+    cards.forEach(c=>{ c.classList.toggle('quiz',on); if(on) c.classList.remove('on'); });
+    this.textContent='🙈 自测模式：'+(on?'开':'关'); cnt();
+  };
+  document.getElementById('nwRand').onclick=function(){
+    cards.forEach(c=>c.classList.remove('on'));
+    var idx=cards.map((_,i)=>i);
+    for(var i=idx.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));[idx[i],idx[j]]=[idx[j],idx[i]];}
+    idx.slice(0,5).forEach(i=>cards[i].classList.add('on'));
+    cards[idx[0]].scrollIntoView({behavior:'smooth',block:'center'});
+    cnt();
+  };
+  setTimeout(function(){ typeset(wrap); cnt(); },350);
+})();
+</script>
+
+  <!-- ================= s12 习题速查 ================= -->
+  <h2 id="s12"><span class="idx">十二</span>基础习题精练 · 答案速查（全部已程序复算）</h2>
+  <p>基础30讲章末 15 道习题的<b>答案与一句话打法</b>。<b>先自己做完再看</b>——题面在
+  <a href="../../张宇系列_分章易识别版/线性代数/02_矩阵/线代_第02章_基础30讲.pdf">基础30讲第 75–77 页</a>。</p>
+  <div class="gridwrap"><table>
+    <tr><th>题</th><th>答案</th><th>一句话打法 / 易错点</th></tr>
+    <tr><td>2.1</td><td>(C)</td><td>$\boldsymbol A^{2}-\boldsymbol B^{2}=\begin{bmatrix}7&5\\-4&-1\end{bmatrix}$，$(\boldsymbol A-\boldsymbol B)(\boldsymbol A+\boldsymbol B)=\begin{bmatrix}-4&-2\\8&10\end{bmatrix}$。<span style="color:var(--red)">两者不等，因为 $\boldsymbol{AB}\ne\boldsymbol{BA}$</span></td></tr>
+    <tr><td>2.2</td><td>(C) $\boldsymbol O$</td><td>常数项 $3\to3\boldsymbol E$；先算幂与数乘再相加</td></tr>
+    <tr><td>2.3</td><td>(D) $\boldsymbol{BCA}=\boldsymbol E$</td><td>$\boldsymbol{ABC}=\boldsymbol E\Rightarrow\boldsymbol A$ 与 $\boldsymbol{BC}$ 互逆 $\Rightarrow(\boldsymbol{BC})\boldsymbol A=\boldsymbol E$。<b>口诀：$\boldsymbol A,\boldsymbol B,\boldsymbol C$ 顺时针围成一圈，任意三者顺时针相乘都等于 $\boldsymbol E$</b>（$\boldsymbol{ABC}=\boldsymbol{BCA}=\boldsymbol{CAB}=\boldsymbol E$）</td></tr>
+    <tr><td>2.4</td><td>(B) $\boldsymbol C=\boldsymbol{PAP}^{-1}$</td><td>行变换左乘 $\boldsymbol P$、列变换右乘 $\boldsymbol Q$，验出 $\boldsymbol{PQ}=\boldsymbol E$ 即 $\boldsymbol Q=\boldsymbol P^{-1}$</td></tr>
+    <tr><td>2.5</td><td>(B) $a=-2b$</td><td>$r(\boldsymbol A^{*})=1\Rightarrow r(\boldsymbol A)=2$。$|\boldsymbol A|=(a+2b)(a-b)^{2}$，要秩恰为 2 须 $a=-2b$ <b>且</b> $a\ne b$（$a=b$ 时秩降到 1）</td></tr>
+    <tr><td>2.6</td><td>(A) $t\ne6$ 时 $r(\boldsymbol B)=1$</td><td>$\boldsymbol{AB}=\boldsymbol O\Rightarrow r(\boldsymbol A)+r(\boldsymbol B)\le3$，$\boldsymbol B\ne\boldsymbol O\Rightarrow r(\boldsymbol B)\ge1$。$t\ne6$ 时 $r(\boldsymbol A)=2$ ⇒ $r(\boldsymbol B)=1$；<span style="color:var(--red)">$t=6$ 时 $r(\boldsymbol A)=1$，$r(\boldsymbol B)$ 只能说 1 或 2，<b>定不下来</b></span></td></tr>
+    <tr><td>2.7</td><td>$(-6)^{n-1}\boldsymbol A$</td><td>秩 1 阵 $\boldsymbol A=[1,-2,3]^{\mathrm T}[1,2,-1]$，$\operatorname{tr}=-6$</td></tr>
+    <tr><td>2.8</td><td>$\begin{cases}2^{k-1}\boldsymbol A^{2},&n=2k\\2^{k}\boldsymbol A,&n=2k+1\end{cases}$</td><td>试算到 $\boldsymbol A^{3}=2\boldsymbol A$ 出规律。<span style="color:var(--red)">必须分奇偶写</span></td></tr>
+    <tr><td>2.9</td><td>$\frac12(\boldsymbol A+2\boldsymbol E)$</td><td>把 $2\boldsymbol E$ 移到右边：$\boldsymbol A^{2}+\boldsymbol A-2\boldsymbol E=2\boldsymbol E\Rightarrow(\boldsymbol A-\boldsymbol E)(\boldsymbol A+2\boldsymbol E)=2\boldsymbol E$。<b>"移多少倍 $\boldsymbol E$"由要提的因式 $\boldsymbol A-\boldsymbol E$ 反推</b></td></tr>
+    <tr><td>2.10</td><td>$\frac12(\boldsymbol E+\boldsymbol A)=\begin{bmatrix}1&0&0&0\\-1&2&0&0\\0&-2&3&0\\0&0&-3&4\end{bmatrix}$</td><td>$\boldsymbol B+\boldsymbol E=(\boldsymbol E+\boldsymbol A)^{-1}(\boldsymbol E-\boldsymbol A+\boldsymbol E+\boldsymbol A)=2(\boldsymbol E+\boldsymbol A)^{-1}$，<b>直接取逆即可，不必真的算出 $\boldsymbol B$</b></td></tr>
+    <tr><td>2.11</td><td>$\frac{\sqrt3}{3}$</td><td>$\boldsymbol A^{*}=\boldsymbol A^{\mathrm T}\Rightarrow\boldsymbol{AA}^{\mathrm T}=|\boldsymbol A|\boldsymbol E$，取行列式得 $|\boldsymbol A|^{2}=|\boldsymbol A|^{3}$ ⇒ $|\boldsymbol A|=0$ 或 1；由 $a_{11}=a_{12}=a_{13}>0$ 按第一行展开得 $|\boldsymbol A|=3a_{11}^{2}\ne0$ ⇒ $|\boldsymbol A|=1$ ⇒ $3a_{11}^{2}=1$</td></tr>
+    <tr><td>2.12</td><td>$a=2$</td><td>等价 ⟺ 秩相等。$r(\boldsymbol B)=2$，$|\boldsymbol A|=(a-2)(a+1)^{2}=0$ 给出 $a=2$ 或 $-1$；<span style="color:var(--red)">$a=-1$ 时 $r(\boldsymbol A)=1$ 要排除</span></td></tr>
+    <tr><td>2.13</td><td>证明题</td><td>$\boldsymbol A=\boldsymbol E-2\boldsymbol\xi\boldsymbol\xi^{\mathrm T}$，$\boldsymbol\xi^{\mathrm T}\boldsymbol\xi=1$。(1) 转置显然；(2) 展开 $\boldsymbol A^{2}=\boldsymbol E-4\boldsymbol\xi\boldsymbol\xi^{\mathrm T}+4\boldsymbol\xi(\boldsymbol\xi^{\mathrm T}\boldsymbol\xi)\boldsymbol\xi^{\mathrm T}=\boldsymbol E$。<b>由 $\boldsymbol A^{\mathrm T}=\boldsymbol A$、$\boldsymbol A^{2}=\boldsymbol E$ 得 $\boldsymbol{AA}^{\mathrm T}=\boldsymbol E$，这就是第 3 讲的<u>正交矩阵</u>（镜面反射阵）</b></td></tr>
+    <tr><td>2.14</td><td>$\boldsymbol B=\operatorname{diag}\big(3,2,\frac32\big)$</td><td>右乘 $\boldsymbol A^{-1}$ 得 $\boldsymbol A^{-1}\boldsymbol B=6\boldsymbol E+\boldsymbol B\Rightarrow(\boldsymbol A^{-1}-\boldsymbol E)\boldsymbol B=6\boldsymbol E$</td></tr>
+    <tr><td>2.15</td><td>$\begin{bmatrix}1&0&0&0\\-2&1&0&0\\1&-2&1&0\\0&1&-2&1\end{bmatrix}$</td><td>先用 $(\boldsymbol E-\boldsymbol C^{-1}\boldsymbol B)^{\mathrm T}\boldsymbol C^{\mathrm T}=[\boldsymbol C(\boldsymbol E-\boldsymbol C^{-1}\boldsymbol B)]^{\mathrm T}=(\boldsymbol C-\boldsymbol B)^{\mathrm T}$ 化简，得 $\boldsymbol A=[(\boldsymbol C-\boldsymbol B-\boldsymbol E)^{\mathrm T}]^{-1}$，再代数值。<b>张宇原注：先变形、再化简、最后代数值——评分标准里化简有化简的分</b></td></tr>
+  </table></div>
+
+  <!-- ============ 出口 ============ -->
+  <div class="outro">
+    <h3>📌 读完去做题（本章六件套 · 本地 PDF）</h3>
+    <div class="dolinks">
+      <div class="t">张宇分册 · 线代第 2 章</div>
+      <a href="../../张宇系列_分章易识别版/线性代数/02_矩阵/线代_第02章_基础30讲.pdf">基础 30 讲</a>
+      <a href="../../张宇系列_分章易识别版/线性代数/02_矩阵/线代_第02章_强化9讲_第3讲_矩阵运算.pdf">线代9讲·第3讲 矩阵运算</a>
+      <a href="../../张宇系列_分章易识别版/线性代数/02_矩阵/线代_第02章_强化9讲_第4讲_矩阵的秩.pdf">线代9讲·第4讲 矩阵的秩</a>
+      <a href="../../张宇系列_分章易识别版/线性代数/02_矩阵/线代_第02章_1000题_基础_题目.pdf">1000题·基础篇</a>
+      <a href="../../张宇系列_分章易识别版/线性代数/02_矩阵/线代_第02章_1000题_强化_题目_第3讲_矩阵运算.pdf">1000题·强化·矩阵运算</a>
+      <a href="../../张宇系列_分章易识别版/线性代数/02_矩阵/线代_第02章_1000题_强化_题目_第4讲_矩阵的秩.pdf">1000题·强化·矩阵的秩</a>
+      <div class="note">链接指向本地大 PDF（不推 GitHub，线上 Pages 打不开正常）。做错 → 回复盘中心报「1000题·线代第2章·错第X题·卡哪」生成四层错题页。</div>
+    </div>
+
+    <p><b>自测清单（合上页面能不能答出来）</b>：
+    ① $|k\boldsymbol A|$ 与 $k|\boldsymbol A|$ 差在哪？
+    ② $\boldsymbol{AB}=\boldsymbol O$ 能推出什么、<b>不能</b>推出什么？消去律的正确版本是什么？
+    ③ 秩 1 阵怎么一眼拆成 $\boldsymbol\alpha\boldsymbol\beta^{\mathrm T}$，$\boldsymbol A^{n}$ 等于多少？
+    ④ 求 $\boldsymbol A^{n}$ 的五道闸门依次是什么？什么时候<b>不能</b>用相似对角化？
+    ⑤ "左行右列"——初等行变换对应左乘还是右乘？$\boldsymbol E_{ij}(k)$ 按行读和按列读为什么是翻转的？
+    ⑥ $\boldsymbol A^{*}$ 的 $(i,j)$ 元是 $A_{ij}$ 还是 $A_{ji}$？$|\boldsymbol A^{*}|=?$　$(\boldsymbol A^{*})^{*}=?$
+    ⑦ $r(\boldsymbol A^{*})$ 的三分法能背出来吗？
+    ⑧ 扰动法（摄动法）那段话能完整写出来吗？
+    ⑨ 秩公式 6、7、8、9 各是什么？"$r(\boldsymbol{ABC})+r(\boldsymbol B)\ge r(\boldsymbol{AB})+r(\boldsymbol{BC})$" 怎么用分块矩阵证？
+    ⑩ 「狗猫」口诀两句是什么？$r(\boldsymbol{AB})=r(\boldsymbol B)$ 等价于什么？
+    ⑪ <a href="#s10">等价命题网</a>用自测模式抽 5 条，能说清每条的用处吗？
+    ⑫ 证 $\boldsymbol A=\boldsymbol O$ 的四条通道？$\operatorname{tr}(\boldsymbol{AA}^{\mathrm T})=0$ 为什么能推出 $\boldsymbol A=\boldsymbol O$？</p>
+
+    <p><b>真题锚点</b>：矩阵是线代<b>唯一贯穿全部题型的一章</b>——它自己很少单独出解答题，但
+    <b>选择填空的主战场</b>（$\boldsymbol A^{n}$、$\boldsymbol A^{*}$ 的秩与行列式、初等矩阵左乘右乘、分块矩阵的秩比较），
+    以及<b>每一道大题的工具箱</b>（第 3 章判无关性用 $\boldsymbol{AB}=\boldsymbol O$、第 4 章解方程组用初等行变换、第 5 章求 $\boldsymbol A^{n}$ 用相似、第 6 章配方用合同变换）。<br>
+    所以本章的 KPI 不是"会乘矩阵"，而是三件事：<b>(1) 秩的 17 条公式形成条件反射；(2) 等价命题网能任意两点互跳；(3) 初等变换与初等矩阵的"左行右列"永不搞反。</b></p>
+
+    <p><b>配套速查</b>：<a href="../卡库_线代秩方程组特征值.html">卡库·线代：秩/方程组/特征值</a> ·
+    <a href="../公式大全_速查与秒杀.html">公式大全</a> · <a href="../知识串联_考纲主线.html">知识串联</a> ·
+    <a href="线代_第01章_行列式.html">上一章：行列式</a>。<br>
+    <b>下一章</b>：线代第 3 章 <b>向量组</b>（40 页）与第 4 章 <b>线性方程组</b>（40 页）。
+    <span style="color:var(--red)">⚠️ 注意读法反转：<b>《线代9讲》把「方程组」放在第 5 讲、「向量组」放在第 6 讲</b>，即强化阶段是<b>先方程组、后向量组</b>（用方程组的视角统一讲向量组），与基础30讲的章序相反。
+    所以 ch3 与 ch4 会<b>成对写、页内互跳</b>，届时页首会标明两种读法。</span><br>
+    本章已交付 ch1 承诺的两个模块：<a href="#stepper">初等变换步进器</a>与<a href="#s10">等价命题网（30 条）</a>。</p>
+  </div>
+
+  <footer>由 Claude 维护 · 融合张宇《基础30讲·线代》第 2 讲 +《线代9讲》第 3、4 讲 · 概念正文为标准线代理论 ·
+  <b>49 道例题 + 15 道习题答案，以及 17 条秩公式、伴随矩阵公式表，全部经 sympy 符号复算 / 随机矩阵批量对拍，与原书零分歧</b> ·
+  例3.10 另用穷举法独立确认（$3^{9}$ 个整数阵中满足 $\boldsymbol A^{*}=-\boldsymbol A^{\mathrm T}$ 的非零解共 24 个，$|\boldsymbol A|$ 全为 $-1$）· 具体真题另经盲做后入错题页</footer>
+</div>
+</body>
+</html>
