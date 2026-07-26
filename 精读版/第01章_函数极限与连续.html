@@ -15,222 +15,2158 @@
   <a class="back" href="../index.html">← 返回 数学一复盘中心</a>
   <header>
     <h1>精读版 · 高数第 1 章　函数极限与连续</h1>
-    <div class="sub">融合张宇《基础30讲》第 1 讲 + 《强化18讲》第 1 讲 · 以张宇「三向解题法」为主干 · <span class="layer L-base">基础</span> 打地基、<span class="layer L-str">强化</span> 上题型、例题均已逐字核对并独立复算 · 每节末跳去做 1000 题。</div>
+    <div class="sub">融合张宇《基础30讲》第 1 讲（75 页，全书最大的一讲）+《高等数学18讲》第 1 讲 · 以张宇「三向解题法」为主干 · <span class="layer L-base">基础</span> 打地基、<span class="layer L-str">强化</span> 上题型 · <b>全章 69 道题一道不漏</b>（基础例题 38 + 课后习题 16 + 强化例题 15），<b>答案全部经 sympy / 数值程序独立复算</b> · 19 道大题按「想 → 写 → 校」三层给出考场卷面。</div>
   </header>
 
   <div class="legend">
-    <b>这一页的三层结构：</b>
+    <b>怎么用这一页：</b>
     <span class="layer L-base">基础</span>= 概念与必记（基础30讲的地基，标准高数理论，放心记）；
-    <span class="layer L-str">强化</span>= 张宇强化18讲的<b>专属题型与套路</b>（基础讲没有、真题真考的）。批注色块：
+    <span class="layer L-str">强化</span>= 强化18讲的<b>专属题型与套路</b>（基础讲没有、真题真考的）。批注色块：
     <span class="swatch" style="background:var(--blue)"></span><b style="color:var(--blue)">补讲</b>、
     <span class="swatch" style="background:var(--amber)"></span><b style="color:var(--amber)">必记</b>、
     <span class="swatch" style="background:var(--red)"></span><b style="color:var(--red)">陷阱</b>、
     <span class="swatch" style="background:var(--green)"></span><b style="color:var(--green)">强化题型</b>。<br>
-    紫色 <b>例题</b> 卡是张宇强化例题（1.1–1.13），<b>答案我已逐题独立复算核对</b>，当"这类题长什么样"的锚点看。绿色虚线框「去做题」跳本章分章 PDF。
+    <b>紫色例题卡</b>分两种排版：<br>
+    ① <b>选择 / 填空题</b>——「答案 → 分析 → 要害」教学式，考场上本就不写过程，这层就是<b>快速判断的思考资源</b>；<br>
+    ② <b>解答 / 证明 / 计算大题</b>——三层，<b>顺序就是做题的三个动作</b>：
+    <span style="color:var(--purple)"><b>💭 思路</b></span>（动手<u>前</u>看／卡壳时看）→
+    <span style="color:var(--accent)"><b>✍️ 考场卷面</b></span>（写完<u>对照</u>，⛳ 是采分点）→
+    <span style="color:var(--muted)"><b>📌 批注</b></span>（对照完<u>校对</u>，这些字考场上不要落笔）。<br>
+    <b>看完思路就合上页面自己写，别直接翻卷面。</b>绿色虚线框「去做题」跳本章分章 PDF。
   </div>
 
   <nav class="toc">
-    <a href="#s0">本章定位·三向解题法</a>
-    <a href="#s1">预备 · 函数与极限概念</a>
-    <a href="#s2">O1 判定类型·做好计算</a>
-    <a href="#s3">O2 判定连续与间断</a>
-    <a href="#s4">O3 x→· 时的微观性态</a>
+    <a href="#s0">定位·三向解题法</a>
+    <a href="#s1">一 函数的概念与特性</a>
+    <a href="#s2">二 函数的图像</a>
+    <a href="#s3">三 极限的概念与性质</a>
+    <a href="#s4">四 无穷小·无穷大·比阶</a>
+    <a href="#s5">O₁ 计算主战场</a>
+    <a href="#s6">O₂ 连续与间断</a>
+    <a href="#s7">O₃ 微观性态</a>
+    <a href="#idx">例题落位索引 69</a>
   </nav>
 
   <!-- ============ 定位 ============ -->
   <h2 id="s0"><span class="idx">定位</span>考什么 · 张宇的「三向解题法」总图</h2>
-  <a class="pg" href="../../张宇系列_分章易识别版/高等数学/01_函数极限与连续/高数_第01章_基础30讲.pdf">📄 基础30讲</a>
-  <p><b>考纲目标（基础30讲列了 10 条）</b>浓缩成一句：<b>会算函数极限</b>——理解极限/连续/间断的概念，掌握四则运算、两个重要极限、等价无穷小、洛必达、泰勒，会判间断点类型。<b>重难点只有两个（书上标 ★重中之重）：①洛必达法则　②泰勒公式。</b></p>
+  <a class="pg" href="../../张宇系列_分章易识别版/高等数学/01_函数极限与连续/高数_第01章_基础30讲.pdf">📄 基础30讲 p.1–2</a>
+  <p><b>考题</b>：计算函数极限。<b>题型</b>：选择、填空、解答全都有。考纲 10 条浓缩成一句：<b>会算函数极限</b>——理解极限/连续/间断的概念，掌握四则运算、两个重要极限、等价无穷小、洛必达、泰勒，会判间断点类型。<b>书上标 ★ 的重难点只有两个：①洛必达法则　②泰勒公式。</b></p>
+
   <div class="key"><span class="tag">必记 · 张宇「三向解题法」——本章一切题的分流器</span>
     看到 $\displaystyle\lim_{x\to\bullet}f(x)$，先问「盯住哪个目标」：<br>
-    <b>O₁ 判定类型、做好计算</b>——绝大多数题（七种未定式的计算）；<br>
-    <b>O₂ 判定连续与间断</b>——连续/间断点题（本质是在分段点算左右极限）；<br>
-    <b>O₃ 研究 $x\to\bullet$ 时 $f(x)$ 的微观性态</b>——保号、夹逼、单调有界、证明题。<br>
-    每一向下面是统一的「D 操作」：<b>D₁ 常规操作</b>（化简、等价替换、提因子）→ <b>D₂₂ 转换等价表述</b>（$u^v=e^{v\ln u}$、拆左右极限）→ <b>D₂₃ 化归经典形式</b>（凑成 $\frac00,\frac\infty\infty$ 或差函数）。
+    <b>O₁ 判定类型、做好计算</b>——五条支线：未定式<b>整体</b>判定 / 未定式<b>局部</b>判定 / 无穷小量阶的比较 / 无穷大量阶的比较 / 涉及 $\infty$ 的计算问题；<br>
+    <b>O₂ 判定连续与间断</b>——一条流水线：常见备选点判定 → 算 $\lim\limits_{x\to x_0^+}f,\ \lim\limits_{x\to x_0^-}f,\ f(x_0)$ 三个值 → 按定义下结论（跳跃/可去/无穷/振荡）；<br>
+    <b>O₃ 研究 $x\to\bullet$ 时 $f(x)$ 的微观性态</b>——四把工具：定义法 / 局部保号性 / 夹逼准则 / <b>单调有界准则</b>。<br>
+    每一向下面是统一的「D 操作」：<b>D₁ 常规操作</b>（化简、等价替换、提因子）→ <b>D₂₂ 转换等价表述</b>（$u^v=\mathrm e^{v\ln u}$、拆左右极限、把文字翻译成数学式）→ <b>D₂₃ 化归经典形式</b>（凑 $\frac00,\frac\infty\infty$，把「和差」化成「积商」）。
   </div>
+
+  <div class="mine"><span class="tag">补讲 · 基础讲的手写眉批已经把重点划死了</span>
+    书 p.2 结构图旁的两行手写字：「① <b>考题主要集中在七种未定式的计算上，考研中有 6 个方法</b>。② <b>单调有界准则主要是对数列使用，函数的单调有界准则目前还未考过，我们到强化阶段布防</b>。」<br>
+    第二句的"布防"落在哪？——就落在<b>强化 例1.15</b>（本页 §O₃ 最后一张卡）。基础讲埋的坑，强化讲填的土，两本书在这里对上了。
+  </div>
+
   <div class="mine"><span class="tag">补讲 · 时间怎么分配（数学命门就命在这一章的 O₁）</span>
-    十条目标里真正反复考的是 <b>O₁ 计算</b>。基础讲负责把「六个方法」教会你，<b>强化讲负责把这六个方法用到七八种刁钻题型上</b>（局部判定、变上限积分、带头大哥、$\infty-\infty$ 中值定理……）——这些才是拉开分差、也是最容易慌的地方。打法：概念部分（预备节）快速扫、记死三样（左右极限判据 / 保号性脱帽戴帽 / 等价无穷小表）；把主力时间砸在 O₁ 的强化题型上，每种题型都对着例题手推一遍。
+    十条目标里真正反复考的是 <b>O₁ 计算</b>。基础讲负责把「六个方法」教会你，<b>强化讲负责把这六个方法用到七八种刁钻题型上</b>（局部判定、变上限积分、带头大哥、$\infty-\infty$ 中值定理……）——这些才是拉开分差、也是最容易慌的地方。打法：概念部分（§一~§三）快速扫、<b>记死三样</b>（左右极限判据 / 保号性脱帽戴帽 / 等价无穷小表）；把主力时间砸在 §O₁ 的题型上，每种题型都对着例题手推一遍。
   </div>
 
-  <!-- ============ 预备：函数与极限概念 ============ -->
-  <h2 id="s1"><span class="idx">预备</span>函数特性 · 极限概念与性质<span class="layer L-base" style="margin-left:10px">基础为主</span></h2>
+  <!-- ================= 一 函数的概念与特性 ================= -->
+  <h2 id="s1"><span class="idx">一</span>函数的概念与特性<span class="layer L-base" style="margin-left:10px">基础</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/高等数学/01_函数极限与连续/高数_第01章_基础30讲.pdf">📄 基础30讲 p.3–14</a>
 
-  <h3>1　函数的四种特性（后续所有章的隐藏前提）</h3>
+  <h3>1.1　函数 · 铅直画线法</h3>
+  <div class="key"><span class="tag">必记 · 数与形的两条画线法（口诀）</span>
+    $$\begin{cases}\text{铅直直线定单、多}&\text{任一铅直线与图形至多 1 个交点}\Rightarrow\text{单值函数}\\[2pt]\text{水平直线定反、直}&\text{任一水平线与图形至多 1 个交点}\Rightarrow\text{有反函数}\end{cases}$$
+    一对一、多对一都是单值函数；<b>一对多是多值函数，不在函数定义之内</b>（也因此不能确定隐函数）。
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 1.1</span>设 $f\!\left(x+\dfrac1x\right)=\dfrac{x+x^3}{1+x^4}$，则当 $x\ge2$ 时 $f(x)=$ ______。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$\dfrac{x}{x^2-2}$</span>　<span style="color:var(--green);font-size:.82rem">✔ sympy 恒等式对拍通过</span><br>
+      <span class="lab">分析</span>分子分母同除 $x^2$，把 "$x+\frac1x$" 视为<b>一个整体 □</b>：
+      $$\frac{x+x^3}{1+x^4}=\frac{\frac1x+x}{x^2+\frac1{x^2}}=\frac{\left(x+\frac1x\right)}{\left(x+\frac1x\right)^2-2}$$
+      于是对应法则是 $f(\square)=\dfrac{\square}{\square^2-2}$。<br>
+      <span class="lab">要害</span>用的是恒等式 <b>$x^2+\dfrac1{x^2}=\left(x+\dfrac1x\right)^2-2$</b>。这类"给出复合函数、把它写回原来的函数"的考法比较常见，<b>关键动作永远是"凑整体"，不是"解方程求 $x$"</b>。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 1.2 ★</span>设 $f(x)$ 的定义域为 $(0,+\infty)$，且 $2f(x)+x^2f\!\left(\dfrac1x\right)=\dfrac{x^2+2x}{\sqrt{1+x^2}}$，求 $f(x)$。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$f(x)=\dfrac{x}{\sqrt{1+x^2}}$</span>　<span style="color:var(--green);font-size:.82rem">✔ 代回原式 sympy 化简为 0</span>
+
+      <div class="think"><span class="th">💭 思路 · 拿到题先想什么（卡壳时看这层，看完自己动手，别直接翻卷面）</span>
+        <ol>
+          <li>题目<b>没有直接给 $f$，只给了一条含 $f(x)$ 和 $f(1/x)$ 的关系式</b>。一个方程、两个未知量（$f(x)$ 与 $f(1/x)$），显然<b>解不出来</b>——数量对不上，说明还缺一个方程。</li>
+          <li>缺的方程从哪来？注意<b>对应法则与所用的自变量无关</b>：$f(x)=x^2$ 就意味着 $f(1/x)=(1/x)^2$。所以把原式里的 $x$ <b>整体换成 $\frac1x$</b>，就白得第二个方程——而且换完之后，$f(x)$ 和 $f(1/x)$ 的位置正好<b>对调</b>了。</li>
+          <li>两个方程、两个未知量，<b>当成二元一次方程组消元</b>。要消掉 $f(1/x)$：①式系数是 $x^2$，②式系数是 $2$，所以 ①×2 − ②×$x^2$。</li>
+          <li><b>这一整条路子的名字叫「用所给关系式造出方程组」</b>，是第 1 讲最先教的方法。同类还有：给 $f(x)+xf(-x)=x$，就把 $x$ 换成 $-x$ 造第二式。</li>
+        </ol>
+      </div>
+
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面 · 照这个写<span class="score">解答题 10 分参考｜⛳ = 采分点</span></div>
+        <div class="step"><span class="k">解</span>由题设
+        $$2f(x)+x^2f\!\left(\frac1x\right)=\frac{x^2+2x}{\sqrt{1+x^2}}.\tag{1}$$</div>
+        <div class="step">因对应法则与所用自变量无关，在 (1) 中以 $\dfrac1x$ 代 $x$（注意 $x\gt0$），得
+        $$2f\!\left(\frac1x\right)+\frac1{x^2}f(x)=\frac{1+2x}{x\sqrt{1+x^2}}.\tag{2}$$
+        <span class="pt">⛳ 造出第二个方程 4 分</span></div>
+        <div class="step">由 $(1)\times2-(2)\times x^2$，消去 $f\!\left(\dfrac1x\right)$，得
+        $$3f(x)=\frac{2x^2+4x}{\sqrt{1+x^2}}-\frac{x+2x^2}{\sqrt{1+x^2}}=\frac{3x}{\sqrt{1+x^2}}.\tag{3}$$
+        <span class="pt">⛳ 消元正确 4 分</span></div>
+        <div class="fin">故 $f(x)=\dfrac{x}{\sqrt{1+x^2}}\ \ (x\gt0)$。<span class="pt">⛳ 结论 2 分</span></div>
+      </div>
+
+      <div class="notekeep"><span class="nh">📌 批注 · 写完拿这层校对（这些字考场上不要落笔）</span>
+        <b>① 「因对应法则与所用自变量无关」这句话要写出来。</b>它是代换的<u>依据</u>；不写就成了"凭空变出一个式子"，会被认为跳步。<br>
+        <b>② <span class="dock">扣分点</span>：不写 $x\gt0$。</b>题目给的定义域是 $(0,+\infty)$，用 $\frac1x$ 代 $x$ 必须确认 $\frac1x$ 仍在定义域内——$x\gt0$ 时才成立。最后答案也要带上 $x\gt0$。<br>
+        <b>③ 中间式子编号 (1)(2)(3)</b>，后文写"由 $(1)\times2-(2)\times x^2$"，阅卷老师一眼定位。不编号就得在式子堆里找，容易漏给分。<br>
+        <b>④ 自练题（书上明确给的）</b>：若 $f(x)+xf(-x)=x$，同法写 $f(-x)-xf(x)=-x$，消去 $f(-x)$ 得 $f(x)=\dfrac{x+x^2}{1+x^2}$。<span style="color:var(--green)">✔ 已复算</span><br>
+        <b>⑤ 题型定位</b>：<b>「求对应法则」在本章一共有三种造法</b>——由关系式造（本题）、由复合函数表达式造（基 1.1、基 1.4）、<b>由极限造</b>（基 1.26、习 1.4、习 1.5、强 1.3）。第三种是近几年常考的，见 §O₁ 5.2。
+      </div>
+    </div>
+  </div>
+
+  <h3>1.2　反函数 · 三个必记函数</h3>
+  <div class="key"><span class="tag">必记 · 反函数的三条底线</span>
+    ① <b>严格单调 ⇒ 必有反函数（充分不必要）</b>。反例：$f(x)=\begin{cases}x,&x\ge0\\ \frac1x,&x\lt0\end{cases}$ 不单调，但反函数就是它自己。<br>
+    ② $x=f^{-1}(y)$ 与 $y=f(x)$ <b>图形完全重合</b>；只有写成 $y=f^{-1}(x)$（字母互换）后才关于 $y=x$ 对称。<br>
+    ③ $f[f^{-1}(x)]=x$，$f^{-1}[f(x)]=x$。如 $\mathrm e^{\ln2^x}=2^x$。
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 1.3</span>求 $y=f(x)=\ln\!\left(x+\sqrt{x^2+1}\right)$ 的反函数 $f^{-1}(x)$ 的表达式及定义域。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$f^{-1}(x)=\dfrac12\left(\mathrm e^{x}-\mathrm e^{-x}\right)$，定义域 $(-\infty,+\infty)$</span>　<span style="color:var(--green);font-size:.82rem">✔ 复合回代数值验证 $\lt10^{-15}$</span>
+
+      <div class="think"><span class="th">💭 思路 · 拿到题先想什么</span>
+        <ol>
+          <li>求反函数＝<b>从 $y=\ln(x+\sqrt{x^2+1})$ 里把 $x$ 解出来</b>。硬解要先 $\mathrm e^y=x+\sqrt{x^2+1}$ 再移项平方，能做但很脏。</li>
+          <li>看一眼式子的形状：<b>$x+\sqrt{x^2+1}$ 与 $\sqrt{x^2+1}-x$ 是一对共轭</b>，乘积恰为 $1$。凡见到"和的对数"能配出共轭因子，就该想到<b>取相反数再有理化</b>——这是本题唯一的技巧点。</li>
+          <li>于是 $\mathrm e^{y}$ 与 $\mathrm e^{-y}$ 各拿到一个共轭式，<b>两式相减 $\sqrt{\ }$ 项自动抵消</b>，$x$ 立刻裸出来。加法会得到 $2\sqrt{x^2+1}$，反而更麻烦——<b>所以是相减不是相加</b>。</li>
+          <li>定义域：反函数的定义域 = 原函数的值域。$f$ 在 $\mathbf R$ 上严格单增且 $\lim\limits_{x\to\pm\infty}f=\pm\infty$，值域是 $\mathbf R$。</li>
+        </ol>
+      </div>
+
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面 · 照这个写<span class="score">解答题 10 分参考｜⛳ = 采分点</span></div>
+        <div class="step"><span class="k">解</span>由 $y=\ln\!\left(x+\sqrt{x^2+1}\right)$ 得
+        $$\mathrm e^{y}=x+\sqrt{x^2+1}.\tag{1}$$
+        <span class="pt">⛳ 去对数 2 分</span></div>
+        <div class="step">又
+        $$-y=\ln\frac1{x+\sqrt{x^2+1}}=\ln\frac{\sqrt{x^2+1}-x}{\left(\sqrt{x^2+1}+x\right)\left(\sqrt{x^2+1}-x\right)}=\ln\!\left(\sqrt{x^2+1}-x\right),$$
+        故
+        $$\mathrm e^{-y}=\sqrt{x^2+1}-x.\tag{2}$$
+        <span class="pt">⛳ 有理化造出共轭式 4 分</span></div>
+        <div class="step">$(1)-(2)$ 得 $\mathrm e^{y}-\mathrm e^{-y}=2x$，即 $x=\dfrac12\left(\mathrm e^{y}-\mathrm e^{-y}\right)$。
+        <span class="pt">⛳ 相减解出 $x$ 2 分</span></div>
+        <div class="fin">交换字母 $x,y$，得所求反函数 $f^{-1}(x)=\dfrac12\left(\mathrm e^{x}-\mathrm e^{-x}\right)$，其定义域为 $(-\infty,+\infty)$。<span class="pt">⛳ 交换字母 + 定义域 2 分</span></div>
+      </div>
+
+      <div class="notekeep"><span class="nh">📌 批注 · 写完拿这层校对</span>
+        <b>① <span class="dock">扣分点</span>：解出 $x=\frac12(\mathrm e^y-\mathrm e^{-y})$ 就收笔。</b>题目问的是 $f^{-1}(x)$，<b>必须交换字母</b>再写一遍。这一步很多人觉得是废话，但阅卷是按点给分的。<br>
+        <b>② <span class="dock">扣分点</span>：漏写定义域。</b>题干明确要"表达式<u>及定义域</u>"，漏了直接丢分。<br>
+        <b>③ 用到的对数三公式</b>：$\ln ab=\ln a+\ln b$（积变和）、$\ln\frac ab=\ln a-\ln b$（商变差）、$\ln a^b=b\ln a$（幂次变倍数）。第二条是本题的钥匙。<br>
+        <b>④ 这三个函数请当成"必记函数"背下来（书上标"2023 年考查过"）</b>：
+        $\ln(x+\sqrt{x^2+1})$ 叫<b>反双曲正弦</b>（奇）；$\frac{\mathrm e^x-\mathrm e^{-x}}2$ 叫<b>双曲正弦</b>（奇），二者互为反函数；$\frac{\mathrm e^x+\mathrm e^{-x}}2$ 叫<b>双曲余弦</b>（偶），是特殊的<b>悬链线</b>，<b>没有反函数</b>（水平画线法一看便知）。
+      </div>
+    </div>
+  </div>
+
+  <div class="key"><span class="tag">必记 · $\ln(x+\sqrt{x^2+1})$ 的三个后续结论（现在记，后面章章都用）</span>
+    ① $x\to0$ 时 $\ln\!\left(x+\sqrt{x^2+1}\right)\sim x$（与 $\sin x\sim x$、$\tan x\sim x$ 并列，见 §四 与 基 1.22）；<br>
+    ② $\left[\ln\!\left(x+\sqrt{x^2+1}\right)\right]'=\dfrac1{\sqrt{x^2+1}}$，于是 $\displaystyle\int\frac{\mathrm dx}{\sqrt{x^2+1}}=\ln\!\left(x+\sqrt{x^2+1}\right)+C$（<b>记住这个结果</b>）；<br>
+    ③ 由奇性：$\displaystyle\int_{-1}^{1}\left[\ln\!\left(x+\sqrt{x^2+1}\right)+x^2\right]\mathrm dx=\int_{-1}^1x^2\mathrm dx=\frac23$。<br>
+    <span style="color:var(--muted);font-size:.85rem">张宇眉批："③ 是预告未来……你所有的东西实际上是一个联系的整体。基础知识掌握得很扎实，后面学到极限、导数、积分、面积等，就能很快速地把问题解决。"</span>
+  </div>
+
+  <h3>1.3　复合函数与隐函数</h3>
+  <div class="eg">
+    <div class="q"><span class="no">基 1.4</span>设 $f(x)=x^2$，$f[\varphi(x)]=-x^2+2x+3$，且 $\varphi(x)\ge0$，求 $\varphi(x)$ 及其定义域与值域。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$\varphi(x)=\sqrt{-x^2+2x+3}$，定义域 $[-1,3]$，值域 $[0,2]$</span>　<span style="color:var(--green);font-size:.82rem">✔ sympy 解区间 + 极值验证</span><br>
+      <span class="lab">分析</span>把 $\varphi(x)$ 视为整体 □：$f[\square]=\square^2=-x^2+2x+3$，由 $\varphi\ge0$ <b>只取正根</b>。<br>
+      定义域：$-x^2+2x+3\ge0\iff(x-3)(x+1)\le0\iff-1\le x\le3$。<br>
+      值域：$\sqrt{-x^2+2x+3}=\sqrt{-(x-1)^2+4}$，$x=1$ 时取最大 $2$，$x=-1,3$ 时取最小 $0$。<br>
+      <span class="lab">要害</span><b>「$\varphi^2=g$ 则 $\varphi=\pm\sqrt g$」，题目补的那句 $\varphi(x)\ge0$ 就是替你砍掉负根的</b>——凡是给了这种看似多余的条件，都是为了让答案唯一，要立刻用上。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 1.5</span>设 $g(x)=\begin{cases}2-x,&x\le0\\ 2+x,&x\gt0\end{cases}$，$f(x)=\begin{cases}x^2,&x\lt0\\ -x-1,&x\ge0\end{cases}$，求 $g[f(x)]$。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$g[f(x)]=\begin{cases}3+x,&x\ge0\\ 2+x^2,&x\lt0\end{cases}$</span>　<span style="color:var(--green);font-size:.82rem">✔ 6 点数值抽查全过</span><br>
+      <span class="lab">分析</span>外层 $g$ 的分段条件是对<b>它自己的自变量</b>说的，而这里 $g$ 的自变量是 $f(x)$，所以先写
+      $$g[f(x)]=\begin{cases}2-f(x),&f(x)\le0\\ 2+f(x),&f(x)\gt0\end{cases}$$
+      再把「$f(x)\le0$」「$f(x)\gt0$」<b>翻译回 $x$ 的范围</b>：$f\le0\iff x\ge0$（此时 $f=-x-1\le-1$），$f\gt0\iff x\lt0$（此时 $f=x^2\gt0$）。代入即得。<br>
+      <span class="lab">要害</span><b>复合分段函数的唯一难点，是"外层的分段条件必须换算成内层自变量的范围"。</b>方法：<b>画出内层函数的图形，数形结合</b>——$y=x^2$（$x\lt0$ 段，恒正）与 $y=-x-1$（$x\ge0$ 段，从 $-1$ 往下），一眼就看出正负分界正好在 $x=0$。<br>
+      <span class="lab">连续剧</span>这题在 基 1.16 还会再出现一次（问 $\lim\limits_{x\to0}g[f(x)]$），到那时答案已经现成。
+    </div>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 隐函数的"观察法"（书上说考研常出，要重视）</span>
+    方程 $F(x,y)=0$ 若对区间内每个 $x$ 都有<b>唯一</b>的 $y$，就确定了隐函数 $y=y(x)$。多数超越方程<b>没有解析解</b>，考研只要你<b>观察出某一点的函数值</b>：<br>
+    ① $\ln y-\dfrac xy+x=0\ (x\gt0)$，取 $x=2$ 得 $\ln y=\frac2y-2$，观察得 $y(2)=1$；<br>
+    ② $\ln y+\mathrm e^{y-1}=\dfrac x2$，取 $x=2$ 得 $\ln y+\mathrm e^{y-1}=1$，显然 $y=1$ 成立，故 $y(2)=1$。<br>
+    <b>两题都凑成"$y=1$ 使 $\ln y=0$、$\mathrm e^{y-1}=1$"——命题人就爱在 $\mathbf{0}$ 和 $\mathbf{1}$ 这两个数上做文章</b>，这条直觉在本章要反复用（见 §O₁ 的 $\mathrm e^\square-1$、$\ln x=\ln(1+x-1)$）。
+  </div>
+
+  <h3>1.4　函数的四种特性 ★★★</h3>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 1.6</span>证明 $f(x)=\dfrac{x}{1+x^2}$ 在 $(-\infty,+\infty)$ 内有界。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$|f(x)|\le\dfrac12$</span>　<span style="color:var(--green);font-size:.82rem">✔ sympy 求得全局最大值恰为 $1/2$</span>
+
+      <div class="think"><span class="th">💭 思路 · 拿到题先想什么</span>
+        <ol>
+          <li>"证明有界"＝<b>拿出一个具体的常数 $M$，说明 $|f|\le M$ 恒成立</b>。不是"说明它不会跑到无穷"，而是真的要把 $M$ 写出来。</li>
+          <li>现在还没学导数（这是第 1 讲），<b>所以不能求导找最值</b>，只能用<b>基本不等式</b>硬凑。</li>
+          <li>看结构：分子 $x$ 是一次，分母 $1+x^2$ 是二次，且分母恒正。取绝对值后是 $\dfrac{|x|}{1+x^2}$，<b>分子分母同时含 $|x|$——这正是均值不等式 $a+b\ge2\sqrt{ab}$ 的标准形状</b>。</li>
+          <li>两条走法都行：<b>法一</b>分子分母同除 $|x|$，把分母变成 $\frac1{|x|}+|x|\ge2$；<b>法二</b>直接对 $1+x^2$ 用 $1+x^2\ge2|x|$。两法本质一样，法二少一步。</li>
+          <li>⚠️ 除以 $|x|$ 要求 $x\ne0$，所以 <b>$x=0$ 必须单独交代</b>——这是本题唯一的"边界坑"。</li>
+        </ol>
+      </div>
+
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面 · 照这个写<span class="score">证明题 10 分参考｜⛳ = 采分点</span></div>
+        <div class="step"><span class="k">证</span>当 $x=0$ 时，$f(0)=0$，显然 $|f(0)|\le\dfrac12$。<span class="pt">⛳ 单独处理 $x=0$ 2 分</span></div>
+        <div class="step">当 $x\ne0$ 时，由基本不等式 $\dfrac{a+b}2\ge\sqrt{ab}\ (a,b\gt0)$，取 $a=1,\ b=x^2$，得
+        $$\frac{1+x^2}{2}\ge\sqrt{1\cdot x^2}=|x|,\qquad\text{即}\qquad 1+x^2\ge2|x|.\tag{1}$$
+        <span class="pt">⛳ 用基本不等式并写明取法 4 分</span></div>
+        <div class="step">由 (1) 及 $1+x^2\gt0$、$|x|\gt0$ 得
+        $$|f(x)|=\frac{|x|}{1+x^2}\le\frac{|x|}{2|x|}=\frac12.\tag{2}$$
+        <span class="pt">⛳ 放缩得到界 3 分</span></div>
+        <div class="fin">综上，对一切 $x\in(-\infty,+\infty)$ 均有 $|f(x)|\le\dfrac12$，故 $f(x)=\dfrac{x}{1+x^2}$ 在 $(-\infty,+\infty)$ 内<b>有界</b>。<span class="pt">⛳ 取 $M=\frac12$ 下结论 1 分</span></div>
+      </div>
+
+      <div class="notekeep"><span class="nh">📌 批注 · 写完拿这层校对</span>
+        <b>① <span class="dock">扣分点</span>：不分 $x=0$ 与 $x\ne0$。</b>(2) 式的最后一步除以了 $|x|$，$x=0$ 时非法。分类讨论只占一行，但漏了就是过程不完整。<br>
+        <b>② <span class="dock">扣分点</span>：只写"因为分母增长比分子快所以有界"。</b>这是描述不是证明，<b>有界性证明的采分点就是那个具体的 $M$</b>。<br>
+        <b>③ 必背的均值不等式链</b>（$a,b\gt0$）：
+        $$\frac2{\frac1a+\frac1b}\le\sqrt{ab}\le\frac{a+b}2\le\sqrt{\frac{a^2+b^2}2}$$
+        调和 ≤ 几何 ≤ 算术 ≤ 平方平均。本题只用到中间那个 $\le$。<br>
+        <b>④ 绝对值的三条手感（书上手写眉批，很实用）</b>：$x^2=|x^2|=|x|^2$，但 <b>$x^3\ne|x^3|=|x|^3$</b>；$|x|=\sqrt{x^2}$；由此
+        $$\left[|f(x)|\right]'=\left[\sqrt{f^2(x)}\right]'=\frac{2f(x)f'(x)}{2\sqrt{f^2(x)}}=\frac{f(x)f'(x)}{|f(x)|}$$
+        再如 $f(x)=2x+\sqrt{x^2+2x+1}=2x+\sqrt{(x+1)^2}=2x+|x+1|$——<b>看到根号下是完全平方，先开成绝对值再分段</b>。<br>
+        <b>⑤ 有界性的判据以后主要用这条</b>（见 基 1.17、强 1.6）：<b>只要在区间上或其端点处存在点 $x_0$ 使 $\lim\limits_{x\to x_0}f=\infty$，则无界。</b>
+      </div>
+    </div>
+  </div>
+
+  <div class="key"><span class="tag">必记 · 单调性的定义法判据（不用求导也能判）</span>
+    对任意 $x_1,x_2\in D$，$x_1\ne x_2$：
+    $$(x_1-x_2)\left[f(x_1)-f(x_2)\right]\begin{cases}\gt0&\text{严格单调增}\\ \lt0&\text{严格单调减}\\ \ge0&\text{单调不减}\\ \le0&\text{单调不增}\end{cases}$$
+    这是<b>充要条件</b>。考研常用求导讨论，但<b>定义法不可忘</b>——题目只给"任给 $x_1\ne x_2$ 有 $(x_1-x_2)[f(x_1)-f(x_2)]\gt0$"时，求导法根本用不上。
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 1.7</span>设 $f(x)$ 在 $(-\infty,+\infty)$ 内有定义，任给 $x_1\ne x_2$ 均有 $(x_1-x_2)\left[f(x_1)-f(x_2)\right]\gt0$，则以下一定单调增加的是（　）<br>(A) $|f(x)|$　(B) $f(|x|)$　(C) $f(-x)$　(D) $-f(-x)$</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(D)</span><br>
+      <span class="lab">分析</span>条件即"$f$ 严格单增"。逐个用<b>图形变换</b>判：<br>
+      (A) $|f(x)|$：把 $f\lt0$ 的部分翻到 $x$ 轴上方，<b>单调性被翻反</b>，不定；<br>
+      (B) $f(|x|)$：把 $x\ge0$ 的部分镜像到左边，得到的是<b>偶函数</b>，在 $(-\infty,+\infty)$ 上根本没有单调性；<br>
+      (C) $f(-x)$：与 $f(x)$ 关于 <b>$y$ 轴</b>对称 ⇒ <b>单调减少</b>；<br>
+      (D) $-f(-x)$：与 $f(x)$ 关于<b>原点</b>对称 ⇒ <b>单调增加</b>。选 (D)。<br>
+      <span class="lab">要害</span><b>三条对称口诀，背下来这题 5 秒</b>：$f(x)$ 与 $f(-x)$ 关于 <b>$y$ 轴</b>对称；与 $-f(x)$ 关于 <b>$x$ 轴</b>对称；与 <b>$-f(-x)$ 关于原点</b>对称。<b>关于原点对称保持单调方向，关于坐标轴对称翻转单调方向</b>。<br>
+      <span class="lab">法二</span>若允许假定可导：$[-f(-x)]'=f'(-x)\gt0$ 恒成立，直接选 (D)。但题目只说"有定义"，<b>考场上不能默认可导</b>，所以正解走图形。
+    </div>
+  </div>
+
+  <div class="key"><span class="tag">必记 · 奇偶性七条（四大特性中最重要，因为"题目易出 + 对称美"）</span>
+    前提：<b>定义域关于原点对称</b>。<br>
+    ① $f(x)+f(-x)$ <b>必偶</b>（如 $\frac{\mathrm e^x+\mathrm e^{-x}}2$、$\sqrt[3]{(1+x)^2}+\sqrt[3]{(1-x)^2}$）；② $f(x)-f(-x)$ <b>必奇</b>（如 $\frac{\mathrm e^x-\mathrm e^{-x}}2$、$\ln\frac{1+x}{1-x}$）。<br>
+    <b>推论（重要）</b>：令 $u=\frac12[f(x)+f(-x)]$（偶）、$v=\frac12[f(x)-f(-x)]$（奇），则 $f=u+v$——<b>任何函数都能拆成一个奇函数与一个偶函数之和</b>。<br>
+    ③ 复合 $f[\varphi(x)]$：<b>内偶则偶，内奇同外</b>。奇[偶]⇒偶（$\sin x^2$）；偶[奇]⇒偶（$\cos(\sin x)$、$|\sin x|$）；奇[奇]⇒奇（$\sin\frac1x$、$\sqrt[3]{\tan x}$）；偶[偶]⇒偶（$\cos|x|$）；非奇非偶[偶]⇒偶（$\mathrm e^{x^2}$、$\ln|x|$）。<br>
+    ④ $\left[\ln(x+\sqrt{x^2+1})\right]'=\frac1{\sqrt{x^2+1}}$——奇的导数是偶。<br>
+    <b>★⑤ $f$ 奇 ⇒ $f'$ 偶 ⇒ $f''$ 奇 ⇒ …（求导一次奇偶互换）</b>，第 3 章 例3.1 要用。<br>
+    ⑥ $f$ 奇 ⇒ $\displaystyle\int_0^xf(t)\mathrm dt$ <b>偶</b>。<br>
+    ⑦ 若对任意 $x,y$ 有 $f(x+y)=f(x)+f(y)$，则 $f$ 是<b>奇函数</b>（即 基 1.8）。
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 1.8</span>设对任意 $x,y$ 都有 $f(x+y)=f(x)+f(y)$，证明 $f(x)$ 是奇函数。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$f(0)=0$ 且 $f(-x)=-f(x)$，故为奇函数</span>
+
+      <div class="think"><span class="th">💭 思路 · 拿到题先想什么</span>
+        <ol>
+          <li>要证奇函数，<b>定义就是 $f(-x)=-f(x)$</b>——目标式里同时出现 $f(-x)$ 与 $f(x)$，而题设是 $f(x+y)=f(x)+f(y)$，右边正好也是两个 $f$ 相加。<b>只要让左边的 $x+y$ 变成一个"已知值"，就凑成了目标</b>。</li>
+          <li>"$x+y$ 变成已知值"最省事的选择是 <b>$y=-x$</b>，此时左边成了 $f(0)$。</li>
+          <li>但 $f(0)$ 是多少？题设没给。<b>所以要先造出 $f(0)$</b>——令 $x=y=0$ 得 $f(0)=2f(0)$，立刻 $f(0)=0$。<b>两步的顺序不能反</b>。</li>
+          <li>"对任意 $x,y$" 是<b>隐含条件</b>：它说明这是一个<b>恒等式</b>，我可以<u>随便代任何我想要的值</u>。这句话是本题全部的解题许可证。</li>
+        </ol>
+      </div>
+
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面 · 照这个写<span class="score">证明题 8 分参考｜⛳ = 采分点</span></div>
+        <div class="step"><span class="k">证</span>因所给等式对任意 $x,y$ 均成立，令 $x=y=0$，得
+        $$f(0)=f(0)+f(0),$$
+        故
+        $$f(0)=0.\tag{1}$$
+        <span class="pt">⛳ 先定 $f(0)=0$ 4 分</span></div>
+        <div class="step">再令 $y=-x$，得
+        $$f(0)=f(x)+f(-x).\tag{2}$$
+        <span class="pt">⛳ 取 $y=-x$ 2 分</span></div>
+        <div class="fin">将 (1) 代入 (2)，得 $f(-x)=-f(x)$ 对一切 $x$ 成立，故 <b>$f(x)$ 是奇函数</b>，证毕。<span class="pt">⛳ 回扣定义下结论 2 分</span></div>
+      </div>
+
+      <div class="notekeep"><span class="nh">📌 批注 · 写完拿这层校对</span>
+        <b>① 「因所给等式对任意 $x,y$ 均成立」这句话必须落笔。</b>它是"我凭什么能代 $x=y=0$"的依据，是本题的<u>逻辑起点</u>，不是废话。<br>
+        <b>② <span class="dock">扣分点</span>：直接令 $y=-x$ 就写 $f(0)=f(x)+f(-x)$，然后声称"显然 $f(0)=0$"。</b>$f(0)=0$ 是<b>要证的中间结论</b>，不是显然的（比如 $f\equiv c\ne0$ 就不满足题设，但你没证之前不知道）。<br>
+        <b>③ 结尾要写出"故 $f(x)$ 是奇函数"</b>，把定义原话回扣一遍。只写到 $f(-x)=-f(x)$ 就停笔，形式上没有收口。<br>
+        <b>④ 同类题的通法</b>：凡给<b>抽象函数方程</b>（$f(x+y)=\cdots$、$f(xy)=\cdots$），第一动作永远是<b>代特殊值造已知量</b>——常代 $0,1,-x,\frac1x$，看哪个能把两个自变量并成一个。
+      </div>
+    </div>
+  </div>
+
+  <div class="key"><span class="tag">必记 · 周期性的四条结论</span>
+    ① $f$ 以 $T$ 为周期 ⇒ $f(ax+b)$ 以 $\dfrac{T}{|a|}$ 为周期。<br>
+    ② $g$ 周期 ⇒ $f[g(x)]$ 周期，如 $\mathrm e^{\sin x}$、$\cos^2x=\frac{1+\cos2x}2$（$T=\frac{2\pi}{|2|}=\pi$）。<br>
+    <b>★③ $f$ 以 $T$ 为周期且可导 ⇒ $f'$ 也以 $T$ 为周期</b>（第 3 章 例3.1 用）。<br>
+    <b>★④ $f$ 以 $T$ 为周期且连续，则<u>只有</u>在 $\displaystyle\int_0^Tf(x)\mathrm dx=0$ 时 $\displaystyle\int_0^xf(t)\mathrm dt$ 才以 $T$ 为周期</b>（第 9 章 例9.25 用）。<br>
+    <span style="color:var(--muted);font-size:.85rem">④ 与 §O₃ 的 强 1.14 正好互为正反面：那里 $\int_0^Tf=1\ne0$，所以变限积分<u>不</u>周期，而是线性增长，才有 $\frac1x\int_0^xf\to\frac12$。</span>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 1.9</span>设 $f(x)$ 在 $(-\infty,+\infty)$ 上满足 $f(x)=f(x-\pi)+\sin x$，证明 $f(x)$ 是以 $T=2\pi$ 为周期的周期函数。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$f(x+2\pi)=f(x)$</span>　<span style="color:var(--green);font-size:.82rem">✔ $\sin(x+\pi)+\sin(x+2\pi)\equiv0$ sympy 验证</span>
+
+      <div class="think"><span class="th">💭 思路 · 拿到题先想什么</span>
+        <ol>
+          <li>目标很死：<b>证 $f(x+2\pi)=f(x)$</b>。题设给的是"隔 $\pi$ 的递推"$f(x)=f(x-\pi)+\sin x$，<b>跨度 $\pi$，目标跨度 $2\pi$ ⇒ 用两次就够</b>。数量对上了，说明路子对。</li>
+          <li>把题设改写成好用的形式：<b>$f(u)=f(u-\pi)+\sin u$，即 $f(u-\pi)=f(u)-\sin u$</b>，我要从 $f(x+2\pi)$ 往下降到 $f(x)$，每用一次降 $\pi$。</li>
+          <li>用两次以后，余下的是两个正弦项 $\sin(x+2\pi)+\sin(x+\pi)$。<b>诱导公式一看就知它们互为相反数</b>（$\sin(x+\pi)=-\sin x$，$\sin(x+2\pi)=\sin x$），恰好抵消——这就是题目为什么偏偏配 $\sin x$ 而不是别的。</li>
+          <li>所以整题只有一个动作：<b>把题设当递推式用两次，让三角项自己抵消</b>。</li>
+        </ol>
+      </div>
+
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面 · 照这个写<span class="score">证明题 8 分参考｜⛳ = 采分点</span></div>
+        <div class="step"><span class="k">证</span>题设等式对一切实数成立。在 $f(x)=f(x-\pi)+\sin x$ 中以 $x+2\pi$ 代 $x$，得
+        $$f(x+2\pi)=f(x+\pi)+\sin(x+2\pi).\tag{1}$$
+        <span class="pt">⛳ 第一次代换 3 分</span></div>
+        <div class="step">再以 $x+\pi$ 代 $x$，得
+        $$f(x+\pi)=f(x)+\sin(x+\pi).\tag{2}$$
+        <span class="pt">⛳ 第二次代换 3 分</span></div>
+        <div class="step">将 (2) 代入 (1)，并由诱导公式 $\sin(x+\pi)=-\sin x$、$\sin(x+2\pi)=\sin x$，得
+        $$f(x+2\pi)=f(x)+\sin(x+\pi)+\sin(x+2\pi)=f(x)-\sin x+\sin x=f(x).\tag{3}$$
+        <span class="pt">⛳ 三角项抵消 1 分</span></div>
+        <div class="fin">即对一切 $x$ 有 $f(x+2\pi)=f(x)$，故 <b>$f(x)$ 是以 $T=2\pi$ 为周期的周期函数</b>，证毕。<span class="pt">⛳ 回扣定义 1 分</span></div>
+      </div>
+
+      <div class="notekeep"><span class="nh">📌 批注 · 写完拿这层校对</span>
+        <b>① 诱导公式要在卷面上写出来</b>（哪怕只写 $\sin(x+\pi)=-\sin x$ 一句）。抵消那一步如果不给依据，阅卷看到的就是"两个正弦忽然没了"。<br>
+        <b>② <span class="dock">扣分点</span>：只验证一个具体的 $x$。</b>周期性是<b>恒等式</b>，必须对一切 $x$ 成立，卷面上要用符号 $x$ 而不是数字。<br>
+        <b>③ 为什么写成"以 $x+2\pi$ 代 $x$"而不是"令 $x=x+2\pi$"</b>：后者是病句（同一个符号两边意义不同）。<b>规范说法是"以 ⋯ 代 $x$"或"在等式中取 $x\to x+2\pi$"。</b><br>
+        <b>④ 题目只要求证"是以 $2\pi$ 为周期"，不要求证"$2\pi$ 是最小正周期"</b>——两者难度差很多，别自作主张去证后者浪费时间。
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= 二 函数的图像 ================= -->
+  <h2 id="s2"><span class="idx">二</span>函数的图像 · 基本初等函数与分段函数<span class="layer L-base" style="margin-left:10px">基础</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/高等数学/01_函数极限与连续/高数_第01章_基础30讲.pdf">📄 基础30讲 p.14–27</a>
+  <p>基本初等函数六类，口诀 <b>「反对幂指三」</b>（学分部积分法时还要用一次）。图像底座见 <a href="../直觉馆_图像与数感.html">直觉馆</a>，这里只留<b>本章要考的落点</b>。</p>
+
+  <div class="key"><span class="tag">必记 · $x\gt0$ 时的「简洁美」四招（求最值的降维打击）</span>
+    $y=x,\ \sqrt x,\ \sqrt[3]x,\ \ln x$ 在 $x\gt0$ 上<b>有相同的单调性</b>，与 $\frac1x$ 相反。故：<br>
+    ① 见 $\sqrt u,\sqrt[3]u$ ⇒ 用 $u$ 研究最值；<br>
+    <b>★② 见 $|u|$ ⇒ 由 $|u|=\sqrt{u^2}$，用 $u^2$ 研究最值</b>（$\sqrt{u^2}$ 与 $u^2$ 最值点相同）——书上标"考得最多"；<br>
+    <b>★③ 见 $u_1u_2u_3$ ⇒ 取对数 $\ln(u_1u_2u_3)=\ln u_1+\ln u_2+\ln u_3$，把乘法变加法</b>（如 $\ln(x^{1/3}y^{1/2}z^{1/5})=\frac13\ln x+\frac12\ln y+\frac15\ln z$）；<br>
+    ④ 见 $\frac1u$ ⇒ 用 $u$ 研究，但<b>结论相反</b>（最大值点变最小值点）。
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 1.10</span>设 $0\lt x\lt\dfrac12$，求 $y(x)=x^6(1-x)^2(1-2x)^4$ 的最大值点。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$x=\dfrac{7-\sqrt{13}}{12}\approx0.2829$</span>　<span style="color:var(--green);font-size:.82rem">✔ sympy 解驻点 + 端点比较</span>
+
+      <div class="think"><span class="th">💭 思路 · 拿到题先想什么</span>
+        <ol>
+          <li>直接对 $x^6(1-x)^2(1-2x)^4$ 求导？<b>乘积法则要拆三项、每项还带高次幂，展开是灾难</b>。看到这种<b>纯乘积（且各因子在区间上恒正）</b>的形状，立刻想上面第 ③ 招。</li>
+          <li>取对数：$\ln y=6\ln x+2\ln(1-x)+4\ln(1-2x)$，<b>乘法塌成加法，六次幂塌成系数</b>，求导后是三个简单分式。<b>这就是"对数求导法"。</b></li>
+          <li>合法性检查：区间 $0\lt x\lt\frac12$ 上 $x\gt0$、$1-x\gt0$、$1-2x\gt0$，三个对数都有定义，$y\gt0$。<b>而 $\ln$ 单增，所以 $\ln y$ 与 $y$ 的最值点相同</b>——这句话是换元的依据，卷面上要写。</li>
+          <li>解出驻点是二次方程，会给出两个根，<b>必须筛掉落在 $(0,\frac12)$ 外的那个</b>。</li>
+          <li>还没学最值判别法（那是第 5 章），所以最后<b>用端点极限比较</b>：$x\to0^+$ 与 $x\to(\frac12)^-$ 时 $y\to0$，而驻点处 $y\gt0$，故驻点即最大值点。</li>
+        </ol>
+      </div>
+
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面 · 照这个写<span class="score">解答题 10 分参考｜⛳ = 采分点</span></div>
+        <div class="step"><span class="k">解</span>当 $0\lt x\lt\dfrac12$ 时 $x\gt0,\ 1-x\gt0,\ 1-2x\gt0$，故 $y(x)\gt0$，两端取对数得
+        $$\ln y(x)=6\ln x+2\ln(1-x)+4\ln(1-2x).\tag{1}$$
+        因 $\ln$ 单调增加，$\ln y$ 与 $y$ 在该区间上有相同的最大值点。<span class="pt">⛳ 取对数并说明同最值点 3 分</span></div>
+        <div class="step">将 (1) 两端对 $x$ 求导，得
+        $$\frac{\mathrm d\left[\ln y(x)\right]}{\mathrm dx}=\frac6x-\frac2{1-x}-\frac8{1-2x}=\frac{24x^2-28x+6}{x(1-x)(1-2x)}.\tag{2}$$
+        <span class="pt">⛳ 求导并通分 3 分</span></div>
+        <div class="step">令 (2) 式为零，即 $12x^2-14x+3=0$，解得
+        $$x=\frac{7\pm\sqrt{13}}{12}.$$
+        因 $\dfrac{7+\sqrt{13}}{12}\gt\dfrac12$ 不在所给区间内，舍去，故区间内唯一驻点为 $x=\dfrac{7-\sqrt{13}}{12}$。<span class="pt">⛳ 解方程 + 舍根 2 分</span></div>
+        <div class="step">又
+        $$\lim_{x\to0^+}y(x)=\lim_{x\to\left(\frac12\right)^-}y(x)=0\lt y\!\left(\frac{7-\sqrt{13}}{12}\right),$$
+        <span class="pt">⛳ 端点比较 1 分</span></div>
+        <div class="fin">故 $y(x)=x^6(1-x)^2(1-2x)^4$ 在 $\left(0,\dfrac12\right)$ 内的<b>最大值点为 $x=\dfrac{7-\sqrt{13}}{12}$</b>。<span class="pt">⛳ 结论 1 分</span></div>
+      </div>
+
+      <div class="notekeep"><span class="nh">📌 批注 · 写完拿这层校对</span>
+        <b>① <span class="dock">扣分点</span>：不写"$y\gt0$ 才能取对数"。</b>取对数是<b>有条件的变形</b>，条件必须在卷面上交代，否则整条路的合法性没有依据。<br>
+        <b>② <span class="dock">扣分点</span>：不舍根。</b>$\frac{7+\sqrt{13}}{12}\approx0.884\gt\frac12$，落在区间外。<b>凡是解出多个根，必须逐个回到题设区间检验</b>——这一步的分是白送的，漏了很可惜。<br>
+        <b>③ <span class="dock">扣分点</span>：解出驻点直接宣布"最大值点"。</b>第 1 讲还没有最值判别定理，<b>必须用端点极限作比较</b>才算论证完整。（学到第 5 章后可改用第一/第二充分条件，那时才允许省。）<br>
+        <b>④ 求导的三个小结果</b>：$(\ln x)'=\frac1x$；$[\ln(1-x)]'=\frac{-1}{1-x}=\frac1{x-1}$；$[\ln(1-2x)]'=\frac{-2}{1-2x}$。<b>复合函数别忘了拖内层导数</b>，这是本题最常见的计算错。<br>
+        <b>⑤ 通分那一步可以心算</b>：$6(1-x)(1-2x)-2x(1-2x)-8x(1-x)=24x^2-28x+6$，除以 2 得 $12x^2-14x+3$。卷面写通分后的结果即可，不必展示中间。<br>
+        <b>⑥ 张宇在这题下写的话，值得抄在错题本扉页</b>："做例题不是念一个题、把答案一抄这么简单，而是通过做这个题，<b>在分析阶段你要学会什么，在解题过程中你要学会什么，然后在整个题目学完之后，你通过这个题目提高了哪些方面的解题能力</b>。"
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 1.11</span>已知 $\mathrm e^x=\displaystyle\sum_{n=0}^{\infty}\frac{x^n}{n!},\ x\in\mathbf R$，则 $2^x=$（　）<br>(A)(B) $\displaystyle\sum_{n=0}^{\infty}\frac{(x\ln2)^n}{n!}$　(C) $\displaystyle\sum_{n=0}^{\infty}\frac{(\ln2)x^n}{n!}$　(D) $\displaystyle\sum_{n=0}^{\infty}\frac{(\ln2)^nx^n}{n!}$</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(B) $\displaystyle\sum_{n=0}^{\infty}\frac{(x\ln2)^n}{n!}$</span>　<span style="color:var(--green);font-size:.82rem">✔ $\mathrm e^{x\ln2}=2^x$ 数值验证</span><br>
+      <span class="lab">分析</span>先用 <b>$u^v=\mathrm e^{v\ln u}$</b> 把底数换成 $\mathrm e$：$2^x=\mathrm e^{\ln2^x}=\mathrm e^{x\ln2}$。再把已知展开式<b>广义化</b>（$x\to$ 狗）：$\mathrm e^{\text{狗}}=\sum\frac{\text{狗}^n}{n!}$，取狗 $=x\ln2$ 即得。<br>
+      <span class="lab">要害</span><b>(D) 是给"只把 $x$ 换成 $x\ln2$ 却忘了整体带幂"的人准备的</b>：$(x\ln2)^n=x^n(\ln2)^n$，与 (D) 其实相同——所以本题真正的干扰项是 (C)（只在分子挂一个 $\ln2$，没带 $n$ 次幂）。<b>动作要点：换元是"整块换"，不是"部分换"。</b><br>
+      <span class="lab">张宇按</span>理工与自然科学中当然会用到 $\mathrm e^x=1+x+\frac{x^2}{2!}+\cdots$，社会科学中也常看到，<b>因为多项式是最简单的</b>——这就是泰勒公式的全部动机。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 1.12</span>设 $y=\sin x,\ 0\le x\le2\pi$，求其所有单调区间上的反函数。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$y=\arcsin x\ (x\in[0,1])$；$y=\pi-\arcsin x\ (x\in[-1,1))$；$y=2\pi+\arcsin x\ (x\in(-1,0])$</span>　<span style="color:var(--green);font-size:.82rem">✔ 7 点数值回代全过</span>
+
+      <div class="think"><span class="th">💭 思路 · 拿到题先想什么</span>
+        <ol>
+          <li>$\sin x$ 在 $[0,2\pi]$ 上<b>不单调</b>（升-降-升），整体没有反函数。题目说"所有单调区间上的反函数"，就是要我<b>先切段，再一段一段求</b>。切点在 $x=\frac\pi2$ 与 $x=\frac{3\pi}2$。</li>
+          <li>唯一的工具是 $\arcsin$，但它<b>只认主值区间 $\left[-\frac\pi2,\frac\pi2\right]$</b>：只有当 $x$ 落在这个区间里，才能从 $\sin x=y$ 直接写 $x=\arcsin y$。</li>
+          <li>所以每一段的动作是固定的两步：<b>先把这一段平移进主值区间</b>（第二段减 $\pi$，第三段减 $2\pi$），<b>再用诱导公式把 $\sin(\text{平移后})$ 与 $y$ 挂上钩</b>，最后解出 $x$。</li>
+          <li>每段的<b>值域要跟着算</b>（那是反函数的定义域），端点开闭必须与原段严格对应，否则三段会重叠成多值。</li>
+        </ol>
+      </div>
+
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面 · 照这个写<span class="score">解答题 12 分参考｜⛳ = 采分点</span></div>
+        <div class="step"><span class="k">解</span>$y=\sin x$ 在 $[0,2\pi]$ 上的单调区间为 $\left[0,\frac\pi2\right]$、$\left[\frac\pi2,\frac{3\pi}2\right]$、$\left[\frac{3\pi}2,2\pi\right]$，分别讨论。<span class="pt">⛳ 正确切段 2 分</span></div>
+        <div class="step"><span class="k">(i)</span>当 $0\le x\le\dfrac\pi2$ 时，$x$ 已在主值区间内，故 $x=\arcsin y$，$y\in[0,1]$。
+        所求反函数为 $y=\arcsin x,\ x\in[0,1]$。<span class="pt">⛳ 3 分</span></div>
+        <div class="step"><span class="k">(ii)</span>当 $\dfrac\pi2\lt x\le\dfrac{3\pi}2$ 时，$-\dfrac\pi2\lt x-\pi\le\dfrac\pi2$，且
+        $$\sin(x-\pi)=-\sin(\pi-x)=-\sin x=-y,$$
+        故 $x-\pi=\arcsin(-y)=-\arcsin y$，即 $x=\pi-\arcsin y,\ y\in[-1,1)$。
+        所求反函数为 $y=\pi-\arcsin x,\ x\in[-1,1)$。<span class="pt">⛳ 平移 + 诱导公式 4 分</span></div>
+        <div class="step"><span class="k">(iii)</span>当 $\dfrac{3\pi}2\lt x\le2\pi$ 时，$-\dfrac\pi2\lt x-2\pi\le0$，且 $\sin(x-2\pi)=\sin x=y$，
+        故 $x-2\pi=\arcsin y$，即 $x=2\pi+\arcsin y,\ y\in(-1,0]$。
+        所求反函数为 $y=2\pi+\arcsin x,\ x\in(-1,0]$。<span class="pt">⛳ 2 分</span></div>
+        <div class="fin">综上，$y=\sin x\ (0\le x\le2\pi)$ 在其三个单调区间上的反函数依次为
+        $y=\arcsin x\ (x\in[0,1])$、$y=\pi-\arcsin x\ (x\in[-1,1))$、$y=2\pi+\arcsin x\ (x\in(-1,0])$。<span class="pt">⛳ 汇总 1 分</span></div>
+      </div>
+
+      <div class="notekeep"><span class="nh">📌 批注 · 写完拿这层校对</span>
+        <b>① 「$-\frac\pi2\lt x-\pi\le\frac\pi2$」这一步必须写出来。</b>它是"我为什么可以对 $x-\pi$ 用 $\arcsin$"的<b>唯一依据</b>——<b>只有当自变量落在 $\left[-\frac\pi2,\frac\pi2\right]$ 上时才有 $x=\arcsin y$</b>。不写这句，后面全部无根。<br>
+        <b>② <span class="dock">扣分点</span>：三段的开闭端点写成一样。</b>三段必须<u>不重叠</u>，否则合起来是多值的（见 ④）。<br>
+        <b>③ 为什么不写成一个分段函数？</b>书上专门解释：若把三段合成一个函数，其图形就是 $y=\sin x$ 在 $[0,2\pi]$ 沿 $y=x$ 的整体镜像，<b>那是多值函数</b>，不符合"铅直画线法"。<b>所以只能分段列出，不能合并。</b><br>
+        <b>④ 这题以后有什么用？</b>二重积分换序时会直接出现这样的上下限，例如
+        $\displaystyle\int_{-1}^0\mathrm dy\int_{\pi-\arcsin y}^{2\pi+\arcsin y}f(x,y)\,\mathrm dx$。<br>
+        <b>⑤ 反三角函数的主值区间（必背）</b>：$\arcsin\in\left[-\frac\pi2,\frac\pi2\right]$，$\arccos\in[0,\pi]$，$\arctan\in\left(-\frac\pi2,\frac\pi2\right)$，$\operatorname{arccot}\in(0,\pi)$。
+        另有 $\arcsin x+\arccos x=\dfrac\pi2\ (|x|\le1)$、$\arctan x+\operatorname{arccot}x=\dfrac\pi2\ (x\in\mathbf R)$。
+      </div>
+    </div>
+  </div>
+
+  <div class="key"><span class="tag">必记 · 三个重要的分段函数（分段函数是本章最大的命题素材）</span>
+    <b>① 绝对值 $y=|x|$</b>——⚠️ 它虽是分段函数，<b>却是初等函数</b>，因为 $|x|=\sqrt{x^2}$（一般分段函数不是初等函数，$|x|$ 是特例）。<br>
+    <b>② 符号函数</b> $\operatorname{sgn}x=\begin{cases}1,&x\gt0\\0,&x=0\\-1,&x\lt0\end{cases}$，对任意实数有 $x=|x|\operatorname{sgn}x$。<br>
+    <b>③ 取整函数 $[x]$</b>＝不超过 $x$ 的最大整数。<b>四条必背</b>：<br>
+    　(1) $[x+n]=[x]+n$（$n$ 为整数）★★★　(2) <b>$x-1\lt[x]\le x$</b> ★（<b>夹逼准则的固定弹药</b>，见 基 1.29）<br>
+    　(3) $\lim\limits_{x\to0^+}[x]=0$，$\lim\limits_{x\to0^-}[x]=-1$；一般地 $\lim\limits_{x\to n^+}[x]=n$，$\lim\limits_{x\to n^-}[x]=n-1$ ★<br>
+    　(4) 「$Y=i+1$ 当且仅当 $i\le X\lt i+1$（$i$ 整数）」$\iff Y=[X]+1$ ★★★（概率论离散化专用）
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 1.13</span>设 $[x]$ 表示不超过 $x$ 的最大整数，则 $y=x-[x]$ 是（　）<br>(A) 无界函数　(B) 单调函数　(C) 偶函数　(D) 周期函数</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(D)，周期为 1</span>　<span style="color:var(--green);font-size:.82rem">✔ $[x+1]-[x]\equiv1$ sympy 验证</span><br>
+      <span class="lab">分析</span>$y(x+1)=x+1-[x+1]\overset{(1)}{=}x+1-\left([x]+1\right)=x-[x]=y(x)$，故周期为 1。图像是<b>锯齿波</b>（每段从 0 升到 1 后垂直落回）。<br>
+      其余三项：值域 $[0,1)$ 故有界，(A) 错；锯齿在整点断崖，(B) 错；$y$ 不是偶函数（$y(0.5)=0.5$，$y(-0.5)=0.5$ 巧合相等，但 $y(1.5)=0.5\ne y(-1.5)=0.5$ 也巧合——真正的反例是 $y(0.3)=0.3$ 而 $y(-0.3)=0.7$），(C) 错。<br>
+      <span class="lab">要害</span><b>$x-[x]$ 就是 $x$ 的小数部分 $\{x\}$。</b>⚠️ <b>负数最容易翻车</b>：$1.99-[1.99]=0.99$，但
+      $$-1.99-[-1.99]=-1.99-(-2)=\boxed{0.01}$$
+      （$-1.99$ 的整数部分是 $-2$ 不是 $-1$）。<b>凡涉及 $[x]$ 的题，先拿一个负数试一下</b>，这是最省事的自查。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 1.6</span>设 $f(x)=\dfrac x{1+x},\ x\in[0,1]$，定义函数列 $f_1(x)=f(x),\ f_2=f[f_1],\ \cdots,\ f_n=f[f_{n-1}]$，则 $f_n(x)=$ ______。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$f_n(x)=\dfrac{x}{1+nx}\ (n=1,2,3,\cdots)$</span>　<span style="color:var(--green);font-size:.82rem">✔ sympy 逐层复合到 $n=5$ 全吻合</span><br>
+      <span class="lab">分析</span>算前两层找规律：
+      $$f_2=\frac{f_1}{1+f_1}=\frac{\frac{x}{1+x}}{1+\frac x{1+x}}=\frac{x}{1+2x},\qquad f_3=\frac{f_2}{1+f_2}=\frac{\frac{x}{1+2x}}{1+\frac x{1+2x}}=\frac{x}{1+3x}$$
+      由<b>数学归纳法</b>得 $f_n=\dfrac x{1+nx}$。<br>
+      <span class="lab">要害</span><b>形如 $\frac{x}{1+ax}$ 的函数在复合下"分母的系数直接相加"</b>——这类"迭代求通项"的题，标准动作永远是<b>算两层、猜通项、归纳法一句话收口</b>。填空题写答案即可，若是解答题，"由数学归纳法可得"这句必须落笔。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 1.11</span>设 $f(x)=\arcsin(\sin x)$，画出 $f(x)$ 的图形。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">峰值 $\frac\pi2$、谷值 $-\frac\pi2$、周期 $2\pi$ 的等腰三角波</span>　<span style="color:var(--green);font-size:.82rem">✔ 8 点数值对拍分段式全过</span>
+
+      <div class="think"><span class="th">💭 思路 · 拿到题先想什么</span>
+        <ol>
+          <li>$\arcsin(\sin x)\ne x$！只有 $x\in\left[-\frac\pi2,\frac\pi2\right]$ 时才等于 $x$。<b>这一句就是全题的题眼</b>：$\arcsin$ 的输出被锁死在主值区间里，而输入 $x$ 可以跑遍 $\mathbf R$。</li>
+          <li>输入跑遍 $\mathbf R$、输出锁在一个有限区间 ⇒ <b>必然是周期的</b>。先证周期（用 $\sin$ 的 $2\pi$ 周期一句话搞定），<b>这样只需画一个周期</b>。</li>
+          <li>一个周期内怎么画？<b>把 $[-\frac\pi2,\frac{3\pi}2]$ 切成主值段和非主值段</b>，非主值段再用诱导公式平移回主值区间——和 基 1.12 是同一套动作。</li>
+          <li>结果必然是<b>折线</b>：主值段上是 $y=x$（斜率 $+1$），另一段上是 $y=\pi-x$（斜率 $-1$）。斜率交替 $\pm1$ ⇒ <b>等腰三角波</b>。</li>
+        </ol>
+      </div>
+
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面 · 照这个写<span class="score">解答题 10 分参考｜⛳ = 采分点</span></div>
+        <div class="step"><span class="k">解</span>由 $\sin(x+2\pi)=\sin x$ 得
+        $$f(x+2\pi)=\arcsin\left[\sin(x+2\pi)\right]=\arcsin(\sin x)=f(x),$$
+        故 $f(x)$ 以 $2\pi$ 为周期，只需在长度为 $2\pi$ 的区间 $\left[-\dfrac\pi2,\dfrac32\pi\right]$ 上讨论。<span class="pt">⛳ 证周期 2 分</span></div>
+        <div class="step">当 $x\in\left[-\dfrac\pi2,\dfrac\pi2\right]$ 时，$x$ 在 $\arcsin$ 的主值区间内，故 $\arcsin(\sin x)=x$。<span class="pt">⛳ 2 分</span></div>
+        <div class="step">当 $x\in\left[\dfrac\pi2,\pi\right)$ 时，$\pi-x\in\left(0,\dfrac\pi2\right]$，故
+        $$\arcsin(\sin x)=\arcsin\left[\sin(\pi-x)\right]=\pi-x.$$
+        <span class="pt">⛳ 2 分</span></div>
+        <div class="step">当 $x\in\left[\pi,\dfrac32\pi\right)$ 时，$x-\pi\in\left[0,\dfrac\pi2\right)$，故
+        $$\arcsin(\sin x)=\arcsin\left[-\sin(x-\pi)\right]=-(x-\pi)=\pi-x.$$
+        <span class="pt">⛳ 2 分</span></div>
+        <div class="step">故在 $\left[-\dfrac\pi2,\dfrac32\pi\right]$ 上 $f(x)=\begin{cases}x,&x\in\left[-\frac\pi2,\frac\pi2\right]\\ \pi-x,&x\in\left[\frac\pi2,\frac32\pi\right]\end{cases}$，于是在 $(-\infty,+\infty)$ 上
+        $$f(x)=\arcsin(\sin x)=\begin{cases}x-2k\pi,&x\in\left[-\dfrac\pi2+2k\pi,\ \dfrac\pi2+2k\pi\right]\\[4pt] (2k+1)\pi-x,&x\in\left[\dfrac\pi2+2k\pi,\ \dfrac32\pi+2k\pi\right]\end{cases}\quad(k\text{ 为整数}).$$
+        <span class="pt">⛳ 写出通式 1 分</span></div>
+        <div class="fin">其图形为<b>周期 $2\pi$、峰值 $\dfrac\pi2$（在 $x=\dfrac\pi2+2k\pi$ 处）、谷值 $-\dfrac\pi2$（在 $x=-\dfrac\pi2+2k\pi$ 处）、各段斜率交替为 $\pm1$ 的等腰三角波</b>，如下图。<span class="pt">⛳ 作图 1 分</span></div>
+      </div>
+
+      <svg viewBox="0 0 620 170" style="width:100%;max-width:620px;display:block;margin:10px auto;background:var(--card);border:1px solid var(--line);border-radius:10px">
+        <!-- 比例：水平 π/2 = 45px，垂直 π/2 = 45px（斜率 ±1，等腰）；原点 O 在 (310,85) -->
+        <line x1="20" y1="85" x2="600" y2="85" stroke="currentColor" stroke-width="1.2" opacity=".55"/>
+        <polygon points="600,85 592,81.5 592,88.5" fill="currentColor" opacity=".55"/>
+        <line x1="310" y1="18" x2="310" y2="155" stroke="currentColor" stroke-width="1.2" opacity=".55"/>
+        <polygon points="310,18 306.5,26 313.5,26" fill="currentColor" opacity=".55"/>
+        <line x1="24" y1="40" x2="596" y2="40" stroke-dasharray="4 4" stroke="var(--purple)" stroke-width="1" opacity=".7"/>
+        <line x1="24" y1="130" x2="596" y2="130" stroke-dasharray="4 4" stroke="var(--purple)" stroke-width="1" opacity=".7"/>
+        <polyline points="40,85 85,130 175,40 265,130 355,40 445,130 535,40 580,85"
+          fill="none" stroke="var(--accent)" stroke-width="2.4"/>
+        <circle cx="310" cy="85" r="3" fill="var(--accent)"/>
+        <text x="292" y="100" font-size="11" fill="currentColor" opacity=".75">O</text>
+        <text x="576" y="100" font-size="11" fill="currentColor" opacity=".75">x</text>
+        <text x="316" y="26" font-size="11" fill="currentColor" opacity=".75">f(x)</text>
+        <text x="24" y="37" font-size="11" fill="var(--purple)">π/2</text>
+        <text x="24" y="141" font-size="11" fill="var(--purple)">−π/2</text>
+        <text x="348" y="100" font-size="11" fill="currentColor" opacity=".75">π/2</text>
+        <text x="396" y="100" font-size="11" fill="currentColor" opacity=".75">π</text>
+        <text x="432" y="100" font-size="11" fill="currentColor" opacity=".75">3π/2</text>
+        <text x="252" y="100" font-size="11" fill="currentColor" opacity=".75">−π/2</text>
+        <text x="208" y="100" font-size="11" fill="currentColor" opacity=".75">−π</text>
+      </svg>
+
+      <div class="notekeep"><span class="nh">📌 批注 · 写完拿这层校对</span>
+        <b>① 先证周期再画一个周期</b>——这是"画周期函数图形"的标准卷面结构。上来就画一整片，既费时又给不了分。<br>
+        <b>② <span class="dock">扣分点</span>：写 $\arcsin(\sin x)=x$ 而不限定区间。</b>这是本题<u>唯一</u>要考的东西，写错等于全错。<br>
+        <b>③ 第三段的诱导公式是 $\sin x=-\sin(x-\pi)$</b>（不是 $+$）。符号错会把三角波画成锯齿波，图形形状就变了。<br>
+        <b>④ 这张图和 §O₃ 强 1.14 的三角波是"同族"</b>：那里是 $f(x)=\min|x-2k|$，周期 2、峰值 1；这里周期 $2\pi$、峰值 $\frac\pi2$。<b>两题都靠"折线 + 面积"吃饭</b>，一起记。<br>
+        <b>⑤ 另一张同族图</b>：$y=|\sin x|$（一拱面积为 2，周期 $\pi$）。以后算积分时这三张图都有用。
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= 三 极限的概念与性质 ================= -->
+  <h2 id="s3"><span class="idx">三</span>函数极限的概念与性质<span class="layer L-base" style="margin-left:10px">基础</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/高等数学/01_函数极限与连续/高数_第01章_基础30讲.pdf">📄 基础30讲 p.27–41</a>
+  <p>张宇开篇一句：<b>先厘清极限的概念，概念懂了，后面的性质是显然的，计算就会遵循概念和性质，从而不会出错。</b></p>
+
+  <h3>3.1　定义 · 24 个定义的总表</h3>
+  <div class="key"><span class="tag">必记 · $\varepsilon$-$\delta$ 语言与 24 个定义的骨架</span>
+    $$\lim_{x\to x_0}f(x)=A\iff\forall\varepsilon\gt0,\ \exists\delta\gt0,\ \text{当}\ 0\lt|x-x_0|\lt\delta\ \text{时，有}\ |f(x)-A|\lt\varepsilon$$
+    <b>自变量的趋近方式 6 种</b>：$x\to x_0,\ x_0^+,\ x_0^-$（张宇叫「<b>显微镜</b>」，门槛是 $\delta$）；$x\to\infty,+\infty,-\infty$（叫「<b>望远镜</b>」，门槛是 $X$）。<br>
+    <b>函数的趋近方式 4 种</b>：$f\to A$（用 $|f-A|\lt\varepsilon$）、$f\to\infty$（$|f|\gt M$）、$f\to+\infty$（$f\gt M$）、$f\to-\infty$（$f\lt-M$）。<br>
+    $6\times4=24$ 个定义。<b>不必全背，但要能现场写出任意一个</b>——尤其 $x\to+\infty$、$f\to A$ 那一个（强 1.12、强 1.13 直接要用）。
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 张宇的「超实数」是什么，为什么值得花 5 分钟看</span>
+    实数系公理说：若对任意大的 $n$ 都有 $|x|\lt\frac1n$，则 $x=0$。<b>这使得实数系里根本不存在"非零的无穷小"</b>。张宇把 $\mathbf R$ 扩张成<b>超实数系 $\mathbf R^*$</b>：$x_0$ 叫<b>核</b>，$x_0+x^*$（$x^*$ 为非零无穷小）叫核的<b>光环</b>——<b>每个实数周围有无穷多个光环</b>。$\lim f$ 就是取 $f$ 的<b>标准实数部分</b> $\operatorname{std}(f)$，也就是"这个超实数的家在哪"。<br>
+    <b>为什么有用？因为它一句话解释清了"什么时候能替换"这个本章最大的困惑</b>——见下面这块红牌。
+  </div>
+
+  <div class="trap"><span class="tag">陷阱 · ⚠️ 实数运算 vs 趋核运算：本章一半的错都出在这儿</span>
+    设 $\lim\limits_{x\to x_0}f(x)=A$，其中 <b>$f(x)$ 本身是<u>实数运算</u>，$\lim f(x)$ 才是<u>趋核运算</u>，$A$ 是核值。顺序不能颠倒。</b><br>
+    <b>反例一</b>：$\lim\limits_{x\to0}(x-x)=0$ 没问题。但 $\lim\limits_{x\to0}(x-\sin x)\ne\lim\limits_{x\to0}(x-x)=0$——因为 $x-\sin x$ <b>首先要作实数运算</b>，而 $\sin x\ne x$（是"等价"不是"相等"），趋核运算便无从谈起。<br>
+    <b>反例二</b>：$\lim\limits_{x\to\infty}\dfrac{\left(1+\frac1x\right)^{x^2}}{\mathrm e^x}$，若写成 $\lim\dfrac{\left[\left(1+\frac1x\right)^x\right]^x}{\mathrm e^x}=\lim\dfrac{\mathrm e^x}{\mathrm e^x}=1$，<b>错</b>。因为实数运算中 $\left(1+\frac1x\right)^x\ne\mathrm e$。
+    正解：先实数运算化为 $\mathrm e^{x^2\ln(1+\frac1x)-x}$，再取极限。<br>
+    <b>⭐ 那"等价无穷小替换"为什么合法？</b>它<u>不是</u>在实数运算里把 $1-\cos x$ 写成 $\frac12x^2$，而是<b>另拆了一个比值恒为 1 的因子</b>：
+    $$\frac{1-\cos x}{x^2}=\underbrace{\frac{\frac12x^2}{x^2}}_{\text{算它}}\cdot\underbrace{\frac{1-\cos x}{\frac12x^2}}_{\to\ 1\ (\text{趋核速度相同})}$$
+    <b>👉 这就是"等价无穷小只能替换乘除因子"的根本原因：加减处拆不出这样的因子。</b>把这句话记住，比背十条禁令都管用。
+  </div>
+
+  <h3>3.2　性质一 · 唯一性（左右极限判据）</h3>
+  <div class="key"><span class="tag">必记 · 函数极限存在的两个充要条件</span>
+    $$\lim_{x\to x_0}f(x)=A\iff\lim_{x\to x_0^-}f(x)=\lim_{x\to x_0^+}f(x)=A$$
+    $$\lim_{x\to x_0}f(x)=A\iff f(x)=A+\alpha(x),\ \ \lim\alpha(x)=0\qquad(\textbf{脱帽法})$$
+    <b>脱帽法就是"超实数 = 标准实数部分 + 无穷小"</b>，是"已知一个极限求另一个极限"的万能钥匙（基 1.27、习 1.1 都用它）。<br>
+    唯一性的两层含义：① $x\to\infty$ 意味着 $x\to+\infty$ <b>且</b> $x\to-\infty$；② $x\to x_0$ 意味着 $x\to x_0^+$ <b>且</b> $x\to x_0^-$。称为自变量取值的「<b>双向性</b>」。
+  </div>
+
+  <div class="trap"><span class="tag">陷阱 · ★ 5 个「极限不存在」的经典（书上说"几乎是必考的"）</span>
+    ① $\lim\limits_{x\to\infty}\mathrm e^x$ 不存在（$+\infty$ 端为 $+\infty$，$-\infty$ 端为 $0$）。⚠️ 若有人答"$+\infty$ 或 $0$"，<b>立即拒绝——违背唯一性</b>。<br>
+    ② $\lim\limits_{x\to0}\dfrac{\sin x}{|x|}$ 不存在（右 $=1$，左 $=-1$）。<br>
+    ③ $\lim\limits_{x\to\infty}\arctan x$ 不存在（$\pm\frac\pi2$）。<br>
+    ④ $\lim\limits_{x\to0}[x]$ 不存在（右 $=0$，左 $=-1$）。<br>
+    ⑤ 分段函数在分段点两侧表达式不同，需分别求左、右极限。<br>
+    <b>👉 实战总结：见到 $\mathrm e^{\square}$（$\square\to\infty$）、$|x|$、$\dfrac1x$、$\arctan\dfrac1x$、$[x]$、分段点，一律先拆左右。</b>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 1.14</span>已知 $\lim\limits_{x\to0}\dfrac{f(x)}{x^2}$ 存在，且 $f(x)=\dfrac{x-\sin x}{x}+x^2\lim\limits_{x\to0}\dfrac{f(x)}{1-\cos x}$，则 $\lim\limits_{x\to0}\dfrac{f(x)}{x^2}=$（　）<br>(A) $-\frac13$　(B) $\frac13$　(C) $\frac16$　(D) $-\frac16$</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(D) $-\dfrac16$</span>　<span style="color:var(--green);font-size:.82rem">✔ sympy 解方程验证</span><br>
+      <span class="lab">分析</span>题目里 $\lim\limits_{x\to0}\frac{f}{1-\cos x}$ 是一个<b>常数</b>（不含 $x$），所以整条式子其实是"$f$ 用一个未知常数表达自己"——<b>设未知数，建方程</b>。<br>
+      记 $A=\lim\limits_{x\to0}\dfrac{f(x)}{x^2}$。两端同除 $x^2$：
+      $$\frac{f(x)}{x^2}=\frac{x-\sin x}{x^3}+\lim_{x\to0}\frac{f(x)}{1-\cos x}$$
+      而那个常数要用 $A$ 表出——<b>恒等变形拆一刀</b>：
+      $$\lim_{x\to0}\frac{f(x)}{1-\cos x}=\lim_{x\to0}\frac{f(x)}{x^2}\cdot\frac{x^2}{1-\cos x}=A\cdot2=2A$$
+      于是 $A=\dfrac16+2A$，得 $A=-\dfrac16$。<br>
+      <span class="lab">要害</span>两个动作：<b>① 把"极限里含极限"的常数设成未知量 $A$；② 用 $\dfrac{f}{1-\cos x}=\dfrac{f}{x^2}\cdot\dfrac{x^2}{1-\cos x}$ 把它换算成 $A$ 的倍数。</b>$\lim\frac{x^2}{1-\cos x}=2$ 要脱口而出。<br>
+      <span class="lab">同族</span>基 1.27、习 1.1 是同一个套路的加强版（那里用脱帽法）。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 1.15</span>当 $x\to1$ 时，函数 $\dfrac{\mathrm e^{\frac1{x-1}}\ln|1+x|}{(\mathrm e^x-1)(x-2)}$ 的极限（　）<br>(A) 等于 1　(B) 等于 0　(C) 为 $\infty$　(D) 不存在且不为 $\infty$</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(D)，因为 $\lim\limits_{x\to1^-}=0$ 而 $\lim\limits_{x\to1^+}=-\infty$</span>　<span style="color:var(--green);font-size:.82rem">✔ sympy 双侧极限：左 $0$、右 $-\infty$</span><br>
+      <span class="lab">分析</span>全式的胜负手只在 $\mathrm e^{\frac1{x-1}}$ 一处（其余因子在 $x=1$ 处都取到非零有限值：$\ln2$、$\mathrm e-1$、$-1$）。
+      $$x\to1^+\Rightarrow x-1\to0^+\Rightarrow\frac1{x-1}\to+\infty\Rightarrow\mathrm e^{\frac1{x-1}}\to+\infty$$
+      $$x\to1^-\Rightarrow x-1\to0^-\Rightarrow\frac1{x-1}\to-\infty\Rightarrow\mathrm e^{\frac1{x-1}}\to0$$
+      故右极限 $=\dfrac{(+\infty)\cdot\ln2}{(\mathrm e-1)\cdot(-1)}=-\infty$，左极限 $=\dfrac{0\cdot\ln2}{(\mathrm e-1)(-1)}=0$。两侧不等且不同为 $\infty$，选 (D)。<br>
+      <span class="lab">要害</span><b>遇到 $\mathrm e^{\infty}$，必须分 $\mathrm e^{+\infty}=+\infty$ 与 $\mathrm e^{-\infty}=0$ 两种情况</b>——这是本章最高频的单点考法。<br>
+      <span class="lab">张宇按</span>"<b>你不能用一个非常非常小的正数去代替 $\frac1{x-1}$</b>……它不是一个很小很小的数，而是无限趋于零的<b>变量</b>。"<br>
+      <span class="lab">连续剧</span>这个函数在 基 1.37 会整体重来一遍（问间断点个数），到那时四个点的极限都要算。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 1.16</span>设 $g,f$ 同 基 1.5，则 $\lim\limits_{x\to0}g[f(x)]$（　）(A) 3　(B) 2　(C) 1　(D) 不存在</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(D) 不存在</span><br>
+      <span class="lab">分析</span>由 基 1.5，$g[f(x)]=\begin{cases}3+x,&x\ge0\\ 2+x^2,&x\lt0\end{cases}$。故 $\lim\limits_{x\to0^+}=3\ne\lim\limits_{x\to0^-}=2$，极限不存在。<br>
+      <span class="lab">要害</span><b>复合分段函数在分段点处求极限，一定要先把复合结果显式写成分段形式，再拆左右</b>；直接对 $g$ 或 $f$ 单独取极限会算错。<br>
+      <span class="lab">张宇按</span>"这个题已见过（基 1.5）……<b>有前世今生，越往后学越轻松</b>。"
+    </div>
+  </div>
+
+  <h3>3.3　性质二 · 局部有界性</h3>
+  <div class="key"><span class="tag">必记 · 有界性的四条判据（考场上够用了）</span>
+    ① $\lim\limits_{x\to\bullet}f$ 存在 ⇒ $x\to\bullet$ 时 $f$ 有界。<b>反之不真</b>（$\sin x$ 在任意区间有界，但 $\lim\limits_{x\to+\infty}\sin x$ 不存在）。<br>
+    ② $f$ 在<b>闭区间</b> $[a,b]$ 上连续 ⇒ 必定有界。<br>
+    <b>★③ $f$ 在<u>开区间</u> $(a,b)$ 内连续，且 $\lim\limits_{x\to a^+}f$ 与 $\lim\limits_{x\to b^-}f$ <u>都存在</u> ⇒ $f$ 在 $(a,b)$ 内必定有界。</b><br>
+    ④ 有界 ± 有界 = 有界，有界 × 有界 = 有界。<b>商没有这个结论。</b><br>
+    <span style="color:var(--muted);font-size:.85rem">③ 的直观（书上手写眉批）：「<b>三段有界，则总的有界</b>」——$\lim\limits_{x\to a^+}f$ 存在管住左端一小段，闭区间连续管住中间 $[a+\delta_1,b-\delta_2]$，$\lim\limits_{x\to b^-}f$ 存在管住右端一小段。</span><br>
+    <b>反过来用（判无界）</b>：只要区间上或其<b>端点</b>处存在 $x_0$ 使 $\lim\limits_{x\to x_0}f=\infty$，则无界。
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 1.17</span>在下列区间内，函数 $f(x)=\dfrac{x\sin(x-3)}{(x-1)(x-3)^2}$ 有界的是（　）<br>(A) $(-2,1)$　(B) $(-1,0)$　(C) $(1,2)$　(D) $(2,3)$</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(B) $(-1,0)$</span>　<span style="color:var(--green);font-size:.82rem">✔ sympy：$\lim\limits_{x\to1}|f|=\lim\limits_{x\to3}|f|=\infty$；$(-1,0)$ 两端点值有限</span><br>
+      <span class="lab">分析</span>四个选项<b>全是开区间</b>，不能直接用"闭区间连续 ⇒ 有界"，要走上面的判据 ③：<b>看两个端点处的极限是否都存在</b>。<br>
+      $f$ 只在 $x=1,3$ 处无定义，其余处是初等函数故连续。而
+      $$\lim_{x\to1}f=\infty\ (\text{分母}\ x-1\to0),\qquad\lim_{x\to3}f=\infty$$
+      于是<b>凡以 1 或 3 为端点的开区间，$f$ 都无界</b>——(A) 端点含 1，(C) 端点含 1，(D) 端点含 3，全部出局。只剩 (B)，其两端点 $-1,0$ 处 $f$ 都有定义、极限存在（$f(-1)=\frac{-\sin(-4)}{-2\cdot16}$、$f(0)=0$），故有界。<br>
+      <span class="lab">要害</span>⚠️ <b>$x\to3$ 那里最容易判错</b>：分子的 $\sin(x-3)\sim(x-3)$ 只能消掉分母 $(x-3)^2$ 的<b>一次方</b>，还剩一次方在分母 ⇒ 仍是 $\infty$。<b>凡分母有重根，必须核对分子能约掉几次。</b><br>
+      <span class="lab">秒法</span>本题<b>不用算任何极限值，只用定位"分母零点在哪"</b>：零点 $1,3$ → 谁的端点碰到它谁出局 → 唯一不碰的就是答案。
+    </div>
+  </div>
+
+  <h3>3.4　性质三 · 局部保号性 ★★★（书上批注："极限 3 个性质中最重要的一个"）</h3>
+  <div class="key"><span class="tag">必记 · 脱帽 / 戴帽（方向与严格性，反了就掉坑）</span>
+    $$\boxed{\ \lim f\gt0\Rightarrow f\gt0,\qquad\lim f\lt0\Rightarrow f\lt0\ }\qquad\textbf{脱帽严格括不等}$$
+    $$\boxed{\ f\ge0\Rightarrow\lim f\ge0,\qquad f\le0\Rightarrow\lim f\le0\ }\qquad\textbf{戴帽非严格括不等}$$
+    <b>脱帽</b>：由极限的符号推出<u>邻域内函数</u>的符号，严格 → 严格。<br>
+    <b>戴帽</b>：由函数的符号推出<u>极限</u>的符号，带等 → 带等（<b>不能升级成严格</b>，如 $f=x^2\gt0$ 但 $\lim\limits_{x\to0}f=0$）。<br>
+    <b>证法（要会写）</b>：由定义，$\forall\varepsilon\gt0$ 存在 $\delta$ 使 $|f-A|\lt\varepsilon$。<b>取 $\varepsilon=\dfrac A2\gt0$</b>，即得 $|f-A|\lt\frac A2$，所以 $f\gt\frac A2\gt0$。<br>
+    ⚠️ <b>常见错法：取 $\varepsilon=2A$</b>，得 $-A\lt f\lt3A$，<b>范围不够精确，不能用于证明</b>。<b>"取 $\varepsilon=\frac A2$" 这一步就是采分点。</b>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 1.18</span>已知 $f(x)$ 在 $x=0$ 的某个邻域内连续，且 $\lim\limits_{x\to0}\dfrac{f(x)}{1-\cos x}=-1$，则存在 $\delta\gt0$，（　）<br>(A) $x\in(-\delta,0)$ 时 $f\gt0$，$x\in(0,\delta)$ 时 $f\lt0$　(B) 反之<br>(C) 两侧均 $f\gt0$　(D) 两侧均 $f\lt0$</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(D) 两侧均 $f(x)\lt0$</span>　<span style="color:var(--green);font-size:.82rem">✔ $\lim\frac{x^2}{1-\cos x}=2$ sympy 验证</span><br>
+      <span class="lab">分析</span>把分母换成最干净的 $x^2$：
+      $$-1=\lim_{x\to0}\frac{f(x)}{1-\cos x}=\lim_{x\to0}\frac{2f(x)}{x^2}\ \Longrightarrow\ \lim_{x\to0}\frac{f(x)}{x^2}=-\frac12\lt0$$
+      由<b>局部保号性（脱帽）</b>，在 $x=0$ 的某去心邻域内 $\dfrac{f(x)}{x^2}\lt0$。而 <b>$x^2\gt0$ 恒成立</b>，故该邻域内 $f(x)\lt0$——<b>两侧都是</b>。选 (D)。<br>
+      <span class="lab">要害</span><b>符号全由分子背，是因为分母 $1-\cos x$（以及 $x^2$）恒非负。</b>命题人设 (A)(B) 两个"左右异号"的选项，就是等着那些以为"$x$ 变号 ⇒ $f$ 变号"的人。<b>看到分母是偶次方/恒正量，立刻断定左右同号。</b><br>
+      <span class="lab">举一反三</span>若把分母换成 $x^3$（奇次），答案就变成 (A) 或 (B) 了——<b>做这类题第一眼先看分母的奇偶次。</b>
+    </div>
+  </div>
+
+  <h3>3.5　极限的四则运算 · 两种「不存在」怎么办</h3>
   <div class="gridwrap"><table>
-    <tr><th>特性</th><th>判据</th><th>必记二级结论</th></tr>
-    <tr><td><b>有界性</b></td><td>存在 $M\gt0$，$|f(x)|\le M$ 恒成立</td><td>闭区间上连续 ⇒ 有界</td></tr>
-    <tr><td><b>单调性</b></td><td>$x_1\lt x_2\Rightarrow f(x_1)\lt f(x_2)$（增）</td><td>严格单调 ⇒ 有反函数</td></tr>
-    <tr><td><b>奇偶性</b></td><td>$f(-x)=\mp f(x)$（定义域须对称）</td><td>奇±奇=奇，奇×奇=偶；奇函数在 0 有定义则 $f(0)=0$</td></tr>
-    <tr><td><b>周期性</b></td><td>存在 $T\gt0$，$f(x+T)=f(x)$</td><td>周期 $T$ ⇒ $f(ax+b)$ 周期 $T/|a|$</td></tr>
+    <tr><th>条件</th><th>$f\pm g$</th><th>$fg$ 与 $f/g$</th></tr>
+    <tr><td>$f,g$ <b>均存在</b>核值</td><td colspan="2">均存在（除法要求分母核值 $\ne0$），等于极限的四则运算</td></tr>
+    <tr><td><b>恰有一个</b>不存在核值</td><td><b>一定不存在</b>（或为 $\infty$）</td><td><b>可能存在也可能不存在</b></td></tr>
+    <tr><td><b>均不</b>存在核值</td><td colspan="2">均<b>可能存在也可能不存在</b></td></tr>
   </table></div>
-  <div class="key"><span class="tag">必记 · 奇偶性的求导/积分升降</span>
-    <b>奇函数求导变偶、偶函数求导变奇</b>；<b>奇函数的原函数全是偶函数</b>，偶函数的原函数里只有 $\int_0^x$ 那支是奇函数。后面「对称性简化积分」天天用。复合/反函数的坑几乎都在<b>定义域接不上</b>；反函数存在 ⟺ 严格单调，图像关于 $y=x$ 对称。图像底座见 <a href="../直觉馆_图像与数感.html">直觉馆</a>。
+  <div class="mine"><span class="tag">补讲 · 每一格的经典反例（考选择题就靠这些）</span>
+    <b>「一个存在 + 一个不存在」的乘积</b>三种命运：<br>
+    　(i) $\lim\limits_{x\to0}x\sin\frac1x=0$——$A=0$ 时可以把"$-1$ 到 $1$ 之间的振荡"<b>压缩为 0</b>，极限存在；<br>
+    　(ii) $\lim\limits_{x\to\infty}x\sin\frac1{x^2}=0$——同理；<br>
+    　(iii) $\lim\limits_{x\to0}\cos x\cdot\sin\frac1x$ <b>不存在</b>——$A=1\ne0$，放缩后结果不变，振荡还在。<br>
+    　<b>👉 判据：$A=0$ 能压死振荡，$A\ne0$ 压不死。</b><br>
+    <b>「两个都不存在」的乘积</b>：<br>
+    　(i) $f=g=\begin{cases}1,&x\text{ 有理}\\-1,&x\text{ 无理}\end{cases}$ ⇒ $fg\equiv1$，<b>极限存在</b>；<br>
+    　(ii) $f=\sin\frac1x,g=\cos\frac1x$ ⇒ $fg=\frac12\sin\frac2x$，<b>不存在</b>；<br>
+    　(iii) $f=\sin\frac1x,g=\frac1x$ ⇒ 取 $x=\frac1{n\pi}$ 得 $0$，取 $x=\frac1{2n\pi+\frac\pi2}$ 得 $\to\infty$——<b>既有实数又有无穷大，叫"无界变量"</b>（既非极限存在，也非 $\infty$）。<br>
+    <b>「两个都不存在」的和差</b>：$\lim\limits_{x\to0}\left(\frac1x-\frac1x\right)=0$ 存在（<b>先做实数运算，不能拆</b>）；$\lim\limits_{x\to0}\left(\frac1x-\frac2x\right)=\infty$。
   </div>
 
-  <h3>2　极限的概念与三大性质</h3>
-  <div class="key"><span class="tag">必记 · 左右极限判据（O₂ 的命根子）</span>
-    $$\lim_{x\to x_0}f(x)=A\iff \lim_{x\to x_0^-}f(x)=\lim_{x\to x_0^+}f(x)=A$$
-    凡遇<b>分段点、$|x|$、$\dfrac1x$、$e^{1/x}$、$\arctan\dfrac1x$、$x\to\infty$ 两侧行为不同</b>，一律先拆左右。
-  </div>
-  <div class="trap"><span class="tag">陷阱 · 三个「左右必分家」的怪物（$x\to0$）</span>
-    ① $\dfrac1x$：$0^+\!\to\!+\infty$，$0^-\!\to\!-\infty$；② $e^{1/x}$：$0^+\!\to\!+\infty$，$0^-\!\to\!0$；③ $\arctan\dfrac1x$：$0^+\!\to\!\frac\pi2$，$0^-\!\to\!-\frac\pi2$。它们是间断点题的固定弹药。
-  </div>
-  <p><b>三大局部性质</b>：唯一性；局部有界性（极限存在 ⇒ 邻域有界，<b>反之不真</b>，如 $\sin\frac1x$）；局部保号性。保号性在 O₃ 详讲。</p>
+  <div class="eg">
+    <div class="q"><span class="no">基 1.20 ★</span>证明：(1) 若 $\lim\dfrac fg=A$ 且 $\lim g=0$，则 $\lim f=0$；(2) 若 $\lim\dfrac fg=A\ne0$ 且 $\lim f=0$，则 $\lim g=0$。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">两式都由"把待求量恒等变形成两个已知极限的乘积/商"直接得到</span>
 
-  <h3>3　无穷小、无穷大与比阶</h3>
-  <p><b>无穷小</b>=以 0 为极限的量（是过程，不是"很小的数"）；<b>无穷大</b>=绝对值无限增大；非零无穷小与无穷大互为倒数。</p>
-  <div class="key"><span class="tag">必记 · 无穷小运算 + 比阶</span>
-    <b>有限个</b>无穷小的和/积仍是无穷小；<b>有界量 × 无穷小 = 无穷小</b>（如 $x\sin\frac1x\to0$）。比阶看 $\lim\frac\beta\alpha$：$0$→高阶 $o(\alpha)$，$\infty$→低阶，非零常数→同阶，$1$→等价，与 $\alpha^k$ 比为非零常数→ $k$ 阶。
-  </div>
-  <div class="key"><span class="tag">必记 · 等价无穷小表（$x\to0$，强化版——广义化 "$x\to$ 狗"）</span>
-    <b>一阶组</b>（张宇：任何无穷小"狗"都能替 $x$）：
-    $$\sin x\sim x,\ \tan x\sim x,\ \arcsin x\sim x,\ \arctan x\sim x,\ \ln(1+x)\sim x,\ e^x-1\sim x$$
-    $$\ln\!\big(x+\sqrt{1+x^2}\big)\sim x,\quad a^x-1\sim x\ln a,\quad (1+x)^\alpha-1\sim\alpha x,\quad 1-\cos x\sim\tfrac12x^2,\quad 1-\cos^\alpha x\sim\tfrac{\alpha}{2}x^2$$
-    <b>差函数组</b>（加减型救命，注意符号）：
-    $$x-\sin x\sim\tfrac{x^3}{6},\ \ \tan x-x\sim\tfrac{x^3}{3},\ \ \arcsin x-x\sim\tfrac{x^3}{6},\ \ x-\arctan x\sim\tfrac{x^3}{3},\ \ x-\ln(1+x)\sim\tfrac{x^2}{2},\ \ 1-\sqrt{\cos x}\sim\tfrac14x^2$$
-  </div>
-  <div class="trap"><span class="tag">陷阱 · 差值组符号口诀</span>
-    「$\tan$ 快、$\sin$ 慢、$x$ 居中」⇒ $\tan x\!-\!x\gt0$、$x\!-\!\sin x\gt0$；$\arcsin/\arctan$ 与 $\sin/\tan$ 反号。拿不准 $x=0.1$ 心算 10 秒验回。
-  </div>
+      <div class="think"><span class="th">💭 思路 · 拿到题先想什么</span>
+        <ol>
+          <li>题设给的是 $\lim\frac fg$ 与 $\lim g$（或 $\lim f$）<b>两个已知极限</b>，要求的是第三个。<b>三者之间只能靠四则运算法则连起来</b>——而四则运算法则要求"参与运算的极限都存在"，这里恰好都存在，所以路是通的。</li>
+          <li>(1) 要 $f$，而手上有 $\frac fg$ 和 $g$：<b>$f=\frac fg\cdot g$</b>，乘法。</li>
+          <li>(2) 要 $g$，而手上有 $\frac fg$ 和 $f$：<b>$g=\dfrac{f}{\frac fg}$</b>，除法。<b>除法要求分母极限不为 0 ⇒ 这就是题设为什么多加一句 $A\ne0$</b>。条件和用途严丝合缝，说明想对了。</li>
+          <li>整题只有"<b>恒等变形</b>"一个动作，难的不是算，是<b>看出要把哪个量写成哪两个量的乘积</b>。</li>
+        </ol>
+      </div>
 
-  <!-- ============ O1 计算 ============ -->
-  <h2 id="s2"><span class="idx">O₁</span>判定类型 · 做好计算　<span style="font-size:.8rem;color:var(--red)">← 全章重头戏</span></h2>
-  <a class="pg" href="../../张宇系列_分章易识别版/高等数学/01_函数极限与连续/高数_第01章_强化18讲.pdf">📄 强化18讲</a>
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面 · 照这个写<span class="score">证明题 10 分参考｜⛳ = 采分点</span></div>
+        <div class="step"><span class="k">证</span>（1）由题设 $\lim\dfrac{f}{g}=A$ 与 $\lim g=0$ 均存在，且在所论过程中 $g\ne0$，作恒等变形
+        $$f=\frac fg\cdot g.\tag{1}$$
+        <span class="pt">⛳ 恒等变形 2 分</span></div>
+        <div class="step">对 (1) 两端取极限，由极限的乘法运算法则得
+        $$\lim f=\lim\frac fg\cdot\lim g=A\cdot0=0.$$
+        <span class="pt">⛳ 引四则运算法则 3 分</span></div>
+        <div class="step"><span class="k">（2）</span>由题设 $\lim\dfrac fg=A\ne0$，作恒等变形
+        $$g=\frac{f}{\ \frac fg\ }.\tag{2}$$
+        <span class="pt">⛳ 恒等变形 2 分</span></div>
+        <div class="step">因分母的极限 $A\ne0$，由极限的除法运算法则得
+        $$\lim g=\frac{\lim f}{\lim\frac fg}=\frac0A=0.$$
+        <span class="pt">⛳ 说明 $A\ne0$ 并用除法法则 2 分</span></div>
+        <div class="fin">故 (1) 中 $\lim f=0$，(2) 中 $\lim g=0$，证毕。<span class="pt">⛳ 1 分</span></div>
+      </div>
 
-  <h3>2.1　先定型 · 未定式的「整体判定」<span class="layer L-base">基础</span></h3>
-  <p>代入后出现下面七种之一才是极限题：</p>
-  <div class="fml">$$\tfrac00,\quad \tfrac{\infty}{\infty},\quad 0\cdot\infty,\quad \infty-\infty,\quad 1^{\infty},\quad 0^{0},\quad \infty^{0}$$</div>
-  <div class="mine"><span class="tag">补讲 · 张宇的归口：七种型塌缩成一个流程</span>
-    · $0\cdot\infty$：把一个因子<b>倒下去</b>→ $\frac00$ 或 $\frac\infty\infty$；· $\infty-\infty$：<b>通分/提因子/有理化/中值定理</b>凑成分式或积；· $1^\infty,0^0,\infty^0$（幂指型）：一律 <b>$u^v=e^{v\ln u}$</b> 把指数上的 $0\cdot\infty$ 拉下来。剩下 $\frac00,\frac\infty\infty$ 交给洛必达/泰勒。
-  </div>
-
-  <h3>2.2　未定式的「局部判定」<span class="layer L-str">强化专属</span></h3>
-  <div class="zy"><span class="tag">强化题型 · 见 $\lim f(n,x)$ 含参、含 $|x|^n$/$nx^{2n}$ → 先判局部表达式</span>
-    形如 $\lim\limits_{n\to\infty}\dfrac{1+x}{1+nx^2}$ 这类，<b>胜负手在里面那块局部式子的极限</b>。张宇要你背这几张局部表（$n\to\infty$）：
-    $$\lim|x|^n=\begin{cases}+\infty,&|x|\gt1\\ 1,&|x|=1\\ 0,&|x|\lt1\end{cases}\qquad
-      \lim nx^{2n}=\begin{cases}+\infty,&|x|\ge1\\ 0,&|x|\lt1\end{cases}\qquad
-      \lim e^{nx}=\begin{cases}+\infty,&x\gt0\\ 1,&x=0\\ 0,&x\lt0\end{cases}$$
-    以及 $\lim\limits_{x\to0^+}x^a$：$a\gt0$ 得 $0$，$a=0$ 得 $1$，$a\lt0$ 得 $+\infty$。<b>抓住这些关键点，$\lim f(n,x)$ 分段结果就出来了</b>；注意题目常把 $n\to\infty$ 写成 $t\to+\infty$、把 $x$ 写成 $t$ 来"变脸"，要认得出。
+      <div class="notekeep"><span class="nh">📌 批注 · 写完拿这层校对</span>
+        <b>① <span class="dock">扣分点</span>：(2) 中不点明"因分母的极限 $A\ne0$"。</b>除法法则<u>必须</u>验证分母极限非零，这正是题设给 $A\ne0$ 的原因。不写＝定理条件没验。<br>
+        <b>② 这两条结论以后可以直接引用，是「反求参数」类题目的标准武器</b>——<b>看到"$\lim\dfrac{\text{某式}}{\text{含参式}}=$ 非零常数"，立刻断定分母（或分子）$\to0$，参数当场定死。</b>基 1.21 就是它的第一个应用。<br>
+        <b>③ 张宇按</b>："<b>凡是给予证明的，它往往是今后解决问题要用到的解题方法或过程</b>，不会很难但都比较经典。"——第 1 讲的证明题只有四道（基 1.6/1.8/1.9/1.20 + 基 1.22），全是后面要反复用的工具，别跳过。
+      </div>
+    </div>
   </div>
 
-  <h3>2.3　六大基础方法 · 决策树<span class="layer L-base">基础</span></h3>
+  <div class="eg">
+    <div class="q"><span class="no">基 1.21</span>设 $\lim\limits_{x\to0}\dfrac{\sin x}{\mathrm e^x-a}(\cos x-b)=5$，则 $b=$（　）(A) $-4$　(B) $-3$　(C) $-2$　(D) $-1$</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(A) $b=-4$（顺带 $a=1$）</span>　<span style="color:var(--green);font-size:.82rem">✔ 代回 sympy 得极限恰为 5</span><br>
+      <span class="lab">分析</span><b>第一步定 $a$</b>：整体极限 $=5\ne0$，而分子的因子 $\sin x\to0$。由 基 1.20(2)（$\lim\frac fg=A\ne0$ 且 $\lim f=0$ ⇒ $\lim g=0$），必有 $\lim\limits_{x\to0}(\mathrm e^x-a)=0$，即 <b>$a=1$</b>。<br>
+      <b>第二步定 $b$</b>：此时 $\dfrac{\sin x}{\mathrm e^x-1}\to1$（因 $\sin x\sim x\sim\mathrm e^x-1$），故
+      $$5=\lim_{x\to0}\frac{\sin x}{\mathrm e^x-1}\cdot\lim_{x\to0}(\cos x-b)=1\cdot(1-b)\ \Longrightarrow\ b=-4$$
+      <span class="lab">要害</span><b>「反求参数」的固定顺序：先用"极限非零 ⇒ 分母趋零"把 $a$ 定死，再把式子化简后代入定 $b$。</b>顺序反了根本算不动——这是本章参数题的通用节奏（习 1.15、习 1.16 同理）。<br>
+      <span class="lab">⚠️</span>题只问 $b$，但 <b>$a$ 必须先算</b>；考场上别看到"只问 $b$"就想跳过 $a$。
+    </div>
+  </div>
+
+  <!-- ================= 四 无穷小·无穷大·比阶 ================= -->
+  <h2 id="s4"><span class="idx">四</span>无穷小 · 无穷大 · 比阶<span class="layer L-base" style="margin-left:10px">基础</span><span class="layer L-str">强化</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/高等数学/01_函数极限与连续/高数_第01章_强化18讲.pdf">📄 强化18讲 p.4–7</a>
+  <p>书上明说：<b>「在考研数学中，可能无穷小比阶的考题考得是最多的。」</b>本节把基础讲的定义与强化讲的<b>六类比阶模板</b>合并成一张总表。</p>
+
+  <div class="key"><span class="tag">必记 · 无穷小的定义与三条性质</span>
+    <b>无穷小</b>＝以 0 为极限的量（是<b>过程</b>，不是"很小的数"）；<b>无穷大</b>＝绝对值无限增大（<b>一定无界，但无界不一定是无穷大</b>）；非零无穷小与无穷大互为倒数。<br>
+    ① <b>有限个</b>无穷小的和是无穷小。⚠️ <b>无穷个不一定</b>：$\lim\limits_{n\to\infty}\left(\frac1{n+1}+\cdots+\frac1{n+n}\right)=\ln2$（"人多力量大"，第 8 讲专讲）。<br>
+    <b>★② 有界量 × 无穷小 = 无穷小</b>（$x\sin\frac1x\to0$）。<br>
+    ③ <b>有限个</b>无穷小之积是无穷小。<br>
+    <b>比阶（$\lim\frac\alpha\beta$）</b>：$0$ ⇒ $\alpha$ 高阶，记 $\alpha=o(\beta)$；$\infty$ ⇒ 低阶；<b>非零常数 $c$ ⇒ 同阶；$1$ ⇒ 等价 $\alpha\sim\beta$</b>（书批"最重要的是这两个"）；$\lim\frac\alpha{\beta^k}=c\ne0$ ⇒ $\alpha$ 是 $\beta$ 的 <b>$k$ 阶</b>无穷小。<br>
+    ⚠️ <b>不是任意两个无穷小都可比阶</b>：$x\to0$ 时 $x\sin\frac1x$ 与 $x^2$ 不可比（$\lim\frac1x\sin\frac1x$ 不存在，是"无界变量"）。
+  </div>
+
+  <h3>4.1　强化的「六类比阶模板」——本章计算题的弹药库<span class="layer L-str">强化专属</span></h3>
+
+  <div class="zy"><span class="tag">强化题型 (1) 普通函数型（$x\to0$，一切的地基）</span>
+    $$\sin x\sim x,\quad\tan x\sim x,\quad\arcsin x\sim x,\quad\arctan x\sim x,\quad\mathrm e^x-1\sim x,\quad\ln(1+x)\sim x$$
+    $$\ln\!\left(x+\sqrt{1+x^2}\right)\sim x,\qquad a^x-1=\mathrm e^{x\ln a}-1\sim x\ln a\ (a\gt0,a\ne1)$$
+    $$1-\cos x\sim\tfrac12x^2,\qquad \boxed{1-\cos^\alpha x\sim\tfrac\alpha2x^2\ (\alpha\ne0)},\qquad(1+x)^\alpha-1\sim\alpha x,\qquad(1+x)^x-1\sim x^2$$
+    由带框那条可秒得 <b>$1-\sqrt{\cos x}\sim\frac14x^2$</b>（$\alpha=\frac12$，习 1.7 直接用）。<br>
+    <b>广义化（张宇的"狗"）</b>：$\lim\limits_{\text{狗}\to0}\dfrac{\sin(\text{狗})}{\text{狗}}=1$——<b>表里的 $x$ 都能换成任何趋于 0 的式子</b>。
+  </div>
+
+  <div class="zy"><span class="tag">强化题型 (2) 类型不同的差函数型（加减救命，注意符号）</span>
+    $$x-\sin x\sim\tfrac16x^3,\quad x-\arcsin x\sim-\tfrac16x^3,\quad x-\tan x\sim-\tfrac13x^3,\quad x-\arctan x\sim\tfrac13x^3$$
+    $$x-\ln(1+x)\sim\tfrac12x^2,\qquad \mathrm e^x-1-x\sim\tfrac12x^2$$
+    <b>符号口诀</b>：「$\tan$ 快、$\sin$ 慢、$x$ 居中」⇒ $\tan x\gt x\gt\sin x$（$x\gt0$ 近 0 时），所以 $x-\tan x\lt0$、$x-\sin x\gt0$；$\arcsin/\arctan$ 与 $\sin/\tan$ <b>反号</b>。拿不准就取 $x=0.1$ 心算 10 秒验回。<br>
+    <b>★ 没有现成差函数就"创造"一个（D₂₃ 化归经典形式）</b>：<br>
+    ① $x-\ln(1+\tan x)=(x-\tan x)+\left[\tan x-\ln(1+\tan x)\right]$<br>
+    ② $\sin x+\ln(1-\sin x)=-\left\{-\sin x-\ln(1-\sin x)\right\}$<br>
+    ③ $f(x)-\tan x=\left[f(x)-x\right]+\left[x-\tan x\right]$
+  </div>
+
+  <div class="zy"><span class="tag">强化题型 (3) 复合函数型 —— 先各自定阶，再"底数带幂"</span>
+    $x\to0$，$f(x)\sim ax^m$，$g(x)\sim bx^n$（$ab\ne0$，$m,n$ 正整数），则
+    $$\boxed{f[g(x)]\sim a\,b^{m}x^{mn}}$$
+    ⚠️ <b>是 $b^m$ 不是 $b$，是 $x^{mn}$ 不是 $x^{m+n}$</b>——把 $g\sim bx^n$ 整块代进 $f\sim a(\ \cdot\ )^m$ 里就知道了。<br>
+    注：若 $m,n$ 为正<b>实</b>数，则要求 $x\to0^+$，命题亦成立。
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 1.4</span>当 $x\to0$ 时，$\cos\!\left(\mathrm e^{\frac{x^2}2}-1\right)-1\sim c\,x^{k}$，则 $ck=$ ______。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$c=-\dfrac18,\ k=4,\ ck=-\dfrac12$</span>　<span style="color:var(--green);font-size:.82rem">✔ sympy 极限 $=-1/8$</span><br>
+      <span class="lab">分析</span>套模板 (3)。<b>外层</b>：$f(u)=\cos u-1\sim-\frac12u^2$，即 $a=-\frac12,\ m=2$。<b>内层</b>：$g(x)=\mathrm e^{x^2/2}-1\sim\frac12x^2$，即 $b=\frac12,\ n=2$。故
+      $$f[g(x)]\sim a\,b^{m}x^{mn}=\left(-\frac12\right)\left(\frac12\right)^{2}x^{2\cdot2}=-\frac18x^4$$
+      <span class="lab">要害</span><b>三步定死：① 剥出外层函数（把内层整块看成 $u$）② 各自写成 $a x^m$ / $b x^n$ ③ 代公式。</b>最容易错的是漏掉 $b^m$——这里若写成 $-\frac12\cdot\frac12x^4=-\frac14x^4$ 就错了。<br>
+      <span class="lab">自查</span>次数 $mn=4$ 可以直接心算验：内层是 $x^2$ 级，外层要平方 ⇒ $x^4$。<b>次数对不上就说明代错了。</b>
+    </div>
+  </div>
+
+  <div class="zy"><span class="tag">强化题型 (4) 变上限积分型（升阶）· ★★★ 二型是命门</span>
+    <b>① 一型（$f\to0$）</b>：$f(x)\sim ax^m\Rightarrow\displaystyle\int_0^xf(t)\mathrm dt\sim\int_0^xat^m\mathrm dt=\frac a{m+1}x^{m+1}$（<b>升一阶</b>）。
+    如 $\displaystyle\int_0^x\left(\mathrm e^{t^3}-1\right)\mathrm dt\sim\int_0^xt^3\mathrm dt=\frac14x^4$。<br>
+    <b>★★★ ② 二型（$f\not\to0$）</b>：$\lim\limits_{x\to0}f=A\ne0$，$\lim\limits_{x\to0}h=0$ 且 $h\ne0$，则
+    $$\boxed{\int_0^{h(x)}f(t)\,\mathrm dt\sim A\,h(x)}$$
+    如 $F(x)=\displaystyle\int_0^{5x}\frac{\sin t}{t}\mathrm dt\sim\int_0^{5x}1\,\mathrm dt=5x$；$G(x)=\displaystyle\int_0^{\sin x}(1+t)^{1/t}\mathrm dt\sim\mathrm e\sin x\sim\mathrm ex$。
+    <b>二者是同阶非等价无穷小</b>（$5x$ 与 $\mathrm ex$）。<br>
+    <b>(5) 复合 + 变上限</b>：$f\sim ax^m,g\sim bx^n\Rightarrow\displaystyle\int_0^{g(x)}f(t)\mathrm dt\sim\int_0^{bx^n}at^m\mathrm dt$。
+    如 $\displaystyle\int_0^{2-2\cos x}\left(\mathrm e^{t^2}-1\right)\mathrm dt\sim\int_0^{x^2}t^2\mathrm dt=\frac13x^6$。<br>
+    <b>👉 看到 $\dfrac{\int_0^{\square}\cdots}{x^\alpha}$ 先用这组把分子定阶，比洛必达快得多。</b>
+  </div>
+
+  <div class="zy"><span class="tag">强化题型 (6) 带头大哥型（$\alpha=o(\beta)$）· ★★★</span>
+    $\alpha,\beta$ 是同一过程下的<b>非零</b>无穷小，且 $\alpha=o(\beta)$（$\beta$ 是<b>带头大哥</b>），则<br>
+    ① $\alpha+\beta\sim\beta$（<b>和里只留最低阶那一项</b>）；② $\alpha+\beta$ 与 $\beta$ <b>同号</b>；③ $\alpha\beta=o(\beta)\cdot\beta=o(\beta^2)$。
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 1.5</span>设 $f(x),g(x)$ 在 $x=0$ 的某去心邻域内有定义且恒不为 0，若当 $x\to0$ 时 $f$ 是 $g$ 的高阶无穷小，则当 $x\to0$ 时有（　）<br>(A) $f+g=o(g)$　(B) $fg=o(f^2)$　(C) $f=o\!\left(\mathrm e^{g}-1\right)$　(D) $f=o(g^2)$</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(C)</span>　<span style="color:var(--green);font-size:.82rem">✔ 取 $f=x^2,g=x$ 作反例，(A)(B)(D) 全部被否；(C) sympy 验为 0</span><br>
+      <span class="lab">分析</span>题设即 $f=o(g)$，$g$ 是带头大哥（隐含 $g\to0$）。逐项判：<br>
+      <b>(A)</b> 由 ① $f+g\sim g$，即 $\lim\frac{f+g}{g}=1\ne0$，不是 $o(g)$ ⇒ 错。<br>
+      <b>(B)</b> 由 ③ $fg=o(g^2)$，而不是 $o(f^2)$；实际 $\lim\frac{fg}{f^2}=\lim\frac gf=\infty$ ⇒ 错。<br>
+      <b>(C)</b> $\mathrm e^{g}-1\sim g$，而 $f=o(g)$，等价量可以互换 ⇒ <b>$f=o(\mathrm e^g-1)$ 成立</b>。<br>
+      <b>(D)</b> $f=o(g)$ 只保证比 $g$ 高阶，<b>不保证比 $g^2$ 还高阶</b>。反例：$f=x^2,g=x$，$\frac f{g^2}=1\not\to0$ ⇒ 错。<br>
+      <span class="lab">要害</span><b>「高阶」是相对的，只能降一级不能随便降两级</b>——(D) 就是专门骗"$o$ 记号可以随便加次方"的人。<b>一个万能反例 $f=x^2,g=x$ 就把 (A)(B)(D) 全打掉</b>，考场上比逐条推理快。<br>
+      <span class="lab">记号纪律</span>$o(x^m)\pm o(x^n)=o(x^{\min\{m,n\}})$（加减取低阶）；$o(x^m)\cdot o(x^n)=o(x^{m+n})$（乘法累加）；$k\cdot o(x^m)=o(x^m)\ (k\ne0)$。⚠️ <b>$o(x^2)-o(x^2)=o(x^2)$ 而不是 0</b>——记号运算不是数的运算。
+    </div>
+  </div>
+
+  <h3>4.2　无穷大量阶的比较 · 两条速度链<span class="layer L-str">强化补强</span></h3>
+  <div class="key"><span class="tag">必记 · 「远远小于」链（$\ll$），考场上直接引用</span>
+    $$x\to+\infty:\quad \ln^p x\ \ll\ x^q\ \ll\ a^x\ \ll\ x^x$$
+    $$n\to\infty:\quad \ln^p n\ \ll\ n^q\ \ll\ a^n\ \ll\ n!\ \ll\ n^n\qquad(p,q\gt0,\ a\gt1)$$
+    即 $\lim\dfrac{\ln^pn}{n^q}=0,\ \lim\dfrac{n^q}{a^n}=0,\ \lim\dfrac{a^n}{n!}=0,\ \lim\dfrac{n!}{n^n}=0$。<br>
+    <span style="color:var(--muted);font-size:.85rem">⚠️ 强化讲比基础讲的链<b>多了 $x^x$ 与 $n^n$ 两级</b>，以强化版为准。</span><br>
+    <b>配套的"慢"结论</b>：$\alpha\gt0$ 时 $\lim\limits_{x\to0^+}x^\alpha\ln x=0$，一般地 $\lim\limits_{x\to0^+}x^\alpha\ln^\beta x=0\ (\alpha,\beta\gt0)$。
+    <b>直觉</b>：$\ln x\to\infty$ 的速度太慢了，$x$ 哪怕开一亿次方，$x^\alpha\to0$ 也压得住它。
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 1.23</span>设 $f(x)=\ln^{10}x$，$g(x)=x$，$h(x)=\mathrm e^{x/10}$，则当 $x$ 充分大时（　）<br>(A) $g\lt h\lt f$　(B) $h\lt g\lt f$　(C) $f\lt g\lt h$　(D) $g\lt f\lt h$</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(C) $f\lt g\lt h$</span>　<span style="color:var(--green);font-size:.82rem">✔ sympy：$\lim\frac gf=\lim\frac hg=+\infty$</span><br>
+      <span class="lab">分析</span>直接套速度链 $\ln^px\ll x^q\ll a^x$：这里 $p=10,\ q=1,\ a=\mathrm e^{1/10}\gt1$。<b>指数、系数再怎么变都撼动不了三档的等级顺序</b>，故 $\ln^{10}x\ll x\ll\mathrm e^{x/10}$。<br>
+      <span class="lab">要害</span>命题人故意把对数配成 10 次方、把指数配成 $\frac{x}{10}$，就是<b>制造"10 次方肯定比 1 次方大"的错觉</b>。<b>速度链比较的是"函数类型"，不是"指数大小"——对数类永远输给幂类，幂类永远输给指数类。</b><br>
+      <span class="lab">张宇按</span>"在微积分中有一个很要紧的问题，就是<b>趋于零的函数谁快谁慢、趋于无穷大的函数谁快谁慢</b>，这些问题解决好了，很多难题就迎刃而解。"
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 1.19</span>设 $x\to0$ 时，$\mathrm e^{\tan x}-\mathrm e^{\sin x}$ 与 $x^n$ 是同阶无穷小，则 $n$ 为（　）(A) 1　(B) 2　(C) 3　(D) 4</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(C) $n=3$</span>　<span style="color:var(--green);font-size:.82rem">✔ sympy 极限 $=1/2$（非零常数 ⇒ 同阶）</span><br>
+      <span class="lab">分析</span>见「同底数指数之差」，<b>第一动作永远是提公因子，凑出 $\mathrm e^\square-1$</b>：
+      $$\mathrm e^{\tan x}-\mathrm e^{\sin x}=\mathrm e^{\sin x}\left(\mathrm e^{\tan x-\sin x}-1\right)\sim1\cdot(\tan x-\sin x)$$
+      再化差为积：$\tan x-\sin x=\tan x(1-\cos x)\sim x\cdot\frac12x^2=\frac12x^3$。故 $n=3$。<br>
+      <span class="lab">要害</span>两次"化加减为乘除"：<b>① 提 $\mathrm e^{\sin x}$（它 $\to1$，是极限不为 0 的因子，可以直接提走）；② 提 $\tan x$。</b>全程不用泰勒、不用洛必达。<br>
+      ⚠️ <b>不能对 $\tan x-\sin x$ 两项分别换 $x$</b>（会得 0，主部被抵消）——这正是"等价替换只能用于乘除因子"的经典翻车现场。<br>
+      <span class="lab">前世今生</span>2023 年真题的化简就是这一招：$\mathrm e^{\sin x}-\mathrm e^{\tan x}=\mathrm e^{\tan x}\left(\mathrm e^{\sin x-\tan x}-1\right)\sim\sin x-\tan x$。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 1.22</span>证明：(1) $x\to0$ 时 $\ln\!\left(x+\sqrt{1+x^2}\right)\sim x$；(2) $x\to0$ 时 $1-(\cos x)^{a}\sim\dfrac12ax^2\ (a\ne0)$。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">两式的比值极限都等于 1</span>　<span style="color:var(--green);font-size:.82rem">✔ (2) 对 $a=\frac12,1,2,-3$ 四组 sympy 全验为 1</span>
+
+      <div class="think"><span class="th">💭 思路 · 拿到题先想什么</span>
+        <ol>
+          <li>"证明 $\alpha\sim\beta$" 的定义就是 <b>$\lim\dfrac\alpha\beta=1$</b>。所以两小问都归结为<b>算一个极限并说明它等于 1</b>，任务非常明确。</li>
+          <li>两个式子代入 $x=0$ 都得 $\dfrac00$，且分子分母都可导 ⇒ <b>洛必达法则的三个前提齐了</b>，直接洛。（这是第 1 讲少数几处"洛必达最省事"的地方——因为分子求导后根式会自动消掉。）</li>
+          <li>(1) 的关键是记住 $\left[\ln(x+\sqrt{1+x^2})\right]'=\dfrac1{\sqrt{1+x^2}}$（§一 已列为必记结论），求导后代 $x=0$ 直接得 1。</li>
+          <li>(2) 中 $(\cos x)^a$ 是<b>幂函数复合</b>（底是 $\cos x$，指数 $a$ 是常数），求导用 $\left[u^a\right]'=au^{a-1}u'$，<b>不是幂指函数</b>，不必取对数。求导后凑出 $\dfrac{\sin x}{x}\to1$。</li>
+        </ol>
+      </div>
+
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面 · 照这个写<span class="score">证明题 10 分参考｜⛳ = 采分点</span></div>
+        <div class="step"><span class="k">证</span>（1）当 $x\to0$ 时，$\ln\!\left(x+\sqrt{1+x^2}\right)\to0$，$x\to0$，所求为 $\dfrac00$ 型，且分子分母在 $x=0$ 的去心邻域内可导、分母的导数不为零，由洛必达法则
+        $$\lim_{x\to0}\frac{\ln\!\left(x+\sqrt{1+x^2}\right)}{x}=\lim_{x\to0}\frac{\ \dfrac1{\sqrt{1+x^2}}\ }{1}=1.$$
+        <span class="pt">⛳ 验型 + 引洛必达 2 分</span><span class="pt">⛳ 求导正确 2 分</span></div>
+        <div class="step">故当 $x\to0$ 时 $\ln\!\left(x+\sqrt{1+x^2}\right)\sim x$。<span class="pt">⛳ 回扣等价定义 1 分</span></div>
+        <div class="step"><span class="k">（2）</span>当 $x\to0$ 时 $1-(\cos x)^a\to0$，$\dfrac12ax^2\to0$，为 $\dfrac00$ 型，同样满足洛必达法则的条件，故
+        $$\lim_{x\to0}\frac{1-(\cos x)^{a}}{\frac12ax^2}=\lim_{x\to0}\frac{-a(\cos x)^{a-1}(-\sin x)}{ax}=\lim_{x\to0}(\cos x)^{a-1}\cdot\frac{\sin x}{x}=1\cdot1=1.$$
+        <span class="pt">⛳ 求导正确 3 分</span><span class="pt">⛳ 拆出 $\frac{\sin x}{x}\to1$ 1 分</span></div>
+        <div class="fin">故当 $x\to0$ 时 $1-(\cos x)^{a}\sim\dfrac12ax^2\ (a\ne0)$，证毕。<span class="pt">⛳ 1 分</span></div>
+      </div>
+
+      <div class="notekeep"><span class="nh">📌 批注 · 写完拿这层校对</span>
+        <b>① <span class="dock">扣分点</span>：上来就写等号连着洛必达，不验型。</b>洛必达法则的<u>三个前提</u>（$\frac00$ 或 $\frac\infty\infty$、去心邻域内可导且 $g'\ne0$、$\lim\frac{f'}{g'}$ 存在或为 $\infty$）<b>至少要把"$\frac00$ 型"写出来</b>，这是白给的分。<br>
+        <b>② (2) 中题设的 $a\ne0$ 不能漏抄</b>——$a=0$ 时左边恒为 0、右边恒为 0，$\frac00$ 无意义，结论不成立。<br>
+        <b>③ 本题的真正价值是那两个结论，以后直接用不必再证</b>（张宇原话："凡是在《基础30讲》中给出的结论都可以直接用"）：
+        $$\ln\!\left(x+\sqrt{1+x^2}\right)\sim x,\qquad \boxed{1-\cos^ax\sim\frac a2x^2}$$
+        <b>特例</b>：$a=1$ 得 $1-\cos x\sim\frac12x^2$；<b>$a=\frac12$ 得 $1-\sqrt{\cos x}\sim\frac14x^2$（习 1.7 直接秒杀）</b>；$a=2$ 得 $\sin^2x\sim x^2$。<br>
+        <b>④ ⚠️ 别把 $(\cos x)^a$ 当幂指函数</b>去取对数——指数 $a$ 是<u>常数</u>，直接用幂函数求导法则。真正的幂指函数是 $u(x)^{v(x)}$（两处都含 $x$），那才要 $\mathrm e^{v\ln u}$。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 1.6 ★</span>已知函数 $f(x)=\dfrac{\displaystyle\int_0^x\ln(1+t^2)\,\mathrm dt}{x^{\alpha}}$ 在 $(0,+\infty)$ 上有界，则 $\alpha$ 的取值范围是（　）<br>(A) $-1\lt\alpha\lt3$　(B) $1\lt\alpha\le3$　(C) $0\lt\alpha\le3$　(D) $\alpha\gt3$</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(B) $1\lt\alpha\le3$</span>　<span style="color:var(--green);font-size:.82rem">✔ sympy 对 $\alpha=\frac12,1,\frac32,3,\frac72$ 逐个算两端极限，只有 $(1,3]$ 两端都有限</span><br>
+      <span class="lab">分析</span>用 §三 判据 ③：$(0,+\infty)$ 内 $f$ 连续，<b>有界 $\iff$ 两个端点 $x\to0^+$ 与 $x\to+\infty$ 处的极限都存在</b>。两端各定一个不等式，取交集。<br>
+      <b>右端 $x\to+\infty$（定下界 $\alpha\gt1$）</b>：分子 $\displaystyle\int_0^x\ln(1+t^2)\mathrm dt\to+\infty$，要极限存在，分母必须也 $\to+\infty$，即 $\alpha\gt0$。于是 $\frac\infty\infty$ 型，洛必达：
+      $$\lim_{x\to+\infty}\frac{\int_0^x\ln(1+t^2)\mathrm dt}{x^\alpha}=\lim_{x\to+\infty}\frac{\ln(1+x^2)}{\alpha x^{\alpha-1}}$$
+      由速度链 $\ln^p\ll x^q$：只要 $\alpha-1\gt0$ 即 <b>$\alpha\gt1$</b>，此极限为 0（存在）；$\alpha=1$ 时分母为常数、分子 $\to\infty$，<b>发散</b>。<br>
+      <b>左端 $x\to0^+$（定上界 $\alpha\le3$）</b>：用变上限积分<b>一型</b>，$\ln(1+t^2)\sim t^2$，故分子 $\sim\displaystyle\int_0^xt^2\mathrm dt=\frac13x^3$：
+      $$\lim_{x\to0^+}\frac{\frac13x^3}{x^\alpha}=\frac13\lim_{x\to0^+}x^{3-\alpha}$$
+      $3-\alpha\gt0$ 时为 0，$=0$ 时为 $\frac13$，<b>$\lt0$ 时为 $+\infty$</b>。故须 <b>$\alpha\le3$</b>。<br>
+      综上 $1\lt\alpha\le3$，选 (B)。<br>
+      <span class="lab">要害</span><b>① 开区间有界 = 两端极限都在，缺一不可，所以要"两头各解一个不等式"；② 两端用的工具完全不同——$+\infty$ 端用洛必达 + 速度链，$0^+$ 端用等价无穷小 + 变限积分升阶。</b>只算一端是本题最常见的丢分方式（(C)(D) 就分别是只算一端的产物）。<br>
+      <span class="lab">边界自查</span>$\alpha=1$ 要不要？（不要，右端发散）$\alpha=3$ 要不要？（要，左端极限 $=\frac13$ 有限）——<b>选项 (B)(C) 的差别全在这两个端点上，必须逐个代进去验。</b>
+    </div>
+  </div>
+
+  <!-- ================= O1 计算 ================= -->
+  <h2 id="s5"><span class="idx">O₁</span>判定类型 · 做好计算　<span style="font-size:.8rem;color:var(--red)">← 全章重头戏</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/高等数学/01_函数极限与连续/高数_第01章_基础30讲.pdf">📄 基础30讲 p.46–63</a>
+
+  <div class="key"><span class="tag">必记 · 七种未定式 + 三步解题思路</span>
+    七种：$\dfrac00,\ \dfrac\infty\infty,\ 0\cdot\infty,\ \infty-\infty,\ 1^\infty,\ 0^0,\ \infty^0$（后三个是幂指函数的极限）。<br>
+    <b>★★★ 题型四类</b>：直接计算 · <b>反求参数</b> · <b>已知某一极限求另一极限</b> · <b>无穷小的比阶</b>（书上说最后一类考得最多）。<br>
+    <b>解题思路（顺序不能乱）</b>：<br>
+    <b>① 化简先行</b>——a. 提出<b>极限不为 0</b> 的因式；b. 等价无穷小代换；c. 恒等变形（提公因式、通分、上下同除最高次幂、<b>换元／倒代换</b>）。<br>
+    <b>② 判断类型</b>（是七种中的哪一种）。<br>
+    <b>③ 选择方法</b>（洛必达 / 泰勒 / 夹逼 / 两个重要极限）。<br>
+    <span style="color:var(--muted);font-size:.85rem">张宇："拿到极限计算的问题，<b>不要直接开始就洛必达法则、泰勒展开</b>。实际上先做一些化简，有的时候化简完了这个题就非常简单了，<b>2023 年有道大题就是第一步要化简，如果不知道化简的话，那个题太复杂了</b>。"</span>
+  </div>
+
+  <h3>5.1　未定式的「整体判定」与化简先行<span class="layer L-str">强化专属</span></h3>
+  <div class="zy"><span class="tag">强化题型 · 整体判定：见到 $\frac?0,\frac?\infty,?\cdot\infty,\infty-?,\infty^?,0^?,?^\infty$ 不必去猜 "?" 是什么</span>
+    因为<b>计算题的未定式就这 7 种</b>，若题设不是这 7 种，那自然就不是求未定式计算了。<br>
+    <b>关于 $u^v$ 的两点</b>：<br>
+    ① 牢记规则 $\lim f=a\gt0,\ \lim g=b\Rightarrow\lim f^{g}=a^{b}$（<b>不是未定式，直接代</b>）。<br>
+    ② <b>学会变形</b>：$\displaystyle\lim_{n\to\infty}\left(\frac{n+1}{n}\right)^{(-1)^n}=\lim_{n\to\infty}\left[\left(\frac{n+1}{n}\right)^{n}\right]^{\frac{(-1)^n}{n}}=\mathrm e^{0}=1$。<br>
+    <b>眉批的要害</b>：这里要<b>消去 $(-1)^n$ 的影响</b>，即消去"有界但不唯一"这种式子（$\sin x$ 之类）。<b>关键是用「无穷小量 × 有界变量 = 无穷小量」去寻找或制造无穷小量</b>——本题制造出来的就是 $\frac1n$。
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 1.1</span>$\lim\limits_{x\to0^+}\dfrac{x^{x}-1}{\ln x\cdot\ln(1-x)}=$ ______。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$-1$</span>　<span style="color:var(--green);font-size:.82rem">✔ sympy 验证</span><br>
+      <span class="lab">分析</span>见幂指函数 $x^x$，<b>一律先用 e 抬起来</b>：$x^x=\mathrm e^{x\ln x}$。而 $x\to0^+$ 时 $x\ln x\to0$（速度链的"慢"结论），故
+      $$x^x-1=\mathrm e^{x\ln x}-1\sim x\ln x$$
+      分母 $\ln(1-x)\sim-x$，故 $\ln x\cdot\ln(1-x)\sim-x\ln x$，于是原式 $=\dfrac{x\ln x}{-x\ln x}=-1$。<br>
+      <span class="lab">要害</span><b>两处等价替换都用在<u>乘除因子</u>上，完全合法。</b>$\mathrm e^\square-1\sim\square$ 中的 $\square=x\ln x$ 必须先确认 $\to0$——这就是速度链那条"慢"结论的第一次实战。<br>
+      <span class="lab">三步模板</span>①化简（恒等变形、等价替换）②工具（洛必达、泰勒、拉格朗日中值定理）③算出结果。本题在①就结束了，<b>根本没用到②</b>。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 1.2</span>计算 $\displaystyle\lim_{x\to0}\left[\frac{1+\displaystyle\int_0^x\frac{\sin t}{t}\,\mathrm dt}{x}-\frac1{\ln(1+x)}\right]$。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$\dfrac12$</span>　<span style="color:var(--green);font-size:.82rem">✔ sympy 验证</span>
+
+      <div class="think"><span class="th">💭 思路 · 拿到题先想什么</span>
+        <ol>
+          <li>整式是 $\infty-\infty$，本能反应是"通分"。但一通分，分子里会同时出现<b>变上限积分</b>和 $\ln(1+x)$，式子立刻变得极难看。<b>先别动手，先看结构。</b></li>
+          <li>把第一项拆开：$\dfrac{1+\int_0^x\frac{\sin t}t\mathrm dt}{x}=\dfrac1x+\dfrac{\int_0^x\frac{\sin t}t\mathrm dt}{x}$。<b>第二块是独立的、极限存在的一项</b>（洛必达一次即得 $\lim\frac{\sin x}{x}=1$）——它跟后面的 $-\frac1{\ln(1+x)}$ 没有任何纠缠。</li>
+          <li>所以正确顺序是：<b>先把这块"干扰项"单独算掉（得 1），剩下的 $\frac1x-\frac1{\ln(1+x)}$ 才是真正的 $\infty-\infty$</b>，而它恰好是 基 1.30 那道原题。</li>
+          <li>能这么拆的依据：<b>四则运算法则要求参与拆分的极限存在</b>——干扰项极限存在（$=1$），所以可以拆出去；剩下的两项极限都不存在，只能<b>捆在一起</b>算。<b>拆哪块、不拆哪块，判据就是"这一块自己的极限存在吗"。</b></li>
+        </ol>
+      </div>
+
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面 · 照这个写<span class="score">解答题 10 分参考｜⛳ = 采分点</span></div>
+        <div class="step"><span class="k">解</span>先计算
+        $$\lim_{x\to0}\frac{\displaystyle\int_0^x\frac{\sin t}{t}\,\mathrm dt}{x}=\lim_{x\to0}\frac{\ \frac{\sin x}{x}\ }{1}=1,$$
+        其中第一个等号用了洛必达法则（$\frac00$ 型）与变上限积分求导公式。<span class="pt">⛳ 算出干扰项 3 分</span></div>
+        <div class="step">因上式极限存在，由极限的四则运算法则可将其分离出来：
+        $$\text{原式}=\lim_{x\to0}\frac{\displaystyle\int_0^x\frac{\sin t}{t}\,\mathrm dt}{x}+\lim_{x\to0}\left[\frac1x-\frac1{\ln(1+x)}\right]=1+\lim_{x\to0}\left[\frac1x-\frac1{\ln(1+x)}\right].\tag{1}$$
+        <span class="pt">⛳ 说明可拆并正确拆分 3 分</span></div>
+        <div class="step">对 (1) 式中余下的 $\infty-\infty$ 型通分，并由 $x\to0$ 时 $\ln(1+x)\sim x$、$x-\ln(1+x)\sim\frac12x^2$，得
+        $$\lim_{x\to0}\left[\frac1x-\frac1{\ln(1+x)}\right]=\lim_{x\to0}\frac{\ln(1+x)-x}{x\ln(1+x)}=\lim_{x\to0}\frac{-\frac12x^2}{x^2}=-\frac12.\tag{2}$$
+        <span class="pt">⛳ 通分 + 等价代换 3 分</span></div>
+        <div class="fin">将 (2) 代入 (1)，得原式 $=1-\dfrac12=\dfrac12$。<span class="pt">⛳ 1 分</span></div>
+      </div>
+
+      <div class="notekeep"><span class="nh">📌 批注 · 写完拿这层校对</span>
+        <b>① <span class="dock">扣分点</span>：不说明"因上式极限存在"就直接拆。</b>$\infty-\infty$ <u>不能随便拆</u>（见 §三 3.5 的表），<b>能拆的唯一理由是被拆出去的那块自己极限存在</b>。这句话就是采分点。<br>
+        <b>② 分母 $x\ln(1+x)$ 换成 $x^2$ 是合法的</b>——它整体是一个<u>乘除因子</u>（分母），不是加减项。<br>
+        <b>③ 顺序纪律</b>：书上把这题放在"化简先行"标题下，就是要你养成<b>「先扫一眼有没有能单独算掉的块」</b>的习惯。同类的还有 $\lim\limits_{x\to0}\left(\frac{1+\sin x}{x}-\frac1{\mathrm e^x-1}\right)=\lim\left(\frac1x-\frac1{\mathrm e^x-1}\right)+\underbrace{\lim\frac{\sin x}{x}}_{=1}$。<br>
+        <b>④ 张宇原话</b>："<b>解题的方法，我们不能蛮干，一定要注意这些细节，细节决定成败。</b>"
+      </div>
+    </div>
+  </div>
+
+  <h3>5.2　未定式的「局部判定」——由极限定义函数<span class="layer L-str">强化专属</span></h3>
+  <div class="zy"><span class="tag">强化题型 · 见 $\lim f(n,x)$ 含参 ⇒ 先判<u>里面那块局部表达式</u>的极限</span>
+    形如 $\lim\limits_{n\to\infty}\dfrac{1+x}{1+nx^{2n}}$，<b>胜负手在 $nx^{2n}$ 这一块</b>。五张局部表（必背）：
+    $$①\ \lim_{n\to\infty}|x|^n=\begin{cases}+\infty,&|x|\gt1\\1,&|x|=1\\0,&|x|\lt1\end{cases}\qquad
+      ②\ \lim_{x\to0^+}x^{a}=\begin{cases}0,&a\gt0\\1,&a=0\\+\infty,&a\lt0\end{cases}$$
+    $$③\ \lim_{n\to\infty}nx^{2n}=\begin{cases}+\infty,&|x|\ge1\\0,&|x|\lt1\end{cases}\qquad
+      ④\ \lim_{n\to\infty}\mathrm e^{nx}=\begin{cases}+\infty,&x\gt0\\1,&x=0\\0,&x\lt0\end{cases}\qquad
+      ⑤\ \lim_{n\to\infty}n^{x}=\begin{cases}+\infty,&x\gt0\\1,&x=0\\0,&x\lt0\end{cases}$$
+    ③ 中 $0\lt|x|\lt1$ 时为什么是 0：令 $a=\frac1{x^2}\gt1$，则 $\lim\limits_{t\to+\infty}\dfrac{t}{a^{t}}=\lim\limits_{t\to+\infty}\dfrac1{a^{t}\ln a}=0$（<b>指数打败幂，速度链</b>）。<br>
+    <b>⚠️ 认得出"变脸"</b>：有时把 $n\to\infty$ 写成 $t\to+\infty$，有时把 $x$ 写成 $t$，形式变了本质没变。
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 1.26</span>设函数 $f(x)=\lim\limits_{n\to\infty}\dfrac{x^2+nx(1-x)\sin^2\pi x}{1+n\sin^2\pi x}$，则 $f(x)=$ ______。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$f(x)=\begin{cases}x^2,&x=0,\pm1,\pm2,\cdots\\ x(1-x),&\text{其他}\end{cases}$</span>　<span style="color:var(--green);font-size:.82rem">✔ $n=10^7$ 数值：整点 5 个、非整点 4 个全吻合</span><br>
+      <span class="lab">分析</span><b>求极限时 $n$ 在变、$x$ 视为常数</b>。找特点：<b>抓 $n$ 前面的系数</b>——分子分母都是「$\square+n\square$」的形状，<b>带头大哥是含 $n$ 的项，除非它的系数为零</b>。所以按 $\sin^2\pi x$ 是否为 0 分类：<br>
+      <b>情形一：$\sin\pi x=0$（即 $x=k$ 整数）</b>——含 $n$ 的项<b>整个消失</b>：
+      $$f(x)=\lim_{n\to\infty}\frac{x^2+n\cdot x(1-x)\cdot0}{1+n\cdot0}=\frac{x^2}{1}=x^2$$
+      <b>情形二：$\sin\pi x\ne0$（$x\ne k$）</b>——上下同除 $n$：
+      $$f(x)=\lim_{n\to\infty}\frac{\frac{x^2}{n}+x(1-x)\sin^2\pi x}{\frac1n+\sin^2\pi x}=\frac{x(1-x)\sin^2\pi x}{\sin^2\pi x}=x(1-x)$$
+      <span class="lab">要害</span><b>这是"由极限求对应法则"的最高难度</b>（张宇原话："这是构造函数的最高难度了，不会再超过这个难度"）。精彩之处在于：<b>若 $n$ 的系数为零，含 $n$ 的项就消失了，结果就是 $x^2$</b>——一个被 $\sin^2\pi x$ 控制的"开关"。<br>
+      <span class="lab">公式</span>$\lim\limits_{n\to\infty}n\cdot0=0$（<b>是"真的 0"，不是无穷小</b>，所以不构成未定式）。<br>
+      <span class="lab">连续剧</span>基 1.38 就是问这个 $f$ 的间断点类型，见 §O₂。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 1.5</span>设函数 $f(x)=\lim\limits_{n\to\infty}\dfrac{1+x}{1+x^{2n}}$，关于该函数的间断点，下列结论正确的是（　）<br>(A) 不存在间断点　(B) 存在间断点 $x=1$　(C) 存在间断点 $x=0$　(D) 存在间断点 $x=-1$</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(B) $x=1$（跳跃间断点）</span>　<span style="color:var(--green);font-size:.82rem">✔ mpmath 高精度取 $n=2000$，六点数值与分段式全吻合</span><br>
+      <span class="lab">分析</span>因式中有 $x^{2n}$，<b>先把 $x=\pm1$ 当分段点</b>，用局部表 ①：
+      $$f(x)=\begin{cases}0,&x\le-1\\ 1+x,&-1\lt x\lt1\\ 1,&x=1\\ 0,&x\gt1\end{cases}$$
+      （$|x|\lt1$ 时 $x^{2n}\to0$ 得 $1+x$；$|x|\gt1$ 时 $x^{2n}\to+\infty$ 得 0；$x=1$ 代入得 $\frac{2}{2}=1$；$x=-1$ 代入得 $\frac{0}{2}=0$。）<br>
+      <b>$x=-1$ 处</b>：左极限 0，右极限 $1+(-1)=0$，$f(-1)=0$ ⇒ <b>三者相等，连续！</b>（(D) 是给没算 $f(-1)$ 的人准备的陷阱。）<br>
+      <b>$x=1$ 处</b>：左极限 $1+1=2$，右极限 0 ⇒ <b>跳跃间断点</b>。选 (B)。<br>
+      <span class="lab">要害</span><b>分段点 ≠ 间断点。</b>把 $\pm1$ 定为分段点只是"分类的边界"，是不是间断还要老老实实算三个值。<b>$x=-1$ 恰好三值相等，这就是本题的全部机关。</b><br>
+      <span class="lab">分析原话</span>"$f$ 是以 $x$ 为自变量的函数，但是当 $n\to\infty$ 求极限时，<b>$x$ 则被看成一个常数（参数）</b>，根据 $x$ 的不同取值求出极限，<b>求完极限后 $x$ 又恢复变量的本来身份</b>。"
+    </div>
+  </div>
+
+  <h3>5.3　六大方法 · 泰勒八式 · 两条展开原则<span class="layer L-base">基础 ★</span></h3>
   <div class="mine"><span class="tag">补讲 · 拿到极限脑内跑这条线</span>
-    代入判型 → <b>能约先约、能提先提、乘除因子先等价替换</b> → 剩 $\frac00/\frac\infty\infty$：<b>加减型优先泰勒</b>（不易错），简单可洛必达（每次验型）→ 幂指型取对数 → 数列/递推用夹逼或单调有界。心法：<b>越早化简越不容易错，洛必达/泰勒最后上。</b>
+    代入判型 → <b>能约先约、能提先提、乘除因子先等价替换</b> → 剩 $\frac00/\frac\infty\infty$：<b>加减型优先泰勒</b>（不易错），简单的可洛必达（每次都要验型）→ 幂指型取对数 → 数列 / 取整用夹逼。<br>
+    心法：<b>越早化简越不容易错，洛必达 / 泰勒最后上。</b>
   </div>
   <div class="gridwrap"><table>
     <tr><th>方法</th><th>要点 / 条件</th><th>一句话陷阱</th></tr>
-    <tr><td><b>①四则运算</b></td><td>各部分极限存在才能拆</td><td>$\infty-\infty$ 不能拆</td></tr>
-    <tr><td><b>②两个重要极限</b></td><td>$\lim\limits_{x\to0}\frac{\sin x}{x}=1$；$\lim\limits_{x\to\infty}(1+\frac1x)^x=e$</td><td>$\frac{\sin\square}\square$ 要求角与分母同一个 $\square$ 且 $\to0$</td></tr>
-    <tr><td><b>③等价无穷小</b></td><td>只换<b>乘除因子</b></td><td>加减项乱换会抵消主部（见下例陷阱）</td></tr>
-    <tr><td><b>④洛必达 ★</b></td><td>$\frac00/\frac\infty\infty$ + 可导 $g'\ne0$ + $\lim\frac{f'}{g'}$ 存在或 $\infty$</td><td>失效≠原极限不存在；数列不能直接洛</td></tr>
-    <tr><td><b>⑤泰勒 ★</b></td><td>加减型通解，展开阶数<b>对齐分母</b></td><td>$\ln(1+x)$ 二次项是减；复合先展外层</td></tr>
-    <tr><td><b>⑥夹逼 / 单调有界</b></td><td>多用于数列（$n$ 项和 / 递推）</td><td>单调有界主要对数列</td></tr>
+    <tr><td><b>①四则运算</b></td><td>各部分极限存在才能拆</td><td>$\infty-\infty$ 不能拆（见 §三 3.5）</td></tr>
+    <tr><td><b>②两个重要极限</b></td><td>$\lim\limits_{x\to0}\frac{\sin x}{x}=1$；$\lim\limits_{x\to\infty}(1+\frac1x)^x=\mathrm e$，两种写法 $\lim\limits_{x\to0}(1+x)^{1/x}=\mathrm e$</td><td>$\frac{\sin\square}\square$ 要求角与分母是同一个 $\square$ 且 $\to0$</td></tr>
+    <tr><td><b>③等价无穷小</b></td><td>只换<b>乘除因子</b></td><td>加减项乱换会抵消主部</td></tr>
+    <tr><td><b>④洛必达 ★</b></td><td>$\frac00/\frac\infty\infty$ + 去心邻域内可导且 $F'\ne0$ + $\lim\frac{f'}{F'}$ 存在或为 $\infty$</td><td><b>右存在则左存在；左存在不意味右存在</b></td></tr>
+    <tr><td><b>⑤泰勒 ★</b></td><td>加减型通解，展开阶数按下面两条原则</td><td>$\ln(1+x)$ 的二次项是<b>减</b>；复合先展外层</td></tr>
+    <tr><td><b>⑥夹逼准则</b></td><td>$h\le f\le g$ 且两端同极限</td><td>$\lim(g-h)=0$ <b>推不出</b> $\lim f$ 存在</td></tr>
   </table></div>
-  <div class="key"><span class="tag">必记 · 泰勒八式 & $1^\infty$ 公式</span>
-    $$e^{x}=1+x+\tfrac{x^2}{2!}+\tfrac{x^3}{3!}+o(x^3),\ \ \ln(1+x)=x-\tfrac{x^2}2+\tfrac{x^3}3+o(x^3),\ \ \sin x=x-\tfrac{x^3}{3!}+o(x^3),\ \ \cos x=1-\tfrac{x^2}{2!}+\tfrac{x^4}{4!}+o(x^4)$$
-    $$(1+x)^\alpha=1+\alpha x+\tfrac{\alpha(\alpha-1)}2x^2+o(x^2),\ \ \arctan x=x-\tfrac{x^3}3+o(x^3),\ \ \arcsin x=x+\tfrac{x^3}6+o(x^3),\ \ \tan x=x+\tfrac{x^3}3+o(x^3)$$
-    <b>$1^\infty$ 型</b>（$\lim f=1,\lim g=\infty$）：$\displaystyle\lim f^{\,g}=\exp\!\big(\lim g(f-1)\big)$。
-  </div>
-  <div class="trap"><span class="tag">陷阱 · 加减项乱换 = 抵消主部</span>
-    $\displaystyle\lim_{x\to0}\frac{\tan x-\sin x}{x^3}$：两项都换 $x$ 得 $0$（错）。正解 $\tan x-\sin x=\tan x(1-\cos x)\sim x\cdot\frac{x^2}2$，极限 $=\frac12$。加减处改用泰勒。
+
+  <div class="trap"><span class="tag">陷阱 · ⚠️ 洛必达的三条注（第 3 条几乎年年考）</span>
+    (1) 一般只对 $\frac00$ 或 $\frac\infty\infty$ 用；(2) 结果仍是未定式且条件仍满足，<b>可以连续用</b>；<br>
+    <b>(3) 若 $\lim\dfrac{f'}{F'}$ 不存在也不为 $\infty$，<u>推不出</u> $\lim\dfrac{f}{F}$ 不存在。</b>一句话：<b>右存在，则左存在；但左存在，并不意味着右一定存在。</b><br>
+    <b>经典反例</b>：$\lim\limits_{x\to0}\dfrac{x^2\sin\frac1x}{x}=\lim\limits_{x\to0}x\sin\frac1x=0$ <b>存在</b>；而洛必达后 $\lim\limits_{x\to0}\left(2x\sin\frac1x-\cos\frac1x\right)$ <b>不存在</b>。<br>
+    <b>👉 洛完发现"极限不存在"，<u>不能</u>下结论说原极限不存在，要换方法（等价替换 / 泰勒 / 夹逼）重来。</b><br>
+    <span style="color:var(--muted);font-size:.85rem">冷知识（可当页面调剂）：洛必达法则不是洛必达的，是他老师<b>约翰·伯努利</b> 1694 年卖给他的；法则二其实是<b>柯西</b>给的。洛必达出版了<b>世界上第一本微积分教材</b>，可称"伟大的数学知识传播者"。</span>
   </div>
 
-  <h3>2.4　强化题型库 · 七种刁钻计算<span class="layer L-str">强化专属</span></h3>
+  <div class="key"><span class="tag">必记 · 泰勒八式（张宇："8 个都要背，一站直达"）</span>
+    $$\sin x=x-\frac{x^3}{3!}+o(x^3),\qquad \cos x=1-\frac{x^2}{2!}+\frac{x^4}{4!}+o(x^4)$$
+    $$\arcsin x=x+\frac{x^3}{3!}+o(x^3),\qquad \tan x=x+\frac{x^3}{3}+o(x^3)$$
+    $$\arctan x=x-\frac{x^3}{3}+o(x^3),\qquad \ln(1+x)=x-\frac{x^2}2+\frac{x^3}3+o(x^3)$$
+    $$\mathrm e^{x}=1+x+\frac{x^2}{2!}+\frac{x^3}{3!}+o(x^3),\qquad (1+x)^{\alpha}=1+\alpha x+\frac{\alpha(\alpha-1)}{2!}x^2+o(x^2)$$
+    <b>另一个必备的展开</b>：$\sec x=1+\dfrac{x^2}{2}+o(x^3)$（真题考过"$\sec x$ 的 2 次泰勒多项式 $g(x)=1+\frac12x^2$"）。<br>
+    <span style="color:var(--muted);font-size:.85rem">张宇："泰勒有一双火眼金睛，一眼看穿所有函数。<b>我们要泰勒公式，也要洛必达法则，但泰勒公式是远远优于洛必达法则的。</b>"</span>
+  </div>
 
-  <div class="zy"><span class="tag">强化题型 A · 幂指 $u^v$（$1^\infty$）先套公式再化归</span>
-    $\lim f=a\gt0,\ \lim g=b\Rightarrow\lim f^{\,g}=a^b$；$1^\infty$ 用 $\lim f^g=e^{\lim g(f-1)}$。关键动作：把 $u^v$ 写成 $e^{v\ln u}$，指数上就是可算的 $0\cdot\infty$。</div>
+  <div class="key"><span class="tag">必记 · ★★ 泰勒展开的两条原则（展到几阶就看这两条）</span>
+    <b>① $\dfrac AB$ 型 ⇒「上下同阶」原则</b>：分母（或分子）是 $x$ 的 $k$ 次幂，就把分子（或分母）<b>展开到 $x$ 的 $k$ 次幂</b>。<br>
+    　示范 $\lim\limits_{x\to0}\dfrac{x-\ln(1+x)}{x^2}$：$\ln(1+x)=x+o(x)$ <b>不够</b>；$=x-\frac{x^2}2+o(x^2)$ <b>恰到好处</b>；$=x-\frac{x^2}2+\frac{x^3}3+o(x^3)$ <b>多了</b>。<br>
+    　顺带得到重要代换式 <b>$x-\ln(1+x)\sim\frac12x^2$</b>（与 $1-\cos x\sim\frac12x^2$ 并列）。<br>
+    <b>② $A-B$ 型 ⇒「幂次最低」原则</b>：把 $A,B$ 分别展开到<b>它们系数<u>不相等</u>的 $x$ 的最低次幂</b>为止。<br>
+    　示范：$x\to0$ 时 $\cos x-\mathrm e^{-x^2/2}\sim ax^b$，求 $a,b$。
+    $$\cos x=1-\frac{x^2}{2!}+\frac{x^4}{4!}+o(x^4),\qquad \mathrm e^{-x^2/2}=1-\frac{x^2}{2}+\frac1{2!}\cdot\frac{x^4}{4}+o(x^4)$$
+    　$x^2$ 项系数相同（都是 $-\frac12$）⇒ 不够，<b>展到 $x^4$ 才分家</b>：
+    $$\cos x-\mathrm e^{-x^2/2}=\left(\frac1{24}-\frac18\right)x^4+o(x^4)=-\frac1{12}x^4+o(x^4)\ \Longrightarrow\ a=-\frac1{12},\ b=4$$
+  </div>
+
   <div class="eg">
-    <div class="q"><span class="no">例1.1</span>$\displaystyle\lim_{x\to0^+}\frac{x^{x}-1}{\ln x\cdot\ln(1-x)}$</div>
-    <div class="s"><span class="lab">解</span>$x^x-1=e^{x\ln x}-1\sim x\ln x$，$\ln(1-x)\sim -x$，故原式 $=\dfrac{x\ln x}{\ln x\cdot(-x)}=\boxed{-1}$。<span class="ans"> ✔ 已复算</span></div>
+    <div class="q"><span class="no">基 1.34 ★</span>设当 $x\to0$ 时，$\mathrm e^{x}-(ax^2+bx+1)$ 是比 $x^2$ 高阶的无穷小，则（　）<br>(A) $a=\frac12,b=1$　(B) $a=1,b=1$　(C) $a=-\frac12,b=-1$　(D) $a=-1,b=1$</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(A) $a=\dfrac12,\ b=1$</span>　<span style="color:var(--green);font-size:.82rem">✔ sympy：代 (A) 得极限 0；代 (B) 得 $-\frac12\ne0$</span><br>
+      <span class="lab">分析（法一 · 泰勒，最快）</span>题设即 $\lim\limits_{x\to0}\dfrac{\mathrm e^x-(ax^2+bx+1)}{x^2}=0$。由「上下同阶」把 $\mathrm e^x$ 展到 $x^2$：
+      $$\lim_{x\to0}\frac{\left(1+x+\frac{x^2}{2}+o(x^2)\right)-(ax^2+bx+1)}{x^2}=\lim_{x\to0}\frac{\left(\frac12-a\right)x^2+(1-b)x+o(x^2)}{x^2}=0$$
+      要极限为 0，<b>$x$ 的一次项和二次项系数必须全为零</b>（否则一次项那支会 $\to\infty$），故 $b=1,\ a=\frac12$。<br>
+      <span class="lab">法二 · 洛必达（书上也给了，思路值得学）</span>
+      $$\lim_{x\to0}\frac{\mathrm e^x-(ax^2+bx+1)}{x^2}=\lim_{x\to0}\frac{\mathrm e^x-2ax-b}{2x}$$
+      <b>若 $b\ne1$，上式右端分子 $\to1-b\ne0$ 而分母 $\to0$，右端趋于无穷，从而左端也趋于无穷，与题设矛盾，所以 $b=1$</b>。此时 $\lim\dfrac{\mathrm e^x-2ax-1}{2x}=\lim\dfrac{\mathrm e^x-1}{2x}-a=\dfrac12-a=0$，故 $a=\frac12$。<br>
+      <span class="lab">要害</span><b>「在无穷小比阶相关问题中，可优先考虑泰勒公式」</b>——这是书上原话。法二那句"若 $b\ne1$ 则右端趋于无穷，与题设矛盾"是<b>反证式定参数</b>，习 1.15 也用得上。
+    </div>
   </div>
 
-  <div class="zy"><span class="tag">强化题型 B · 复合函数型比阶 $f[g(x)]$</span>
-    $x\to0$，$f(x)\sim ax^m,\ g(x)\sim bx^n$（$ab\ne0$，$m,n$ 正整数）⇒ $f[g(x)]\sim a\,b^{m}x^{mn}$。<b>先各自定阶，再代进去乘</b>。</div>
   <div class="eg">
-    <div class="q"><span class="no">例1.4</span>当 $x\to0$，$\cos\!\big(e^{x^2/2}-1\big)-1\sim c\,x^{k}$，求 $ck$。</div>
-    <div class="s"><span class="lab">解</span>外 $\cos u-1\sim-\tfrac12u^2$，内 $g=e^{x^2/2}-1\sim\tfrac12x^2$，故 $f[g]\sim-\tfrac12(\tfrac12)^2x^{4}=-\tfrac18x^4$，$c=-\tfrac18,k=4$，$ck=\boxed{-\tfrac12}$。<span class="ans"> ✔ 已复算</span></div>
+    <div class="q"><span class="no">基 1.35</span>设函数 $f(x)=\dfrac{\sin x}{1+x^2}$ 在 $x=0$ 处的 3 次泰勒多项式为 $ax+bx^2+cx^3$，则（　）<br>(A) $a=1,b=0,c=-\frac76$　(B) $a=1,b=0,c=\frac76$　(C) $a=-1,b=-1,c=-\frac76$　(D) $a=-1,b=-1,c=\frac76$</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(A) $a=1,\ b=0,\ c=-\dfrac76$</span>　<span style="color:var(--green);font-size:.82rem">✔ sympy 级数展开得 $x-\frac76x^3$</span><br>
+      <span class="lab">分析（法一 · 两个已知展开式相乘）</span>
+      $$\sin x=x-\frac{x^3}{3!}+\cdots,\qquad \frac1{1+x^2}=1-x^2+x^4-\cdots$$
+      $$\frac{\sin x}{1+x^2}=\left(x-\frac{x^3}{6}+\cdots\right)\left(1-x^2+x^4-\cdots\right)=x-\frac76x^3+\cdots$$
+      <b>构成 $x^3$ 项的只有两条路</b>：$x\cdot(-x^2)=-x^3$ 与 $\left(-\frac{x^3}6\right)\cdot1$，合起来 $-1-\frac16=-\frac76$。<br>
+      <span class="lab">法二 · 逐项定系数</span>由 $\sin x=(1+x^2)(ax+bx^2+cx^3+\cdots)$：
+      $\lim\limits_{x\to0}\frac{\sin x}{x}=\lim(1+x^2)(a+bx+\cdots)=a$，故 $a=1$；$\sin x$ 是奇函数故 $b=0$；再
+      $$c=\lim_{x\to0}\frac{\sin x-(1+x^2)x}{x^3}=\lim_{x\to0}\frac{\sin x-x}{x^3}-1=-\frac16-1=-\frac76$$
+      <span class="lab">秒杀</span><b>$f$ 是奇函数，既然写"=", 则两边性质一样 ⇒ 右边不能有偶次方 ⇒ $b=0$，(C)(D) 当场排除</b>；再看 $a$：$\lim\frac{\sin x}{x(1+x^2)}=1\gt0$，$a=1$，只剩 (A)(B)；$c$ 的符号靠 $\frac1{1+x^2}$ 那个 $-x^2$ 是负的 ⇒ 选 (A)。<b>全程不用算完。</b><br>
+      <span class="lab">要害</span><b>「函数在 0 处的泰勒多项式」= 把已知展开式相乘/相除后截断</b>，不必去求 $f'''(0)$。<b>$\frac1{1+x^2}=1-x^2+x^4-\cdots$ 是几何级数，要背。</b>
+    </div>
   </div>
 
-  <div class="zy"><span class="tag">强化题型 C · 变上限积分型（升阶）</span>
-    <b>一型（$f\to0$）</b>：$f(x)\sim ax^m\Rightarrow\displaystyle\int_0^x f(t)\,dt\sim\int_0^x at^m\,dt=\frac{a}{m+1}x^{m+1}$（升一阶）。<br>
-    <b>★二型（$f\not\to0$）</b>：$\lim f=A\ne0,\ \lim h=0\Rightarrow\displaystyle\int_0^{h(x)}f(t)\,dt\sim A\,h(x)$。<br>
-    <b>复合型</b>：$f\sim ax^m,g\sim bx^n\Rightarrow\displaystyle\int_0^{g(x)}f(t)\,dt\sim\int_0^{bx^n}at^m\,dt$。看到 $\dfrac{\int_0^{\square}\cdots}{x^\alpha}$ 先用它把分子定阶。</div>
   <div class="eg">
-    <div class="q"><span class="no">例1.6</span>$f(x)=\dfrac{\int_0^x\ln(1+t^2)\,dt}{x^{\alpha}}$ 在 $(0,+\infty)$ 有界，求 $\alpha$ 范围。</div>
-    <div class="s"><span class="lab">解</span>$x\to+\infty$ 端：分子 $\to+\infty$，洛必达得 $\dfrac{\ln(1+x^2)}{\alpha x^{\alpha-1}}$，要极限存在需 $\alpha\gt1$；$x\to0^+$ 端：分子 $\sim\int_0^x t^2dt=\tfrac13x^3$，$f\sim\tfrac13x^{3-\alpha}$，有界需 $\alpha\le3$。合得 $\boxed{1\lt\alpha\le3}$。<span class="ans"> ✔ 已复算</span></div>
+    <div class="q"><span class="no">基 1.27</span>已知极限 $\lim\limits_{x\to0}\dfrac{\tan2x+xf(x)}{\sin x^3}=0$，则 $\lim\limits_{x\to0}\dfrac{2+f(x)}{x^2}=$（　）<br>(A) $\frac{13}9$　(B) 4　(C) $\frac{10}3$　(D) $-\frac83$</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(D) $-\dfrac83$</span>　<span style="color:var(--green);font-size:.82rem">✔ 构造满足题设的 $f$（取 $\alpha(x)=x$）后 sympy 复算得 $-8/3$</span><br>
+      <span class="lab">分析</span>典型的<b>「已知某一极限求另一极限」</b>：要建立已知和未知的联系，<b>两条路——一是脱帽法，二是泰勒展开</b>。<br>
+      <b>法一 · 脱帽法</b>：$\sin x^3\sim x^3$，记 $\dfrac{\tan2x+xf(x)}{x^3}=\alpha(x)$（$x\to0$ 时的无穷小），<b>解出 $f$</b>：
+      $$f(x)=\frac{x^3\alpha(x)-\tan2x}{x}$$
+      代入待求式并通分：
+      $$\lim_{x\to0}\frac{2+f(x)}{x^2}=\lim_{x\to0}\frac{2x-\tan2x+x^3\alpha(x)}{x^3}=\lim_{x\to0}\frac{2x-\left[2x+\frac13(2x)^3+o(x^3)\right]}{x^3}=-\frac83$$
+      （$x^3\alpha(x)/x^3=\alpha\to0$。）<br>
+      <b>法二 · 泰勒展开（更短）</b>：把 $\tan2x=2x+\frac13(2x)^3+o(x^3)$ 直接代进题设：
+      $$\lim_{x\to0}\frac{2x+\frac83x^3+o(x^3)+xf(x)}{x^3}=0\ \Longrightarrow\ \lim_{x\to0}\frac{2+f(x)}{x^2}=-\frac83$$
+      （把 $\frac{2x+xf(x)}{x^3}=\frac{2+f(x)}{x^2}$ 单拎出来即可。）<br>
+      <span class="lab">要害</span><b>「$\tan$ 狗 $-$ 狗 $\sim\frac13$ 狗$^3$」这里狗 $=2x$，所以是 $\frac13(2x)^3=\frac83x^3$——⚠️ 千万别写成 $\frac13x^3$。</b>这是本题唯一的计算陷阱，(A)(B)(C) 三个错项都由此而来。<br>
+      <span class="lab">脱帽法的标准写法</span>若 $\lim\limits_{x\to0}f(x)=A$，则 $f(x)=A+\alpha(x)$，其中 $\lim\alpha=0$。（<b>超实数 = 标准实数部分 + 无穷小</b>。）
+    </div>
   </div>
 
-  <div class="zy"><span class="tag">强化题型 D · 带头大哥型（$\alpha=o(\beta)$）</span>
-    $\alpha,\beta$ 同过程非零无穷小，且 $\alpha=o(\beta)$（$\beta$ 是"带头大哥"）⇒ ① $\alpha+\beta\sim\beta$；② $\alpha+\beta$ 与 $\beta$ 同号；③ $\alpha\beta=o(\beta^2)$。<b>和里只留最低阶那一项。</b></div>
   <div class="eg">
-    <div class="q"><span class="no">例1.5</span>$f,g$ 在 $x=0$ 去心邻域有定义恒不为 0，$x\to0$ 时 $f$ 是 $g$ 的高阶无穷小，则（　）<br>(A) $f+g=o(g)$　(B) $fg=o(f^2)$　(C) $f=o(e^{g}-1)$　(D) $f=o(g^2)$</div>
-    <div class="s"><span class="lab">解</span>$g$ 是带头大哥：$f+g\sim g$（A 错）；$fg=o(g^2)$（B 错）；$e^{g}-1\sim g$，而 $f=o(g)=o(e^g-1)$，选 $\boxed{\text{C}}$。<span class="ans"> ✔ 已复算</span></div>
+    <div class="q"><span class="no">习 1.1</span>若 $\lim\limits_{x\to0}\dfrac{\sin x+xf(x)}{x^3}=0$，则 $\lim\limits_{x\to0}\dfrac{1+f(x)}{x^2}$ 为（　）(A) 0　(B) $\frac13$　(C) $\frac16$　(D) $\infty$</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(C) $\dfrac16$</span>　<span style="color:var(--green);font-size:.82rem">✔ 构造法 sympy 复算</span><br>
+      <span class="lab">法一 · 拆项（书上第一解法，最巧）</span>在分子里<b>凑出差函数</b>：
+      $$0=\lim_{x\to0}\frac{\sin x-x+x+xf(x)}{x^3}=\lim_{x\to0}\frac{\sin x-x}{x^3}+\lim_{x\to0}\frac{x+xf(x)}{x^3}=-\frac16+\lim_{x\to0}\frac{1+f(x)}{x^2}$$
+      故所求 $=\dfrac16$。<b>「$+x-x$」这一手就是"创造差函数"</b>（§四 模板 (2) 的③）。<br>
+      <span class="lab">法二 · 泰勒</span>$\lim\dfrac{x-\frac16x^3+o(x^3)+xf(x)}{x^3}=\lim\dfrac{1+f(x)}{x^2}-\dfrac16=0$。<br>
+      <span class="lab">法三 · 脱帽</span>$\frac{\sin x+xf(x)}{x^3}=0+\alpha$，得 $xf(x)=-\sin x+o(x^3)$，故所求 $=\lim\dfrac{x-\sin x+o(x^3)}{x^3}=\dfrac16$。<br>
+      <span class="lab">要害</span>与 基 1.27 是<b>同一道题的孪生版</b>（把 $\tan2x$ 换成 $\sin x$、$2$ 换成 $1$）。<b>两题并排放，"已知极限求另一极限"的三条路就固定下来了：拆项凑差函数 / 泰勒 / 脱帽。考场上选最快的那条——通常是泰勒。</b>
+    </div>
   </div>
 
-  <div class="zy"><span class="tag">强化题型 E · $\infty-\infty$ 见"同型函数之差"→ 拉格朗日中值定理</span>
-    在 $\lim$ 里见 $f-f$ 型（三角、反三角、对数、指数之差，如 $\arctan(x+1)-\arctan x$、$\sqrt[n]2-\sqrt[n+1]2$），用 $f(b)-f(a)=f'(\xi)(b-a)$ 把差<b>拆成"导数 × 自变量差"</b>，自变量差往往是无穷小。</div>
   <div class="eg">
-    <div class="q"><span class="no">例1.7</span>$\displaystyle\lim_{n\to\infty}n^2\big(\sqrt[n]{2}-\sqrt[n+1]{2}\big)$</div>
-    <div class="s"><span class="lab">解</span>对 $2^x$ 在 $[\tfrac1{n+1},\tfrac1n]$ 用中值定理：$\sqrt[n]2-\sqrt[n+1]2=2^{\xi}\ln2\cdot\big(\tfrac1n-\tfrac1{n+1}\big)$，$\xi\to0^+$ 故 $2^\xi\to1$。原式 $=\lim n^2\ln2\cdot\dfrac{1}{n(n+1)}=\boxed{\ln2}$。<span class="ans"> ✔ 已复算</span></div>
+    <div class="q"><span class="no">习 1.15</span>设 $\lim\limits_{x\to0}\dfrac{\ln(1+x)-(ax+bx^2)}{x^2}=2$，求常数 $a,b$。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$a=1,\ b=-\dfrac52$</span>　<span style="color:var(--green);font-size:.82rem">✔ 代回 sympy 得极限恰为 2</span>
+
+      <div class="think"><span class="th">💭 思路 · 拿到题先想什么</span>
+        <ol>
+          <li>要定 $a,b$ <b>两个</b>常数，就需要<b>两个独立方程</b>。题目只给了一个极限等式——但这个等式其实<b>暗含两条信息</b>：分子展开后，$x$ 的<u>一次项系数</u>必须为 0（否则除以 $x^2$ 后那支 $\to\infty$，极限不可能是有限数 2），<u>二次项系数</u>必须恰好等于 2。<b>数量对上了。</b></li>
+          <li>所以路子是：<b>把分子按「上下同阶」原则展到 $x^2$，然后逐项比系数</b>。分母是 $x^2$，所以 $\ln(1+x)$ 展到 $x^2$ 正好。</li>
+          <li>顺序纪律：<b>先由一次项定 $a$，再由二次项定 $b$</b>。反过来会算崩——因为二次项的方程里不含 $a$，但一次项若不为零，整个极限就没有意义。</li>
+          <li>（书上还给了第二条路：凑 $x-\ln(1+x)\sim\frac12x^2$。值得学，但考场上比系数更稳。）</li>
+        </ol>
+      </div>
+
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面 · 照这个写<span class="score">解答题 10 分参考｜⛳ = 采分点</span></div>
+        <div class="step"><span class="k">解</span>由泰勒公式，$x\to0$ 时 $\ln(1+x)=x-\dfrac12x^2+o(x^2)$，代入所给极限得
+        $$2=\lim_{x\to0}\frac{x-\frac12x^2+o(x^2)-ax-bx^2}{x^2}=\lim_{x\to0}\frac{(1-a)x-\left(\frac12+b\right)x^2+o(x^2)}{x^2}.\tag{1}$$
+        <span class="pt">⛳ 展到 $x^2$ 并整理 4 分</span></div>
+        <div class="step">若 $1-a\ne0$，则 (1) 式右端 $\to\infty$，与极限等于 2 矛盾，故必有
+        $$1-a=0,\qquad\text{即}\qquad a=1.\tag{2}$$
+        <span class="pt">⛳ 由一次项定 $a$ 3 分</span></div>
+        <div class="step">将 (2) 代入 (1)，得 $-\left(\dfrac12+b\right)=2$。<span class="pt">⛳ 由二次项定 $b$ 2 分</span></div>
+        <div class="fin">故所求常数为 $a=1,\ b=-\dfrac52$。<span class="pt">⛳ 1 分</span></div>
+      </div>
+
+      <div class="notekeep"><span class="nh">📌 批注 · 写完拿这层校对</span>
+        <b>① <span class="dock">扣分点</span>：直接写"故 $1-a=0$"而不说理由。</b>必须写出<b>"若 $1-a\ne0$ 则右端趋于无穷，与题设矛盾"</b>这句反证——它是本题最核心的逻辑，也是与 基 1.34 法二共用的一句话。<br>
+        <b>② <span class="dock">扣分点</span>：把 $\ln(1+x)$ 的二次项写成 $+\frac12x^2$。</b>正确是 <b>$-\frac12x^2$</b>。符号错则 $b=-\frac32$，全题报废。<br>
+        <b>③ 展开到几阶</b>：分母 $x^2$ ⇒ 分子展到 $x^2$（「上下同阶」）。展到 $x^3$ 不错但多写，展到 $x$ 就不够。<br>
+        <b>④ 书上的第二解法（值得会）</b>：由 $x-\ln(1+x)\sim\frac12x^2$，把分子凑成这个形状——
+        $$2=-\lim_{x\to0}\frac{x-\ln(1+x)}{x^2}-\lim_{x\to0}\frac{(a-1)x}{x^2}-\lim_{x\to0}\frac{bx^2}{x^2}=-\frac12-b-\lim_{x\to0}\frac{(a-1)x}{x^2}$$
+        末项存在必须 $a-1=0$，故 $a=1$，因而 $-\frac12-b=2$，$b=-\frac52$。<b>这一手体现的是"背熟差函数等价式，能省掉展开"。</b>
+      </div>
+    </div>
   </div>
 
-  <div class="zy"><span class="tag">强化题型 F · 差函数"恒等变形创造" & $f_1^{g}-f_2^{g}$ 提公因子</span>
-    没有现成差函数就<b>造</b>一个：$x-\ln(1+\tan x)=(x-\tan x)+(\tan x-\ln(1+\tan x))$。幂之差 $[f_1]^{g}-[f_2]^{g}=[f_2]^{g}\big\{(f_1/f_2)^{g}-1\big\}$，$[f]^{g_1}-[f]^{g_2}=[f]^{g_2}\big\{f^{\,g_1-g_2}-1\big\}$——都是先提公因子再化 $e^{\square}-1$。</div>
   <div class="eg">
-    <div class="q"><span class="no">例1.8</span>$\displaystyle\lim_{x\to+\infty}x^2\big(3^{1/x}-3^{1/(x+1)}\big)$</div>
-    <div class="s"><span class="lab">解</span>提公因子 $3^{1/(x+1)}$：$=\lim x^2\cdot3^{1/(x+1)}\big(3^{\frac1x-\frac1{x+1}}-1\big)\sim\lim x^2\cdot1\cdot\dfrac{\ln3}{x(x+1)}=\boxed{\ln3}$。<span class="ans"> ✔ 已复算</span></div>
+    <div class="q"><span class="no">习 1.16</span>求常数 $a$ 和 $b$ 的值，使得函数 $f(x)=x-(a+b\cos x)\sin x$ 在 $x\to0$ 时是 $x$ 的 <b>5 阶</b>无穷小。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$a=\dfrac43,\ b=-\dfrac13$（此时 $f(x)=\dfrac1{30}x^5+o(x^5)$）</span>　<span style="color:var(--green);font-size:.82rem">✔ sympy 级数：$x,x^2,x^3,x^4$ 系数全为 0，$x^5$ 系数 $=\frac1{30}\ne0$</span>
+
+      <div class="think"><span class="th">💭 思路 · 拿到题先想什么</span>
+        <ol>
+          <li>"是 $x$ 的 5 阶无穷小"翻译成数学式：<b>展开后 $x^1\sim x^4$ 的系数全为 0，且 $x^5$ 的系数 $\ne0$</b>。注意最后那个<u>不等于零</u>的条件必须一起写——否则"6 阶、7 阶"也满足前面几条。</li>
+          <li>$f$ 里有 $\cos x\sin x$ 这个乘积，直接展开要做级数乘法，容易错。<b>先用二倍角把乘积化成单个正弦</b>：$b\cos x\sin x=\frac b2\sin2x$。<b>这一步恒等变形是全题的关键，做了之后只剩两个已知展开式。</b></li>
+          <li>展到几阶？目标是 $x^5$，所以 $\sin x$ 与 $\sin2x$ 都<b>展到 $x^5$</b>。$\sin$ 是奇函数 ⇒ 只有奇次项 ⇒ 需要比的其实只有 $x^1,x^3,x^5$ 三档，$x^2,x^4$ 自动为 0。</li>
+          <li>三档、两个未知数：<b>$x$ 与 $x^3$ 给两个方程恰好定出 $a,b$，$x^5$ 那档留作"$\ne0$"的验证</b>。数量刚好，说明"5 阶"这个要求既不多余也不矛盾。</li>
+        </ol>
+      </div>
+
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面 · 照这个写<span class="score">解答题 10 分参考｜⛳ = 采分点</span></div>
+        <div class="step"><span class="k">解</span>先作恒等变形。由 $2\sin x\cos x=\sin2x$ 得
+        $$f(x)=x-a\sin x-b\sin x\cos x=x-a\sin x-\frac12b\sin2x.\tag{1}$$
+        <span class="pt">⛳ 二倍角化积为单项 2 分</span></div>
+        <div class="step">再利用泰勒展开式
+        $$\sin x=x-\frac{x^3}{6}+\frac{x^5}{120}+o(x^5),\qquad \sin2x=2x-\frac{(2x)^3}{6}+\frac{(2x)^5}{120}+o(x^5)=2x-\frac43x^3+\frac4{15}x^5+o(x^5),$$
+        代入 (1) 可得
+        $$f(x)=(1-a-b)x+\left(\frac a6+\frac{2b}3\right)x^3-\left(\frac a{120}+\frac{2b}{15}\right)x^5+o(x^5).\tag{2}$$
+        <span class="pt">⛳ 两式展到 $x^5$ 3 分</span><span class="pt">⛳ 合并同次项 2 分</span></div>
+        <div class="step">欲使 $x\to0$ 时 $f(x)$ 是 $x$ 的 5 阶无穷小，由 (2) 应有
+        $$\begin{cases}1-a-b=0,\\[2pt] \dfrac a6+\dfrac{2b}3=0,\\[2pt] \dfrac a{120}+\dfrac{2b}{15}\ne0,\end{cases}$$
+        <span class="pt">⛳ 列出含"$\ne0$"的完整条件 2 分</span></div>
+        <div class="fin">解得 $a=\dfrac43,\ b=-\dfrac13$（此时 $\dfrac a{120}+\dfrac{2b}{15}=-\dfrac1{30}\ne0$，条件满足）。<span class="pt">⛳ 1 分</span></div>
+      </div>
+
+      <div class="notekeep"><span class="nh">📌 批注 · 写完拿这层校对</span>
+        <b>① <span class="dock">扣分点</span>：只列两个等式，漏掉第三条 $\ne0$。</b>"恰好 5 阶"＝前面全为零 <u>且</u> 第 5 阶不为零。<b>只写等式，逻辑上只证明了"至少 5 阶"。</b><br>
+        <b>② <span class="dock">扣分点</span>：不化二倍角，硬做 $\sin x\cdot\cos x$ 的级数乘法。</b>能算对，但要多算两轮、还得展 $\cos x$ 到 $x^4$。<b>看到 $\sin\square\cos\square$ 先想二倍角</b>，这是省时也是省错。<br>
+        <b>③ 展 $\sin2x$ 时"狗"要整块带幂</b>：$\frac{(2x)^3}{6}=\frac{8x^3}{6}=\frac43x^3$，$\frac{(2x)^5}{120}=\frac{32x^5}{120}=\frac4{15}x^5$。<b>漏掉 $2^3,2^5$ 是本题最常见的算错</b>（与 基 1.27 的 $\frac13(2x)^3$ 同一个坑）。<br>
+        <b>④ 解方程的心算</b>：由第二式 $\frac a6=-\frac{2b}3$ 得 $a=-4b$，代入第一式 $1+4b-b=0$ 得 $b=-\frac13$，故 $a=\frac43$。<br>
+        <b>⑤ 为什么 $x^2,x^4$ 不用列</b>：$f(x)=x-a\sin x-\frac b2\sin2x$ 是<b>奇函数</b>（三项都奇），偶次项恒为 0。<b>在卷面上点一句"$f$ 为奇函数，偶次项自动为零"能省两行。</b>
+      </div>
+    </div>
   </div>
 
-  <div class="zy"><span class="tag">强化题型 G · 见 $\lim[f(x)-ax]$ → 把 $f$ 与 $ax$ "合并"成乘除</span>
-    $\infty-\infty$ 的一个常见外壳。总方向：<b>提出主部、把"和差"化"积"</b>，再用 $e^{\square}-1\sim\square$ 或泰勒。</div>
+  <h3>5.4　“$\frac00$”“$\frac\infty\infty$”“$0\cdot\infty$”</h3>
+
   <div class="eg">
-    <div class="q"><span class="no">例1.10</span>$\displaystyle\lim_{x\to+\infty}\Big[\frac{x^{1+x}}{(1+x)^x}-\frac{x}{e}\Big]$</div>
-    <div class="s"><span class="lab">解</span>提 $\tfrac xe$：$=\tfrac xe\big[e\cdot(\tfrac{x}{1+x})^x-1\big]=\tfrac xe\big[e^{\,1-x\ln(1+\frac1x)}-1\big]$。指数 $1-x\ln(1+\tfrac1x)=\tfrac1{2x}+o(\tfrac1x)$，故 $\sim\tfrac xe\cdot\tfrac1{2x}=\boxed{\tfrac1{2e}}$。<span class="ans"> ✔ 已复算</span></div>
+    <div class="q"><span class="no">基 1.24</span>$\lim\limits_{x\to0^+}\dfrac{(1+x)^{\frac1x}-\mathrm e}{x}=$ ______。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$-\dfrac{\mathrm e}2$</span>　<span style="color:var(--green);font-size:.82rem">✔ sympy 验证</span><br>
+      <span class="lab">分析</span>$\frac00$ 型。<b>碰到幂指函数，一定用 e 抬起来</b>（$u^v=\mathrm e^{v\ln u}$），然后<b>提出常数 $\mathrm e$ 凑 $\mathrm e^\square-1$</b>：
+      $$\lim_{x\to0^+}\frac{\mathrm e^{\frac1x\ln(1+x)}-\mathrm e}{x}=\mathrm e\lim_{x\to0^+}\frac{\mathrm e^{\frac1x\ln(1+x)-1}-1}{x}\xrightarrow{\mathrm e^\square-1\sim\square}\mathrm e\lim_{x\to0^+}\frac{\frac1x\ln(1+x)-1}{x}$$
+      $$\xrightarrow{\text{通分}}\mathrm e\lim_{x\to0^+}\frac{\ln(1+x)-x}{x^2}=\mathrm e\cdot\frac{-\frac12x^2}{x^2}=-\frac{\mathrm e}2$$
+      <span class="lab">要害</span><b>提 $\mathrm e$ 那一步是全题灵魂</b>：不提，指数上的 $\frac1x\ln(1+x)$ 与常数 $\mathrm e$ 无法合流；提了以后指数变成 $\frac1x\ln(1+x)-1\to0$，$\mathrm e^\square-1\sim\square$ 立刻可用。<b>这是「$[f]^{g_1}-[f]^{g_2}$ 提公因子」的一个特例</b>（见 §5.5 强化题型③）。<br>
+      <span class="lab">★ 顺带记住三条（书上标"这个结论太重要了"）</span>$f(x)=(1+x)^{1/x}$ 在 $x\gt0$ 时：① <b>单调减少</b>；② $\lim\limits_{x\to0^+}f=\mathrm e$；<b>③ $(1+x)^{1/x}-\mathrm e\sim-\dfrac{\mathrm e}2x\ (x\to0^+)$</b>（就是本题）。<br>
+      <span class="lab">题型提示</span>眉批写："<b>这是考研中喜欢出的一种类型——提前告诉你存在了，实际上问是几。</b>"
+    </div>
   </div>
-  <p style="font-size:.85rem;color:var(--muted)">同类可练：例1.2（$\lim[\frac{1+\int_0^x\frac{\sin t}t dt}{x}-\frac1{\ln(1+x)}]=\frac12$，先算"干扰项"再算差）、例1.9（$\lim_{x\to\infty}[x\ln(e+\frac1{x-1})-x]=\frac1e$）。三道都在强化18讲原文，去 PDF 手推。</p>
 
-  <!-- ============ O2 连续与间断 ============ -->
-  <h2 id="s3"><span class="idx">O₂</span>判定连续与间断（本质是算左右极限）</h2>
+  <div class="eg">
+    <div class="q"><span class="no">基 1.25</span>求极限 $I=\lim\limits_{x\to\infty}\dfrac{a_nx^n+a_{n-1}x^{n-1}+\cdots+a_1x+a_0}{b_mx^m+b_{m-1}x^{m-1}+\cdots+b_1x+b_0}$，其中 $a_n\ne0,\ b_m\ne0$ 为常数。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$I=\begin{cases}\dfrac{a_n}{b_m},&n=m\\ \infty,&n\gt m\\ 0,&n\lt m\end{cases}$</span>　<span style="color:var(--green);font-size:.82rem">✔ sympy 三种情形各取实例验证</span>
 
-  <h3>3.1　连续的定义（三个等价说法）<span class="layer L-base">基础</span></h3>
-  <div class="key"><span class="tag">必记 · $f$ 在 $x_0$ 连续 ⟺ 任一成立</span>
-    ① $\displaystyle\lim_{x\to x_0}f(x)=f(x_0)$（极限值=函数值）；② $\displaystyle\lim_{\Delta x\to0}\Delta y=0$；③ 左右连续且 $=f(x_0)$。缺哪个就从哪个断。<b>初等函数在定义区间内处处连续</b>——判连续的总开关。
+      <div class="think"><span class="th">💭 思路 · 拿到题先想什么</span>
+        <ol>
+          <li>$x\to\infty$ 时两个多项式都 $\to\infty$，是 $\frac\infty\infty$。<b>洛必达能做，但要洛 $\min(n,m)$ 次，纯属自找麻烦</b>——书上给这题起的外号就是「<b>纸老虎</b>」。</li>
+          <li>正路是<b>抓主要矛盾，找"带头大哥"</b>：多项式在 $x\to\infty$ 时只有<b>最高次项</b>说话，其余项除以最高次幂后全 $\to0$。</li>
+          <li>操作就一个动作：<b>上下同除某个 $x$ 的幂</b>。除以谁？<b>分三种情形</b>——$n=m$ 时除以 $x^n$（上下都变成"常数 + 无穷小"）；$n\gt m$ 时提出 $x^{n-m}$；$n\lt m$ 时提出 $\frac1{x^{m-n}}$。</li>
+          <li>为什么必须分情形而不能一刀切：<b>因为要保证"除完之后上下两边的极限都存在且分母不为零"</b>，四则运算法则才能用。这就是分类的依据。</li>
+        </ol>
+      </div>
+
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面 · 照这个写<span class="score">解答题 10 分参考｜⛳ = 采分点</span></div>
+        <div class="step"><span class="k">解</span><span class="k">(i)</span>若 $n=m$，上下同除以 $x^{n}$，得
+        $$I=\lim_{x\to\infty}\frac{a_n+\frac{a_{n-1}}{x}+\cdots+\frac{a_0}{x^{n}}}{b_m+\frac{b_{m-1}}{x}+\cdots+\frac{b_0}{x^{n}}}
+        =\frac{\lim\limits_{x\to\infty}\left(a_n+\frac{a_{n-1}}{x}+\cdots+\frac{a_0}{x^n}\right)}{\lim\limits_{x\to\infty}\left(b_m+\frac{b_{m-1}}{x}+\cdots+\frac{b_0}{x^n}\right)}=\frac{a_n}{b_m},$$
+        末一步用了四则运算法则（分母极限 $b_m\ne0$）。<span class="pt">⛳ $n=m$ 情形 4 分</span></div>
+        <div class="step"><span class="k">(ii)</span>若 $n\gt m$，则
+        $$I=\lim_{x\to\infty}\frac{x^{n-m}\left(a_nx^{m}+\cdots+a_0x^{m-n}\right)}{b_mx^{m}+\cdots+b_0}=\lim_{x\to\infty}x^{n-m}\cdot\frac{a_n}{b_m}=\infty.$$
+        <span class="pt">⛳ 3 分</span></div>
+        <div class="step"><span class="k">(iii)</span>若 $n\lt m$，则
+        $$I=\lim_{x\to\infty}\frac{a_nx^{n}+\cdots+a_0}{x^{m-n}\left(b_mx^{n}+\cdots+b_0x^{n-m}\right)}=\lim_{x\to\infty}\frac1{x^{m-n}}\cdot\frac{a_n}{b_m}=0.$$
+        <span class="pt">⛳ 2 分</span></div>
+        <div class="fin">综上
+        $$\lim_{x\to\infty}\frac{a_nx^n+\cdots+a_1x+a_0}{b_mx^m+\cdots+b_1x+b_0}=\begin{cases}\dfrac{a_n}{b_m},&n=m,\\ \infty,&n\gt m,\\ 0,&n\lt m.\end{cases}$$
+        <span class="pt">⛳ 汇总成分段结论 1 分</span></div>
+      </div>
+
+      <div class="notekeep"><span class="nh">📌 批注 · 写完拿这层校对</span>
+        <b>① 本题的结果就是通常说的「抓大头」，以后<u>直接用</u>不必再推</b>：$x\to\infty$ 时分别抓分子、分母中关于 $x$ 的<b>最高次项</b>，忽略其他。<br>
+        <b>② ★ 特别注意：若 $x\to0$，则应分别抓分子、分母中关于 $x$ 的<u>最低次项</u>。</b>（"大头"是相对于过程说的，不是永远看最高次。）<br>
+        <b>③ 考场速算的写法（心算，卷面别这么写）</b>：$\lim\limits_{x\to\infty}\dfrac{x^3+x^2-1}{0\cdot x^3+2x^2+2}=\infty$、$\lim\limits_{x\to\infty}\dfrac{0\cdot x^3-x^2+2}{1\cdot x^3-x+1}=0$——<b>给缺项补一个系数为 0 的"带头大哥"，次数一眼就能比</b>。眉批称这是"最爱考的"。<br>
+        <b>④ <span class="dock">扣分点</span>：$x\to-\infty$ 时把 $\sqrt{4x^2}$ 写成 $2x$。</b>正确是 $|2x|=-2x$。书上给的例子：
+        $$\lim_{x\to-\infty}\frac{\sqrt{4x^2+x-1}+x+1}{\sqrt{x^2+\sin x}}=1$$
+        （分子 $\sim-2x+x=-x$，分母 $\sim-x$，比值 1。）<span style="color:var(--green)">✔ 已复算</span><b>凡是根号遇上 $x\to-\infty$，先把 $\sqrt{x^2}$ 写成 $|x|=-x$。</b><br>
+        <b>⑤ 这题为什么叫"纸老虎"</b>：看着一大片系数很吓人，实际只有"上下同除"一个动作。<b>考场上见到长表达式先别怕，先找带头大哥。</b>
+      </div>
+    </div>
   </div>
 
-  <h3>3.2　强化流程 · 备选点判定 → 算三值 → 下结论<span class="layer L-str">强化专属</span></h3>
-  <div class="zy"><span class="tag">强化题型 · 第一步"盯住无定义点与分段点"（尤其分母表达式的零点）</span>
-    张宇列的常见备选点：① $e^{1/x}\!\Rightarrow\!x=0$；② $\dfrac1{\sin x}\!\Rightarrow\!x=k\pi$；③ $\dfrac1{\arctan x}\!\Rightarrow\!x=0$；④ $\dfrac1{|x|(x^2-1)}\!\Rightarrow\!x=0,\pm1$；⑤ $[x]\!\Rightarrow\!$ 整数点为分段点（$\lim_{x\to n^+}[x]=n,\ \lim_{x\to n^-}[x]=n-1$）；⑥ $|x|^{1/(\cdots)}$ 用 $u^v=e^{v\ln u}$ 变形再找无定义点。<b>找齐所有备选点，一个不漏。</b>
+  <div class="eg">
+    <div class="q"><span class="no">基 1.28</span>求 $\lim\limits_{x\to1^-}\ln x\cdot\ln(1-x)$。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$0$</span>　<span style="color:var(--green);font-size:.82rem">✔ sympy 验证</span>
+
+      <div class="think"><span class="th">💭 思路 · 拿到题先想什么</span>
+        <ol>
+          <li>$x\to1^-$ 时 $\ln x\to0$、$\ln(1-x)\to-\infty$，是 <b>$0\cdot\infty$</b>。这种型的标准动作是"把一个因子倒下去"变成 $\frac00$ 或 $\frac\infty\infty$。</li>
+          <li><b>但把谁倒下去是有讲究的！</b>原则：<b>简单因子才下放</b>。简单因子有 $x^\alpha,\mathrm e^{\beta x},\sin rx$；<b>复杂因子有 $\arctan x,\arcsin x,\ln x$</b>。这里两个因子都是对数，都算复杂——<b>所以先别急着倒，先化简</b>。</li>
+          <li>化简的钥匙：<b>$\ln x$ 在 $x\to1$ 时可以等价替换</b>。因为 $\ln(1+u)\sim u\ (u\to0)$，取 $u=x-1$ 得
+          $$\ln x=\ln\left[1+(x-1)\right]\sim x-1\quad(x\to1)$$
+          <b>这个式子在考研中出现的频率极高</b>（眉批原话）。替换后一个复杂因子变成了简单因子 $x-1$。</li>
+          <li>剩下 $\lim\limits_{x\to1^-}(x-1)\ln(1-x)$，<b>令 $1-x=t$ 换元</b>就成了标准形 $-\lim\limits_{t\to0^+}t\ln t$，而 $\lim\limits_{x\to0^+}x^\alpha\ln x=0\ (\alpha\gt0)$ 是必背结论。</li>
+        </ol>
+      </div>
+
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面 · 照这个写<span class="score">解答题 10 分参考｜⛳ = 采分点</span></div>
+        <div class="step"><span class="k">解</span>所求为 $0\cdot\infty$ 型。因 $x\to1$ 时 $x-1\to0$，由 $\ln(1+u)\sim u\ (u\to0)$ 得
+        $$\ln x=\ln\left[1+(x-1)\right]\sim x-1\qquad(x\to1).$$
+        <span class="pt">⛳ 验型 1 分</span><span class="pt">⛳ 用 $\ln x\sim x-1$ 等价替换 4 分</span></div>
+        <div class="step">故
+        $$\lim_{x\to1^-}\ln x\cdot\ln(1-x)=\lim_{x\to1^-}(x-1)\ln(1-x).\tag{1}$$
+        </div>
+        <div class="step">在 (1) 中令 $1-x=t$，则 $x\to1^-$ 时 $t\to0^+$，于是
+        $$\lim_{x\to1^-}(x-1)\ln(1-x)=-\lim_{t\to0^+}t\ln t.\tag{2}$$
+        <span class="pt">⛳ 换元（含趋向的改写）3 分</span></div>
+        <div class="fin">又 $\lim\limits_{t\to0^+}t\ln t=0$，故 $\lim\limits_{x\to1^-}\ln x\cdot\ln(1-x)=0$。<span class="pt">⛳ 2 分</span></div>
+      </div>
+
+      <div class="notekeep"><span class="nh">📌 批注 · 写完拿这层校对</span>
+        <b>① 「$\ln x\sim x-1\ (x\to1)$」是本题唯一要写对的东西</b>，而它的来源必须交代（由 $\ln(1+u)\sim u$ 广义化）。<b>凡是把已知等价式广义化，卷面上要写出"取 $u=\cdots$"或"由 $\cdots\sim\cdots$ 得"。</b><br>
+        <b>② <span class="dock">扣分点</span>：换元时只换表达式、不换极限符号下面的趋向。</b>眉批把这叫「<b>极限换元有二换</b>」：①表达式中的量要换；②<b>极限符号底下的趋向也要换</b>（$x\to1^-$ 变 $t\to0^+$）。漏第二换是最常见的失分。<br>
+        <b>③ 必背结论及其证法</b>（$\alpha\gt0$）：
+        $$\lim_{x\to0^+}x^{\alpha}\ln x=\lim_{x\to0^+}\frac{\ln x}{x^{-\alpha}}\xrightarrow{\text{洛}}\lim_{x\to0^+}\frac{x^{-1}}{-\alpha x^{-\alpha-1}}=-\frac1\alpha\lim_{x\to0^+}x^{\alpha}=0$$
+        一般形式 $\lim\limits_{x\to0^+}x^{\alpha}\ln^{\beta}x=0\ (\alpha,\beta\gt0)$，如 $\lim\limits_{x\to0^+}\sqrt x\ln^2x=0$。<span style="color:var(--green)">✔ 已复算</span><br>
+        <b>④ 「$0\cdot\infty$ 的分母设置原则」值得单独抄一遍</b>：<b>简单因子才下放</b>（$x^\alpha,\mathrm e^{\beta x},\sin rx$ 求导后仍简单）；<b>复杂因子留在分子</b>（$\arctan x,\arcsin x,\ln x$ 求导后会变复杂或产生新分式）。放错位置会把题做成一团麻。<br>
+        <b>⑤ 张宇按</b>：这实际上是个小综合题，注意两点——<b>①等价代换 ②换元</b>。
+      </div>
+    </div>
   </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 1.29</span>求 $I=\lim\limits_{x\to0}x\left[\dfrac{10}x\right]$，其中 $[\ \cdot\ ]$ 为取整符号。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$I=10$</span>　<span style="color:var(--green);font-size:.82rem">✔ 6 档双侧数值（含 $x\lt0$）全过</span>
+
+      <div class="think"><span class="th">💭 思路 · 拿到题先想什么</span>
+        <ol>
+          <li>$x\to0$ 时 $\frac{10}{x}\to\infty$，于是 $\left[\frac{10}{x}\right]$ 是「$[\infty]$」——<b>这个东西没有任何等价无穷小、泰勒公式、洛必达法则可用</b>（取整函数不连续、不可导）。所有常规武器全部失效。</li>
+          <li><b>常规方法全部失效的时候，一定要想起夹逼准则</b>（张宇原话）。它是本题唯一的路。</li>
+          <li>夹逼要有不等式。取整函数自带的不等式只有一条：<b>$x-1\lt[x]\le x$</b>。把它用在 $\frac{10}{x}$ 上：$\frac{10}x-1\lt\left[\frac{10}x\right]\le\frac{10}x$。</li>
+          <li>⚠️ <b>接下来要乘 $x$——而 $x$ 可正可负，乘负数不等号要反向</b>。所以必须分 $x\gt0$、$x\lt0$ 两种情形写。<b>这是本题唯一的、也是最容易漏的坑。</b></li>
+          <li>两侧夹出来的都是 $10-x$ 与 $10$，$x\to0$ 时同趋于 10，夹逼成立。</li>
+        </ol>
+      </div>
+
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面 · 照这个写<span class="score">解答题 10 分参考｜⛳ = 采分点</span></div>
+        <div class="step"><span class="k">解</span>当 $x\to0$ 时 $\dfrac{10}x\to\infty$。由取整函数的性质 $x-1\lt[x]\le x$，得
+        $$\frac{10}x-1\lt\left[\frac{10}x\right]\le\frac{10}x.\tag{1}$$
+        <span class="pt">⛳ 写出 $x-1\lt[x]\le x$ 3 分</span></div>
+        <div class="step">在 (1) 两端乘以 $x$，需分两种情形：
+        $$\begin{cases}x\gt0\ \text{时，}\ 10-x\lt x\cdot\left[\dfrac{10}x\right]\le10,\\[4pt] x\lt0\ \text{时，}\ 10-x\gt x\cdot\left[\dfrac{10}x\right]\ge10.\end{cases}\tag{2}$$
+        <span class="pt">⛳ 按 $x$ 的符号分类、不等号正确反向 4 分</span></div>
+        <div class="step">又 $\lim\limits_{x\to0}(10-x)=10$，$\lim\limits_{x\to0}10=10$，即 (2) 中不等式<b>两边均趋于同一极限 10</b>。<span class="pt">⛳ 验证两端同极限 2 分</span></div>
+        <div class="fin">故由夹逼准则，$I=\lim\limits_{x\to0}x\left[\dfrac{10}x\right]=10$。<span class="pt">⛳ 引夹逼准则下结论 1 分</span></div>
+      </div>
+
+      <div class="notekeep"><span class="nh">📌 批注 · 写完拿这层校对</span>
+        <b>① <span class="dock">扣分点</span>：只写 $x\gt0$ 的情形。</b>题目是 $x\to0$（双侧），<b>$x\lt0$ 时乘以负数不等号必须反向</b>。漏掉这一半，等于只算了右极限。<br>
+        <b>② <span class="dock">扣分点</span>：不写"由夹逼准则"。</b>结论的依据必须点名，这是"判断/证明性质的结论要写定理名"这条通则的又一处。<br>
+        <b>③ 为什么不能用等价无穷小或洛必达</b>：$\left[\frac{10}x\right]$ <b>既不连续也不可导</b>，洛必达的前提直接不成立；它也不是无穷小，没有等价式可换。<b>看到 $[\ \cdot\ ]$、$\operatorname{sgn}$、$\sin\frac1x$ 这类"不光滑"的东西，第一反应就该是夹逼。</b><br>
+        <b>④ 取整函数四条性质里，本题只用第 (2) 条</b>：$x-1\lt[x]\le x$。另外三条（$[x+n]=[x]+n$、$\lim\limits_{x\to n^\pm}[x]$、概率论的 $Y=[X]+1$）见 §二。<br>
+        <b>⑤ 考情</b>：书上说"<b>以前的数学一大题中考过取整函数，现在考的频率不高了，但是一旦出现，都是很有区分度的</b>。命题老师对这种题也是很青睐的。"——<b>属于"必须会但不必刷很多"的一类。</b>
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 1.7</span>$\lim\limits_{x\to0^+}\dfrac{1-\sqrt{\cos x}}{x\left(1-\cos\sqrt x\right)}=$ ______。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$\dfrac12$</span>　<span style="color:var(--green);font-size:.82rem">✔ sympy 验证</span><br>
+      <span class="lab">分析（秒杀 · 用 基 1.22 的结论）</span>$1-\cos^\alpha x\sim\frac\alpha2x^2$：<br>
+      分子取 $\alpha=\frac12$：$1-\sqrt{\cos x}\sim\dfrac14x^2$；分母中 $1-\cos\sqrt x\sim\dfrac12(\sqrt x)^2=\dfrac12x$，故分母 $\sim x\cdot\frac12x=\frac12x^2$。于是
+      $$\text{原式}=\frac{\frac14x^2}{\frac12x^2}=\frac12$$
+      <span class="lab">分析（书上的常规解法 · 分子有理化）</span>
+      $$\lim_{x\to0^+}\frac{1-\cos x}{x\left(1-\cos\sqrt x\right)\left(1+\sqrt{\cos x}\right)}=\lim_{x\to0^+}\frac{\frac12x^2}{x\cdot\frac12x\cdot\left(1+\sqrt{\cos x}\right)}=\frac12$$
+      <span class="lab">要害</span><b>书上专门写了一句注：「若想到了例 1.22 的 $1-\cos^ax\sim\frac a2x^2$，则解题就更简单了」。</b>——这就是"把证明过的结论当武器"的直接收益。<b>凡是分子出现 $1-\sqrt{\cos x}$、$1-\sqrt[3]{\cos x}$，一律套 $\frac\alpha2x^2$，不必有理化。</b><br>
+      ⚠️ <b>$\cos\sqrt x$ 的等价式里"狗"是 $\sqrt x$</b>，所以是 $\frac12(\sqrt x)^2=\frac12x$（<b>一次</b>，不是二次）。这是本题最容易错的地方。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 1.9</span>已知 $a\gt0,\ b\gt0$，则 $\lim\limits_{x\to+\infty}x\left(a^{\frac1x}-b^{\frac1x}\right)=$ ______。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$\ln\dfrac ab$</span>　<span style="color:var(--green);font-size:.82rem">✔ 取 $a=5,b=2$ sympy 验证</span><br>
+      <span class="lab">分析</span>$0\cdot\infty$ 型，<b>倒代换</b>令 $\frac1x=t$（$x\to+\infty\Rightarrow t\to0^+$）：
+      $$\lim_{t\to0^+}\frac{a^{t}-b^{t}}{t}=\lim_{t\to0^+}\frac{\left(a^t-1\right)-\left(b^t-1\right)}{t}=\ln a-\ln b=\ln\frac ab$$
+      （用 $a^t-1\sim t\ln a$；或直接洛必达 $\lim(a^t\ln a-b^t\ln b)$。）<br>
+      <span class="lab">要害</span><b>「$-1+1$」这一手：把 $a^t-b^t$ 拆成两个 $\mathrm e^\square-1$ 型</b>，就能各自用等价式。⚠️ <b>不能直接对 $a^t-b^t$ 两项分别换 $t\ln a$ 与 $t\ln b$ 吗？</b>——这里恰好<b>可以</b>，因为拆完后两项的极限<u>各自都存在</u>（分别是 $\ln a$、$\ln b$），四则运算法则允许拆。<b>判据永远是"拆出来的每一块极限存在吗"。</b><br>
+      <span class="lab">同族</span>与 强 1.8（$x^2\left(3^{1/x}-3^{1/(x+1)}\right)$）看着像，但那题是<b>同底不同指数</b>，要提公因子；本题是<b>同指数不同底</b>，直接拆。<b>看清"哪里相同"再决定动作。</b>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 1.10</span>设函数 $f(x)=\begin{cases}\dfrac{1-\mathrm e^{\tan x}}{\arcsin\frac x2},&x\gt0\\[4pt] a\mathrm e^{2x},&x\le0\end{cases}$ 在 $x=0$ 处连续，则 $a=$ ______。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$a=-2$</span>　<span style="color:var(--green);font-size:.82rem">✔ sympy：右极限 $=-2$</span><br>
+      <span class="lab">分析</span>连续 ⟺ 左极限 = 右极限 = $f(0)$。<br>
+      <b>右极限</b>：$1-\mathrm e^{\tan x}=-\left(\mathrm e^{\tan x}-1\right)\sim-\tan x\sim-x$，$\arcsin\frac x2\sim\frac x2$，故
+      $$\lim_{x\to0^+}f=\lim_{x\to0^+}\frac{-x}{\frac x2}=-2$$
+      <b>左极限</b>：$\lim\limits_{x\to0^-}a\mathrm e^{2x}=a$，且 $f(0)=a$。<br>
+      由连续性 $a=-2$。<br>
+      <span class="lab">要害</span><b>分母 $\arcsin\frac x2$ 的"狗"是 $\frac x2$</b>，替换成 $\frac x2$ 而不是 $x$——这个 $\frac12$ 就是答案里那个 2 的来源。<b>凡是三角/反三角的自变量带系数，替换时系数要跟着走。</b>
+    </div>
+  </div>
+
+  <h3>5.5　“$\infty-\infty$” · 总方向：把「和差形式」化成「积商形式」<span class="layer L-str">强化重仓</span></h3>
+  <div class="key"><span class="tag">必记 · $\infty-\infty$ 的两条基础思路（基础30讲）</span>
+    ① <b>有分母 ⇒ 通分</b>，把加减变乘除，以便用别的工具（基 1.30、习 1.12）；<br>
+    ② <b>没分母 ⇒ 提公因式 或 作倒代换，先造出分母</b>，再通分（基 1.31）。
+  </div>
+  <div class="zy"><span class="tag">强化题型 · 涉及 $\infty$ 的计算，四点注意（D₂₃：和差 ⇒ 积商）</span>
+    <b>① 双向性</b>：$f$ 在 $|x|$ 充分大时有定义，则 $\lim\limits_{x\to\infty}f$ 存在的<b>充要条件</b>是
+    $\lim\limits_{x\to+\infty}f=\lim\limits_{x\to-\infty}f=a$。（<b>$n\to\infty$ 只指 $+\infty$；$x\to\infty$ 指两支</b>。）<br>
+    <b>② 见 $f-f$ 型（同类型函数之差）⇒ 拉格朗日中值定理</b> $f(b)-f(a)=f'(\xi)(b-a)$，把差<b>拆成"导数 × 自变量差"</b>，而自变量差往往是无穷小。<br>
+    　适用清单：$\arctan(x+1)-\arctan x$、$\sin\sqrt{x+1}-\sin\sqrt x$、$\cos(\sin x)-\cos(\tan x)$、$\sqrt[n]2-\sqrt[n+1]2$。<br>
+    <b>③ 见 $[f_1]^{g}-[f_2]^{g}$ 或 $[f]^{g_1}-[f]^{g_2}$ ⇒ 提公因子</b>：
+    $$\text{a.}\ [f_1]^{g}-[f_2]^{g}=[f_2]^{g}\left\{\left[\frac{f_1}{f_2}\right]^{g}-1\right\}\qquad
+      \text{b.}\ [f]^{g_1}-[f]^{g_2}=[f]^{g_2}\left\{[f]^{g_1-g_2}-1\right\}$$
+    　示范：$(3+x)^{\tan x}-3^{\tan x}=3^{\tan x}\left[\left(1+\frac x3\right)^{\tan x}-1\right]$；$\mathrm e^{\sin x}-\mathrm e^{\tan x}=\mathrm e^{\tan x}\left(\mathrm e^{\sin x-\tan x}-1\right)$；<br>
+    　<b>★★★</b> $\mathrm e-\left(1+\frac1x\right)^{x}=\mathrm e-\mathrm e^{x\ln(1+\frac1x)}=\mathrm e\left[1-\mathrm e^{x\ln(1+\frac1x)-1}\right]$。<br>
+    <b>★★★ ④ 见 $\lim\limits_{x\to\infty}[f(x)-ax]$ ⇒ 把 $f(x)$ 与 $ax$ 通过恒等变形「合在一起」，成为乘除的形式</b>（强 1.9、强 1.10）。
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 1.30</span>极限 $\lim\limits_{x\to0}\left[\dfrac1{\ln(1+x)}-\dfrac1x\right]=$（　）(A) 2　(B) $\frac32$　(C) 1　(D) $\frac12$</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(D) $\dfrac12$</span>　<span style="color:var(--green);font-size:.82rem">✔ sympy 验证</span><br>
+      <span class="lab">分析</span>$\infty-\infty$ 且<b>有分母 ⇒ 通分</b>，化成 $\frac00$：
+      $$\lim_{x\to0}\frac{x-\ln(1+x)}{x\ln(1+x)}=\lim_{x\to0}\frac{x-\ln(1+x)}{x^2}$$
+      （分母 $x\ln(1+x)$ 整体是<b>乘除因子</b>，可换成 $x^2$。）<br>
+      <b>法一 洛必达</b>：$\lim\dfrac{1-\frac1{1+x}}{2x}=\lim\dfrac{x}{2x(1+x)}=\dfrac12$。<br>
+      <b>法二 泰勒（秒）</b>：$x-\ln(1+x)\sim\frac12x^2$，直接 $\dfrac{\frac12x^2}{x^2}=\dfrac12$。<br>
+      <span class="lab">要害</span><b>$\lim\left(\frac1\square-\frac1\square\right)$ 是 $\infty-\infty$ 最常见的考法</b>（"简洁美、统一美"）。<b>越是复杂困难的情形，泰勒越有优势</b>——法二三行写完，法一要洛两次还要化简。<br>
+      <span class="lab">张宇的话（值得贴在书桌上）</span>"命题老师觉得这个题是<b>送分</b>给你的……可是很多同学他不要，他说'老师，我不好意思要这个分数'。<b>这个实在不应该，这是基本问题，它常考，这种分数一定要拿到手。</b>"
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 1.31</span>求极限 $\lim\limits_{x\to+\infty}\left[x^2\left(\mathrm e^{\frac1x}-1\right)-x\right]$。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$\dfrac12$</span>　<span style="color:var(--green);font-size:.82rem">✔ sympy 验证</span>
+
+      <div class="think"><span class="th">💭 思路 · 拿到题先想什么</span>
+        <ol>
+          <li>$x\to+\infty$ 时 $x^2\left(\mathrm e^{1/x}-1\right)\to\infty$、$x\to\infty$，是 <b>$\infty-\infty$，而且<u>没有分母</u></b>。按基础思路 ②，得<b>先造出分母</b>。</li>
+          <li>造分母有两条路，这题两条都要用：<b>先提公因式 $x$</b>（两项都含 $x$），得 $x\left[x\left(\mathrm e^{1/x}-1\right)-1\right]$，方括号里是 $\to0$ 的量；<b>再把外面的 $x$ 倒下去</b>当分母 $\frac1x$，就成了 $\frac00$。</li>
+          <li>接着<b>倒代换令 $u=\frac1x$</b>，把 $x\to+\infty$ 变成 $u\to0^+$，式子瞬间变成教科书标准形 $\dfrac{\mathrm e^{u}-1-u}{u^2}$。</li>
+          <li><b>为什么倒代换比直接洛必达好</b>：不换元的话，分子分母对 $x$ 求导会不停地产生 $\mathrm e^{1/x}\cdot\left(-\frac1{x^2}\right)$ 这类项，越算越乱。<b>眉批的原则：设置分母有原则，简单因子才下放；先不用洛必达，分子分母求导会很麻烦。</b></li>
+          <li>最后一步认出 <b>$\mathrm e^u-1-u\sim\frac12u^2$</b>（§四 差函数表里的第 6 条），一步到底。</li>
+        </ol>
+      </div>
+
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面 · 照这个写<span class="score">解答题 10 分参考｜⛳ = 采分点</span></div>
+        <div class="step"><span class="k">解</span>所求为 $\infty-\infty$ 型且不含分母，先提出公因式 $x$，再作倒代换造出分母：
+        $$\text{原式}=\lim_{x\to+\infty}x\cdot\left[x\left(\mathrm e^{\frac1x}-1\right)-1\right]=\lim_{x\to+\infty}\frac{x\left(\mathrm e^{\frac1x}-1\right)-1}{\frac1x}.\tag{1}$$
+        <span class="pt">⛳ 提公因式 + 造分母 4 分</span></div>
+        <div class="step">在 (1) 中令 $u=\dfrac1x$，则 $x\to+\infty$ 时 $u\to0^+$，于是
+        $$\text{原式}=\lim_{u\to0^{+}}\frac{\frac1u\left(\mathrm e^{u}-1\right)-1}{u}=\lim_{u\to0^{+}}\frac{\mathrm e^{u}-1-u}{u^{2}}.\tag{2}$$
+        <span class="pt">⛳ 倒代换（含趋向改写）3 分</span></div>
+        <div class="step">由 $u\to0$ 时 $\mathrm e^{u}-1-u\sim\dfrac12u^{2}$，得
+        $$\lim_{u\to0^{+}}\frac{\mathrm e^{u}-1-u}{u^{2}}=\lim_{u\to0^{+}}\frac{\frac12u^{2}}{u^{2}}=\frac12.$$
+        <span class="pt">⛳ 用差函数等价式 2 分</span></div>
+        <div class="fin">故 $\lim\limits_{x\to+\infty}\left[x^2\left(\mathrm e^{\frac1x}-1\right)-x\right]=\dfrac12$。<span class="pt">⛳ 1 分</span></div>
+      </div>
+
+      <div class="notekeep"><span class="nh">📌 批注 · 写完拿这层校对</span>
+        <b>① 若不背 $\mathrm e^u-1-u\sim\frac12u^2$，也可洛必达一次</b>：$\lim\limits_{u\to0^+}\dfrac{\mathrm e^u-1}{2u}=\dfrac12$。<b>两条都写在卷面上不加分，选一条即可。</b><br>
+        <b>② <span class="dock">扣分点</span>：倒代换后忘改趋向。</b>$x\to+\infty$ 必须写成 $u\to0^+$（<b>是 $0^+$ 不是 $0$</b>，因为原题是 $x\to+\infty$ 单侧）。<br>
+        <b>③ <span class="dock">扣分点</span>：一上来就洛必达。</b>能算出来，但要对 $x^2(\mathrm e^{1/x}-1)-x$ 这种形状硬求导，考场上极易算错。<b>「$\infty-\infty$ 且无分母 ⇒ 先提公因式或倒代换」这个顺序本身就是采分点</b>（阅卷看的是方法选择）。<br>
+        <b>④ 「倒代换」是本章的高频动作</b>，凡 $x\to\infty$ 且式中出现 $\frac1x$、$\mathrm e^{1/x}$、$\ln(1+\frac1x)$，一律考虑令 $u=\frac1x$。同族题：习 1.9、强 1.10。<br>
+        <b>⑤ 张宇按</b>："建议考生把这类题也练练，在《1000 题》中布置了这类题目，一定要把里面的每一道题反复地练，<b>熟练地掌握这类题目的计算，为全面的综合题的学习、解题打下坚实的基础</b>。"
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 1.7</span>$\lim\limits_{n\to\infty}n^2\left(\sqrt[n]{2}-\sqrt[n+1]{2}\right)=$ ______。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$\ln2$</span>　<span style="color:var(--green);font-size:.82rem">✔ sympy 验证</span><br>
+      <span class="lab">分析</span>括号里是 <b>$f-f$ 型</b>（同一个函数 $2^x$ 在两个点的值之差）⇒ <b>拉格朗日中值定理</b>。$\sqrt[n]2=2^{1/n}$，$\sqrt[n+1]2=2^{1/(n+1)}$，故对 $f(t)=2^{t}$ 在 $\left[\dfrac1{n+1},\dfrac1n\right]$ 上用中值定理：
+      $$\sqrt[n]2-\sqrt[n+1]2=2^{\xi}\ln2\cdot\left(\frac1n-\frac1{n+1}\right)=\frac{2^{\xi}\ln2}{n(n+1)},\qquad \xi\in\left(\frac1{n+1},\frac1n\right)$$
+      于是
+      $$\text{原式}=\lim_{n\to\infty}n^2\cdot\frac{2^{\xi}\ln2}{n(n+1)}=\ln2\cdot\lim_{n\to\infty}2^{\xi}\cdot\frac{n}{n+1}=\ln2\cdot1\cdot1=\ln2$$
+      <span class="lab">要害</span><b>$\xi$ 被夹在 $\left(\frac1{n+1},\frac1n\right)$ 里，$n\to\infty$ 时 $\xi\to0^+$，所以 $2^\xi\to2^0=1$</b>——这一步是中值定理法的<b>收口</b>，必须写出 $\xi$ 的范围才能说明它趋于 0。<br>
+      <span class="lab">识别口诀</span><b>D₂₃ 看两件事：① 是不是"差"；② 是不是 $f(b)-f(a)$（同一个 $f$）。</b>两条都是 ⇒ 拉格朗日。<br>
+      ⚠️ 别忘了 $(2^t)'=2^t\ln2$（<b>底数不是 e 时要带 $\ln$ 底数</b>）。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 1.8</span>$\lim\limits_{x\to+\infty}x^2\left(3^{\frac1x}-3^{\frac1{x+1}}\right)=$ ______。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$\ln3$</span>　<span style="color:var(--green);font-size:.82rem">✔ sympy 验证</span><br>
+      <span class="lab">分析</span><b>同底不同指数 ⇒ 提公因子</b>（强化题型 ③b）：
+      $$x^2\left(3^{\frac1x}-3^{\frac1{x+1}}\right)=x^2\cdot3^{\frac1{x+1}}\left(3^{\frac1x-\frac1{x+1}}-1\right)=x^2\cdot3^{\frac1{x+1}}\left(\mathrm e^{\frac{\ln3}{x(x+1)}}-1\right)$$
+      $$\sim\lim_{x\to+\infty}x^2\cdot1\cdot\frac{\ln3}{x(x+1)}=\ln3$$
+      <span class="lab">要害</span><b>提出的公因子 $3^{1/(x+1)}\to3^0=1$，是"极限不为 0 的因子"，可以直接提走当 1</b>。剩下的 $3^{\square}-1$ 写成 $\mathrm e^{\square\ln3}-1\sim\square\ln3$，其中 $\square=\frac1x-\frac1{x+1}=\frac1{x(x+1)}$。<br>
+      <span class="lab">与 强 1.7 的分工（并排记）</span>两题形状几乎一样，但<b>动作不同</b>：<br>
+      · 强 1.7 是 $2^{1/n}-2^{1/(n+1)}$，<b>走拉格朗日</b>（把差看成 $f(b)-f(a)$）；<br>
+      · 强 1.8 是 $3^{1/x}-3^{1/(x+1)}$，<b>走提公因子</b>（把差看成 $[f]^{g_1}-[f]^{g_2}$）。<br>
+      <b>👉 其实两条路对这两题都通！</b>本章给同一形状配了两把工具，考场上哪把顺手用哪把——<b>这就是"$f-f$ 型"的两条并行通道，一定要都会。</b>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 1.9</span>$\lim\limits_{x\to\infty}\left[x\ln\!\left(\mathrm e+\dfrac1{x-1}\right)-x\right]=$ ______。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$\dfrac1{\mathrm e}$</span>　<span style="color:var(--green);font-size:.82rem">✔ sympy 验证</span><br>
+      <span class="lab">分析</span>典型的 $\lim[f(x)-ax]$（这里 $a=1$）⇒ <b>把 $f$ 与 $ax$ 合并成乘除</b>：先提出 $x$，得 $x\left[\ln\!\left(\mathrm e+\frac1{x-1}\right)-1\right]$。<br>
+      <b>关键一步：$1=\ln\mathrm e$</b>（"神秘的数字 1"），于是差变成对数之商：
+      $$\ln\!\left(\mathrm e+\frac1{x-1}\right)-1=\ln\!\left(\mathrm e+\frac1{x-1}\right)-\ln\mathrm e=\ln\frac{\mathrm e+\frac1{x-1}}{\mathrm e}=\ln\!\left[1+\frac1{\mathrm e(x-1)}\right]$$
+      再用 $\ln(1+u)\sim u$：
+      $$\text{原式}=\lim_{x\to\infty}x\ln\!\left[1+\frac1{\mathrm e(x-1)}\right]=\lim_{x\to\infty}\frac{x}{\mathrm e(x-1)}=\frac1{\mathrm e}$$
+      <span class="lab">要害</span><b>「把 1 写成 $\ln\mathrm e$」这一手是全题的钥匙</b>。基础30讲 p.18 早就给过这个转化，并明确说："<b>如果你考虑用洛必达法则，那么就舍近求远了。</b>"<br>
+      <b>👉 通则：见到"对数减常数"，先把常数写成对数（$1=\ln\mathrm e$，$0=\ln1$），再用商变差的逆运算合并。</b><br>
+      <span class="lab">命题人的习惯（很有用的元认知）</span>眉批原话："<b>命题老师给的关系式一般都需要做逆运算</b>——该加的他减，该减的他加；该乘的他除，该除的他乘……<b>要跟他唱反调，这是非常重要的解题经验。</b>"
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 1.10</span>$\lim\limits_{x\to+\infty}\left[\dfrac{x^{1+x}}{(1+x)^{x}}-\dfrac{x}{\mathrm e}\right]=$ ______。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$\dfrac1{2\mathrm e}$</span>　<span style="color:var(--green);font-size:.82rem">✔ ⚠️ sympy 的 <code>limit</code> 在此式上失效（误报 $\infty$）；改用 mpmath 60 位精度逐档求值得 $0.1839397205$，与 $\frac1{2\mathrm e}=0.1839397206$ 吻合，另用 $x\to\infty$ 渐近展开得首项 $\frac{\mathrm e^{-1}}2$，<b>书答正确</b></span><br>
+      <span class="lab">分析</span>$\lim[f(x)-ax]$ 型（$a=\frac1{\mathrm e}$）⇒ 合并成乘除。<b>提出 $\frac x{\mathrm e}$</b>：
+      $$\frac{x^{1+x}}{(1+x)^x}-\frac x{\mathrm e}=\frac x{\mathrm e}\left[\mathrm e\cdot\left(\frac{x}{1+x}\right)^{x}-1\right]=\frac x{\mathrm e}\left(\mathrm e^{\,x\ln\frac{x}{1+x}+1}-1\right)$$
+      由 $\mathrm e^\square-1\sim\square$（指数 $\to0$）：
+      $$\text{原式}=\lim_{x\to+\infty}\frac x{\mathrm e}\left(x\ln\frac{x}{x+1}+1\right)\xrightarrow{t=\frac1x}\lim_{t\to0^+}\frac1{\mathrm e}\cdot\frac{t-\ln(1+t)}{t^2}=\frac1{\mathrm e}\cdot\frac{\frac12t^2}{t^2}=\frac1{2\mathrm e}$$
+      <span class="lab">要害</span><b>三个动作连招</b>：① 提 $\frac x{\mathrm e}$（把 $\infty-\infty$ 变成 $\infty\cdot0$）；② 幂指用 e 抬起来、并把常数 $\mathrm e$ 吸进指数（$+1$）；③ <b>倒代换</b>把 $x\to+\infty$ 变 $t\to0^+$，指数化成标准差函数 $t-\ln(1+t)\sim\frac12t^2$。<br>
+      <span class="lab">自查技巧</span>指数 $x\ln\frac{x}{x+1}+1=1-x\ln\left(1+\frac1x\right)$，而 $x\ln(1+\frac1x)=1-\frac1{2x}+o(\frac1x)$，故指数 $\sim\frac1{2x}$，乘上 $\frac x{\mathrm e}$ 恰得 $\frac1{2\mathrm e}$。<b>用这个"主部估算"做心算校验，比重算一遍快。</b><br>
+      <span class="lab">⚠️ 程序也会骗人</span>这是本章唯一一处 sympy 直接算错的地方（对原始形式的 <code>limit</code> 返回 $\infty$）。<b>教训：符号计算器给出反常结果时，先换写法／换工具，再怀疑书</b>——本例用高精度数值 + 渐近展开两条独立路径互验，都指向 $\frac1{2\mathrm e}$。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 1.12</span>求极限 $\lim\limits_{x\to0}\left(\dfrac{\mathrm e^{x}+x\mathrm e^{x}}{\mathrm e^{x}-1}-\dfrac1x\right)$。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$\dfrac32$</span>　<span style="color:var(--green);font-size:.82rem">✔ sympy 验证（另把书上标出的错解也跑了一遍，确实得 2）</span>
+
+      <div class="think"><span class="th">💭 思路 · 拿到题先想什么</span>
+        <ol>
+          <li>$\infty-\infty$ 且<b>有分母 ⇒ 通分</b>（基础思路 ①）。别的都是后话。</li>
+          <li>⚠️ <b>最危险的念头</b>：看到 $\mathrm e^x-1$ 就想"$\sim x$，先换掉"。<b>不行！</b>此刻 $\mathrm e^x-1$ 站在<u>减法的一支</u>里，不是整个式子的乘除因子。<b>必须先通分，通分之后它才变成公分母（乘除因子），那时才能换。</b></li>
+          <li>通分后分母是 $x\left(\mathrm e^x-1\right)$——<b>这才是乘除因子，此时换成 $x^2$ 合法</b>。</li>
+          <li>分子 $x\mathrm e^x(1+x)+1-\mathrm e^x$ 是 $\frac00$，用洛必达（求导后 $\mathrm e^x$ 项会相消）或泰勒都行。</li>
+        </ol>
+      </div>
+
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面 · 照这个写<span class="score">解答题 10 分参考｜⛳ = 采分点</span></div>
+        <div class="step"><span class="k">解</span>所求为 $\infty-\infty$ 型，先通分：
+        $$\text{原式}=\lim_{x\to0}\frac{x\mathrm e^{x}(1+x)+1-\mathrm e^{x}}{x\left(\mathrm e^{x}-1\right)}.\tag{1}$$
+        <span class="pt">⛳ 通分 3 分</span></div>
+        <div class="step">由 $x\to0$ 时 $\mathrm e^{x}-1\sim x$，(1) 的分母（作为乘除因子）可作等价替换：
+        $$\text{原式}=\lim_{x\to0}\frac{x\mathrm e^{x}(1+x)+1-\mathrm e^{x}}{x^{2}}.\tag{2}$$
+        <span class="pt">⛳ 对分母作等价替换 2 分</span></div>
+        <div class="step">(2) 为 $\dfrac00$ 型，由洛必达法则
+        $$\text{原式}=\lim_{x\to0}\frac{3x\mathrm e^{x}+x^{2}\mathrm e^{x}}{2x}=\lim_{x\to0}\frac{3\mathrm e^{x}+x\mathrm e^{x}}{2}=\frac32.$$
+        <span class="pt">⛳ 求导正确 3 分</span><span class="pt">⛳ 结论 2 分</span></div>
+        <div class="fin">故 $\lim\limits_{x\to0}\left(\dfrac{\mathrm e^{x}+x\mathrm e^{x}}{\mathrm e^{x}-1}-\dfrac1x\right)=\dfrac32$。</div>
+      </div>
+
+      <div class="notekeep"><span class="nh">📌 批注 · 写完拿这层校对</span>
+        <b>① ⚠️⚠️ 书上专门标出的错误做法（全章最锋利的反例，务必看一遍）</b>：
+        $$\lim_{x\to0}\left(\frac{\mathrm e^{x}+x\mathrm e^{x}}{\mathrm e^{x}-1}-\frac1x\right)\ \ne\ \lim_{x\to0}\left(\frac{\mathrm e^{x}+x\mathrm e^{x}}{x}-\frac1x\right)=\lim_{x\to0}\frac{\mathrm e^{x}+x\mathrm e^{x}-1}{x}=\lim_{x\to0}\left(2\mathrm e^{x}+x\mathrm e^{x}\right)=2$$
+        <b>错解得 2，正解是 $\frac32$。</b>错在<b>"$\infty-\infty$ 没通分之前，$\mathrm e^x-1$ 处于减法的一支里，不能替换"</b>。<span style="color:var(--green)">✔ 我把这个错解也跑了一遍，确实得 2——与正解差 $\frac12$，正好是被抹掉的那个主部。</span><br>
+        <b>② 这就是 §三 那块红牌（实数运算 vs 趋核运算）的实战版</b>：替换的合法性来自"能拆出一个比值恒为 1 的<u>因子</u>"，加减处拆不出来。<b>把这题和 基 1.19（$\tan x-\sin x$ 不能分项换）放在一起记，等价替换的边界就刻死了。</b><br>
+        <b>③ 分子求导的心算</b>：$\left[x\mathrm e^x+x^2\mathrm e^x+1-\mathrm e^x\right]'=\left(\mathrm e^x+x\mathrm e^x\right)+\left(2x\mathrm e^x+x^2\mathrm e^x\right)-\mathrm e^x=3x\mathrm e^x+x^2\mathrm e^x$——<b>$\mathrm e^x$ 与 $-\mathrm e^x$ 正好抵消</b>，这是本题能一次洛完的原因。<br>
+        <b>④ 什么时候能换、什么时候不能，一句话</b>：<b>看它是不是"整个分式的分子或分母"（乘除因子）。是 ⇒ 能换；夹在 $\pm$ 中间 ⇒ 不能换，先通分／提因子把它变成因子。</b>
+      </div>
+    </div>
+  </div>
+
+  <h3>5.6　“$1^\infty$”“$0^0$”“$\infty^0$” · 幂指函数三兄弟</h3>
+  <div class="key"><span class="tag">必记 · 幂指型的两个公式（用错一个全盘错）</span>
+    <b>通法（$0^0,\infty^0$ 都靠它）</b>：
+    $$\lim u^{v}=\mathrm e^{\lim v\ln u}\overset{\text{记}}{=}\exp\left\{\lim v\ln u\right\}$$
+    把题化成 $\frac00,\frac\infty\infty,0\cdot\infty$ 三种再算。<br>
+    <b>★ $1^\infty$ 专用简化公式</b>（$\lim u=1,\ \lim v=\infty$）：
+    $$\boxed{\ \lim u^{v}=\mathrm e^{\lim v(u-1)}\ }$$
+    　推导：$\lim u^{v}=\lim\left\{\left[1+(u-1)\right]^{\frac1{u-1}}\right\}^{(u-1)v}=\mathrm e^{\lim(u-1)v}$。<br>
+    　<b>眉批："这类问题不用凑重要极限 $\lim\limits_{x\to0}(1+x)^{1/x}=\mathrm e$，用这个公式解决更快。"</b><br>
+    ⚠️ <b>注：整体"抄"，不要只算指数部分 $\lim v(u-1)$，免得忘记外面那个 $\mathrm e$！</b>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 1.32</span>求极限 $\lim\limits_{x\to+\infty}\left(x+\sqrt{1+x^{2}}\right)^{\frac1x}$。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$1$</span>　<span style="color:var(--green);font-size:.82rem">✔ sympy 验证</span>
+
+      <div class="think"><span class="th">💭 思路 · 拿到题先想什么</span>
+        <ol>
+          <li>底 $x+\sqrt{1+x^2}\to+\infty$，指数 $\frac1x\to0$ ⇒ <b>$\infty^{0}$ 型</b>。这型<b>没有</b>专用简化公式，只能走通法 $u^v=\mathrm e^{v\ln u}$。</li>
+          <li>抬起来之后指数是 $\frac1x\ln\left(x+\sqrt{1+x^2}\right)$，形状是 $\frac\infty\infty$ ⇒ 洛必达。</li>
+          <li>敢洛的理由：<b>$\left[\ln(x+\sqrt{1+x^2})\right]'=\dfrac1{\sqrt{1+x^2}}$ 是已经背下来的结果</b>（§一 必记三条之②），求导后根式立刻变干净。<b>这就是为什么本章反复要求背那个导数。</b></li>
+          <li>指数极限为 0 ⇒ 答案 $\mathrm e^{0}=1$。<b>别忘了最后把 $\mathrm e$ 补回去。</b></li>
+        </ol>
+      </div>
+
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面 · 照这个写<span class="score">解答题 10 分参考｜⛳ = 采分点</span></div>
+        <div class="step"><span class="k">解</span>所求为 $\infty^{0}$ 型。由幂指函数的恒等变形 $u^{v}=\mathrm e^{v\ln u}$，得
+        $$\text{原式}=\exp\left\{\lim_{x\to+\infty}\frac1x\ln\!\left(x+\sqrt{1+x^{2}}\right)\right\}.\tag{1}$$
+        <span class="pt">⛳ 验型 + 用 e 抬起 3 分</span></div>
+        <div class="step">(1) 中指数为 $\dfrac\infty\infty$ 型，由洛必达法则
+        $$\lim_{x\to+\infty}\frac{\ln\!\left(x+\sqrt{1+x^{2}}\right)}{x}
+        =\lim_{x\to+\infty}\frac{\dfrac1{x+\sqrt{1+x^{2}}}\left(1+\dfrac{x}{\sqrt{1+x^{2}}}\right)}{1}
+        =\lim_{x\to+\infty}\frac1{\sqrt{1+x^{2}}}=0.\tag{2}$$
+        <span class="pt">⛳ 求导化简正确 4 分</span><span class="pt">⛳ 指数极限为 0 2 分</span></div>
+        <div class="fin">将 (2) 代入 (1)，得 $\lim\limits_{x\to+\infty}\left(x+\sqrt{1+x^{2}}\right)^{\frac1x}=\mathrm e^{0}=1$。<span class="pt">⛳ 补回 $\mathrm e$ 并作结 1 分</span></div>
+      </div>
+
+      <div class="notekeep"><span class="nh">📌 批注 · 写完拿这层校对</span>
+        <b>① <span class="dock">扣分点</span>：算出指数为 0 就写"故原式 $=0$"。</b>忘了外面那层 $\mathrm e$，答案应是 $\mathrm e^{0}=1$。<b>这是幂指型最高频的失分点，所以书上专门写"整体抄，不要只算指数部分"。</b><br>
+        <b>② 求导那一步的化简</b>：$\dfrac1{x+\sqrt{1+x^2}}\cdot\dfrac{\sqrt{1+x^2}+x}{\sqrt{1+x^2}}=\dfrac1{\sqrt{1+x^2}}$——<b>括号里通分后分子恰是 $\sqrt{1+x^2}+x$，与前面的分母整块约掉</b>。看出这一点，本题就是三行。<br>
+        <b>③ 也可用速度链秒判</b>：$\ln\left(x+\sqrt{1+x^2}\right)$ 与 $\ln(2x)$ 同阶，而 $\ln x\ll x$ ⇒ 指数 $\to0$ ⇒ 答案 1。<b>填空题可以这么秒，解答题按卷面写。</b><br>
+        <b>④ 三兄弟的分工</b>：$1^{\infty}$ 用简化公式 $\mathrm e^{\lim v(u-1)}$（最快）；<b>$0^{0}$ 与 $\infty^{0}$ 只能用通法 $\mathrm e^{\lim v\ln u}$</b>。⚠️ 别把简化公式套到 $\infty^{0}$ 上——它的推导前提是 $u\to1$。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 1.33</span>求极限 $\lim\limits_{x\to0}\left(\dfrac{\mathrm e^{x}+\mathrm e^{2x}+\mathrm e^{3x}}{3}\right)^{\frac{\mathrm e}{x}}$。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$\mathrm e^{2\mathrm e}$</span>　<span style="color:var(--green);font-size:.82rem">✔ sympy 验证</span>
+
+      <div class="think"><span class="th">💭 思路 · 拿到题先想什么</span>
+        <ol>
+          <li>$x\to0$ 时底 $\to\frac{1+1+1}{3}=1$，指数 $\frac{\mathrm e}{x}\to\infty$ ⇒ <b>$1^{\infty}$ 型，直接上简化公式 $\lim u^{v}=\mathrm e^{\lim v(u-1)}$</b>。</li>
+          <li>算 $u-1=\dfrac{\mathrm e^x+\mathrm e^{2x}+\mathrm e^{3x}}{3}-1=\dfrac{\left(\mathrm e^x-1\right)+\left(\mathrm e^{2x}-1\right)+\left(\mathrm e^{3x}-1\right)}{3}$——<b>把 3 拆成 $1+1+1$，每个 1 各配一个指数项</b>，三个 $\mathrm e^{\square}-1$ 就出来了。这一手是本题的全部技巧。</li>
+          <li>乘上 $v=\frac{\mathrm e}{x}$ 后，三项各自是 $\frac{\mathrm e^{kx}-1}{x}\to k$，<b>各项极限都存在 ⇒ 可以拆开算</b>（四则运算法则），得 $\frac{\mathrm e}{3}(1+2+3)=2\mathrm e$。</li>
+        </ol>
+      </div>
+
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面 · 照这个写<span class="score">解答题 10 分参考｜⛳ = 采分点</span></div>
+        <div class="step"><span class="k">解</span>因 $\lim\limits_{x\to0}\dfrac{\mathrm e^{x}+\mathrm e^{2x}+\mathrm e^{3x}}{3}=1$，$\lim\limits_{x\to0}\dfrac{\mathrm e}{x}=\infty$，所求为 $1^{\infty}$ 型，由公式 $\lim u^{v}=\mathrm e^{\lim v(u-1)}$ 得
+        $$\text{原式}=\exp\left\{\lim_{x\to0}\frac{\mathrm e}{x}\left(\frac{\mathrm e^{x}+\mathrm e^{2x}+\mathrm e^{3x}}{3}-1\right)\right\}.\tag{1}$$
+        <span class="pt">⛳ 验 $1^\infty$ 型 + 套公式 4 分</span></div>
+        <div class="step">将 (1) 的指数中 $3$ 拆为 $1+1+1$，得
+        $$\lim_{x\to0}\frac{\mathrm e}{3x}\left[\left(\mathrm e^{x}-1\right)+\left(\mathrm e^{2x}-1\right)+\left(\mathrm e^{3x}-1\right)\right]
+        =\frac{\mathrm e}{3}\left(\lim_{x\to0}\frac{\mathrm e^{x}-1}{x}+\lim_{x\to0}\frac{\mathrm e^{2x}-1}{x}+\lim_{x\to0}\frac{\mathrm e^{3x}-1}{x}\right),$$
+        上式各项极限均存在，分别为 $1,2,3$，故指数 $=\dfrac{\mathrm e}{3}(1+2+3)=2\mathrm e$。<span class="pt">⛳ 拆成三个 $\mathrm e^\square-1$ 4 分</span></div>
+        <div class="fin">故 $\lim\limits_{x\to0}\left(\dfrac{\mathrm e^{x}+\mathrm e^{2x}+\mathrm e^{3x}}{3}\right)^{\frac{\mathrm e}{x}}=\mathrm e^{2\mathrm e}$。<span class="pt">⛳ 2 分</span></div>
+      </div>
+
+      <div class="notekeep"><span class="nh">📌 批注 · 写完拿这层校对</span>
+        <b>① <span class="dock">扣分点</span>：只写出指数 $2\mathrm e$，把答案写成 $2\mathrm e$。</b>正确答案是 $\mathrm e^{2\mathrm e}$。书上原文就用感叹号提醒："<b>整体『抄』，不要只算指数部分 $\lim v(x)[u(x)-1]$，免得忘记！</b>"<br>
+        <b>② "3 拆成 $1+1+1$" 的普遍写法</b>：$\dfrac{\sum_{k=1}^{n}\mathrm e^{a_kx}}{n}-1=\dfrac{1}{n}\sum_{k=1}^{n}\left(\mathrm e^{a_kx}-1\right)$。<b>凡是"$n$ 个东西的平均 $-1$"，都这么拆。</b>习 1.13 就是它的一般版（那里是 $a_i^{x}$）。<br>
+        <b>③ 拆成三项之前要说"各项极限均存在"</b>，否则四则运算法则的前提没验。<br>
+        <b>④ $\lim\limits_{x\to0}\dfrac{\mathrm e^{kx}-1}{x}=k$ 要脱口而出</b>（狗 $=kx$，$\mathrm e^{kx}-1\sim kx$）。写成 1 是本题第二高频的错。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 1.8</span>$\lim\limits_{x\to\infty}\left(\dfrac{x+2}{x-1}\right)^{x}=$ ______。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$\mathrm e^{3}$</span>　<span style="color:var(--green);font-size:.82rem">✔ sympy 验证（另验 $\left(\frac{x+3}{x-3}\right)^x\to\mathrm e^{6}$）</span><br>
+      <span class="lab">分析（书上解法 · 上下同除 $x$ 后分头凑）</span>
+      $$\lim_{x\to\infty}\left(\frac{1+\frac2x}{1-\frac1x}\right)^{x}=\frac{\lim\limits_{x\to\infty}\left(1+\frac2x\right)^{x}}{\lim\limits_{x\to\infty}\left(1-\frac1x\right)^{x}}=\frac{\mathrm e^{2}}{\mathrm e^{-1}}=\mathrm e^{3}$$
+      <span class="lab">法二（$1^\infty$ 公式，一行）</span>$u-1=\dfrac{x+2}{x-1}-1=\dfrac{3}{x-1}$，故 $\lim u^{x}=\mathrm e^{\lim\frac{3x}{x-1}}=\mathrm e^{3}$。<br>
+      <span class="lab">★ 必记的两个固定模式（书上说"为固定模式的求解方法，应熟记"）</span>
+      $$\lim_{x\to\infty}\left(1+\frac ax\right)^{bx+d}=\mathrm e^{ab},\qquad \lim_{x\to\infty}\left(\frac{x+a}{x-a}\right)^{x}=\mathrm e^{2a}$$
+      <span class="lab">要害</span><b>$\mathrm e^{ab}$ 里没有 $d$</b>——指数上的常数项 $d$ 对结果<u>没有影响</u>（因为 $\left(1+\frac ax\right)^{d}\to1$）。考场上看到 $\left(1+\frac2x\right)^{3x+100}$ 直接写 $\mathrm e^{6}$。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 1.13</span>求极限 $\lim\limits_{x\to0}\left(\dfrac{a_1^{x}+a_2^{x}+\cdots+a_n^{x}}{n}\right)^{\frac nx}$，其中 $a_i\gt0,\ i=1,2,\cdots,n$。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$a_1a_2\cdots a_n$</span>　<span style="color:var(--green);font-size:.82rem">✔ 三组实例 $(2,3)\to6$、$(1,5,7)\to35$、$(2,2,2,2)\to16$ sympy 全过</span>
+
+      <div class="think"><span class="th">💭 思路 · 拿到题先想什么</span>
+        <ol>
+          <li>$x\to0$ 时每个 $a_i^{x}\to1$，故底 $\to\frac nn=1$，指数 $\frac nx\to\infty$ ⇒ <b>$1^{\infty}$ 型</b>，上简化公式。</li>
+          <li>指数里的 $u-1=\dfrac{\sum a_i^{x}}{n}-1=\dfrac1n\sum\left(a_i^{x}-1\right)$——<b>把 $n$ 拆成 $n$ 个 1，一一配对</b>（与 基 1.33 完全同一招）。</li>
+          <li>乘上 $\frac nx$ 后 $n$ 正好约掉，只剩 $\sum\dfrac{a_i^{x}-1}{x}$，每项 $\to\ln a_i$。<b>题目把指数配成 $\frac nx$ 而不是 $\frac1x$，就是为了约掉这个 $n$——看出这一点说明读懂了出题意图。</b></li>
+          <li>指数和为 $\sum\ln a_i=\ln\left(a_1\cdots a_n\right)$，再套上 $\mathrm e$ ⇒ <b>指数与对数互消，答案就是乘积</b>。</li>
+        </ol>
+      </div>
+
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面 · 照这个写<span class="score">解答题 10 分参考｜⛳ = 采分点</span></div>
+        <div class="step"><span class="k">解</span>因 $\lim\limits_{x\to0}a_i^{x}=1\ (i=1,\cdots,n)$，故 $\lim\limits_{x\to0}\dfrac{a_1^{x}+\cdots+a_n^{x}}{n}=1$，所求为 $1^{\infty}$ 型。由公式 $\lim u^{v}=\mathrm e^{\lim v(u-1)}$ 得
+        $$\text{原式}=\exp\left\{\lim_{x\to0}\frac nx\left(\frac{a_1^{x}+a_2^{x}+\cdots+a_n^{x}}{n}-1\right)\right\}.\tag{1}$$
+        <span class="pt">⛳ 验型 + 套公式 3 分</span></div>
+        <div class="step">将 (1) 指数中的 $n$ 拆为 $n$ 个 1，得
+        $$\lim_{x\to0}\frac nx\cdot\frac1n\sum_{i=1}^{n}\left(a_i^{x}-1\right)=\sum_{i=1}^{n}\lim_{x\to0}\frac{a_i^{x}-1}{x}.$$
+        <span class="pt">⛳ 拆项 3 分</span></div>
+        <div class="step">由 $x\to0$ 时 $a_i^{x}-1=\mathrm e^{x\ln a_i}-1\sim x\ln a_i$，上式各项极限存在且
+        $$\sum_{i=1}^{n}\lim_{x\to0}\frac{a_i^{x}-1}{x}=\sum_{i=1}^{n}\ln a_i=\ln\left(a_1a_2\cdots a_n\right).$$
+        <span class="pt">⛳ 用 $a^{x}-1\sim x\ln a$ 3 分</span></div>
+        <div class="fin">故 $\text{原式}=\mathrm e^{\ln\left(a_1a_2\cdots a_n\right)}=a_1a_2\cdots a_n$。<span class="pt">⛳ 指对互消作结 1 分</span></div>
+      </div>
+
+      <div class="notekeep"><span class="nh">📌 批注 · 写完拿这层校对</span>
+        <b>① 书上给的法二（凑第二重要极限）也要会</b>——<b>"$1^{\infty}$ 型未定式都可以凑成第二个重要极限"</b>：
+        $$\lim_{x\to0}\left(1+\frac{\sum a_i^{x}-n}{n}\right)^{\frac{n}{\sum a_i^{x}-n}\cdot\frac{\sum a_i^{x}-n}{x}}$$
+        其中 $\lim\limits_{x\to0}\dfrac{\sum a_i^{x}-n}{x}=\ln\left(a_1\cdots a_n\right)$，括号那部分 $\to\mathrm e$。<b>但这条路要凑两层指数，卷面上比简化公式长一倍，考场优先用公式。</b><br>
+        <b>② $a^{x}-1\sim x\ln a$ 的来源要写</b>：$a^{x}=\mathrm e^{x\ln a}$，再用 $\mathrm e^{\square}-1\sim\square$。<br>
+        <b>③ 答案的对称美 + 两秒自查</b>：取 $a_i$ <b>全相等</b>为 $a$ 时，底恒为 $a^{x}$，原式 $=\left(a^{x}\right)^{n/x}=a^{n}$ ✓ 与结论一致。<b>这个自查能立刻发现"指数写漏 $n$"的错。</b>
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 1.14</span>已知 $\lim\limits_{x\to0}\left[a\dfrac{2+\mathrm e^{\frac1x}}{1+\mathrm e^{\frac4x}}+(1+|x|)^{\frac1x}\right]$ 存在，求 $a$ 的值。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$a=\dfrac{\mathrm e}2-\dfrac1{2\mathrm e}\approx1.1752$</span>　<span style="color:var(--green);font-size:.82rem">✔ 代回 sympy：左、右极限均为 $\mathrm e$</span>
+
+      <div class="think"><span class="th">💭 思路 · 拿到题先想什么</span>
+        <ol>
+          <li>题目说"极限<b>存在</b>"，而不是给具体值 ⇒ <b>唯一能用的条件就是"左极限 = 右极限"</b>，这个等式就是定 $a$ 的方程。<b>一个未知数、一个方程，数量对上了。</b></li>
+          <li>为什么必须分左右？式子里有<b>两处双侧行为不同的东西</b>：① $\mathrm e^{1/x},\mathrm e^{4/x}$（右侧 $\to+\infty$，左侧 $\to0$）；② <b>$|x|$</b>（右侧是 $x$，左侧是 $-x$）。<b>两处都要拆，漏一处就错。</b></li>
+          <li>右侧：$\mathrm e^{4/x}$ 比 $\mathrm e^{1/x}$ 跑得快得多 ⇒ 那个分式 $\to0$（<b>"抓大头"用在指数上</b>），第一项整体消失；$(1+x)^{1/x}\to\mathrm e$。故<b>右极限 $=\mathrm e$，与 $a$ 无关</b>。</li>
+          <li>左侧：两个指数都 $\to0$，分式 $\to\frac{2+0}{1+0}=2$，第一项 $=2a$；$(1-x)^{1/x}\to\mathrm e^{-1}$。故<b>左极限 $=2a+\frac1{\mathrm e}$，含 $a$</b>。</li>
+          <li>令两者相等即得 $a$。<b>结构上是"用右边去定左边"。</b></li>
+        </ol>
+      </div>
+
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面 · 照这个写<span class="score">解答题 10 分参考｜⛳ = 采分点</span></div>
+        <div class="step"><span class="k">解</span>因所给极限存在，故其左、右极限存在且相等。<span class="pt">⛳ 点明用左右极限相等 1 分</span></div>
+        <div class="step">当 $x\to0^{+}$ 时，$\dfrac1x\to+\infty$，$\dfrac4x\to+\infty$，且 $|x|=x$，故
+        $$\lim_{x\to0^{+}}\left[a\frac{2+\mathrm e^{\frac1x}}{1+\mathrm e^{\frac4x}}+(1+|x|)^{\frac1x}\right]=\lim_{x\to0^{+}}\left[a\frac{2+\mathrm e^{\frac1x}}{1+\mathrm e^{\frac4x}}+(1+x)^{\frac1x}\right]=0+\mathrm e=\mathrm e,$$
+        其中 $\lim\limits_{x\to0^{+}}\dfrac{2+\mathrm e^{\frac1x}}{1+\mathrm e^{\frac4x}}=\lim\limits_{x\to0^{+}}\dfrac{2\mathrm e^{-\frac4x}+\mathrm e^{-\frac3x}}{\mathrm e^{-\frac4x}+1}=0$（上下同除 $\mathrm e^{\frac4x}$）。<span class="pt">⛳ 右极限 4 分</span></div>
+        <div class="step">当 $x\to0^{-}$ 时，$\dfrac1x\to-\infty$，$\dfrac4x\to-\infty$，故 $\mathrm e^{\frac1x}\to0$、$\mathrm e^{\frac4x}\to0$；又 $|x|=-x$，故
+        $$\lim_{x\to0^{-}}\left[a\frac{2+\mathrm e^{\frac1x}}{1+\mathrm e^{\frac4x}}+(1-x)^{\frac1x}\right]=2a+\frac1{\mathrm e}.$$
+        <span class="pt">⛳ 左极限 4 分</span></div>
+        <div class="fin">由左、右极限相等得 $\mathrm e=2a+\dfrac1{\mathrm e}$，解得 $a=\dfrac{\mathrm e}2-\dfrac1{2\mathrm e}$。<span class="pt">⛳ 1 分</span></div>
+      </div>
+
+      <div class="notekeep"><span class="nh">📌 批注 · 写完拿这层校对</span>
+        <b>① <span class="dock">扣分点</span>：只拆 $\mathrm e^{1/x}$，忘了 $|x|$ 也要拆。</b>$(1+|x|)^{1/x}$ 右侧是 $(1+x)^{1/x}\to\mathrm e$，<b>左侧是 $(1-x)^{1/x}\to\mathrm e^{-1}$</b>（令 $t=-x$：$(1+t)^{-1/t}\to\mathrm e^{-1}$）。<b>这个 $\mathrm e^{-1}$ 就是答案里 $-\frac1{2\mathrm e}$ 的来源，漏了直接错。</b><br>
+        <b>② 右极限的分式要"上下同除 $\mathrm e^{4/x}$"再算</b>，不能直接写 $\frac\infty\infty=0$。<b>指数上也讲"抓大头"：$\mathrm e^{4/x}$ 是带头大哥。</b><br>
+        <b>③ 本题把两大"必拆左右"的对象合在一处考</b>（$\mathrm e^{1/x}$ 与 $|x|$），是 §三 那张"5 个不存在"清单的期末考。<b>与 基 1.15、习 1.3 并排看，$\mathrm e^{1/x}$ 的三种考法就齐了：求极限（基 1.15）／判间断（习 1.3）／定参数（本题）。</b>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= O2 连续与间断 ================= -->
+  <h2 id="s6"><span class="idx">O₂</span>判定连续与间断（本质是算左右极限）</h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/高等数学/01_函数极限与连续/高数_第01章_强化18讲.pdf">📄 强化18讲 p.9–10</a>
+  <div class="mine"><span class="tag">补讲 · 本节的总纲（书首页眉批两行）</span>
+    ① <b>讨论间断点只看两种点：无定义点（必间断）、分段点（未必间断）。</b>初等函数在其定义区间内处处连续。<br>
+    ② <b>连续与间断的判别，本质上就是极限计算。</b>——所以这一向没有新工具，全是 O₁ 的应用。
+  </div>
+
+  <div class="key"><span class="tag">必记 · 连续的定义与三条运算法则</span>
+    $f$ 在 $x_0$ 的<b>某一邻域内有定义</b>且 $\lim\limits_{x\to x_0}f(x)=f(x_0)$ ⇒ 在 $x_0$ 处连续。等价说法：$\lim\limits_{x\to x_0^-}f=\lim\limits_{x\to x_0^+}f=f(x_0)$。<br>
+    ① <b>四则</b>：$f,g$ 在 $x_0$ 连续 ⇒ $f\pm g,\ fg$ 连续；$g(x_0)\ne0$ 时 $f/g$ 连续。<br>
+    ② <b>复合</b>：$u=\varphi(x)$ 在 $x_0$ 连续、$y=f(u)$ 在 $u_0=\varphi(x_0)$ 连续 ⇒ $f[\varphi(x)]$ 在 $x_0$ 连续。<br>
+    ③ <b>反函数</b>：$y=f(x)$ 在 $I_x$ 上<b>单调</b>且连续 ⇒ 反函数在对应区间上连续且有相同单调性。<br>
+    <b>★ 连续版保号性（与 §三 的保号性要区分）</b>：$f$ 在 $x_0$ <u>连续</u>且 $f(x_0)\gt0$ ⇒ 存在 $\delta\gt0$ 使 $|x-x_0|\lt\delta$ 时 $f(x)\gt0$。
+    ⚠️ <b>这里是完整邻域 $|x-x_0|\lt\delta$，而极限版保号性是<u>去心</u>邻域 $0\lt|x-x_0|\lt\delta$。</b>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 张宇的「无牵无挂 vs 相依相偎」（与第 3 章微观放大镜同源）</span>
+    什么叫函数<b>存在</b>？给了一个 $x$，就有一个 $y$ 对应在那里，它附近的点 $X$ 们所对应的 $Y$ 们也是如此，<b>它们只是在那里，无牵无挂</b>。<br>
+    什么叫<b>连续</b>？$Y$ 们<b>充分靠近</b> $y$，彼此的距离小到无法用任何小的正实数表达，只能用超实数"无穷小"来衡量——<b>它们并不只是在那里，它们相依相偎</b>。<br>
+    <span style="color:var(--muted);font-size:.85rem">这三档（存在 / 连续 / 可导）的递进，正是 <a href="第03章_一元函数微分学的概念.html">第 3 章「微观放大镜」</a>那个交互模块要你亲手拖动看的东西。学到那里回头再看这段。</span>
+  </div>
+
+  <h3>6.1　间断点的四种类型</h3>
   <div class="gridwrap"><table>
-    <tr><th>大类</th><th>小类</th><th>$x_0$ 处特征</th></tr>
-    <tr><td rowspan="2"><b>第一类</b>（左右极限都存在）</td><td>可去</td><td>$f(x_0^-)=f(x_0^+)\ne f(x_0)$ 或无定义</td></tr>
-    <tr><td>跳跃</td><td>$f(x_0^-)\ne f(x_0^+)$</td></tr>
-    <tr><td rowspan="2"><b>第二类</b>（至少一侧不存在）</td><td>无穷</td><td>某侧极限 $=\infty$</td></tr>
-    <tr><td>振荡</td><td>某侧振荡不存在</td></tr>
+    <tr><th>大类</th><th>小类</th><th>判据（$x_0$ 处）</th><th>本页实例</th></tr>
+    <tr><td rowspan="2"><b>第一类</b><br>（左右极限<b>都存在</b>）</td><td><b>可去</b>（可补）</td><td>$f(x_0^-)=f(x_0^+)=a\ne f(x_0)$，或 $f(x_0)$ 无定义</td><td>基 1.37 的 $x=0$；基 1.38 的整点；习 1.4</td></tr>
+    <tr><td><b>跳跃</b></td><td>$f(x_0^-)\ne f(x_0^+)$，二者都存在（<b>与 $f(x_0)$ 的值无关</b>）</td><td>习 1.3 的 $x=1$；习 1.5 的 $x=1$</td></tr>
+    <tr><td rowspan="2"><b>第二类</b><br>（至少一侧不存在）</td><td><b>无穷</b></td><td>某一侧极限 $=\infty$</td><td>基 1.37 的 $-1,1,2$；强 1.3；强 1.11 的 $0,2$</td></tr>
+    <tr><td><b>振荡</b></td><td>某一侧振荡不存在，如 $\sin\frac1x$ 在 $x=0$</td><td>—</td></tr>
   </table></div>
-  <div class="eg">
-    <div class="q"><span class="no">例1.11</span>$f(x)=|x|^{\frac{1}{(1-x)(x-2)}}$ 的第一类间断点个数为（　）(A)3 (B)2 (C)1 (D)0</div>
-    <div class="s"><span class="lab">解</span>无定义点 $x=0,1,2$。$|x|^{\frac1{(1-x)(x-2)}}=e^{\frac{\ln|x|}{(1-x)(x-2)}}$：$x\to0$ 指数 $\to+\infty$（第二类无穷）；$x\to1$ 指数 $\to$ 有限，$f\to e$（<b>第一类可去</b>）；$x\to2$ 指数 $\to+\infty$（第二类无穷）。第一类只有 $x=1$，选 $\boxed{\text{C}}$。<span class="ans"> ✔ 已复算</span></div>
+  <div class="trap"><span class="tag">陷阱 · 三条容易漏的规矩</span>
+    ① <b>可去间断点仍然是间断点</b>（虽然补个定义就能连续）。<br>
+    ② <b>无穷间断点不是说"这一点的值是无穷大"</b>，而是说这一点的左、右两侧<b>至少有一个极限值趋向无穷大</b>。<br>
+    ③ <b>考研数学中没有"单侧间断"的概念，区间端点不考虑间断。</b>（问定义域 $[0,1]$ 的函数在 $x=1$ 处的间断性，<b>不予回答</b>——1 的右边没有定义。）
   </div>
-  <div class="trap"><span class="tag">陷阱 · 可去仍是间断点；别把 $x=k\pi$ 之类漏了</span>
-    可去间断点当下就是间断（虽可补定义）。$\frac1{\sin x}$ 别只盯 $x=0$，$\sin x=0$ 的 $x=k\pi$ 全是间断点。
+  <div class="zy"><span class="tag">强化题型 · 常见备选点清单（D₂₁ 观察研究对象：盯住无定义点与分段点，尤其分母表达式的零点）</span>
+    ① $\mathrm e^{\frac1x}\Rightarrow x=0$；　② $\dfrac1{\int_1^{x}t|\sin t|\,\mathrm dt}\Rightarrow x=\pm1$
+    <span style="color:var(--muted);font-size:.85rem">（$t|\sin t|$ 是<b>奇函数</b>，故 $\int_1^{-1}t|\sin t|\mathrm dt=0$，所以 $x=-1$ 也是无定义点——<b>构造对称区间</b>才看得出来）</span>；<br>
+    ③ $\dfrac1{\sin x}\Rightarrow x=k\pi$；　④ $\dfrac1{\arctan x}\Rightarrow x=0$；　⑤ $\dfrac1{\tan\left(x-\frac\pi4\right)},\ 0\lt x\lt2\pi\Rightarrow x=\frac\pi4,\frac{3\pi}4,\frac{5\pi}4,\frac{7\pi}4$；<br>
+    ⑥ $\dfrac1{|x|(x^2-1)}\Rightarrow x=0,\pm1$；　⑦ $[x]\Rightarrow x=n$ 为<b>分段点</b>；　⑧ $|x|^{\frac1{(1-x)(x-2)}}\Rightarrow x=0,1,2$（用 $u^{v}=\mathrm e^{v\ln u}$ 变形才看得出 $x=0$ 也无定义）。<br>
+    <b>👉 找齐所有备选点，一个不漏——漏点是这类题的第一大失分源。</b>
   </div>
 
-  <!-- ============ O3 微观性态 ============ -->
-  <h2 id="s4"><span class="idx">O₃</span>研究 $x\to\bullet$ 时 $f(x)$ 的微观性态<span class="layer L-str" style="margin-left:10px">强化 · 证明题主场</span></h2>
-  <p>这一向是<b>极限的定性使用</b>：不算数值，而是"证 $f\ge0$""证存在 $\xi$"。四把工具：定义法、局部保号性、夹逼、单调有界。</p>
-  <div class="key"><span class="tag">必记 · 局部保号性的"脱帽 / 戴帽"（极重要考点）</span>
-    <b>由极限定号（脱帽·严格→严格）</b>：$\lim f\gt0\Rightarrow$ 邻域内 $f\gt0$。<br>
-    <b>由函数定号（戴帽·带等→带等）</b>：邻域内 $f\ge0\Rightarrow\lim f\ge0$（可能 $=0$，如 $f=x^2$）。<br>
-    <b>方向反了、严格与带等混了，就掉坑。</b>证法：取 $\varepsilon=\frac A2$ 即得（定义法藏着 $|f-A|\lt\varepsilon$ 这把万能钥匙，$\varepsilon$ 可按需取）。
-  </div>
-  <div class="zy"><span class="tag">强化题型 · 单调 + 极限为 0 ⇒ 定号</span>
-    $f$ 单调减少且 $\lim\limits_{x\to+\infty}f=0\Rightarrow f\ge0$（数列同理）。套路：单调给出 $f(x)\ge f(x+t)$，再对 $t\to+\infty$ 取极限。</div>
   <div class="eg">
-    <div class="q"><span class="no">例1.13</span>设 $f(x)$ 单调减少，$\displaystyle\lim_{x\to+\infty}f(x)=0$，证明 $f(x)\ge0$。</div>
-    <div class="s"><span class="lab">证</span>单调减 ⇒ 任意 $t\gt0$ 有 $f(x)\ge f(x+t)$，令 $t\to+\infty$：$f(x)\ge\lim\limits_{t\to+\infty}f(x+t)=\lim\limits_{u\to+\infty}f(u)=0$。得证。<span class="ans"> ✔ 思路已核对</span></div>
+    <div class="q"><span class="no">基 1.36</span>已知 $f(x)=\begin{cases}(\cos x)^{x^{-2}},&x\ne0\\ a,&x=0\end{cases}$ 在 $x=0$ 处连续，则 $a=$ ______。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$a=\mathrm e^{-\frac12}$</span>　<span style="color:var(--green);font-size:.82rem">✔ sympy 验证</span><br>
+      <span class="lab">分析</span>连续 ⟺ $\lim\limits_{x\to0}f(x)=f(0)=a$，所以本题<b>就是算一个极限</b>。$\cos x\to1$、$x^{-2}\to\infty$ ⇒ $1^{\infty}$，套简化公式：
+      $$\lim_{x\to0}(\cos x)^{x^{-2}}=\mathrm e^{A},\qquad A=\lim_{x\to0}\frac{\cos x-1}{x^{2}}=-\frac12$$
+      故 $a=\mathrm e^{-\frac12}$。<br>
+      <span class="lab">要害</span><b>$1^\infty$ 公式 $\lim u^{v}=\mathrm e^{\lim v(u-1)}$ 里的 $u-1=\cos x-1$（是负的！）</b>。写成 $1-\cos x$ 就会得到 $\mathrm e^{1/2}$，符号反了。<b>公式是 $u-1$ 不是 $1-u$，抄公式时看清顺序。</b><br>
+      <span class="lab">同族</span>习 1.10 是同一类"由连续定参数"，只不过那里是分段函数、要拆左右；本题左右一致，直接算。
+    </div>
   </div>
-  <p style="font-size:.85rem;color:var(--muted)">证明题进阶：例1.12（$\lim[x-f(x)]=0,f(1)\lt1$，用定义法取 $\varepsilon$ + 拉氏中值定理证存在 $\eta\gt1$ 使 $f'(\eta)\gt1$）在强化18讲，属 O₃ 的综合证明，建议第二轮再攻。</p>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 1.37</span>函数 $f(x)=\dfrac{\mathrm e^{\frac1{x-1}}\ln|1+x|}{(\mathrm e^{x}-1)(x-2)}$ 的<b>第二类间断点</b>的个数为（　）(A) 1　(B) 2　(C) 3　(D) 4</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(C) 3 个（$x=-1,1,2$）</span>　<span style="color:var(--green);font-size:.82rem">✔ sympy 四点全算：$x\to-1$ 得 $-\infty$、$x\to2$ 得 $\infty$、$x\to1^{+}$ 得 $-\infty$（$x\to1^{-}$ 得 0）、$x\to0$ 得 $-\frac1{2\mathrm e}$</span><br>
+      <span class="lab">分析</span><b>第一步：找齐无定义点。</b>定义域是 $\{x\mid x\ne-1,0,1,2\}$（$\ln|1+x|$ 要 $x\ne-1$；$\mathrm e^{x}-1\ne0$ 要 $x\ne0$；$\mathrm e^{1/(x-1)}$ 要 $x\ne1$；$x-2\ne0$ 要 $x\ne2$）。初等函数在定义域内连续，所以<b>间断点就这 4 个</b>。<br>
+      <b>第二步：逐点算极限。</b><br>
+      · $x\to-1$：$\ln|1+x|\to-\infty$，其余因子有限非零 ⇒ $-\infty$，<b>第二类</b>。<br>
+      · $x\to2$：分母 $(x-2)\to0$，分子有限非零 ⇒ $\infty$，<b>第二类</b>。<br>
+      · $x\to1$：由 基 1.15 已算过，<b>右极限为 $-\infty$</b>（左极限为 0）⇒ <b>第二类</b>。<br>
+      · $x\to0$：$\mathrm e^{1/(x-1)}\to\mathrm e^{-1}$，$(x-2)\to-2$，而 $\dfrac{\ln(1+x)}{\mathrm e^{x}-1}\to1$，故
+      $$\lim_{x\to0}f=-\frac1{2\mathrm e}\lim_{x\to0}\frac{\ln(1+x)}{\mathrm e^{x}-1}=-\frac1{2\mathrm e}$$
+      极限存在但 $f(0)$ 无定义 ⇒ <b>可去（第一类）</b>。<br>
+      <b>综上第二类共 3 个，选 (C)。</b><br>
+      <span class="lab">⚠️ 书上有一处印刷矛盾（我复核后确认）</span>p.67 写"由例 1.15 知 $\lim\limits_{x\to1^{+}}f=+\infty$"，<b>但 例 1.15 原文（p.38）写的是 $-\infty$，且符号分析也支持 $-\infty$</b>：$\mathrm e^{1/(x-1)}\to+\infty$、$\ln2\gt0$、$\mathrm e-1\gt0$、$(x-2)\to-1\lt0$，故整体 $\to-\infty$。<span style="color:var(--green)">sympy 亦给 $-\infty$。</span><b>这是书的笔误，不影响答案（无论 $\pm\infty$ 都是第二类无穷间断点）</b>，但说明<b>抄书也要自己验符号</b>。<br>
+      <span class="lab">要害</span><b>找点 → 算极限 → 归类，三步一步不能省。</b>本题四个点用了四种不同的判法（对数发散 / 分母为零 / 指数双侧 / 可去），是间断点题的"全家福"。<b>书上评："这个题目的计算量还是比较大的，对于极限计算，命题老师的要求还是比较高的。"</b>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 1.38 ★</span>设函数 $f(x)=\lim\limits_{n\to\infty}\dfrac{x^{2}+nx(1-x)\sin^{2}\pi x}{1+n\sin^{2}\pi x}$，则 $f(x)$（　）<br>(A) 处处连续　(B) 只有第一类间断点　(C) 只有第二类间断点　(D) 既有第一类间断点，又有第二类间断点</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(B) 只有第一类（可去）间断点</span>　<span style="color:var(--green);font-size:.82rem">✔ 逐个整点算：$x=k\ (k\ne0)$ 处 $\lim=k(1-k)\ne k^{2}=f(k)$；$x=0$ 处两者都是 0</span><br>
+      <span class="lab">分析</span><b>第一步：去掉极限符号，找出对应法则</b>——由 基 1.26 已得
+      $$f(x)=\begin{cases}x^{2},&x=0,\pm1,\pm2,\cdots\\ x(1-x),&\text{其他}\end{cases}$$
+      <b>第二步：只在分段点（整数点）处查</b>。在 $x=k$ 处，因周围全是非整数，$\lim\limits_{x\to k}f=k(1-k)$（<b>左右极限都存在且相等</b>）；而 $f(k)=k^{2}$。<br>
+      · $k=0$：$0=0$ ⇒ <b>连续</b>；<br>
+      · $k\ne0$：$k(1-k)\ne k^{2}$（等价于 $k-k^2\ne k^2$ 即 $k\ne2k^2$，$k\ne0$ 时不成立）⇒ <b>可去间断点</b>。<br>
+      左右极限都存在 ⇒ <b>没有第二类间断点</b>，选 (B)。<br>
+      <span class="lab">图像</span>抛物线 $y=x(1-x)$ 上把所有整数点<b>挖掉</b>（空心圈），再在这些位置按 $y=x^{2}$ <b>另点一个实心点</b>（$x=0$ 处两者重合，故连续）。<br>
+      <span class="lab">要害</span><b>「由极限定义的函数」判间断的固定三步：① 去极限号写出分段式；② 只查分段点；③ 算三值下结论。</b>与 习 1.4、习 1.5、强 1.3 完全同构——<b>这四题放在一起，这个题型就吃透了。</b><br>
+      <span class="lab">张宇收官语</span>"学好基础知识任重道远，数学成绩的提高，<b>第一要靠理解，第二要通过做题</b>，逐渐提高解题能力。"
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 1.2</span>设 $f(x)$ 在 $(-\infty,+\infty)$ 内有定义，且 $\lim\limits_{x\to\infty}f(x)=a$，$g(x)=\begin{cases}f\!\left(\frac1x\right),&x\ne0\\ 0,&x=0\end{cases}$，则（　）<br>(A) $x=0$ 必是 $g$ 的第一类间断点　(B) 必是第二类间断点　(C) 必是 $g$ 的连续点　(D) $g$ 在 $x=0$ 处的连续性与 $a$ 的取值有关</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(D)</span>　<span style="color:var(--green);font-size:.82rem">✔ 取 $f=a+\mathrm e^{-x^{2}}$ 构造：$a=0$ 时连续、$a=2$ 时不连续</span><br>
+      <span class="lab">分析</span><b>倒代换搬运极限</b>：$x\to0$ 时 $\frac1x\to\infty$，故
+      $$\lim_{x\to0}g(x)=\lim_{x\to0}f\!\left(\frac1x\right)=\lim_{u\to\infty}f(u)=a$$
+      而 $g(0)=0$。于是<b>$a=0$ 时 $\lim g=g(0)$，连续；$a\ne0$ 时 $\lim g$ 存在但 $\ne g(0)$，是可去间断点</b>。故连续与否取决于 $a$，选 (D)。<br>
+      <span class="lab">要害</span>(A) 说"必是第一类间断点"——<b>错在"必"字</b>：$a=0$ 时它根本不是间断点。<b>凡选项里出现"必是"，先去找一个反例。</b><br>
+      <span class="lab">同族</span>本题与 习 1.10、基 1.36 都是"由连续性定参数"，只是这里参数<u>不被定死</u>，而是问"取值影响什么"——<b>是同一知识点的反问形式。</b>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 1.3</span>设函数 $f(x)=\dfrac1{\mathrm e^{\frac{x}{x-1}}-1}$，则（　）<br>(A) $x=0,x=1$ 都是第一类间断点　(B) 都是第二类间断点　(C) $x=0$ 是第一类、$x=1$ 是第二类　(D) $x=0$ 是第二类、$x=1$ 是第一类</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(D)</span>　<span style="color:var(--green);font-size:.82rem">✔ sympy：$x\to0$ 得 $\infty$；$x\to1^{+}$ 得 0，$x\to1^{-}$ 得 $-1$</span><br>
+      <span class="lab">分析</span>$f$ <b>不是</b>分段函数，只需讨论无定义点 $x=0,1$（$x=0$ 使分母 $\mathrm e^{0}-1=0$；$x=1$ 使指数无意义）。<br>
+      · <b>$x\to0$</b>：$\frac{x}{x-1}\to0$，故 $\mathrm e^{\frac{x}{x-1}}-1\to0$，$f\to\infty$ ⇒ <b>第二类（无穷）</b>。<br>
+      · <b>$x\to1^{+}$</b>：$x-1\to0^{+}$，$\frac{x}{x-1}\to+\infty$，$\mathrm e^{+\infty}\to+\infty$，故 $f\to0$。<br>
+      · <b>$x\to1^{-}$</b>：$x-1\to0^{-}$，$\frac{x}{x-1}\to-\infty$，$\mathrm e^{-\infty}\to0$，故 $f\to\dfrac1{0-1}=-1$。<br>
+      左右极限都存在但 $0\ne-1$ ⇒ <b>$x=1$ 是第一类（跳跃）间断点</b>。选 (D)。<br>
+      <span class="lab">要害</span><b>两个点的判法完全相反，这就是本题的设计</b>：$x=0$ 处"里层指数趋于 0 ⇒ 分母趋于 0 ⇒ 无穷"；$x=1$ 处"里层指数趋于 $\pm\infty$ ⇒ 分母分别趋于 $+\infty$ 和 $-1$ ⇒ 跳跃"。<br>
+      <b>👉 通用动作：见 $\mathrm e^{\square}$，先算 $\square$ 的双侧极限，再决定 $\mathrm e^{\square}$ 是 $+\infty$ 还是 0。</b>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 1.4</span>函数 $f(x)=\lim\limits_{t\to0}\left(1+\dfrac{\sin t}{x}\right)^{\frac{x^{2}}{t}}$ 在 $(-\infty,+\infty)$ 内（　）<br>(A) 连续　(B) 有可去间断点　(C) 有跳跃间断点　(D) 有无穷间断点</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(B) $x=0$ 是可去间断点</span>　<span style="color:var(--green);font-size:.82rem">✔ sympy：内层极限 $=\mathrm e^{x}$</span><br>
+      <span class="lab">分析</span><b>第一步：去掉极限号。</b>对 $t\to0$ 而言 $x$ 是常数，$\frac{\sin t}{x}\to0$、$\frac{x^{2}}{t}\to\infty$ ⇒ $1^{\infty}$：
+      $$f(x)=\exp\left\{\lim_{t\to0}\frac{x^{2}}{t}\cdot\frac{\sin t}{x}\right\}=\exp\left\{\lim_{t\to0}x\cdot\frac{\sin t}{t}\right\}=\mathrm e^{x}\qquad(x\ne0)$$
+      <b>第二步：$x=0$ 处呢？</b>原式中 $\frac{\sin t}{x}$ 要求 $x\ne0$，故 <b>$f$ 在 $x=0$ 处无定义</b>。而 $\lim\limits_{x\to0}f=\lim\limits_{x\to0}\mathrm e^{x}=1$ 存在 ⇒ <b>可去间断点</b>。选 (B)。<br>
+      <span class="lab">要害</span>⚠️ <b>本题的机关全在"$x=0$ 无定义"这一句上</b>——算出 $f(x)=\mathrm e^{x}$ 后很容易脱口而出"处处连续"选 (A)。<b>用极限定义的函数，一定要回头检查原式对哪些 $x$ 有意义。</b><br>
+      <span class="lab">对照</span>与 强 1.3 是一对：那题也是 $\lim\limits_{t\to x}(\cdots)$ 化出 $\mathrm e^{\frac{x}{x-1}}$，但结论是<b>第二类</b>；本题化出 $\mathrm e^{x}$，是<b>第一类可去</b>。<b>差别就在化出来的函数在缺口处极限存不存在。</b>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 1.3</span>$f(x)=\begin{cases}\lim\limits_{t\to x}\left(\dfrac{x-1}{t-1}\right)^{\frac{t}{x-t}},&x\ne1\\[4pt] 0,&x=1\end{cases}$ 的<b>第二类间断点</b>的个数为（　）(A) 0　(B) 1　(C) 3　(D) $\infty$</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(B) 1 个（$x=1$）</span>　<span style="color:var(--green);font-size:.82rem">✔ sympy：内层极限 $=\mathrm e^{\frac{x}{x-1}}$；$x\to1^{+}$ 得 $+\infty$</span><br>
+      <span class="lab">分析</span><b>第一步：化简内层（$1^{\infty}$ 型，注意这里趋向的是 $t\to x$）。</b>
+      $$\lim_{t\to x}\left(\frac{x-1}{t-1}\right)^{\frac{t}{x-t}}=\mathrm e^{\lim\limits_{t\to x}\frac{t}{x-t}\left(\frac{x-1}{t-1}-1\right)}=\mathrm e^{\lim\limits_{t\to x}\frac{t}{x-t}\cdot\frac{x-t}{t-1}}=\mathrm e^{\lim\limits_{t\to x}\frac{t}{t-1}}=\mathrm e^{\frac{x}{x-1}}$$
+      <b>关键约分</b>：$\dfrac{x-1}{t-1}-1=\dfrac{x-t}{t-1}$，其中的 $(x-t)$ 与前面的 $\dfrac1{x-t}$ <b>恰好整块约掉</b>——这就是题目把指数配成 $\frac{t}{x-t}$ 的原因。<br>
+      <b>第二步：得到 $f(x)=\begin{cases}\mathrm e^{\frac{x}{x-1}},&x\ne1\\ 0,&x=1\end{cases}$，只查 $x=1$。</b>
+      $\lim\limits_{x\to1^{+}}\mathrm e^{\frac{x}{x-1}}=\mathrm e^{+\infty}=+\infty$ ⇒ <b>第二类（无穷）间断点</b>，只此一个，选 (B)。<br>
+      <span class="lab">要害</span><b>选项 (C) 3 和 (D) $\infty$ 是给"没化简就瞎猜"的人准备的。</b>本题一旦把内层化成 $\mathrm e^{x/(x-1)}$，就退化成一道最简单的间断点题。<b>「由极限定义的函数」永远是：先化简、再判点。</b><br>
+      <span class="lab">与 习 1.3 的关系</span>那题是 $\dfrac1{\mathrm e^{x/(x-1)}-1}$，本题是 $\mathrm e^{x/(x-1)}$ 本身——<b>同一个内核套了不同外壳</b>。所以那题在 $x=1$ 处是跳跃（因为 $+\infty$ 被 $\frac1{\square-1}$ 压成了 0），本题在 $x=1$ 处是无穷。<b>两题并看，能真正理解"外层运算怎么改变间断类型"。</b>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 1.11</span>函数 $f(x)=|x|^{\frac1{(1-x)(x-2)}}$ 的<b>第一类间断点</b>的个数是（　）(A) 3　(B) 2　(C) 1　(D) 0</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(C) 1 个（$x=1$，可去）</span>　<span style="color:var(--green);font-size:.82rem">✔ 三点指数逐个复核：$x\to0$ 与 $x\to2$ 指数 $\to+\infty$，$x\to1$ 指数 $\to1$</span><br>
+      <span class="lab">分析</span><b>第一步：找无定义点。</b>用 $u^{v}=\mathrm e^{v\ln u}$ 变形为 $\mathrm e^{\frac{\ln|x|}{(1-x)(x-2)}}$，可见 <b>$x=0$（$\ln|x|$ 无意义）、$x=1,2$（分母为 0）</b>三点无定义。<br>
+      <b>第二步：逐点算指数的极限</b>（指数定生死）：<br>
+      · <b>$x\to0$</b>：$\ln|x|\to-\infty$，分母 $(1-x)(x-2)\to1\cdot(-2)=-2$，指数 $\to\dfrac{-\infty}{-2}=+\infty$，故 $f\to\mathrm e^{+\infty}=+\infty$ ⇒ <b>第二类</b>。<br>
+      · <b>$x\to1$</b>：$\ln|x|\to0$ 且 $\ln|x|=\ln[1+(x-1)]\sim x-1$，分母 $(1-x)(x-2)=-(x-1)(x-2)$，故
+      $$\lim_{x\to1}\frac{\ln|x|}{(1-x)(x-2)}=\lim_{x\to1}\frac{x-1}{-(x-1)(x-2)}=\lim_{x\to1}\frac{-1}{x-2}=1$$
+      于是 $f\to\mathrm e^{1}=\mathrm e$，极限存在但无定义 ⇒ <b>第一类（可去）</b>。<br>
+      · <b>$x\to2$</b>：$\ln|x|\to\ln2\gt0$，分母 $\to0$（$(1-x)\to-1$，$(x-2)\to0$），指数 $\to\pm\infty$ 中的 $+\infty$ 一侧 ⇒ $f\to+\infty$ ⇒ <b>第二类</b>。<br>
+      <b>第一类只有 1 个，选 (C)。</b><br>
+      <span class="lab">要害</span><b>幂指函数判间断的唯一动作：先 $\mathrm e^{v\ln u}$ 抬起来，然后<u>只盯指数</u>。</b>指数 $\to$ 有限 ⇒ 极限存在；指数 $\to\pm\infty$ ⇒ 第二类。<br>
+      ⚠️ <b>$x=0$ 是最容易漏的点</b>——不变形的话，$|x|^{\square}$ 在 $x=0$ 看起来"好像有定义"（$0^{\square}$）。<b>备选点清单第 ⑧ 条专门列的就是它。</b><br>
+      <span class="lab">分析的三步式（照抄到卷面上）</span>①无定义点为 $x=0,1,2$；②计算 $\lim\limits_{x\to0^{\pm}}f,f(0)$；$\lim\limits_{x\to1^{\pm}}f,f(1)$；$\lim\limits_{x\to2^{\pm}}f,f(2)$；③下结论。
+    </div>
+  </div>
+
+  <!-- ================= O3 微观性态 ================= -->
+  <h2 id="s7"><span class="idx">O₃</span>研究 $x\to\bullet$ 时 $f(x)$ 的微观性态<span class="layer L-str" style="margin-left:10px">强化 · 证明题主场</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/高等数学/01_函数极限与连续/高数_第01章_强化18讲.pdf">📄 强化18讲 p.10–13</a>
+  <p>这一向是<b>极限的定性使用</b>：不算数值，而是"证 $f\ge0$""证存在 $\xi$""证极限存在"。四把工具：<b>定义法 · 局部保号性 · 夹逼准则 · 单调有界准则</b>。本节四道全是证明题，也是全章唯一集中练卷面的地方。</p>
+
+  <div class="key"><span class="tag">必记 · 定义法的真正用途（眉批点破）</span>
+    $$\lim_{x\to x_0}f(x)=A\iff\forall\varepsilon\gt0,\ \exists\delta\gt0,\ \text{当}\ 0\lt|x-x_0|\lt\delta\ \text{时}\ |f(x)-A|\lt\varepsilon$$
+    <b>「定义法中藏着一个重要的不等式 $|f(x)-A|\lt\varepsilon$，这大有用处，且 $\varepsilon$ 可根据题意任取合适的正数。」</b><br>
+    👉 <b>凡题目里出现一个"莫名其妙的正数"（如 $1-f(1)$、$\frac A2$），十有八九就是让你拿去当 $\varepsilon$ 的。</b>保号性的证明取 $\varepsilon=\frac A2$，强 1.12 取 $\varepsilon=1-f(1)$，都是这一招。
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 1.12 ★★</span>设 $f(x)$ 具有一阶连续导数，且 $\lim\limits_{x\to+\infty}\left[x-f(x)\right]=0$，$f(1)\lt1$，证明：<br>(1) 存在 $\xi\gt1$，使得 $\left|\xi-f(\xi)\right|\lt1-f(1)$；<br>(2) 存在 $\eta\gt1$，使得 $f'(\eta)\gt1$。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(1) 取 $\varepsilon=1-f(1)\gt0$ 用极限定义；(2) 由 (1) 移项后对 $f$ 在 $[1,\xi]$ 上用拉格朗日中值定理</span>　<span style="color:var(--green);font-size:.82rem">✔ 取 $f(x)=x-\mathrm e^{-x}$ 作实例：$f(1)=1-\frac1{\mathrm e}\lt1$、$\xi=5$ 时 $|\xi-f(\xi)|=0.0067\lt0.368$、差商 $=1.090\gt1$，全部吻合</span>
+
+      <div class="think"><span class="th">💭 思路 · 拿到题先想什么</span>
+        <ol>
+          <li>(1) 的结论 $\left|\xi-f(\xi)\right|\lt1-f(1)$ <b>左边正好是题设 $\lim[x-f(x)]=0$ 里那个量的绝对值</b>，右边 $1-f(1)$ 由 $f(1)\lt1$ 保证<b>是一个正数</b>。<b>"一个量的绝对值小于某个正数" ⇒ 这就是极限定义 $|f-A|\lt\varepsilon$ 的样子</b>（这里 $A=0$）。所以 (1) 根本不用技巧，<b>把 $1-f(1)$ 当 $\varepsilon$ 取进去就完了</b>——题目给 $f(1)\lt1$ 的唯一用途就是保证这个 $\varepsilon\gt0$。</li>
+          <li>(2) 结论里出现 $f'$，而题设只给了 $f$ 的值和极限 ⇒ <b>连接"函数值之差"与"导数"的桥只有拉格朗日中值定理</b> $f'(\eta)=\dfrac{f(\xi)-f(1)}{\xi-1}$。所以任务变成：<b>证明这个差商 $\gt1$</b>。</li>
+          <li>差商 $\gt1$ 即 $f(\xi)-f(1)\gt\xi-1$。手上有什么？只有 (1) 的 $\left|\xi-f(\xi)\right|\lt1-f(1)$。<b>去绝对值：$\xi-f(\xi)\le\left|\xi-f(\xi)\right|\lt1-f(1)$，移项即得</b>。<b>——(1) 是 (2) 的弹药，这就是题目分两问的原因。</b></li>
+          <li>用拉格朗日前要验条件：$f$ 有<b>一阶连续导数</b>（题设给的），所以在 $[1,\xi]$ 上连续、$(1,\xi)$ 内可导，条件齐备，且 $\xi\gt1$ 保证区间非空。</li>
+        </ol>
+      </div>
+
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面 · 照这个写<span class="score">证明题 12 分参考｜⛳ = 采分点</span></div>
+        <div class="step"><span class="k">证</span><span class="k">(1)</span>由 $\lim\limits_{x\to+\infty}\left[x-f(x)\right]=0$ 及极限的定义知：对于任意的 $\varepsilon\gt0$，存在 $X\gt1$，当 $\xi\gt X$ 时有
+        $$\left|\xi-f(\xi)\right|\lt\varepsilon.\tag{1}$$
+        <span class="pt">⛳ 写出极限定义 3 分</span></div>
+        <div class="step">由题设 $f(1)\lt1$，知 $1-f(1)\gt0$。在 (1) 中<b>取 $\varepsilon=1-f(1)$</b>，即存在 $\xi\gt X\gt1$，使得
+        $$\left|\xi-f(\xi)\right|\lt1-f(1),$$
+        得证。<span class="pt">⛳ 取 $\varepsilon=1-f(1)$ 并说明其为正 3 分</span></div>
+        <div class="step"><span class="k">(2)</span>由 $\left|\xi-f(\xi)\right|\ge\xi-f(\xi)$，结合 (1) 问的结论，有
+        $$\xi-f(\xi)\le\left|\xi-f(\xi)\right|\lt1-f(1),$$
+        移项得
+        $$\xi-1\lt f(\xi)-f(1).\tag{2}$$
+        <span class="pt">⛳ 去绝对值 + 移项 3 分</span></div>
+        <div class="step">因 $f(x)$ 具有一阶连续导数，故 $f$ 在 $[1,\xi]$ 上连续、在 $(1,\xi)$ 内可导，由<b>拉格朗日中值定理</b>，存在 $\eta\in(1,\xi)$，使得
+        $$f'(\eta)=\frac{f(\xi)-f(1)}{\xi-1}.$$
+        <span class="pt">⛳ 验条件 + 引拉格朗日中值定理 2 分</span></div>
+        <div class="fin">由 (2) 及 $\xi-1\gt0$ 得 $f'(\eta)=\dfrac{f(\xi)-f(1)}{\xi-1}\gt1$，即<b>存在 $\eta\gt1$，使得 $f'(\eta)\gt1$</b>，得证。<span class="pt">⛳ 回扣题干下结论 1 分</span></div>
+      </div>
+
+      <div class="notekeep"><span class="nh">📌 批注 · 写完拿这层校对</span>
+        <b>① <span class="dock">扣分点</span>：(1) 中不说明 $1-f(1)\gt0$。</b>$\varepsilon$ <u>必须是正数</u>，极限定义才允许你取它。<b>题设那句 $f(1)\lt1$ 存在的唯一理由就是这个，不用等于没读题。</b><br>
+        <b>② <span class="dock">扣分点</span>：(2) 中直接把 $\left|\xi-f(\xi)\right|$ 写成 $\xi-f(\xi)$。</b>我们并不知道 $\xi-f(\xi)$ 的符号！<b>正确的桥是不等式 $a\le|a|$</b>——只需要这一半，不需要知道符号。这一行是本题技术含量最高的地方。<br>
+        <b>③ <span class="dock">扣分点</span>：用拉格朗日不验条件。</b>必须写"因 $f$ 具有一阶连续导数，故在 $[1,\xi]$ 上连续、在 $(1,\xi)$ 内可导"。<b>凡用中值定理，先验连续与可导，区间的开闭要分清</b>（闭区间连续、开区间可导）。<br>
+        <b>④ <span class="dock">扣分点</span>：最后忘了说 $\eta\gt1$。</b>题目要的是"存在 $\eta\gt1$"，而 $\eta\in(1,\xi)$ 自然满足——<b>但要把这句话写出来才算回扣题干。</b><br>
+        <b>⑤ 分问之间要"接力"</b>：(2) 开头就要写"结合 (1) 问的结论"。<b>阅卷老师看到这句才知道你是有意识地用前问，而不是碰巧写对。</b><br>
+        <b>⑥ 题型定位</b>：<b>「极限定义 + 中值定理」是 O₃ 的招牌组合</b>——极限定义负责<b>造出一个点 $\xi$</b>，中值定理负责<b>把这个点的信息传给导数</b>。第 6 章（中值定理与不等式）整章都是这一招的放大版，本题是它的第一次亮相。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 1.13</span>设 $f(x)$ 单调减少，$\lim\limits_{x\to+\infty}f(x)=0$，证明 $f(x)\ge0$。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">用"单调给出不等式 → 对不等式取极限（戴帽）"两步</span>　<span style="color:var(--green);font-size:.82rem">✔ 以 $f=\mathrm e^{-x}$ 验证结论方向；戴帽的"非严格"用 $f=\mathrm e^{-x}\gt0$ 而极限 $=0$ 说明不可升级为严格</span>
+
+      <div class="think"><span class="th">💭 思路 · 拿到题先想什么</span>
+        <ol>
+          <li>要证的是 <b>$f(x)\ge0$ 对<u>每一个</u> $x$ 成立</b>，而手上只有两条信息：单调减少、$+\infty$ 处极限为 0。<b>怎么把"无穷远处的信息"搬到"任意一点 $x$"？</b>——这就是全题的问题所在。</li>
+          <li>单调减少能给什么？<b>它给的是"右边的值不超过左边的值"</b>：对任意 $t\gt0$，有 $f(x)\ge f(x+t)$。<b>这个不等式把点 $x$ 和它右边所有的点连了起来</b>——搬运通道有了。</li>
+          <li>接下来<b>让 $t\to+\infty$</b>，右端 $f(x+t)\to0$（换元 $u=x+t$ 即题设的极限），左端 $f(x)$ 与 $t$ 无关是常数。<b>对不等式两端取极限</b>，就把 0 搬到了 $x$ 处。</li>
+          <li>⚠️ 最后一步用的是<b>保号性的"戴帽"方向</b>（由函数的不等号推极限的不等号），所以<b>结论必然是带等号的 $\ge$，不可能是 $\gt$</b>。题目要证的正是 $\ge$，与工具的性质严丝合缝——<b>如果题目要你证 $f\gt0$，那这条路就不够，说明想错了</b>。</li>
+        </ol>
+      </div>
+
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面 · 照这个写<span class="score">证明题 10 分参考｜⛳ = 采分点</span></div>
+        <div class="step"><span class="k">证</span>因 $f(x)$ 单调减少，故对任意 $t\gt0$ 及任意 $x$，有
+        $$f(x)\ge f(x+t).\tag{1}$$
+        <span class="pt">⛳ 由单调性写出不等式 4 分</span></div>
+        <div class="step">在 (1) 中固定 $x$，令 $t\to+\infty$。注意 $f(x)$ 与 $t$ 无关，且令 $u=x+t$ 时 $t\to+\infty$ 蕴涵 $u\to+\infty$，故
+        $$f(x)=\lim_{t\to+\infty}f(x)\ \ge\ \lim_{t\to+\infty}f(x+t)=\lim_{u\to+\infty}f(u)=0.\tag{2}$$
+        <span class="pt">⛳ 对不等式取极限（保号性戴帽）4 分</span><span class="pt">⛳ 换元说明趋向 1 分</span></div>
+        <div class="fin">即对一切 $x$ 均有 $f(x)\ge0$，证毕。<span class="pt">⛳ 1 分</span></div>
+      </div>
+
+      <div class="notekeep"><span class="nh">📌 批注 · 写完拿这层校对</span>
+        <b>① 第 (2) 步用的是保号性的<u>戴帽</u>方向</b>：$f\ge g\Rightarrow\lim f\ge\lim g$（<b>带等 → 带等</b>）。<b>写卷面时点一句"由极限的保号性"最稳。</b><br>
+        <b>② <span class="dock">扣分点</span>：把结论写成 $f(x)\gt0$。</b>戴帽<u>不能</u>把非严格升级为严格。<b>反例：$f(x)=\mathrm e^{-x}$ 处处 $\gt0$，但极限恰为 0；而 $f\equiv0$ 也满足题设，此时等号取到。</b><br>
+        <b>③ <span class="dock">扣分点</span>：不写 $f(x)=\lim\limits_{t\to+\infty}f(x)$ 这一步。</b>不等式两端要<u>同时</u>取极限，左端虽是常数也要写成极限的形式，否则"两端取极限"的动作在形式上不完整。<br>
+        <b>④ 数列版（书上给的"同理"，一起记）</b>：设 $\{x_n\}$ 单调减少，$\lim\limits_{n\to\infty}x_n=0$，则 $x_n\ge0$。
+        证：由单调减少，对任意整数 $m\gt0$ 有 $x_n\ge x_{n+m}$，则 $x_n=\lim\limits_{m\to\infty}x_n\ge\lim\limits_{m\to\infty}x_{n+m}\xrightarrow{k=n+m}\lim\limits_{k\to\infty}x_k=0$。<b>与函数版逐字对应。</b><br>
+        <b>⑤ 题型定位</b>：<b>「单调 + 极限值 ⇒ 定号」是一个独立的小套路</b>，凡题设同时给"单调"和"某端极限"，就往这条路上想。<b>下一题（强 1.15）是它的升级版：单调 + 有界 ⇒ 极限存在。</b>
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 1.14</span>设 $x\ge0$，记 $x$ 到 $2k$ 的最小距离为 $f(x)$，$k=0,1,2,\cdots$。<br>(1) 证明 $f(x)$ 以 2 为周期，写出其在 $[0,2]$ 上的表达式并画出 $f(x)$ 的图像；<br>(2) 求 $\lim\limits_{x\to+\infty}\dfrac{\displaystyle\int_0^{x}f(t)\,\mathrm dt}{x}$。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(1) $f(x)=\min\left\{|x-2k|\right\}=\begin{cases}x,&0\le x\lt1\\ 2-x,&1\le x\le2\end{cases}$，底 2 高 1 的等腰三角波；(2) $\dfrac12$</span>　<span style="color:var(--green);font-size:.82rem">✔ 数值积分 $X=50,501.3,5000.7,20000$ 四档，$\frac1X\int_0^Xf$ 依次 $0.500000,0.500209,0.499979,0.500000$</span>
+
+      <div class="think"><span class="th">💭 思路 · 拿到题先想什么</span>
+        <ol>
+          <li>(1) 第一关是<b>读懂中文</b>："$x$ 到 $2k$ 的最小距离"，$k=0,1,2,\cdots$ ⇒ 就是 $x$ 到 $0,2,4,6,\cdots$ 这些点的距离里最小的那个，写成数学式 <b>$f(x)=\min\limits_{k}\left|x-2k\right|$</b>。<b>把文字翻译成 $\min$ 记号，题就做完一半了。</b></li>
+          <li>翻译不下来就<b>取特例看看</b>：$x=0.3$ 离 0 最近，$f=0.3$；$x=1.7$ 离 2 最近，$f=0.3$；$x=1$ 到 0 和 2 都是 1。<b>规律立刻浮现：在 $[0,1)$ 上是 $x$，在 $[1,2]$ 上是 $2-x$。</b></li>
+          <li>证周期：$f(x+2)=\min\left|x+2-2k\right|=\min\left|x-2(k-1)\right|$，而 $k$ 跑遍 $1,2,\cdots$ 时 $k-1$ 跑遍 $0,1,\cdots$，<b>取的是同一个集合的最小值</b>，故 $=f(x)$。</li>
+          <li>(2) 是 $\frac\infty\infty$，但被积函数<b>不连续可导也没有初等原函数表达</b>（是折线），洛必达用不了。<b>但它的积分有几何意义：每个周期的图形是底 2 高 1 的三角形，面积恰为 1。</b>所以 $\int_0^{2n}f=n$——<b>积分能数出来，不必算出来。</b></li>
+          <li>$x$ 不一定落在整周期上，就<b>把 $x$ 夹在两个整周期之间</b>：$2n\le x\lt2n+2$，于是 $n\le\int_0^xf\lt n+1$，再除以 $x$（也要用 $2n\le x\lt2n+2$ 放缩）⇒ <b>夹逼</b>。这是"积分 + 夹逼"的标准配合。</li>
+        </ol>
+      </div>
+
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面 · 照这个写<span class="score">解答题 12 分参考｜⛳ = 采分点</span></div>
+        <div class="step"><span class="k">证 (1)</span>由题意，$f(x)=\min\limits_{k}\left\{\left|x-2k\right|\right\}\ (k=0,1,2,\cdots)$，即 $f(x)$ 是 $x\,(\ge0)$ 到 $0,2,4,\cdots$ 这些数的最小距离。<span class="pt">⛳ 把文字翻译成数学表述 2 分</span></div>
+        <div class="step">当 $x\ge0$ 时
+        $$f(x+2)=\min_{k\ge0}\left\{\left|(x+2)-2k\right|\right\}=\min_{k\ge1}\left\{\left|x-2(k-1)\right|\right\}=f(x),$$
+        故 $f(x)$ 是以 2 为周期的函数。<span class="pt">⛳ 证周期 3 分</span></div>
+        <div class="step">在 $[0,2]$ 上：若 $0\le x\lt1$，则 $x$ 距 0 更近，$f(x)=x$；若 $1\le x\le2$，则 $x$ 距 2 更近，$f(x)=2-x$。故
+        $$f(x)=\min_{k}\left\{\left|x-2k\right|\right\}=\begin{cases}x,&0\le x\lt1,\\ 2-x,&1\le x\le2.\end{cases}$$
+        其图像为底边长 2、高为 1 的<b>等腰三角波</b>（峰在 $x=1,3,5,\cdots$，谷在 $x=0,2,4,\cdots$），如下图。<span class="pt">⛳ 分段表达式 + 作图 2 分</span></div>
+
+        <svg viewBox="0 0 620 140" style="width:100%;max-width:620px;display:block;margin:10px auto;background:var(--card);border:1px solid var(--line);border-radius:10px">
+          <line x1="40" y1="110" x2="600" y2="110" stroke="currentColor" stroke-width="1.2" opacity=".55"/>
+          <polygon points="600,110 592,106.5 592,113.5" fill="currentColor" opacity=".55"/>
+          <line x1="40" y1="18" x2="40" y2="128" stroke="currentColor" stroke-width="1.2" opacity=".55"/>
+          <polygon points="40,18 36.5,26 43.5,26" fill="currentColor" opacity=".55"/>
+          <line x1="44" y1="50" x2="596" y2="50" stroke-dasharray="4 4" stroke="var(--purple)" stroke-width="1" opacity=".7"/>
+          <polyline points="40,110 100,50 160,110 220,50 280,110 340,50 400,110 460,50 520,110 580,50"
+            fill="none" stroke="var(--accent)" stroke-width="2.4"/>
+          <text x="26" y="124" font-size="11" fill="currentColor" opacity=".75">O</text>
+          <text x="24" y="54" font-size="11" fill="var(--purple)">1</text>
+          <text x="96" y="124" font-size="11" fill="currentColor" opacity=".75">1</text>
+          <text x="156" y="124" font-size="11" fill="currentColor" opacity=".75">2</text>
+          <text x="216" y="124" font-size="11" fill="currentColor" opacity=".75">3</text>
+          <text x="276" y="124" font-size="11" fill="currentColor" opacity=".75">4</text>
+          <text x="576" y="124" font-size="11" fill="currentColor" opacity=".75">x</text>
+          <text x="46" y="30" font-size="11" fill="currentColor" opacity=".75">f(x)</text>
+          <polygon points="40,110 100,50 160,110" fill="var(--accent)" opacity=".12"/>
+          <text x="78" y="98" font-size="10" fill="var(--accent)">面积=1</text>
+        </svg>
+
+        <div class="step"><span class="k">解 (2)</span>当 $2n\le x\lt2n+2\ (n\ge1)$ 时，由 $f\ge0$ 及每个周期上 $\displaystyle\int_{2k}^{2k+2}f(t)\,\mathrm dt=\frac12\cdot2\cdot1=1$，得
+        $$n=\int_0^{2n}f(t)\,\mathrm dt\le\int_0^{x}f(t)\,\mathrm dt\lt\int_0^{2n+2}f(t)\,\mathrm dt=n+1.$$
+        <span class="pt">⛳ 用周期面积把积分夹住 3 分</span></div>
+        <div class="step">又 $2n\le x\lt2n+2$，故
+        $$\frac{n}{2n+2}=\frac1{2n+2}\int_0^{2n}f(t)\,\mathrm dt\lt\frac1x\int_0^{x}f(t)\,\mathrm dt\lt\frac1{2n}\int_0^{2n+2}f(t)\,\mathrm dt=\frac{n+1}{2n}.$$
+        <span class="pt">⛳ 除以 $x$ 时对分母也放缩 1 分</span></div>
+        <div class="fin">当 $x\to+\infty$ 时 $n\to\infty$，而 $\dfrac{n}{2n+2}\to\dfrac12$、$\dfrac{n+1}{2n}\to\dfrac12$，由<b>夹逼准则</b>得
+        $\lim\limits_{x\to+\infty}\dfrac1x\displaystyle\int_0^{x}f(t)\,\mathrm dt=\dfrac12$。<span class="pt">⛳ 引夹逼准则作结 1 分</span></div>
+      </div>
+
+      <div class="notekeep"><span class="nh">📌 批注 · 写完拿这层校对</span>
+        <b>① 眉批的审题三招（本题最值钱的东西，抄下来）</b>：把题目中的<b>文字表述翻译成数学表述</b>——<b>①名词准确翻译；②取个特例看看；③画个图像看看（数形结合）</b>。原话："<b>很多考生畏惧这一『难关』，事实上，只要冷静做好上述过程，多做几个训练，此关可过。</b>"<br>
+        <b>② <span class="dock">扣分点</span>：夹逼时只对分子放缩，分母直接写 $x$。</b>必须把 $\frac1x$ 也用 $2n\le x\lt2n+2$ 换掉，两端才成为只含 $n$ 的可算量。<b>「分子放大就要分母缩小」——不等号方向要一致地朝一边推。</b><br>
+        <b>③ <span class="dock">扣分点</span>：不说明 $x\to+\infty$ 时 $n\to\infty$。</b>换元后极限过程变了，必须交代（与 基 1.28 的"极限换元有二换"同一条纪律）。<br>
+        <b>④ 为什么积分不必真算</b>：$f$ 是折线，<b>$\int_0^{2}f=$ 三角形面积 $=\frac12\times\text{底}\times\text{高}=\frac12\times2\times1=1$</b>。<b>凡被积函数是折线/绝对值/取整，先想面积，别急着找原函数。</b><br>
+        <b>⑤ 与 §一 周期性结论 ④ 互为正反面</b>：那条说"$\int_0^{x}f$ 以 $T$ 为周期 $\iff\int_0^{T}f=0$"。<b>本题 $\int_0^{2}f=1\ne0$，所以 $\int_0^xf$ <u>不</u>周期，而是大致线性增长（斜率 $\frac12$）——这正是本题极限等于 $\frac12$ 的本质。</b><br>
+        <b>⑥ 与 习 1.11 的三角波是同族</b>：那里是 $\arcsin(\sin x)$（周期 $2\pi$、峰 $\frac\pi2$），这里周期 2、峰 1。<b>两张图一起记。</b>
+      </div>
+    </div>
+  </div>
+
+  <div class="key"><span class="tag">必记 · 单调有界准则（函数版）——基础讲说"要到强化阶段布防"的就是这里</span>
+    若存在 $\delta\gt0$ 使 $f(x)$ 在 $(x_0,x_0+\delta)$ 内<b>单调有界</b>，则 $\lim\limits_{x\to x_0^{+}}f(x)$ <b>存在</b>；<br>
+    若存在 $\delta\gt0$ 使 $f(x)$ 在 $(x_0-\delta,x_0)$ 内单调有界，则 $\lim\limits_{x\to x_0^{-}}f(x)$ 存在。<br>
+    $x\to\pm\infty$ 的情形同理：<b>在 $+\infty$ 的某邻域内单调有界 ⇒ $\lim\limits_{x\to+\infty}f$ 存在。</b><br>
+    <b>👉 用法固定：证极限存在 = 证单调 + 证有界，两件事各写一段。</b>数列版见 <a href="第02章_数列极限.html">第 2 章</a>（那里是主力工具）。
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 1.15 ★★</span>已知函数 $f(x)$ 的定义域是 $[0,+\infty)$，且满足 $f(0)=1$，$f'(x)=\dfrac1{f^{2}(x)+x^{2}}$，求证：$\lim\limits_{x\to+\infty}f(x)$ 存在，且 $\lim\limits_{x\to+\infty}f(x)\le1+\dfrac\pi2$。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">证单调递增 + 证有上界 $1+\frac\pi2$ ⇒ 极限存在；再由戴帽得极限 $\le1+\frac\pi2$</span>　<span style="color:var(--green);font-size:.82rem">✔ $\int_0^{+\infty}\frac{\mathrm dx}{1+x^{2}}=\frac\pi2$ sympy 验证；数值解 ODE 到 $x=4000$ 得 $f\approx2.1446\lt1+\frac\pi2\approx2.5708$，与结论一致</span>
+
+      <div class="think"><span class="th">💭 思路 · 拿到题先想什么</span>
+        <ol>
+          <li>题目要证的是<b>"极限存在"而不是"极限等于几"</b>——这类问题在本章只有一把钥匙：<b>单调有界准则</b>。所以任务立刻拆成两半：<b>证单调、证有界</b>。</li>
+          <li>单调好办：$f'(x)=\dfrac1{f^{2}+x^{2}}$，分母是两个平方和，<b>显然 $\gt0$</b>（$x\ge0$ 且 $f$ 有定义，分母不为零）⇒ $f$ 单调递增。<b>单增 + 起点 $f(0)=1$ ⇒ 顺带得到 $f(x)\ge1$，这条马上要用。</b></li>
+          <li>有界怎么办？<b>$f$ 是隐式给的（$f$ 出现在自己导数的分母里），解不出来</b>。但注意：<b>要找<u>上</u>界，就要把 $f'$ 往<u>大</u>了放</b>——分母越小商越大，而分母 $f^{2}+x^{2}\ge1+x^{2}$（用上一步的 $f\ge1$！），故
+          $$f'(x)\le\frac1{1+x^{2}}$$
+          <b>右边是个不含 $f$ 的、能积分的东西——这一步就是全题的枢纽。</b></li>
+          <li>有了导数的上界，怎么变成 $f$ 的上界？<b>牛顿-莱布尼茨：$f(x)=f(0)+\int_0^{x}f'(t)\,\mathrm dt$</b>，把不等式积起来即可。而 $\int_0^{+\infty}\frac{\mathrm dt}{1+t^{2}}=\arctan t\big|_0^{+\infty}=\frac\pi2$——<b>$\arctan$ 的那个 $\frac\pi2$ 就是结论里 $\frac\pi2$ 的来源</b>。看到结论里有 $\frac\pi2$，反推也该想到 $\frac1{1+x^{2}}$。</li>
+          <li>最后一句"极限 $\le1+\frac\pi2$"：由 $f(x)\le1+\frac\pi2$ <b>对不等式取极限（戴帽）</b>即得，仍是非严格。</li>
+        </ol>
+      </div>
+
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面 · 照这个写<span class="score">证明题 12 分参考｜⛳ = 采分点</span></div>
+        <div class="step"><span class="k">证</span>由 $f'(x)=\dfrac1{f^{2}(x)+x^{2}}\gt0$ 知 $f(x)$ 在 $[0,+\infty)$ 上<b>单调递增</b>，又 $f(0)=1$，故
+        $$f(x)\ge1\qquad(x\ge0).\tag{1}$$
+        <span class="pt">⛳ 证单调 2 分</span><span class="pt">⛳ 得下界 $f\ge1$ 2 分</span></div>
+        <div class="step">由 (1) 得 $f^{2}(x)+x^{2}\ge1+x^{2}$，从而
+        $$f'(x)=\frac1{f^{2}(x)+x^{2}}\le\frac1{1+x^{2}}.\tag{2}$$
+        <span class="pt">⛳ 放缩出不含 $f$ 的上界 3 分</span></div>
+        <div class="step">对任意 $x\ge0$，由牛顿-莱布尼茨公式及 (2)，
+        $$f(x)=f(0)+\int_0^{x}f'(t)\,\mathrm dt\le1+\int_0^{+\infty}\frac1{1+t^{2}}\,\mathrm dt=1+\arctan t\Big|_0^{+\infty}=1+\frac\pi2.\tag{3}$$
+        <span class="pt">⛳ 积分得上界 3 分</span></div>
+        <div class="step">由 (3) 知 $f(x)$ <b>有上界</b>，结合 $f(x)$ 单调递增，由<b>单调有界准则</b>知 $\lim\limits_{x\to+\infty}f(x)$ <b>存在</b>。<span class="pt">⛳ 引单调有界准则 1 分</span></div>
+        <div class="fin">又由 (3) 中 $f(x)\le1+\dfrac\pi2$ 对一切 $x\ge0$ 成立，两端取极限得 $\lim\limits_{x\to+\infty}f(x)\le1+\dfrac\pi2$，得证。<span class="pt">⛳ 戴帽取极限收口 1 分</span></div>
+      </div>
+
+      <div class="notekeep"><span class="nh">📌 批注 · 写完拿这层校对</span>
+        <b>① 全题的枢纽是「用 $f\ge1$ 把 $f$ 从分母里赶走」。</b>没有这一步，$f'\le\frac1{1+x^{2}}$ 就出不来，后面全断。<b>这是"先证一个粗糙的界，再用它换一个精细的界"的典型两级放缩</b>，第 6 章的不等式证明反复用这一招。<br>
+        <b>② <span class="dock">扣分点</span>：放缩方向搞反。</b>要证<u>上</u>界就把 $f'$ 往<u>大</u>了放 ⇒ <b>分母往小了放</b>。写成 $f^{2}+x^{2}\le\cdots$ 就全错了。<b>放缩前先问一句"我要的是上界还是下界"。</b><br>
+        <b>③ <span class="dock">扣分点</span>：直接写 $f(x)\le1+\frac\pi2$ 而不给 $f(x)=f(0)+\int_0^xf'$。</b>这个公式是把"导数的信息"变成"函数值的信息"的<b>唯一通道</b>，必须落笔。<br>
+        <b>④ <span class="dock">扣分点</span>：证完有上界就直接说"故极限存在"。</b><b>单调有界准则要两个条件</b>，卷面上要把"单调递增"和"有上界"并列写出，再引准则。<br>
+        <b>⑤ <span class="dock">扣分点</span>：最后写成 $\lim f\lt1+\frac\pi2$。</b>戴帽是<b>非严格</b>（见 §三 保号性）。<b>题目要的正是 $\le$，写 $\lt$ 反而错。</b><br>
+        <b>⑥ 把 $\int_0^{x}$ 直接放大成 $\int_0^{+\infty}$ 是合法的</b>，因为被积函数 $\frac1{1+t^{2}}\gt0$。<b>若被积函数变号，这一步就不能做</b>——考场上要留意这个前提。<br>
+        <b>⑦ 题型定位</b>：<b>本题是基础30讲那句手写眉批「函数的单调有界准则目前还未考过，我们到强化阶段布防」的落点</b>。基础讲埋坑、强化讲填土，两本书在这里对上。<b>数列版的单调有界准则是 <a href="第02章_数列极限.html">第 2 章</a>的绝对主力（那里的"三段式：证界 → 证单调 → 取极限"），本题是它在函数侧的唯一演练，务必写熟。</b>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= 例题落位索引 ================= -->
+  <h2 id="idx"><span class="idx">索引</span>例题落位表 · 69 道一道不漏</h2>
+  <p style="font-size:.88rem;color:var(--muted)">这一章我做过一次<b>逐编号核对</b>：基础30讲 例 1.1–1.38（38 道）+ 课后习题 1.1–1.16（16 道）+ 强化18讲 例 1.1–1.15（15 道）＝ <b>69 道，全部落位</b>。<b>答案均经 sympy 符号运算或高精度数值独立复算</b>，脚本在 <code>scratchpad/g1_v1..v4.py</code>。</p>
+
+  <div class="gridwrap"><table>
+    <tr><th>来源</th><th>编号</th><th>落在本页哪一节</th><th>答案速查</th></tr>
+    <tr><td rowspan="9"><b>基础30讲<br>例题（38）</b></td><td>1.1 – 1.5</td><td>§一 1.1–1.3 函数/反函数/复合</td><td>$\frac{x}{x^2-2}$；$\frac{x}{\sqrt{1+x^2}}$；$\frac12(\mathrm e^x-\mathrm e^{-x})$；$\sqrt{-x^2+2x+3}$；分段式</td></tr>
+    <tr><td>1.6 – 1.9</td><td>§一 1.4 四种特性</td><td>$|f|\le\frac12$；(D)；奇函数；$T=2\pi$</td></tr>
+    <tr><td>1.10 – 1.13</td><td>§二 函数的图像</td><td>$\frac{7-\sqrt{13}}{12}$；(B)；三段反函数；(D)</td></tr>
+    <tr><td>1.14 – 1.18</td><td>§三 极限的概念与性质</td><td>(D) $-\frac16$；(D)；(D)；(B)；(D)</td></tr>
+    <tr><td>1.19, 1.22, 1.23</td><td>§四 无穷小·比阶</td><td>(C) $n=3$；两个等价式的证明；(C)</td></tr>
+    <tr><td>1.20, 1.21</td><td>§三 3.5 四则运算</td><td>两条定参数结论；(A) $b=-4$</td></tr>
+    <tr><td>1.24 – 1.29</td><td>§O₁ 5.2 / 5.4</td><td>$-\frac{\mathrm e}2$；抓大头三分式；分段式；(D) $-\frac83$；$0$；$10$</td></tr>
+    <tr><td>1.30 – 1.33</td><td>§O₁ 5.5 / 5.6</td><td>(D) $\frac12$；$\frac12$；$1$；$\mathrm e^{2\mathrm e}$</td></tr>
+    <tr><td>1.34 – 1.38</td><td>§O₁ 5.3 / §O₂</td><td>(A)；(A)；$\mathrm e^{-1/2}$；(C) 3 个；(B)</td></tr>
+    <tr><td rowspan="4"><b>课后习题<br>（16）</b></td><td>1.1, 1.15, 1.16</td><td>§O₁ 5.3 泰勒与定参数</td><td>(C) $\frac16$；$a=1,b=-\frac52$；$a=\frac43,b=-\frac13$</td></tr>
+    <tr><td>1.2 – 1.5</td><td>§O₂ 连续与间断（1.5 在 §O₁ 5.2）</td><td>(D)；(D)；(B)；(B)</td></tr>
+    <tr><td>1.6, 1.11</td><td>§二 函数的图像</td><td>$\frac{x}{1+nx}$；三角波（周期 $2\pi$，峰 $\frac\pi2$）</td></tr>
+    <tr><td>1.7 – 1.10, 1.12 – 1.14</td><td>§O₁ 5.4 / 5.5 / 5.6</td><td>$\frac12$；$\mathrm e^3$；$\ln\frac ab$；$-2$；$\frac32$；$a_1\cdots a_n$；$\frac{\mathrm e}2-\frac1{2\mathrm e}$</td></tr>
+    <tr><td rowspan="5"><b>强化18讲<br>例题（15）</b></td><td>1.1, 1.2</td><td>§O₁ 5.1 整体判定与化简先行</td><td>$-1$；$\frac12$</td></tr>
+    <tr><td>1.3, 1.11</td><td>§O₂ 连续与间断</td><td>(B) 1 个；(C) 1 个</td></tr>
+    <tr><td>1.4 – 1.6</td><td>§四 六类比阶模板</td><td>$ck=-\frac12$；(C)；(B) $1\lt\alpha\le3$</td></tr>
+    <tr><td>1.7 – 1.10</td><td>§O₁ 5.5 涉及 $\infty$ 的计算</td><td>$\ln2$；$\ln3$；$\frac1{\mathrm e}$；$\frac1{2\mathrm e}$</td></tr>
+    <tr><td>1.12 – 1.15</td><td>§O₃ 微观性态（四道证明题）</td><td>定义法 + 拉氏；单调 $\Rightarrow f\ge0$；三角波 + 夹逼 $\frac12$；单调有界 $\le1+\frac\pi2$</td></tr>
+  </table></div>
+
+  <div class="mine"><span class="tag">补讲 · 本次回补做了什么（2026-07-26）</span>
+    旧版本页只收了强化 9 道例题，<b>基础30讲的 38 例 + 16 道课后习题一道没收</b>。这次按扫描件协议把 <b>基础 75 页 + 强化 13 页共 88 页全部逐页读完</b>，落成本地讲义笔记，再一次性重写全页。<br>
+    <b>顺带纠正两处旧记录</b>：① 强化18讲第 1 讲的例题是 <b>15 道</b>（1.1–1.15），不是 13 道；② 旧版缺的是 1.2/1.3/1.9/1.12/<b>1.14/1.15</b> 六道，其中 <b>1.15 正是"函数版单调有界准则"的唯一演练题</b>，缺了它 O₃ 这一向就是残的。
+  </div>
+
+  <!-- ================= 收官 ================= -->
+  <h2><span class="idx">收官</span>这一章真正要带走的六条</h2>
+  <div class="key"><span class="tag">必记 · 全章主线（考前只看这一块）</span>
+    <b>① 三向分流</b>：看到 $\lim$ 先问盯哪个目标——<b>算数值（O₁）／判连续（O₂）／证性质（O₃）</b>。O₂ 本质是 O₁，O₃ 才是另一套工具。<br>
+    <b>② 化简先行，洛必达/泰勒最后上</b>：提极限不为 0 的因子 → 等价替换 → 恒等变形（提公因式、通分、倒代换）。<b>2023 年真题第一步就是化简。</b><br>
+    <b>③ 等价替换的唯一边界</b>：<b>只能换乘除因子</b>。原因不是"规定"，而是替换的合法性来自"另拆一个比值恒为 1 的<u>因子</u>"，加减处拆不出来（§三 红牌）。<b>三处反例并排看就刻死了</b>：基 1.19（$\tan x-\sin x$ 不能分项换）／基 1.30（先通分才能换分母）／<b>习 1.12（书上明确标出的错解，得 2 而不是 $\frac32$）</b>。<br>
+    <b>④ "见 X 就拆左右"清单</b>：$\mathrm e^{\square}(\square\to\infty)$、$|x|$、$\frac1x$、$\arctan\frac1x$、$[x]$、分段点。<b>本章至少 6 道题（基 1.15/1.16/1.17、习 1.3/1.14、强 1.11）栽在这一条上。</b><br>
+    <b>⑤ 保号性的两个方向别搞反</b>：<b>脱帽严格括不等</b>（$\lim f\gt0\Rightarrow f\gt0$），<b>戴帽非严格括不等</b>（$f\ge0\Rightarrow\lim f\ge0$）。§O₃ 的强 1.13、强 1.15 结尾都是戴帽，<b>所以结论必然带等号，写成严格反而错</b>。<br>
+    <b>⑥ 常规工具全部失效时，想夹逼</b>：$[\ \cdot\ ]$、$\min$、折线、振荡量都不可导不可展开。<b>基 1.29（取整）与 强 1.14（最小距离 + 积分）是仅有的两道，一起记。</b>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 一条贯穿全章的卷面纪律（回炉时才看得见的横向模式）</span>
+    本章 26 张卷面卡反复演示同一件事：<b>每一次"换方法"都要在卷面上写出理由</b>。<br>
+    · 用洛必达 ⇒ 先写"为 $\frac00$ 型"（基 1.22、强 1.6、习 1.12）；<br>
+    · 用等价替换 ⇒ 先把它变成乘除因子，并说明"作为分母"（习 1.12）；<br>
+    · 用中值定理 ⇒ 先验"闭区间连续、开区间可导"（强 1.7、强 1.12）；<br>
+    · 用夹逼 ⇒ 先写出那条不等式的<b>来源</b>（$x-1\lt[x]\le x$ / 周期面积），并验"两端同极限"（基 1.29、强 1.14）；<br>
+    · 用四则运算拆 $\infty-\infty$ ⇒ 先说明"被拆出去的那块极限存在"（强 1.2）；<br>
+    · 用单调有界 ⇒ <b>单调与有界两件事各写一段</b>（强 1.15）。<br>
+    <b>阅卷是找采分点而不是通读——"依据"这一行往往就是那 1～2 分。</b>
+  </div>
 
   <!-- ============ 出口 ============ -->
   <div class="outro">
@@ -241,13 +2177,14 @@
       <a href="../../张宇系列_分章易识别版/高等数学/01_函数极限与连续/高数_第01章_强化18讲.pdf">强化 18 讲</a>
       <a href="../../张宇系列_分章易识别版/高等数学/01_函数极限与连续/高数_第01章_1000题_基础_题目.pdf">1000题·基础篇</a>
       <a href="../../张宇系列_分章易识别版/高等数学/01_函数极限与连续/高数_第01章_1000题_强化_题目.pdf">1000题·强化篇</a>
-      <div class="note">链接指向本地大 PDF（不推 GitHub，线上 Pages 打不开正常）。做错 → 回复盘中心报「1000题·第1章·错第X题·卡哪」生成四层错题页。</div>
+      <div class="note">链接指向本地大 PDF（不推 GitHub，线上 Pages 打不开属正常）。做错 → 回复盘中心报「1000题·第1章·错第X题·卡哪」生成四层错题页。</div>
     </div>
-    <p><b>真题锚点</b>：极限计算在统考里<b>几乎年年考</b>（选择/填空/解答都有落点），是全卷基本盘。等你做真题/1000 题遇到卡壳，报给我 → 盲做+逐字核对后写成错题页，并把该题回填到上面对应的强化题型旁（真题按<a href="../index.html">复盘中心</a>「错题驱动」补，不提前泄题）。</p>
-    <p><b>配套速查</b>：<a href="../卡库_极限与无穷小工具箱.html">卡库·极限工具箱</a> · <a href="../公式大全_速查与秒杀.html">公式大全</a> · <a href="../直觉馆_图像与数感.html">直觉馆</a>。<b>下一章</b>：<a href="第02章_数列极限.html">第 2 章 数列极限</a>（$n\to\infty$ 版，夹逼/单调有界当主角）。</p>
+    <p><b>真题锚点</b>：极限计算在统考里<b>几乎年年考</b>（选择/填空/解答都有落点），是全卷基本盘。等你做真题 / 1000 题遇到卡壳，报给我 → 盲做 + 逐字核对后写成错题页，并把该题回填到上面对应的题型旁（真题按<a href="../index.html">复盘中心</a>「错题驱动」补，不提前泄题）。</p>
+    <p><b>配套速查</b>：<a href="../卡库_极限与无穷小工具箱.html">卡库·极限工具箱</a> · <a href="../公式大全_速查与秒杀.html">公式大全</a> · <a href="../直觉馆_图像与数感.html">直觉馆</a>。<br>
+    <b>下一章</b>：<a href="第02章_数列极限.html">第 2 章 数列极限</a>（$n\to\infty$ 版，夹逼 / 单调有界当主角——本章 强 1.15 就是它在函数侧的预演）。<b>本章的连续与间断，会在</b> <a href="第03章_一元函数微分学的概念.html">第 3 章</a> <b>升级成"可导"</b>（存在 → 连续 → 可导三档，见那里的「微观放大镜」）。</p>
   </div>
 
-  <footer>由 Claude 维护 · 融合张宇《基础30讲》+《强化18讲》第 1 讲 · 概念正文为标准高数理论 · 例题 1.1–1.13 题面照原书、答案经独立复算核对 · 具体真题另经盲做后入错题页</footer>
+  <footer>由 Claude 维护 · 融合张宇《基础30讲》第 1 讲（75 页）+《高等数学18讲》第 1 讲（13 页）· 88 页逐页转录 · 例题 69 道全收，题面照原书、答案经 sympy / 高精度数值独立复算 · 19 类大题按「想 → 写 → 校」三层给出考场卷面 · 具体真题另经盲做后入错题页</footer>
 </div>
 </body>
 </html>
