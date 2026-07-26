@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>精读版 · 高数 第4章 一元函数微分学的计算</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],ignoredClasses:['nokatex']})"></script>
+<link rel="stylesheet" href="style.css">
+<style>
+/* ===== 本章专属：泰勒系数流水线 + 参数方程二阶导对拍台 ===== */
+.tool{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:20px 0}
+.tool h4{margin:0 0 4px;font-size:1rem;color:var(--accent)}
+.tool .hint{color:var(--muted);font-size:.82rem;margin-bottom:12px;line-height:1.7}
+.ctl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0}
+.ctl button{font:inherit;font-size:.82rem;padding:4px 13px;border-radius:8px;cursor:pointer;
+  border:1px solid var(--line);background:var(--card);color:var(--muted)}
+.ctl button.on{background:var(--accent-soft);color:var(--accent);border-color:var(--accent);font-weight:700}
+.ctl button:hover{filter:brightness(.96)}
+.ctl select{font:inherit;font-size:.82rem;padding:4px 8px;border-radius:8px;max-width:100%;
+  border:1px solid var(--line);background:var(--card);color:var(--ink)}
+.ctl label{font-size:.8rem;color:var(--muted)}
+.ctl input[type=range]{flex:1 1 160px;min-width:130px;accent-color:var(--accent)}
+.ctl .val{font-family:var(--mono);font-size:.78rem;color:var(--accent);min-width:5.5em}
+.scene{background:var(--bg);border:1px solid var(--line);border-radius:10px;margin:10px 0}
+.scene svg{display:block;width:100%;height:auto}
+.say{background:var(--accent-soft);border-radius:8px;padding:9px 13px;margin:10px 0;
+  font-size:.86rem;color:var(--accent);line-height:1.75;min-height:2em}
+.say b{color:var(--accent)}
+.verdict{font-size:.9rem;font-weight:700;border-radius:8px;padding:7px 13px;margin:10px 0;display:block}
+.v-ok{background:var(--green-soft);color:var(--green)}
+.v-no{background:var(--red-soft);color:var(--red)}
+.v-inf{background:var(--amber-soft);color:var(--amber)}
+.dq{width:100%;min-width:0;font-size:.8rem;margin:6px 0}
+.dq th,.dq td{padding:4px 8px;font-family:var(--mono);text-align:right;white-space:nowrap}
+.dq th:first-child,.dq td:first-child{text-align:left}
+.dq td.hit{color:var(--green);font-weight:700}
+.dq td.miss{color:var(--red);font-weight:700}
+.dq td.zero{color:var(--muted)}
+.legend2{font-size:.78rem;color:var(--muted);line-height:1.7;margin-top:6px}
+.chip{display:inline-block;font-size:.72rem;border-radius:5px;padding:1px 7px;margin-right:6px}
+.c-b{background:var(--accent-soft);color:var(--accent)}
+.c-g{background:var(--green-soft);color:var(--green)}
+.c-r{background:var(--red-soft);color:var(--red)}
+.c-a{background:var(--amber-soft);color:var(--amber)}
+/* 公式速查表：紧凑双列 */
+table.dense{font-size:.84rem;min-width:420px}
+table.dense td{padding:5px 9px}
+@media (max-width:560px){ .ctl{gap:6px} .dq{font-size:.7rem} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../index.html">← 返回 数学一复盘中心</a>
+  <header>
+    <h1>精读版 · 高数第 4 章　一元函数微分学的计算</h1>
+    <div class="sub">融合张宇《基础30讲·高数分册》第 4 讲 + 《高数18讲》第 4 讲 · 以《18讲》的<b>三向解题法八支线</b>为骨架 · <span class="layer L-base">基础</span> 打地基、<span class="layer L-str">强化</span> 上题型 · <b>基础 19 例 + 8 习题 + 强化 9 例，共 36 道，答案全部用 sympy 符号复算 / 数值对拍，零分歧</b> · 本章交付两个交互模块：<b>泰勒系数流水线</b>（现场算出 $f^{(n)}(0)$ 与书上通项公式当场对拍）与 <b>参数方程二阶导对拍台</b>（把"$\frac{\psi''}{\varphi''}$"这个全章第一大坑用数值差商当场判死刑）。</div>
+  </header>
+
+  <div class="legend">
+    <b>这一页的三层结构：</b>
+    <span class="layer L-base">基础</span>= 公式与操作（基础30讲的地基，标准求导法则，放心背）；
+    <span class="layer L-str">强化</span>= 《高数18讲》的<b>专属题型与套路</b>（基础讲没有、真题真考的）。批注色块：
+    <span class="swatch" style="background:var(--blue)"></span><b style="color:var(--blue)">补讲</b>、
+    <span class="swatch" style="background:var(--amber)"></span><b style="color:var(--amber)">必记</b>、
+    <span class="swatch" style="background:var(--red)"></span><b style="color:var(--red)">陷阱</b>、
+    <span class="swatch" style="background:var(--green)"></span><b style="color:var(--green)">强化题型</b>。<br>
+    紫色 <b>例题</b> 卡里，<b>基</b>4.x = 基础30讲例题、<b>强</b>4.x = 高数18讲例题（两本各自编号，别混）。<b>每题都标 ✔</b> = 答案已被我用程序独立算过一遍，不是照抄扫描件。
+  </div>
+
+  <nav class="toc">
+    <a href="#s0">定位 · 八支线地图</a>
+    <a href="#s1">基本公式 + 四则运算</a>
+    <a href="#s2">复合函数 · 微分形式不变性</a>
+    <a href="#s3">分段函数与绝对值</a>
+    <a href="#s4">反函数的导数</a>
+    <a href="#s5">隐函数求导</a>
+    <a href="#s6">参数方程求导</a>
+    <a href="#s7">🔗 二阶导对拍台</a>
+    <a href="#s8">对数求导 · 幂指函数</a>
+    <a href="#s9">高阶导数三法 + 公式表</a>
+    <a href="#s10">🏭 泰勒系数流水线</a>
+    <a href="#s11">泰勒展开法求 $f^{(n)}(0)$</a>
+    <a href="#s12">莱布尼茨 · 求导转化法</a>
+    <a href="#s13">特殊点 · 奇偶周期</a>
+    <a href="#s14">习题答案速查</a>
+  </nav>
+
+  <!-- ================= s0 定位 ================= -->
+  <h2 id="s0"><span class="idx">定位</span>这一章到底在学什么 · 八支线地图</h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/高等数学/04_一元函数微分学的计算/高数_第04章_基础30讲.pdf">📄 基础30讲</a>
+
+  <div class="mine"><span class="tag">补讲 · 一句话定位</span>
+    张宇在本讲标题下批的原话是：<em>上一讲讲概念，这一讲讲计算，要学会熟练地计算。</em><br>
+    第 3 章问的是"<b>导数存不存在</b>"（概念题、选择题、抠定义）；这一章问的是"<b>导数等于多少</b>"（计算题、填空题、拼手速）。两章的气质完全相反：第 3 章几乎不许你套公式（一套就掉坑），第 4 章反过来——<b>能套公式就别回定义</b>，回定义只发生在两个地方：<b>分段点</b>与<b>绝对值点</b>（见 <a href="#s3">§三</a>）。<br>
+    还有一条暗线：本章的<b>基本求导公式表</b>张宇批了四个字——"<b>倒背必逃</b>"，意思是这张表<b>倒着念就是第 8 章的积分公式表</b>。现在背导数，等于提前把积分背了一半。
+  </div>
+
+  <div class="key"><span class="tag">必记 · 本章的考试面貌（基础30讲章首卡片）</span>
+    <div class="gridwrap"><table>
+      <tr><th>项</th><th>内容</th></tr>
+      <tr><td>题型</td><td><b>选择题</b>（本章自己很少出大题，但它是后面每一道大题的"体力活"部分——中值定理、极值、积分、级数、微分方程，都要先把导数算对）</td></tr>
+      <tr><td>目标</td><td>①掌握四则运算法则与复合函数求导法则，掌握基本初等函数导数公式；了解微分四则运算与<b>一阶微分形式的不变性</b>，会求微分。②了解高阶导数概念，会求简单函数的高阶导数。③会求<b>分段函数</b>的导数，会求<b>隐函数</b>和<b>参数方程</b>所确定的函数（仅数一、数二）以及<b>反函数</b>的导数</td></tr>
+      <tr><td>重难点</td><td><b>复合函数</b>的导数、<b>分段函数</b>的导数、<b>隐函数</b>的导数</td></tr>
+    </table></div>
+    基础30讲的知识结构给了 <b>9 支 + 高阶导数 3 法</b>：基本公式 → 四则运算 → 复合函数与微分不变性 → 分段函数 → 反函数 → 隐函数 → 参数方程 → 对数求导法 → 幂指函数求导法 → <b>高阶导数（归纳法 / 莱布尼茨公式 / 泰勒展开式）</b>。张宇在"高阶导数"旁边批：<b>$f^{(n)}(x)$ 是考研的重点和难点</b>；在"隐函数 / 参数方程"旁边批：<b>在实际问题中很常见，是考研的必考题</b>。
+  </div>
+
+  <div class="zy"><span class="tag">强化题型 · 《高数18讲》三向解题法：一个目标 O，八条支线</span>
+    《18讲》第 4 讲干脆把目标直接写成 <b>O（盯住目标）＝ 计算高阶导数</b>，标签是「<b>形式化归体系块</b>」——也就是说，<b>18 讲眼里的第 4 章 ≈ 高阶导数专题</b>，一阶的那些法则默认你已经会了。八条支线：
+    <div class="gridwrap"><table>
+      <tr><th>#</th><th>支线</th><th>张宇编码</th><th>本页位置</th></tr>
+      <tr><td>1</td><td><b>泰勒展开法</b>（认"亲戚"→ 恒等变形 → 比系数）</td><td>D₁ 常规操作 + <b>D₂₃ 化归经典形式</b></td><td><a href="#s11">§十一</a></td></tr>
+      <tr><td>2</td><td><b>莱布尼茨公式法</b>（$f(x)\cdot(ax^2+bx+c)$ 型只剩 3 项）</td><td>D₁ + <b>D₂₃</b></td><td><a href="#s12">§十二</a></td></tr>
+      <tr><td>3</td><td><b>求导转化法</b>（先求一两次导，再恒等变形出递推）</td><td>D₁ + <b>D₂₃</b></td><td><a href="#s12">§十二</a></td></tr>
+      <tr><td>4</td><td><b>特殊点的高阶导数</b>（分段点 / 绝对值）</td><td>D₁ 常规操作</td><td><a href="#s13">§十三</a></td></tr>
+      <tr><td>5</td><td><b>奇偶、周期函数的高阶导数</b></td><td>D₁ 常规操作</td><td><a href="#s13">§十三</a></td></tr>
+      <tr><td>6</td><td><b>隐函数的二阶导</b></td><td>D₁ 常规操作</td><td><a href="#s5">§五</a></td></tr>
+      <tr><td>7</td><td><b>参数方程的二阶导</b></td><td>D₁ 常规操作</td><td><a href="#s6">§六</a><a href="#s7">§七</a></td></tr>
+      <tr><td>8</td><td><b>反函数的二阶导</b></td><td>D₁ 常规操作</td><td><a href="#s4">§四</a></td></tr>
+    </table></div>
+    <b>本页的读法</b>：§一~§八 走基础30讲的顺序（一阶求导的九种场合，把地基砌平），§九~§十三 走 18 讲的八支线（高阶导数的五种套路）。<b>后五节才是真正的考点密集区。</b>
+  </div>
+
+  <div class="dolinks">
+    <div class="t">本章体量（高数里最小的一章之一，但公式密度最高）</div>
+    基础30讲第 4 讲 <b>p.119–138（20 页）</b> · 高数18讲第 4 讲 <b>p.34–40（7 页）</b>，共 <b>27 页</b>。
+    例题：基础 19 例 + 8 道习题 + 强化 9 例 = <b>36 道，本页全收</b>。
+    <div class="note">⚠️ 分章索引 <code>00_本章资料索引.md</code> 标的原书页码（基础 125–144 / 强化 47–53）与 PDF 内页眉<b>差 6 页</b>，以本页标注的 119–138 / 34–40 为准（第 3 章也是同样的偏移）。</div>
+  </div>
+
+  <!-- ================= s1 基本公式 + 四则 ================= -->
+  <h2 id="s1"><span class="idx">一</span>基本求导公式 + 四则运算<span class="layer L-base">基础</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/高等数学/04_一元函数微分学的计算/高数_第04章_基础30讲.pdf">📄 基础30讲 p.120</a>
+
+  <div class="key"><span class="tag">必记 · 基本求导公式表（张宇批「熟稔于心，倒背必逃」）</span>
+    <div class="gridwrap"><table class="dense">
+      <tr><th>幂 / 指 / 对</th><th>三角</th><th>反三角 / 特殊</th></tr>
+      <tr>
+        <td>$(x^\alpha)'=\alpha x^{\alpha-1}$（$\alpha$ 拿下来）<br>
+            $(a^x)'=a^x\ln a\ (a\gt0,a\ne1)$<br>
+            $(\mathrm e^x)'=\mathrm e^x$<br>
+            $(\log_ax)'=\dfrac{1}{x\ln a}$<br>
+            $(\ln|x|)'=\dfrac1x$</td>
+        <td>$(\sin x)'=\cos x$<br>
+            $(\cos x)'=-\sin x$<br>
+            $(\tan x)'=\sec^2x$<br>
+            $(\cot x)'=-\csc^2x$<br>
+            $(\sec x)'=\sec x\tan x$<br>
+            $(\csc x)'=-\csc x\cot x$</td>
+        <td>$(\arcsin x)'=\dfrac{1}{\sqrt{1-x^2}}$<br>
+            $(\arccos x)'=-\dfrac{1}{\sqrt{1-x^2}}$<br>
+            $(\arctan x)'=\dfrac{1}{1+x^2}$<br>
+            $(\operatorname{arccot}x)'=-\dfrac{1}{1+x^2}$<br>
+            $\left[\ln\left(x+\sqrt{x^2\pm1}\right)\right]'=\dfrac{1}{\sqrt{x^2\pm1}}$</td>
+      </tr>
+    </table></div>
+    <b>三处不能含糊的地方：</b><br>
+    ① <b>$(\ln|x|)'=\dfrac1x$——绝对值符号可以"视而不见"</b>。理由是 $x\lt0$ 时 $[\ln(-x)]'=\frac{1}{-x}\cdot(-1)=\frac1x$，负负得正。推广到复合：$\big[\ln|u(x)|\big]'=\dfrac{u'(x)}{u(x)}$，两支合成一支。<b>这条在第 8 章凑微分时天天用。</b><br>
+    ② 张宇在 $(a^x)'$ 旁顺手把<b>高阶</b>批出来了：$(a^x)''=a^x(\ln a)^2\Rightarrow(a^x)^{(n)}=a^x(\ln a)^n$，$(\mathrm e^x)^{(n)}=\mathrm e^x$。<b>后面所有高阶导数公式都可以用同样的"归纳法"自己推</b>——记不住就现推，见 <a href="#s9">§九</a>。<br>
+    ③ 最后一行 $\ln(x+\sqrt{x^2\pm1})$ 是<b>反双曲函数</b>，考研只以"这个式子的导数长得特别干净"的身份出现（例 4.2 就是它的带参版本）。
+  </div>
+
+  <div class="key"><span class="tag">必记 · 四则运算（和差 / 积 / 商，导数与微分两套写法）</span>
+    $$[u\pm v]'=u'\pm v',\qquad \mathrm d[u\pm v]=\mathrm du\pm\mathrm dv$$
+    $$[uv]'=u'v+uv',\qquad \mathrm d[uv]=u\,\mathrm dv+v\,\mathrm du$$
+    $$\left[\frac uv\right]'=\frac{u'v-uv'}{v^2}\ (v\ne0),\qquad \mathrm d\left[\frac uv\right]=\frac{v\,\mathrm du-u\,\mathrm dv}{v^2}$$
+    口诀：<b>乘积的导数 ＝ 前导×后不动 ＋ 前不动×后导</b>。<br>
+    三项版：$[uvw]'=u'vw+uv'w+uvw'$，张宇的巧记是"<b>3 个人排一排，第一个人一巴掌 + 中间人一巴掌 + 最后一人一巴掌</b>"。<br>
+    商的公式不必单记，从积推：$\left(\dfrac uv\right)'=\left(u\cdot\dfrac1v\right)'=u'\cdot\dfrac1v+u\cdot\left(-\dfrac1{v^2}\right)v'=\dfrac{u'v-uv'}{v^2}$。
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 乘积求导公式的证明（<span class="exam">2015 年考研考过</span>）</span>
+    这是全章唯一一个"<b>要会证</b>"的公式，2015 年真考过。关键是<b>加一项减一项</b>（凑出两个差商）：
+    $$[uv]'=\lim_{\Delta x\to0}\frac{u(x+\Delta x)v(x+\Delta x)-\underline{u(x)v(x+\Delta x)}+\underline{u(x)v(x+\Delta x)}-u(x)v(x)}{\Delta x}$$
+    $$=\lim_{\Delta x\to0}\frac{u(x+\Delta x)-u(x)}{\Delta x}\cdot v(x+\Delta x)+\lim_{\Delta x\to0}\frac{v(x+\Delta x)-v(x)}{\Delta x}\cdot u(x)=u'(x)v(x)+u(x)v'(x)$$
+    <b>细节</b>：第一项里 $v(x+\Delta x)\to v(x)$ 用到了 <b>$v$ 可导 ⇒ $v$ 连续</b>——这是第 3 章的结论，证明里不能跳。<br>
+    另外张宇特意区分了两种写法：$f'(x_0)=\lim\limits_{x\to x_0}\frac{f(x)-f(x_0)}{x-x_0}$ 是<b>特指点</b>（$x_0$ 定死），$f'(x)=\lim\limits_{\Delta x\to0}\frac{f(x+\Delta x)-f(x)}{\Delta x}$ 是<b>泛指点</b>（$x$ 是变量）。<b>证导函数的恒等式必须用泛指点写</b>。
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 4.1 ✔</span>设 $f(x)=\prod\limits_{n=1}^{100}\left(\tan\dfrac{\pi x^n}{4}-n\right)$，则 $f'(1)=$ ______。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$-\dfrac{\pi\cdot99!}{2}$</span>（已对 $N=3,5,8$ 项的缩小版逐项符号求导对拍，与"抓第一项"的通式完全一致）<br>
+      <span class="lab">分析</span>展开来看是 $f(x)=\left(\tan\frac\pi4x-1\right)\left(\tan\frac\pi4x^2-2\right)\cdots\left(\tan\frac\pi4x^{100}-100\right)$，<b>100 项相乘</b>。因式超过 3 项就<b>不要直接求导</b>，要把它化归成"经典形式"（两项相乘）。<br>
+      <span class="lab">解</span>把 $x=1$ 代进每个因式：第一项 $\tan\frac\pi4-1=0$，<b>其余 99 项全不为 0</b>。抓住第一项这个"特立独行"的因子，把剩下的打包：$g(x)=\prod\limits_{n=2}^{100}\left(\tan\frac{\pi x^n}{4}-n\right)$，于是 $f=\underbrace{\left(\tan\frac{\pi x}{4}-1\right)}_{u}\cdot\underbrace{g(x)}_{v}$，
+      $$f'(1)=\underbrace{\frac\pi4\sec^2\frac{\pi x}{4}\Big|_{x=1}}_{=\frac\pi4\cdot2=\frac\pi2}\cdot g(1)+\underbrace{\left(\tan\frac\pi4-1\right)}_{=0}g'(1)=\frac\pi2\cdot\prod_{n=2}^{100}(1-n)=\frac\pi2\cdot(-1)^{99}99!=-\frac{\pi\cdot99!}{2}$$
+      <span class="lab">要害</span>$\prod\limits_{n=2}^{100}(1-n)=(-1)(-2)\cdots(-99)=(-1)^{99}\cdot99!=-99!$，<b>符号别丢</b>。<br>
+      <span class="lab">同款</span>这题和第 3 章的<b>基 3.4</b>（$f=(\mathrm e^x-1)(\mathrm e^{2x}-2)\cdots$）是<b>同一道题的两件衣服</b>：都是"多因子相乘，代入后只有一个因子为零"。第 3 章用导数定义做，这里用乘法公式做，<b>两条路都要会</b>。
+    </div>
+  </div>
+
+  <!-- ================= s2 复合函数 ================= -->
+  <h2 id="s2"><span class="idx">二</span>复合函数的导数 · 微分形式不变性<span class="layer L-base">基础</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/高等数学/04_一元函数微分学的计算/高数_第04章_基础30讲.pdf">📄 基础30讲 p.122</a>
+
+  <div class="key"><span class="tag">必记 · 链式法则与"求导符号站在哪一层"</span>
+    设 $u=g(x)$ 在 $x$ 可导，$y=f(u)$ 在 $u=g(x)$ 可导，则
+    $$\{f[g(x)]\}'=f'[g(x)]\cdot g'(x)$$
+    把它写成莱布尼茨记号，一切都清楚了：
+    $$\{f[g(x)]\}'=\frac{\mathrm d\{f[g(x)]\}}{\mathrm dx}=\underbrace{\frac{\mathrm d\{f[g(x)]\}}{\mathrm d[g(x)]}}_{=\,f'[g(x)]:\ \text{对中间变量求导}}\cdot\underbrace{\frac{\mathrm d[g(x)]}{\mathrm dx}}_{=\,g'(x)}$$
+    <b>张宇反复强调的一句：要看清楚求导符号的位置，不要弄错了。</b>$\{f[g(x)]\}'$ 是<b>整体对 $x$ 求导</b>，$f'[g(x)]$ 是<b>只对中间变量求导后再代入</b>——两者差着一个 $g'(x)$。<br>
+    三层版：$f\to u\to v\to x$，$\ f'_x\{u[v(x)]\}=\dfrac{\mathrm df}{\mathrm du}\cdot\dfrac{\mathrm du}{\mathrm dv}\cdot\dfrac{\mathrm dv}{\mathrm dx}$。张宇的注脚很可爱：<em>"如果你愿意一层一层一层地剥开它的心……"——考试最多 3 层。</em>
+  </div>
+
+  <div class="key"><span class="tag">必记 · 一阶微分形式的不变性（本章最重要的计算方法）</span>
+    $$\mathrm d\{f[g(x)]\}=f'[g(x)]g'(x)\mathrm dx=f'[g(x)]\,\mathrm d[g(x)]$$
+    即：<b>无论 $u$ 是中间变量还是自变量，$\mathrm dy=f'(u)\,\mathrm du$ 都成立。</b><br>
+    张宇给它的批语是「<b>微分不变性是微分学中最重要的计算方法，要认识规则，严守规则</b>」。它的威力在于把"链式法则"从"记住乘哪一项"变成了<b>机械的一层层脱壳</b>：
+    $$\mathrm d(\mathrm e^u)=\mathrm e^u\,\mathrm du,\qquad \mathrm d(\sin v)=\cos v\,\mathrm dv,\qquad \mathrm d(\ln w)=\frac{\mathrm dw}{w}$$
+    <b>后面的用处</b>：第 13 章多元函数的<b>全微分形式不变性</b>是它的直接推广，第 15 章解微分方程的"凑全微分"也靠它。<b>现在就把"脱壳"练成肌肉记忆。</b>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 4.2 ✔</span>设 $y=\ln\left(x+\sqrt{x^2+a^2}\right)\ (a\ne0)$，求 $y'\big|_{x=0}$。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$\dfrac{1}{|a|}$</span>（sympy 化简得 $y'=\frac{1}{\sqrt{x^2+a^2}}$，代 $x=0$ 得 $1/|a|$）<br>
+      <span class="lab">解</span>外层 $\ln u$、内层 $u=x+\sqrt{x^2+a^2}$，两层链式：
+      $$y'=\frac{1}{x+\sqrt{x^2+a^2}}\left[1+\frac{1}{2\sqrt{x^2+a^2}}\cdot 2x\right]=\frac{1}{x+\sqrt{x^2+a^2}}\cdot\frac{\sqrt{x^2+a^2}+x}{\sqrt{x^2+a^2}}=\frac{1}{\sqrt{x^2+a^2}}$$
+      <b>中间那步约分是全题的爽点</b>：分子恰好凑出分母的括号，一约就干净。所以 $y'|_{x=0}=\dfrac{1}{\sqrt{a^2}}=\dfrac{1}{|a|}$。<br>
+      <span class="lab">陷阱</span><b>$\sqrt{a^2}=|a|$ 不是 $a$。</b>题目只说 $a\ne0$，没说 $a\gt0$，写成 $\frac1a$ 就丢分。<br>
+      <span class="lab">注</span>$a=1$ 时这就是<b>反双曲正弦</b> $\operatorname{arsinh}x$，导数 $\frac{1}{\sqrt{x^2+1}}$ 正是 §一 公式表最后一行。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 4.3 ✔</span>设 $f(x)=\begin{cases}\ln\sqrt x,&x\ge1\\ 2x-1,&x\lt1\end{cases}$，且 $y=f[f(x)]$，则 $\dfrac{\mathrm dy}{\mathrm dx}\Big|_{x=\mathrm e}=$ ______。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$\dfrac1{\mathrm e}$</span><br>
+      <span class="lab">分析</span>分段函数 + 复合函数的综合。<b>千万不要盲目先求出 $f[f(x)]$ 的表达式</b>（那要分三四种情况讨论）——题目只要<b>一点处的导数值</b>，先把求导表达式写出来再说。<br>
+      <span class="lab">解</span>
+      $$\frac{\mathrm dy}{\mathrm dx}\Big|_{x=\mathrm e}=f'[f(x)]f'(x)\Big|_{x=\mathrm e}=f'[f(\mathrm e)]\cdot f'(\mathrm e)$$
+      逐个算：$f(\mathrm e)=\ln\sqrt{\mathrm e}=\dfrac12$（用 $x\ge1$ 那支）；<b>$\frac12\lt1$，所以 $f'\left(\frac12\right)$ 要用 $2x-1$ 那支</b>，$f'\left(\frac12\right)=2$；$f'(\mathrm e)=(\ln\sqrt x)'|_{x=\mathrm e}=\frac{1}{2x}\big|_{x=\mathrm e}=\frac{1}{2\mathrm e}$。故 $\frac{\mathrm dy}{\mathrm dx}=2\cdot\frac{1}{2\mathrm e}=\frac1{\mathrm e}$。<br>
+      <span class="lab">要害</span>张宇在题干旁批了一句 <b>"$x=\mathrm e$ 不是分段点！"</b>——分段点是 $x=1$。不在分段点，就<b>老老实实套公式</b>，不用回定义。全题真正的机关是<b>内外两层落在不同的分支上</b>（外层 $\frac12$ 走下支，内层 $\mathrm e$ 走上支）。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 4.4 ✔</span>设 $y=\mathrm e^{\sin(\ln x)}$，求 $\mathrm dy$ 及 $\dfrac{\mathrm dy}{\mathrm dx}$。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$\mathrm dy=\mathrm e^{\sin(\ln x)}\cos(\ln x)\dfrac1x\,\mathrm dx$，$\dfrac{\mathrm dy}{\mathrm dx}=\mathrm e^{\sin(\ln x)}\cos(\ln x)\dfrac1x$</span><br>
+      <span class="lab">法一 · 微分不变性（张宇给的解法）</span>三层脱壳，<b>每一步只脱一层，不要跳</b>：
+      $$\mathrm d\left[\mathrm e^{\sin(\ln x)}\right]=\mathrm e^{\sin(\ln x)}\,\mathrm d[\sin(\ln x)]=\mathrm e^{\sin(\ln x)}\cos(\ln x)\,\mathrm d(\ln x)=\mathrm e^{\sin(\ln x)}\cos(\ln x)\frac1x\mathrm dx$$
+      <span class="lab">法二 · 链式法则</span>先求导后配 $\mathrm dx$，结果一样。<br>
+      <span class="lab">提炼</span>求微分的题<b>两条路等价</b>：链式求导→乘 $\mathrm dx$，或直接微分不变性。<b>层数多（≥3 层）时用微分不变性更不容易漏乘</b>，因为每一步的形式是一样的，机械可控。
+    </div>
+  </div>
+
+  <!-- ================= s3 分段函数 ================= -->
+  <h2 id="s3"><span class="idx">三</span>分段函数与绝对值的导数<span class="layer L-base">基础</span><span class="layer L-str">强化</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/高等数学/04_一元函数微分学的计算/高数_第04章_基础30讲.pdf">📄 基础30讲 p.124</a>
+
+  <div class="key"><span class="tag">必记 · 分段函数求导的两句话规矩</span>
+    设 $f(x)=\begin{cases}f_1(x),&x\ge x_0\\ f_2(x),&x\lt x_0\end{cases}$，其中 $f_1,f_2$ 在各自开区间上可导，则<br>
+    ① <b>在分段点 $x_0$ 处用导数定义求导</b>（左右分别算）：
+    $$f'_+(x_0)=\lim_{x\to x_0^+}\frac{f_1(x)-f(x_0)}{x-x_0},\qquad f'_-(x_0)=\lim_{x\to x_0^-}\frac{f_2(x)-f(x_0)}{x-x_0}$$
+    看两者是否相等，来判定 $f'(x_0)$ 存不存在；<br>
+    ② <b>在非分段点处用导数公式求导</b>：$x\gt x_0$ 时 $f'=f_1'$，$x\lt x_0$ 时 $f'=f_2'$。<br>
+    <b>含绝对值的函数一律先脱绝对值写成分段函数</b>，然后照上面两条办。补一条张宇特别点出的例外：<b>分段点处无定义的，不用求</b>（无定义 ⇒ 不连续 ⇒ 一定不可导，见基 4.5 的 $x=0$）。
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 4.5 ✔</span>设 $y=\ln|x|,\ x\ne0$，求 $y'$。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$y'=\dfrac1x\ (x\ne0)$</span><br>
+      <span class="lab">解</span>$y=\ln|x|=\begin{cases}\ln x,&x\gt0\\ \ln(-x),&x\lt0\end{cases}$。$x\gt0$：$y'=\frac1x$；$x\lt0$：$y'=[\ln(-x)]'=\frac{1}{-x}\cdot(-1)=\frac1x$。两支<b>合成一个式子</b>。<br>
+      <span class="lab">要害</span>$x=0$ 是<b>无定义点</b>——无定义自然不连续，不连续一定不可导，所以<b>压根不用讨论</b>（这一步很多人会画蛇添足地去算左右导数）。<br>
+      <span class="lab">结论卡</span><b>$\ln|x|$ 求导时，可视"绝对值符号"而不见。</b>这是第 8 章 $\int\frac{\mathrm dx}{x}=\ln|x|+C$ 的正当性来源。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 4.6 ✔</span>设函数 $y=\left|x\mathrm e^{-x}\right|$，求 $y''$。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$y''=\begin{cases}\mathrm e^{-x}(2-x),&x\lt0\\ \mathrm e^{-x}(x-2),&x\gt0\end{cases}$（$x=0$ 处 $y'$ 都不存在，更谈不上 $y''$）</span><br>
+      <span class="lab">第一步 · 脱绝对值</span>$\mathrm e^{-x}\gt0$ 恒成立，<b>所以绝对值只看 $x$ 的正负</b>：
+      $$y=\begin{cases}-x\mathrm e^{-x},&x\lt0\\ x\mathrm e^{-x},&x\ge0\end{cases}\quad\Longrightarrow\quad y'=\begin{cases}\mathrm e^{-x}(x-1),&x\lt0\\ \mathrm e^{-x}(1-x),&x\gt0\end{cases}$$
+      <span class="lab">第二步 · 分段点用定义</span>
+      $$y'_-(0)=\lim_{x\to0^-}\frac{-x\mathrm e^{-x}-0}{x}=-1,\qquad y'_+(0)=\lim_{x\to0^+}\frac{x\mathrm e^{-x}-0}{x}=1$$
+      $-1\ne1$，故 <b>$y$ 在 $x=0$ 不可导</b>，$x=0$ 是角点。<br>
+      <span class="lab">第三步 · 二阶导只在非分段点</span>既然 $y'(0)$ 都不存在，$y''$ 自然只在 $x\ne0$ 上讨论，<b>直接对两支用公式求导即可</b>，不必再回定义。<br>
+      <span class="lab">检验</span>用第 3 章的<b>结论卡</b>秒判：$|f|$ 只在"$f(x_0)=0$ 且 $f'(x_0)\ne0$"处不可导。这里 $f=x\mathrm e^{-x}$，$f(0)=0$、$f'(0)=1\ne0$ ⇒ <b>$x=0$ 必不可导</b>，与上面算的一致。<b>选择题就这么秒，解答题才写左右导数。</b>
+    </div>
+  </div>
+
+  <!-- ================= s4 反函数 ================= -->
+  <h2 id="s4"><span class="idx">四</span>反函数的导数<span class="layer L-base">基础</span><span class="layer L-str">强化</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/高等数学/04_一元函数微分学的计算/高数_第04章_基础30讲.pdf">📄 基础30讲 p.125</a>
+
+  <div class="key"><span class="tag">必记 · 一阶＋二阶两条公式（两本书重复出现＝必考）</span>
+    设 $y=f(x)$ 单调、可导且 $f'(x)\ne0$，则存在反函数 $x=\varphi(y)$，且
+    $$\frac{\mathrm dx}{\mathrm dy}=\frac{1}{\dfrac{\mathrm dy}{\mathrm dx}},\qquad\text{即}\quad \varphi'(y)=\frac{1}{f'(x)}$$
+    <b>二阶导（张宇批"重要"，18 讲又抄了一遍）</b>：记 $y'_x=f'(x)$、$x'_y=\varphi'(y)$，
+    $$y''_{xx}=\frac{\mathrm d\left(\frac{1}{x'_y}\right)}{\mathrm dx}=\frac{\mathrm d\left(\frac{1}{x'_y}\right)}{\mathrm dy}\cdot\frac{\mathrm dy}{\mathrm dx}=-\frac{x''_{yy}}{(x'_y)^2}\cdot\frac{1}{x'_y}=-\frac{x''_{yy}}{(x'_y)^3}$$
+    反过来写就是考场上直接套的那个：
+    $$\boxed{\ \varphi'(y)=\frac{1}{f'(x)},\qquad \varphi''(y)=-\frac{f''(x)}{[f'(x)]^3}\ }$$
+    <b>为什么是三次方？</b>——链式法则里"换自变量"要再乘一次 $\frac{\mathrm dy}{\mathrm dx}=\frac{1}{x'_y}$，商法则先贡献了平方，再乘一次就是立方。<b>记不住次数就现推一遍，20 秒。</b>
+  </div>
+
+  <div class="trap"><span class="tag">陷阱 · 反函数题的头号送命点：代进去的到底是 $x$ 还是 $y$</span>
+    公式右边全是<b>关于 $x$ 的表达式</b>，而题目问的是 $\varphi''(y_0)$——<b>必须先由 $f(x)=y_0$ 反解出对应的 $x$</b>，再把这个 $x$ 代进去。基 4.7 里 $y=3+\mathrm e\Rightarrow x=1$，强 4.9 里 $y=2\Rightarrow x=0$。<br>
+    强 4.9 的选项 (D) $-\frac{\mathrm e^2}{(\mathrm e^2+2)^3}$ 就是<b>专门给"把 $y=2$ 当成 $x=2$ 直接代"的人准备的</b>（我把 $x=2$ 代进去验证过，一字不差就是 (D)）。<b>看到反函数求导，第一件事是解出对应点。</b>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 4.7 ✔</span>当 $x\gt0$ 时，设 $y=f(x)=3x^2+\mathrm e^x$ 有反函数 $x=\varphi(y)$，则 $\varphi''(3+\mathrm e)=$ ______。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$-\dfrac{1}{(6+\mathrm e)^2}$</span>（除符号推导外，另用 mpmath 对 $\varphi$ 做<b>数值二阶微分</b>独立对拍，误差 $\lt10^{-8}$）<br>
+      <span class="lab">解</span>先定点：$3x^2+\mathrm e^x=3+\mathrm e\Rightarrow x=1$。再套公式（$f'=6x+\mathrm e^x$，$f''=6+\mathrm e^x$）：
+      $$\varphi''(y)\Big|_{y=3+\mathrm e}=-\frac{f''(x)}{[f'(x)]^3}\bigg|_{x=1}=-\frac{6+\mathrm e^x}{(6x+\mathrm e^x)^3}\bigg|_{x=1}=-\frac{6+\mathrm e}{(6+\mathrm e)^3}=-\frac{1}{(6+\mathrm e)^2}$$
+      <span class="lab">爽点</span>分子分母<b>同时出现 $6+\mathrm e$，约掉一个</b>，答案从三次方降成平方。<b>看到这种约分能约出来，说明代点代对了</b>；如果约不掉，八成是 $x$ 找错了。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 4.9 ✔</span>已知 $f(x)=\mathrm e^x+2x+1$，设 $g(y)$ 与 $f(x)$ 互为反函数，则 $g''(2)=(\ \ )$。<br>
+      (A) $\dfrac13$　(B) $-3$　(C) $-\dfrac{1}{27}$　(D) $-\dfrac{\mathrm e^2}{(\mathrm e^2+2)^3}$</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(C)</span>（符号 + mpmath 数值反解求二阶导双验）<br>
+      <span class="lab">解</span>$f'=\mathrm e^x+2\gt0$ 恒成立 ⇒ <b>严格单调递增，反函数存在</b>。由 $f(0)=1+0+1=2$ 知 $g(2)=0$，<b>对应点 $x=0$</b>。<br>
+      张宇这里没直接套 $-\frac{f''}{(f')^3}$，而是<b>现推一遍</b>（推荐，公式忘了也不慌）：$g'(y)=\frac{1}{f'(x)}=\frac{1}{\mathrm e^x+2}$，再对 <b>$y$</b> 求一次导（注意 $x$ 是 $y$ 的函数，要再乘 $g'(y)$）：
+      $$g''(y)=-\frac{\mathrm e^x}{(\mathrm e^x+2)^2}\cdot g'(y)=-\frac{\mathrm e^x}{(\mathrm e^x+2)^2}\cdot\frac{1}{\mathrm e^x+2}=-\frac{\mathrm e^x}{(\mathrm e^x+2)^3}$$
+      代 $x=0$：$g''(2)=-\dfrac{1}{27}$。<br>
+      <span class="lab">选项解剖</span>(D) = 把 $y=2$ 当成 $x=2$ 硬代；(A)(B) 是把三次方写成一次方 / 漏负号的产物。<b>四个选项覆盖了四种典型错误，这题的价值全在选项里。</b>
+    </div>
+  </div>
+
+  <!-- ================= s5 隐函数 ================= -->
+  <h2 id="s5"><span class="idx">五</span>隐函数求导法<span class="layer L-base">基础</span><span class="layer L-str">强化</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/高等数学/04_一元函数微分学的计算/高数_第04章_基础30讲.pdf">📄 基础30讲 p.126</a>
+
+  <div class="key"><span class="tag">必记 · 两步走（"把 $y$ 看成中间变量"是全部）</span>
+    设 $y=y(x)$ 由 $F(x,y)=0$ 确定且可导，则<br>
+    ① 方程两边<b>对自变量 $x$ 求导</b>，全过程记住 $y=y(x)$，即方程真身是 $F[x,y(x)]=0$——<b>凡遇到 $y$ 就是复合函数，求导后要拖一个 $y'$</b>；<br>
+    ② 解出 $y'$（它一般同时含 $x$ 和 $y$，<b>这很正常，不必消元</b>）。<br>
+    求二阶导：把 ① 得到的等式<b>再对 $x$ 求一次导</b>，得到含 $y''$ 的方程，解出 $y''$。<br>
+    <b>常用小公式</b>（都来自链式）：$(y^2)'=2yy'$，$(xy)'=y+xy'$，$(xyy')'=yy'+x(y')^2+xyy''$，$[f(y)]'=f'(y)y'$，$[f'(y)y']'=f''(y)(y')^2+f'(y)y''$。
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 求"某点的二阶导"时最省力的路线</span>
+    考场上几乎不需要把 $y''$ 的<b>通式</b>整理出来（那往往是一坨分式）。正确姿势是：<b>一路带着 $y',y''$ 求导，最后一次性把 $x_0,y(x_0),y'(x_0)$ 全部代进去，直接解出数值 $y''(x_0)$。</b><br>
+    基 4.8 就是范本：它甚至<b>不知道 $y(1)$ 是多少</b>——是靠"一阶导等式 + $y'(1)=0$"反解出来的。这个"<b>用导数等式反解函数值</b>"的动作，是隐函数题的高频操作。
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 4.8 ✔</span>设 $y=y(x)$ 由方程 $y^3+xy^2+x^2y+6=0$ 确定，且 $y'(1)=0$，求 $y''(1)$。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$y''(1)=\dfrac49$</span>（sympy 全程符号求解：候选 $y(1)\in\{0,-2\}$，舍 0 后唯一解 $4/9$）<br>
+      <span class="lab">第一步 · 一阶导 + 反解 $y(1)$</span>两边对 $x$ 求导：
+      $$3y^2y'+y^2+2xyy'+2xy+x^2y'=0$$
+      代 $x=1$、$y'(1)=0$：留下 $y^2(1)+2y(1)=0\Rightarrow y(1)=0$ 或 $y(1)=-2$。<b>回原方程验：</b>$y(1)=0$ 代入得 $0+0+0+6=6\ne0$，<b>舍去</b>；$y(1)=-2$ 代入得 $-8+4-2+6=0$ ✓。<br>
+      <span class="lab">第二步 · 二阶导</span>对上式再求一次导：
+      $$(3y^2+2xy+x^2)y''+2(3y+x)(y')^2+4(y+x)y'+2y=0$$
+      代 $x=1,\ y=-2,\ y'=0$：$(12-4+1)y''+0+0-4=0\Rightarrow 9y''=4\Rightarrow y''(1)=\dfrac49$。<br>
+      <span class="lab">复核</span>这个展开式我用 sympy 对拍过，与书上<b>逐项一致</b>（$3y^2y''+2xyy''+x^2y''+6y(y')^2+2x(y')^2+4yy'+4xy'+2y$）。<br>
+      <span class="lab">要害</span><b>"不满足题目所给方程，舍去"这一步不能省。</b>一阶导等式是原方程的<b>推论</b>，解集比原方程大，多出来的根必须回代筛掉。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 4.7 ✔</span>已知可导函数 $y=y(x)$ 满足 $a\mathrm e^x+y^2+y-\ln(1+x)\cos y+b=0$，且 $y(0)=0$，$y'(0)=0$。<br>(1) 求 $a,b$；(2) 判断 $x=0$ 是否为 $y(x)$ 的极值点。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(1) $a=1,\ b=-1$；(2) $y''(0)=-2\lt0$，$x=0$ 是<b>极大值点</b></span>（书上给的整条二阶导表达式我用 sympy 逐项对拍，完全一致）<br>
+      <span class="lab">(1)</span>代 $x=0,y=0$ 进原方程：$a\cdot1+0+0-0+b=0\Rightarrow a+b=0$。再对 $x$ 求导：
+      $$a\mathrm e^x+2yy'+y'-\frac{\cos y}{1+x}+\ln(1+x)y'\sin y=0$$
+      代 $x=0,y=0,y'=0$：$a-1=0\Rightarrow \boxed{a=1,\ b=-1}$。<br>
+      <span class="lab">(2)</span>把上式再对 $x$ 求一次导（$a=1$）：
+      $$\mathrm e^x+2(y')^2+2yy''+y''+\frac{\cos y}{(1+x)^2}+\frac{2y'\sin y}{1+x}+\ln(1+x)(y')^2\cos y+\ln(1+x)y''\sin y=0$$
+      代 $x=0,y=0,y'=0$，八项里活下来的只有三项：$1+y''+1=0\Rightarrow y''(0)=-2$。<br>
+      由<b>极值第二充分条件</b>（$y'(0)=0$ 且 $y''(0)\lt0$）知 $x=0$ 是极大值点。<br>
+      <span class="lab">提炼</span>这题把<b>隐函数二阶导</b>和<b>第 5 章极值判别</b>缝在一起，是 18 讲典型的"综合型"。<b>技巧：代点时先扫一眼哪些项带 $\ln(1+x)$ 或 $\sin y$ 因子——在 $x=0,y=0$ 处它们全归零，八项瞬间只剩三项，不必硬算。</b>
+    </div>
+  </div>
+
+  <!-- ================= s6 参数方程 ================= -->
+  <h2 id="s6"><span class="idx">六</span>参数方程所确定的函数的导数<span class="layer L-base">基础</span><span class="layer L-str">强化</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/高等数学/04_一元函数微分学的计算/高数_第04章_基础30讲.pdf">📄 基础30讲 p.126–127</a>
+
+  <div class="key"><span class="tag">必记 · 一阶好记，二阶"不要背"（张宇原话）</span>
+    设 $y=y(x)$ 由 $\begin{cases}x=\varphi(t)\\ y=\psi(t)\end{cases}$ 确定，$\varphi,\psi$ 可导且 $\varphi'(t)\ne0$，则
+    $$\frac{\mathrm dy}{\mathrm dx}=\frac{\mathrm dy/\mathrm dt}{\mathrm dx/\mathrm dt}=\frac{\psi'(t)}{\varphi'(t)}$$
+    <b>二阶导——张宇明确批注"不要背"，要现推</b>。记 $\dfrac{\mathrm dy}{\mathrm dx}=w(t)$，则
+    $$\frac{\mathrm d^2y}{\mathrm dx^2}=\frac{\mathrm d\left(\frac{\mathrm dy}{\mathrm dx}\right)}{\mathrm dx}=\frac{\mathrm d[w(t)]/\mathrm dt}{\mathrm dx/\mathrm dt}=\frac{w'(t)}{\varphi'(t)}$$
+    展开就是那个没人背得住的式子：$\dfrac{\mathrm d^2y}{\mathrm dx^2}=\dfrac{\psi''(t)\varphi'(t)-\psi'(t)\varphi''(t)}{[\varphi'(t)]^3}$。<br>
+    <b>操作口诀：先把 $\frac{\mathrm dy}{\mathrm dx}$ 算成一个只含 $t$ 的函数 $w(t)$，然后"再对 $t$ 求导、再除以 $\frac{\mathrm dx}{\mathrm dt}$"。</b>这个"<b>求导 ÷ $x'(t)$</b>"的动作可以无限重复，三阶四阶都这么办。
+  </div>
+
+  <div class="trap"><span class="tag">陷阱 · 全章第一大坑：$\dfrac{\mathrm d^2y}{\mathrm dx^2}\ne\dfrac{\psi''(t)}{\varphi''(t)}$</span>
+    一阶那个"上下各对 $t$ 求导"的形式太顺手，于是很多人二阶继续写 $\dfrac{\mathrm d^2y}{\mathrm dx^2}=\dfrac{y''(t)}{x''(t)}$——<b>这是错的</b>，而且是本章最高频的错。<br>
+    根子在于：$\frac{\mathrm dy}{\mathrm dx}$ 是<b>关于 $t$ 的新函数</b>，对它求 $\frac{\mathrm d}{\mathrm dx}$ 时必须再走一次链式（乘 $\frac{\mathrm dt}{\mathrm dx}$），<b>而不是把分子分母各再求一次导</b>。<br>
+    <b>下一节 <a href="#s7">§七 的对拍台</a> 就是专门为这个坑造的：正法、错法、数值差商三者同屏，让"错法"当场露馅。</b>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 4.9 ✔</span>设 $y=y(x)$ 由 $\begin{cases}x=\sin t\\ y=t\sin t+\cos t\end{cases}$ 确定，则 $\dfrac{\mathrm d^2y}{\mathrm dx^2}\Big|_{t=\frac\pi4}=$ ______。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$\sqrt2$</span><br>
+      <span class="lab">解</span>先算一阶（<b>分子会大幅约简，这是本题的设计</b>）：
+      $$\frac{\mathrm dy}{\mathrm dt}=\sin t+t\cos t-\sin t=t\cos t,\qquad \frac{\mathrm dx}{\mathrm dt}=\cos t\quad\Longrightarrow\quad \frac{\mathrm dy}{\mathrm dx}=\frac{t\cos t}{\cos t}=t$$
+      $\frac{\mathrm dy}{\mathrm dx}=t$ 干净得离谱，于是二阶：
+      $$\frac{\mathrm d^2y}{\mathrm dx^2}=\frac{\mathrm d}{\mathrm dt}(t)\cdot\frac{\mathrm dt}{\mathrm dx}=1\cdot\frac{1}{\cos t}=\frac{1}{\cos t}\quad\Longrightarrow\quad \frac{\mathrm d^2y}{\mathrm dx^2}\Big|_{t=\frac\pi4}=\frac{1}{\cos\frac\pi4}=\sqrt2$$
+      <span class="lab">反面教材</span>若用错法 $\frac{y''(t)}{x''(t)}=\frac{(t\cos t)'}{(\cos t)'}=\frac{\cos t-t\sin t}{-\sin t}$，在 $t=\frac\pi4$ 处得 $\frac{\frac{\sqrt2}{2}(1-\frac\pi4)}{-\frac{\sqrt2}{2}}=\frac\pi4-1\approx-0.215$，<b>与正确答案 $1.414$ 差了十万八千里</b>。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 4.10 ✔</span>设 $y=y(x)$ 由 $\begin{cases}x=\arctan t\\ 2y-ty^2+\mathrm e^t=5\end{cases}$ 确定，则 $\dfrac{\mathrm dy}{\mathrm dx}=$ ______。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$\dfrac{(y^2-\mathrm e^t)(1+t^2)}{2(1-ty)}$</span><br>
+      <span class="lab">分析</span><b>参数方程 ✕ 隐函数的复合型</b>：第二个方程并没有把 $y$ 显式写成 $t$ 的函数，它是"$y$ 关于 $t$ 的隐函数"。<b>但求导流程一点没变</b>——照样是 $\frac{\mathrm dy}{\mathrm dx}=\frac{\mathrm dy/\mathrm dt}{\mathrm dx/\mathrm dt}$，只是 $\frac{\mathrm dy}{\mathrm dt}$ 要用隐函数求导得到。<br>
+      <span class="lab">解</span>$\dfrac{\mathrm dx}{\mathrm dt}=\dfrac{1}{1+t^2}$。对第二式两端<b>关于 $t$</b> 求导（$y$ 是 $t$ 的函数，$ty^2$ 要用乘积法则）：
+      $$2\frac{\mathrm dy}{\mathrm dt}-y^2-2ty\frac{\mathrm dy}{\mathrm dt}+\mathrm e^t=0\ \Longrightarrow\ \frac{\mathrm dy}{\mathrm dt}=\frac{y^2-\mathrm e^t}{2(1-ty)}$$
+      两者相除：$\dfrac{\mathrm dy}{\mathrm dx}=\dfrac{y^2-\mathrm e^t}{2(1-ty)}\cdot(1+t^2)$。<br>
+      <span class="lab">要害</span>答案里<b>同时含 $t$ 和 $y$，这是允许的</b>——参数方程的答案本来就允许含参数，隐函数的答案本来就允许含 $y$，两者叠加不必强行消元。<b>张宇的批语：本题是一个综合型求导题目，根据它的类型套用相应公式！</b>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 4.8 ✔</span>若 $\begin{cases}x=\ln t\\ y=\mathrm e^{t^2}\end{cases}$，则 $\dfrac{\mathrm d^2y}{\mathrm dx^2}\Big|_{t=1}=$ ______。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$8\mathrm e$</span><br>
+      <span class="lab">解</span>$\dfrac{\mathrm dy}{\mathrm dx}=\dfrac{2t\mathrm e^{t^2}}{1/t}=2t^2\mathrm e^{t^2}$（<b>除以 $\frac1t$ ＝ 乘 $t$</b>，这一步别手滑）。再求二阶：
+      $$\frac{\mathrm d^2y}{\mathrm dx^2}=\frac{\frac{\mathrm d}{\mathrm dt}\left(2t^2\mathrm e^{t^2}\right)}{\frac{\mathrm dx}{\mathrm dt}}=\frac{4t\mathrm e^{t^2}+4t^3\mathrm e^{t^2}}{1/t}=4t^2(1+t^2)\mathrm e^{t^2}$$
+      代 $t=1$：$4\cdot1\cdot2\cdot\mathrm e=8\mathrm e$。<br>
+      <span class="lab">对比</span>错法 $\frac{y''(t)}{x''(t)}=\frac{(2t\mathrm e^{t^2})'}{(1/t)'}=\frac{2\mathrm e^{t^2}(1+2t^2)}{-1/t^2}$，在 $t=1$ 处 $=-6\mathrm e$，<b>连符号都反了</b>。
+    </div>
+  </div>
+
+  <!-- ================= s7 交互模块 B ================= -->
+  <h2 id="s7"><span class="idx">七</span>🔗 参数方程二阶导对拍台<span class="layer L-base">基础</span><span class="layer L-str">强化</span></h2>
+
+  <div class="tool">
+    <h4>正法 vs 错法 vs 数值裁判——把 $\dfrac{\psi''}{\varphi''}$ 这个坑当场判死刑</h4>
+    <div class="hint">
+      选一条参数曲线和一个参数值 $t_0$。左边三列分别是：<b>正法</b> $\dfrac{w'(t)}{\varphi'(t)}$（$w=\frac{\mathrm dy}{\mathrm dx}$）、<b>错法</b> $\dfrac{\psi''(t)}{\varphi''(t)}$、<b>数值裁判</b>——不碰任何公式，只在曲线上取 $x_0-h,\ x_0,\ x_0+h$ 三点的真实 $y$ 值做二阶差商 $\frac{y_{+}-2y_0+y_{-}}{h^2}$。<br>
+      看谁跟裁判对得上。顺便下面画出曲线、$t_0$ 处的<b>切线</b>与<b>二阶导符号对应的凹凸方向</b>。
+    </div>
+    <div class="ctl">
+      <label>曲线</label><select id="curveSel"></select>
+    </div>
+    <div class="ctl">
+      <label>参数 $t_0$</label>
+      <input type="range" id="tSlider" min="0" max="100" value="50">
+      <span class="val" id="tVal">t₀ = —</span>
+    </div>
+    <div class="gridwrap"><table class="dq" id="cmpTab"></table></div>
+    <span class="verdict" id="cmpVerdict"></span>
+    <div class="scene"><svg id="curveSvg" viewBox="0 0 660 300" xmlns="http://www.w3.org/2000/svg"></svg></div>
+    <div class="say" id="cmpSay"></div>
+    <div class="legend2">
+      <span class="chip c-b">蓝</span>曲线本身　<span class="chip c-g">绿</span>$t_0$ 处的切线（斜率 = 正法一阶导）　<span class="chip c-r">红点</span>当前点<br>
+      数值裁判用的是<b>真实曲线上的点</b>（对每个 $x$ 反解出 $t$ 再取 $y$），因此它<b>不预设任何求导公式</b>——三列里只有它是"事实"，另外两列是"说法"。
+    </div>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 从对拍台上该带走什么</span>
+    ① 切换任何一条曲线、任何一个 $t_0$，<b>正法永远贴着裁判（误差在 $10^{-4}$ 量级，那是差商本身的截断误差），错法基本永远偏</b>——只有在极特殊的巧合点上才碰巧相等。<br>
+    ② 特别留意<b>摆线</b>和<b>星形线</b>：这两条曲线上 $\varphi''$ 和 $\psi''$ 都不为零，错法给出的是一个"看起来很像那么回事"的有限数值，<b>正因为它不离谱，才更害人</b>。<br>
+    ③ 看 $\frac{\mathrm d^2y}{\mathrm dx^2}$ 的<b>符号</b>与曲线弯曲方向的对应：正值 ⇒ 曲线在该点<b>凹（开口向上）</b>，负值 ⇒ <b>凸</b>。这条对应在第 5 章（凹凸性与拐点）会正式讲，这里先用眼睛记住。
+  </div>
+
+  <!-- ================= s8 对数求导 + 幂指 ================= -->
+  <h2 id="s8"><span class="idx">八</span>对数求导法 · 幂指函数求导法<span class="layer L-base">基础</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/高等数学/04_一元函数微分学的计算/高数_第04章_基础30讲.pdf">📄 基础30讲 p.128–129</a>
+
+  <div class="key"><span class="tag">必记 · 什么时候取对数：见到"多项相乘 / 相除 / 开方 / 乘方"</span>
+    设 $y=f(x)\ (f(x)\gt0)$：① 两边取对数 $\ln y=\ln f(x)$；② 两边对 $x$ 求导（<b>左边 $y$ 是中间变量，得 $\frac1yy'$</b>）：
+    $$\frac{y'}{y}=[\ln f(x)]'\quad\Longrightarrow\quad y'=y\cdot[\ln f(x)]'=\frac{y\,f'(x)}{f(x)}$$
+    <b>本质是把乘除变加减、把幂次变系数</b>——复杂表达式化归为简单表达式再运算。<br>
+    <b>幂指函数 $u(x)^{v(x)}\ (u\gt0)$ 除了取对数，更推荐直接化指数：</b>
+    $$u^v=\mathrm e^{v\ln u}\quad\Longrightarrow\quad \left[u^v\right]'=u^v\left[v'\ln u+v\cdot\frac{u'}{u}\right]$$
+    张宇批得很干脆：<b>公式不要记，直接书导</b>——化成 $\mathrm e^{v\ln u}$ 之后就是普通的复合函数，链式一遍就完事。
+  </div>
+
+  <div class="trap"><span class="tag">陷阱 · 幂指函数的两个"半错解法"</span>
+    $u(x)^{v(x)}$ 既不能当幂函数（把 $v$ 当常数写 $vu^{v-1}u'$），也不能当指数函数（把 $u$ 当常数写 $u^v\ln u\cdot v'$）。<b>有趣的是：这两个错误答案加起来正好等于正确答案</b>
+    $$\left[u^v\right]'=\underbrace{v u^{v-1}u'}_{\text{当幂函数}}+\underbrace{u^v\ln u\cdot v'}_{\text{当指数函数}}$$
+    这不是巧合，是二元函数全导数的结果（第 13 章会看到 $\frac{\mathrm d}{\mathrm dx}F(u,v)=F_u u'+F_v v'$）。<b>可以拿它当验算工具，但考场上还是老实化 $\mathrm e^{v\ln u}$。</b>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 4.12 ✔ / 4.13 ✔</span>（幂指函数两连击）<b>4.12</b> 求 $y=x^x\ (x\gt0)$ 的导数；　<b>4.13</b> 求 $y=x^{\frac1x}\ (x\gt0)$ 的导数。</div>
+    <div class="s">
+      <span class="lab">4.12 答案</span><span class="ans">$y'=x^x(1+\ln x)$</span>　化 $\mathrm e^{x\ln x}$：$y'=\mathrm e^{x\ln x}(x\ln x)'=x^x(\ln x+1)$。<br>
+      <span class="lab">4.13 答案</span><span class="ans">$y'=x^{\frac1x-2}(1-\ln x)$</span>　化 $\mathrm e^{\frac1x\ln x}$：
+      $$y'=\mathrm e^{\frac{\ln x}{x}}\left(-\frac{1}{x^2}\ln x+\frac1x\cdot\frac1x\right)=x^{\frac1x}\cdot\frac{1-\ln x}{x^2}=x^{\frac1x-2}(1-\ln x)$$
+      <span class="lab">注</span>末尾把 $\frac{1}{x^2}$ 吸进指数写成 $x^{\frac1x-2}$，是书上的写法；<b>写成 $\frac{x^{1/x}(1-\ln x)}{x^2}$ 一样对</b>。<br>
+      <span class="lab">附带收获</span>$y=x^{1/x}$ 的导数在 $x=\mathrm e$ 处变号（$1-\ln x$ 换符号）——这就是"<b>$\sqrt[n]{n}$ 在 $n=3$ 附近取最大</b>"那个经典结论的来源，第 5 章比较 $\mathrm e^\pi$ 与 $\pi^\mathrm e$ 时还会再见到它。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 4.11 ✔</span>设 $y=y(x)$ 由方程 $x\mathrm e^{f(y)}=\mathrm e^y\ln2$ 确定，其中 $f$ 具有二阶导数，且 $f'\ne1$，则 $\dfrac{\mathrm d^2y}{\mathrm dx^2}=$ ______。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$-\dfrac{[1-f'(y)]^2-f''(y)}{x^2[1-f'(y)]^3}$</span>（sympy 从取对数式出发独立解出 $y''$，与书上式子化简后<b>恒等</b>）<br>
+      <span class="lab">为什么取对数</span>方程里挂着 $\mathrm e^{f(y)}$、$\mathrm e^y$ 两个指数塔，直接求导会越滚越大。<b>取对数把它拍平</b>：由 $\mathrm e^y\ln2\gt0$ 知 $x\gt0$，取对数合法：
+      $$\ln x+f(y)=y+\ln(\ln2)$$
+      <span class="lab">一阶</span>对 $x$ 求导：$\dfrac1x+f'(y)y'=y'\Rightarrow y'=\dfrac{1}{x[1-f'(y)]}$（<b>这里就用上了条件 $f'\ne1$</b>，张宇在题干旁批"这部分可能出现在分母中"）。<br>
+      <span class="lab">二阶</span>继续对 $x$ 求导：
+      $$-\frac{1}{x^2}+f''(y)(y')^2+f'(y)y''=y''\ \Longrightarrow\ y''[1-f'(y)]=-\frac{1}{x^2}+\frac{f''(y)}{x^2[1-f'(y)]^2}$$
+      整理即得答案。<br>
+      <span class="lab">要害</span>本题挂着"对数求导法"的牌子，其实是<b>隐函数二阶导</b>的题——<b>取对数只是入场券</b>。凡是看到 $\mathrm e^{(\text{含 }y)}$ 或多项连乘，先取对数再说。
+    </div>
+  </div>
+
+  <!-- ================= s9 高阶导数三法 ================= -->
+  <h2 id="s9"><span class="idx">九</span>高阶导数 · 三法总纲 + 必背公式表<span class="layer L-base">基础</span><span class="layer L-str">强化</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/高等数学/04_一元函数微分学的计算/高数_第04章_基础30讲.pdf">📄 基础30讲 p.129–133</a>
+
+  <div class="zy"><span class="tag">强化题型 · 从这里开始，本章进入真正的考点区</span>
+    张宇给"高阶导数"标了 <b>★★★</b> 三颗星，批注是「<b>是考研数学中一个区分度较高的题型</b>」。而《18讲》第 4 讲干脆把整讲的目标写成"<b>计算高阶导数</b>"——<b>前八节都是热身，从这一节开始才是考试真正要你的东西。</b><br>
+    求 $f^{(n)}$ 只有三条路，<b>选路的依据是函数长什么样</b>：
+    <div class="gridwrap"><table>
+      <tr><th>方法</th><th>什么时候用</th><th>本页例题</th></tr>
+      <tr><td><b>(1) 归纳法</b><br>逐次求导，探索规律，写通式</td><td>没有现成公式可套时的兜底；抽象函数给了<b>关系式</b>（如 $f'=f^2$、$f'=\mathrm e^f$）时几乎必用</td><td>基 4.14、基 4.16、习 4.5</td></tr>
+      <tr><td><b>(2) 莱布尼茨公式</b><br>$(uv)^{(n)}=\sum\limits_{k=0}^nC_n^ku^{(n-k)}v^{(k)}$</td><td>看到<b>两个函数相乘</b>，且其中一个是<b>低次幂函数</b>（$x$、$x^2$）——它的三阶导为 0，求和只剩 2~3 项</td><td>基 4.17、基 4.19法二、强 4.3、习 4.8法一</td></tr>
+      <tr><td><b>(3) 泰勒展开式</b><br>比较 $x^n$ 的系数</td><td>函数是 $\mathrm e^x,\ln(1+x),\sin x,\cos x,\frac{1}{1\pm x}$ 的"<b>亲戚</b>"，或形如 $x^kf(x)$，尤其是<b>只问 $f^{(n)}(0)$</b> 时</td><td>基 4.18、基 4.19法一、强 4.1、习 4.8法二</td></tr>
+    </table></div>
+    <b>一句话选路</b>：问的是<b>一点（通常是 0）的值</b>且函数是常见展开式的亲戚 → 泰勒；<b>乘积</b>且一方是低次多项式 → 莱布尼茨；<b>抽象关系式</b>或都不像 → 归纳法。
+  </div>
+
+  <div class="key"><span class="tag">必记 · 常用高阶导数公式（$n$ 为正整数，全部经 sympy 对 $n=1\sim6$ 逐条验过）</span>
+    $$\left(\mathrm e^{ax+b}\right)^{(n)}=a^n\mathrm e^{ax+b},\qquad (a^x)^{(n)}=a^x(\ln a)^n$$
+    $$[\sin(ax+b)]^{(n)}=a^n\sin\left(ax+b+\frac{n\pi}{2}\right),\qquad [\cos(ax+b)]^{(n)}=a^n\cos\left(ax+b+\frac{n\pi}{2}\right)$$
+    $$[\ln(ax+b)]^{(n)}=(-1)^{n-1}a^n\frac{(n-1)!}{(ax+b)^n},\qquad \left(\frac{1}{ax+b}\right)^{(n)}=(-1)^na^n\frac{n!}{(ax+b)^{n+1}}$$
+    <b>三条记忆线索，比死背可靠：</b><br>
+    ① <b>每求一次导就多掉出一个 $a$</b>（链式），所以每个公式都带 $a^n$；<br>
+    ② 三角函数<b>每求一次导就是相位加 $\frac\pi2$</b>（$\cos x=\sin(x+\frac\pi2)$），所以是 $+\frac{n\pi}{2}$；<br>
+    ③ 最后两条是<b>同一条</b>：$\left(\frac{1}{ax+b}\right)^{(n)}=\frac1a[\ln(ax+b)]^{(n+1)}$，阶乘从 $(n-1)!$ 变成 $n!$、符号翻一次，完全对得上。<br>
+    张宇原话：<em>考生若能记住这些式子，那是最好的。若记不住，学会推导的方式，在考试中快速计算出来，也是可以的。</em>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 4.14 ✔</span>求 $y=\sin x$ 的 $n$ 阶导数。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$(\sin x)^{(n)}=\sin\left(x+n\cdot\dfrac\pi2\right),\ n=1,2,\cdots$</span>（$n=1\sim8$ 逐阶符号验证全等）<br>
+      <span class="lab">关键动作</span>直接逐阶写 $\cos x,-\sin x,-\cos x,\sin x,\cdots$ <b>看不出规律</b>（四个一循环，写不成一个式子）。张宇的破局点是<b>把 $\cos$ 改写成同名的 $\sin$</b>：$\cos x=\sin\left(x+\frac\pi2\right)$。于是
+      $$y'=\sin\left(x+\frac\pi2\right),\quad y''=\cos\left(x+\frac\pi2\right)=\sin\left(x+2\cdot\frac\pi2\right),\quad y'''=\sin\left(x+3\cdot\frac\pi2\right),\ \cdots$$
+      <b>每求一次导，相位就 $+\frac\pi2$</b>，规律一眼可见。<br>
+      <span class="lab">提炼</span>归纳法的成败常常取决于<b>"用什么形式写下每一阶"</b>——同一串导数，写成 $\pm\sin/\pm\cos$ 就是死路，写成统一的 $\sin(x+k\frac\pi2)$ 就是通途。<b>探索规律前，先统一形式。</b>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 4.15 ✔</span>设 $y=\dfrac{1-x}{1+x}$，则 $y^{(n)}(0)=(\ \ )$。<br>
+      (A) $(-1)^n2\cdot n!$　(B) $-2^n\cdot n!$　(C) $2^n\cdot(n-1)!$　(D) $-2^n\cdot(n-1)!$</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(A)</span>（$n=1\sim7$ 逐阶求导代 0，得 $-2,4,-12,48,-240,1440,-10080$，与 $(-1)^n2\cdot n!$ 完全吻合；B/C/D 均在 $n\le5$ 内被排除）<br>
+      <span class="lab">解</span>不能直接套公式，先<b>把假分式化成"常数 + 真分式"</b>（分子降次）：
+      $$y=\frac{1-x}{1+x}=\frac{-(1+x)+2}{1+x}=-1+\frac{2}{1+x}=2(1+x)^{-1}-1$$
+      套公式 $\left(\frac{1}{1+x}\right)^{(n)}=(-1)^n\frac{n!}{(1+x)^{n+1}}$：
+      $$y^{(n)}=(-1)^n\,2\cdot n!\,(1+x)^{-(n+1)}\quad\Longrightarrow\quad y^{(n)}(0)=(-1)^n2\cdot n!$$
+      <span class="lab">通法</span><b>凡有理分式求高阶导，第一步永远是"分子降次 + 部分分式"</b>，把它拆成若干 $\frac{A}{ax+b}$ 之和，然后逐项套公式。<a href="#s11">§十一</a> 的强 4.2 是这条通法的加强版。<br>
+      <span class="lab">注</span>常数项 $-1$ 求一次导就没了，<b>只在 $n=0$ 时有贡献</b>，所以通式对 $n\ge1$ 成立。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 4.16 ✔</span>已知 $f(x)$ 具有任意阶导数，且 $f'(x)=[f(x)]^2$，则 $f^{(n)}(x)=$ ______。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$f^{(n)}(x)=n!\,[f(x)]^{n+1}$</span>（取具体解 $f=-\frac{1}{x+C}$，$n=1\sim6$ 逐阶验证与通式恒等）<br>
+      <span class="lab">解 · 归纳法</span>反复对 $f'=f^2$ 求导，<b>每次都把新出现的 $f'$ 换回 $f^2$</b>：
+      $$f''=2ff'=2f^3,\qquad f'''=2\cdot3f^2\cdot f'=2\cdot3f^4,\qquad f^{(4)}=2\cdot3\cdot4f^3f'=2\cdot3\cdot4f^5$$
+      系数是 $1,2,2\cdot3,2\cdot3\cdot4,\cdots$ 即 $n!$，幂次是 $2,3,4,5,\cdots$ 即 $n+1$，故 $f^{(n)}=n!f^{n+1}$。<br>
+      <span class="lab">严格性</span>客观题写到这里就够了；解答题要补数学归纳法：设 $f^{(k)}=k!f^{k+1}$，则 $f^{(k+1)}=(k+1)k!f^kf'=(k+1)!f^{k+2}$ ✓。<br>
+      <span class="lab">提炼</span><b>抽象函数 + 一个关系式 ⇒ 一定是归纳法</b>，而且套路固定：<b>每求一次导，就用关系式把 $f'$ 消掉</b>，让每一阶都只用 $f$ 表示，规律才看得见。习 4.5（$f'=\mathrm e^f$）是同一模子，答案 $f^{(n)}=(n-1)!\mathrm e^{nf}$。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 4.17 ✔</span>设 $f(x)=x\mathrm e^x$，则 $f^{(n)}(x)=$ ______。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$(n+x)\mathrm e^x$</span>（$n=1\sim8$ 全验）<br>
+      <span class="lab">解 · 莱布尼茨</span>取 $u=\mathrm e^x$（好求高阶）、$v=x$（<b>二阶导为 0，求和瞬间截断</b>）：
+      $$f^{(n)}=(\mathrm e^x)^{(n)}\cdot x+C_n^1(\mathrm e^x)^{(n-1)}\cdot 1+\underbrace{C_n^2(\mathrm e^x)^{(n-2)}\cdot 0+\cdots}_{\text{全为}0}=x\mathrm e^x+n\mathrm e^x=(n+x)\mathrm e^x$$
+      <span class="lab">分工原则</span>用莱布尼茨时，<b>把"高阶导好写"的那个当 $u$，把"很快求导为 0"的多项式当 $v$</b>——公式里 $v$ 的求导阶数从 0 递增，多项式次数是几，就只剩几+1 项。$v=x$ 剩 2 项，$v=x^2$ 剩 3 项。<br>
+      <span class="lab">杨辉三角</span>系数 $C_n^0,C_n^1,C_n^2$ 只需要前几个，用杨辉三角现推最快：$1;\ 1,1;\ 1,2,1;\ 1,3,3,1;\ 1,4,6,4,1$。
+    </div>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 莱布尼茨公式的一个漂亮应用（张宇页边注）</span>
+    有些函数<b>自己求高阶很难，但乘上另一个函数后变得极简</b>，这时可以反向利用莱布尼茨。例如求 $(\arcsin x)^{(n)}$：<br>
+    由 $(\arcsin x)'=\frac{1}{\sqrt{1-x^2}}$ 得 <b>$(\arcsin x)'\cdot\sqrt{1-x^2}=1$</b>。令 $u=(\arcsin x)'$、$v=\sqrt{1-x^2}$，则 $uv\equiv1$，于是对两边求 $n-1$ 阶导：
+    $$(uv)^{(n-1)}=1^{(n-1)}=0\quad\Longrightarrow\quad C_{n-1}^0(\arcsin x)^{(n)}\sqrt{1-x^2}+\cdots+C_{n-1}^{n-1}(\arcsin x)'\left(\sqrt{1-x^2}\right)^{(n-1)}=0$$
+    <b>常数的高阶导为 0</b> 这个平凡事实，成了一条递推关系式。<b>这就是 <a href="#s12">§十二 求导转化法</a> 的思想雏形</b>：先制造一个乘积恒等式，再对它求高阶导。
+  </div>
+
+  <!-- ================= s10 交互模块 A ================= -->
+  <h2 id="s10"><span class="idx">十</span>🏭 泰勒系数流水线<span class="layer L-base">基础</span><span class="layer L-str">强化</span></h2>
+
+  <div class="tool">
+    <h4>把"展开式唯一性"变成一台机器：现场算出 $f^{(n)}(0)$，跟书上通项当场对拍</h4>
+    <div class="hint">
+      下面这台机器<b>不做数值微分</b>（那会被舍入误差毁掉），而是用<b>截断幂级数运算</b>：把每个函数按 $\mathrm e^u,\ \ln(1+u),\ \sin u,\ \frac{1}{1-u}$ 的标准展开式逐项算出泰勒系数 $a_n$，再用
+      $$\boxed{\ f^{(n)}(0)=n!\cdot a_n\ }$$
+      得到高阶导数值——<b>这正是张宇"泰勒展开法"三步（抽象展开 / 具体展开 / 比系数）的机器实现</b>。右边一列是书上给的通项公式，两列对得上就打 ✓。
+    </div>
+    <div class="ctl">
+      <label>函数</label><select id="fnSel"></select>
+    </div>
+    <div class="say" id="fnNote"></div>
+    <div class="gridwrap"><table class="dq" id="taylorTab"></table></div>
+    <span class="verdict" id="taylorVerdict"></span>
+    <div class="legend2">
+      <span class="chip c-b">$a_n$</span>幂级数系数（$f=\sum a_nx^n$）　<span class="chip c-g">$n!a_n$</span>就是 $f^{(n)}(0)$　<span class="chip c-a">通项</span>书上给的封闭公式<br>
+      <b>为什么可以这样算</b>：泰勒展开式<b>唯一</b>——不管你用什么方法展开，$x^n$ 前的系数只有一个。所以"求 $f^{(n)}(0)$"和"求展开式系数"是<b>同一件事的两种问法</b>，而后者可以纯机械地做。
+    </div>
+  </div>
+
+  <div class="key"><span class="tag">必记 · 常用泰勒展开式（张宇批"要熟记"，本章与第 16 章级数共用）</span>
+    $$\mathrm e^x=\sum_{n=0}^\infty\frac{x^n}{n!}=1+x+\frac{x^2}{2!}+\cdots\quad(-\infty\lt x\lt+\infty)$$
+    $$\frac{1}{1+x}=\sum_{n=0}^\infty(-1)^nx^n,\qquad \frac{1}{1-x}=\sum_{n=0}^\infty x^n\quad(-1\lt x\lt1)$$
+    $$\ln(1+x)=\sum_{n=1}^\infty(-1)^{n-1}\frac{x^n}{n}=x-\frac{x^2}{2}+\frac{x^3}{3}-\cdots\quad(-1\lt x\le1)$$
+    $$\sin x=\sum_{n=0}^\infty(-1)^n\frac{x^{2n+1}}{(2n+1)!},\qquad \cos x=\sum_{n=0}^\infty(-1)^n\frac{x^{2n}}{(2n)!}\quad(-\infty\lt x\lt+\infty)$$
+    $$(1+x)^\alpha=1+\alpha x+\frac{\alpha(\alpha-1)}{2!}x^2+\cdots+\frac{\alpha(\alpha-1)\cdots(\alpha-n+1)}{n!}x^n+\cdots$$
+    $$\tan x=x+\frac13x^3+\cdots,\qquad \arcsin x=x+\frac16x^3+\cdots,\qquad \arctan x=x-\frac13x^3+\cdots$$
+    <b>收敛域是 $(1+x)^\alpha$ 唯一要小心的地方</b>：$\alpha\le-1$ 时 $x\in(-1,1)$；$-1\lt\alpha\lt0$ 时 $(-1,1]$；$\alpha\gt0$ 且非正整数时 $[-1,1]$；$\alpha$ 为正整数时全 $\mathbf R$（此时它就是有限项的二项式定理）。<br>
+    最后三条（$\tan,\arcsin,\arctan$）<b>只需要记到三次项</b>——它们在极限题里当等价无穷小的"下一阶"用，本章则用来<b>反推 $f'''(0)$</b>。
+  </div>
+
+  <div class="key"><span class="tag">必记 · 泰勒展开法的三步法（18讲原话）</span>
+    ① <b>抽象展开</b>：$f(x)=\sum\limits_{n=0}^\infty\dfrac{f^{(n)}(0)}{n!}x^n$（或以 $x_0$ 为中心）；<br>
+    ② <b>具体展开</b>：认出 $f(x)$ 是某个标准展开式的"亲戚"，恒等变形后展开；<br>
+    ③ <b>唯一性比系数</b>：令 ① ② 中 $x^n$ 前的系数相等，得 $f^{(n)}(0)$。<br>
+    <b>"变亲戚"的四种手法（18讲专门列出）：</b><br>
+    (1) <b>通分的逆运算</b>（瓦解敌人，各个击破）：$\dfrac{1}{x(x+1)}=\dfrac1x-\dfrac{1}{x+1}$；<br>
+    (2) <b>对数运算性质</b>：$\ln(2+x)=\ln2+\ln\left(1+\dfrac x2\right)$——<b>直接写 $\ln(1+x+1)$ 是展不开的</b>，必须先把常数提出去；<br>
+    (3) <b>三角公式降幂</b>：$\sin^2x=\dfrac{1-\cos2x}{2}$；<br>
+    (4) <b>广义化（$x\to$ 狗）</b>：展开式里的 $x$ 可以换成任何趋于 0 的东西。<br>
+    <span class="chip c-r">注意</span>抽象的 $f(x)$（只给关系式）<b>用不了泰勒</b>，那是归纳法 + 数学归纳法的地盘。
+  </div>
+
+  <!-- ================= s11 泰勒展开法 ================= -->
+  <h2 id="s11"><span class="idx">十一</span>泰勒展开法求 $f^{(n)}(0)$<span class="layer L-str">强化</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/高等数学/04_一元函数微分学的计算/高数_第04章_强化18讲.pdf">📄 高数18讲 p.34–35</a>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 4.18 ✔</span>设 $f(x)=x^2\ln(1-x)$，则当 $n\ge3$ 时，$f^{(n)}(0)=(\ \ )$。<br>
+      (A) $-\dfrac{n!}{n-2}$　(B) $\dfrac{n!}{n-2}$　(C) $-\dfrac{(n-2)!}{n}$　(D) $\dfrac{(n-2)!}{n}$</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(A)</span>（$n=3\sim9$ 逐阶符号求导，与 $-\frac{n!}{n-2}$ 全部吻合；B/C/D 均被排除）<br>
+      <span class="lab">解 · 泰勒三步</span>先具体展开——<b>$\ln(1-x)$ 是 $\ln(1+x)$ 把 $x$ 换成 $-x$</b>：
+      $$\ln(1-x)=-\sum_{m=1}^\infty\frac{x^m}{m}\ \Longrightarrow\ f(x)=x^2\ln(1-x)=-\sum_{m=1}^\infty\frac{x^{m+2}}{m}\xlongequal{\ n=m+2\ }-\sum_{n=3}^\infty\frac{x^{n}}{n-2}$$
+      与抽象展开 $f=\sum\frac{f^{(n)}(0)}{n!}x^n$ 比系数：$\dfrac{f^{(n)}(0)}{n!}=-\dfrac{1}{n-2}\Rightarrow f^{(n)}(0)=-\dfrac{n!}{n-2}$。<br>
+      <span class="lab">通法</span><b>$g(x)=x^kf(x)$ 型，一律用泰勒</b>：乘 $x^k$ 在级数里只是<b>把每一项的指数平移 $k$</b>，随后重新编号（$n=m+k$）即可。用莱布尼茨也行，但要写三项还要代 0，慢得多。<br>
+      <span class="lab">易错</span>换编号时 <b>求和下限也要跟着变</b>（$m\ge1\Rightarrow n\ge3$），这正是题目限定 $n\ge3$ 的原因——$n=1,2$ 时系数为 0，通式不适用。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 4.19 ✔</span>设 $f(x)=x^22^x$，则当 $n\ge1$ 时，$f^{(n)}(0)=$ ______。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$n(n-1)(\ln2)^{n-2}$</span>（$n=1\sim8$ 全验；注意 $n=1$ 时值为 0，$n=2$ 时为 2，通式都对）<br>
+      <span class="lab">法一 · 泰勒</span>$2^x$ 没有现成展开式，<b>先变形成 $\mathrm e^{x\ln2}$</b>（这就是"变亲戚"）：
+      $$f(x)=x^2\mathrm e^{x\ln2}=x^2\sum_{k=0}^\infty\frac{(x\ln2)^k}{k!}=\sum_{k=0}^\infty\frac{(\ln2)^k}{k!}x^{k+2}=\sum_{n=2}^\infty\frac{(\ln2)^{n-2}}{(n-2)!}x^n$$
+      比系数：$\dfrac{f^{(n)}(0)}{n!}=\dfrac{(\ln2)^{n-2}}{(n-2)!}\Rightarrow f^{(n)}(0)=\dfrac{n!}{(n-2)!}(\ln2)^{n-2}=n(n-1)(\ln2)^{n-2}$。<br>
+      <span class="lab">法二 · 莱布尼茨</span>$u=2^x,v=x^2$，$v'''=0$，只剩三项：
+      $$f^{(n)}=x^2 2^x(\ln2)^n+n\cdot2x\cdot2^x(\ln2)^{n-1}+\frac{n(n-1)}{2}\cdot2\cdot2^x(\ln2)^{n-2}$$
+      代 $x=0$，<b>前两项带 $x$ 因子全部归零</b>，只剩第三项 $=n(n-1)(\ln2)^{n-2}$。<br>
+      <span class="lab">两法对比</span>这题<b>两条路一样快</b>，是练手的好素材。经验：<b>问 $f^{(n)}(0)$ 用泰勒（只需一个系数），问 $f^{(n)}(x)$ 通式用莱布尼茨（泰勒给不出非零点的通式）。</b><br>
+      <span class="lab">细节</span>法一中 $f(0)=f'(0)=0$，所以求和从 $n=2$ 起与从 $n=0$ 起<b>完全一致</b>（张宇专门写了个注强调这点）。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 4.1 ✔</span>设 $f(x)$ 可导且满足 $x^2f'(x)=f^2(x)$，$f(1)=\dfrac13$，则 $f^{(n)}(0)=(\ \ )$。<br>
+      (A) $(-1)^nn!$　(B) $(-1)^{n-1}n!$　(C) $(-2)^nn!$　(D) $(-2)^{n-1}n!$</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(D)</span>（先验 $f=\frac{x}{2x+1}$ 确实满足方程与初值，再 $n=1\sim8$ 逐阶求导，与 $(-2)^{n-1}n!$ 全吻合；A/B/C 排除）<br>
+      <span class="lab">第一步 · 这其实是道微分方程题</span>把 $x^2f'=f^2$ 看成 $x^2y'=y^2$，<b>变量可分离</b>：
+      $$\frac{\mathrm d[f(x)]}{f^2(x)}=\frac{\mathrm dx}{x^2}\ \Longrightarrow\ -\frac{1}{f(x)}=-\frac1x-C\ \Longrightarrow\ f(x)=\frac{x}{Cx+1}$$
+      由 $f(1)=\frac13$ 得 $\frac{1}{C+1}=\frac13\Rightarrow C=2$，故 $f(x)=\dfrac{x}{2x+1}$。<br>
+      <span class="lab">第二步 · 泰勒</span>先<b>分子降次</b>（和基 4.15 同一手）：
+      $$f(x)=\frac{x}{2x+1}=\frac12-\frac12\cdot\frac{1}{2x+1}=\frac12-\frac12\sum_{n=0}^\infty(-2)^nx^n$$
+      $x^n$ 的系数（$n\ge1$）为 $-\frac12(-2)^n=(-2)^{n-1}$，故 $f^{(n)}(0)=(-2)^{n-1}n!$。<br>
+      <span class="lab">要害</span><b>本题的"化归"跨了章</b>：第 4 章的题，第一步却要用第 15 章的可分离变量方程。张宇把它放在"泰勒展开法"名下，是想说明——<b>泰勒展开法的前提是"你手里得先有个具体函数"</b>，题目不给，就想办法解出来。<br>
+      <span class="lab">符号核对</span>$\frac{1}{2x+1}=\frac{1}{1-(-2x)}=\sum(-2x)^n=\sum(-2)^nx^n$。<b>把 $-2x$ 整体当"狗"</b>，别只把 $2x$ 当狗然后漏掉 $(-1)^n$。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 4.2 ✔</span>(1) 设 $y=\dfrac{1}{x(1-x)}$，求 $\dfrac{\mathrm d^ny}{\mathrm dx^n}$；　(2) 设 $z=\dfrac{y^2}{x(1-x)}$，求 $\dfrac{\partial^nz}{\partial x^n}$。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(1) $\left[(-1)^n\dfrac{1}{x^{n+1}}+\dfrac{1}{(1-x)^{n+1}}\right]n!$；(2) $y^2\left[(-1)^n\dfrac{1}{x^{n+1}}+\dfrac{1}{(1-x)^{n+1}}\right]n!$</span>（$n=1\sim7$ / $1\sim5$ 逐阶符号验证）<br>
+      <span class="lab">(1) 解</span>核心是"<b>通分的逆运算</b>"——把一个分母拆成两个（<b>瓦解敌人，各个击破</b>）：
+      $$\frac{1}{x(1-x)}=\frac1x+\frac{1}{1-x}$$
+      （验算：右边通分 $=\frac{1-x+x}{x(1-x)}=\frac{1}{x(1-x)}$ ✓）然后<b>逐项套公式</b>：
+      $$\left(\frac1x\right)^{(n)}=(-1)^n\frac{n!}{x^{n+1}},\qquad \left(\frac{1}{1-x}\right)^{(n)}=\frac{n!}{(1-x)^{n+1}}$$
+      <span class="lab">符号为什么不同</span>$\frac{1}{1-x}$ 的内层导数是 $-1$，每求一次导贡献一个 $(-1)$，$n$ 次贡献 $(-1)^n$，<b>恰好与公式本身的 $(-1)^n$ 抵消</b>，所以结果<b>恒为正</b>。这一处符号是本题唯一的技术点。<br>
+      <span class="lab">(2) 解</span>求的是<b>偏导</b> $\frac{\partial^n}{\partial x^n}$，$y$ 全程当<b>常数</b>，直接把 $y^2$ 提到前面即可。<b>18 讲放这一小问，是提前告诉你：第 13 章多元函数的高阶偏导，用的还是这一套公式。</b>
+    </div>
+  </div>
+
+  <!-- ================= s12 莱布尼茨 + 求导转化 ================= -->
+  <h2 id="s12"><span class="idx">十二</span>莱布尼茨公式法 · 求导转化法<span class="layer L-str">强化</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/高等数学/04_一元函数微分学的计算/高数_第04章_强化18讲.pdf">📄 高数18讲 p.36–37</a>
+
+  <div class="zy"><span class="tag">强化题型 · 莱布尼茨公式法的触发条件</span>
+    看到（或可恒等变形为）<b>$f(x)\cdot(ax^2+bx+c)$</b>，例如 $\mathrm e^x(1+x^2)$——因为 $(ax^2+bx+c)'''=0$，<b>用莱布尼茨公式展开后只剩三项</b>：
+    $$(uv)^{(n)}=u^{(n)}v+C_n^1u^{(n-1)}v'+C_n^2u^{(n-2)}v''$$
+    这三项分别配 $v,v',v''$，系数 $1,\ n,\ \frac{n(n-1)}{2}$。<b>如果只问 $x=x_0$ 处的值，往往还会有一两项自动归零</b>（基 4.19 法二就只剩一项）。
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 4.3 ✔</span>设 $f(x)=(x^3-1)^n$，则 $f^{(n)}(1)=$ ______。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$3^n\,n!$</span>（$n=1\sim7$ 逐阶符号求导后代 $x=1$，全部吻合）<br>
+      <span class="lab">解</span>先<b>因式分解，把"在 $x=1$ 处为零"的因子隔离出来</b>：
+      $$f(x)=(x^3-1)^n=\big[(x-1)(x^2+x+1)\big]^n=(x-1)^n\cdot(x^2+x+1)^n$$
+      令 $u=(x-1)^n$、$v=(x^2+x+1)^n$，用莱布尼茨：
+      $$f^{(n)}(x)=\sum_{k=0}^nC_n^k\left[(x-1)^n\right]^{(k)}\left[(x^2+x+1)^n\right]^{(n-k)}$$
+      <b>在 $x=1$ 处，$(x-1)^n$ 的 $k$ 阶导（$k\lt n$）全部为 0</b>（还剩 $(x-1)$ 的正次幂），只有 $k=n$ 那一项活着：
+      $$f^{(n)}(1)=C_n^n\cdot\underbrace{\left[(x-1)^n\right]^{(n)}}_{=\,n!}\cdot\underbrace{(x^2+x+1)^n\big|_{x=1}}_{=\,3^n}=3^n\,n!$$
+      <span class="lab">提炼</span>这题是<b>"求 $n$ 阶导，恰好函数里也有个 $n$ 次方"</b>的经典设计。看到 $(\cdot)^n$ 求 $n$ 阶导，几乎必然是<b>只剩一项</b>——因为 $[(x-x_0)^n]^{(n)}=n!$ 而更低阶的都还带着 $(x-x_0)$ 因子。<b>算之前先想"哪一项能活下来"，别真去展开求和。</b>
+    </div>
+  </div>
+
+  <div class="zy"><span class="tag">强化题型 · 求导转化法：先求一两次导，制造出"能套公式的乘积"</span>
+    ① 若函数<b>既不是"亲戚"、也不能恒等变形</b>，考虑<b>先求一阶、二阶导，再恒等变形</b>。例如 $y=\arctan x$：$(\arctan x)'=\frac{1}{1+x^2}$，即 <b>$y'(1+x^2)=1$</b>——一个乘积恒等式诞生了，接下来对它用莱布尼茨公式。<br>
+    ② 这条路一定要<b>记住 §九 的 5 个常用公式，并且会做简单的递推</b>。<br>
+    <b>整条路径</b>：原函数 → 求导 → 凑出 $(\text{多项式})\cdot y^{(k)}=(\text{简单东西})$ → 两边求 $n$ 阶导（莱布尼茨）→ 得到关于 $y^{(n)},y^{(n-1)},y^{(n-2)}$ 的<b>递推关系</b> → 代 $x=0$ 逐步算出各阶值。
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 4.4 ✔</span>设 $y=\dfrac{x}{1+x^2}$，求 $y^{(n)}$ 满足的递推关系式及 $y^{(2n+1)}(0)$。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$(1+x^2)y^{(n)}+2nxy^{(n-1)}+n(n-1)y^{(n-2)}=0\ (n\ge2)$；$y^{(2n+1)}(0)=(-1)^n(2n+1)!$</span>（递推式 $n=2\sim8$ 逐条符号验证恒为 0；奇数阶值 $n=0\sim4$ 全吻合；偶数阶 $n=1\sim5$ 全为 0）<br>
+      <span class="lab">第一步 · 造乘积恒等式</span>由 $y=\frac{x}{1+x^2}$ 直接得 <b>$(1+x^2)y=x$</b>（比先求导更省事）。<br>
+      <span class="lab">第二步 · 两边求 $n$ 阶导</span>右边 $x$ 的 $n$ 阶导（$n\gt1$）为 0；左边用莱布尼茨，$v=1+x^2$ 只有三项：
+      $$(1+x^2)y^{(n)}+C_n^1\cdot 2x\cdot y^{(n-1)}+C_n^2\cdot 2\cdot y^{(n-2)}=0$$
+      即 $(1+x^2)y^{(n)}+2nxy^{(n-1)}+n(n-1)y^{(n-2)}=0$（$C_n^2\cdot2=n(n-1)$）。<br>
+      <span class="lab">第三步 · 代 $x=0$ 递推</span>$y^{(n)}(0)=-n(n-1)y^{(n-2)}(0)$，起点 $y(0)=0$、$y'(0)=1$：
+      $$y'''(0)=-3\cdot2\cdot1=-3!,\quad y^{(5)}(0)=-5\cdot4\cdot(-3!)=5!,\quad\cdots\quad y^{(2n+1)}(0)=(-1)^n(2n+1)!$$
+      <span class="lab">偶数阶</span>$y''(0)=-2\cdot1\cdot y(0)=0$，往后每一步都乘 0，故 <b>$y^{(2n)}(0)=0$</b>。张宇给了一个不用算的理由：<b>$y=\frac{x}{1+x^2}$ 是奇函数 ⇒ 偶数阶导数还是奇函数 ⇒ 在 0 点取值必为 0</b>（见 <a href="#s13">§十三</a>）。<br>
+      <span class="lab">另一条路</span>本题也可以泰勒：$\frac{x}{1+x^2}=x\sum(-1)^kx^{2k}=\sum(-1)^kx^{2k+1}$，系数 $\frac{y^{(2n+1)}(0)}{(2n+1)!}=(-1)^n$ 立刻得同样结果。<b>两法都会，考场上挑顺手的。</b>
+    </div>
+  </div>
+
+  <!-- ================= s13 特殊点 + 奇偶周期 ================= -->
+  <h2 id="s13"><span class="idx">十三</span>特殊点的高阶导数 · 奇偶周期函数<span class="layer L-str">强化</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/高等数学/04_一元函数微分学的计算/高数_第04章_强化18讲.pdf">📄 高数18讲 p.37–38</a>
+
+  <div class="key"><span class="tag">必记 · 奇偶性与周期性在求导下的传递（能省掉大量计算）</span>
+    <div class="gridwrap"><table>
+      <tr><th>$f$ 的性质</th><th>导数的性质</th><th>在 0 点的直接后果</th></tr>
+      <tr><td><b>奇</b>函数</td><td>$f^{(2n)}$ 仍<b>奇</b>，$f^{(2n+1)}$ 变<b>偶</b></td><td>在零点有定义时 <b>$f^{(2n)}(0)=0$</b></td></tr>
+      <tr><td><b>偶</b>函数</td><td>$f^{(2n)}$ 仍<b>偶</b>，$f^{(2n+1)}$ 变<b>奇</b></td><td>在零点有定义时 <b>$f^{(2n+1)}(0)=0$</b></td></tr>
+      <tr><td><b>周期</b>函数</td><td>$f^{(n)}$ 仍是<b>同周期</b>的周期函数</td><td>—</td></tr>
+    </table></div>
+    记忆：<b>求一次导，奇偶性翻一次；奇函数在 0 点取值必为 0</b>（若有定义）。所以"奇函数的偶阶导"还是奇函数，在 0 处为 0。<br>
+    <b>用法</b>：题目问 $f^{(4)}(0)$、$f^{(100)}(0)$ 这种大阶数时，<b>先看奇偶性能不能直接判 0</b>——能判就是白送分，判不了再老老实实展开。
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 4.6 ✔</span>设 $f(x)=\dfrac{1}{2^x+1},\ x\in\mathbf R$，则 $f^{(4)}(0)=$ ______。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">0</span>（sympy 直接求四阶导代 0 得 0；另验 2、6 阶也为 0）<br>
+      <span class="lab">解 · 创造对称</span>$f$ 自己既不奇也不偶，但<b>把它向下平移 $\frac12$ 就奇了</b>：
+      $$f(x)=\underbrace{\left(\frac{1}{2^x+1}-\frac12\right)}_{g(x)}+\frac12$$
+      验证 $g$ 为奇函数：$g(-x)=\dfrac{1}{2^{-x}+1}-\dfrac12=\dfrac{2^x}{1+2^x}-\dfrac12=\dfrac12-\dfrac{1}{2^x+1}=-g(x)$ ✓。<br>
+      常数 $\frac12$ 求一次导就没了，故 $f^{(4)}(x)=g^{(4)}(x)$。<b>$g$ 奇 ⇒ $g^{(4)}$ 仍奇 ⇒ $g^{(4)}(0)=0$</b>，所以 $f^{(4)}(0)=0$。<br>
+      <span class="lab">要害</span>张宇给这一手的标签是 <b>$D_{21}$（观察研究对象）</b>，页边注写着<b>"发现对称 / 创造对称"</b>——<b>没有对称性就制造一个</b>。手法就是加减一个常数把图像平移到对称中心上。<br>
+      <span class="lab">迁移</span>同款函数还有 $\frac{1}{\mathrm e^x+1}$、$\frac{a^x-1}{a^x+1}$（本身就奇）、$\ln\frac{1+x}{1-x}$（本身就奇）。<b>看到 $\frac{1}{a^x+1}$ 就条件反射地减 $\frac12$。</b>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 4.5 ✔</span>设 $y=f(x)$ 由 $\begin{cases}x=2t+|t|\\ y=|t|\tan t\end{cases}$ 确定，则在 $\left(-\dfrac\pi2,\dfrac\pi2\right)$ 内（　）。<br>
+      (A) $f(x)$ 连续，$f'(0)$ 不存在　(B) $f'(0)$ 存在，$f'(x)$ 在 $x=0$ 处不连续<br>
+      (C) $f'(x)$ 连续，$f''(0)$ 不存在　(D) $f''(0)$ 存在，$f''(x)$ 在 $x=0$ 处不连续</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(C)</span>（左右一阶导、二阶导的四个极限值全部用 sympy 求出，并另做数值差商二次确认：$f''_+(0)=\frac29$、$f''_-(0)=-2$）<br>
+      <span class="lab">第一步 · 消参数、脱绝对值</span>参数方程里带绝对值，<b>先按 $t$ 的正负拆成两支，并把 $t$ 用 $x$ 表示</b>：
+      $$t\ge0:\begin{cases}x=3t\\ y=t\tan t\end{cases}\Rightarrow t=\frac x3;\qquad t\lt0:\begin{cases}x=t\\ y=-t\tan t\end{cases}\Rightarrow t=x$$
+      $$\Longrightarrow\quad y=f(x)=\begin{cases}\dfrac x3\tan\dfrac x3,&x\ge0\\[4pt] -x\tan x,&x\lt0\end{cases}$$
+      <b>注意 $t\ge0$ 时 $x=2t+t=3t$、$t\lt0$ 时 $x=2t-t=t$——两支的"换算率"不同，这是全题的机关。</b><br>
+      <span class="lab">第二步 · 逐级检查</span>
+      连续 ✓（两侧极限都是 0）；
+      $$f'_+(0)=\lim_{x\to0^+}\frac{\frac x3\tan\frac x3}{x}=0,\qquad f'_-(0)=\lim_{x\to0^-}\frac{-x\tan x}{x}=0\ \Longrightarrow\ f'(0)=0\ \text{存在}$$
+      $$x\gt0:f'=\frac13\tan\frac x3+\frac x9\sec^2\frac x3;\qquad x\lt0:f'=-\tan x-x\sec^2x$$
+      两侧极限都是 $0=f'(0)$，<b>故 $f'$ 在 0 处连续</b>（排除 A、B）。再上一层：
+      $$f''_+(0)=\lim_{x\to0^+}\frac{f'(x)-0}{x}=\frac13\cdot\frac13+\frac19=\frac29,\qquad f''_-(0)=\lim_{x\to0^-}\frac{-\tan x-x\sec^2x}{x}=-1-1=-2$$
+      $\frac29\ne-2$ ⇒ <b>$f''(0)$ 不存在</b>，选 (C)。<br>
+      <span class="lab">提炼</span>这类"<b>四个选项层层递进</b>"的题，做法是<b>从最低层开始一级一级往上爬，爬到断掉为止</b>：连续 → 一阶存在 → 一阶连续 → 二阶存在。断在哪一级，答案就是哪一级。<b>不要跳级去猜。</b>
+    </div>
+  </div>
+
+  <!-- ================= s14 习题 ================= -->
+  <h2 id="s14"><span class="idx">十四</span>基础习题 4.1–4.8 · 答案速查<span class="layer L-base">基础</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/高等数学/04_一元函数微分学的计算/高数_第04章_基础30讲.pdf">📄 基础30讲 p.135–138</a>
+
+  <div class="mine"><span class="tag">补讲 · 这 8 道题的分工</span>
+    4.1 <b>复合函数反查</b>（给 $h'$ 反求 $g$）；4.2 <b>先算极限再求导</b>（跨第 1 章）；4.3 <b>反函数二阶导</b>；4.4 <b>参数方程二阶导</b>（两种解法都给了）；4.5 <b>抽象关系式 + 归纳法</b>（基 4.16 的孪生题）；4.6 <b>隐函数求值</b>；4.7 <b>导数连续性证明</b>（跨第 3 章）；4.8 <b>$x^kf(x)$ 型高阶导</b>（莱布尼茨 vs 泰勒双解）。<b>八题正好覆盖全章九支线中的七支。</b>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 4.1 ✔</span>设 $g(x)$ 可微，$h(x)=\mathrm e^{1+g(x)}$，$h'(1)=1$，$g'(1)=2$，则 $g(1)=(\ \ )$。<br>(A) $\ln3-1$　(B) $-\ln3-1$　(C) $-\ln2-1$　(D) $\ln2-1$</div>
+    <div class="s"><span class="lab">答案</span><span class="ans">(C)</span><br>
+      $h'(x)=\mathrm e^{1+g(x)}g'(x)$，代 $x=1$：$1=\mathrm e^{1+g(1)}\cdot2\Rightarrow \mathrm e^{1+g(1)}=\frac12$，两边取对数：
+      $$1+g(1)=\ln\frac12\ \Longrightarrow\ g(1)=\ln\frac{h'(1)}{g'(1)}-1=\ln\frac12-1=-\ln2-1$$
+      <span class="lab">易错</span>$\ln\frac12=-\ln2$，别写成 $\ln2$；(A)(B) 是把 $\frac{1}{2}$ 错算成 $\frac13$ 的产物。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 4.2 ✔</span>设 $f(x)=\lim\limits_{t\to0}x(1-2t)^{-\frac xt}$，则 $f'(x)=$ ______。</div>
+    <div class="s"><span class="lab">答案</span><span class="ans">$(1+2x)\mathrm e^{2x}$</span>（sympy 先算极限得 $x\mathrm e^{2x}$，再求导）<br>
+      <span class="lab">第一步 · 先把 $f$ 算出来</span><b>极限是对 $t$ 求的，$x$ 全程是常数</b>，先凑第二个重要极限：
+      $$f(x)=x\lim_{t\to0}\left[(1-2t)^{-\frac{1}{2t}}\right]^{2x}=x\cdot\mathrm e^{2x}$$
+      <span class="lab">第二步 · 求导</span>$f'(x)=(x\mathrm e^{2x})'=\mathrm e^{2x}+x\mathrm e^{2x}\cdot2=(1+2x)\mathrm e^{2x}$。<br>
+      <span class="lab">要害</span>看到 $f(x)=\lim\limits_{t\to\cdot}(\cdots)$ 这种"<b>用极限定义的函数</b>"，<b>第一件事永远是把极限算完</b>，把 $f$ 变成显式表达式。<b>绝不能在极限号里面求导。</b>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 4.3 ✔</span>已知 $f'(x)=A\mathrm e^x$（$A$ 为正常数），则 $f(x)$ 的反函数的二阶导数为 ______。</div>
+    <div class="s"><span class="lab">答案</span><span class="ans">$-\dfrac{1}{A^2\mathrm e^{2x}}$</span>（符号推导 + 取 $A=2$ 时用 $g(y)=\ln\frac y2$ 数值二阶微分对拍）<br>
+      套 §四 的公式（这里 $f''=f'=A\mathrm e^x$）：
+      $$\frac{\mathrm d^2x}{\mathrm dy^2}=-\frac{f''(x)}{[f'(x)]^3}=-\frac{A\mathrm e^x}{(A\mathrm e^x)^3}=-\frac{1}{A^2\mathrm e^{2x}}$$
+      <span class="lab">注</span>答案<b>允许用 $x$ 表示</b>（题目没指定点）。这题妙在 $f''=f'$，三次方分母被约成两次方。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 4.4 ✔</span>设 $y=y(x)$ 由 $\begin{cases}x=\ln(1+t^2)+1\\ y=2\arctan t-(t+1)^2\end{cases}$ 确定，则 $\dfrac{\mathrm d^2y}{\mathrm dx^2}=$ ______。</div>
+    <div class="s"><span class="lab">答案</span><span class="ans">$-\dfrac{(1+2t)(1+t^2)}{2t}$</span>（两种解法都用 sympy 独立验过）<br>
+      <span class="lab">推荐解法（先化简一阶）</span>
+      $$\frac{\mathrm dx}{\mathrm dt}=\frac{2t}{1+t^2},\qquad \frac{\mathrm dy}{\mathrm dt}=\frac{2}{1+t^2}-2(t+1)$$
+      $$\frac{\mathrm dy}{\mathrm dx}=\frac{\frac{2}{1+t^2}-2(t+1)}{\frac{2t}{1+t^2}}=\frac{2-2(t+1)(1+t^2)}{2t}=-\left(t^2+t+1\right)$$
+      <b>这一步的化简是全题关键</b>：分子分母同乘 $(1+t^2)$ 后，$2-2(t+1)(1+t^2)=-2t(t^2+t+1)$，与分母的 $2t$ 恰好约掉。得到一个干净的多项式后：
+      $$\frac{\mathrm d^2y}{\mathrm dx^2}=\frac{\frac{\mathrm d}{\mathrm dt}\left[-(t^2+t+1)\right]}{\frac{\mathrm dx}{\mathrm dt}}=\frac{-(2t+1)}{\frac{2t}{1+t^2}}=-\frac{(1+2t)(1+t^2)}{2t}$$
+      <span class="lab">另一解法</span>书上还给了直接套公式 $\frac{x'y''-x''y'}{(x')^3}$ 的算法，<b>分子分母都是四层分式，极易算错</b>——结论：<b>先把 $\frac{\mathrm dy}{\mathrm dx}$ 化到最简，再求第二次导</b>，这是参数方程二阶导的第一原则。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 4.5 ✔</span>设 $f(x)$ 在 $x=2$ 的某邻域内具有任意阶导数，且 $f'(x)=\mathrm e^{f(x)}$，$f(2)=1$，则当 $n\ge1$ 时，$f^{(n)}(2)=$ ______。</div>
+    <div class="s"><span class="lab">答案</span><span class="ans">$(n-1)!\,\mathrm e^n$</span>（取具体解 $f=-\ln(C-x)$ 验 $n=1\sim6$ 与通式恒等）<br>
+      <span class="lab">解 · 归纳法（基 4.16 的孪生题）</span>反复求导，<b>每次把 $f'$ 换成 $\mathrm e^f$</b>：
+      $$f''=\mathrm e^ff'=\mathrm e^{2f},\quad f'''=\mathrm e^{2f}\cdot2f'=2!\,\mathrm e^{3f},\quad f^{(4)}=2\mathrm e^{3f}\cdot3f'=3!\,\mathrm e^{4f}$$
+      规律：$f^{(n)}=(n-1)!\,\mathrm e^{nf(x)}$。代 $f(2)=1$：$f^{(n)}(2)=(n-1)!\mathrm e^n$。<br>
+      <span class="lab">对照</span>基 4.16 是 $f'=f^2\Rightarrow f^{(n)}=n!f^{n+1}$，这里是 $f'=\mathrm e^f\Rightarrow f^{(n)}=(n-1)!\mathrm e^{nf}$。<b>阶乘差一位、指数差一位，别记混：数一数第一次求导后系数是 2 还是 1 就知道了。</b>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 4.6 ✔</span>设 $y=y(x)$ 由 $\sin(xy)=\ln\dfrac{x+\mathrm e}{y}+1$ 确定，求 $y'(0)$。</div>
+    <div class="s"><span class="lab">答案</span><span class="ans">$y'(0)=\mathrm e-\mathrm e^4$</span><br>
+      <span class="lab">第一步 · 先求 $y(0)$</span>令 $x=0$：$\sin0=0=\ln\dfrac{\mathrm e}{y(0)}+1\Rightarrow\ln\dfrac{\mathrm e}{y(0)}=-1\Rightarrow\dfrac{\mathrm e}{y(0)}=\mathrm e^{-1}\Rightarrow y(0)=\mathrm e^2$。<br>
+      <span class="lab">第二步 · 隐函数求导</span>右边先<b>拆对数</b>（$\ln\frac{x+\mathrm e}{y}=\ln(x+\mathrm e)-\ln y$）再求导，最省事：
+      $$\cos(xy)\cdot(y+xy')=\frac{1}{x+\mathrm e}-\frac{y'}{y}$$
+      代 $x=0,y=\mathrm e^2$：$1\cdot(\mathrm e^2+0)=\dfrac{1}{\mathrm e}-\dfrac{y'(0)}{\mathrm e^2}$，解得 $y'(0)=\mathrm e^2\left(\dfrac1{\mathrm e}-\mathrm e^2\right)=\mathrm e-\mathrm e^4$。<br>
+      <span class="lab">要害</span><b>隐函数题永远是"先定点，再求导，最后代入"三步。</b>$y(0)$ 没求出来，后面一步也走不动。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 4.7 ✔</span>已知 $g(x)$ 在 $x=0$ 处二阶可导，且 $g(0)=g'(0)=0$，设 $f(x)=\begin{cases}\dfrac{g(x)}{x},&x\ne0\\ 0,&x=0\end{cases}$，证明：$f(x)$ 的导函数在 $x=0$ 处连续。</div>
+    <div class="s"><span class="lab">结论</span><span class="ans">$f'(0)=\lim\limits_{x\to0}f'(x)=\dfrac12g''(0)$</span>（取 $g=cx^2+x^3$ 验证两式都等于 $\frac12g''(0)=c$）<br>
+      <span class="lab">第一步 · 用定义算 $f'(0)$</span>
+      $$f'(0)=\lim_{x\to0}\frac{\frac{g(x)}{x}-0}{x-0}=\lim_{x\to0}\frac{g(x)}{x^2}\xlongequal{\text{洛必达}}\lim_{x\to0}\frac{g'(x)}{2x}=\frac12\lim_{x\to0}\frac{g'(x)-g'(0)}{x-0}=\frac12g''(0)$$
+      <b>最后一步是关键</b>：只知道 $g$ 二阶可导（$g''$ 不一定连续），<b>不能再洛必达</b>，必须<b>退回二阶导的定义</b>。<br>
+      <span class="lab">第二步 · 算 $\lim\limits_{x\to0}f'(x)$</span>$x\ne0$ 时 $f'(x)=\dfrac{xg'(x)-g(x)}{x^2}$，拆成两个已知极限：
+      $$\lim_{x\to0}f'(x)=\lim_{x\to0}\frac{g'(x)}{x}-\lim_{x\to0}\frac{g(x)}{x^2}=g''(0)-\frac12g''(0)=\frac12g''(0)=f'(0)$$
+      （$\lim\frac{g'(x)}{x}=\lim\frac{g'(x)-g'(0)}{x-0}=g''(0)$，还是二阶导定义。）故 $f'$ 在 0 处连续。<br>
+      <span class="lab">跨章提醒</span>这题是<b>第 3 章「导数极限定理」的正面案例</b>：$\lim f'(x)$ 存在且等于 $f'(0)$。反面案例是 $x^2\sin\frac1x$（$f'(0)$ 存在但 $\lim f'$ 不存在）。<b>两个例子要成对记。</b>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 4.8 ✔</span>求 $f(x)=x^2\ln(1+x)$ 在 $x=0$ 处的 $n$ 阶导数 $f^{(n)}(0)\ (n\ge3)$。</div>
+    <div class="s"><span class="lab">答案</span><span class="ans">$f^{(n)}(0)=\dfrac{(-1)^{n-1}n!}{n-2}$</span>（$n=3\sim9$ 逐阶符号求导全吻合；两种写法的等价性也已验证）<br>
+      <span class="lab">法一 · 莱布尼茨</span>用 $[\ln(1+x)]^{(k)}=\dfrac{(-1)^{k-1}(k-1)!}{(1+x)^k}$，$v=x^2$ 只剩三项：
+      $$f^{(n)}(x)=x^2\frac{(-1)^{n-1}(n-1)!}{(1+x)^n}+2nx\frac{(-1)^{n-2}(n-2)!}{(1+x)^{n-1}}+n(n-1)\frac{(-1)^{n-3}(n-3)!}{(1+x)^{n-2}}$$
+      代 $x=0$，<b>前两项归零</b>：$f^{(n)}(0)=(-1)^{n-3}n(n-1)(n-3)!$。再化简：$n(n-1)(n-3)!=\dfrac{n!}{n-2}$（因 $(n-2)!=(n-2)(n-3)!$），且 $(-1)^{n-3}=(-1)^{n-1}$，得 $\dfrac{(-1)^{n-1}n!}{n-2}$。<br>
+      <span class="lab">法二 · 泰勒（更快）</span>
+      $$f(x)=x^2\sum_{m=1}^\infty\frac{(-1)^{m-1}}{m}x^m=\sum_{m=1}^\infty\frac{(-1)^{m-1}}{m}x^{m+2}=\sum_{n=3}^\infty\frac{(-1)^{n-3}}{n-2}x^n$$
+      比系数：$\dfrac{f^{(n)}(0)}{n!}=\dfrac{(-1)^{n-3}}{n-2}\Rightarrow f^{(n)}(0)=\dfrac{(-1)^{n-1}n!}{n-2}$。<br>
+      <span class="lab">与基 4.18 对照</span>基 4.18 是 $x^2\ln(1-x)$，答案 $-\frac{n!}{n-2}$（<b>符号恒负</b>）；本题是 $x^2\ln(1+x)$，答案 $\frac{(-1)^{n-1}n!}{n-2}$（<b>符号交替</b>）。<b>$1-x$ 与 $1+x$ 只差一个负号，答案的符号规律却完全不同——这是最容易张冠李戴的地方。</b>
+    </div>
+  </div>
+
+  <div class="outro">
+    <h3>收官 · 本章带走什么</h3>
+    <ol>
+      <li><b>一条主线</b>：一阶求导的九种场合（公式 / 四则 / 复合 / 分段 / 反函数 / 隐函数 / 参数方程 / 对数 / 幂指），本质上<b>只有一件事——把"谁是中间变量"想清楚，然后链式法则</b>。隐函数是"$y$ 是中间变量"，参数方程是"$t$ 是中间变量"，反函数是"$x$ 与 $y$ 互换角色"。</li>
+      <li><b>两条必须现推的公式</b>：反函数二阶导 $\varphi''=-\frac{f''}{(f')^3}$、参数方程二阶导 $\frac{w'(t)}{\varphi'(t)}$。<b>都不要死背，20 秒推一遍比记错强。</b></li>
+      <li><b>三条求高阶导的路</b>：归纳法（抽象关系式）/ 莱布尼茨（乘积 × 低次多项式）/ 泰勒（"亲戚" + 只问 $x=0$）。<b>选路比会算更重要。</b></li>
+      <li><b>一个大坑</b>：$\dfrac{\mathrm d^2y}{\mathrm dx^2}\ne\dfrac{\psi''(t)}{\varphi''(t)}$，<a href="#s7">§七 对拍台</a>已当场证伪。</li>
+      <li><b>一组白送分</b>：奇函数的偶阶导在 0 点为 0、偶函数的奇阶导在 0 点为 0；不对称就<b>创造对称</b>（强 4.6 减 $\frac12$）。</li>
+      <li><b>一句话</b>：基本求导公式表<b>倒着背就是第 8 章的积分公式表</b>——这一章多背一遍，第 8 章省一半力气。</li>
+    </ol>
+    <p><b>配套速查</b>：<a href="../公式大全_速查与秒杀.html">公式大全</a>（高阶导数与泰勒展开两张表在这里可以一起查） · <a href="../卡库_极限与无穷小工具箱.html">卡库·极限工具箱</a>（习 4.2 的第二重要极限、$\tan/\arcsin/\arctan$ 的三次项都在里面） · <a href="../直觉馆_图像与数感.html">直觉馆</a>。<b>上一章</b>：<a href="第03章_一元函数微分学的概念.html">第 3 章 一元函数微分学的概念</a>。<b>下一章</b>：第 5 章 一元函数微分学的应用（一）· 几何应用。</p>
+    <div class="dolinks">
+      <div class="t">去做题</div>
+      <a href="../../张宇系列_分章易识别版/高等数学/04_一元函数微分学的计算/高数_第04章_基础30讲.pdf">基础 30 讲</a>
+      <a href="../../张宇系列_分章易识别版/高等数学/04_一元函数微分学的计算/高数_第04章_强化18讲.pdf">强化 18 讲</a>
+      <a href="../../张宇系列_分章易识别版/高等数学/04_一元函数微分学的计算/高数_第04章_1000题_基础_题目.pdf">1000题·基础篇</a>
+      <a href="../../张宇系列_分章易识别版/高等数学/04_一元函数微分学的计算/高数_第04章_1000题_强化_题目.pdf">1000题·强化篇</a>
+      <div class="note">本章 1000 题体量是全书最小的（基础篇 1 页、强化篇 2 页），<b>建议一次刷完</b>，重点盯"参数方程二阶导 / $x^kf(x)$ 型高阶导 / 幂指函数"三类——它们的出错率远高于其他类型。</div>
+    </div>
+  </div>
+
+  <footer>
+    精读版 · 高数第 4 章　一元函数微分学的计算<br>
+    张宇《基础30讲·高数分册》p.119–138 + 《高数18讲》p.34–40，共 27 页　·　36 道例题与习题答案已全部程序复算
+  </footer>
+</div>
+
+<script>
+/* ===================== 模块 A：泰勒系数流水线 =====================
+   截断幂级数（Taylor series）算术：数组 a[i] 表示 x^i 的系数。
+   支持 加/减/数乘/乘/除/复合(exp, log(1+u), sin, cos, 1/(1-u))。
+   f^(n)(0) = n! * a[n]，精确到浮点，避免数值微分的舍入灾难。          */
+(function(){
+  const N = 11;                       // 展开到 x^10
+  const zero = ()=>new Array(N).fill(0);
+  const cst  = c=>{const a=zero();a[0]=c;return a;};
+  const X    = ()=>{const a=zero();a[1]=1;return a;};
+  const add  = (a,b)=>a.map((v,i)=>v+b[i]);
+  const smul = (a,c)=>a.map(v=>v*c);
+  const mul  = (a,b)=>{const r=zero();for(let i=0;i<N;i++){if(!a[i])continue;
+      for(let j=0;i+j<N;j++) r[i+j]+=a[i]*b[j];} return r;};
+  // 1/(1 - u)，要求 u[0] === 0
+  const geom = u=>{let r=cst(1),p=cst(1);for(let k=1;k<N;k++){p=mul(p,u);r=add(r,p);}return r;};
+  // exp(u)，要求 u[0] === 0
+  const expS = u=>{let r=cst(1),p=cst(1),f=1;for(let k=1;k<N;k++){p=mul(p,u);f*=k;r=add(r,smul(p,1/f));}return r;};
+  // ln(1+u)，要求 u[0] === 0
+  const log1p= u=>{let r=zero(),p=cst(1);for(let k=1;k<N;k++){p=mul(p,u);r=add(r,smul(p,(k%2?1:-1)/k));}return r;};
+  const sinS = u=>{let r=zero(),p=cst(1),f=1;for(let k=1;k<N;k++){p=mul(p,u);f*=k;
+      if(k%2===1) r=add(r,smul(p,(((k-1)/2)%2?-1:1)/f));} return r;};
+  const fact = n=>{let r=1;for(let i=2;i<=n;i++)r*=i;return r;};
+
+  // 每个条目：展开系数 a[]、书上通项（函数 n -> 值 或 null）、说明
+  const FN = [
+    { name:'基 4.15　$y=\\dfrac{1-x}{1+x}$',
+      ser:()=>add(smul(geom(smul(X(),-1)),2),cst(-1)),   // -1 + 2/(1+x)
+      gen:n=>Math.pow(-1,n)*2*fact(n), genTex:'(-1)^n\\,2\\cdot n!\\ (n\\ge1)', from:1,
+      note:'先化 $-1+\\dfrac{2}{1+x}$ 再套公式。常数项 $-1$ <b>只影响 $n=0$</b>（$f(0)=1\\ne2$），所以通式从 $n=1$ 起算。'},
+    { name:'基 4.17　$f=x\\mathrm e^x$',
+      ser:()=>mul(X(),expS(X())),
+      gen:n=>n, genTex:'(n+x)\\mathrm e^x\\big|_{x=0}=n',
+      note:'莱布尼茨只剩两项：$f^{(n)}=(n+x)\\mathrm e^x$，代 $0$ 得 $n$。'},
+    { name:'基 4.18　$f=x^2\\ln(1-x)$',
+      ser:()=>mul(mul(X(),X()),log1p(smul(X(),-1))),
+      gen:n=>n>=3? -fact(n)/(n-2) : (n===0?0:(n===1?0:(n===2?0:0))), genTex:'-\\dfrac{n!}{n-2}\\ (n\\ge3)',
+      note:'$x^kf(x)$ 型的样板：乘 $x^2$ ＝ 指数整体平移 2，重新编号即可。$n\\lt3$ 时系数为 0，通式不适用。', from:3},
+    { name:'习 4.8　$f=x^2\\ln(1+x)$',
+      ser:()=>mul(mul(X(),X()),log1p(X())),
+      gen:n=>n>=3? Math.pow(-1,n-1)*fact(n)/(n-2) : 0, genTex:'\\dfrac{(-1)^{n-1}n!}{n-2}\\ (n\\ge3)',
+      note:'与基 4.18 只差一个负号，但<b>符号规律完全不同</b>（这里交替，那里恒负）。', from:3},
+    { name:'基 4.19　$f=x^2 2^x$',
+      ser:()=>mul(mul(X(),X()),expS(smul(X(),Math.log(2)))),
+      gen:n=>n*(n-1)*Math.pow(Math.log(2),n-2), genTex:'n(n-1)(\\ln2)^{n-2}',
+      note:'$2^x$ 没有展开式 → 先变 $\\mathrm e^{x\\ln2}$（"变亲戚"）。$n=1$ 时值为 0。'},
+    { name:'强 4.1　$f=\\dfrac{x}{2x+1}$',
+      ser:()=>add(cst(0.5),smul(geom(smul(X(),-2)),-0.5)),
+      gen:n=>n>=1? Math.pow(-2,n-1)*fact(n) : 0, genTex:'(-2)^{n-1}n!',
+      note:'由 $x^2f\'=f^2,\\ f(1)=\\frac13$ 解出的具体函数。把 $-2x$ 整体当"狗"。', from:1},
+    { name:'强 4.4　$y=\\dfrac{x}{1+x^2}$（奇函数）',
+      ser:()=>mul(X(),geom(smul(mul(X(),X()),-1))),
+      gen:n=>n%2===1? Math.pow(-1,(n-1)/2)*fact(n) : 0, genTex:'\\text{奇阶}(-1)^{(n-1)/2}n!,\\ \\text{偶阶}0',
+      note:'奇函数 ⇒ <b>偶数阶导在 0 点全为 0</b>，表格里会看到整齐的一列零。'},
+    { name:'强 4.6　$f=\\dfrac{1}{2^x+1}$（减 $\\frac12$ 后为奇）',
+      ser:()=>smul(geom(smul(expS(smul(X(),Math.log(2))),-1).map((v,i)=>i===0?v+0:v)),1),
+      custom:true,
+      gen:null, genTex:'\\text{偶数阶}(n\\ge2)\\ \\text{全为}\\ 0',
+      note:'$g=f-\\frac12$ 是奇函数 ⇒ $g^{(2n)}(0)=0$ ⇒ $f^{(2n)}(0)=0\\ (n\\ge1)$。<b>创造对称</b>。'},
+    { name:'$\\sin x$（基 4.14 的验证）',
+      ser:()=>sinS(X()),
+      gen:n=>Math.sin(n*Math.PI/2), genTex:'\\sin\\left(0+n\\cdot\\frac\\pi2\\right)',
+      note:'$(\\sin x)^{(n)}=\\sin(x+n\\frac\\pi2)$，代 $x=0$ 就是 $\\sin\\frac{n\\pi}{2}$：$1,0,-1,0,\\cdots$'}
+  ];
+  // 强 4.6 单独构造： 1/(2^x+1) = (1/2)*1/(1+u/2)，u = 2^x-1 = e^{x ln2}-1
+  FN[7].ser = ()=>{
+    const u = add(expS(smul(X(),Math.log(2))),cst(-1));   // 2^x - 1, u[0]=0
+    return smul(geom(smul(u,-0.5)),0.5);                  // (1/2)/(1+u/2)
+  };
+
+  const sel=document.getElementById('fnSel'), tab=document.getElementById('taylorTab'),
+        vd=document.getElementById('taylorVerdict'), note=document.getElementById('fnNote');
+  if(!sel) return;
+  const LABEL=['基 4.15　y = (1−x)/(1+x)','基 4.17　f = x·eˣ','基 4.18　f = x²ln(1−x)',
+               '习 4.8　f = x²ln(1+x)','基 4.19　f = x²·2ˣ','强 4.1　f = x/(2x+1)',
+               '强 4.4　y = x/(1+x²)（奇函数）','强 4.6　f = 1/(2ˣ+1)（创造对称）','基 4.14　sin x'];
+  FN.forEach((o,i)=>{const op=document.createElement('option');op.value=i;
+    op.textContent=LABEL[i]; sel.appendChild(op);});
+
+  const fmt=v=>{
+    if(Math.abs(v)<1e-9) return '0';
+    if(Number.isInteger(v)&&Math.abs(v)<1e15) return String(v);
+    if(Math.abs(v)>=1e6||Math.abs(v)<1e-3) return v.toExponential(4);
+    return v.toFixed(6).replace(/0+$/,'').replace(/\.$/,'');
+  };
+
+  function run(){
+    const o=FN[+sel.value], a=o.ser();
+    const from = o.from||0;
+    let rows='<tr><th>n</th><th>系数 $a_n$</th><th>$n!\\,a_n=f^{(n)}(0)$</th><th>书上通项</th><th></th></tr>';
+    let allHit=true, checked=0;
+    for(let n=0;n<N;n++){
+      const val=fact(n)*a[n];
+      let gv=null, cls='', mark='';
+      if(o.gen && n>=from){ gv=o.gen(n); }
+      if(gv!==null){
+        const sc=Math.max(1,Math.abs(gv),Math.abs(val));
+        const hit=Math.abs(gv-val)/sc<1e-9;
+        checked++; if(!hit) allHit=false;
+        cls=hit?'hit':'miss'; mark=hit?'✓':'✗';
+      }
+      const zc=Math.abs(val)<1e-9?' class="zero"':'';
+      rows+=`<tr><td>${n}</td><td${zc}>${fmt(a[n])}</td><td${zc}>${fmt(val)}</td>`
+           +`<td>${gv===null?'—':fmt(gv)}</td><td class="${cls}">${mark}</td></tr>`;
+    }
+    tab.innerHTML=rows;
+    if(o.gen){
+      vd.className='verdict '+(allHit?'v-ok':'v-no');
+      vd.textContent=(allHit?'✔ 全部对上：':'✘ 有出入：')+`书上的通项公式与机器算出的幂级数系数，在 ${checked} 个 n 值上`
+        +(allHit?'逐一吻合 —— 这就是"展开式唯一性"的实证。':'出现分歧，需要复核。');
+    }else{
+      vd.className='verdict v-inf';
+      vd.textContent='ℹ 本条没有封闭通项，看第三列的零点分布即可（偶数阶全为 0）。';
+    }
+    note.innerHTML='<b>'+o.name+'</b>　'+o.note+'　通项：$'+o.genTex+'$';
+    if(window.renderMathInElement){
+      renderMathInElement(note,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});
+      renderMathInElement(tab,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});
+    }
+  }
+  sel.addEventListener('change',run);
+  run();
+})();
+
+/* ===================== 模块 B：参数方程二阶导对拍台 ===================== */
+(function(){
+  const CURVES=[
+    { name:'基 4.9　x=sin t, y=t sin t+cos t',
+      x:t=>Math.sin(t), y:t=>t*Math.sin(t)+Math.cos(t),
+      x1:t=>Math.cos(t), y1:t=>t*Math.cos(t),
+      x2:t=>-Math.sin(t), y2:t=>Math.cos(t)-t*Math.sin(t),
+      tmin:-1.2, tmax:1.2, tex:'\\begin{cases}x=\\sin t\\\\ y=t\\sin t+\\cos t\\end{cases}',
+      right:'\\frac{1}{\\cos t}' },
+    { name:'强 4.8　x=ln t, y=e^{t²}',
+      x:t=>Math.log(t), y:t=>Math.exp(t*t),
+      x1:t=>1/t, y1:t=>2*t*Math.exp(t*t),
+      x2:t=>-1/(t*t), y2:t=>(2+4*t*t)*Math.exp(t*t),
+      tmin:0.45, tmax:1.35, tex:'\\begin{cases}x=\\ln t\\\\ y=\\mathrm e^{t^2}\\end{cases}',
+      right:'4t^2(1+t^2)\\mathrm e^{t^2}' },
+    { name:'习 4.4　x=ln(1+t²)+1, y=2arctan t−(t+1)²',
+      x:t=>Math.log(1+t*t)+1, y:t=>2*Math.atan(t)-(t+1)*(t+1),
+      x1:t=>2*t/(1+t*t), y1:t=>2/(1+t*t)-2*(t+1),
+      x2:t=>2*(1-t*t)/Math.pow(1+t*t,2), y2:t=>-4*t/Math.pow(1+t*t,2)-2,
+      tmin:0.35, tmax:2.2, tex:'\\begin{cases}x=\\ln(1+t^2)+1\\\\ y=2\\arctan t-(t+1)^2\\end{cases}',
+      right:'-\\frac{(1+2t)(1+t^2)}{2t}' },
+    { name:'摆线　x=t−sin t, y=1−cos t',
+      x:t=>t-Math.sin(t), y:t=>1-Math.cos(t),
+      x1:t=>1-Math.cos(t), y1:t=>Math.sin(t),
+      x2:t=>Math.sin(t), y2:t=>Math.cos(t),
+      tmin:0.7, tmax:5.6, tex:'\\begin{cases}x=t-\\sin t\\\\ y=1-\\cos t\\end{cases}',
+      right:'-\\frac{1}{(1-\\cos t)^2}' },
+    { name:'星形线　x=cos³t, y=sin³t',
+      x:t=>Math.pow(Math.cos(t),3), y:t=>Math.pow(Math.sin(t),3),
+      x1:t=>-3*Math.cos(t)*Math.cos(t)*Math.sin(t), y1:t=>3*Math.sin(t)*Math.sin(t)*Math.cos(t),
+      x2:t=>3*Math.cos(t)*(2*Math.sin(t)*Math.sin(t)-Math.cos(t)*Math.cos(t)),
+      y2:t=>3*Math.sin(t)*(2*Math.cos(t)*Math.cos(t)-Math.sin(t)*Math.sin(t)),
+      tmin:0.35, tmax:1.22, tex:'\\begin{cases}x=\\cos^3t\\\\ y=\\sin^3t\\end{cases}',
+      right:'\\frac{1}{3\\cos^4t\\sin t}' },
+    { name:'椭圆　x=2cos t, y=sin t',
+      x:t=>2*Math.cos(t), y:t=>Math.sin(t),
+      x1:t=>-2*Math.sin(t), y1:t=>Math.cos(t),
+      x2:t=>-2*Math.cos(t), y2:t=>-Math.sin(t),
+      tmin:0.3, tmax:2.85, tex:'\\begin{cases}x=2\\cos t\\\\ y=\\sin t\\end{cases}',
+      right:'-\\frac{1}{4\\sin^3t}' }
+  ];
+  const sel=document.getElementById('curveSel'), sld=document.getElementById('tSlider'),
+        tv=document.getElementById('tVal'), tab=document.getElementById('cmpTab'),
+        vd=document.getElementById('cmpVerdict'), svg=document.getElementById('curveSvg'),
+        say=document.getElementById('cmpSay');
+  if(!sel) return;
+  CURVES.forEach((c,i)=>{const o=document.createElement('option');o.value=i;o.textContent=c.name;sel.appendChild(o);});
+
+  const fmt=v=>{
+    if(!isFinite(v)) return '—';
+    if(Math.abs(v)>=1e5||(Math.abs(v)<1e-4&&v!==0)) return v.toExponential(3);
+    return v.toFixed(5);
+  };
+  // 给定 x 目标值，在 t 区间内二分反解 t（曲线在所选区间上 x(t) 单调）
+  function solveT(c,xt,lo,hi){
+    const inc = c.x(hi)>c.x(lo);
+    for(let k=0;k<80;k++){
+      const m=(lo+hi)/2, v=c.x(m);
+      if((v<xt)===inc) lo=m; else hi=m;
+    }
+    return (lo+hi)/2;
+  }
+  function run(){
+    const c=CURVES[+sel.value];
+    const p=+sld.value/100, t0=c.tmin+(c.tmax-c.tmin)*p;
+    tv.textContent='t₀ = '+t0.toFixed(4);
+
+    // —— 正法：w(t)=y1/x1，d2 = w'(t)/x1(t)，w' 用解析式组合
+    const x1=c.x1(t0), y1=c.y1(t0), x2=c.x2(t0), y2=c.y2(t0);
+    const right=(y2*x1-y1*x2)/Math.pow(x1,3);
+    // —— 错法
+    const wrong=y2/x2;
+    // —— 数值裁判：三点二阶差商（在曲线上反解 t）
+    const x0=c.x(t0);
+    const h=Math.max(1e-3,Math.abs(c.x(c.tmax)-c.x(c.tmin))*2e-3);
+    let judge=NaN;
+    try{
+      const tp=solveT(c,x0+h,c.tmin-0.15,c.tmax+0.15), tm=solveT(c,x0-h,c.tmin-0.15,c.tmax+0.15);
+      judge=(c.y(tp)-2*c.y(t0)+c.y(tm))/(h*h);
+    }catch(e){}
+    const rel=(a,b)=>Math.abs(a-b)/Math.max(1,Math.abs(b));
+    const okRight=rel(right,judge)<2e-2, okWrong=rel(wrong,judge)<2e-2;
+
+    tab.innerHTML=
+      '<tr><th>算法</th><th>公式</th><th>在 t₀ 的值</th><th>与裁判比</th></tr>'+
+      `<tr><td>✅ 正法</td><td>[y″(t)x′(t)−y′(t)x″(t)]／x′(t)³</td><td>${fmt(right)}</td><td class="${okRight?'hit':'miss'}">${okRight?'✓ 吻合':'✗ 不符'}</td></tr>`+
+      `<tr><td>❌ 错法</td><td>y″(t)／x″(t)</td><td>${fmt(wrong)}</td><td class="${okWrong?'hit':'miss'}">${okWrong?'✓ 吻合':'✗ 不符'}</td></tr>`+
+      `<tr><td>⚖️ 数值裁判</td><td>[y(x₀+h)−2y(x₀)+y(x₀−h)]／h²</td><td>${fmt(judge)}</td><td>基准</td></tr>`;
+
+    if(okRight&&!okWrong){
+      vd.className='verdict v-ok';
+      vd.textContent='✔ 正法与数值裁判吻合；'+(isFinite(wrong)
+        ? '错法偏离 '+(Math.abs(wrong-judge)/Math.max(1e-9,Math.abs(judge))*100).toFixed(1)+'%'
+        : '错法此处 x″(t)=0，直接除零爆成 ∞')+' —— d²y/dx² ≠ ψ″/φ″ 再次被证伪。';
+    }else if(okRight&&okWrong){
+      vd.className='verdict v-inf';
+      vd.textContent='⚡ 巧合点：在这个 t₀ 附近两者恰好接近。挪动滑块就会立刻分开——巧合不是规律。';
+    }else{
+      vd.className='verdict v-inf';
+      vd.textContent='ℹ 此处 x′(t) 或 h 太小，数值差商误差偏大，换个 t₀ 再看（正法始终是对的那一个）。';
+    }
+    say.innerHTML='当前曲线 $'+c.tex+'$，正法的解析结果应为 $'+c.right+'$；'
+      +'一阶导 $\\dfrac{\\mathrm dy}{\\mathrm dx}='+fmt(y1/x1)+'$（即下图绿色切线的斜率），'
+      +'二阶导 '+(right>0?'<b>&gt;0 ⇒ 此处曲线凹（开口向上）</b>':'<b>&lt;0 ⇒ 此处曲线凸</b>')+'。';
+    if(window.renderMathInElement) renderMathInElement(say,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});
+
+    // —— 画图
+    const W=660,H=300,PAD=34;
+    let xs=[],ys=[];
+    for(let i=0;i<=400;i++){const t=c.tmin+(c.tmax-c.tmin)*i/400;xs.push(c.x(t));ys.push(c.y(t));}
+    const xmin=Math.min(...xs),xmax=Math.max(...xs),ymin=Math.min(...ys),ymax=Math.max(...ys);
+    const sx=v=>PAD+(v-xmin)/((xmax-xmin)||1)*(W-2*PAD);
+    const sy=v=>H-PAD-(v-ymin)/((ymax-ymin)||1)*(H-2*PAD);
+    let pts='';
+    for(let i=0;i<xs.length;i++) pts+=(pts?' ':'')+sx(xs[i]).toFixed(1)+','+sy(ys[i]).toFixed(1);
+    const cx=sx(c.x(t0)), cy=sy(c.y(t0));
+    // 切线：在 x 方向 ±（画布宽度的 18%），但纵向不许超出画面高度的 35%（陡峭处自动缩短）
+    const k=y1/x1;
+    let dx=(xmax-xmin)*0.18;
+    const dyCap=(ymax-ymin)*0.35;
+    if(isFinite(k)&&Math.abs(k*dx)>dyCap) dx=dyCap/Math.abs(k);
+    const tx1=sx(c.x(t0)-dx), ty1=sy(c.y(t0)-k*dx), tx2=sx(c.x(t0)+dx), ty2=sy(c.y(t0)+k*dx);
+    let s='';
+    s+=`<rect x="0" y="0" width="${W}" height="${H}" fill="none"/>`;
+    s+=`<polyline points="${pts}" fill="none" stroke="var(--accent)" stroke-width="2"/>`;
+    s+=`<line x1="${tx1.toFixed(1)}" y1="${ty1.toFixed(1)}" x2="${tx2.toFixed(1)}" y2="${ty2.toFixed(1)}" stroke="var(--green)" stroke-width="2" stroke-dasharray="6 4"/>`;
+    s+=`<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="5" fill="var(--red)"/>`;
+    s+=`<text x="${(cx+9).toFixed(1)}" y="${(cy-9).toFixed(1)}" font-size="11" fill="var(--muted)">t₀=${t0.toFixed(3)}</text>`;
+    s+=`<text x="${W-16}" y="${H-10}" font-size="10" fill="var(--muted)" text-anchor="end">曲线段 t∈[${c.tmin},${c.tmax}]</text>`;
+    s+=`<text x="16" y="18" font-size="10" fill="var(--muted)">${right>0?'d²y/dx² > 0：凹':'d²y/dx² < 0：凸'}</text>`;
+    svg.innerHTML=s;
+  }
+  sel.addEventListener('change',run);
+  sld.addEventListener('input',run);
+  run();
+})();
+</script>
+</body>
+</html>
