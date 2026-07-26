@@ -80,6 +80,19 @@ em{font-style:normal;background:var(--amber-soft);color:var(--amber);border-radi
 .eg .s .lab{font-size:.74rem;font-weight:700;color:var(--accent);margin-right:6px}
 .eg .ans{color:var(--green);font-weight:700}
 
+/* ===== 大题三层：💭思路(.think) → ✍️卷面(.paper) → 📌批注(.notekeep) =====
+   学习时的真实顺序是「想 → 写 → 校」，三层各管一段，不许互相混装：
+   .think    做题**前**看：审题信号→选路→关键决策。只讲"为什么往这边走",不出现具体计算结果。
+             卡壳时先看这层,看完自己动手,别直接翻卷面。
+   .paper    做完**对照**：只写考场上真要落笔的字,⛳ 标采分点。
+   .notekeep 写完**校对**：定理边界、扣分点、心算技巧、跨章联系。这些字考场上不要落笔。 */
+.think{background:var(--purple-soft);border-left:4px solid var(--purple);border-radius:0 10px 10px 0;
+  padding:11px 15px;margin:12px 0;font-size:.87rem;line-height:1.9}
+.think .th{display:block;font-size:.72rem;font-weight:700;letter-spacing:.06em;color:var(--purple);margin-bottom:5px}
+.think ol{margin:4px 0 0 20px}
+.think li{margin:4px 0}
+.think b{color:var(--ink)}
+
 /* ===== 考场卷面（.paper）：可直接照抄的完整解答，不含任何教学口语 =====
    规矩：正文只写"考场上真要落笔的字"；解释、动机、扣分点一律放到卡片下方的批注区。
    ⛳ 每个采分点用 .pt 标出（阅卷老师的给分锚点），考前可只扫 .pt。            */
