@@ -80,6 +80,24 @@ em{font-style:normal;background:var(--amber-soft);color:var(--amber);border-radi
 .eg .s .lab{font-size:.74rem;font-weight:700;color:var(--accent);margin-right:6px}
 .eg .ans{color:var(--green);font-weight:700}
 
+/* ===== 考场卷面（.paper）：可直接照抄的完整解答，不含任何教学口语 =====
+   规矩：正文只写"考场上真要落笔的字"；解释、动机、扣分点一律放到卡片下方的批注区。
+   ⛳ 每个采分点用 .pt 标出（阅卷老师的给分锚点），考前可只扫 .pt。            */
+.paper{background:var(--card);border:1px solid var(--line);border-left:3px double var(--accent);
+  border-radius:0 10px 10px 0;padding:12px 16px 14px;margin:12px 0;font-size:.9rem;line-height:1.95}
+.paper .phead{font-size:.72rem;font-weight:700;letter-spacing:.08em;color:var(--accent);
+  border-bottom:1px dashed var(--line);padding-bottom:5px;margin-bottom:9px}
+.paper .phead .score{float:right;font-weight:400;color:var(--muted);letter-spacing:0}
+.paper .step{margin:7px 0}
+.paper .step > .k{font-weight:700;color:var(--ink);margin-right:4px}
+.paper .pt{display:inline-block;font-size:.68rem;font-weight:700;color:var(--green);
+  background:var(--green-soft);border-radius:4px;padding:0 6px;margin-left:6px;vertical-align:2px;white-space:nowrap}
+.paper .fin{border-top:1px dashed var(--line);margin-top:10px;padding-top:8px;font-weight:700}
+.notekeep{background:var(--bg);border-radius:8px;padding:9px 13px;margin:10px 0 2px;font-size:.85rem;line-height:1.85}
+.notekeep .nh{font-size:.72rem;font-weight:700;letter-spacing:.06em;color:var(--muted);
+  display:block;margin-bottom:4px}
+.notekeep .dock{color:var(--red);font-weight:700}
+
 .layer{display:inline-block;font-size:.68rem;font-weight:700;border-radius:5px;padding:1px 7px;margin-right:7px;vertical-align:2px}
 .L-base{background:var(--accent-soft);color:var(--accent)}
 .L-str{background:var(--green-soft);color:var(--green)}

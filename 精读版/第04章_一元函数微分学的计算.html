@@ -67,7 +67,8 @@ table.dense td{padding:5px 9px}
     <span class="swatch" style="background:var(--amber)"></span><b style="color:var(--amber)">必记</b>、
     <span class="swatch" style="background:var(--red)"></span><b style="color:var(--red)">陷阱</b>、
     <span class="swatch" style="background:var(--green)"></span><b style="color:var(--green)">强化题型</b>。<br>
-    紫色 <b>例题</b> 卡里，<b>基</b>4.x = 基础30讲例题、<b>强</b>4.x = 高数18讲例题（两本各自编号，别混）。<b>每题都标 ✔</b> = 答案已被我用程序独立算过一遍，不是照抄扫描件。
+    紫色 <b>例题</b> 卡里，<b>基</b>4.x = 基础30讲例题、<b>强</b>4.x = 高数18讲例题（两本各自编号，别混）。<b>每题都标 ✔</b> = 答案已被我用程序独立算过一遍，不是照抄扫描件。<br>
+    <b>📝 需要写过程的大题另加两层</b>：<b>「✍️ 考场卷面」</b>＝<b>可以照着抄上考场的完整解答</b>，只写真要落笔的字，每个采分点标 <span class="pt" style="margin-left:0">⛳</span>；下面的<b>「批注」</b>＝为什么这么写、哪里会被扣分，<b>那些话考场上不要写</b>。本章有两张（<a href="#s5">强 4.7</a>、<a href="#s14">习 4.7</a>），第 5 章起全面采用。
   </div>
 
   <nav class="toc">
@@ -362,15 +363,36 @@ table.dense td{padding:5px 9px}
   <div class="eg">
     <div class="q"><span class="no">强 4.7 ✔</span>已知可导函数 $y=y(x)$ 满足 $a\mathrm e^x+y^2+y-\ln(1+x)\cos y+b=0$，且 $y(0)=0$，$y'(0)=0$。<br>(1) 求 $a,b$；(2) 判断 $x=0$ 是否为 $y(x)$ 的极值点。</div>
     <div class="s">
-      <span class="lab">答案</span><span class="ans">(1) $a=1,\ b=-1$；(2) $y''(0)=-2\lt0$，$x=0$ 是<b>极大值点</b></span>（书上给的整条二阶导表达式我用 sympy 逐项对拍，完全一致）<br>
-      <span class="lab">(1)</span>代 $x=0,y=0$ 进原方程：$a\cdot1+0+0-0+b=0\Rightarrow a+b=0$。再对 $x$ 求导：
-      $$a\mathrm e^x+2yy'+y'-\frac{\cos y}{1+x}+\ln(1+x)y'\sin y=0$$
-      代 $x=0,y=0,y'=0$：$a-1=0\Rightarrow \boxed{a=1,\ b=-1}$。<br>
-      <span class="lab">(2)</span>把上式再对 $x$ 求一次导（$a=1$）：
-      $$\mathrm e^x+2(y')^2+2yy''+y''+\frac{\cos y}{(1+x)^2}+\frac{2y'\sin y}{1+x}+\ln(1+x)(y')^2\cos y+\ln(1+x)y''\sin y=0$$
-      代 $x=0,y=0,y'=0$，八项里活下来的只有三项：$1+y''+1=0\Rightarrow y''(0)=-2$。<br>
-      由<b>极值第二充分条件</b>（$y'(0)=0$ 且 $y''(0)\lt0$）知 $x=0$ 是极大值点。<br>
-      <span class="lab">提炼</span>这题把<b>隐函数二阶导</b>和<b>第 5 章极值判别</b>缝在一起，是 18 讲典型的"综合型"。<b>技巧：代点时先扫一眼哪些项带 $\ln(1+x)$ 或 $\sin y$ 因子——在 $x=0,y=0$ 处它们全归零，八项瞬间只剩三项，不必硬算。</b>
+      <span class="lab">答案</span><span class="ans">(1) $a=1,\ b=-1$；(2) $y''(0)=-2\lt0$，$x=0$ 是<b>极大值点</b></span>（书上给的整条二阶导表达式我用 sympy 逐项对拍，完全一致）
+
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面 · 照这个写<span class="score">解答题 10 分参考｜⛳ = 采分点</span></div>
+        <div class="step"><span class="k">解</span>（1）在所给方程中令 $x=0$，由 $y(0)=0$ 得
+        $$a+b=0.\tag{1}$$
+        <span class="pt">⛳ 定点 1 分</span></div>
+        <div class="step">将方程两端对 $x$ 求导（其中 $y=y(x)$），得
+        $$a\mathrm e^x+2yy'+y'-\frac{\cos y}{1+x}+\ln(1+x)y'\sin y=0.\tag{2}$$
+        <span class="pt">⛳ 一阶求导正确 2 分</span></div>
+        <div class="step">以 $x=0,\ y(0)=0,\ y'(0)=0$ 代入 (2)，得 $a-1=0$，故 $a=1$；代回 (1) 得 $b=-1$。
+        <span class="pt">⛳ 结论 2 分</span></div>
+        <div class="step"><span class="k">（2）</span>将 (2) 式两端再对 $x$ 求导，得
+        $$\mathrm e^x+2(y')^2+2yy''+y''+\frac{\cos y}{(1+x)^2}+\frac{2y'\sin y}{1+x}+\ln(1+x)(y')^2\cos y+\ln(1+x)y''\sin y=0.\tag{3}$$
+        <span class="pt">⛳ 二阶求导正确 3 分</span></div>
+        <div class="step">以 $x=0,\ y(0)=0,\ y'(0)=0$ 代入 (3)，得 $1+y''(0)+1=0$，即
+        $$y''(0)=-2.$$
+        <span class="pt">⛳ 求得 $y''(0)$ 1 分</span></div>
+        <div class="fin">因 $y'(0)=0$，$y''(0)=-2\lt0$，由极值的第二充分条件知，$x=0$ 是 $y(x)$ 的<b>极大值点</b>。<span class="pt">⛳ 引定理 + 结论 1 分</span></div>
+      </div>
+
+      <div class="notekeep"><span class="nh">批注 · 为什么这么写（这些字考场上不要落笔）</span>
+        <b>① 先令 $x=0$ 再求导，顺序不能反。</b>$a+b=0$ 是不用动脑的一分，先落袋。<br>
+        <b>② 求导时每个含 $y$ 的项都要拖一个 $y'$</b>——$y^2\to2yy'$、$\cos y\to-y'\sin y$。漏拖是本题最常见的失分。<br>
+        <b>③ 给中间结果编号 (1)(2)(3)，后文写"将 (2) 式再对 $x$ 求导"。</b>阅卷老师是<b>找采分点</b>而不是通读，编号能让他一眼定位；不编号就得在一大片式子里找，容易漏给分。<br>
+        <b>④ <span class="dock">扣分点</span>：只算出 $y''(0)=-2$ 就写"所以是极大值点"</b>，不写"由极值的第二充分条件"，判断无依据，这 1 分会被扣。<b>凡是"判断/证明"性质的结论，必须把所依据的定理名字写出来。</b><br>
+        <b>⑤ <span class="dock">扣分点</span>：把 $y''(0)\lt0$ 写成"$y''\lt0$"</b>——第二充分条件要的是<b>驻点处</b>的二阶导符号，不是整个区间。<br>
+        <b>⑥ 代点时的省力技巧（心里做，卷面不写）</b>：先扫一眼哪些项带 $\ln(1+x)$ 或 $\sin y$ 因子——在 $x=0,y=0$ 处它们全归零，(3) 式八项瞬间只剩三项，不必硬算。<br>
+        <b>⑦ 题型定位</b>：隐函数二阶导 ✕ 第 5 章极值判别，是《18讲》典型的跨章"综合型"。
+      </div>
     </div>
   </div>
 
@@ -858,14 +880,35 @@ table.dense td{padding:5px 9px}
 
   <div class="eg">
     <div class="q"><span class="no">习 4.7 ✔</span>已知 $g(x)$ 在 $x=0$ 处二阶可导，且 $g(0)=g'(0)=0$，设 $f(x)=\begin{cases}\dfrac{g(x)}{x},&x\ne0\\ 0,&x=0\end{cases}$，证明：$f(x)$ 的导函数在 $x=0$ 处连续。</div>
-    <div class="s"><span class="lab">结论</span><span class="ans">$f'(0)=\lim\limits_{x\to0}f'(x)=\dfrac12g''(0)$</span>（取 $g=cx^2+x^3$ 验证两式都等于 $\frac12g''(0)=c$）<br>
-      <span class="lab">第一步 · 用定义算 $f'(0)$</span>
-      $$f'(0)=\lim_{x\to0}\frac{\frac{g(x)}{x}-0}{x-0}=\lim_{x\to0}\frac{g(x)}{x^2}\xlongequal{\text{洛必达}}\lim_{x\to0}\frac{g'(x)}{2x}=\frac12\lim_{x\to0}\frac{g'(x)-g'(0)}{x-0}=\frac12g''(0)$$
-      <b>最后一步是关键</b>：只知道 $g$ 二阶可导（$g''$ 不一定连续），<b>不能再洛必达</b>，必须<b>退回二阶导的定义</b>。<br>
-      <span class="lab">第二步 · 算 $\lim\limits_{x\to0}f'(x)$</span>$x\ne0$ 时 $f'(x)=\dfrac{xg'(x)-g(x)}{x^2}$，拆成两个已知极限：
-      $$\lim_{x\to0}f'(x)=\lim_{x\to0}\frac{g'(x)}{x}-\lim_{x\to0}\frac{g(x)}{x^2}=g''(0)-\frac12g''(0)=\frac12g''(0)=f'(0)$$
-      （$\lim\frac{g'(x)}{x}=\lim\frac{g'(x)-g'(0)}{x-0}=g''(0)$，还是二阶导定义。）故 $f'$ 在 0 处连续。<br>
-      <span class="lab">跨章提醒</span>这题是<b>第 3 章「导数极限定理」的正面案例</b>：$\lim f'(x)$ 存在且等于 $f'(0)$。反面案例是 $x^2\sin\frac1x$（$f'(0)$ 存在但 $\lim f'$ 不存在）。<b>两个例子要成对记。</b>
+    <div class="s"><span class="lab">结论</span><span class="ans">$f'(0)=\lim\limits_{x\to0}f'(x)=\dfrac12g''(0)$</span>（取 $g=cx^2+x^3$ 验证两式都等于 $\frac12g''(0)=c$）
+
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面 · 照这个写<span class="score">证明题 10 分参考｜⛳ = 采分点</span></div>
+        <div class="step"><span class="k">证</span>　<b>(i) 先证 $f'(0)$ 存在并求其值。</b><br>
+        由导数定义及 $f(0)=0$，得
+        $$f'(0)=\lim_{x\to0}\frac{f(x)-f(0)}{x-0}=\lim_{x\to0}\frac{g(x)}{x^2}.$$
+        <span class="pt">⛳ 分段点回定义 2 分</span></div>
+        <div class="step">因 $g(0)=g'(0)=0$，上式为 $\dfrac00$ 型，由洛必达法则及二阶导数的定义，
+        $$\lim_{x\to0}\frac{g(x)}{x^2}=\lim_{x\to0}\frac{g'(x)}{2x}=\frac12\lim_{x\to0}\frac{g'(x)-g'(0)}{x-0}=\frac12g''(0),$$
+        故 $f'(0)=\dfrac12g''(0)$ 存在。<span class="pt">⛳ 3 分</span></div>
+        <div class="step"><b>(ii) 再求 $\lim\limits_{x\to0}f'(x)$。</b><br>
+        当 $x\ne0$ 时，由商的求导法则
+        $$f'(x)=\frac{xg'(x)-g(x)}{x^2}=\frac{g'(x)}{x}-\frac{g(x)}{x^2}.$$
+        <span class="pt">⛳ 求出 $x\ne0$ 处的 $f'$ 2 分</span></div>
+        <div class="step">由二阶导数的定义，$\lim\limits_{x\to0}\dfrac{g'(x)}{x}=\lim\limits_{x\to0}\dfrac{g'(x)-g'(0)}{x-0}=g''(0)$；又由 (i) 知 $\lim\limits_{x\to0}\dfrac{g(x)}{x^2}=\dfrac12g''(0)$。于是
+        $$\lim_{x\to0}f'(x)=g''(0)-\frac12g''(0)=\frac12g''(0).$$
+        <span class="pt">⛳ 2 分</span></div>
+        <div class="fin">(iii) 由 (i)(ii) 得 $\lim\limits_{x\to0}f'(x)=\dfrac12g''(0)=f'(0)$，故导函数 $f'(x)$ 在 $x=0$ 处连续。<b>证毕。</b><span class="pt">⛳ 回扣定义收口 1 分</span></div>
+      </div>
+
+      <div class="notekeep"><span class="nh">批注 · 为什么这么写（这些字考场上不要落笔）</span>
+        <b>① 证明题必须先声明"要证什么"再动手。</b>本题证"导函数连续"，按定义就是要凑齐三样：$f'(0)$ 存在、$\lim\limits_{x\to0}f'(x)$ 存在、两者相等。所以卷面直接分 (i)(ii)(iii) 三段，<b>每段开头一句话点明这一段在干什么</b>——阅卷老师顺着这三段找分，一找一个准。<br>
+        <b>② <span class="dock">扣分点（本题最大的坑）</span>：$\lim\limits_{x\to0}\dfrac{g'(x)}{2x}$ 这一步不能再用洛必达。</b>题设只给"$g$ 在 $x=0$ <b>处</b>二阶可导"，$g''$ 在 $0$ 的邻域内不一定存在、更不一定连续，洛必达的前提（分子分母在去心邻域内可导）不成立。<b>必须退回二阶导数的定义</b>。卷面上写"由二阶导数的定义"这七个字就是在向阅卷老师声明你知道这条边界——这是有效采分动作。<br>
+        <b>③ 同理，第一次用洛必达是合法的</b>：$g$ 一阶可导是在邻域内给的（否则 $g'(0)$ 都无从谈起）。<b>一次洛必达合法、第二次非法</b>，这个"只能洛一次"的结构是命题人反复用的机关。<br>
+        <b>④ <span class="dock">扣分点</span>：$x\ne0$ 时的 $f'(x)$ 与 $f'(0)$ 必须<b>分开求</b></b>。$f$ 是分段函数，$x=0$ 是分段点，那里只能回定义；把 $\frac{xg'-g}{x^2}$ 直接代 $x=0$ 是零分动作。<br>
+        <b>⑤ 结尾要"回扣"。</b>算完两个极限别停笔，补一句"故 $f'(x)$ 在 $x=0$ 处连续"把结论说回题目问的话。<b>凡证明题，最后一行必须是题干要证的那句话原样出现</b>，这一分白送不要。<br>
+        <b>⑥ 跨章提醒</b>：这题是第 3 章<b>导数极限定理</b>的正面案例（$\lim f'$ 存在且 $=f'(0)$）；反面案例是 $x^2\sin\frac1x$（$f'(0)$ 存在但 $\lim f'$ 不存在）。<b>两个例子成对记。</b>
+      </div>
     </div>
   </div>
 
