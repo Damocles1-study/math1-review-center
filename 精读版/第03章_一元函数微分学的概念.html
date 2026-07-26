@@ -52,7 +52,7 @@
   <a class="back" href="../index.html">← 返回 数学一复盘中心</a>
   <header>
     <h1>精读版 · 高数第 3 章　一元函数微分学的概念</h1>
-    <div class="sub">融合张宇《基础30讲·高数分册》第 3 讲 + 《高数18讲》第 3 讲 · 以《18讲》的<b>三向解题法五支线</b>为骨架 · <span class="layer L-base">基础</span> 打地基、<span class="layer L-str">强化</span> 上题型 · <b>基础 11 例 + 3 注例 + 1 一题一练 + 9 习题 + 强化 8 例，共 32 道，答案全部用 sympy 符号复算 / 数值对拍，零分歧</b> · 本章交付两个交互模块：<b>微观放大镜</b>（把张宇的「无牵无挂 / 相依相偎 / 靠得更近」做成可缩放的点阵）与 <b>左右导数对拍台</b>（10 个经典函数现场算左右差商）。</div>
+    <div class="sub">融合张宇《基础30讲·高数分册》第 3 讲 + 《高数18讲》第 3 讲 · 以《18讲》的<b>三向解题法五支线</b>为骨架 · <span class="layer L-base">基础</span> 打地基、<span class="layer L-str">强化</span> 上题型 · <b>基础 11 例 + 3 注例 + 1 一题一练 + 9 习题 + 强化 8 例，共 32 道，答案全部用 sympy 符号复算 / 数值对拍，零分歧</b> · 本章交付两个交互模块：<b>微观放大镜</b>（把张宇的「无牵无挂 / 相依相偎 / 靠得更近」做成可缩放的点阵）与 <b>左右导数对拍台</b>（10 个经典函数现场算左右差商）· <b>六道需要写过程的大题已按「💭思路 → ✍️考场卷面 → 📌批注」三层重排，卷面可直接照抄上考场，采分点逐个标 ⛳。</b></div>
   </header>
 
   <div class="legend">
@@ -63,7 +63,12 @@
     <span class="swatch" style="background:var(--amber)"></span><b style="color:var(--amber)">必记</b>、
     <span class="swatch" style="background:var(--red)"></span><b style="color:var(--red)">陷阱</b>、
     <span class="swatch" style="background:var(--green)"></span><b style="color:var(--green)">强化题型</b>。<br>
-    紫色 <b>例题</b> 卡里，<b>基</b>3.x = 基础30讲例题、<b>强</b>3.x = 高数18讲例题（两本各自编号，别混）。<b>每题都标 ✔</b> = 答案已被我用程序独立算过一遍，不是照抄扫描件。
+    紫色 <b>例题</b> 卡里，<b>基</b>3.x = 基础30讲例题、<b>强</b>3.x = 高数18讲例题（两本各自编号，别混）。<b>每题都标 ✔</b> = 答案已被我用程序独立算过一遍，不是照抄扫描件。<br>
+    <b>📝 需要写过程的大题按「想 → 写 → 校」分三层</b>，对应做题的三个动作，<b>请按这个顺序用</b>：<br>
+    <b>💭 思路</b>＝<u>动手前</u>看：审题信号、为什么往这条路走、卡在哪里怎么破。<b>看完这层就合上页面自己写，别直接翻卷面。</b><br>
+    <b>✍️ 考场卷面</b>＝<u>写完对照</u>：可以照着抄上考场的完整解答，只写真要落笔的字，每个采分点标 <span class="pt" style="margin-left:0">⛳</span> 及分值。<br>
+    <b>📌 批注</b>＝<u>对照完校对</u>：定理适用边界、<span class="dock">扣分点</span>、提速技巧、跨章联系。<b>这层的话考场上一个字都不要写。</b><br>
+    选择填空题不用卷面层（考场上本来就不写过程），仍是「答案 → 分析 → 要害/法一法二」教学式排版——<b>那正是选填题该有的产出：快速判断的思考资源。</b>本章大题<b>六张</b>：<a href="#s6">基 3.9</a>（证明·极值第二充分条件）、<a href="#s9">习 3.7</a>（证明·导数极限定理）、<a href="#s10">强 3.5</a>（计算·分段点回定义）、<a href="#s11">强 3.8</a>（综合·变限积分）、<a href="#s12">习 3.8</a>（计算·定常数）、<a href="#s12">习 3.9</a>（证明·泰勒反推可导）。
   </div>
 
   <nav class="toc">
@@ -518,12 +523,49 @@
 
   <div class="eg">
     <div class="q"><span class="no">基 3.9 ✔</span>设 $f(x)$ 在 $x=x_0$ 处二阶可导，且 $f'(x_0)=0,\ f''(x_0)\ne0$。证明：(1) 若 $f''(x_0)\lt0$，则 $f$ 在 $x_0$ 取得极大值；(2) 若 $f''(x_0)\gt0$，则取得极小值。</div>
-    <div class="s">
-      <span class="lab">来源</span>这就是<b>极值第二充分条件</b>的证明，考纲内可考证明题。核心工具是<b>函数极限的局部保号性</b>：
-      $$\lim_{x\to x_0}f(x)=A\lt0\ \Rightarrow\ f(x)\lt0\ \big(x\in\mathring U(x_0,\delta)\big);\qquad A\gt0\ \Rightarrow\ f(x)\gt0$$
-      <span class="lab">证 (1)</span>由二阶导数定义 $f''(x_0)=\lim\limits_{x\to x_0}\dfrac{f'(x)-f'(x_0)}{x-x_0}\lt0$，由局部保号性，存在去心邻域 $\mathring U(x_0,\delta)$ 使 $\dfrac{f'(x)-f'(x_0)}{x-x_0}\lt0$。因 $f'(x_0)=0$，上式即 $\dfrac{f'(x)}{x-x_0}\lt0$，故 <b>$f'(x)$ 与 $x-x_0$ 符号相反</b>：$x\lt x_0$ 时 $f'\gt0$，$x\gt x_0$ 时 $f'\lt0$（左增右减）。由<b>极值第一充分条件</b>，$f$ 在 $x_0$ 取极大值。<br>
-      <span class="lab">证 (2)</span>同理 $\dfrac{f'(x)}{x-x_0}\gt0$，$f'(x)$ 与 $x-x_0$ <b>符号相同</b>（左减右增），取极小值。<br>
-      <span class="lab">套路</span><b>"二阶导的符号 → 差商的符号 → 一阶导的符号 → 单调性"</b>，四步链条一气呵成，全程只用定义 + 局部保号性，不需要泰勒。
+    <div class="s"><span class="lab">来源</span>这就是<b>极值第二充分条件</b>的证明，考纲内可考证明题。
+
+      <div class="think"><span class="th">💭 思路 · 拿到题先想什么（卡壳时看这层，看完自己动手，别直接翻卷面）</span>
+        <ol>
+          <li>要证的是<b>极值</b>，而手上只有<b>一点处</b>的两个导数值。先问自己：我认识的极值判据有哪些？<b>第一充分条件</b>（$f'$ 在 $x_0$ 两侧变号）与<b>第二充分条件</b>（就是本题要证的东西，不能自己引用自己）。所以<b>唯一的出口是把结论化归到第一充分条件</b>——目标随之明确：<b>证出 $f'(x)$ 在 $x_0$ 两侧异号</b>。</li>
+          <li>怎么从"$f''(x_0)\lt0$"这一个数，推出"$f'$ 在<b>一整片邻域</b>上的符号"？把一点的信息扩散成一片信息的工具只有一个：<b>局部保号性</b>（极限值的符号会传染给去心邻域内的函数值）。所以第一步一定是<b>把 $f''(x_0)$ 写回极限式</b>，让它变成一个"某某极限 $\lt0$"的样子。</li>
+          <li>写回哪个极限式？题设是"在 $x_0$ <b>处</b>二阶可导"——<b>这个条件抠得很紧</b>：没说邻域内二阶可导，所以 $f''(x)$ 作为函数根本不一定存在，凡是要对 $f''$ 做文章的路（比如对 $f'$ 用拉格朗日、或者泰勒展开到二阶余项）<b>全部走不通</b>。能用的只有<b>二阶导数在一点的定义式</b> $f''(x_0)=\lim\limits_{x\to x_0}\frac{f'(x)-f'(x_0)}{x-x_0}$。</li>
+          <li>保号性给出的是<b>整个差商</b> $\frac{f'(x)-f'(x_0)}{x-x_0}$ 的符号。要把它变成 $f'(x)$ 的符号，就得处理掉分子里的 $f'(x_0)$ 和分母里的 $x-x_0$——注意题设白送了 <b>$f'(x_0)=0$</b>（分子直接塌成 $f'(x)$），剩下的分母 $x-x_0$ 则<b>靠分左右两侧讨论来定号</b>。到这里链条就闭合了。</li>
+          <li>(2) 与 (1) 的结构完全对称，<b>不要重写一遍</b>，卷面上写"同理"并只列出变号方向即可，把篇幅留给 (1)。</li>
+        </ol>
+      </div>
+
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面 · 照这个写<span class="score">证明题 10 分参考｜⛳ = 采分点</span></div>
+        <div class="step"><span class="k">证</span>　<b>(1) 设 $f''(x_0)\lt0$。</b><br>
+        因 $f$ 在 $x=x_0$ 处二阶可导，由二阶导数的定义
+        $$f''(x_0)=\lim_{x\to x_0}\frac{f'(x)-f'(x_0)}{x-x_0}\lt0.\tag{1}$$
+        <span class="pt">⛳ 二阶导写回定义式 2 分</span></div>
+        <div class="step">由<b>函数极限的局部保号性</b>，存在 $\delta\gt0$，当 $x\in\mathring U(x_0,\delta)$ 时
+        $$\frac{f'(x)-f'(x_0)}{x-x_0}\lt0.\tag{2}$$
+        <span class="pt">⛳ 点名局部保号性 2 分</span></div>
+        <div class="step">又已知 $f'(x_0)=0$，故 (2) 式即
+        $$\frac{f'(x)}{x-x_0}\lt0,\qquad x\in\mathring U(x_0,\delta).\tag{3}$$
+        <span class="pt">⛳ 代入 $f'(x_0)=0$ 化简 1 分</span></div>
+        <div class="step">由 (3) 式知 $f'(x)$ 与 $x-x_0$ <b>异号</b>，即
+        $$x\in(x_0-\delta,\ x_0)\ \text{时}\ f'(x)\gt0;\qquad x\in(x_0,\ x_0+\delta)\ \text{时}\ f'(x)\lt0.$$
+        <span class="pt">⛳ 分左右两侧定出 $f'$ 的符号 2 分</span></div>
+        <div class="step">于是 $f(x)$ 在 $(x_0-\delta,x_0)$ 内单调增加、在 $(x_0,x_0+\delta)$ 内单调减少。由<b>极值的第一充分条件</b>，$f(x)$ 在点 $x_0$ 处取得极大值。<span class="pt">⛳ 点名第一充分条件收口 1 分</span></div>
+        <div class="step"><b>(2) 设 $f''(x_0)\gt0$。</b><br>
+        同理，由二阶导数的定义与局部保号性，存在 $\delta\gt0$，当 $x\in\mathring U(x_0,\delta)$ 时 $\dfrac{f'(x)}{x-x_0}\gt0$，即 $f'(x)$ 与 $x-x_0$ <b>同号</b>：
+        $$x\in(x_0-\delta,\ x_0)\ \text{时}\ f'(x)\lt0;\qquad x\in(x_0,\ x_0+\delta)\ \text{时}\ f'(x)\gt0.$$
+        故 $f(x)$ 在 $x_0$ 左侧单调减少、右侧单调增加。<span class="pt">⛳ 2 分</span></div>
+        <div class="fin">由极值的第一充分条件，$f(x)$ 在点 $x_0$ 处取得极小值。<b>证毕。</b></div>
+      </div>
+
+      <div class="notekeep"><span class="nh">📌 批注 · 写完拿这层校对（这些字考场上不要落笔）</span>
+        <b>① <span class="dock">扣分点（本题最大的坑）</span>：不能对 $f'$ 用拉格朗日中值定理，也不能用带二阶皮亚诺余项的泰勒公式去"直接"下结论。</b>题设只给"在 $x_0$ <b>处</b>二阶可导"，$f''$ 在邻域内不一定存在，中值定理的前提（$f'$ 在邻域内可导）不成立。卷面上写"<b>由二阶导数的定义</b>"这七个字，就是在向阅卷老师声明你知道这条边界——<b>这是有效采分动作</b>，和 <a href="#s12">习 3.7</a> 里"只能洛一次"是同一类机关。<br>
+        <b>② 三个式子必须编号。</b>(1)(2)(3) 三步是三个独立采分点，写成一大坨等号串，阅卷老师找不到"用了保号性"和"代入了 $f'(x_0)=0$"这两个动作，就会漏给。<br>
+        <b>③ <span class="dock">扣分点</span>：$\delta$ 要"存在"出来，不能凭空出现。</b>写"存在 $\delta\gt0$，当 $x\in\mathring U(x_0,\delta)$ 时"是保号性的标准表述；直接写"当 $x$ 在 $x_0$ 附近时"属于口语，不给分。<br>
+        <b>④ 结尾要点名"第一充分条件"。</b>从"左增右减"跳到"取极大值"中间隔着一条定理，判断类结论不写依据要扣分。这也是本题的逻辑闭环：<b>用第一充分条件证出第二充分条件</b>。<br>
+        <b>⑤ 提速</b>：(2) 不必把 (1) 重抄一遍。写"同理"+ 直接给出符号结论即可，考场上省下的两分钟够检查一遍前面。但<b>"同理"只能用在结构真正对称处</b>，本题两问只差一个不等号方向，用得起。<br>
+        <b>⑥ 跨章</b>：这条链子「二阶导的符号 → 差商的符号 → 一阶导的符号 → 单调性」在第 5 章（几何应用·凹凸性与拐点）会原样再用一次，只是把 $f'$ 换成 $f''$、把"极值"换成"拐点"。<b>成对记。</b>
+      </div>
     </div>
   </div>
 
@@ -711,14 +753,44 @@
     <div class="q"><span class="no">基 · 习题 3.7 ✔</span>（导数极限定理）证明：<br>
       (1) 若 $F(x)$ 在 $[x_0,x_0+\delta)\ (\delta\gt0)$ 连续，在 $(x_0,x_0+\delta)$ 内可导，当 $\lim\limits_{x\to x_0^+}F'(x)=A$（存在）时，有 $F'_+(x_0)=A$；<br>
       (2) 若 $F(x)$ 在 $(x_0-\delta,x_0]$ 连续，在 $(x_0-\delta,x_0)$ 内可导，当 $\lim\limits_{x\to x_0^-}F'(x)=A$（存在）时，有 $F'_-(x_0)=A$。</div>
-    <div class="s">
-      <span class="lab">证</span>两条一模一样，都是<b>洛必达</b>（$\frac00$ 型，分子 $F(x)-F(x_0)\to0$ 由连续保证）：
-      $$F'_+(x_0)=\lim_{x\to x_0^+}\frac{F(x)-F(x_0)}{x-x_0}\xlongequal{\text{洛必达}}\lim_{x\to x_0^+}\frac{F'(x)}{1}=A,\qquad F'_-(x_0)\xlongequal{\text{洛必达}}\lim_{x\to x_0^-}F'(x)=A$$
-      <span class="lab">★★★ 单向性（极易错）</span>满足条件时 $\lim\limits_{x\to x_0^\pm}F'(x)=A\ \Rightarrow\ F'_\pm(x_0)=A$；<b>但 $\lim\limits_{x\to x_0^\pm}F'(x)$ 不存在时，$F'_\pm(x_0)$ 亦可能存在。</b><br>
-      <span class="lab">标准反例</span>$F(x)=\begin{cases}x^2\sin\frac1x,&x\ne0\\0,&x=0\end{cases}$：
-      $F'(0)=\lim\limits_{x\to0}\dfrac{F(x)-F(0)}{x-0}=\lim\limits_{x\to0}x\sin\dfrac1x=0$ <b>存在</b>；
-      而 $x\ne0$ 时 $F'(x)=2x\sin\dfrac1x-\cos\dfrac1x$，$\lim\limits_{x\to0^+}F'(x)$ <b>不存在</b>。<br>
-      <span class="lab">用法</span>这条定理是<b>求分段函数在分段点导数的合法捷径</b>：先算 $\lim f'$，成功就直接得到 $f'(x_0)$；失败（极限不存在）<b>什么也说明不了</b>，必须退回定义。$x^2\sin\frac1x$ 正是那个"失败但函数其实可导"的经典。
+    <div class="s"><span class="lab">结论</span><span class="ans">$F'_\pm(x_0)=A$，即「导数极限定理」（也叫达布型的单侧版本）</span>
+
+      <div class="think"><span class="th">💭 思路 · 拿到题先想什么（卡壳时看这层，看完自己动手，别直接翻卷面）</span>
+        <ol>
+          <li>要证的东西是 <b>$F'_+(x_0)=A$</b>，而 $F'_+(x_0)$ 按定义就是一个极限 $\lim\limits_{x\to x_0^+}\frac{F(x)-F(x_0)}{x-x_0}$。<b>把要证的量写回定义式，是所有"证某导数等于某值"题的第一动作</b>——不写出来就无从下手。</li>
+          <li>写出来之后观察类型：分子 $F(x)-F(x_0)$，分母 $x-x_0$。分母显然趋于 0；<b>分子趋不趋于 0？靠的正是题设里那句"$F$ 在 $[x_0,x_0+\delta)$ 上<u>连续</u>"</b>。题目为什么要单独强调"连续"？就是为了送这个 $\frac00$。<b>题设里每一个看似多余的条件，都是在给你指定工具。</b></li>
+          <li>$\frac00$ 型 + 手上握着的是<b>导函数的极限</b> $\lim F'(x)$ ——这两件事撞在一起，指向唯一的工具：<b>洛必达法则</b>（它正好把"函数之比的极限"换成"导数之比的极限"）。而洛必达要求分子分母在<u>去心邻域内可导</u>，题设那句"在 $(x_0,x_0+\delta)$ 内可导"就是在铺这个前提。</li>
+          <li>分母 $x-x_0$ 求导得 1，所以洛完就是 $\lim\limits_{x\to x_0^+}F'(x)$，正好等于题给的 $A$。<b>整个证明只有两步</b>，短得不像证明题——但两个条件（连续、可导）各自对应一个前提，卷面上都要点到。</li>
+          <li>(2) 与 (1) 完全对称，只把 $x\to x_0^+$ 换成 $x\to x_0^-$、区间左右互换。<b>不要重抄。</b></li>
+        </ol>
+      </div>
+
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面 · 照这个写<span class="score">证明题 10 分参考｜⛳ = 采分点</span></div>
+        <div class="step"><span class="k">证</span>　<b>(1)</b> 由右导数的定义，
+        $$F'_+(x_0)=\lim_{x\to x_0^+}\frac{F(x)-F(x_0)}{x-x_0}.\tag{1}$$
+        <span class="pt">⛳ 把待证量写回定义 2 分</span></div>
+        <div class="step">因 $F(x)$ 在 $[x_0,x_0+\delta)$ 上连续，故 $\lim\limits_{x\to x_0^+}\big[F(x)-F(x_0)\big]=0$，又 $\lim\limits_{x\to x_0^+}(x-x_0)=0$，故 (1) 式是 $\dfrac00$ 型未定式。<span class="pt">⛳ 验证 $\frac00$（用到"连续"）2 分</span></div>
+        <div class="step">又 $F(x)$ 在 $(x_0,x_0+\delta)$ 内可导，$(x-x_0)'=1\ne0$，且 $\lim\limits_{x\to x_0^+}\dfrac{F'(x)}{1}=A$ 存在，故洛必达法则的条件全部满足。由<b>洛必达法则</b>，
+        $$F'_+(x_0)=\lim_{x\to x_0^+}\frac{F'(x)}{(x-x_0)'}=\lim_{x\to x_0^+}F'(x)=A.$$
+        <span class="pt">⛳ 点名洛必达并逐条验前提 3 分</span></div>
+        <div class="step"><b>(2)</b> 同理，由左导数的定义
+        $$F'_-(x_0)=\lim_{x\to x_0^-}\frac{F(x)-F(x_0)}{x-x_0},$$
+        由 $F$ 在 $(x_0-\delta,x_0]$ 上连续知其为 $\dfrac00$ 型，由 $F$ 在 $(x_0-\delta,x_0)$ 内可导及 $\lim\limits_{x\to x_0^-}F'(x)=A$ 存在，用洛必达法则得
+        $$F'_-(x_0)=\lim_{x\to x_0^-}F'(x)=A.$$
+        <span class="pt">⛳ 2 分</span></div>
+        <div class="fin">故当 $\lim\limits_{x\to x_0^+}F'(x)=A$ 时有 $F'_+(x_0)=A$；当 $\lim\limits_{x\to x_0^-}F'(x)=A$ 时有 $F'_-(x_0)=A$。<b>证毕。</b><span class="pt">⛳ 回扣题干收口 1 分</span></div>
+      </div>
+
+      <div class="notekeep"><span class="nh">📌 批注 · 写完拿这层校对（这些字考场上不要落笔）</span>
+        <b>① 这题短，但<span class="dock">扣分点</span>恰恰在"太短"上：洛必达的三个前提要逐条落笔。</b>$\frac00$ 型（来自<b>连续</b>）、去心邻域内可导且分母导数非零（来自<b>可导</b>）、<b>洛完之后的极限存在</b>（这是题给的）。三条各值一分，只写一个"由洛必达法则得"会被砍掉一半。<b>题设给了两个区间条件，就是要你把它们各用一次。</b><br>
+        <b>② <span class="dock">扣分点</span>：区间开闭写错。</b>连续要求的是<b>闭</b>在 $x_0$ 一侧（$[x_0,x_0+\delta)$，含端点，否则 $F(x_0)$ 都没定义）；可导只要求<b>开</b>区间 $(x_0,x_0+\delta)$（端点处可导正是要证的东西，不能预设）。<b>把两个区间写成一样，逻辑就成了循环论证。</b><br>
+        <b>③ ★★★ 单向性（本定理最容易被误用的地方）</b>：满足条件时 $\lim\limits_{x\to x_0^\pm}F'(x)=A\Rightarrow F'_\pm(x_0)=A$；<b>但 $\lim\limits_{x\to x_0^\pm}F'(x)$ 不存在时，$F'_\pm(x_0)$ 亦可能存在。</b>标准反例：
+        $$F(x)=\begin{cases}x^2\sin\frac1x,&x\ne0\\0,&x=0\end{cases}$$
+        $F'(0)=\lim\limits_{x\to0}x\sin\frac1x=0$ <b>存在</b>；而 $x\ne0$ 时 $F'(x)=2x\sin\frac1x-\cos\frac1x$，$\lim\limits_{x\to0}F'(x)$ <b>不存在</b>。<br>
+        <b>④ 实战用法</b>：这条定理是<b>求分段函数在分段点导数的合法捷径</b>——先算 $\lim F'$，算出来就直接得到 $f'(x_0)$；<b>算不出来（极限不存在）什么也说明不了</b>，必须退回定义。<a href="#s11">强 3.8</a> 是"用得上"的正面案例，$x^2\sin\frac1x$ 是"用不上但函数其实可导"的反面案例，<b>两个成对记</b>。<br>
+        <b>⑤ 与 <a href="#s6">基 3.9</a> 的对照</b>：那题是"洛必达<u>不能</u>用（只给一点二阶可导）"，这题是"洛必达<u>正好</u>能用（给了邻域内可导）"。<b>判断依据永远是同一句：求导的前提在邻域内成立吗。</b>把这两题并排放，边界就刻死了。
+      </div>
     </div>
   </div>
 
@@ -734,14 +806,42 @@
 
   <div class="eg">
     <div class="q"><span class="no">强 3.5 ✔</span>设 $f(x)=x^{\frac23}\sin x$，求 $f'(x)$。</div>
-    <div class="s">
-      <span class="lab">答案</span>
+    <div class="s"><span class="lab">结论</span>
       $$f'(x)=\begin{cases}\dfrac{2}{3\sqrt[3]{x}}\sin x+\sqrt[3]{x^2}\cos x,&x\ne0\\[6pt]0,&x=0\end{cases}$$
-      （公式部分已符号对拍；$x\lt0$ 一侧另用实立方根做了 $x=-2,-0.5,-0.1$ 三点数值验证，与数值导数吻合到 $10^{-11}$）<br>
-      <span class="lab">解</span>$x\ne0$ 时按乘法法则直接求；$x=0$ 时法则失效（$\frac{2}{3\sqrt[3]x}$ 无定义），<b>回到定义</b>：
-      $$f'(0)=\lim_{x\to0}\frac{f(x)-f(0)}{x-0}=\lim_{x\to0}\frac{x^{2/3}\sin x}{x}=\lim_{x\to0}\sqrt[3]{x^2}\cdot\frac{\sin x}{x}=0\cdot1=0$$
-      <span class="lab">★ 注（本讲最容易被扣分的地方）</span>若由 $f'(x)=\dfrac{2}{3\sqrt[3]x}\sin x+\sqrt[3]{x^2}\cos x$ <b>在 $x=0$ 无定义</b>就得出"$f'(0)$ 不存在"，<b>这无疑是错误的</b>。<br>
-      <span class="lab">赠品</span>张宇顺手给的一条：若 $F(x)=f(x)\cdot g(x)$，$f$ 在 $x=x_0$ 处<b>不可导</b>，但 $F(x)$ 在 $x=x_0$ 处<b>可能是可导的</b>（这正是 <a href="#s7">§七</a> 那条 $g(x_0)=0$ 公式的另一种说法）。
+      （公式部分已符号对拍；$x\lt0$ 一侧另用实立方根做了 $x=-2,-0.5,-0.1$ 三点数值验证，与数值导数吻合到 $10^{-11}$）
+
+      <div class="think"><span class="th">💭 思路 · 拿到题先想什么（卡壳时看这层，看完自己动手，别直接翻卷面）</span>
+        <ol>
+          <li>题目说"<b>求 $f'(x)$</b>"——注意是求<b>整个导函数</b>，不是求某一点的导数值。所以第一反应不该是抄乘法法则，而是先问：<b>这个函数的定义域上，有没有哪一点是求导法则用不了的？</b></li>
+          <li>$x^{2/3}$ 在 $x=0$ 处有定义（值为 0）、但求导后出现 $\frac{2}{3}x^{-1/3}$，<b>在 $x=0$ 处分母为零</b>。这就是信号：<b>$x=0$ 是"公式法失效点"，必须单独处理</b>，最终答案一定是分段形式。</li>
+          <li>公式法失效 ≠ 不可导。<b>唯一的正规军是回到导数定义</b>算 $f'(0)=\lim\limits_{x\to0}\frac{f(x)-f(0)}{x-0}$。别看到 $x^{-1/3}\to\infty$ 就断言"导数不存在"——那是把<b>导函数表达式的定义域</b>误当成了<b>函数的可导点集</b>。</li>
+          <li>算 $f'(0)$ 时先看分子结构：$f(0)=0$，差商是 $\frac{x^{2/3}\sin x}{x}$。<b>别急着洛必达</b>，把它拆成"$x^{2/3}$ 乘以 $\frac{\sin x}{x}$"更快——一个是无穷小、一个趋于 1。<b>凡是差商里能分离出重要极限的，先拆再算。</b></li>
+          <li>最后组装：分段函数的导函数写成分段形式，$x\ne0$ 一支来自法则、$x=0$ 一支来自定义，<b>两支的来源不同，卷面上要分开写、不要用"同理"连起来</b>。</li>
+        </ol>
+      </div>
+
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面 · 照这个写<span class="score">计算题 10 分参考｜⛳ = 采分点</span></div>
+        <div class="step"><span class="k">解</span>　<b>(i) 当 $x\ne0$ 时，由乘积的求导法则。</b>
+        $$f'(x)=\left(x^{\frac23}\right)'\sin x+x^{\frac23}(\sin x)'=\frac{2}{3}x^{-\frac13}\sin x+x^{\frac23}\cos x=\frac{2}{3\sqrt[3]{x}}\sin x+\sqrt[3]{x^2}\cos x.\tag{1}$$
+        <span class="pt">⛳ 乘法法则求出非分段点的导数 3 分</span></div>
+        <div class="step"><b>(ii) 当 $x=0$ 时，(1) 式无定义，故用导数定义求 $f'(0)$。</b><br>
+        因 $f(0)=0$，
+        $$f'(0)=\lim_{x\to0}\frac{f(x)-f(0)}{x-0}=\lim_{x\to0}\frac{x^{\frac23}\sin x}{x}=\lim_{x\to0}\sqrt[3]{x^2}\cdot\lim_{x\to0}\frac{\sin x}{x}=0\cdot1=0.\tag{2}$$
+        <span class="pt">⛳ 声明"(1) 式无定义，改用定义" 2 分</span>　<span class="pt">⛳ 极限算对 3 分</span></div>
+        <div class="fin">由 (1)(2) 得
+        $$f'(x)=\begin{cases}\dfrac{2}{3\sqrt[3]{x}}\sin x+\sqrt[3]{x^2}\cos x,&x\ne0,\\[6pt]0,&x=0.\end{cases}$$
+        <span class="pt">⛳ 合并成分段形式 2 分</span></div>
+      </div>
+
+      <div class="notekeep"><span class="nh">📌 批注 · 写完拿这层校对（这些字考场上不要落笔）</span>
+        <b>① <span class="dock">扣分点（张宇原话点名的错误）</span>：由"(1) 式在 $x=0$ 无定义"直接得出"$f'(0)$ 不存在"，<b>这无疑是错误的</b>。</b>(1) 式无定义只说明<u>求导法则在该点不成立</u>，与 $f$ 在该点是否可导无关。<br>
+        <b>② 卷面上"(1) 式无定义，故用导数定义"这句话本身是采分点。</b>不写这句直接跳去算极限，阅卷老师无法判断你是"知道要回定义"还是"碰巧算了个极限"。<b>把切换理由写出来，是这类题的固定得分动作。</b><br>
+        <b>③ <span class="dock">扣分点</span>：漏掉 $x=0$ 这一支。</b>题目问的是"求 $f'(x)$"（导函数），只写出 (1) 式就交卷，等于宣称定义域少了一个点，属于答不对题。<br>
+        <b>④ 最后答案必须写成<u>分段函数</u>的标准形式</b>（大括号 + 两行 + 各自的条件），不要写成"当 $x\ne0$ 时……，当 $x=0$ 时……"两句散话。<br>
+        <b>⑤ 赠品结论（张宇顺手给的）</b>：若 $F(x)=f(x)g(x)$，$f$ 在 $x=x_0$ 处<b>不可导</b>，但 $F$ 在 $x_0$ 处<b>可能是可导的</b>——这正是 <a href="#s7">§七</a> 那条「$F$ 可导 $\iff g(x_0)=0$」的另一种说法。<b>"某个因子不可导"推不出"乘积不可导"。</b><br>
+        <b>⑥ 提速</b>：$x^{2/3}=\sqrt[3]{x^2}$ 在实数域对 $x\lt0$ 也有定义（$\sqrt[3]{x^2}\gt0$），所以本题答案对<b>全体实数</b>成立，不必附加 $x\gt0$。⚠️ 但用计算机/sympy 验算时它常被化成 $|x|^{2/3}$ 并要求 $x\gt0$，那是软件的实数分支约定，<b>不是数学限制</b>。
+      </div>
     </div>
   </div>
 
@@ -777,17 +877,53 @@
       <span class="lab">答案</span>
       $$f'(x)=\begin{cases}\dfrac{-\displaystyle\int_0^{x^3}g(u)\,\mathrm du}{x^2}+3xg(x^3),&x\ne0\\[8pt]0,&x=0\end{cases}\qquad f'(x)\ \text{在}\ x=0\ \textbf{连续}$$
       （已取 $g=\cos u,\ 1+u,\ \mathrm e^u$ 三个具体函数，把"直接对原式求导"与"书上的公式"符号相减，$x\ne0$ 处恒为 0；$f'(0)$ 与 $\lim\limits_{x\to0}f'(x)$ 也都算出 0）<br>
-      <span class="lab">第一步 · 把 $x$ 赶出积分号</span>$x\ne0$ 时令 $u=xt$（$\mathrm du=x\,\mathrm dt$，上限 $x^2\mapsto x^3$）：
-      $$f(x)=\frac1x\int_0^{x^3}g(u)\,\mathrm du$$
-      <b>这是全题第一道关</b>：原式里 $x$ <u>既在积分限里、又在被积函数里</u>，不换元根本没法用变限积分求导公式。<br>
-      <span class="lab">第二步 · 乘法法则 + 变限积分求导</span>（$g$ 连续保证可导）
-      $$f'(x)=-\frac{1}{x^2}\int_0^{x^3}g(u)\mathrm du+\frac1x\cdot g(x^3)\cdot3x^2=\frac{-\int_0^{x^3}g(u)\mathrm du}{x^2}+3xg(x^3)\qquad(x\ne0)$$
-      <span class="lab">第三步 · 分段点回定义</span>依题设 $f(0)=0$，
-      $$f'(0)=\lim_{x\to0}\frac{f(x)-f(0)}{x}=\lim_{x\to0}\frac{\int_0^{x^3}g(u)\mathrm du}{x^2}\xlongequal{\text{洛必达}}\lim_{x\to0}\frac{g(x^3)\cdot3x^2}{2x}=0$$
-      <span class="lab">第四步 · 判连续性</span>
-      $$\lim_{x\to0}f'(x)=\lim_{x\to0}\left[\frac{-\int_0^{x^3}g(u)\mathrm du}{x^2}+3xg(x^3)\right]=-\lim_{x\to0}\frac{g(x^3)\cdot3x^2}{2x}+0=0=f'(0)$$
-      故 $f'$ 在 $x=0$ 连续。<br>
-      <span class="lab">为什么放在收官</span>这道题把本章<b>四个模块串成一条线</b>：换元（形式化归）→ 公式法求 $f'(x)$ → 分段点用<b>定义</b>补 $f'(0)$（<a href="#s10">§十坑一</a>）→ 用 $\lim f'(x)$ 与 $f'(0)$ 比较判连续（<a href="#s9">§九</a>）。<b>会做这一道，本章就通了。</b>
+
+      <div class="think"><span class="th">💭 思路 · 拿到题先想什么（卡壳时看这层，看完自己动手，别直接翻卷面）</span>
+        <ol>
+          <li>看清被积函数：$\int_0^{x^2}g(xt)\,\mathrm dt$ 里，$t$ 是积分变量、$x$ 是参数，而 <b>$x$ 同时出现在<u>积分上限</u>和<u>被积函数</u>里</b>。变限积分求导公式只管上限里的 $x$，<b>被积函数里的 $x$ 必须先赶出去</b>，否则公式根本不适用。这是全题第一道、也是唯一一道"想不到就全盘卡住"的关。</li>
+          <li>怎么赶？<b>换元 $u=xt$</b>（把 $x$ 和 $t$ 捆成一个新变量）。做换元时三样东西一起变：$\mathrm du=x\,\mathrm dt$（会提出一个 $\frac1x$）、上限 $t=x^2\Rightarrow u=x^3$、下限不变。<b>提出来的 $\frac1x$ 要求 $x\ne0$</b>——这就预告了 $x=0$ 必须单独处理，答案一定是分段的。</li>
+          <li>换完之后 $f(x)=\frac1x\int_0^{x^3}g(u)\mathrm du$ 是<b>乘积</b>形式，求导用乘法法则；其中变限积分那一块要用<b>复合的变限积分求导</b>（上限是 $x^3$，要乘 $3x^2$）。$g$ 连续这个条件就是在保证这一步合法。</li>
+          <li>$x=0$ 处：按 <a href="#s10">§十坑一</a> 的规矩，公式法失效就<b>回导数定义</b>。注意 $f(0)=\int_0^0g=0$ 是白送的。差商 $\frac{\int_0^{x^3}g}{x^2}$ 是 $\frac00$ 型，<b>此处洛必达是合法的</b>（$g$ 连续 ⇒ 变限积分在整个邻域内可导），和 <a href="#s12">习 3.7</a> 那种"只能洛一次"的情形不一样，别自己吓自己。</li>
+          <li>最后一问"判断连续性"，把定义摊开就是：<b>算 $\lim\limits_{x\to0}f'(x)$，看它是否等于 $f'(0)$</b>。$f'(0)$ 第三步已算出，所以只剩一个极限要算。<b>四步的顺序是被题目本身钉死的，不用自己设计框架。</b></li>
+        </ol>
+      </div>
+
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面 · 照这个写<span class="score">综合题 12 分参考｜⛳ = 采分点</span></div>
+        <div class="step"><span class="k">解</span>　<b>(i) 先化去被积函数中的 $x$。</b><br>
+        当 $x\ne0$ 时，令 $u=xt$，则 $\mathrm du=x\,\mathrm dt$，且 $t=0$ 时 $u=0$、$t=x^2$ 时 $u=x^3$，于是
+        $$f(x)=\int_0^{x^2}g(xt)\,\mathrm dt=\frac1x\int_0^{x^3}g(u)\,\mathrm du.\tag{1}$$
+        <span class="pt">⛳ 换元把 $x$ 赶出积分号 3 分</span></div>
+        <div class="step"><b>(ii) 求 $x\ne0$ 处的 $f'(x)$。</b><br>
+        因 $g(u)$ 连续，故 $\int_0^{x^3}g(u)\mathrm du$ 可导。将 (1) 式两端对 $x$ 求导，由乘积的求导法则及变限积分求导公式，
+        $$f'(x)=-\frac{1}{x^2}\int_0^{x^3}g(u)\mathrm du+\frac1x\cdot g(x^3)\cdot3x^2
+              =-\frac{\displaystyle\int_0^{x^3}g(u)\mathrm du}{x^2}+3xg(x^3).\tag{2}$$
+        <span class="pt">⛳ 乘法法则 + 上限复合乘 $3x^2$ 3 分</span></div>
+        <div class="step"><b>(iii) 求 $f'(0)$。</b><br>
+        (2) 式在 $x=0$ 处无定义，故由导数定义求。因 $f(0)=\displaystyle\int_0^0g(0)\mathrm dt=0$，由 (1) 式
+        $$f'(0)=\lim_{x\to0}\frac{f(x)-f(0)}{x-0}=\lim_{x\to0}\frac{\displaystyle\int_0^{x^3}g(u)\mathrm du}{x^2}
+        \xlongequal{\text{洛必达}}\lim_{x\to0}\frac{g(x^3)\cdot3x^2}{2x}=\lim_{x\to0}\frac{3x}{2}g(x^3)=0.\tag{3}$$
+        <span class="pt">⛳ 分段点回定义 2 分</span>　<span class="pt">⛳ 极限算对 2 分</span></div>
+        <div class="step">由 (2)(3) 得
+        $$f'(x)=\begin{cases}-\dfrac{\displaystyle\int_0^{x^3}g(u)\mathrm du}{x^2}+3xg(x^3),&x\ne0,\\[10pt] 0,&x=0.\end{cases}$$
+        <span class="pt">⛳ 写成分段形式 1 分</span></div>
+        <div class="step"><b>(iv) 判断 $f'(x)$ 在 $x=0$ 处的连续性。</b><br>
+        因 $g(u)$ 连续，由 (2) 式
+        $$\lim_{x\to0}f'(x)=\lim_{x\to0}\left[-\frac{\displaystyle\int_0^{x^3}g(u)\mathrm du}{x^2}+3xg(x^3)\right]
+        \xlongequal{\text{洛必达}}-\lim_{x\to0}\frac{g(x^3)\cdot3x^2}{2x}+0=0.$$
+        <span class="pt">⛳ 1 分</span></div>
+        <div class="fin">由 (3) 式知 $\lim\limits_{x\to0}f'(x)=0=f'(0)$，故 $f'(x)$ 在 $x=0$ 处<b>连续</b>。</div>
+      </div>
+
+      <div class="notekeep"><span class="nh">📌 批注 · 写完拿这层校对（这些字考场上不要落笔）</span>
+        <b>① <span class="dock">扣分点（本题最大的坑）</span>：不换元就直接对 $\int_0^{x^2}g(xt)\mathrm dt$ 用变限积分求导公式，写成 $g(x\cdot x^2)\cdot2x$。</b>这是<b>零分动作</b>——公式 $\left(\int_a^{\varphi(x)}h(u)\mathrm du\right)'=h(\varphi(x))\varphi'(x)$ 要求<b>被积函数与 $x$ 无关</b>，本题不满足。卷面上"令 $u=xt$"这一步既是采分点，也是全题的分水岭。<br>
+        <b>② 换元时三样东西一起改：$\mathrm dt\to\frac{\mathrm du}{x}$、上下限、被积函数。</b>最容易漏的是<b>提出来的 $\frac1x$</b>——漏了它后面全错，而且因为 $\frac1x$ 的存在，(ii) 必须用<b>乘法法则</b>而不是直接求导。<br>
+        <b>③ 洛必达在这题是<u>合法</u>的，不要过度谨慎。</b>$g$ 连续 ⇒ $\int_0^{x^3}g$ 在整个邻域内可导，前提成立。这和 <a href="#s12">习 3.7</a> 注里"只给一点二阶可导所以不能第二次洛"是<b>两种不同情形</b>，判断依据永远是<b>"求导的前提在邻域内成立吗"</b>。<br>
+        <b>④ <span class="dock">扣分点</span>：$f(0)$ 要显式算一句。</b>直接写"$f(0)=0$"没依据；写"$f(0)=\int_0^0g(0)\mathrm dt=0$"（上下限相同的定积分为零）才是完整的。<br>
+        <b>⑤ 卷面为什么把 (iii) 和 (iv) 分开写？</b>因为它们是两个独立的采分点：(iii) 是"用<b>定义</b>算函数值 $f'(0)$"，(iv) 是"算<b>导函数的极限</b> $\lim f'(x)$"。<b>这两个量在一般情况下并不相等</b>（$x^2\sin\frac1x$ 就是反例），合在一起写等于默认了结论，属于循环论证。<br>
+        <b>⑥ 为什么这题放在本章收官</b>：它把四个模块串成一条线——换元（形式化归）→ 公式法求 $f'(x)$ → 分段点用<b>定义</b>补 $f'(0)$（<a href="#s10">§十坑一</a>）→ 比较 $\lim f'(x)$ 与 $f'(0)$ 判连续（<a href="#s9">§九</a>）。<b>会做这一道，本章就通了。</b><br>
+        <b>⑦ 跨章</b>：变限积分求导会在第 8–11 章（一元积分学）成为主力工具，这里是它第一次以"求导对象"的身份出场。<b>本题的换元技巧在第 11 章的积分不等式里还会再用。</b>
+      </div>
     </div>
   </div>
 
@@ -795,7 +931,8 @@
   <h2 id="s12"><span class="idx">十二</span>基础习题 3.1–3.9 · 答案速查<span class="layer L-base">基础</span></h2>
 
   <div class="mine"><span class="tag">补讲 · 这 9 道题的分工</span>
-    3.1、3.8 练<b>分段点可导性</b>；3.2 练<b>绝对值充要条件</b>（就是基 3.5 换了件衣服）；3.3、3.4 练<b>微分与无穷小阶的比较</b>；3.5 练<b>公式法陷阱</b>；3.6 练<b>把陌生极限凑成导数定义</b>；3.7 是<b>导数极限定理</b>（已在 <a href="#s9">§九</a> 展开）；3.9 练<b>泰勒反推导数</b>。<b>九道题正好覆盖全章。</b>
+    3.1、3.8 练<b>分段点可导性</b>；3.2 练<b>绝对值充要条件</b>（就是基 3.5 换了件衣服）；3.3、3.4 练<b>微分与无穷小阶的比较</b>；3.5 练<b>公式法陷阱</b>；3.6 练<b>把陌生极限凑成导数定义</b>；3.7 是<b>导数极限定理</b>（已在 <a href="#s9">§九</a> 展开）；3.9 练<b>泰勒反推导数</b>。<b>九道题正好覆盖全章。</b><br>
+    其中 <b>3.8、3.9 是需要写过程的大题</b>（另加 §九 的 3.7），已按「想 → 写 → 校」三层重排；<b>3.1–3.6 是选择填空，保持教学式排版</b>——考场上本就不写过程，那几张卡要的是<b>快速判断的思考资源</b>，不是卷面模板。
   </div>
 
   <div class="eg">
@@ -850,22 +987,87 @@
 
   <div class="eg">
     <div class="q"><span class="no">习 3.8 ✔</span>设 $f(x)=\begin{cases}x^2\sin\dfrac{\pi}{x},&x\lt0\\ A,&x=0\\ ax^2+b,&x\gt0\end{cases}$，求常数 $A,a,b$ 的值使 $f(x)$ 在 $x=0$ 处可导，并求 $f'(0)$。</div>
-    <div class="s"><span class="lab">答案</span><span class="ans">$A=b=0$，$a$ 可以为<b>任意</b>常数，$f'(0)=0$</span><br>
-      <span class="lab">第一步 · 连续（可导的必要条件）</span>$\lim\limits_{x\to0^-}x^2\sin\dfrac{\pi}{x}=0$（无穷小 × 有界），$\lim\limits_{x\to0^+}(ax^2+b)=b$，两者都要等于 $f(0)=A$，故 <b>$A=b=0$</b>。<br>
-      <span class="lab">第二步 · 可导</span>
-      $$f'_-(0)=\lim_{x\to0^-}\frac{x^2\sin\frac{\pi}{x}-0}{x-0}=\lim_{x\to0^-}x\sin\frac{\pi}{x}=0,\qquad f'_+(0)=\lim_{x\to0^+}\frac{ax^2-0}{x-0}=0$$
-      两侧恒为 0，<b>与 $a$ 无关</b>，所以 $a$ 可取任意常数，$f'(0)=0$。<br>
-      <span class="lab">陷阱</span>很多人条件反射地"三个未知数就要解出三个值"，结果硬凑一个 $a$ 出来。<b>这题的答案就是"$a$ 自由"</b>——$ax^2$ 是 $x$ 的高阶无穷小，无论 $a$ 多大都影响不到一阶导数。
+    <div class="s"><span class="lab">结论</span><span class="ans">$A=b=0$，$a$ 可以为<b>任意</b>常数，$f'(0)=0$</span>
+
+      <div class="think"><span class="th">💭 思路 · 拿到题先想什么（卡壳时看这层，看完自己动手，别直接翻卷面）</span>
+        <ol>
+          <li>"求常数使分段函数在分段点可导"是<b>固定流程题</b>，顺序不能反：<b>先用连续定 $A,b$，再用可导定 $a$</b>。因为可导 ⇒ 连续，连续是必要条件，先用弱条件把能定的常数定下来，剩下的才交给强条件。</li>
+          <li>先数一数<b>条件与未知数</b>：三个未知数 $A,a,b$。连续给出两个等式（左极限 $=$ 右极限 $=f(0)$），可导给出一个等式（左导 $=$ 右导）。<b>三个方程三个未知数</b>——但这只是"看上去刚好"，<b>方程可能退化</b>，别预设一定能解出三个具体值。</li>
+          <li>左支 $x^2\sin\frac{\pi}{x}$ 在 $x\to0^-$ 的极限，别想着洛必达（$\cos\frac\pi x$ 会振荡），用<b>无穷小 × 有界量 = 无穷小</b>。这是本章反复出现的老工具（可导⇒连续的反例二、习 3.1 都用它）。</li>
+          <li>算导数时<b>$x=0$ 是分段点，只能回定义算左右导数</b>，绝不能拿两支的导函数在 0 处取值。这是 <a href="#s10">§十坑三</a> 的规矩。</li>
+          <li>算到 $f'_+(0)=\lim\frac{ax^2}{x}=\lim ax$ 时会发现：<b>无论 $a$ 取多少，极限都是 0</b>。此时不要慌着"再找一个方程"——<b>这就是答案本身：$a$ 自由</b>。$ax^2$ 是 $x$ 的高阶无穷小，一阶导数根本看不见它。</li>
+        </ol>
+      </div>
+
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面 · 照这个写<span class="score">计算题 10 分参考｜⛳ = 采分点</span></div>
+        <div class="step"><span class="k">解</span>　<b>(i) 由可导必连续，先由连续性确定 $A$ 与 $b$。</b><br>
+        因 $\left|x^2\sin\dfrac{\pi}{x}\right|\le x^2$，由无穷小与有界量之积仍为无穷小，
+        $$\lim_{x\to0^-}f(x)=\lim_{x\to0^-}x^2\sin\frac{\pi}{x}=0,\qquad \lim_{x\to0^+}f(x)=\lim_{x\to0^+}(ax^2+b)=b.\tag{1}$$
+        <span class="pt">⛳ 两侧极限算对 2 分</span></div>
+        <div class="step">$f(x)$ 在 $x=0$ 处可导，故必在 $x=0$ 处连续，即
+        $$\lim_{x\to0^-}f(x)=\lim_{x\to0^+}f(x)=f(0)=A.$$
+        代入 (1) 式得 $\boxed{A=b=0}$。<span class="pt">⛳ 点名"可导必连续"并定出 $A=b=0$ 2 分</span></div>
+        <div class="step"><b>(ii) 再由左、右导数相等确定 $a$。</b><br>
+        $x=0$ 是分段点，由导数定义（此时 $f(0)=0$）
+        $$f'_-(0)=\lim_{x\to0^-}\frac{f(x)-f(0)}{x-0}=\lim_{x\to0^-}\frac{x^2\sin\frac{\pi}{x}}{x}=\lim_{x\to0^-}x\sin\frac{\pi}{x}=0,\tag{2}$$
+        $$f'_+(0)=\lim_{x\to0^+}\frac{f(x)-f(0)}{x-0}=\lim_{x\to0^+}\frac{ax^2}{x}=\lim_{x\to0^+}ax=0.\tag{3}$$
+        <span class="pt">⛳ 分段点回定义求左右导数 3 分</span></div>
+        <div class="step">由 (2)(3) 知，<b>对任意常数 $a$ 恒有</b> $f'_-(0)=f'_+(0)=0$，故 $f(x)$ 在 $x=0$ 处可导。<span class="pt">⛳ 指出对一切 $a$ 成立 2 分</span></div>
+        <div class="fin">综上：$A=b=0$，$a$ 为<b>任意</b>常数，且 $f'(0)=0$。<span class="pt">⛳ 收口 1 分</span></div>
+      </div>
+
+      <div class="notekeep"><span class="nh">📌 批注 · 写完拿这层校对（这些字考场上不要落笔）</span>
+        <b>① <span class="dock">扣分点（本题最大的坑）</span>：硬给 $a$ 凑一个值。</b>很多人条件反射"三个未知数必须解出三个数"，于是编一个方程。<b>本题的正确答案就是"$a$ 任意"</b>，而且卷面上要<b>把这句话明写出来</b>（"对任意常数 $a$ 恒有……"），只写 $f'(0)=0$ 而不交代 $a$ 的取值范围，等于漏答一问。<br>
+        <b>② <span class="dock">扣分点</span>：跳过"可导 ⇒ 连续"直接算左右导数。</b>若不先定出 $b=0$，则 $f'_+(0)=\lim\frac{ax^2+b-A}{x}$ 里含 $b-A$，分子不趋于 0，极限是 $\infty$——<b>顺序反了会直接算崩</b>。卷面上"因 $f$ 可导必连续"这七个字是采分点。<br>
+        <b>③ 无穷小 × 有界量要写出依据。</b>直接写 $\lim x^2\sin\frac\pi x=0$ 不给分，要么写不等式 $\left|x^2\sin\frac\pi x\right|\le x^2$ 用夹逼，要么写"由无穷小与有界量之积仍为无穷小"。<b>⚠️ 不能用洛必达</b>：求导后出现 $\cos\frac\pi x$ 振荡，极限不存在，洛必达失效（这与 <a href="#s12">习 3.7</a> 注里的反例是同一个函数族）。<br>
+        <b>④ 为什么 $a$ 影响不到？</b>$ax^2=o(x)$，一阶导数只"看得见" $x$ 的一次项。<b>推论：如果题目改成求 $f''(0)$，$a$ 就跑不掉了</b>（二阶导数正好看二次项）。<b>这个"阶数决定谁能被看见"的视角，就是 <a href="#s4">§四</a> 那三行统一模板的直接应用。</b><br>
+        <b>⑤ 提速</b>：$f(0)=A$ 是题目白给的（分段函数在 $x=0$ 处的值直接写着 $A$），不用再算。很多人绕一圈去求 $\lim f(x)$ 当 $f(0)$，浪费时间。
+      </div>
     </div>
   </div>
 
   <div class="eg">
     <div class="q"><span class="no">习 3.9 ✔</span>设 $\delta\gt0$，$f(x)$ 在 $[-\delta,\delta]$ 上有定义，$f(0)=1$，且满足 $\lim\limits_{x\to0}\dfrac{\ln(1-2x)+2xf(x)}{x^2}=0$。证明：$f(x)$ 在 $x=0$ 处可导，并求 $f'(0)$。</div>
     <div class="s"><span class="lab">答案</span><span class="ans">$f'(0)=1$</span>（已双向验证：取 $f=1+x+dx^2$ 时极限恒为 0 且与 $d$ 无关；取 $f=1+1.5x$ 时极限为 1 $\ne$ 0，说明斜率必须是 1）<br>
-      <span class="lab">证</span>对 $\ln(1-2x)$ 用<b>泰勒公式</b>展到二阶：$\ln(1-2x)=-2x-\dfrac12(2x)^2+o(x^2)=-2x-2x^2+o(x^2)$。代入
-      $$0=\lim_{x\to0}\frac{-2x-2x^2+o(x^2)+2xf(x)}{x^2}=\lim_{x\to0}\frac{2x\big[f(x)-1\big]}{x^2}-2+0=2\lim_{x\to0}\frac{f(x)-1}{x}-2$$
-      于是 $\lim\limits_{x\to0}\dfrac{f(x)-f(0)}{x-0}=1$，这个极限<b>存在</b>即说明 $f$ 在 $x=0$ 可导，且 $f'(0)=1$。<br>
-      <span class="lab">要害</span>题干<b>只给了 $f(0)=1$，没给 $f$ 连续或可导</b>——"可导"是要你<u>证</u>出来的，途径就是<b>证明差商的极限存在</b>。把已知极限里的 $f$ 分离成 $\frac{f(x)-1}{x}$ 的形式，剩下的全是可算的具体函数，这就是<a href="#s11">基 3.3</a> 说的"用具体函数的信息去求抽象函数的点信息"。
+
+      <div class="think"><span class="th">💭 思路 · 拿到题先想什么（卡壳时看这层，看完自己动手，别直接翻卷面）</span>
+        <ol>
+          <li><b>先看题设给了什么、没给什么。</b>给的是"$f$ 在 $[-\delta,\delta]$ 上<u>有定义</u>"——只有定义！<b>没给连续、没给可导</b>。所以「可导」是要<u>证</u>出来的东西，绝不能拿来用（不能洛必达、不能泰勒展 $f$、不能对 $f$ 求导）。<b>题设越弱，可用的工具越少，路反而越窄越好找。</b></li>
+          <li>证"在 $x=0$ 可导"只有一条路：<b>证明差商 $\dfrac{f(x)-f(0)}{x-0}$ 的极限存在</b>。$f(0)=1$ 是白给的，所以目标锁定为——<b>想办法把 $\lim\limits_{x\to0}\dfrac{f(x)-1}{x}$ 从已知条件里"抠"出来</b>。</li>
+          <li>已知条件里 $f$ 出现在 $2xf(x)$ 中。要凑出 $\frac{f(x)-1}{x}$，就得让分子出现 $f(x)-1$、分母出现 $x$。<b>观察分母是 $x^2$，而 $2xf(x)$ 除以 $x^2$ 正好是 $\frac{2f(x)}{x}$</b>——差的就是把 $2f(x)$ 变成 $2[f(x)-1]$，即从别处借一个 $-2x$ 出来。<b>那个 $-2x$ 只能来自 $\ln(1-2x)$。</b></li>
+          <li>所以 $\ln(1-2x)$ 必须展开，而且<b>展到二阶</b>（分母是 $x^2$，一阶不够、三阶多余）。这是全题唯一的技术动作。展开后 $-2x$ 与 $2xf(x)$ 拼成 $2x[f(x)-1]$，$-2x^2$ 除以 $x^2$ 变常数 $-2$，$o(x^2)$ 除以 $x^2$ 归零——<b>三块各归各位，严丝合缝</b>。</li>
+          <li>最后一步是逻辑上的要害：算出 $\lim\frac{f(x)-1}{x}=1$ 之后，<b>要明说"这个极限存在，故由导数定义知 $f$ 在 $0$ 可导"</b>。这句话就是本题"证"的落点，不写等于没证。</li>
+        </ol>
+      </div>
+
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面 · 照这个写<span class="score">证明题 10 分参考｜⛳ = 采分点</span></div>
+        <div class="step"><span class="k">证</span>　由泰勒公式（麦克劳林展开），当 $x\to0$ 时
+        $$\ln(1-2x)=-2x-\frac12(2x)^2+o(x^2)=-2x-2x^2+o(x^2).\tag{1}$$
+        <span class="pt">⛳ 展到二阶 2 分</span></div>
+        <div class="step">将 (1) 式代入题设的极限式，并利用 $f(0)=1$，得
+        $$0=\lim_{x\to0}\frac{\ln(1-2x)+2xf(x)}{x^2}
+        =\lim_{x\to0}\frac{-2x-2x^2+o(x^2)+2xf(x)}{x^2}
+        =\lim_{x\to0}\left[\frac{2x\big[f(x)-1\big]}{x^2}-2+\frac{o(x^2)}{x^2}\right].\tag{2}$$
+        <span class="pt">⛳ 拼出 $2x[f(x)-1]$ 3 分</span></div>
+        <div class="step">因 $\lim\limits_{x\to0}\dfrac{o(x^2)}{x^2}=0$，由 (2) 式知极限 $\lim\limits_{x\to0}\dfrac{2\big[f(x)-1\big]}{x}$ <b>存在</b>，且
+        $$2\lim_{x\to0}\frac{f(x)-1}{x}-2=0,\qquad\text{即}\qquad \lim_{x\to0}\frac{f(x)-1}{x}=1.\tag{3}$$
+        <span class="pt">⛳ 指出该极限存在 2 分</span></div>
+        <div class="step">又 $f(0)=1$，故 (3) 式即
+        $$\lim_{x\to0}\frac{f(x)-f(0)}{x-0}=1.$$
+        <span class="pt">⛳ 化成导数定义式 2 分</span></div>
+        <div class="fin">由导数的定义知 $f(x)$ 在 $x=0$ 处可导，且 $f'(0)=1$。<b>证毕。</b><span class="pt">⛳ 回扣题干收口 1 分</span></div>
+      </div>
+
+      <div class="notekeep"><span class="nh">📌 批注 · 写完拿这层校对（这些字考场上不要落笔）</span>
+        <b>① <span class="dock">扣分点（本题最大的坑）</span>：对已知极限用洛必达。</b>题设只说 $f$ <u>有定义</u>，$f'$ 根本不知道存不存在（它正是要证的东西），洛必达的前提完全不成立。<b>拿要证的结论当条件用 = 循环论证 = 零分。</b>本题从头到尾<b>只对 $\ln(1-2x)$ 这个具体函数动手</b>，抽象的 $f$ 一次都没求导，这不是巧合，是被题设逼出来的唯一走法。<br>
+        <b>② 泰勒必须展到 $x^2$，多一阶少一阶都不行。</b>只展到 $-2x+o(x)$，则 $\frac{o(x)}{x^2}$ 是未定式，推不出结论；展到 $x^3$ 纯属多余。<b>展开阶数由分母的阶决定</b>，这是泰勒题的通用判据。<br>
+        <b>③ <span class="dock">扣分点</span>：直接写 $\lim\frac{f(x)-1}{x}=1$ 就收笔。</b>本题问的是<b>两件事</b>：证可导 + 求 $f'(0)$。必须补一句"由导数的定义知 $f$ 在 $x=0$ 可导"——<b>"极限存在"到"函数可导"之间隔着一个定义，那句话就是采分点。</b><br>
+        <b>④ 卷面为什么强调"该极限<u>存在</u>"？</b>因为 (2) 式左边是 0（已知存在），$-2$ 与 $\frac{o(x^2)}{x^2}$ 的极限都存在，<b>由极限的四则运算法则反推</b>，剩下那一块的极限必然存在。<b>这个"反推存在性"的动作是证明题的常见得分点</b>，别当成理所当然一笔带过。<br>
+        <b>⑤ 题型归属</b>：题干<b>只给 $f(0)=1$，其余全是抽象的</b>——这正是 <a href="#s11">基 3.3</a> 说的"<b>利用抽象函数与具体函数的关系式，通过具体函数的信息去求抽象函数的点信息</b>"。基 3.3 用夹逼、本题用泰勒，<b>工具不同，套路同一个</b>。<br>
+        <b>⑥ 反向自检</b>：把 $f$ 换成 $1+x+dx^2$ 代回原极限，无论 $d$ 取多少结果都是 0（说明 $f'(0)=1$ 合题）；换成 $1+1.5x$ 则极限变成 1 $\ne$ 0（说明斜率<b>必须</b>是 1）。考场上没时间做这个，但<b>平时验算时这样双向试一次，能确认答案唯一</b>。
+      </div>
     </div>
   </div>
 
@@ -878,6 +1080,7 @@
       <li><b>一条结论卡</b>：$|f|$ 只在"$f(x_0)=0$ 且 $f'(x_0)\ne0$"处不可导。所有含绝对值的题都从这里出发。</li>
       <li><b>三个坑</b>：公式法在一点失效 ≠ 不可导（回定义）；$\lim f'(x)$ 不存在 ≠ $f'(x_0)$ 不存在（$x^2\sin\frac1x$）；两侧导数"均存在" ≠ 可导。</li>
       <li><b>一套隐含条件挖掘术</b>：题干给"某个含绝对值的差商极限存在"，先逼出 $f(x_0)$，再按符号分三支脱绝对值（强 3.3）。</li>
+      <li><b>一条卷面纪律</b>（本章六张大题反复演示）：<b>切换方法必须写出理由</b>——"(1) 式在 $x=0$ 无定义，故用导数定义"「由二阶导数的定义」「因 $f$ 可导必连续」这类句子本身不含计算，却每句都值分，因为阅卷是<b>找采分点</b>。同一条边界还决定了洛必达能不能用：<b>看前提是在<u>一点</u>成立还是在<u>邻域</u>成立</b>（基 3.9 不能洛 / 习 3.7 正好能洛 / 强 3.8 能洛两次）。</li>
     </ol>
     <p><b>配套速查</b>：<a href="../卡库_极限与无穷小工具箱.html">卡库·极限工具箱</a>（$1-\cos^\alpha x\sim\frac\alpha2x^2$ 在习 3.6 里直接用到） · <a href="../公式大全_速查与秒杀.html">公式大全</a> · <a href="../直觉馆_图像与数感.html">直觉馆</a>（$x^{1/3}$、$x^2\sin\frac1x$ 两张图正好是本章 §五、§九 的主角）。<b>上一章</b>：<a href="第02章_数列极限.html">第 2 章 数列极限</a>。<b>下一章</b>：<a href="第04章_一元函数微分学的计算.html">第 4 章 一元函数微分学的计算</a>。</p>
     <div class="dolinks">
