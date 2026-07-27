@@ -1,0 +1,1887 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>精读版 · 概率第1章 随机事件与概率</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],ignoredClasses:['nokatex']})"></script>
+<link rel="stylesheet" href="style.css">
+<style>
+/* ===== 本章专属：文氏图事件运算器 + 贝叶斯权重台 ===== */
+.tool{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:20px 0}
+.tool h4{margin:0 0 4px;font-size:1rem;color:var(--accent)}
+.tool .hint{color:var(--muted);font-size:.82rem;margin-bottom:12px;line-height:1.7}
+
+/* 文氏图 */
+.vennwrap{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start;justify-content:center}
+.vennbox{text-align:center;flex:0 0 auto}
+.vennbox canvas{border:1px solid var(--line);border-radius:8px;max-width:100%;height:auto;background:transparent}
+.vennbox .cap{font-size:.76rem;color:var(--muted);margin-top:5px;min-height:1.4em}
+.exprbar{display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin:10px 0}
+.exprbar select,.exprbar button{font:inherit;font-size:.83rem;padding:4px 10px;border-radius:8px;
+  border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+.exprbar button{background:var(--accent-soft);color:var(--accent)}
+.exprbar button:hover{filter:brightness(.94)}
+.exprbar .lbl{font-size:.8rem;color:var(--muted)}
+.vres{border-radius:8px;padding:9px 13px;margin:10px 0 0;font-size:.87rem;line-height:1.8}
+.vres.same{background:var(--green-soft);color:var(--green)}
+.vres.diff{background:var(--red-soft);color:var(--red)}
+.vres b{color:inherit}
+.rtab{width:100%;border-collapse:collapse;font-size:.8rem;margin:10px 0 0;min-width:0}
+.rtab th,.rtab td{border:1px solid var(--line);padding:3px 6px;text-align:center;white-space:nowrap}
+.rtab td.y{background:var(--green-soft);color:var(--green);font-weight:700}
+.rtab td.n{color:var(--muted)}
+.rtab td.bad{background:var(--red-soft);color:var(--red);font-weight:700}
+.presets{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 0}
+.presets button{font:inherit;font-size:.78rem;padding:3px 10px;border-radius:999px;cursor:pointer;
+  border:1px solid var(--line);background:var(--card);color:var(--ink)}
+.presets button:hover{border-color:var(--accent);color:var(--accent)}
+
+/* 贝叶斯权重台 */
+.bayes{margin:10px 0}
+.brow{display:grid;grid-template-columns:minmax(0,90px) minmax(0,1fr) minmax(0,1fr);gap:10px;align-items:center;margin:9px 0}
+.brow .nm{font-size:.84rem;font-weight:700}
+.brow .sl{display:flex;align-items:center;gap:7px;min-width:0}
+.brow input[type=range]{flex:1;min-width:0;accent-color:var(--accent)}
+.brow .v{font-family:var(--mono);font-size:.78rem;color:var(--muted);width:3.4em;text-align:right}
+.bars{margin:14px 0 0}
+.bar{margin:7px 0}
+.bar .t{display:flex;justify-content:space-between;font-size:.79rem;margin-bottom:3px}
+.bar .t .r{font-family:var(--mono);color:var(--muted)}
+.bar .track{height:16px;background:var(--bg);border-radius:8px;overflow:hidden;display:flex}
+.bar .pre{background:var(--accent-soft);height:100%;transition:width .3s}
+.bar .post{background:var(--purple);height:100%;transition:width .3s;opacity:.85}
+.blegend{font-size:.78rem;color:var(--muted);margin-top:8px}
+.blegend i{display:inline-block;width:11px;height:11px;border-radius:3px;vertical-align:middle;margin:0 4px 0 10px}
+.btotal{background:var(--accent-soft);border-radius:8px;padding:8px 12px;margin:12px 0 0;font-size:.87rem;color:var(--accent)}
+@media (max-width:560px){ .brow{grid-template-columns:1fr;gap:4px} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../index.html">← 返回 数学一复盘中心</a>
+  <header>
+    <h1>精读版 · 概率第 1 章　随机事件与概率</h1>
+    <div class="sub">融合张宇《基础30讲·概率论与数理统计分册》第 1 讲（32 页）+《概率论与数理统计9讲》第 1 讲（8 页）· 以《9讲》的<b>三向解题法六条主路</b>为骨架 · <span class="layer L-base">基础</span> 打地基、<span class="layer L-str">强化</span> 上题型 · <b>基础 15 例 + 19 习题 + 强化 10 例，共 44 道，答案全部用程序独立枚举 / 数值积分复算，与原书零分歧</b> · 本章交付两个交互模块：<b>📐 文氏图事件运算器</b>（任意两个事件表达式当场对拍，治「$A-(B-C)$ 到底等不等于 $(A-B)\cup C$」这类头号错因）与 <b>🔀 贝叶斯权重台</b>（把"信息一进来，权重就变了"这句话做成可以拖的滑块）。</div>
+  </header>
+
+  <div class="legend">
+    <b>这一页的三层结构：</b>
+    <span class="layer L-base">基础</span>= 定义、公式与模型（基础30讲的地基，放心背）；
+    <span class="layer L-str">强化</span>= 《概率9讲》的<b>专属解题路线与充要条件群</b>（基础讲没有、真题真考的）。批注色块：
+    <span class="swatch" style="background:var(--blue)"></span><b style="color:var(--blue)">补讲</b>、
+    <span class="swatch" style="background:var(--amber)"></span><b style="color:var(--amber)">必记</b>、
+    <span class="swatch" style="background:var(--red)"></span><b style="color:var(--red)">陷阱</b>、
+    <span class="swatch" style="background:var(--green)"></span><b style="color:var(--green)">强化题型</b>。<br>
+    紫色 <b>例题</b> 卡里，<b>基</b>1.x = 基础30讲例题、<b>习</b>1.x = 基础30讲课后习题、<b>强</b>1.x = 概率9讲例题（三套各自编号，别混）。<b>每题都标 ✔</b> = 答案已被我用程序独立算过一遍，不是照抄扫描件。<br>
+    <b>📝 需要写过程的大题按「想 → 写 → 校」分三层</b>，对应做题的三个动作，<b>请按这个顺序用</b>：<br>
+    <b>💭 思路</b>＝<u>动手前</u>看：审题信号、为什么往这条路走、卡在哪里怎么破。<b>看完这层就合上页面自己写，别直接翻卷面。</b><br>
+    <b>✍️ 考场卷面</b>＝<u>写完对照</u>：可以照着抄上考场的完整解答，只写真要落笔的字，每个采分点标 <span class="pt" style="margin-left:0">⛳</span> 及分值。<br>
+    <b>📌 批注</b>＝<u>对照完校对</u>：定理适用边界、<span class="dock">扣分点</span>、提速技巧、跨章联系。<b>这层的话考场上一个字都不要写。</b><br>
+    选择填空题不用卷面层（考场上本来就不写过程），仍是「答案 → 分析 → 要害/法一法二」的教学式排版。本章需要写过程的共 <b>7 张</b>（基 1.1、基 1.3、基 1.9、基 1.12、强 1.5、习 1.18、习 1.19），已全部上三层。
+  </div>
+
+  <nav class="toc">
+    <a href="#s0">定位 · 六条主路地图</a>
+    <a href="#s1">基本概念 · 事件的关系与运算</a>
+    <a href="#s2">📐 文氏图事件运算器</a>
+    <a href="#s3">概率的三个定义 + 性质</a>
+    <a href="#s4">古典概型 · 计数三法</a>
+    <a href="#s5">几何概型</a>
+    <a href="#s6">七大公式 · 加减条件乘法</a>
+    <a href="#s7">全概率与贝叶斯</a>
+    <a href="#s8">🔀 贝叶斯权重台</a>
+    <a href="#s9">独立性与伯努利概型</a>
+    <a href="#s10">强化 · 六条主路题型库</a>
+    <a href="#s11">习题答案速查（19 道）</a>
+    <a href="#s12">例题落位表 · 自测清单</a>
+  </nav>
+
+  <!-- ================= s0 定位 ================= -->
+  <h2 id="s0"><span class="idx">定位</span>这一章到底在学什么 · 六条主路地图</h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/概率论与数理统计/01_随机事件与概率/概率_第01章_基础30讲.pdf">📄 基础30讲</a>
+
+  <div class="mine"><span class="tag">补讲 · 一句话定位</span>
+    整本概率论只有<b>两件事</b>：先把随机现象翻译成<b>事件</b>（第 1 章），再把事件升级成<b>随机变量</b>（第 2 章起）。所以第 1 章是全科唯一一章"<b>还没有随机变量</b>"的章节——它教的是<b>翻译</b>与<b>拆解</b>：把一句中文（"至少有一个""既不…又不…""已知…求…"）翻译成 $P(\cdot)$ 的式子，再把复杂事件<b>拆</b>成能算的小块。<br>
+    这一章的知识点极少（七个公式全在一页纸上），但<b>失分率不低</b>，原因永远是同一个：<b>翻译错了</b>。所以本页把重心放在两处——<a href="#s1">事件运算</a>（配 <a href="#s2">📐 运算器</a> 当场对拍）与 <a href="#s7">全集分解</a>（配 <a href="#s8">🔀 权重台</a> 看清贝叶斯在干什么）。<br>
+    另有一条暗线：<b>第 1 章的每个模型都会在后面复活</b>——古典概型的"$n$ 球放 $N$ 盒"→ 第 2 章的二项分布背景；条件概率 $P(B\mid A)$ → 第 3 章的条件分布 $f_{X\mid Y}$；全集分解 → 第 3 章求 $Z=X+Y$ 分布的卷积公式。<b>现在把翻译练熟，后面全是复利。</b>
+  </div>
+
+  <div class="key"><span class="tag">必记 · 基础30讲的知识结构（四大块）</span>
+    <div class="gridwrap"><table>
+      <tr><th>#</th><th>块</th><th>内容</th><th>本页位置</th></tr>
+      <tr><td>①</td><td><b>基本概念</b></td><td>随机试验 / 随机事件 / 样本空间；事件的<b>关系</b>（包含、相等、积、相容、互斥、和、差、逆）与<b>运算</b>（吸收、交换、结合、分配、<b>对偶律</b>）；概率的三个定义（描述性 / 统计性 / 公理化）</td><td><a href="#s1">§一</a><a href="#s3">§三</a></td></tr>
+      <tr><td>②</td><td><b>古典概型和几何概型</b></td><td>古典概型（<b>随机分配</b>问题、<b>简单随机抽样</b>问题）、几何概型</td><td><a href="#s4">§四</a><a href="#s5">§五</a></td></tr>
+      <tr><td>③</td><td><b>概率的性质与公式</b></td><td>性质（有界性、<b>单调性</b>）；公式（逆事件、加法、减法、<b>条件概率</b>、乘法、<b>全概率</b>、<b>贝叶斯</b>）</td><td><a href="#s6">§六</a><a href="#s7">§七</a></td></tr>
+      <tr><td>④</td><td><b>独立性和独立重复试验</b></td><td>事件的独立性、独立性的判定、独立试验序列概型与 <b>$n$ 重伯努利概型</b></td><td><a href="#s9">§九</a></td></tr>
+    </table></div>
+    张宇在 ④ 旁边批的原话：<em>涉及多项分布的背景，比如常考的二项分布</em>——第 1 章的伯努利概型就是第 2 章二项分布的出生地。
+  </div>
+
+  <div class="zy"><span class="tag">强化题型 · 《概率9讲》三向解题法：一个目标 O，六条主路</span>
+    《9讲》第 1 讲把目标写成 <b>O（盯住目标）＝ 计算随机事件的概率</b>，然后按"<b>题干里出现什么词</b>"分成六条主路。<b>这张表就是本章的解题总开关</b>：
+    <div class="gridwrap"><table>
+      <tr><th>#</th><th>主路</th><th>题干信号词</th><th>张宇编码</th><th>本页位置</th></tr>
+      <tr><td>一</td><td>用<b>对立</b>思想求事件概率</td><td>"既不…又不…"、"<b>至少</b>有…"</td><td>D₁ 常规操作 + <b>D₂₂ 转换等价表述</b> + D₄₂ 引入符号</td><td><a href="#s10a">§十·一</a></td></tr>
+      <tr><td>二</td><td>用<b>互斥</b>思想求事件概率</td><td>"<b>恰有</b>一个发生"、并事件拆分</td><td>D₁ + <b>D₂₂</b> + D₄₂</td><td><a href="#s10b">§十·二</a></td></tr>
+      <tr><td>三</td><td>用<b>条件</b>思想求事件概率</td><td>"<b>已知</b>…"、"<b>当…发生时</b>"</td><td>D₁ + <b>D₂₂</b> + D₄₂</td><td><a href="#s10c">§十·三</a></td></tr>
+      <tr><td>四</td><td>用<b>单调性</b>处理事件概率</td><td>出现<b>不等号</b>、"两边夹"</td><td>D₁ + <b>D₂₁ 观察研究对象</b></td><td><a href="#s10d">§十·四</a></td></tr>
+      <tr><td>五</td><td>用<b>最值关系式</b>处理事件概率</td><td>出现 $\max\{X,Y\}$、$\min\{X,Y\}$</td><td>D₁ + <b>D₂₃ 化归经典形式</b></td><td><a href="#s10e">§十·五</a></td></tr>
+      <tr><td>六</td><td>用<b>独立、有利或抑止</b>处理概率</td><td>比较 $P(AB)$ 与 $P(A)P(B)$、充要条件题</td><td>D₁ + <b>D₂₂</b></td><td><a href="#s10f">§十·六</a></td></tr>
+    </table></div>
+    <b>张宇在 §三（条件思想）标题旁批了一句</b>：<em>必考点，对计算能力提出较高要求，要加强训练</em>——六条路里<b>只有第三条被点名</b>，全概率与贝叶斯就是本章的考试重心。
+  </div>
+
+  <div class="dolinks">
+    <div class="t">本章体量（概率六章里的中等章，但它是全科的地基）</div>
+    基础30讲第 1 讲 <b>p.1–32（32 页）</b> · 概率9讲第 1 讲 <b>p.1–8（8 页）</b>，共 <b>40 页</b>。
+    例题：基础 15 例 + 19 道课后习题 + 强化 10 例 = <b>44 道，本页全收，一道不漏</b>。
+    <a href="../../张宇系列_分章易识别版/概率论与数理统计/01_随机事件与概率/概率_第01章_基础30讲.pdf">📄 基础30讲 第1讲</a>
+    <a href="../../张宇系列_分章易识别版/概率论与数理统计/01_随机事件与概率/概率_第01章_强化9讲_第1讲_随机事件和概率.pdf">📄 概率9讲 第1讲</a>
+    <a href="../../张宇系列_分章易识别版/概率论与数理统计/01_随机事件与概率/概率_第01章_1000题_基础_题目.pdf">📝 1000题·基础</a>
+    <a href="../../张宇系列_分章易识别版/概率论与数理统计/01_随机事件与概率/概率_第01章_1000题_强化_题目_第1讲_随机事件和概率.pdf">📝 1000题·强化</a>
+    <div class="note">读完本页再去刷 1000 题；解析先别看，盲做完了才对答案。</div>
+  </div>
+
+  <!-- ================= s1 基本概念 ================= -->
+  <h2 id="s1"><span class="idx">一</span>基本概念 · 事件的关系与运算　<span class="layer L-base">基础</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/概率论与数理统计/01_随机事件与概率/概率_第01章_基础30讲.pdf">📄 基础 p.2–6</a>
+
+  <h3>1. 随机试验 $E$ 的三个条件</h3>
+  <p>(1) 试验可以在<b>相同的条件下重复</b>进行；(2) 试验所有可能结果<b>明确可知，且不止一个</b>；(3) 每一次试验会出现哪一个结果，<b>事先并不能确定</b>。三条同时满足才叫随机试验，记为 $E$ 或 $E_1,E_2,\dots$。</p>
+
+  <div class="mine"><span class="tag">补讲 · 张宇为什么在这里插了一大段正态分布</span>
+    书上 p.3 有一整页的注，讲的是"<b>不能确切知道全部结果时，可以把范围放大</b>"：记录某城市一天的交通事故数，试验结果是非负整数 $x$，无法确定 $x$ 的确切范围，就干脆取 $[0,+\infty)$，甚至取 $(-\infty,+\infty)$ 也无妨。<br>
+    这段话是在<b>提前给正态分布铺路</b>：为什么身高的分布能写成取值在 $(-\infty,+\infty)$ 的正态？身高怎么可能取负值？——<b>并非身高取负值，而是对自然现象进行了范围扩大</b>。扩大以后刚好能用高斯曲线这条从 $-\infty$ 到 $+\infty$ 的著名曲线来研究，数学处理极其方便，而曲线两端取值的可能性非常小、几乎取不到。<br>
+    配套两句结论（<b>记住，第 5 章还会考</b>）：①在大样本情况下，根据<b>中心极限定理</b>，所有分布最终都会收敛于正态分布；②<b>普通现象的概率肯定是高的，而极端现象的概率是低的</b>——这就是正态"两边低中间高"的现实含义。
+  </div>
+
+  <h3>2. 随机事件 · 样本空间</h3>
+  <p>一次试验中<b>可能出现也可能不出现</b>的结果称为<b>随机事件</b>，用 $A,B,C$ 表示。每次试验中<b>一定发生</b>的事件称<b>必然事件</b> $\Omega$（集合中全集的符号）；<b>一定不发生</b>的称<b>不可能事件</b> $\varnothing$（空集的符号）。<br>
+  每一个可能结果称<b>样本点</b> $\omega$（<b>不可再分</b>），全体样本点的集合称<b>样本空间</b>（基本事件空间）$\Omega=\{\omega\}$；由<b>一个</b>样本点构成的事件称<b>基本事件</b>。随机事件 $A$ 总是由若干基本事件组成，即 <b>$A$ 是 $\Omega$ 的子集</b>。</p>
+  <p><b>示例</b>（掷骰子）：$\omega_i=\{$掷出点数 $i\}$，$\Omega=\{\omega_1,\omega_2,\cdots,\omega_6\}$；$A=\{$掷出偶数点$\}=\{\omega_2,\omega_4,\omega_6\}$ 是 $\Omega$ 的子集。</p>
+
+  <h3>3. 事件的关系（八条）</h3>
+  <div class="gridwrap"><table>
+    <tr><th>关系</th><th>定义</th><th>记号</th><th>随手带出的结论</th></tr>
+    <tr><td><b>包含</b></td><td>$A$ 发生<b>必导致</b> $B$ 发生</td><td>$A\subset B$</td><td>单调性 $P(A)\le P(B)$（<a href="#s6">§六</a>）</td></tr>
+    <tr><td><b>相等</b></td><td>$A\subset B$ 且 $B\subset A$</td><td>$A=B$</td><td>"由完全相同的试验结果构成，只是同一事件表面上看起来不同的两个说法"</td></tr>
+    <tr><td><b>积（交）</b></td><td>$A$ 与 $B$ <b>同时</b>发生</td><td>$A\cap B$ 或 $AB$</td><td>$n$ 个：$\bigcap_{i=1}^{n}A_i$</td></tr>
+    <tr><td><b>相容</b></td><td>$AB\ne\varnothing$（里面是有元素的）</td><td>—</td><td>—</td></tr>
+    <tr><td><b>互斥</b>（互不相容）</td><td>$AB=\varnothing$</td><td>—</td><td>加法公式退化为 $P(A\cup B)=P(A)+P(B)$</td></tr>
+    <tr><td><b>和（并）</b></td><td>$A$ 与 $B$ <b>至少有一个</b>发生</td><td>$A\cup B$</td><td>$n$ 个：$\bigcup_{i=1}^{n}A_i$</td></tr>
+    <tr><td><b>差</b></td><td>$A$ 发生<b>而</b> $B$ 不发生</td><td>$A-B$</td><td>$A-B=A-AB=A\overline B$</td></tr>
+    <tr><td><b>逆（对立）</b></td><td>$A$ <b>不</b>发生</td><td>$\overline A$</td><td>$B=\overline A\iff AB=\varnothing$ 且 $A\cup B=\Omega$</td></tr>
+  </table></div>
+
+  <div class="trap"><span class="tag">陷阱 · 全章第一个必须分清的辨析</span>
+    <b>对立事件一定是互不相容事件，但互不相容事件不一定是对立事件。</b><br>
+    书上的反例图（p.5）：把矩形 $\Omega$ 切成三块 $A,B,C$，则 $A$ 与 $B$、$B$ 与 $C$、$A$ 与 $C$ <b>两两互斥</b>，但只有 $B\cup C$ 才是 $A$ 的对立事件——<b>互斥只要求"不重"，对立还要求"不漏"</b>（并起来必须铺满 $\Omega$）。<br>
+    这条辨析直接生出下一个概念：把"不重 + 不漏"写成定义，就是<b>完备事件组</b>。
+  </div>
+
+  <div class="key"><span class="tag">必记 · 完备事件组（全集分解）</span>
+    若 $\displaystyle\bigcup_{i=1}^{n}A_i=\Omega$（或 $\bigcup_{i=1}^{\infty}A_i=\Omega$）且 $A_iA_j=\varnothing\ (i\ne j)$，则称 $A_1,A_2,\cdots,A_n(\cdots)$ 构成一个<b>完备事件组</b>。<br>
+    书上眉批把它说得最透：<b>完备事件组保证「不重不漏」——所谓不重，就是任何两个事件的交集是空集（没有公共元素）；不漏就是所有事件并起来最后是全集。</b><br>
+    它还有两个别名：<b>对样本空间的一种划分</b>、<b>全集分解</b>。最常用的两个具体形式是 $\{A,\overline A\}$（二分）和"按原因分类"的 $\{A_1,\cdots,A_n\}$。<b>全概率公式、贝叶斯公式的第一句话都是它</b>（<a href="#s7">§七</a>）。
+  </div>
+
+  <h3>4. 事件的运算（五条律）</h3>
+  <div class="gridwrap"><table>
+    <tr><th>#</th><th>名称</th><th>内容</th></tr>
+    <tr><td>①</td><td>吸收律</td><td>若 $A\subset B$，则 $A\cup B=B$，$A\cap B=A$</td></tr>
+    <tr><td>②</td><td>交换律</td><td>$A\cup B=B\cup A$，$A\cap B=B\cap A$</td></tr>
+    <tr><td>③</td><td>结合律</td><td>$(A\cup B)\cup C=A\cup(B\cup C)$，$(A\cap B)\cap C=A\cap(B\cap C)$</td></tr>
+    <tr><td>④</td><td>分配律</td><td>$A\cap(B\cup C)=(A\cap B)\cup(A\cap C)$；$A\cup(B\cap C)=(A\cup B)\cap(A\cup C)$；$A\cap(B-C)=(A\cap B)-(A\cap C)$</td></tr>
+    <tr><td>⑤★</td><td><b>对偶律</b>（德·摩根律）</td><td>$\overline{A\cup B}=\overline A\cap\overline B$，$\overline{A\cap B}=\overline A\cup\overline B$</td></tr>
+  </table></div>
+
+  <div class="key"><span class="tag">必记 · 对偶律口诀与运算顺序</span>
+    张宇的口诀：<b>长杠变短杠，开口换方向</b>。例如 $\overline{\overline A\cap B}=\overline{\overline A}\cup\overline B=A\cup\overline B$。<br>
+    <b>运算顺序约定</b>：先进行<b>逆</b>运算，然后进行<b>交</b>运算，最后进行<b>并或差</b>运算。<br>
+    <b>方法论</b>：事件的关系、运算与集合的关系、运算相当，具有相同的运算法则，<b>要学会用集合关系去考虑事件关系</b>——这就是下一节那个运算器的全部原理。
+  </div>
+
+  <div class="zy"><span class="tag">强化题型 · 《9讲》把上面这些律改写成了两条"可直接代入"的公式串</span>
+    <b>对立串（主路一）</b>：$\overline{A\cup B}=\overline A\,\overline B$，$\overline{AB}=\overline A\cup\overline B$，$P(A)=1-P(\overline A)$。<br>
+    于是 $P(A\cup B)=1-P(\overline{A\cup B})=1-P(\overline A\,\overline B)$；$\ P(AB)=1-P(\overline{AB})=1-P(\overline A\cup\overline B)$。<br><br>
+    <b>互斥串（主路二）</b>：$A\cup B=A\cup\overline AB=B\cup A\overline B=A\overline B\cup AB\cup\overline AB$（<b>把并拆成三块互斥的</b>）。<br>
+    于是 $P(A\cup B)=P(A\overline B)+P(AB)+P(\overline AB)$。<br>
+    以及：若 $B_1,B_2,B_3$ 为完备事件组，则 $A=AB_1\cup AB_2\cup AB_3$，$P(A)=P(AB_1)+P(AB_2)+P(AB_3)$（<b>这就是全概率公式的骨架</b>）。<br>
+    再加四条随手用的：$P(A\overline B)=P(A-B)=P(A)-P(AB)$；$P(A+B)=P(A)+P(B)-P(AB)$；<br>
+    $P(A+B+C)=P(A)+P(B)+P(C)-P(AB)-P(BC)-P(AC)+P(ABC)$；$A_i$ 两两互斥时 $P(\bigcup A_i)=\sum P(A_i)$。
+  </div>
+
+  <!-- ================= s2 文氏图运算器 ================= -->
+  <h2 id="s2"><span class="idx">二</span>📐 文氏图事件运算器 · 任意两式当场对拍</h2>
+
+  <div class="tool">
+    <h4>把两个事件表达式画在同一张图上，逐区域比对</h4>
+    <div class="hint">
+      三个圆 $A,B,C$ 把矩形 $\Omega$ 切成 <b>8 个互不相交的区域</b>（含圆外那块）。任何一个由 $A,B,C$ 经交、并、差、逆构成的事件，本质上<b>就是这 8 块里挑几块</b>——所以判断两个表达式是否相等，只要看它们挑的块是不是同一批，这是<b>完全严格</b>的判定，不是"看着差不多"。<br>
+      <b>这替代了什么学习动作</b>：书上习 1.16 让你判断 $A-(B-C)=(A-B)\cup C$ 之类的命题成不成立，标准做法是<b>手画两张文氏图比阴影</b>（书上 p.30 的图 1-5 就是这么干的）。手画慢且容易画歪，这里改成选两个式子按一下。<b>但请先自己用对偶律推一遍，推完再来验</b>——工具是判卷的，不是替你想的。
+    </div>
+
+    <div class="exprbar">
+      <span class="lbl">左式</span><select id="vL"></select>
+      <span class="lbl">右式</span><select id="vR"></select>
+      <button id="vGo">对拍</button>
+      <button id="vSwap">⇄ 交换</button>
+    </div>
+    <div class="presets" id="vPre"></div>
+
+    <div class="vennwrap">
+      <div class="vennbox"><canvas id="cvL" width="360" height="230"></canvas><div class="cap" id="capL"></div></div>
+      <div class="vennbox"><canvas id="cvR" width="360" height="230"></canvas><div class="cap" id="capR"></div></div>
+    </div>
+
+    <div class="vres" id="vRes"></div>
+    <div class="gridwrap"><table class="rtab" id="vTab"></table></div>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 8 个区域怎么读</span>
+    表头那一行 <b>$\overline A\overline B\overline C$ / $A\overline B\overline C$ / …</b> 就是 8 块，按"$A$ 在不在、$B$ 在不在、$C$ 在不在"排列。<b>把任何一个事件写成"哪几块的并"，是这一章最有用的一个习惯</b>——例如：<br>
+    ・"$A,B,C$ <b>恰有一个</b>发生" = $A\overline B\overline C\cup\overline AB\overline C\cup\overline A\overline BC$（挑 3 块）→ 正是<a href="#s10b">强 1.2</a>；<br>
+    ・"$A,B,C$ <b>至多有一个</b>发生" = 上面 3 块再加 $\overline A\overline B\overline C$（挑 4 块）→ 正是<a href="#s11">习 1.14 ③</a>；<br>
+    ・"<b>至少有一个</b>发生" = 除 $\overline A\overline B\overline C$ 外的全部 7 块 = $\overline{\overline A\overline B\overline C}$ → <b>对立思想</b>的来源（<a href="#s10a">§十·一</a>）。<br>
+    看出来了吗：<b>"恰有 / 至多 / 至少"这三个词，在这张图上就是选几块的区别。</b>翻译对了，题就做完一半。
+  </div>
+
+  <!-- ================= s3 概率的定义与性质 ================= -->
+  <h2 id="s3"><span class="idx">三</span>概率的三个定义 + 两条性质　<span class="layer L-base">基础</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/概率论与数理统计/01_随机事件与概率/概率_第01章_基础30讲.pdf">📄 基础 p.6–7、p.15</a>
+
+  <h3>1. 三个定义 · 各管一段</h3>
+  <div class="gridwrap"><table>
+    <tr><th>定义</th><th>说的是什么</th><th>它<b>能</b>干什么 / <b>不能</b>干什么</th></tr>
+    <tr><td><b>描述性</b></td><td>$P(A)$ 是事件 $A$ 发生<b>可能性大小的度量</b>（非负值）</td><td>只给直觉，不给算法</td></tr>
+    <tr><td><b>统计性</b></td><td>$n$ 次重复试验中 $A$ 出现 $k$ 次，$\dfrac kn$ 称<b>频率</b>；$n$ 充分大时频率"稳定"于常数 $p$，$p$ 即概率</td><td><b>频率只是概率的估计，不是概率本身</b>。它没有理论上的价值、不能精确定义概率，但实践上有用：①提供<b>估计</b>概率的方法；②提供<b>检验</b>某结论是否正确的准则</td></tr>
+    <tr><td><b>公理化</b>★</td><td>①非负性 $P(A)\ge0$；②规范性 $P(\Omega)=1$；③<b>可列可加性</b>：$A_i$ 两两互不相容时 $P\!\left(\bigcup_{i=1}^{\infty}A_i\right)=\sum_{i=1}^{\infty}P(A_i)$</td><td>只界定概率<b>必须满足</b>的一般性质，<b>不解决</b>具体场合下的计算。但——<b>常用它来判断某个事件函数 $P(\cdot)$ 是不是概率，这种题型在考研试题中经常遇到</b></td></tr>
+  </table></div>
+
+  <div class="mine"><span class="tag">补讲 · 统计性定义的两句人话（书上 p.6 眉批）</span>
+    抛硬币 1000 次，正面朝上 527 次，$\dfrac{527}{1000}=0.527$——<b>这是频率，不是概率</b>。<br>
+    对于均匀的硬币，正面朝上的概率<b>客观上就应该是 $\tfrac12$</b>，频率只能是逐渐地靠近 $\tfrac12$；但在硬币不均匀的情况下，不清楚抛出硬币正面朝上的概率，就<b>不能直接讲是 $\tfrac12$</b>。<br>
+    ②那句"检验准则"更实用：你说某批产品合格率是 95%，我抽样算出合格率 20%，远远低于你所说的 95%，于是<b>毫不犹豫地拒绝你的结论</b>——这就是第 6 章<b>假设检验</b>的全部思想，在第 1 章就埋下了。<br>
+    另外"频率依概率收敛到概率"这句话，是第 5 章<b>大数定律</b>的原话。
+  </div>
+
+  <h3>2. 两条性质</h3>
+  <p><b>(1) 有界性</b>：对于任一事件 $A$，有 $0\le P(A)\le1$，且 $P(\varnothing)=0$，$P(\Omega)=1$。</p>
+  <p><b>★(2) 单调性</b>：设 $A,B$ 是两个事件，若 $A\subset B$，则 $P(B-A)=P(B)-P(A)$，$P(B)\ge P(A)$。</p>
+
+  <div class="trap"><span class="tag">陷阱 · 全章最容易被当成"显然"的一条（选择题常客）</span>
+    <b>$P(A)=0$，不能断言 $A=\varnothing$；$P(A)=1$，不能断言 $A=\Omega$。</b>换句话说
+    $$A=\varnothing\ \Longrightarrow\ P(A)=0,\qquad\text{反过来不成立}.$$
+    书上的具体反例：用 $\Omega$ 表示一个人在 8:00–9:00 之间进入教室，$A=\{8{:}30$ 到达教室$\}$，则 $P(A)=\dfrac01=0$——8:00~9:00 的时间长度为 1，而 8:30 是<b>一个点，长度为 0</b>。可是"8:30 进教室"<b>显然是可能发生的</b>。<br>
+    张宇给的解释：在<b>非测度论</b>的基础上，有可能会<b>测不到</b>那个概率。这是我们现在这个概率学基础上数学工具不够完善所导致的，即明明是可能发生的事情，但是测不到它，故它的概率是零。<b>但是概率是零的事件，却不一定是不可能事件</b>——它有<b>两种身份</b>：①它确确实实是不可能事件（空集里面什么元素都没有）；②在我们所学的基础上，$A$ 事件的测量是测不到它的，测不到，那概率依然是零。<br>
+    <span class="dock">考场用法</span>：见到选项写着"由 $P(A\cup B)=1$ 得 $A\cup B=\Omega$"或"由 $P(AB)=0$ 得 $AB=\varnothing$"，<b>直接判错</b>。这正是<a href="#s6">基 1.6</a> 的整道题。
+  </div>
+
+  <!-- ================= s4 古典概型 ================= -->
+  <h2 id="s4"><span class="idx">四</span>古典概型 · 计数三法 + 两大模型　<span class="layer L-base">基础</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/概率论与数理统计/01_随机事件与概率/概率_第01章_基础30讲.pdf">📄 基础 p.8–13</a>
+
+  <p><b>古典概型的两个条件</b>：①只有<b>有限个</b>样本点（基本事件）——<em>一旦出现无穷个，就不是古典概型</em>；②每个样本点发生的可能性都一样（<b>等可能性</b>）。此时
+  $$P(A)=\frac kn=\frac{\text{事件 }A\text{ 所含基本事件的个数}}{\text{基本事件总数}}.$$</p>
+
+  <div class="key"><span class="tag">必记 · 计数三法（古典概型的全部工作量都在这里）</span>
+    <b>(1) 列举法</b>（直接数）：基本事件数不多时用。<b>习 1.3</b> 那道二次方程有实根的题就是硬列 $6\times6$ 的表。<br>
+    <b>(2) 集合对应法</b>：<br>
+    　①<b>加法原理</b>——完成一件事有 $n$ <b>类</b>办法，第 $i$ 类有 $m_i$ 种，共 $\sum_{i=1}^n m_i$ 种；<br>
+    　②<b>乘法原理</b>——完成一件事需 $n$ 个<b>步骤</b>，第 $i$ 步有 $m_i$ 种，共 $\prod_{i=1}^n m_i$ 种；<br>
+    　　<b>两者的分水岭只有一句话：完成这件事情的时候，是否需要分步骤进行。</b>需分步 → 乘法；不分步而是分几"类" → 加法。<br>
+    　　（书上的例子：A 地到 B 地，坐飞机有 C919/C929/A330，坐火车有复兴号/和谐号。<b>看路线</b>：$3+2=5$ 种交通方式；<b>先坐飞机再转火车</b>：$3\times2=6$ 种。）<br>
+    　③<b>排列</b>：$\mathrm P_n^m=n(n-1)\cdots(n-m+1)=\dfrac{n!}{(n-m)!}$；$m=n$ 时 $\mathrm P_n^n=\dfrac{n!}{0!}=n!$（全排列）。<br>
+    　④<b>组合</b>：$\mathrm C_n^m=\dfrac{\mathrm P_n^m}{m!}=\dfrac{n!}{m!(n-m)!}$；$\mathrm C_n^m=\mathrm C_n^{n-m}$，$0!=1$，$\mathrm C_n^0=1$。<br>
+    <b>(3) 逆数法</b>：先求 $\overline A$ 的基本事件数 $n_{\overline A}$，用总数减。<b>常用于计算含"至少"字样的事件的概率</b>，即 $P(A)=1-P(\overline A)$。
+  </div>
+
+  <h3>模型一：随机分配问题（随机占位，突出一个"<b>放</b>"字）</h3>
+  <p>$n$ 个<b>可辨</b>质点随机分配到 $N$ 个盒子中：</p>
+  <div class="gridwrap"><table>
+    <tr><th>分配方式</th><th>不同分法的总数</th><th>为什么</th></tr>
+    <tr><td>每盒容纳<b>任意多</b>个质点</td><td>$N^{\,n}$</td><td>每个质点均可放到 $N$ 个盒子中的任何一个，即有 $N$ 种放法，$n$ 个质点 → $N^n$（<em>"1 月 1 日出生的人有很多"</em>）</td></tr>
+    <tr><td>每盒容纳<b>至多一个</b>质点</td><td>$\mathrm P_N^{\,n}=N(N-1)\cdots(N-n+1)$</td><td>质点可辨且一盒至多一个，即从 $N$ 个元素中选 $n$ 个的排列数（<em>"一个萝卜一个坑"</em>）</td></tr>
+  </table></div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 1.1 ✔</span>将 $n$ 个球随机放入 $N\ (n\le N)$ 个盒子中，<b>每个盒子可以放任意多个球</b>。求下列事件的概率：<br>
+    $A=\{$某<b>指定</b>的 $n$ 个盒子中各有一球$\}$；$B=\{$<b>恰有</b> $n$ 个盒子中各有一球$\}$；$C=\{$<b>指定</b>的 $k\ (k\le n)$ 个盒子中各有一球$\}$。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$P(A)=\dfrac{n!}{N^n}$，$P(B)=\dfrac{\mathrm C_N^n\,n!}{N^n}$，$P(C)=\dfrac{\mathrm C_n^k\,k!\,(N-k)^{n-k}}{N^n}=\dfrac{n!\,(N-k)^{n-k}}{(n-k)!\,N^n}$</span>（$n=3,N=5,k=2$ 时用 $5^3=125$ 种放法穷举，三个答案分别得 $\tfrac6{125},\tfrac{12}{25},\tfrac{18}{125}$，与公式完全一致）
+
+      <div class="think"><span class="th">💭 思路 · 拿到题先想什么（卡壳时看这层，看完自己动手，别直接翻卷面）</span>
+        <ol>
+          <li>先定<b>基本事件是什么</b>——这是古典概型的第一步，也是唯一容易错的一步。题目说"每个盒子可以放任意多个球"，说明球和盒子都<b>可分辨</b>（例如编号），<b>"$n$ 个球的一种放法"就是一个基本事件</b>，每球 $N$ 种选择，总数 $N^n$。分母定死了，剩下全是分子。</li>
+          <li>三问的差别<b>只在"盒子的位置定没定"和"球用完没用完"</b>，读题时就抠这两点：<br>
+          ・$A$ "<b>某指定</b>的 $n$ 个盒子"——盒子位置<b>唯一确定</b>，只有此一种情况；球恰好 $n$ 个，正好填满，是 $n$ 个球的一个<b>全排列</b>。<br>
+          ・$B$ "<b>恰有</b> $n$ 个盒子"——盒子位置<b>不唯一</b>了，先要从 $N$ 个里挑 $n$ 个，多出一个 $\mathrm C_N^n$。<b>$A$ 与 $B$ 只差这一个因子</b>，这是本题的全部机关。<br>
+          ・$C$ "指定的 $k$ 个盒子各有一球"，但球有 $n\gt k$ 个——<b>球没用完</b>，剩下的 $n-k$ 个球必须交代去向。</li>
+          <li>$C$ 的分子按<b>乘法原理分三步</b>：选哪 $k$ 个球去填指定盒（$\mathrm C_n^k$）→ 这 $k$ 个球与 $k$ 个盒子配对（$k!$）→ 剩下 $n-k$ 个球随便放<b>其余 $N-k$ 个盒子</b>（$(N-k)^{n-k}$）。<b>第三步最容易漏</b>：不能再放进那 $k$ 个指定盒，否则就不是"各有一球"了。</li>
+          <li>算完回头看一眼<b>方法总结</b>：将 $n$ 个球放入 $n$ 个盒子使每盒各一球，有 $n!$ 种方法——这个数在后面反复出现。</li>
+        </ol>
+      </div>
+
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面 · 照这个写<span class="score">解答题 10 分参考｜⛳ = 采分点</span></div>
+        <div class="step"><span class="k">解</span>　设 $n$ 个球、$N$ 个盒子都是可分辨的（例如编号）。由于每个盒子可以放任意多个球，每个球都有 $N$ 种不同的放置方法。将 $n$ 个球随机放入 $N$ 个盒子的一种放法作为一个基本事件，则基本事件总数为
+        $$n_\Omega=N^{\,n}.$$
+        <span class="pt">⛳ 样本空间与总数 2 分</span></div>
+        <div class="step">（1）事件 $A$ 所含的基本事件是 $n$ 个不同球的一个排列，故
+        $$n_A=n!,\qquad P(A)=\frac{1\cdot n!}{N^{\,n}}.\tag{1}$$
+        <span class="pt">⛳ 2 分</span></div>
+        <div class="step">（2）事件 $B$ 的基本事件可设想为：先从 $N$ 个盒子中选出 $n$ 个（共有 $\mathrm C_N^{\,n}$ 种不同选法），然后把 $n$ 个球随机放入这 $n$ 个盒子中，每盒一球（共有 $n!$ 种不同放法），因此
+        $$n_B=\mathrm C_N^{\,n}\cdot n!,\qquad P(B)=\frac{\mathrm C_N^{\,n}\cdot n!}{N^{\,n}}.\tag{2}$$
+        <span class="pt">⛳ 认出比 (1) 多一个 $\mathrm C_N^n$　3 分</span></div>
+        <div class="step">（3）事件 $C$ 的基本事件可设想为：先从 $n$ 个球中选出 $k$ 个（有 $\mathrm C_n^{\,k}$ 种不同选法），再将这 $k$ 个球随机放入指定的 $k$ 个盒子中，每盒一球（有 $k!$ 种不同放法），最后将余下的 $n-k$ 个球随机放入其余的 $N-k$ 个盒子中，每球都有 $N-k$ 种放置方法，因此共有 $(N-k)^{\,n-k}$ 种不同放法，故
+        $$n_C=\mathrm C_n^{\,k}\cdot k!\,(N-k)^{\,n-k},\qquad
+        P(C)=\frac{\mathrm C_n^{\,k}k!(N-k)^{\,n-k}}{N^{\,n}}=\frac{n!\,(N-k)^{\,n-k}}{(n-k)!\,N^{\,n}}.\tag{3}$$
+        <span class="pt">⛳ 三步计数各 1 分，共 3 分</span></div>
+        <div class="fin">故所求三个事件的概率分别为 (1)(2)(3) 三式。</div>
+      </div>
+
+      <div class="notekeep"><span class="nh">📌 批注 · 写完对照这一层</span>
+        ・<span class="dock">扣分点</span>：<b>不写"基本事件是什么"直接甩公式</b>，古典概型的题这一句就是采分点——阅卷看的是你有没有把样本空间说清楚。<br>
+        ・<span class="dock">扣分点</span>：$C$ 中把最后一步写成 $N^{\,n-k}$（忘了排除那 $k$ 个已经装满的指定盒），或写成 $(N-k)^{\,n}$（忘了已经用掉 $k$ 个球）。<b>这两个错误占本题失分的绝大多数。</b><br>
+        ・<b>为什么 $P(C)$ 的第二个写法更好用</b>：$\mathrm C_n^kk!=\dfrac{n!}{(n-k)!}=\mathrm P_n^k$，合并后式子里不再出现组合数，代数字更快。<br>
+        ・<b>同构题一次记全</b>（书上原话）：许多问题的结构形式与分球入盒问题相同，都属于随机占位问题——<b>生日问题</b>（$n$ 个人生日，相当于 $n$ 个球随机放入 365 个盒子，每盒可放多个）、<b>住房分配问题</b>（$n$ 个人被分配到 $N$ 个房间，每房可住多人）、<b>乘客下车问题</b>（$n$ 个乘客在 $N$ 个车站下车的各种可能情况）。<b>见到这三类，立刻套本题。</b><br>
+        ・书上把 $N=365,n=12,k=3$ 代进去给了完整对照：$A_1=\{$指定 12 个盒子各放 1 球$\}$，$P(A_1)=\dfrac{12!}{365^{12}}$；$B_1=\{$恰有 12 个盒子各放 1 球$\}$，$P(B_1)=\dfrac{\mathrm C_{365}^{12}12!}{365^{12}}$；$C_1=\{$指定 3 个盒子各放 1 球$\}$，$P(C_1)=\dfrac{\mathrm C_{12}^33!(365-3)^{12-3}}{365^{12}}$。<br>
+        对应到 12 个人回母校参加校庆：$A_2=\{$生日全不相同，且分别为每个月的第一天$\}$、$B_2=\{$生日全不相同$\}$（于是 $\overline{B_2}=\{$<b>至少有两人生日相同</b>$\}$，这就是著名的生日悖论）、$C_2=\{$有且仅有三个人的生日分别在劳动节、儿童节、中秋节$\}$。
+      </div>
+    </div>
+  </div>
+
+  <h3>模型二：简单随机抽样问题（突出一个"<b>取</b>"字）</h3>
+  <p>设 $\Omega=\{\omega_1,\omega_2,\cdots,\omega_N\}$ 含 $N$ 个元素，称 $\Omega$ 为<b>总体</b>。如果各元素被抽到的可能性相同，则总体 $\Omega$ 的抽样称作<b>简单随机抽样</b>。三种方式：</p>
+  <div class="gridwrap"><table>
+    <tr><th>抽样方式</th><th>抽取方法总数</th><th>为什么</th></tr>
+    <tr><td><b>先后有放回</b>取 $n$ 次<br>（样本空间始终无变化）</td><td>$N^{\,n}$</td><td>既考虑抽到何元素，又考虑各元素出现的<b>顺序</b>；每次都有 $N$ 个元素可被抽取</td></tr>
+    <tr><td><b>先后无放回</b>取 $n$ 次</td><td>$\mathrm P_N^{\,n}=N(N-1)\cdots(N-n+1)$</td><td>考虑元素 + 顺序，但每次抽取时都比上一次少了一个元素</td></tr>
+    <tr><td><b>任取</b> $n$ 个</td><td>$\mathrm C_N^{\,n}$</td><td>一次性取 $n$ 个，相当于<b>无序且无放回</b>地取走，$\mathrm C_N^n=\dfrac{\mathrm P_N^n}{n!}$</td></tr>
+  </table></div>
+
+  <div class="key"><span class="tag">必记 · 三种方式两两之间的区别（书上 p.11 的注，逐字要点）</span>
+    <b>①先后有放回 vs 先后无放回</b>：先后有放回取也不意味着是真的放回去了。<b>当产品的数量足够多的时候，拿走一个不放回来，也当作有放回处理</b>（因为若按照先后无放回去计算，可能比较复杂，所以可以当作有放回）。实际上是改变了样本空间，每取走一个，样本空间里就少一个元素，但是<b>如果元素足够多，取走一个可以近似看作原来的样本空间没有变</b>。<b>所以先后有放回取，往往是用在样本 $n$ 足够大的情况下。</b><br>
+    <b>②先后无放回 vs 任取</b>：先后无放回强调"<b>先后</b>"顺序，任取<b>无</b>顺序，故计算公式少了排列 $n!$。
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 1.2 ✔</span>袋中有 5 个球，3 个白球，2 个黑球。(1) 先后有放回取 2 个球；(2) 先后无放回取 2 个球；(3) 任取 2 个球。求取的 2 个球中<b>至少 1 个是白球</b>的概率。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(1) $\dfrac{21}{25}$　(2) $\dfrac9{10}$　(3) $\dfrac9{10}$</span>（三问都用 5 个球贴标签后穷举验证：有放回 $25$ 种、无放回 $20$ 种、任取 $\mathrm C_5^2=10$ 种，计数分别为 21、18、9，逐一吻合）
+      <br><span class="lab">分析</span>考查简单抽样的 <b>3 种抽取方法</b>，要求必会。
+      <br><span class="lab">解</span>题干里有"<b>至少</b>"二字 → <b>逆数法</b>：用对立事件思想，计算"两球全黑"的种数，再用总数减去它。
+      $$\text{(1) }5^2-2^2=21,\qquad\text{(2) }5\times4-2\times1=18,\qquad\text{(3) }\mathrm C_5^2-\mathrm C_2^2=9.$$
+      $$p_1=\frac{5^2-2^2}{5^2}=1-\frac{2^2}{5^2}=\frac{21}{25},\quad
+      p_2=1-\frac{2\times1}{5\times4}=\frac9{10},\quad
+      p_3=1-\frac{\mathrm C_2^2}{\mathrm C_5^2}=\frac9{10}.$$
+
+      <div class="key"><span class="tag">必记 · 本题真正的产出：一条能省一半计算量的结论</span>
+        (2) 与 (3) 概率相同，不是巧合：
+        $$\frac{2\cdot1}{5\cdot4}=\frac{\mathrm C_2^2\cdot\mathrm P_2^2}{\mathrm C_5^2\cdot\mathrm P_2^2}=\frac{\mathrm C_2^2}{\mathrm C_5^2},$$
+        左边上下有序，右边上下无序，相当于把顺序"<b>消掉</b>"了。故
+        <b>「先后无放回取 $k$ 个球」与「任取 $k$ 个球」的概率相同。由于 (3) 较方便，因此计算 (2) 时，可按 (3) 来计算。</b><br>
+        <span class="dock">用法</span>：以后凡见"无放回依次取 $k$ 个，求其中恰有 $m$ 个次品"，<b>直接写成超几何形式</b> $\dfrac{\mathrm C_{M}^{m}\mathrm C_{N-M}^{k-m}}{\mathrm C_N^k}$，不必排列。<a href="#s4">基 1.3(2)</a> 立刻就用上。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 1.3 ✔</span>袋中有 100 个球，40 个白球、60 个黑球。<br>
+    (1) 先后<b>有放回</b>取 20 个球，求取出 15 个白球、5 个黑球的概率；<br>
+    (2) 先后<b>无放回</b>取 20 个球，求取出 15 个白球、5 个黑球的概率；<br>
+    (3) 先后<b>有放回</b>取 20 个球，求<b>第 20 次</b>取到白球的概率；<br>
+    (4) 先后<b>无放回</b>取 20 个球，求<b>第 20 次</b>取到白球的概率。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$p_1=\dfrac{\mathrm C_{20}^{15}\cdot40^{15}\cdot60^{5}}{100^{20}}$，$p_2=\dfrac{\mathrm C_{40}^{15}\mathrm C_{60}^{5}}{\mathrm C_{100}^{20}}$，$p_3=p_4=\dfrac{40}{100}=\dfrac25$</span>
+
+      <div class="think"><span class="th">💭 思路 · 拿到题先想什么</span>
+        <ol>
+          <li>四问是<b>两两配对</b>的：(1)(2) 问"多少个白"，(3)(4) 问"第几次是白"。<b>先按这个分组，再在每组内比较有放回/无放回的差别</b>，不要四问平行地做。</li>
+          <li>(1) 有放回 ⇒ <b>样本空间每次都没变</b>，每次取球是一次独立重复试验，$P\{$取到白$\}=\tfrac{40}{100}$ 恒定 ⇒ 这就是<b>投篮模型</b>：投 20 次、中 15 次不中 5 次 ⇒ <b>二项分布</b>（第 2 章的 $B(20,0.4)$）。写式子时别忘 $\mathrm C_{20}^{15}$——<b>20 个位置中有 15 个位置放白球</b>。</li>
+          <li>(2) 无放回 ⇒ 样本空间在变，二项那套废了。改走<b>随机占位</b>视角；又由<a href="#s4">基 1.2</a> 的结论，"先后无放回取 20 个"可按"<b>任取 20 个</b>"计算，分母 $\mathrm C_{100}^{20}$，分子按颜色分块选 ⇒ 超几何形式。<b>能用组合就别用排列</b>，这是本题第一个提速点。</li>
+          <li>(3) 有放回，每次都一样，<b>第几次根本不重要</b>，直接 $\tfrac{40}{100}$。这一问是送分的，但它的价值是给 (4) 做对照。</li>
+          <li>(4) 无放回还问"第 20 次"——<b>本能反应是要讨论前 19 次取了什么，那是死路</b>（要算 20 项和）。正确的看法：把 100 个球一次性放进 100 个编号盒子（每盒 1 个），"第 20 次取到白球"就是"<b>第 20 号盒子里装的是白球</b>"，与前 19 盒装什么<b>无关</b>。分子 $\mathrm C_{40}^1\cdot99!$，分母 $100!$。</li>
+          <li>算完发现 $p_4=p_3$——这不是巧合，是<b>抓阄模型</b>：无论第几个抓，概率都一样。<b>记住这个结论，考场上 (4) 可以直接写答案。</b></li>
+        </ol>
+      </div>
+
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面 · 照这个写<span class="score">解答题 12 分参考｜⛳ = 采分点</span></div>
+        <div class="step"><span class="k">解</span>（1）先后有放回取球，每次取球有 100 种取法，取 20 次，故基本事件总数为 $100^{20}$；20 个位置中取 15 个位置放白球有 $\mathrm C_{20}^{15}$ 种，故
+        $$p_1=\frac{40^{15}\cdot60^{5}\cdot\mathrm C_{20}^{15}}{100^{20}}.\tag{1}$$
+        <span class="pt">⛳ 认出二项结构 + $\mathrm C_{20}^{15}$　3 分</span></div>
+        <div class="step">（2）先后无放回取 $k$ 个球与任取 $k$ 个球的概率相同，故按照"任取 20 个球"来计算，即
+        $$p_2=\frac{\mathrm C_{40}^{15}\mathrm C_{60}^{5}}{\mathrm C_{100}^{20}}.\tag{2}$$
+        <span class="pt">⛳ 转化为任取 + 超几何式　3 分</span></div>
+        <div class="step">（3）有放回取球，每次抽取的样本空间没有变化，故每次取到白球的概率始终为
+        $$p_3=\frac{40}{100}=\frac25.\tag{3}$$
+        <span class="pt">⛳ 2 分</span></div>
+        <div class="step">（4）看作随机占位问题：设有 100 个盒子，每个盒子中放 1 个球，则只要求第 20 个盒子中放入白球即可。第 20 个盒子从 40 个白球中取 1 个放入有 $\mathrm C_{40}^{1}$ 种放法，剩下 99 个球放在其余 99 个盒子里、每盒各 1 球有 $99!$ 种放法，故
+        $$p_4=\frac{\mathrm C_{40}^{1}\cdot99!}{100!}=\frac{40}{100}=\frac25.\tag{4}$$
+        <span class="pt">⛳ 化为占位模型 3 分　结果 1 分</span></div>
+        <div class="fin">故四问所求概率依次为 (1)(2)(3)(4) 四式，其中 $p_3=p_4=\dfrac25$。</div>
+      </div>
+
+      <div class="notekeep"><span class="nh">📌 批注 · 写完对照这一层</span>
+        ・<b>(4) 的推广要背</b>：若改为"先后无放回取 $k$ 个球，求<b>第 $k$ 次</b>取到白球的概率"，结果仍为 $\dfrac25$。<br>
+        ・<b>为什么 $p_4=p_3$ 而不必算条件概率</b>——书上眉批说得最准：<b>第 20 个盒子放的是白球，但是前 19 个盒子放的什么球并不清楚；若清楚了，即转化为条件概率问题。</b>正因为"不清楚"，各次地位对称，概率相同，这叫<b>绝对概率</b>。<br>
+        ・<b>抓阄模型的两个类比</b>（书上原话，很好用）：①设有 100 个灰球，白的成分∶黑的成分 $=40\!:\!60$，每次取到球中白的成分是 40%；②设有糖水，糖的成分∶水的成分 $=40\!:\!60$，每次取一勺糖水，取到糖的成分是 40%。<b>无放回不改变"浓度"</b>。<br>
+        ・<span class="dock">扣分点</span>：(2) 直接写 $\dfrac{\mathrm P_{40}^{15}\mathrm P_{60}^{5}}{\mathrm P_{100}^{20}}$ 是<b>错的</b>——分子只排了组内、没排组间的交错顺序。要么老老实实乘 $\mathrm C_{20}^{15}$ 补回位置，要么按"任取"走组合，<b>两条路别混着走</b>。<br>
+        ・<b>跨章</b>：(1) 是二项分布 $B(20,0.4)$ 的概率质量函数，(2) 是<b>超几何分布</b>——第 2 章会正式给名字，这里先把它们的出生场景记住：<b>有放回 → 二项；无放回 → 超几何</b>。
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= s5 几何概型 ================= -->
+  <h2 id="s5"><span class="idx">五</span>几何概型　<span class="layer L-base">基础</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/概率论与数理统计/01_随机事件与概率/概率_第01章_基础30讲.pdf">📄 基础 p.13–14</a>
+
+  <p><b>几何概型的两个条件</b>：①样本空间 $\Omega$ 是一个<b>可度量的有界区域</b>；②每个样本点发生的可能性都一样，即样本点落入 $\Omega$ 的某一可度量的子区域 $S$ 的可能性大小<b>与 $S$ 的几何度量成正比，而与 $S$ 的位置及形状无关</b>。</p>
+  <p><b>【名词解释】可度量</b>：通俗来讲，即为可以度量，就是我们现在理解的<b>长度、面积、体积</b>。对于数学一，计算体积则要涉及三重积分；对于数学三，可度量其实基本上就限定在一维的长度和二维的面积上。</p>
+
+  <div class="mine"><span class="tag">补讲 · "天上掉馅饼"——张宇讲几何概型的原始场景</span>
+    假如明天早晨 9:00，在学校操场上会从天上掉一个馅饼下来，大家拿着食堂的饭盆去接这个馅饼。<br>
+    <b>(1) 站在哪里最容易接到？</b>——<b>站哪儿都行</b>。馅饼落到操场上任意一个 $\mathrm dS$ 具有等可能性，实际上是有<b>无数个 $\mathrm dS$</b>（无数个面积微分），所以跟你拿着饭盆站哪里没关系。<br>
+    <b>(2) 跟饭盆的什么有关系？</b>——<b>与饭盆的形状没关系，但是与饭盆的面积有关系</b>。若饭盆的面积 = 操场面积的 $\tfrac12$，则 $P\{$接到馅饼$\}=\tfrac12$；若饭盆的面积 = 操场面积，则 $P\{$接到馅饼$\}=1$。<br>
+    这两句就是几何概型定义里"<b>与几何度量成正比、与位置及形状无关</b>"的全部含义。<br>
+    <b>（顺带解决上一节那个"概率为 0 不等于不可能"的疑惑）</b>：8:30 进教室这件事，在 8:00–9:00 这段长度为 1 的区间里对应<b>一个点</b>，长度为 0——它就是"面积为 0 的饭盆"。
+  </div>
+
+  <div class="key"><span class="tag">必记 · 古典概型 vs 几何概型：区别与联系</span>
+    <b>区别</b>：基本事件<b>有限</b>、等可能发生的随机试验为<b>古典概型</b>；基本事件<b>无限</b>且具有几何度量、等可能发生的随机试验为<b>几何概型</b>。<br>
+    <b>联系</b>（书上给的转化例）：操场被平均分成四部分 $A_1,A_2,A_3,A_4$，现假设 4 个人分别拿着与 $A_1,\cdots,A_4$ <b>同等面积</b>的饭盆，此时相当于对 $\Omega$ 进行<b>均等的划分</b>。显然，馅饼落到 4 个饭盆里具有等可能性，且基本事件数只有四个，即基本事件数是<b>有限</b>的——<b>此时就可以把几何概型转化成古典概型</b>。<br>
+    <span class="dock">用法</span>：见到"把区域等分成 $n$ 块，求落在第 $k$ 块"的题，别去积分，<b>直接按古典概型数块</b>。
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 1.4 ✔</span>在区间 $(0,1)$ 中随机地取两个数，则这两个数之差的<b>绝对值小于 0.5</b> 的概率为 ______。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$0.75$</span>
+      <br><span class="lab">分析</span>在区间 $(0,1)$ 上随机取两个数，这两个数的取值范围就可构成一个<b>可以度量的几何区域</b>，实际上是二维平面上的一个<b>正方形</b>。理解为"馅饼落在操场任何一个点具有等可能性"。记 $A=\{(x,y)\mid|x-y|\lt0.5\}\cap\Omega$，则 $p=\dfrac{S_A}{S_\Omega}$。
+      <br><span class="lab">解</span>设两个数分别为 $x,y$，则依题意 $(x,y)$ 的取值范围为正方形区域 $D=\{(x,y)\mid0\lt x\lt1,\ 0\lt y\lt1\}$。又 $|x-y|\lt0.5$，则所在区域为下图阴影部分（两条直线 $y=x\pm0.5$ 之间的带状区域），于是
+      $$p=\frac{1^2-0.5^2}{1^2}=0.75.$$
+      <div class="fml">
+        <svg viewBox="0 0 200 180" width="200" height="180" style="max-width:100%">
+          <defs><style>.ax{stroke:currentColor;stroke-width:1.1;fill:none}.gl{stroke:currentColor;stroke-width:.9;stroke-dasharray:3 3;opacity:.45;fill:none}.sh{fill:currentColor;opacity:.18}.bd{stroke:currentColor;stroke-width:1.2;fill:none}.tx{font-size:10px;fill:currentColor;font-family:Georgia,serif}</style></defs>
+          <!-- 阴影：单位正方形去掉左上、右下两个直角边0.5的三角形 -->
+          <polygon class="sh" points="30,150 90,150 150,90 150,30 90,30 30,90"/>
+          <rect class="bd" x="30" y="30" width="120" height="120"/>
+          <line class="gl" x1="30" y1="90" x2="150" y2="90"/><line class="gl" x1="90" y1="30" x2="90" y2="150"/>
+          <line class="bd" x1="30" y1="90" x2="90" y2="30" stroke-dasharray="0"/>
+          <line class="bd" x1="90" y1="150" x2="150" y2="90"/>
+          <line class="ax" x1="20" y1="150" x2="175" y2="150"/><line class="ax" x1="30" y1="165" x2="30" y2="20"/>
+          <polygon points="175,150 169,147 169,153" fill="currentColor"/><polygon points="30,20 27,26 33,26" fill="currentColor"/>
+          <text class="tx" x="178" y="154">x</text><text class="tx" x="24" y="18">y</text>
+          <text class="tx" x="22" y="163">O</text><text class="tx" x="85" y="163">0.5</text><text class="tx" x="146" y="163">1</text>
+          <text class="tx" x="14" y="93">0.5</text><text class="tx" x="20" y="34">1</text>
+        </svg>
+        <div style="font-size:.76rem;color:var(--muted);margin-top:4px">图 1-2　$|x-y|\lt0.5$ 的带状区域：正方形挖去左上、右下两个直角边为 0.5 的等腰直角三角形</div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        <b>两个三角形合起来正好是一个边长 0.5 的正方形</b>（$2\times\tfrac12\times0.5^2=0.5^2$），所以面积一步就能写成 $1^2-0.5^2$，不必分别算两个三角形。<br>
+        <b>几何概型的固定动作</b>：①设变量、写出 $\Omega$ 的区域；②把条件翻译成不等式、画出 $A$ 的区域；③求两块的度量之比。<b>三步里最容易错的是第②步的边界</b>——本章的<a href="#s11">习 1.6、习 1.7</a> 都在考"区域画对没有"，习 1.7 还要真算一个定积分。
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= s6 七大公式 ================= -->
+  <h2 id="s6"><span class="idx">六</span>七大公式 · 逆 / 加 / 减 / 条件 / 乘法　<span class="layer L-base">基础</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/概率论与数理统计/01_随机事件与概率/概率_第01章_基础30讲.pdf">📄 基础 p.15–16</a>
+
+  <div class="key"><span class="tag">必记 · 七大公式（★★★ 是张宇亲标的星级）</span>
+    <div class="gridwrap"><table>
+      <tr><th>#</th><th>名称</th><th>公式</th><th>星</th></tr>
+      <tr><td>(1)</td><td>逆事件概率</td><td>$P(\overline A)=1-P(A)$</td><td>——<em>看谁好算，灵活运用</em></td></tr>
+      <tr><td>(2)</td><td><b>加法公式</b></td><td>$P(A\cup B)=P(A)+P(B)-P(AB)$<br>另式：$P(A\cup B)=P(A\overline B)+P(AB)+P(B\overline A)$</td><td></td></tr>
+      <tr><td></td><td>三事件加法</td><td>$P(A_1\cup A_2\cup A_3)=\sum_{i}P(A_i)-P(A_1A_2)-P(A_1A_3)-P(A_2A_3)+P(A_1A_2A_3)$</td><td></td></tr>
+      <tr><td></td><td>两两互斥时</td><td>$P(A_1\cup\cdots\cup A_n)=P(A_1)+\cdots+P(A_n)$</td><td></td></tr>
+      <tr><td>(3)</td><td><b>减法公式</b></td><td>$P(A-B)=P(A)-P(AB)=P(A\overline B)$</td><td></td></tr>
+      <tr><td>(4)</td><td><b>条件概率</b></td><td>$P(B\mid A)=\dfrac{P(AB)}{P(A)}$，要求 $P(A)\gt0$</td><td>★★★</td></tr>
+      <tr><td>(5)</td><td><b>乘法公式</b></td><td>$P(AB)=P(A)P(B\mid A)$；<br>$n\gt2$ 且 $P(A_1\cdots A_{n-1})\gt0$ 时 $P(A_1A_2\cdots A_n)=P(A_1)P(A_2\mid A_1)P(A_3\mid A_1A_2)\cdots P(A_n\mid A_1\cdots A_{n-1})$</td><td></td></tr>
+      <tr><td>(6)</td><td><b>全概率公式</b></td><td>见 <a href="#s7">§七</a></td><td>★★★</td></tr>
+      <tr><td>(7)</td><td><b>贝叶斯公式</b></td><td>见 <a href="#s7">§七</a></td><td></td></tr>
+    </table></div>
+    条件概率里<b>为什么要排除 $P(A)=0$</b>：书上眉批一句话——<b>因为它往往出现在分母位置</b>。
+  </div>
+
+  <div class="key"><span class="tag">必记 · 条件概率的两条使用守则</span>
+    <b>(1) 条件概率 $P(\cdot\mid A)$ 本身就是概率</b>，概率的一切性质和结论对条件概率都适用。例如
+    $$P(\overline B\mid A)=1-P(B\mid A),\qquad P[(B-C)\mid A]=P(B\mid A)-P(BC\mid A),$$
+    等等。<b>凡是无条件概率成立的公式，两边同时挂上 $\mid A$ 就还成立</b>——这条在<a href="#s10c">强 1.3</a> 与第 3 章条件分布里天天用。<br>
+    <b>(2) 条件概率就是在一定的附加条件之下所计算的概率。</b>当说到"条件概率"时，总是指另外附加了条件，其形式可归结为"<b>已知某事件发生了</b>"（或"当……时"）。<br>
+    书上给的语感辨析（很值得读两遍）：①有一个单位长度的质杆，<b>任意切两刀</b>，截成三段；②一个长度为 1 的质杆，<b>先切一刀</b>，把它分成两段之后，<b>再对剩下的任意一段切一刀</b>。<b>以上两种说法不一致</b>——第二种才是条件概率的语境。
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 1.5 ✔</span>设 $A,B$ 为两个随机事件，则（　）。<br>
+    (A) $P(AB)+P(\overline A\,\overline B)\le1$　　(B) $P(AB)+P(\overline A\,\overline B)\ge1$<br>
+    (C) $P(A-B)\le P(A)-P(B)$　　(D) $P(A\cup B)+P(\overline A\cup\overline B)\le1$</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(A)</span>（四个选项已用"$A,B$ 独立且 $P(A)=P(B)=\tfrac12$"这一组数逐一验：(A) $\tfrac12\le1$ 真；(B) $\tfrac12\ge1$ 假；(C) $\tfrac14\le0$ 假；(D) $\tfrac32\le1$ 假）
+      <br><span class="lab">解</span>本题涉及<b>事件之间的关系</b>。由于 $AB\subset A\cup B$，即 $P(AB)\le P(A\cup B)$，从而
+      $$P(AB)\le P(A\cup B)=1-P(\overline{A\cup B})=1-P(\overline A\,\overline B),$$
+      即 $P(AB)+P(\overline A\,\overline B)\le1$。同时有
+      $$P(A\cup B)-P(AB)=P(A\cup B)+P(\overline{AB})-1=P(A\cup B)+P(\overline A\cup\overline B)-1\ge0,$$
+      即 $P(A\cup B)+P(\overline A\cup\overline B)\ge1$，知选项 (B)、(D) 不正确。又 $AB\subset B$，有 $P(AB)\le P(B)$，从而
+      $$P(A-B)=P(A)-P(AB)\ge P(A)-P(B),$$
+      知选项 (C) 不正确，故选择 (A)。
+      <div class="key"><span class="tag">必记 · 本题的通法：<b>四个选项全靠"包含 ⇒ 单调"这一招</b></span>
+        $AB\subset A\cup B$、$AB\subset B$——找出<b>包含关系</b>，套单调性，再用对偶律把 $\overline{A\cup B}$ 换成 $\overline A\,\overline B$。<b>选项里同时出现"$P$ 的和"与"不等号"，第一反应就是这条路</b>（正是《9讲》主路四，见 <a href="#s10d">§十·四</a>）。<br>
+        <span class="dock">易错</span>：(C) 的方向。$P(A-B)=P(A)-P(AB)$ 而 $P(AB)\le P(B)$，减掉的更小 ⇒ 结果<b>更大</b>，所以是 $\ge$ 不是 $\le$。<b>三个"减去的量"要盯住谁大谁小。</b>
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 1.6 ✔</span>设随机事件 $A,B$ 满足 $P(A)=P(B)=\dfrac12$ 和 $P(A\cup B)=1$，则（　）。<br>
+    (A) $A\cup B=\Omega$　　(B) $AB=\varnothing$　　(C) $P(\overline A\cup\overline B)=1$　　(D) $P(A-B)=0$</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(C)</span>
+      <br><span class="lab">解</span>前面已经指出，$P(A\cup B)=1$ <b>不能推出</b> $A\cup B=\Omega$（<em>不代表它一定是必然事件，因为在几何概型上有可能测不到</em>）；且 $P(AB)=P(A)+P(B)-P(A\cup B)=0$ <b>不能推出</b> $AB=\varnothing$（<em>不代表是不可能事件，比如 8:00–9:00 时段恰好在 8:30 进入教室，这个事情是可以发生的，但概率为 0</em>）。故选项 (A)、(B) 不正确。<br>
+      又 $P(A-B)=P(A)-P(AB)=\dfrac12$，选项 (D) 不正确。从而
+      $$P(\overline A\cup\overline B)=P(\overline{AB})=1-P(AB)=1,$$
+      选 (C)。
+      <div class="trap"><span class="tag">陷阱 · 这道题就是 <a href="#s3">§三</a> 那条陷阱的考法</span>
+        <b>四个选项里有两个（A、B）是"概率等式 ⇒ 集合等式"的非法推理</b>，这是本章选择题最常见的出题点。见到选项写成<b>集合等式</b>（$=\Omega$、$=\varnothing$、$A=B$）而条件只给了<b>概率</b>，先默认它错。<br>
+        反向的推理是对的：$A\cup B=\Omega\Rightarrow P(A\cup B)=1$，$AB=\varnothing\Rightarrow P(AB)=0$。<b>单箭头，别写成双箭头。</b>
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 1.7 ✔</span>设 $A,B,C$ 是三个随机事件，$A$ 与 $C$ <b>互斥</b>，$P(AB)=\dfrac12$，$P(C)=\dfrac13$，则 $P(AB\mid\overline C)=$ ______。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$\dfrac34$</span>
+      <br><span class="lab">分析</span>考查条件概率公式及<b>单调性</b>。
+      <br><span class="lab">解</span>因为 $A$ 与 $C$ 互斥，所以 $P(AC)=0$。又 $ABC\subset AC$，所以 $0\le P(ABC)\le P(AC)=0$，即 $P(ABC)=0$，故（把 $AB$ <b>看作一个事件</b>）
+      $$P(AB\mid\overline C)=\frac{P(AB\overline C)}{P(\overline C)}=\frac{P(AB)-P(ABC)}{1-P(C)}=\frac{\frac12}{1-\frac13}=\frac34.$$
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        ・书上的注给了更直接的一句：由于 $AC=\varnothing$，则 $ABC=\varnothing B=\varnothing$，得到 $P(ABC)=0$。<b>两条路都可以，但"用单调性夹"那条更通用</b>（题目只给 $P(AC)=0$ 而不给 $AC=\varnothing$ 时，就只能夹）。<br>
+        ・<b>本题的核心操作是"把 $AB$ 打包成一个整体"</b>：一旦令 $D=AB$，式子就退化成最基础的 $P(D\mid\overline C)=\dfrac{P(D\overline C)}{P(\overline C)}=\dfrac{P(D)-P(DC)}{1-P(C)}$，一眼可写。<span class="dock">别做的事</span>：把 $P(AB\mid\overline C)$ 拆成 $P(A\mid\overline C)P(B\mid\overline C)$——<b>没有独立性凭什么拆</b>。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 1.8 ✔</span>已知 $P(A)=\dfrac14$，$P(B\mid A)=\dfrac13$，$P(A\mid B)=\dfrac12$，则 $P(A\cup B)=$ ______。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$\dfrac13$</span>
+      <br><span class="lab">分析</span><b>从求解所需的条件出发</b>进行分析。
+      <br><span class="lab">解</span>要用加法公式就缺 $P(B)$ 与 $P(AB)$。由乘法公式知
+      $$P(AB)=P(A)P(B\mid A)=\frac14\times\frac13=\frac1{12},\qquad
+      P(B)=\frac{P(AB)}{P(A\mid B)}=\frac{1/12}{1/2}=\frac16,$$
+      所以 $P(A\cup B)=P(A)+P(B)-P(AB)=\dfrac14+\dfrac16-\dfrac1{12}=\dfrac13$。
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        <b>这类"给一堆条件概率求无条件概率"的填空，路线永远是同一条</b>：先用乘法公式把 $P(AB)$ 榨出来（它是所有条件概率的<b>公共分子</b>），再用它去反解别的。<b>$P(AB)$ 是这类题的枢纽，先算它准没错。</b>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= s7 全概率与贝叶斯 ================= -->
+  <h2 id="s7"><span class="idx">七</span>全集分解 · 全概率公式与贝叶斯公式　<span class="layer L-base">基础</span><span class="layer L-str">强化</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/概率论与数理统计/01_随机事件与概率/概率_第01章_基础30讲.pdf">📄 基础 p.16–22</a>
+
+  <h3>0. 先热身：乘法公式的招牌题</h3>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 1.9 ✔</span>某人给四位亲友各写一封信，然后随机地装入 4 个写好地址的信封，且每个信封装一封信。问：(1) 4 封信<b>都装对了</b>的概率；(2) 4 封信<b>都装错了</b>的概率。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(1) $\dfrac1{24}$　(2) $\dfrac38$</span>（$4!=24$ 个排列全部枚举：恰好 1 个恒等排列、9 个错排，$\tfrac9{24}=\tfrac38$，与书答一致）
+
+      <div class="think"><span class="th">💭 思路 · 拿到题先想什么</span>
+        <ol>
+          <li>先<b>引入符号</b>（$\mathrm D_{42}$）：设 $A_i=\{$第 $i$ 封信装对了$\}$。这一步不做，后面一个字都写不出来。</li>
+          <li>(1) "4 封信<b>都</b>装对了" = $A_1,A_2,A_3,A_4$ <b>同时</b>发生，是"<b>且</b>"关系 ⇒ 交事件 $A_1A_2A_3A_4$ ⇒ <b>用乘法公式</b>。注意每一个条件概率的分母都在缩小：装对第 1 封的概率是 $\tfrac14$，已知第 1 封对了、第 2 封只剩 3 个信封可选故为 $\tfrac13$，依此类推。</li>
+          <li>(2) 这里有一个<b>必须当场识破的陷阱</b>：$A=\{$都装对$\}$ 的对立事件是"<b>至少有一封信装错了</b>"，<b>而不是"全部装错了"</b>。所以 $P(B)\ne1-P(A)$，(2) 不能白捡。</li>
+          <li>那 (2) 怎么走？"都装错" $=\overline{A_1}\,\overline{A_2}\,\overline{A_3}\,\overline{A_4}$，一堆<b>逆事件的交</b> ⇒ 见到这个形状就上<b>对偶律</b>翻成"并的逆"：$1-P(A_1\cup A_2\cup A_3\cup A_4)$，再用<b>四事件的加法公式（容斥）</b>。<b>直接正面计算错排数是很困难的，这种情况下采用逆向思维求解问题更加简捷。</b></li>
+          <li>容斥展开后要算三类量：$P(A_i)$、$P(A_iA_j)$、$P(A_iA_jA_k)$、$P(A_1A_2A_3A_4)$，每一类都用 (1) 里那套乘法公式，且<b>同类之间取值相同</b>（对称性），所以只需各算一个再乘以个数 $4,\mathrm C_4^2=6,\mathrm C_4^3=4,1$。</li>
+        </ol>
+      </div>
+
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面 · 照这个写<span class="score">解答题 10 分参考｜⛳ = 采分点</span></div>
+        <div class="step"><span class="k">解</span>　设事件 $A_i\ (i=1,2,3,4)$ 为"第 $i$ 封信装对了"，事件 $A$ 为"4 封信都装对了"，事件 $B$ 为"4 封信都装错了"。
+        <span class="pt">⛳ 引入符号 1 分</span></div>
+        <div class="step">（1）由乘法公式，
+        $$P(A)=P(A_1A_2A_3A_4)=P(A_1)P(A_2\mid A_1)P(A_3\mid A_1A_2)P(A_4\mid A_1A_2A_3)
+        =\frac14\times\frac13\times\frac12\times\frac11=\frac1{24}.\tag{1}$$
+        <span class="pt">⛳ 乘法公式链 3 分</span></div>
+        <div class="step">（2）由对偶律 $\overline{A_1}\,\overline{A_2}\,\overline{A_3}\,\overline{A_4}=\overline{A_1\cup A_2\cup A_3\cup A_4}$，故
+        $$P(B)=P(\overline{A_1}\,\overline{A_2}\,\overline{A_3}\,\overline{A_4})=1-P(A_1\cup A_2\cup A_3\cup A_4)$$
+        $$=1-\Big[\sum_{i=1}^{4}P(A_i)-\sum_{i\lt j}P(A_iA_j)+\sum_{i\lt j\lt k}P(A_iA_jA_k)-P(A_1A_2A_3A_4)\Big].\tag{2}$$
+        <span class="pt">⛳ 对偶律 + 容斥展开 3 分</span></div>
+        <div class="step">其中（$1\le i,j,k\le4$，$i\ne j\ne k$）
+        $$P(A_i)=\frac14,\qquad P(A_iA_j)=\frac14\times\frac13=\frac1{12},\qquad P(A_iA_jA_k)=\frac14\times\frac13\times\frac12=\frac1{24},$$
+        于是
+        $$P(B)=1-4\times\frac14+6\times\frac1{12}-4\times\frac1{24}+\frac1{24}=\frac38.\tag{3}$$
+        <span class="pt">⛳ 四类概率算对 2 分　结果 1 分</span></div>
+        <div class="fin">故 4 封信都装对了的概率为 $\dfrac1{24}$，都装错了的概率为 $\dfrac38$。</div>
+      </div>
+
+      <div class="notekeep"><span class="nh">📌 批注 · 写完对照这一层</span>
+        ・<span class="dock">头号扣分点</span>：把 (2) 写成 $1-P(A)=\tfrac{23}{24}$。<b>"都装对"的反面是"至少有一封装错"，不是"都装错"</b>——这两个事件之间还夹着"对了 1 封""对了 2 封"等一大片。<br>
+        ・<b>装信过程可看作无放回抽取信件，依次装入信封</b>——这句话写在卷面上能救回条件概率那几个分母（为什么是 $\tfrac13,\tfrac12,\tfrac11$）。<br>
+        ・<b>为什么 $P(A_iA_jA_k)=P(A_1A_2A_3A_4)=\tfrac1{24}$（相等）</b>：4 封信里对了 3 封，第 4 封<b>必然</b>也对，所以"恰有 3 封对"是不可能事件，两个概率自然相等。容斥式最后两项 $-4\times\tfrac1{24}+\tfrac1{24}=-\tfrac18$ 就来自这里。<br>
+        ・<b>这是经典的错排（derangement）问题</b>：$D_n=n!\sum_{k=0}^{n}\dfrac{(-1)^k}{k!}$，$P=\dfrac{D_n}{n!}\to\mathrm e^{-1}\approx0.3679$。$n=4$ 时 $\tfrac38=0.375$ 已经很接近 $\mathrm e^{-1}$ 了。<b>考场上写容斥就够，但知道它收敛到 $\mathrm e^{-1}$ 可以当场自检。</b>
+      </div>
+    </div>
+  </div>
+
+  <h3>1. 全概率公式（★★★）</h3>
+  <p>如果 $\displaystyle\bigcup_{i=1}^{n}A_i=\Omega$，$A_iA_j=\varnothing\ (i\ne j)$，$P(A_i)\gt0$，则对任一事件 $B$，有
+  $$B=\bigcup_{i=1}^{n}A_iB,\qquad P(B)=\sum_{i=1}^{n}P(A_i)P(B\mid A_i).$$
+  （<em>存在 $n=\infty$ 的情形</em>。）</p>
+
+  <div class="key"><span class="tag">必记 · 全概率公式在干什么（书上的注，一句话版）</span>
+    全概率公式用于计算某个"<b>结果</b>" $B$ 发生的可能性大小。如果一个"结果" $B$ 的发生总是与多个"<b>原因</b>" $A_i$ 相联系，那么在计算 $P(B)$ 时，我们一般这样处理：
+    $$B=B\Omega=B\Big(\bigcup_{i=1}^{n}A_i\Big)=\bigcup_{i=1}^{n}A_iB,$$
+    然后应用全概率公式计算 $P(B)$，我们常称这种方法为<b>全集分解法</b>。<br>
+    如果在"结果" $B$ 发生的条件下，探求导致这一"结果"的各种"原因"（即 $A_i$ 发生的可能性大小 $P(A_i\mid B)$），则要应用<b>贝叶斯公式</b>。<br>
+    <b>在引入随机变量之后，还有相应的很多场合要用到全集分解思想。</b>（第 3 章求 $Z=X+Y$ 的分布、第 4 章求 $E[E(X\mid Y)]$，都是它。）
+  </div>
+
+  <h3>2. 一个村子和三个小偷的故事（全集分解思想的示例）</h3>
+  <div class="mine"><span class="tag">补讲 · 这个故事把全概率 + 贝叶斯一次讲完</span>
+    假设一个村子有 3 个小偷，一个叫小张、一个叫小英、一个叫小郑。小张偷东西成功的概率为 $0$，小英为 $\dfrac34$，小郑为 $\dfrac16$（<em>眉批：现实中不会出现成功概率为 0 的小偷</em>）。派一个人去偷东西。记 $A_i=\{$第 $i$ 个人去偷东西$\}$，$B=\{$村子失窃$\}$。<br>
+    <b>分析</b>：(1) $B$ 事件比较复杂，它的复杂性在于<b>它不是一个可能原因导致的</b>。这里有三个原因，都可以导致结果，但是<b>每个原因导致结果的能力还不一样</b>。所以在概率论里，提出了一个重要的思想，即<b>全集分解思想</b>。<br>
+    (2) 当 $B$ 事件非常复杂的时候，它实际上属于整个试验的<b>第二个阶段</b>：第一个阶段，选人，选哪个人去偷；第二个阶段，失窃，偷东西偷成功了。<br><br>
+    <b>(1) 求村子失窃的概率</b>
+    $$P(B)=P(B\Omega)=P\big[B(A_1\cup A_2\cup A_3)\big]=P(BA_1\cup BA_2\cup BA_3)$$
+    $$=P(BA_1)+P(BA_2)+P(BA_3)\quad(\text{完备事件组是互斥的})$$
+    $$=P(A_1)P(B\mid A_1)+P(A_2)P(B\mid A_2)+P(A_3)P(B\mid A_3)=\frac13\times0+\frac13\times\frac34+\frac13\times\frac16=\frac{11}{36}.$$
+    <b>$P(A_i)=\tfrac13$ 是哪来的？</b>——书上眉批：<b>在没有任何附加信息的条件下，只好认为三个人去偷具有等可能性</b>（当然有的题目可能不具有等可能性，但具体的题目会告知）。另外注意 $\sum P(B\mid A_i)$ <b>无要求</b>（不必等于 1，它们不是一个分布）。<br><br>
+    <b>(2) 若已发生失窃，第 $i$ 个人去偷的概率是多少？</b>
+    $$P(A_i\mid B)=\frac{P(A_iB)}{P(B)}=\frac{P(A_i)P(B\mid A_i)}{\sum_{i=1}^{3}P(A_i)P(B\mid A_i)},$$
+    $$P(A_1\mid B)=\frac{0}{11/36}=0,\quad P(A_2\mid B)=\frac{1/4}{11/36}=\frac14\times\frac{36}{11}=\frac9{11},\quad P(A_3\mid B)=\frac{1/18}{11/36}=\frac2{11}.$$
+    <b>对比</b>：①在村子没有失窃的情况下，那三个原因具有<b>等可能性</b>（$\tfrac13,\tfrac13,\tfrac13$），即在没有任何信息的情况下，并不知道哪个人去偷，所以只能认为他们具有等可能性。②<b>当信息增加时</b>（知道村子丢东西了），当这个信息进来以后，第 $i$ 个人偷盗的这三个事件发生的概率就<b>悄然发生了变化</b>（$0,\tfrac9{11},\tfrac2{11}$）。<br>
+    <b>总结</b>：在整个试验过程中，当我们增加一些信息的时候，原来所谓的在没有任何信息的条件下所设立的那些可能性，在信息增加之后，它们的概率就随之变化。这是很重要的一个思想，叫作<b>逆概率公式（执果索因）</b>。<b>发生变化的原因是权重发生了变化。</b>
+  </div>
+
+  <h3>3. 贝叶斯公式（逆概率公式）</h3>
+  <p>如果 $\displaystyle\bigcup_{i=1}^{n}A_i=\Omega$，$A_iA_j=\varnothing\ (i\ne j)$，$P(A_i)\gt0$，则对任一事件 $B$，<b>只要 $P(B)\gt0$</b>，就有
+  $$P(A_j\mid B)=\frac{P(A_j)P(B\mid A_j)}{\displaystyle\sum_{i=1}^{n}P(A_i)P(B\mid A_i)}\qquad(j=1,2,\cdots,n).$$</p>
+  <div class="key"><span class="tag">必记 · 方法总结（书上原话）</span>
+    <b>如果一个事件或者说一个结果的发生是复杂的，它是由多个原因引起的，那么这个时候一定要考虑到全集分解，把原因拉进来处理问题。</b><br>
+    <span class="dock">识别口令</span>：题干里出现"<b>已知……求……</b>""<b>经检验是……</b>""<b>现已知目标被击中，求是甲射中的概率</b>"——<b>结果已经发生、反过来问原因</b>，就是贝叶斯。见 <a href="#s11">习 1.13、习 1.17</a>。
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 1.10 ✔</span>从 $1,2,3,4$ 中任取一个数，记为 $X$，再从 $1,\cdots,X$ 中任取一个数，记为 $Y$，则 $P\{Y=2\}=$ ______。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$\dfrac{13}{48}$</span>
+      <br><span class="lab">解</span>$P\{X=i\}=\dfrac14,\ i=1,2,3,4$，且
+      $$P\{Y=2\mid X=1\}=0,\quad P\{Y=2\mid X=2\}=\frac12,\quad P\{Y=2\mid X=3\}=\frac13,\quad P\{Y=2\mid X=4\}=\frac14,$$
+      故由全概率公式
+      $$P\{Y=2\}=\sum_{i=1}^{4}P\{X=i\}P\{Y=2\mid X=i\}=\frac14\times0+\frac14\times\frac12+\frac14\times\frac13+\frac14\times\frac14=\frac{13}{48}.$$
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        ・<b>这是全概率公式的"两阶段"标准形状</b>：第一阶段决定 $X$（选人），第二阶段在 $X$ 的条件下产生 $Y$（作案）。<b>完备事件组就是 $\{X=1\},\cdots,\{X=4\}$</b>。<br>
+        ・<b>$P\{Y=2\mid X=1\}=0$ 这一项不能漏写</b>——虽然值是 0，但写出来才说明你的完备事件组是完整的（不重<b>不漏</b>）。<br>
+        ・跨章预告：本题实际上给出了 $(X,Y)$ 的<b>联合分布</b>，$P\{Y=2\}$ 就是<b>边缘分布</b>；第 3 章会把这个动作命名为"<b>由联合求边缘</b>"，公式还是这一条。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 1.11 ✔</span>一批产品有 10 个正品和 2 个次品，任意抽取两次，每次抽一个，<b>抽出后不再放回</b>，则<b>第二次</b>抽出的是次品的概率为 ______。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$\dfrac16$</span>（12 个产品贴标签后把 $12\times11=132$ 种有序抽法全部枚举，第二次为次品的有 22 种，$\tfrac{22}{132}=\tfrac16$）
+      <br><span class="lab">解</span>记 $A_i=\{$第 $i$ 次取得次品$\}$，$i=1,2$，则由已知得
+      $$P(A_1)=\frac2{12}=\frac16,\quad P(\overline{A_1})=\frac{10}{12}=\frac56,\quad P(A_2\mid A_1)=\frac1{11},\quad P(A_2\mid\overline{A_1})=\frac2{11},$$
+      由全概率公式得 $P(A_2)=P(A_1)P(A_2\mid A_1)+P(\overline{A_1})P(A_2\mid\overline{A_1})=\dfrac16\times\dfrac1{11}+\dfrac56\times\dfrac2{11}=\dfrac16$。
+      <div class="key"><span class="tag">必记 · 抓阄模型的第二次出场（秒杀写法）</span>
+        书上的注给了<b>占位视角</b>：有 12 个可辨产品（10 正 2 次）放入 12 个格子，每格放 1 个，则放法总数为 $12!$；现只关注第 2 个格子放两个次品中的一个，则放法总数为 $\mathrm C_2^1\cdot1\cdot11!$，故
+        $$p=\frac{\mathrm C_2^1\cdot11!}{12!}=\frac16.$$
+        <b>此过程与结果表明，从第 1 次到第 12 次取到次品的概率均为 $\dfrac16$</b>，即亦可用<a href="#s4">基 1.3(4)</a> 的结论直接得出结果 $\dfrac16$。<br>
+        <span class="dock">考场做法</span>：填空题<b>直接写 $\tfrac2{12}=\tfrac16$</b>，一秒。全概率那套是解答题才需要落笔的过程。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 1.12 ✔</span>设有两批数量相同的零件，已知有一批产品<b>全部合格</b>，另一批产品有 <b>25% 不合格</b>。从两批产品中任取 1 只，<b>经检验是正品，放回原处</b>，并从<b>原所在批次</b>再取 1 只，求这只产品是次品的概率。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$\dfrac3{28}$</span>
+
+      <div class="think"><span class="th">💭 思路 · 拿到题先想什么（本章最典型的一道"复合概型"）</span>
+        <ol>
+          <li>先把两次抽取的<b>不同之处</b>找出来——这是全题的题眼。第一次是在<b>完全不知情</b>的情况下等可能地从两批中抽取；第二次是在第一次抽取<b>并检验合格</b>后进行的，<b>此时"抽的是第一批还是第二批"的概率已经被那条"合格"的信息改写了</b>。</li>
+          <li>所以本题<b>必须分两步走</b>：<br>
+          第一步：在"已抽取产品合格"的条件下，计算抽的是第一批还是第二批的概率——<b>属于贝叶斯概型</b>（执果索因）；<br>
+          第二步：事件"从第一批中抽取"与"从第二批中抽取"构成一个<b>完备事件组</b>，计算第二次抽到次品的概率——<b>属于全概率概型</b>。<br>
+          <b>两个概型的复合，常常是该类题型的特点。</b></li>
+          <li>符号要分两套（$\mathrm D_{42}$）：$H_i$ 管<b>第一次</b>取自第 $i$ 批，$C_i$ 管<b>第二次</b>取自第 $i$ 批。<b>不能共用一个符号</b>——虽然"放回原处、从原所在批次再取"保证了批次不变，但两次的<b>概率分布已经不同</b>了：$P(H_i)=\tfrac12$ 是先验，$P(C_i)=P(H_i\mid A)$ 是后验。<b>混用符号 = 本题全错。</b></li>
+          <li>目标"这只产品是次品"就是 $\overline A$（第二次取到的不是正品），最后一步照全概率公式拼：$P(\overline A)=\sum_i P(C_i)P(\overline A\mid C_i)$，其中 $P(\overline A\mid C_1)=0$（第一批全合格）、$P(\overline A\mid C_2)=\tfrac14$。</li>
+        </ol>
+      </div>
+
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面 · 照这个写<span class="score">解答题 11 分参考｜⛳ = 采分点</span></div>
+        <div class="step"><span class="k">解</span>　记 $H_i=\{$第一次从第 $i$ 批产品中抽取$\}$，$i=1,2$。由两批数量相同及等可能性，
+        $$P(H_1)=P(H_2)=\frac12.$$
+        <span class="pt">⛳ 引入符号 + 先验 1 分</span></div>
+        <div class="step">再记 $A=\{$取到正品$\}$，则 $P(A\mid H_1)=1$，$P(A\mid H_2)=\dfrac34$，由全概率公式
+        $$P(A)=P(H_1)P(A\mid H_1)+P(H_2)P(A\mid H_2)=\frac12\times1+\frac12\times\frac34=\frac78.\tag{1}$$
+        <span class="pt">⛳ 全概率求 $P(A)$　3 分</span></div>
+        <div class="step">又记 $C_i=\{$第二次从第 $i$ 批产品中抽取$\}$，$i=1,2$。由于 $A$ 已经发生，由贝叶斯公式
+        $$P(C_1)=P(H_1\mid A)=\frac{P(H_1A)}{P(A)}=\frac{P(H_1)P(A\mid H_1)}{P(A)}=\frac{1/2}{7/8}=\frac47,\tag{2}$$
+        $$P(C_2)=P(H_2\mid A)=\frac{P(H_2)P(A\mid H_2)}{P(A)}=\frac{(1/2)(3/4)}{7/8}=\frac37.\tag{3}$$
+        <span class="pt">⛳ 贝叶斯改写权重 4 分</span></div>
+        <div class="step">$C_1,C_2$ 构成完备事件组，再由全概率公式
+        $$P(\overline A)=P(C_1)P(\overline A\mid C_1)+P(C_2)P(\overline A\mid C_2)=\frac47\times0+\frac37\times\frac14=\frac3{28}.\tag{4}$$
+        <span class="pt">⛳ 二次全概率 2 分　结果 1 分</span></div>
+        <div class="fin">故第二次取出的这只产品是次品的概率为 $\dfrac3{28}$。</div>
+      </div>
+
+      <div class="notekeep"><span class="nh">📌 批注 · 写完对照这一层</span>
+        ・<span class="dock">头号扣分点</span>：第二次仍按 $P=\tfrac12$ 去分配批次，直接算成 $\tfrac12\times0+\tfrac12\times\tfrac14=\tfrac18$。<b>$\tfrac18\ne\tfrac3{28}$，差的就是那条"经检验是正品"的信息。</b>这条信息让"来自第一批"的权重从 $\tfrac12$ 涨到 $\tfrac47$（第一批全合格，更容易产生"正品"这个结果），于是第二次抽到次品的概率被<b>压低</b>了（$\tfrac3{28}\lt\tfrac18$）。<b>去 <a href="#s8">🔀 权重台</a> 把 $P(B\mid A_2)$ 拉到 1 试试，两条权重会重合成 $\tfrac12$——那就是"信息没有信息量"的情形。</b><br>
+        ・<b>为什么 $P(\overline A\mid C_1)=0$</b>：第一批全部合格，从中取出次品是不可能事件。这一项虽为 0 也要写出来，理由同<a href="#s7">基 1.10</a>。<br>
+        ・<b>题干里"放回原处，并从原所在批次再取 1 只"这句话必须抠</b>：①"放回原处"保证第二次的批内比例不变（仍是 $\tfrac14$ 不合格）；②"<b>原所在批次</b>"保证 $C_i$ 与 $H_i$ 指向同一批（否则 $P(C_i)$ 又回到 $\tfrac12$）。<b>两个条件缺一，本题的贝叶斯那一步就不成立</b>——张宇在题干上给这句话画了下划线，就是这个意思。<br>
+        ・<b>这道题的模板价值极高</b>：凡"抽一次 → 观察到某结果 → 在同一来源再抽一次"，一律走"贝叶斯改权重 → 全概率求目标"两步。<a href="#s11">习 1.18</a> 是它的孪生题（那里第二次<b>不放回</b>，于是变成在 $C_i$ 条件下算 $P(AB\mid C_i)$）。
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= s8 贝叶斯权重台 ================= -->
+  <h2 id="s8"><span class="idx">八</span>🔀 贝叶斯权重台 · 看"信息进来，权重就变了"</h2>
+
+  <div class="tool">
+    <h4>三个原因 $A_1,A_2,A_3$ → 一个结果 $B$：拖动滑块，看后验怎么被改写</h4>
+    <div class="hint">
+      上排滑块是<b>先验</b> $P(A_i)$（谁去偷，自动归一化），下排是<b>似然</b> $P(B\mid A_i)$（他偷得成不成）。右侧同时画出<b>先验条</b>与<b>后验条</b> $P(A_i\mid B)$。<br>
+      <b>这替代了什么学习动作</b>：书上那句"<b>信息增加之后，它们的概率就随之变化，发生变化的原因是权重发生了变化</b>"，只有把数字改上几组才真正变成直觉。默认值就是<b>村子和三个小偷</b>（$\tfrac13,\tfrac13,\tfrac13$ 与 $0,\tfrac34,\tfrac16$），应当得到 $P(B)=\tfrac{11}{36}\approx0.306$ 与后验 $0,\tfrac9{11}\approx0.818,\tfrac2{11}\approx0.182$（滑块精度 0.1%，故 $\tfrac16$ 取作 0.167，末位可能差 1）。<br>
+      <b>三个值得亲手试的情形</b>：①把三个似然拖成<b>相同</b>值 → 后验与先验重合（<em>这条信息没有信息量</em>）；②把 $P(B\mid A_1)$ 拖到 0 → 无论先验多大，后验必为 0（<em>不可能作案的人被彻底排除</em>）；③把某个先验拖到 0 → 后验也是 0（<em>贝叶斯不会凭空造出原因</em>）。
+    </div>
+
+    <div class="bayes" id="bayes">
+      <div class="brow" style="font-size:.78rem;color:var(--muted);font-weight:700">
+        <div class="nm">原因</div><div>先验 $P(A_i)$（相对权重）</div><div>似然 $P(B\mid A_i)$</div>
+      </div>
+      <div class="brow"><div class="nm">$A_1$ 小张</div>
+        <div class="sl"><input type="range" id="pr0" min="0" max="1000" value="333"><span class="v" id="vpr0"></span></div>
+        <div class="sl"><input type="range" id="lk0" min="0" max="1000" value="0"><span class="v" id="vlk0"></span></div></div>
+      <div class="brow"><div class="nm">$A_2$ 小英</div>
+        <div class="sl"><input type="range" id="pr1" min="0" max="1000" value="333"><span class="v" id="vpr1"></span></div>
+        <div class="sl"><input type="range" id="lk1" min="0" max="1000" value="750"><span class="v" id="vlk1"></span></div></div>
+      <div class="brow"><div class="nm">$A_3$ 小郑</div>
+        <div class="sl"><input type="range" id="pr2" min="0" max="1000" value="333"><span class="v" id="vpr2"></span></div>
+        <div class="sl"><input type="range" id="lk2" min="0" max="1000" value="167"><span class="v" id="vlk2"></span></div></div>
+
+      <div class="btotal" id="bTot"></div>
+      <div class="bars" id="bBars"></div>
+      <div class="blegend">图例：<i style="background:var(--accent-soft);border:1px solid var(--line)"></i>先验 $P(A_i)$（信息进来<b>之前</b>）　<i style="background:var(--purple);opacity:.85"></i>后验 $P(A_i\mid B)$（已知 $B$ 发生<b>之后</b>）</div>
+      <div class="presets" style="margin-top:12px">
+        <button data-b="333,333,333,0,750,167">🏘️ 村子三小偷（书上原例）</button>
+        <button data-b="333,333,333,500,500,500">似然全相同 → 后验＝先验</button>
+        <button data-b="800,100,100,50,900,900">先验大但作案能力弱</button>
+        <button data-b="333,333,333,0,0,600">只有一个人可能作案</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= s9 独立性 ================= -->
+  <h2 id="s9"><span class="idx">九</span>事件的独立性和独立重复试验　<span class="layer L-base">基础</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/概率论与数理统计/01_随机事件与概率/概率_第01章_基础30讲.pdf">📄 基础 p.22–25</a>
+
+  <h3>1. 独立性的定义与三种等价说法</h3>
+  <p>设 $A,B$ 为两个事件，如果 $P(AB)=P(A)P(B)$，则称事件 $A$ 与 $B$ <b>相互独立</b>，简称 $A$ 与 $B$ 独立。</p>
+  <p><b>(1) 表示两个事件相互独立的其他形式</b>：<br>
+  ①若 $P(A)\gt0$，$P(B\mid A)=\dfrac{P(AB)}{P(A)}=\dfrac{P(A)P(B)}{P(A)}=P(B)$——<b>$A$ 是否发生，不影响 $B$ 发生的概率</b>。<br>
+  ②$P(A)=0$ 时：若 $P(A)=0$ 且 $AB\subset A$，则 $0\le P(AB)\le P(A)=0$，故 $P(AB)=0$，即 $P(AB)=P(A)P(B)$ 依然成立。</p>
+  <p><b>(2) 两个事件不相互独立时</b>：<br>
+  ①若 $P(AB)\gt P(A)P(B)$，则 $P(B\mid A)\gt P(B)$——<b>$A$ 有利于 $B$ 的发生，相互有利</b>；<br>
+  ②若 $P(AB)\lt P(A)P(B)$，则 $P(B\mid A)\lt P(B)$——<b>相互抑止</b>。</p>
+
+  <div class="key"><span class="tag">必记 · $n$ 个事件相互独立 vs 两两独立（考研常考 $n=3$）</span>
+    设 $A_1,\cdots,A_n$ 为 $n\,(n\ge2)$ 个事件，如果对其中<b>任意有限个</b>事件 $A_{i_1},\cdots,A_{i_k}\ (2\le k\le n)$ 都有
+    $$P(A_{i_1}A_{i_2}\cdots A_{i_k})=P(A_{i_1})P(A_{i_2})\cdots P(A_{i_k}),$$
+    则称 $n$ 个事件 $A_1,\cdots,A_n$ <b>相互独立</b>。<br>
+    <b>考研中常考的是 $n=3$ 时的情形。</b>设 $A_1,A_2,A_3$ 为三个事件，若
+    $$P(A_1A_2)=P(A_1)P(A_2)\ \ (1\text{-}1);\quad P(A_1A_3)=P(A_1)P(A_3)\ \ (1\text{-}2);$$
+    $$P(A_2A_3)=P(A_2)P(A_3)\ \ (1\text{-}3);\quad P(A_1A_2A_3)=P(A_1)P(A_2)P(A_3)\ \ (1\text{-}4),$$
+    则称 $A_1,A_2,A_3$ <b>相互独立</b>。<b>当去掉上述 (1-4) 式后，称只满足 (1-1)(1-2)(1-3) 式的事件 $A_1,A_2,A_3$ 两两独立。</b><br>
+    <span class="dock">一句话</span>：<b>相互独立 = 两两独立 + 三个一起也成立。四个式子缺一不可，少一个就只是"两两"。</b>见 <a href="#s9">基 1.13</a>。
+  </div>
+
+  <h3>2. 独立性的判定（三条，直接用）</h3>
+  <p>①<b>$A$ 与 $B$ 相互独立 $\iff$ $A$ 与 $\overline B$ 相互独立 $\iff$ $\overline A$ 与 $B$ 相互独立 $\iff$ $\overline A$ 与 $\overline B$ 相互独立</b>（张宇批注：<em>夫唱妇随</em>；$A,B,C$ 相互独立时 $\overline A,\overline B,\overline C$ 也相互独立）。<br>
+  证（仅证第一个）：由 $A,B$ 独立有 $P(AB)=P(A)P(B)$，于是
+  $$P(A\overline B)=P(A)-P(AB)=P(A)-P(A)P(B)=P(A)[1-P(B)]=P(A)P(\overline B),$$
+  故 $A,\overline B$ 独立，其余同理。<br>
+  <b>推论</b>：将相互独立的事件组中的<b>任意几个</b>事件换成各自的对立事件，所得的新事件组<b>仍相互独立</b>。</p>
+  <p>②对独立事件组<b>不含相同事件</b>作运算，得到的新事件组仍独立。如 $A,B,C,D$ 相互独立，则 $AB$ 与 $CD$ 相互独立，$A$ 与 $BC-D$ 相互独立。（<b>直接使用，无须证明。</b>）</p>
+  <p>③若 $P(A)=0$ 或 $P(A)=1$，则 $A$ 与<b>任意</b>事件 $B$ 相互独立——<em>不可能事件或必然事件和任意事件独立</em>。</p>
+
+  <div class="mine"><span class="tag">补讲 · ③ 的证明（一分钟能写完，但结论很好用）</span>
+    若 $P(A)=0$：由 $P(AB)\le P(A)\le P(A+B)$，有 $0\le P(AB)\le P(A)=0$，则 $P(AB)=0$，于是 $P(A)P(B)=P(AB)$。<br>
+    若 $P(A)=1$：则 $P(\overline A)=1-P(A)=0$，又由 $P(B\overline A)\le P(\overline A)\le P(\overline A+B)$，有 $0\le P(B\overline A)\le P(\overline A)=0$，知 $P(B\overline A)=0$；又 $P(B\overline A)=P(B)-P(AB)$，故 $P(B)=P(AB)$，即 $P(A)P(B)=P(AB)$。<br>
+    <b>两次都是"用单调性把量夹成 0"</b>——和 <a href="#s6">基 1.7</a> 同一个动作。<b>这是本章证明题的通用第一招。</b>
+  </div>
+
+  <h3>3. 独立试验序列概型与 $n$ 重伯努利概型（记为 $\mathrm{Ber}\text{-}E_n$）</h3>
+  <p>在同样条件下独立重复地进行一系列完全相同的试验，即每次试验的可能结果及其发生的概率都不变，每次试验是相互独立的，称这种重复试验序列的概率模型为<b>独立试验序列概型</b>。如果每次试验只有两个结果 $A$ 与 $\overline A$，且在每次试验中 $A$ 发生的概率都相等（即 $P(A)=p$），将这种试验独立重复 $n$ 次，则称这种试验的概率模型为 <b>$n$ 重伯努利概型</b>。</p>
+  <div class="key"><span class="tag">必记 · 伯努利概型的三个条件 + 一条公式</span>
+    ①每次试验<b>只有 $A$ 与 $\overline A$ 两个结果</b>；②每次试验中 $A$ 发生的概率 $p=P(A)$ <b>不变</b>；③试验<b>独立重复</b>进行 $n$ 次。<br>
+    投篮模型：投 $n$ 次，投中 $k$ 次，
+    $$P\{X=k\}=\mathrm C_n^k\,p^k(1-p)^{n-k},\qquad k=0,1,\cdots,n.$$
+    <b>这就是第 2 章的二项分布 $X\sim B(n,p)$</b>——第 1 章先把它的出生场景讲清楚，第 2 章只是给它起个名字。<b>见到"独立重复射击/抽检/投篮 $n$ 次，恰有 $k$ 次成功"，立刻上这条。</b>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 1.13 ✔</span>将一枚硬币独立地掷两次，引进事件：$A_1=\{$掷第一次出现正面$\}$，$A_2=\{$掷第二次出现正面$\}$，$A_3=\{$正反面各出现一次$\}$，$A_4=\{$正面出现两次$\}$，则事件（　）。<br>
+    (A) $A_1,A_2,A_3$ 相互独立　(B) $A_2,A_3,A_4$ 相互独立　(C) $A_1,A_2,A_3$ <b>两两独立</b>　(D) $A_2,A_3,A_4$ 两两独立</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(C)</span>
+      <br><span class="lab">解</span>（<em>严格按照定义处理</em>）由题可知 $\Omega=\{$正正，正反，反正，反反$\}$，则
+      $$P(A_1)=\frac12,\ P(A_2)=\frac12,\ P(A_3)=\frac12,\ P(A_4)=\frac14;\qquad P(A_1A_2)=P(A_1A_3)=P(A_2A_3)=\frac14,$$
+      三个两两之积都等于对应乘积，故两两独立；<b>但</b>
+      $$P(A_1A_2A_3)=0\ne P(A_1)P(A_2)P(A_3)=\frac18,$$
+      故 $A_1,A_2,A_3$ <b>两两独立，但三者不相互独立</b>。<br>
+      又 $A_3A_4=\varnothing$，$P(A_4)=\dfrac14$，$P(A_3)=\dfrac12$，$P(A_3A_4)=0\ne P(A_3)P(A_4)$，知 $A_2,A_3,A_4$ <b>不两两独立，也不相互独立</b>。故选 (C)。
+      <div class="key"><span class="tag">必记 · 这道题是"两两独立 ⇏ 相互独立"的标准反例，请背下来</span>
+        <b>为什么 $P(A_1A_2A_3)=0$</b>：$A_1A_2$ 是"两次都正"，与 $A_3$ "正反各一次"<b>矛盾</b>，交是空集。<b>三个事件两两都"看不出关联"，合在一起却互相锁死</b>——这正是要多加 (1-4) 式的原因。<br>
+        <span class="dock">秒杀技</span>：选项里 $A_3,A_4$ 一组的，先看 $A_3A_4=\varnothing$ ——由 <a href="#s10f">强 §六·⑦</a>，<b>$0\lt P\lt1$ 的两个事件若互斥，则一定不独立</b>，(B)(D) 当场出局，只剩 (A)(C) 二选一。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 1.14 ✔</span>对同一目标接连进行 3 次独立重复射击，假设<b>至少</b>命中目标一次的概率为 $\dfrac78$，则每次射击命中目标的概率 $p=$ ______。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$\dfrac12$</span>
+      <br><span class="lab">解</span>记 $A_i=\{$第 $i$ 次命中目标$\}$，$i=1,2,3$，且 $P(A_1\cup A_2\cup A_3)=\dfrac78$，故（"<b>至少</b>" ⇒ 对立思想 + 独立性拆积）
+      $$1-P(\overline{A_1}\,\overline{A_2}\,\overline{A_3})=1-P(\overline{A_1})P(\overline{A_2})P(\overline{A_3})=1-(1-p)^3=\frac78,$$
+      则 $p=\dfrac12$。
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        <b>"至少有一个发生"的标准三连</b>：①翻成对立 $1-P(\overline{A_1}\cdots\overline{A_n})$；②用独立性把交拆成积 $\prod[1-P(A_i)]$；③解方程。<b>《9讲》把它写成了通式</b>（见 <a href="#s10f">§十·六</a>②）：
+        $$P\Big(\bigcup_{i=1}^{n}A_i\Big)=1-\prod_{i=1}^{n}[1-P(A_i)].$$
+        <span class="dock">前提</span>：第②步<b>必须有独立性</b>。<a href="#s11">习 1.12</a>（三人破译密码）就是这条通式的直接应用。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 1.15 ✔</span>某人向同一目标独立重复射击，每次命中目标的概率为 $p\ (0\lt p\lt1)$，则此人<b>第 4 次射击恰好第 2 次命中目标</b>的概率为（　）。<br>
+    (A) $3p(1-p)^2$　(B) $6p(1-p)^2$　(C) $3p^2(1-p)^2$　(D) $6p^2(1-p)^2$</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(C) $3p^2(1-p)^2$</span>（取 $p=0.3$ 数值验证：$\mathrm C_3^1p(1-p)^2\cdot p=0.1323=3p^2(1-p)^2$ ✓）
+      <br><span class="lab">分析</span>把 4 次的命中情况列成表，符合要求的只有 3 行：<span class="nokatex" style="font-family:var(--mono)">√ × × √　/　× √ × √　/　× × √ √</span>——<b>最后一次必须是 √</b>，前 3 次恰有 1 个 √。
+      <br><span class="lab">解</span>依题设，4 次射击，<b>最后一次命中，前 3 次有一次命中</b>。若设前 3 次射击有 $X$ 次命中，则 $X\sim B(3,p)$，且有 $P\{X=1\}=\mathrm C_3^1p(1-p)^2$。于是第 4 次射击恰好第 2 次命中目标的概率为
+      $$\mathrm C_3^1p(1-p)^2\cdot p=3p^2(1-p)^2,$$
+      故选择 (C)。
+      <div class="trap"><span class="tag">陷阱 · "第 $n$ 次恰好第 $k$ 次成功" ≠ "$n$ 次中恰有 $k$ 次成功"</span>
+        错选 (D) $6p^2(1-p)^2$ 的人，是把它当成了 $\mathrm C_4^2p^2(1-p)^2$（4 次中恰有 2 次命中）。<b>差别在于：题目<u>钉死了最后一次是成功</u></b>，所以组合数只能在<b>前 $n-1$ 次</b>里选 $k-1$ 个，即 $\mathrm C_{n-1}^{k-1}$ 而非 $\mathrm C_n^k$。<br>
+        <b>通式（背下来）</b>：独立重复试验中，<b>第 $n$ 次试验恰好是第 $k$ 次成功</b>的概率为
+        $$\mathrm C_{n-1}^{\,k-1}p^{k}(1-p)^{\,n-k}.$$
+        这叫<b>帕斯卡分布（负二项分布）</b>；$k=1$ 时退化成<b>几何分布</b> $(1-p)^{n-1}p$。<b>"最后一次钉死"是这一族分布的共同标志。</b>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= s10 强化六条主路 ================= -->
+  <h2 id="s10"><span class="idx">十</span>强化 · 三向解题法六条主路题型库　<span class="layer L-str">强化</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/概率论与数理统计/01_随机事件与概率/概率_第01章_强化9讲_第1讲_随机事件和概率.pdf">📄 概率9讲 第1讲</a>
+
+  <p><b>本节的读法</b>：<a href="#s0">§定位</a>的那张六路表是"<b>看见什么词走哪条路</b>"，这一节是每条路的<b>公式串 + 例题</b>。基础讲已经讲过的公式不再重复，只补《9讲》新加的<b>写法</b>和<b>充要条件群</b>。</p>
+
+  <h3 id="s10a">一、用对立思想求事件概率　<span style="font-size:.8rem;color:var(--muted)">D₁ 常规操作 + D₂₂ 转换等价表述 + D₄₂ 引入符号</span></h3>
+  <div class="zy"><span class="tag">强化题型 · 公式串</span>
+    ①$\overline{A\cup B}=\overline A\cap\overline B$，$\overline{AB}=\overline A\cup\overline B$（长杠变短杠，开口换方向）　②$P(A)=1-P(\overline A)$<br>
+    <b>【注】</b>于是有 $P(A\cup B)=1-P(\overline{A\cup B})=1-P(\overline A\,\overline B)$；$\ P(AB)=1-P(\overline{AB})=1-P(\overline A\cup\overline B)$。<br>
+    <span class="dock">触发词</span>：<b>"既不…，又不…"、"至少有…"</b>。
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 1.1 ✔</span>在 $1\sim100$ 的整数中随机地取一个数，则取到的整数<b>既不能被 2 整除，又不能被 3 整除</b>的概率为 ______。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$\dfrac{33}{100}$</span>（把 $1\!\sim\!100$ 逐个筛：既非 2 的倍数又非 3 的倍数的共 33 个，与公式结果一致）
+      <br><span class="lab">解</span>设 $A=\{$取到的数能被 2 整除$\}$，$B=\{$取到的数能被 3 整除$\}$（$\mathrm D_{42}$ 引入符号——<b>这是概率论与数理统计中一个有特色的解题方法，要熟练掌握</b>），则
+      $$p=P(\overline A\,\overline B)=P(\overline{A\cup B})=1-P(A\cup B)=1-[P(A)+P(B)-P(AB)].$$
+      由 $\dfrac{100}{2}=50$ 得 $P(A)=\dfrac{50}{100}=\dfrac12$；又 $33\lt\dfrac{100}{3}\lt34$，故 $P(B)=\dfrac{33}{100}$；<br>
+      同时能被 2 与 3 整除，即能被 <b>6</b> 整除，由 $16\lt\dfrac{100}{6}\lt17$，则 $P(AB)=\dfrac{16}{100}=\dfrac4{25}$。故
+      $$p=1-\left(\frac12+\frac{33}{100}-\frac4{25}\right)=\frac{33}{100}.$$
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        ・<b>"既不…又不…" $\Rightarrow\overline A\,\overline B\Rightarrow$ 对偶律翻成 $\overline{A\cup B}\Rightarrow1-P(A\cup B)$</b>，这条链子是模板，不用现想。<br>
+        ・<b>$P(AB)$ 别写成 $P(A)P(B)$</b>：能被 2 整除与能被 3 整除在 $1\sim100$ 上<b>不是严格独立</b>的（$\tfrac12\times\tfrac{33}{100}=0.165\ne0.16$）。<b>"同时能被 2 和 3 整除 = 能被 6 整除"才是正解</b>——这是本题唯一的坑。<br>
+        ・取整要小心：$\lfloor100/3\rfloor=33$、$\lfloor100/6\rfloor=16$，<b>张宇特意写成 $33\lt\frac{100}{3}\lt34$ 的形式，就是提醒别四舍五入。</b>
+      </div>
+    </div>
+  </div>
+
+  <h3 id="s10b">二、用互斥思想求事件概率　<span style="font-size:.8rem;color:var(--muted)">D₁ + D₂₂ + D₄₂</span></h3>
+  <div class="zy"><span class="tag">强化题型 · 公式串（六条，见 <a href="#s1">§一</a>末尾已列，这里只补触发场景）</span>
+    <b>核心动作：把"并"拆成互不相交的几块，再把概率直接相加。</b><br>
+    ①$A\cup B=A\overline B\cup AB\cup\overline AB$（三块）　②$B_i$ 完备时 $A=AB_1\cup AB_2\cup AB_3$<br>
+    ③$P(A\overline B)=P(A)-P(AB)$　④两事件加法　⑤三事件加法（容斥）　⑥两两互斥时直接相加<br>
+    <span class="dock">触发词</span>：<b>"恰有一个发生"、"恰有两个发生"</b>——这类词一出来，就是在<a href="#s2">📐 运算器</a>那 8 块里点几块。
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 1.2 ✔</span>设 $A,B,C$ 为三个随机事件，且
+    $$P(A)=P(B)=P(C)=\frac14,\quad P(AB)=0,\quad P(AC)=P(BC)=\frac1{12},$$
+    则 $A,B,C$ 中<b>恰有一个事件发生</b>的概率为（　）。<br>
+    (A) $\dfrac34$　(B) $\dfrac23$　(C) $\dfrac12$　(D) $\dfrac5{12}$</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(D) $\dfrac5{12}$</span>
+      <br><span class="lab">解</span>（$\mathrm D_{22}$ 转换等价表述）"恰有一个发生"即 $A\overline B\overline C\cup\overline AB\overline C\cup\overline A\overline BC$，三块互斥，故
+      $$P(A\overline B\overline C)+P(\overline AB\overline C)+P(\overline A\overline BC)$$
+      $$=\big[P(A\overline B)-P(A\overline BC)\big]+\big[P(\overline AB)-P(\overline ABC)\big]+\big[P(\overline BC)-P(A\overline BC)\big]$$
+      $$=P(A)-P(AB)-[P(AC)-P(ABC)]+P(B)-P(AB)-[P(BC)-P(ABC)]+P(C)-P(BC)-[P(AC)-P(ABC)]$$
+      $$=\frac14-0-\frac1{12}+0+\frac14-0-\frac1{12}+0+\frac14-\frac1{12}-\frac1{12}+0=\frac5{12}.$$
+      <div class="key"><span class="tag">必记 · 一条能秒杀这类题的通式（自己推一遍，考场直接代）</span>
+        设 $S_1=\sum P(A_i)$，$S_2=\sum_{i\lt j}P(A_iA_j)$，$S_3=P(ABC)$，则
+        $$P\{\text{恰有一个发生}\}=S_1-2S_2+3S_3,\qquad P\{\text{恰有两个发生}\}=S_2-3S_3,$$
+        $$P\{\text{至少有一个发生}\}=S_1-S_2+S_3,\qquad P\{\text{至多有一个发生}\}=1-S_2+2S_3.$$
+        本题 $S_1=\tfrac34$，$S_2=0+\tfrac1{12}+\tfrac1{12}=\tfrac16$，$S_3=0$（因 $ABC\subset AB$ 且 $P(AB)=0$），代入得 $\tfrac34-\tfrac13=\tfrac5{12}$ ✓，<b>三秒钟</b>。<br>
+        <span class="dock">易漏</span>：$P(ABC)=0$ 这一步要有理由——<b>由 $ABC\subset AB$ 及 $P(AB)=0$，用单调性夹出来</b>（又是那一招）。
+      </div>
+    </div>
+  </div>
+
+  <h3 id="s10c">三、用条件思想求事件概率　<span style="font-size:.8rem;color:var(--muted)">D₁ + D₂₂ + D₄₂</span>　<b style="color:var(--red)">← 张宇亲批：必考点</b></h3>
+  <div class="zy"><span class="tag">强化题型 · 形式化归体系块（四条）</span>
+    张宇在这条主路的标题旁批的原话：<em>必考点，对计算能力提出较高要求，要加强训练。</em><br>
+    ①$P(A\mid B)=\dfrac{P(AB)}{P(B)}\ (P(B)\gt0)$<br>
+    ②$P(AB)=P(B)P(A\mid B)=P(A)P(B\mid A)=P(A)+P(B)-P(A+B)$（由"二、④"）$=P(A)-P(A\overline B)$（由"二、③"）<br>
+    　【注】当 $P(A_1A_2)\gt0$ 时，$P(A_1A_2A_3)=P(A_1)P(A_2\mid A_1)P(A_3\mid A_1A_2)$。<br>
+    ③<b>全概率公式</b>　④<b>贝叶斯公式</b>（见 <a href="#s7">§七</a>）
+  </div>
+
+  <div class="trap"><span class="tag">陷阱 · $P(B)=0$ 时条件概率公式失效（第 3 章的伏笔，先记住形状）</span>
+    注意 $P(B)\gt0$ 的条件，<b>若 $P(B)=0$，此公式不能用</b>。如设 $(X,Y)\sim f(x,y)$（连续型），则
+    $$P\{x_1\le X\le x_2\mid Y=y_0\}\ \ne\ \frac{P\{x_1\le X\le x_2,\ Y=y_0\}}{P\{Y=y_0\}},$$
+    显然是因为 $P\{Y=y_0\}=0$。故应先求 $Y=y_0$ 条件下 $X$ 的<b>条件概率密度</b>，再作积分，即先求
+    $$f_{X\mid Y}(x\mid y_0)=\frac{f(x,y_0)}{f_Y(y_0)},\qquad\text{则}\quad P\{x_1\le X\le x_2\mid Y=y_0\}=\int_{x_1}^{x_2}\frac{f(x,y_0)}{f_Y(y_0)}\mathrm dx.$$
+    （《9讲》例 5.3 会正面考这个。<b>现在只要记住："连续型的条件，不能用第 1 章那个分式定义"</b>。）
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 1.3 ✔</span>设 $A,B,C$ 为随机事件，且 $A$ 与 $B$ 互不相容，$A$ 与 $C$ 互不相容，$B$ 与 $C$ <b>相互独立</b>，$P(A)=P(B)=P(C)=\dfrac13$，则 $P(B\cup C\mid A\cup B\cup C)=$ ______。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$\dfrac58$</span>
+      <br><span class="lab">解</span>由题意得 $P(AB)=0$，$P(AC)=0$，$P(BC)=P(B)P(C)=\dfrac19$（且由 $ABC\subset AB$ 得 $P(ABC)=0$）。于是（$\mathrm D_{22}$：注意 $(B\cup C)\cap(A\cup B\cup C)=B\cup C$）
+      $$P(B\cup C\mid A\cup B\cup C)=\frac{P\big[(B\cup C)\cap(A\cup B\cup C)\big]}{P(A\cup B\cup C)}
+      =\frac{P(B)+P(C)-P(BC)}{P(A)+P(B)+P(C)-P(AB)-P(AC)-P(BC)+P(ABC)}$$
+      $$=\frac{\frac13+\frac13-\frac19}{\frac13+\frac13+\frac13-0-0-\frac19+0}=\frac{\frac23-\frac19}{1-\frac19}=\frac{\frac59}{\frac89}=\frac58.$$
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        ・<b>本题的全部技术含量在分子那一步</b>：$B\cup C\subset A\cup B\cup C$，所以交集就是 $B\cup C$ 本身（吸收律）。<b>没看出这一点的人会去硬展开 $(B\cup C)(A\cup B\cup C)$，绕一大圈。</b><br>
+        ・<b>三种关系在一道题里同台</b>：互不相容给 $P(\cdot)=0$，相互独立给 $P(\cdot)=$ 积，包含给吸收——<b>题干每给一个关系，就先把它翻译成一个概率等式写在草稿纸边上</b>，然后代进容斥公式。这是条件概率填空题的通用流程。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 1.4 ✔</span>已知随机变量 $X$ 与 $Y$ 相互独立，$X\sim\begin{pmatrix}0&1\\[2pt]\frac14&\frac34\end{pmatrix}$，$Y$ 服从参数为 1 的指数分布，记
+    $$U=\begin{cases}0,&X\lt Y,\\1,&X\ge Y,\end{cases}\qquad V=\begin{cases}0,&X\lt2Y,\\1,&X\ge2Y,\end{cases}$$
+    求 $P\{U=0\}$ 及 $P\{V=0\}$。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$P\{U=0\}=\dfrac14+\dfrac34\mathrm e^{-1}\approx0.5259$，$P\{V=0\}=\dfrac14+\dfrac34\mathrm e^{-1/2}\approx0.7049$</span>
+      <br><span class="lab">解</span>$X$ 是离散型的，$Y$ 是连续型的，$X$ 与 $Y$ 相互独立，故由<b>全概率公式</b>（对 $X$ 的两个取值作全集分解，$\mathrm D_{23}$ 化归经典形式）得相应的概率：
+      $$P\{U=0\}=P\{X\lt Y\}=P\{X\lt Y,X=0\}+P\{X\lt Y,X=1\}=P\{Y\gt0,X=0\}+P\{Y\gt1,X=1\}$$
+      $$=P\{X=0\}\underbrace{P\{Y\gt0\}}_{=1}+P\{X=1\}P\{Y\gt1\}=\frac14+\frac34\int_1^{+\infty}\mathrm e^{-y}\mathrm dy=\frac14+\frac34\mathrm e^{-1};$$
+      $$P\{V=0\}=P\{X\lt2Y\}=P\{Y\gt0,X=0\}+P\Big\{Y\gt\frac12,X=1\Big\}
+      =\frac14+\frac34\int_{1/2}^{+\infty}\mathrm e^{-y}\mathrm dy=\frac14+\frac34\mathrm e^{-\frac12}.$$
+      <div class="key"><span class="tag">必记 · 指数分布的两条式子（张宇批"牢记，必考点"）</span>
+        参数为 $\lambda=1$ 的指数分布：
+        $$f_Y(y)=\begin{cases}\mathrm e^{-y},&y\ge0,\\0,&y\lt0,\end{cases}\qquad
+        F_Y(y)=\begin{cases}1-\mathrm e^{-y},&y\ge0,\\0,&y\lt0.\end{cases}$$
+        于是 $P\{Y\gt a\}=\mathrm e^{-a}\ (a\ge0)$——<b>这一步能省掉每次都去积分</b>。<br>
+        <b>本题的方法价值</b>：<b>一个离散 + 一个连续，靠"对离散的那个作全集分解"缝在一起</b>。$\{X=0\},\{X=1\}$ 是完备事件组，独立性保证了 $P\{Y\gt c,X=k\}=P\{X=k\}P\{Y\gt c\}$。<b>这是第 3 章混合型题目的通法，第 1 章先见一面。</b><br>
+        <span class="dock">易错</span>：$X=0$ 时条件是 $0\lt Y$，即 $P\{Y\gt0\}=1$（不是 $\tfrac12$，也不是 0）；$V$ 那问里 $X=1$ 对应 $1\lt2Y$ 即 $Y\gt\tfrac12$，<b>系数 2 要除过去</b>。
+      </div>
+    </div>
+  </div>
+
+  <h3 id="s10d">四、用单调性处理事件概率　<span style="font-size:.8rem;color:var(--muted)">D₁ + D₂₁ 观察研究对象</span></h3>
+  <div class="zy"><span class="tag">强化题型 · 隐含条件体系块（三条）</span>
+    ①$0\le P(A)\le1$　②若 $A\subseteq B$，则 $P(A)\le P(B)$　③由于 $AB\subseteq A\subseteq A+B$，故 $P(AB)\le P(A)\le P(A+B)$<br>
+    <b>【张宇批注】注意观察研究对象，由单调性得出的不等式往往是<u>隐藏条件</u>，涉及不等式或"两边夹"时，可考虑。</b><br>
+    <span class="dock">触发词</span>：题目里出现<b>不等号</b>、要证<b>不等式</b>、或需要把某个概率<b>夹成 0 / 夹成 1</b>。
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 1.5 ✔</span>对任意的事件 $A,B,C$，证明：<br>
+    (1) $P(AB)+P(AC)+P(BC)\le P(A)+P(B)+P(C)$；<br>
+    (2) 当 $P(ABC)=\dfrac12$ 时，$P(AB)+P(AC)+P(BC)\ge P(A)+P(B)+P(C)-\dfrac12$。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">两问均成立（证明见下）</span>
+
+      <div class="think"><span class="th">💭 思路 · 拿到题先想什么（本章唯一的纯证明题）</span>
+        <ol>
+          <li>两问的<b>左右两边完全一样，只是不等号反了向</b>，还多出一个 $-\tfrac12$。这说明两问用的<b>不是同一个工具</b>——同一个工具推不出反向的两个不等式。看清这一点，就不会在第 (2) 问里继续套第 (1) 问的办法。</li>
+          <li>(1) 左边是三个<b>交</b>事件的概率和，右边是三个<b>单</b>事件的概率和 ⇒ 交比单小 ⇒ <b>单调性</b>（主路四）。关键是<b>配对配对配对</b>：$AB$ 配谁？$AB\subseteq A$ 也 $\subseteq B$，两个都行，<b>但三条式子加起来必须右边恰好是 $P(A)+P(B)+P(C)$ 各一次</b>，所以要错开配：$AB\subseteq B$、$AC\subseteq A$、$BC\subseteq C$。<b>这个"配对不能重复"是本问唯一的技巧。</b></li>
+          <li>(2) 反向不等式从哪来？——<b>右边有 $-\tfrac12$，而题目给的正是 $P(ABC)=\tfrac12$</b>，这不是巧合：三事件容斥公式里恰好带一项 $+P(ABC)$。所以路线是：写出 $P(A\cup B\cup C)$ 的容斥展开，再用 <b>$P(\,\cdot\,)\le1$</b>（隐含条件体系块的第①条）压住左端。</li>
+          <li>换句话说，(1) 用的是"$A\subseteq B\Rightarrow P(A)\le P(B)$"，(2) 用的是"<b>任何概率都 $\le1$</b>"。<b>两问各用体系块里的一条，这道题就是主路四的说明书。</b></li>
+        </ol>
+      </div>
+
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面 · 照这个写<span class="score">证明题 10 分参考｜⛳ = 采分点</span></div>
+        <div class="step"><span class="k">证</span>（1）因为
+        $$AB\subseteq B,\qquad AC\subseteq A,\qquad BC\subseteq C,$$
+        故根据概率的单调性可知
+        $$P(AB)\le P(B),\qquad P(AC)\le P(A),\qquad P(BC)\le P(C),$$
+        三式相加，得
+        $$P(AB)+P(AC)+P(BC)\le P(A)+P(B)+P(C).$$
+        <span class="pt">⛳ 点名单调性 1 分　三条包含关系 2 分　相加 1 分</span></div>
+        <div class="step">（2）由概率的有界性及三事件的加法公式，
+        $$1\ge P(A\cup B\cup C)=P(A)+P(B)+P(C)-P(AB)-P(AC)-P(BC)+P(ABC),\tag{1}$$
+        <span class="pt">⛳ 写出 (1) 式并用 $\le1$ 压住　3 分</span></div>
+        <div class="step">将 $P(ABC)=\dfrac12$ 代入 (1) 式并移项，得
+        $$P(AB)+P(AC)+P(BC)\ \ge\ P(A)+P(B)+P(C)+\frac12-1=P(A)+P(B)+P(C)-\frac12.$$
+        <span class="pt">⛳ 移项整理 2 分</span></div>
+        <div class="fin">故对任意事件 $A,B,C$，(1)(2) 两个不等式均成立。证毕。</div>
+      </div>
+
+      <div class="notekeep"><span class="nh">📌 批注 · 写完对照这一层</span>
+        ・<span class="dock">扣分点</span>：(1) 不写"<b>根据概率的单调性</b>"这六个字。<b>判断/证明类的结论不写依据要扣分</b>，这是卷面第一硬规矩。<br>
+        ・<span class="dock">扣分点</span>：(1) 里把三条包含关系配成 $AB\subseteq A$、$AC\subseteq A$、$BC\subseteq B$——<b>右边出现两个 $P(A)$，加起来就不是 $P(A)+P(B)+P(C)$ 了</b>，整问作废。写之前先在草稿上核一遍右边是不是各出现一次。<br>
+        ・<b>(2) 的起手式"$1\ge P(A\cup B\cup C)$"值得单独记</b>：凡是要证的不等式右端出现<b>常数</b>（这里是 $-\tfrac12$），十有八九来自"某个概率 $\le1$"或"$\ge0$"。<b>常数是路标。</b><br>
+        ・本题的 $\tfrac12$ 可以换成任意 $c$：结论变成 $\sum P(A_iA_j)\ge\sum P(A_i)+c-1$。<b>题目给什么 $P(ABC)$ 就代什么，形式不变。</b>
+      </div>
+    </div>
+  </div>
+
+  <h3 id="s10e">五、用最值关系式处理事件概率　<span style="font-size:.8rem;color:var(--muted)">D₁ + D₂₃ 化归经典形式</span></h3>
+  <div class="zy"><span class="tag">强化题型 · 形式化归体系块（十一条，全表照录）</span>
+    当遇到与 $\max\{X,Y\}$、$\min\{X,Y\}$ 有关的事件时，下面一些关系式是经常要用到的：
+    <div class="gridwrap"><table>
+      <tr><th>#</th><th>关系式</th><th>记法</th></tr>
+      <tr><td>①</td><td>$\{\max\{X,Y\}\le a\}=\{X\le a\}\cap\{Y\le a\}$</td><td rowspan="4"><b>max 配交、min 配并</b>；不等号<b>反向</b>时交并互换。<br>【注】$P\{\max\le a\}=1-P\{\max\gt a\}$，$P\{\min\le a\}=1-P\{\min\gt a\}$</td></tr>
+      <tr><td>②</td><td>$\{\max\{X,Y\}\gt a\}=\{X\gt a\}\cup\{Y\gt a\}$</td></tr>
+      <tr><td>③</td><td>$\{\min\{X,Y\}\le a\}=\{X\le a\}\cup\{Y\le a\}$</td></tr>
+      <tr><td>④</td><td>$\{\min\{X,Y\}\gt a\}=\{X\gt a\}\cap\{Y\gt a\}$</td></tr>
+      <tr><td>⑤</td><td>$\{\max\{X,Y\}\le a\}\subseteq\{\min\{X,Y\}\le a\}$</td><td rowspan="2">包含关系 → 可上<b>单调性</b>（主路四）</td></tr>
+      <tr><td>⑥</td><td>$\{\min\{X,Y\}\gt a\}\subseteq\{\max\{X,Y\}\gt a\}$</td></tr>
+      <tr><td>⑦</td><td>$\max\{X,Y\}=\dfrac{X+Y+|X-Y|}{2}$</td><td rowspan="5"><b>⑦~⑪：左有 max(min)，右无 max(min)，注意转化。</b><br>第 4 章求 $E[\max\{X,Y\}]$ 时靠 ⑦⑨⑩ 化掉最值符号</td></tr>
+      <tr><td>⑧</td><td>$\min\{X,Y\}=\dfrac{X+Y-|X-Y|}{2}$</td></tr>
+      <tr><td>⑨</td><td>$\max\{X,Y\}+\min\{X,Y\}=X+Y$</td></tr>
+      <tr><td>⑩</td><td>$\max\{X,Y\}-\min\{X,Y\}=|X-Y|$</td></tr>
+      <tr><td>⑪</td><td>$\max\{X,Y\}\cdot\min\{X,Y\}=XY$</td></tr>
+    </table></div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 1.6 ✔</span>设 $X,Y$ 为连续型随机变量，且 $P\{X\ge0,Y\ge0\}=\dfrac37$，$P\{X\ge0\}=P\{Y\ge0\}=\dfrac47$，求下列事件的概率：<br>
+    (1) $A=\{\max\{X,Y\}\ge0\}$；(2) $B=\{\max\{X,Y\}\ge0,\ \min\{X,Y\}\lt0\}$。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(1) $\dfrac57$　(2) $\dfrac27$</span>
+      <br><span class="lab">解</span>(1) 由于 $A=\{\max\{X,Y\}\ge0\}=\{X,Y$ 至少有一个大于等于 $0\}=\{X\ge0\}\cup\{Y\ge0\}$（关系式②），故
+      $$P(A)=P\{X\ge0\}+P\{Y\ge0\}-P\{X\ge0,Y\ge0\}=\frac47+\frac47-\frac37=\frac57.$$
+      (2) 用<b>全集分解</b>：
+      $$A=\{\max\{X,Y\}\ge0\}=\{\max\{X,Y\}\ge0\}\cap\Omega=\{\max\ge0\}\cap\big(\{\min\lt0\}\cup\{\min\ge0\}\big)$$
+      $$=\{\max\ge0,\min\lt0\}\cup\{\max\ge0,\min\ge0\}=B\cup\{\min\{X,Y\}\ge0\}=B\cup\{X\ge0,Y\ge0\},$$
+      且两块互斥，故
+      $$P(B)=P(A)-P\{X\ge0,Y\ge0\}=\frac57-\frac37=\frac27.$$
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        ・(2) 用到关系式⑥的<b>包含</b>：$\{\min\ge0\}\subseteq\{\max\ge0\}$，所以 $\{\max\ge0,\min\ge0\}$ 直接塌缩成 $\{\min\ge0\}=\{X\ge0,Y\ge0\}$。<b>这一步不看穿，就会去硬求二维分布</b>。<br>
+        ・<b>本题的通用套路</b>：<b>拿 $\Omega=\{\min\lt0\}\cup\{\min\ge0\}$ 去乘目标事件</b>，把一个复杂事件劈成两块互斥的，然后<b>做减法</b>。这就是主路二（互斥）与主路五（最值）合用。<br>
+        ・【注】书上提到：<b>还有不少涉及 max、min 的问题，如例 5.4、例 6.2，不一而足</b>——第 3 章求 $\max$、$\min$ 的分布函数，第 4 章求它们的期望，全靠这张表。<b>这张表是本讲留给后面章节最值钱的东西。</b>
+      </div>
+    </div>
+  </div>
+
+  <h3 id="s10f">六、用独立、有利或抑止处理事件概率　<span style="font-size:.8rem;color:var(--muted)">D₁ + D₂₂</span></h3>
+  <div class="zy"><span class="tag">强化题型 · 定义（基础讲只给了独立，《9讲》补齐三分法）</span>
+    设 $A,B$ 为两个事件：<br>
+    ①若 $P(AB)=P(A)P(B)$，则称事件 $A$ 与 $B$ <b>相互独立</b>；<br>
+    ②若 $P(AB)\gt P(A)P(B)$，则称事件 $A$ 与 $B$ <b>相互有利</b>；<br>
+    ③若 $P(AB)\lt P(A)P(B)$，则称事件 $A$ 与 $B$ <b>相互抑止</b>。
+  </div>
+
+  <div class="key"><span class="tag">必记 · 重要结论七条（④⑦ 是《9讲》独有，基础讲没有）</span>
+    ①若 $A_1,\cdots,A_n$ 相互独立，则 $P(A_1A_2\cdots A_n)=P(A_1)P(A_2)\cdots P(A_n)$。<br>
+    ②若 $A_1,\cdots,A_n\ (n\gt3)$ 相互独立，则
+    $$P\Big(\bigcup_{i=1}^{n}A_i\Big)=1-P\Big(\overline{\bigcup_{i=1}^{n}A_i}\Big)=1-P\Big(\bigcap_{i=1}^{n}\overline{A_i}\Big)=1-\prod_{i=1}^{n}P(\overline{A_i})=1-\prod_{i=1}^{n}[1-P(A_i)].$$
+    ③$A$ 与 $B$ 相互独立 $\iff A$ 与 $\overline B$ 相互独立 $\iff\overline A$ 与 $B$ 相互独立 $\iff\overline A$ 与 $\overline B$ 相互独立。<br>
+    　【注】将相互独立的事件组中的<b>任何几个</b>事件换成各自的对立事件，所得的新事件组仍相互独立。<br>
+    <b>④★ $A$ 与 $B$ 相互<u>有利</u> $\iff A$ 与 $\overline B$ 相互<u>抑止</u> $\iff\overline A$ 与 $B$ 相互<u>抑止</u> $\iff\overline A$ 与 $\overline B$ 相互<u>有利</u>。</b><br>
+    　即 $P(AB)\gt P(A)P(B)\iff P(\overline A\,\overline B)\gt P(\overline A)P(\overline B)$。<b>取一次逆，关系翻一次；取两次逆，翻回来。</b><br>
+    ⑤对独立事件组（<b>不含相同事件</b>）作运算，得到的新事件组仍独立。如 $A,B,C,D$ 相互独立，则 $AB$ 与 $CD$ 相互独立，$A$ 与 $BC-D$ 相互独立。（<b>直接使用，无须证明。</b>）<br>
+    ⑥若 $P(A)=0$ 或 $P(A)=1$，则 $A$ 与任意事件 $B$ 相互独立（<em>不可能事件或必然事件与任意事件独立</em>）。<br>
+    <b>⑦★ 若 $0\lt P(A)\lt1$，$0\lt P(B)\lt1$，且 $A$ 与 $B$ <u>互斥</u>或存在<u>包含关系</u>，则 $A$ 与 $B$ 一定<u>不</u>独立。</b><br>
+    　证：若 $AB=\varnothing$，则 $P(AB)=0\ne P(A)P(B)$，故 $A,B$ 不独立。若 $A\subseteq B$，则 $AB=A$，从而 $P(AB)=P(A)\ne P(A)P(B)$，故 $A,B$ 不独立。
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · ④ 的证明（考场上可能要你现证，套路固定）</span>
+    <b>前半（有利 ⇒ $A$ 与 $\overline B$ 抑止）</b>：$A$ 与 $B$ 相互有利即 $P(AB)\gt P(A)P(B)$，于是
+    $$P(A)-P(AB)\lt P(A)-P(A)P(B)=P(A)[1-P(B)],$$
+    即 $P(A\overline B)\lt P(A)P(\overline B)$，故 $A$ 与 $\overline B$ 相互抑止。<b>以上过程可逆。</b>同理可证 $\overline A$ 与 $B$ 相互抑止。<br>
+    <b>后半（有利 ⇒ $\overline A$ 与 $\overline B$ 有利）</b>：由 $P(A)=1-P(\overline A)$，$P(B)=1-P(\overline B)$，
+    $$P(AB)=1-P(\overline{AB})=1-P(\overline A\cup\overline B)=1-P(\overline A)-P(\overline B)+P(\overline A\,\overline B),$$
+    代入 $P(AB)\gt P(A)P(B)$ 得
+    $$1-P(\overline A)-P(\overline B)+P(\overline A\,\overline B)\gt[1-P(\overline A)][1-P(\overline B)],$$
+    于是 $P(\overline A\,\overline B)\gt P(\overline A)P(\overline B)$，故 $\overline A$ 与 $\overline B$ 相互有利。<b>以上过程可逆。</b><br>
+    <span class="dock">两句话记住</span>：<b>"$-$" 号动一次，不等号翻一次。</b>独立是等号，翻不翻都一样，所以 ③ 里四个全等价；有利/抑止是不等号，所以 ④ 里是<b>交错</b>的。
+  </div>
+
+  <p><b>下面四道题（强 1.7–1.10）是一组</b>：全都在问"某个式子是不是独立/有利的<b>充要条件</b>"，答案<b>全部是 (C) 充要条件</b>，套路也全部一样——<b>把式子等价变形回 $P(AB)$ 与 $P(A)P(B)$ 的比较，并说明"以上过程可逆"</b>。</p>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 1.7 ✔</span>若 $P(A)\gt0$，则"$A$ 与 $B$ 相互独立"是"$P(B\mid A)=P(B)$"的（　）。<br>
+    (A) 充分非必要条件　(B) 必要非充分条件　(C) 充要条件　(D) 既非充分也非必要条件</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(C)</span>
+      <br><span class="lab">解</span><b>充分性</b>：由 $A$ 与 $B$ 相互独立，有 $P(AB)=P(A)P(B)$，于是 $P(B\mid A)=\dfrac{P(AB)}{P(A)}=P(B)$。<br>
+      <b>必要性</b>：由 $P(B\mid A)=P(B)$，知 $P(AB)=P(B\mid A)P(A)=P(A)P(B)$，则 $A$ 与 $B$ 相互独立。故选 (C)。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 1.8 ✔</span>若 $0\lt P(A)\lt1$，且给出两式 ①$P(B\mid\overline A)=P(B\mid A)$，②$P(B\mid A)+P(\overline B\mid\overline A)=1$，则（　）。<br>
+    (A) ①是 $A$ 与 $B$ 独立的充要条件，②不是　(B) ②是 $A$ 与 $B$ 独立的充要条件，①不是<br>
+    (C) ①是 $A$ 与 $B$ 独立的充要条件，②也是　(D) ①不是 $A$ 与 $B$ 独立的充要条件，②也不是</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(C)</span>
+      <br><span class="lab">解</span>由 $P(B\mid\overline A)=P(B\mid A)$，有
+      $$\frac{P(B\overline A)}{P(\overline A)}=\frac{P(B)-P(AB)}{1-P(A)}=\frac{P(AB)}{P(A)},$$
+      即 $P(A)P(B)-P(A)P(AB)=P(AB)-P(A)P(AB)$，也即 $P(A)P(B)=P(AB)$。<b>上述过程可逆</b>，故①成立。<br>
+      又 $P(B\mid\overline A)=1-P(\overline B\mid\overline A)$（<b>条件概率本身就是概率，逆事件公式照用</b>），故②与①等价，②也成立。选 (C)。
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        <b>②式的看穿方法</b>：$P(B\mid A)+P(\overline B\mid\overline A)=1\iff P(B\mid A)=1-P(\overline B\mid\overline A)=P(B\mid\overline A)$，<b>一步就化回①</b>。见到"两个条件概率相加等于 1"，先想"是不是有一个可以用逆事件翻过来"。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 1.9 ✔</span>若 $P(A)\gt0$，则"$P(AB)\gt P(A)P(B)$"是"$P(B\mid A)\gt P(B)$"的（　）。<br>
+    (A) 充分非必要　(B) 必要非充分　(C) 充要条件　(D) 既非充分也非必要</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(C)</span>
+      <br><span class="lab">解</span>由 $P(AB)\gt P(A)P(B)$，于是
+      $$P(B\mid A)=\frac{P(AB)}{P(A)}\gt\frac{P(A)P(B)}{P(A)}=P(B).$$
+      <b>以上过程可逆</b>，故选 (C)。
+      <div class="key"><span class="tag">必记 · 顺带得到的对称结论</span>
+        <b>若 $P(B)\gt0$，则 $A$ 与 $B$ 相互有利 $\iff P(A\mid B)\gt P(A)$。</b><br>
+        连同 强 1.9 本身：<b>"相互有利"的三种等价说法</b>——$P(AB)\gt P(A)P(B)$、$P(B\mid A)\gt P(B)$、$P(A\mid B)\gt P(A)$。<b>"有利"是相互的，这就是名字的由来。</b>
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 1.10 ✔</span>若 $0\lt P(A)\lt1$，则"$P(AB)\gt P(A)P(B)$"是"$P(B\mid A)\gt P(B\mid\overline A)$"的（　）。<br>
+    (A) 充分非必要　(B) 必要非充分　(C) 充要条件　(D) 既非充分也非必要</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(C)</span>
+      <br><span class="lab">解</span>由 $P(AB)\gt P(A)P(B)$，两端同减 $P(A)P(AB)$，得
+      $$P(AB)-P(A)P(AB)\gt P(A)P(B)-P(A)P(AB),$$
+      即
+      $$\frac{P(AB)}{P(A)}\gt\frac{P(B)-P(AB)}{1-P(A)}=\frac{P(B\overline A)}{P(\overline A)},$$
+      也即 $P(B\mid A)\gt P(B\mid\overline A)$。<b>以上过程可逆</b>，选 (C)。
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        <b>这四道题（强 1.7–1.10）的公共解法</b>：<b>把条件概率全部通分成 $P(AB)$ 与 $P(A)P(B)$ 的比较，最后加一句"以上过程可逆"。</b>"可逆"这三个字就是充要条件题的<b>采分点</b>——只证一个方向最多给一半分。<br>
+        <b>四条式子横向对照</b>（$A$ 与 $B$ 的关系）：
+        <div class="gridwrap"><table>
+          <tr><th>关系</th><th>核心式</th><th>条件概率说法一</th><th>条件概率说法二</th></tr>
+          <tr><td>独立</td><td>$P(AB)=P(A)P(B)$</td><td>$P(B\mid A)=P(B)$</td><td>$P(B\mid A)=P(B\mid\overline A)$</td></tr>
+          <tr><td>有利</td><td>$P(AB)\gt P(A)P(B)$</td><td>$P(B\mid A)\gt P(B)$</td><td>$P(B\mid A)\gt P(B\mid\overline A)$</td></tr>
+          <tr><td>抑止</td><td>$P(AB)\lt P(A)P(B)$</td><td>$P(B\mid A)\lt P(B)$</td><td>$P(B\mid A)\lt P(B\mid\overline A)$</td></tr>
+        </table></div>
+        <b>三行只差一个符号，一行会了三行都会。</b>
+      </div>
+    </div>
+  </div>
+
+  <div class="key"><span class="tag">必记 · 《9讲》第 1 讲的收尾大注：复杂随机事件的转换等价表述（D₂₂）是核心，要总结积累</span>
+    ① 见到求"<b>既…，又…</b>"的概率，一般记"既"之后的为 $A$，"又"之后的为 $B$，写成 $P(AB)$；更易出现的是"<b>既不…，又不…</b>"，同理可写成 $P(\overline A\,\overline B)$，显而易见，这是使用<b>对立思想</b>的场合，于是有 $P(\overline A\,\overline B)=1-P(\overline{\overline A\,\overline B})=1-P(A\cup B)$；至于"<b>至少有…</b>"，一般也是用对立思想处理。<br>
+    ② 见到"<b>已知…</b>""<b>当…发生时</b>"求概率，方向上就是<b>条件思想</b>，是在求 $P(A\mid B)$，可考虑条件概率公式、乘法公式、全概率公式与贝叶斯公式。<br>
+    ③ 见到"<b>不等号</b>"或"<b>不等关系</b>"，方向上就是<b>单调性</b>或独立性中的相互有利、相互抑止。<br>
+    ④ 把握住"<b>最值关系式</b>"的形式化归体系块。<br>
+    <b>这就是针对解题的复习方法。</b>
+  </div>
+
+  <!-- ================= s11 习题 ================= -->
+  <h2 id="s11"><span class="idx">十一</span>基础习题精练 · 19 道全收　<span class="layer L-base">基础</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/概率论与数理统计/01_随机事件与概率/概率_第01章_基础30讲.pdf">📄 基础 p.25–32</a>
+
+  <p><b>用法</b>：先遮住答案自己做，再对照。<b>19 道的答案我全部用程序独立算过一遍</b>（枚举 / 数值积分 / 分数精确运算），与书上零分歧。</p>
+
+  <h3>选择题（1.1–1.5）</h3>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 1.1 ✔</span>设 $A,B,C$ 是任意三个事件，则下列选项中正确的是（　）。<br>
+    (A) 若 $A\cup C=B\cup C$，则 $A=B$　(B) 若 $A-C=B-C$，则 $A=B$<br>
+    (C) 若 $AC=BC$，则 $A=B$　(D) 若 $AB=\varnothing$ 且 $\overline A\,\overline B=\varnothing$，则 $\overline A=B$</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(D)</span>
+      <br><span class="lab">法一（直接法）</span>对于选项 (D)，由事件运算的对偶律，有
+      $$\overline{\overline A\,\overline B}=A\cup B=\overline\varnothing=\Omega,$$
+      而由 $A\cup B=\Omega$ 且 $AB=\varnothing$，可见 $A$ 和 $B$ <b>互为对立事件</b>，即 $\overline A=B$，因此 (D) 正确。
+      <br><span class="lab">法二（排除法）</span>前三个选项都不成立，只需分别举出反例。由于 $A,B,C$ 是任意三个事件，若取 $A\ne B$，而 $C=\Omega$ 是必然事件，则 $A\cup C=B\cup C\,(=\Omega)$ 且 $A-C=B-C\,(=\varnothing)$，但 $A\ne B$，从而 (A) 和 (B) 不成立。取 $A\ne B$，$C=\varnothing$，则 $AC=BC\,(=\varnothing)$，但 $A\ne B$，因此 (C) 不成立。从而选 (D)。
+      <div class="key"><span class="tag">必记 · 本题的结果反映了<b>事件的运算与数的运算的不同之处</b></span>
+        数的运算里 $a+c=b+c\Rightarrow a=b$（可消去），<b>事件运算里"并、差、交"都不能消去</b>。<b>$C=\Omega$ 和 $C=\varnothing$ 是这类反例的万能药</b>：一个把并撑满、一个把交清零。<br>
+        (D) 里那两个条件正是<a href="#s1">§一</a>给的对立事件判据：<b>$B=\overline A\iff AB=\varnothing$ 且 $A\cup B=\Omega$</b>——不重（互斥）+ 不漏（铺满）。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 1.2 ✔</span>设 $A$ 和 $B$ 是任意两个事件。①若 $P(A)=P(B)$，则 $A=B$；②若 $P(AB)=0$，则 $AB=\varnothing$。则关于两个命题的结论，正确的是（　）。<br>
+    (A) ①正确，②不正确　(B) ①不正确，②正确　(C) ①、②均正确　(D) ①、②均不正确</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(D)</span>
+      <br><span class="lab">解</span>考虑向区间 $[0,2]$ 上掷一随机点的试验。令 $A=\{$随机点落入区间 $[0,1]$ 上$\}$，$B=\{$随机点落入区间 $[1,2]$ 上$\}$。显然
+      $$P(A)=P(B)=\frac12,\qquad P(AB)=0\ \ (\text{交只有一个点 }x=1),$$
+      然而 $A\ne B$，$AB=\{1\}\ne\varnothing$。故两个命题均不正确，选 (D)。
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        <b>这是 <a href="#s3">§三</a>"$P(A)=0\nRightarrow A=\varnothing$"的又一次考法</b>，反例的造法也固定：<b>在几何概型里找一个"长度为 0 但非空"的集合</b>（一个点）。<b>把这个反例背下来，本章所有同类选择题都能秒杀。</b>
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 1.3 ✔</span>考虑一元二次方程 $x^2+Bx+C=0$，其中 $B,C$ 分别是将一枚骰子接连抛两次先后出现的点数，则该方程<b>有实根</b>的概率为（　）。<br>
+    (A) $\dfrac{19}{36}$　(B) $\dfrac{17}{36}$　(C) $\dfrac{15}{36}$　(D) $\dfrac{13}{36}$</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(A) $\dfrac{19}{36}$</span>（$6\times6=36$ 组 $(B,C)$ 全部枚举，满足 $B^2-4C\ge0$ 的恰有 19 组 ✓）
+      <br><span class="lab">解</span>本题属于<b>古典概型</b>。由于很难套用现有概型模式或公式求解，一个最简单也是最直接的做法是<b>数出总样本数和事件所含样本点数并计算比值</b>。由于接连抛两次，每次都可能出现 6 个点数，因此其总样本数为 $6^2$。<br>
+      方程有实根，即事件 $\{B^2-4C\ge0\}$，列表如下（$+$ 表示 $\gt0$，$0$ 表示 $=0$，$-$ 表示 $\lt0$）：
+      <div class="gridwrap"><table>
+        <tr><th>$B\backslash C$</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>该行个数</th></tr>
+        <tr><td><b>1</b></td><td>$-$</td><td>$-$</td><td>$-$</td><td>$-$</td><td>$-$</td><td>$-$</td><td>0</td></tr>
+        <tr><td><b>2</b></td><td>$0$</td><td>$-$</td><td>$-$</td><td>$-$</td><td>$-$</td><td>$-$</td><td>1</td></tr>
+        <tr><td><b>3</b></td><td>$+$</td><td>$+$</td><td>$-$</td><td>$-$</td><td>$-$</td><td>$-$</td><td>2</td></tr>
+        <tr><td><b>4</b></td><td>$+$</td><td>$+$</td><td>$+$</td><td>$0$</td><td>$-$</td><td>$-$</td><td>4</td></tr>
+        <tr><td><b>5</b></td><td>$+$</td><td>$+$</td><td>$+$</td><td>$+$</td><td>$+$</td><td>$+$</td><td>6</td></tr>
+        <tr><td><b>6</b></td><td>$+$</td><td>$+$</td><td>$+$</td><td>$+$</td><td>$+$</td><td>$+$</td><td>6</td></tr>
+      </table></div>
+      其中事件 $\{B^2-4C\ge0\}$ 所含样本点数为 $0+1+2+4+6+6=19$，则 $p=\dfrac{19}{36}$，故选 (A)。
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        ・<span class="dock">易错</span>：<b>$B^2-4C=0$（判别式为零）算不算"有实根"？算</b>——重根也是实根。表里 $(B,C)=(2,1),(4,4)$ 这两个 $0$ <b>必须计入</b>，漏掉就得 $\tfrac{17}{36}$，正好是干扰项 (B)。<b>出题人就等在这儿。</b><br>
+        ・<b>列表法什么时候用</b>：样本点 $\le36$ 个且没有明显结构时。<b>按 $B$ 分行、每行数临界点</b>：$C\le B^2/4$，$B=3$ 时 $C\le2.25$ 故 2 个，$B=4$ 时 $C\le4$ 故 4 个，$B\ge5$ 时 $B^2/4\ge6.25$ 全中——<b>这样只需算 6 个数，比画满 36 格快。</b>
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 1.4 ✔</span>甲口袋有 5 个白球、3 个黑球，乙口袋有 4 个白球、6 个黑球。从两个口袋中各任取一个球，则取到的两个球<b>颜色相同</b>的概率为（　）。<br>
+    (A) $\dfrac{19}{40}$　(B) $\dfrac{21}{40}$　(C) $\dfrac14$　(D) $\dfrac9{40}$</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(A) $\dfrac{19}{40}$</span>
+      <br><span class="lab">解</span>从两个口袋中各取一个球，共有 $\mathrm C_8^1\mathrm C_{10}^1$ 种等可能取法，而两个球颜色相同有<b>两种情况</b>：第一种是从甲口袋取出白球，从乙口袋也取出白球；第二种是从甲口袋取出黑球，从乙口袋也取出黑球，共有 $\mathrm C_5^1\mathrm C_4^1+\mathrm C_3^1\mathrm C_6^1$ 种取法。于是
+      $$P\{\text{取到的两个球颜色相同}\}=\frac{5\times4+3\times6}{8\times10}=\frac{19}{40}.$$
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        <b>"分类用加法、分步用乘法"的最小样例</b>：颜色相同分<b>两类</b>（都白/都黑）→ 加；每一类里"甲取一个、乙取一个"是<b>两步</b> → 乘。<b>写式子前先问一句"这是分类还是分步"</b>，古典概型的计数错误九成来自这里。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 1.5 ✔</span>设 $A,B,C$ 为三个随机事件，且 $A$ 与 $C$ 相互独立，$B$ 与 $C$ 相互独立，则 $A\cup B$ 与 $C$ 相互独立的<b>充分必要条件</b>是（　）。<br>
+    (A) $A$ 与 $B$ 相互独立　(B) $A$ 与 $B$ 互不相容　(C) $AB$ 与 $C$ 相互独立　(D) $AB$ 与 $C$ 互不相容</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(C)</span>
+      <br><span class="lab">解</span>$A\cup B$ 与 $C$ 相互独立，即 $P[(A\cup B)\cap C]=P(A\cup B)P(C)$。由
+      $$P[(A\cup B)\cap C]=P(AC\cup BC)=P(AC)+P(BC)-P(AC\cap BC)=P(A)P(C)+P(B)P(C)-P(ABC),$$
+      而
+      $$P(A\cup B)P(C)=[P(A)+P(B)-P(AB)]P(C)=P(A)P(C)+P(B)P(C)-P(AB)P(C),$$
+      所以 $A\cup B$ 与 $C$ 相互独立的充分必要条件为
+      $$P(ABC)=P(AB)P(C),$$
+      即 <b>$AB$ 与 $C$ 相互独立</b>。应选 (C)。
+      <div class="key"><span class="tag">必记 · 这道题是"充要条件"题的标准做法：<b>两边同时展开，把公共项消掉，看剩下什么</b></span>
+        左右两边各展开后，前两项 $P(A)P(C)+P(B)P(C)$ <b>完全相同</b>（这正是用上"$A,C$ 独立、$B,C$ 独立"两个已知的地方），于是等式 $\iff$ 第三项相等，即 $P(ABC)=P(AB)P(C)$。<br>
+        <span class="dock">别选 (A)</span>：$A$ 与 $B$ 独立既不充分也不必要——本题条件里根本没有 $A,B$ 之间的信息，<b>结论只可能落在同时含 $A,B,C$ 的那一项上</b>。这个"数一数每个选项涉及哪些字母"的排除法，考场上五秒就能筛掉 (A)(B)。
+      </div>
+    </div>
+  </div>
+
+  <h3>填空题（1.6–1.13）</h3>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 1.6 ✔</span>随机地向半圆 $0\lt y\lt\sqrt{2ax-x^2}\ (a\gt0)$ 内投掷一点，点均匀落在半圆内任何一个区域，则该点和原点连线同 $x$ 轴的夹角 $\theta\le\dfrac\pi4$ 的概率为 ______。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$\dfrac12+\dfrac1\pi$</span>（取 $a=1$ 作数值积分：所求区域面积 $\div$ 半圆面积 $=0.818310$，而 $\tfrac12+\tfrac1\pi=0.818310$ ✓）
+      <br><span class="lab">解</span>由题设，半圆（即 $(x-a)^2+y^2=a^2$ 的上半部分）与直线 $y=x$ 的交点坐标为 $(a,a)$，如图 1-3 所示，阴影区域 $D$ 内任意点与原点连线同 $x$ 轴的夹角 $\theta\le\dfrac\pi4$，因此所求概率为
+      $$P\{(x,y)\in D\}=\left(\frac{\pi a^2}{4}+\frac{a^2}{2}\right)\Big/\frac{\pi a^2}{2}=\frac12+\frac1\pi.$$
+      <div class="fml">
+        <svg viewBox="0 0 230 150" width="230" height="150" style="max-width:100%">
+          <defs><style>.ax2{stroke:currentColor;stroke-width:1.1;fill:none}.sh2{fill:currentColor;opacity:.18}.bd2{stroke:currentColor;stroke-width:1.3;fill:none}.gl2{stroke:currentColor;stroke-width:.9;stroke-dasharray:3 3;opacity:.5;fill:none}.tx2{font-size:10px;fill:currentColor;font-family:Georgia,serif}</style></defs>
+          <!-- 半圆 圆心(110,120) 半径60 ; 直线 y=x 过原点(50,120) 与半圆交于(110,60) -->
+          <path class="sh2" d="M50,120 L110,60 A60,60 0 0 0 50,120 Z" transform="rotate(0)"/>
+          <path class="sh2" d="M50,120 L110,60 L170,120 Z" opacity=".0"/>
+          <path class="sh2" d="M110,60 A60,60 0 0 1 170,120 L110,120 Z"/>
+          <path class="sh2" d="M50,120 L110,60 L110,120 Z"/>
+          <path class="bd2" d="M50,120 A60,60 0 0 1 170,120"/>
+          <line class="bd2" x1="50" y1="120" x2="110" y2="60"/>
+          <line class="gl2" x1="110" y1="60" x2="110" y2="120"/>
+          <line class="ax2" x1="35" y1="120" x2="205" y2="120"/><line class="ax2" x1="50" y1="135" x2="50" y2="35"/>
+          <polygon points="205,120 199,117 199,123" fill="currentColor"/><polygon points="50,35 47,41 53,41" fill="currentColor"/>
+          <path class="ax2" d="M68,120 A18,18 0 0 0 62,107" opacity=".8"/>
+          <text class="tx2" x="70" y="116">θ</text>
+          <text class="tx2" x="208" y="124">x</text><text class="tx2" x="44" y="33">y</text>
+          <text class="tx2" x="42" y="133">O</text><text class="tx2" x="106" y="133">a</text><text class="tx2" x="163" y="133">2a</text>
+          <text class="tx2" x="112" y="56">A(a,a)</text><text class="tx2" x="122" y="92">D</text>
+        </svg>
+        <div style="font-size:.76rem;color:var(--muted);margin-top:4px">图 1-3　阴影 $D$ ＝ 右侧四分之一圆（$\tfrac{\pi a^2}{4}$）＋ 左侧三角形 $\triangle OAa$（$\tfrac{a^2}{2}$）</div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        ・<b>面积怎么拆</b>：直线 $y=x$ 与半圆交于 $A(a,a)$（即半圆的<b>最高点</b>，因为圆心在 $(a,0)$）。竖直线 $x=a$ 把阴影切成两块：<b>右半是标准的四分之一圆</b> $\tfrac{\pi a^2}{4}$，<b>左半是直角三角形</b>（顶点 $O(0,0)$、$A(a,a)$、$(a,0)$）面积 $\tfrac{a^2}{2}$。<b>看出"交点恰是最高点"是本题的全部机关。</b><br>
+        ・<span class="dock">易错</span>：以为 $\theta\le\tfrac\pi4$ 就是"半圆的四分之一"，直接写 $\tfrac12$。<b>不对</b>——半圆的圆心不在原点，$\theta$ 是从<b>原点</b>量的角，不是从圆心量的。<b>几何概型里"角度均匀"和"面积均匀"是两回事，本题明说"点均匀落在半圆内任何一个区域"，是面积均匀。</b><br>
+        ・答案 $\tfrac12+\tfrac1\pi\approx0.818\gt\tfrac12$，与直觉相符（半圆偏在右侧，$\theta$ 小的区域占得多），<b>可以当场自检</b>。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 1.7 ✔</span>从 $[0,1]$ 中随机地取两个数，其<b>积大于 $\dfrac14$</b>，其<b>和小于 $\dfrac54$</b> 的概率为 ______。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$\dfrac{15}{32}-\dfrac12\ln2$</span>（数值积分得 $0.12217641$，而 $\tfrac{15}{32}-\tfrac12\ln2=0.12217641$ ✓）
+      <br><span class="lab">解</span>从 $[0,1]$ 中随机地取两个数 $x$ 与 $y$，可以看成从图 1-4 所示正方形区域中任取一点，满足几何概型的两个特点。记 $\Omega=\{(x,y)\mid0\le x\le1,\ 0\le y\le1\}$，
+      $$A=\left\{(x,y)\ \Big|\ x+y\lt\frac54,\ xy\gt\frac14\right\},$$
+      对应图 1-4 中阴影部分。于是
+      $$P(A)=\frac{S_A}{S_\Omega}=\frac{\displaystyle\int_{\frac14}^{1}\left(\frac54-x-\frac1{4x}\right)\mathrm dx}{1}
+      =\left(\frac54x-\frac12x^2-\frac14\ln x\right)\Bigg|_{\frac14}^{1}=\frac{15}{32}-\frac12\ln2.$$
+      <div class="fml">
+        <svg viewBox="0 0 200 175" width="200" height="175" style="max-width:100%">
+          <defs><style>.ax3{stroke:currentColor;stroke-width:1.1;fill:none}.bd3{stroke:currentColor;stroke-width:1.2;fill:none}.gl3{stroke:currentColor;stroke-width:.9;stroke-dasharray:3 3;opacity:.5;fill:none}.tx3{font-size:10px;fill:currentColor;font-family:Georgia,serif}.sh3{fill:currentColor;opacity:.2}</style></defs>
+          <!-- 正方形 x:30..150 (0..1) y:150..30 -->
+          <!-- 阴影: 1/4<=x<=1, 1/(4x)<y<5/4-x ; 采样绘制 -->
+          <path class="sh3" d="M 60.0,30.0 L 62.3,32.3 L 64.6,34.6 L 66.9,36.9 L 69.2,39.2 L 71.5,41.5 L 73.8,43.8 L 76.2,46.2 L 78.5,48.5 L 80.8,50.8 L 83.1,53.1 L 85.4,55.4 L 87.7,57.7 L 90.0,60.0 L 92.3,62.3 L 94.6,64.6 L 96.9,66.9 L 99.2,69.2 L 101.5,71.5 L 103.8,73.8 L 106.2,76.2 L 108.5,78.5 L 110.8,80.8 L 113.1,83.1 L 115.4,85.4 L 117.7,87.7 L 120.0,90.0 L 122.3,92.3 L 124.6,94.6 L 126.9,96.9 L 129.2,99.2 L 131.5,101.5 L 133.8,103.8 L 136.2,106.2 L 138.5,108.5 L 140.8,110.8 L 143.1,113.1 L 145.4,115.4 L 147.7,117.7 L 150.0,120.0 L 150.0,120.0 L 147.7,119.4 L 145.4,118.8 L 143.1,118.2 L 140.8,117.5 L 138.5,116.8 L 136.2,116.1 L 133.8,115.3 L 131.5,114.5 L 129.2,113.7 L 126.9,112.9 L 124.6,112.0 L 122.3,111.0 L 120.0,110.0 L 117.7,108.9 L 115.4,107.8 L 113.1,106.7 L 110.8,105.4 L 108.5,104.1 L 106.2,102.7 L 103.8,101.2 L 101.5,99.7 L 99.2,98.0 L 96.9,96.2 L 94.6,94.3 L 92.3,92.2 L 90.0,90.0 L 87.7,87.6 L 85.4,85.0 L 83.1,82.2 L 80.8,79.1 L 78.5,75.7 L 76.2,72.0 L 73.8,67.9 L 71.5,63.3 L 69.2,58.2 L 66.9,52.5 L 64.6,46.0 L 62.3,38.6 L 60.0,30.0 Z"/>
+          <rect class="bd3" x="30" y="30" width="120" height="120"/>
+          <!-- 直线 x+y=5/4: 从(1/4,1)到(1,1/4) => (60,30)-(150,120) -->
+          <line class="bd3" x1="60" y1="30" x2="150" y2="120"/>
+          <!-- 曲线 xy=1/4 -->
+          <path class="bd3" d="M 60.0,30.0 L 62.3,38.6 L 64.6,46.0 L 66.9,52.5 L 69.2,58.2 L 71.5,63.3 L 73.8,67.9 L 76.2,72.0 L 78.5,75.7 L 80.8,79.1 L 83.1,82.2 L 85.4,85.0 L 87.7,87.6 L 90.0,90.0 L 92.3,92.2 L 94.6,94.3 L 96.9,96.2 L 99.2,98.0 L 101.5,99.7 L 103.8,101.2 L 106.2,102.7 L 108.5,104.1 L 110.8,105.4 L 113.1,106.7 L 115.4,107.8 L 117.7,108.9 L 120.0,110.0 L 122.3,111.0 L 124.6,112.0 L 126.9,112.9 L 129.2,113.7 L 131.5,114.5 L 133.8,115.3 L 136.2,116.1 L 138.5,116.8 L 140.8,117.5 L 143.1,118.2 L 145.4,118.8 L 147.7,119.4 L 150.0,120.0"/>
+          <line class="gl3" x1="60" y1="150" x2="60" y2="30"/>
+          <line class="ax3" x1="20" y1="150" x2="178" y2="150"/><line class="ax3" x1="30" y1="165" x2="30" y2="20"/>
+          <polygon points="178,150 172,147 172,153" fill="currentColor"/><polygon points="30,20 27,26 33,26" fill="currentColor"/>
+          <text class="tx3" x="181" y="154">x</text><text class="tx3" x="24" y="18">y</text>
+          <text class="tx3" x="22" y="163">O</text><text class="tx3" x="52" y="163">¼</text><text class="tx3" x="146" y="163">1</text><text class="tx3" x="20" y="34">1</text>
+          <text class="tx3" x="118" y="46">x+y=5/4</text><text class="tx3" x="64" y="126">xy=1/4</text>
+        </svg>
+        <div style="font-size:.76rem;color:var(--muted);margin-top:4px">图 1-4　阴影 ＝ 直线 $x+y=\tfrac54$ 之下、双曲线 $xy=\tfrac14$ 之上、$x\in[\tfrac14,1]$ 的月牙形区域</div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        ・<b>积分限 $\tfrac14$ 与 $1$ 是怎么定的</b>：两条边界曲线 $y=\tfrac54-x$ 与 $y=\tfrac1{4x}$ 的交点满足 $\tfrac54-x=\tfrac1{4x}$，即 $4x^2-5x+1=0$，解得 $x=\tfrac14$ 与 $x=1$。<b>先解交点再定限，别凭图猜。</b><br>
+        ・<span class="dock">扣分点</span>：忘了 $\int\tfrac1{4x}\mathrm dx=\tfrac14\ln x$ 里的系数 $\tfrac14$，或代限时算成 $\tfrac14\ln4=\tfrac12\ln2$ 的符号。<b>$-\tfrac14\ln x\big|_{1/4}^{1}=0-(-\tfrac14\ln\tfrac14)=-\tfrac14\ln4=-\tfrac12\ln2$</b>，两个负号别丢。<br>
+        ・<b>本题是本章唯一要真算积分的题</b>，也是几何概型与高数的接口。<b>数一以后还会遇到要算三重积分的几何概型</b>（体积型）。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 1.8 ✔</span>已知事件 $A,B$ 满足 $P(AB)=P(\overline A\cap\overline B)$，记 $P(A)=p$，则 $P(B)=$ ______。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$1-p$</span>
+      <br><span class="lab">解</span>因为
+      $$P(AB)=P(\overline A\cap\overline B)=P(\overline{A\cup B})=1-P(A\cup B)=1-P(A)-P(B)+P(AB),$$
+      由此得 $1-P(A)-P(B)=0$，所以 $P(B)=1-P(A)=1-p$。
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        <b>$P(AB)$ 在等式两端<u>同时出现并抵消</u>，这是本题的全部技巧</b>——不要试图去求 $P(AB)$ 的值（它根本不确定）。<b>凡是"两个概率相等"型的填空，先把两边都展成同一套基底（$P(A),P(B),P(AB)$），再看谁能消掉。</b>
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 1.9 ✔</span>已知 $P(A)=0.7$，$P(A-B)=0.3$，则 $P(\overline{AB})=$ ______。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$0.6$</span>
+      <br><span class="lab">解</span>因为 $0.3=P(A-B)=P(A)-P(AB)=0.7-P(AB)$，由此得 $P(AB)=0.7-0.3=0.4$，所以
+      $$P(\overline{AB})=1-P(AB)=0.6.$$
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        <b>注意题目问的是 $P(\overline{AB})$（长杠，$=1-P(AB)$），不是 $P(\overline A\,\overline B)$（短杠，$=1-P(A\cup B)$）。</b>差一个杠，答案完全不同——本章的填空题最爱在杠上做文章。<b>读题时先把杠的长短抄准。</b>
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 1.10 ✔</span>已知 $P(\overline A)=0.3$，$P(B)=0.4$，$P(A\overline B)=0.5$，则 $P(B\mid A\cup\overline B)=$ ______。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$0.25$</span>
+      <br><span class="lab">解</span>由条件概率的定义知 $P(B\mid A\cup\overline B)=\dfrac{P\big[B\cap(A\cup\overline B)\big]}{P(A\cup\overline B)}=\dfrac{P(AB)}{P(A\cup\overline B)}$，其中
+      $$P(A\cup\overline B)=P(A)+P(\overline B)-P(A\overline B)=0.7+0.6-0.5=0.8;$$
+      又由 $P(A\overline B)=P(A)-P(AB)$ 可得 $P(AB)=0.7-0.5=0.2$。代回原式，
+      $$P(B\mid A\cup\overline B)=\frac{P(AB)}{P(A\cup\overline B)}=\frac{0.2}{0.8}=0.25.$$
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        <b>分子那一步是关键</b>：$B\cap(A\cup\overline B)=BA\cup B\overline B=AB\cup\varnothing=AB$。<b>不化简直接写 $P(B)$ 是错的</b>（那是把条件当成了 $\Omega$）。<br>
+        <b>条件概率的通用第一动作：把 $P(\text{目标}\mid\text{条件})$ 的分子 $\text{目标}\cap\text{条件}$ 先化到最简</b>，往往能塌缩成一个很简单的事件。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 1.11 ✔</span>设 $A,B$ 为两个随机事件，且 $P(A)=0.4$，$P(A\cup B)=0.7$。<br>
+    若 $A,B$ <b>互不相容</b>，则 $P(B)=$ ______；若 $A,B$ <b>相互独立</b>，则 $P(B)=$ ______；若 <b>$A$ 发生 $B$ 必发生</b>，则 $P(B)=$ ______。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$0.3$；$0.5$；$0.7$</span>
+      <br><span class="lab">解</span>由加法公式 $P(A\cup B)=P(A)+P(B)-P(AB)$，于是：<br>
+      <b>①互不相容</b>：$P(AB)=0$，$P(B)=P(A\cup B)-P(A)=0.7-0.4=0.3$；<br>
+      <b>②相互独立</b>：$P(AB)=P(A)P(B)$，即 $P(A\cup B)=P(A)+P(B)-P(A)P(B)$，解得
+      $$P(B)=\frac{P(A\cup B)-P(A)}{1-P(A)}=\frac{0.7-0.4}{1-0.4}=0.5;$$
+      <b>③$A$ 发生 $B$ 必发生</b>（即 $A\subset B$）：此时 $A\cup B=B$，故 $P(B)=P(A\cup B)=0.7$。
+      <div class="key"><span class="tag">必记 · 一题三吃：<b>三种关系分别怎样"填 $P(AB)$ 这个空"</b></span>
+        加法公式里唯一的未知量是 $P(AB)$，<b>三个小问就是给了三种不同的方式来确定它</b>：互斥 $\Rightarrow P(AB)=0$；独立 $\Rightarrow P(AB)=P(A)P(B)$；包含 $\Rightarrow P(AB)=P(A)$。<b>把这三行写在草稿纸最上面，本章一半的填空题就是在考它们。</b><br>
+        自检：$0.3\lt0.5\lt0.7$——<b>互斥时 $B$ 最小、包含时 $B$ 最大</b>，符合直觉（要凑出同样的并，重叠越多 $B$ 就得越大）。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 1.12 ✔</span>三人独立地破译一个密码，他们能单独译出的概率分别为 $\dfrac15,\dfrac13,\dfrac14$，则此密码<b>被译出</b>的概率为 ______。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$\dfrac35$</span>
+      <br><span class="lab">解</span>记事件 $A_i$ 为"第 $i$ 个人译出密码"（$i=1,2,3$），事件 $B$ 为"密码被译出"，则
+      $$P(B)=P(A_1\cup A_2\cup A_3)=1-P(\overline{A_1}\,\overline{A_2}\,\overline{A_3})=1-\frac45\times\frac23\times\frac34=\frac35.$$
+      <div class="key"><span class="tag">必记 · 书上这道题的注，是一句方法论</span>
+        <b>互不相容可简化<u>并</u>事件的概率计算，相互独立可简化<u>交</u>事件的概率计算。这里为了利用相互独立性，把事件的并在对偶律下转化为事件的交，这一方法会经常用到。</b><br>
+        <b>三句话连起来就是"至少有一个"的标准流水线</b>：并 $\xrightarrow{\text{对偶律}}$ 交的逆 $\xrightarrow{\text{独立}}$ 连乘。见 <a href="#s9">基 1.14</a> 与 <a href="#s10f">§十·六②</a> 的通式 $1-\prod[1-P(A_i)]$。<br>
+        <span class="dock">易错</span>：直接写 $\tfrac15+\tfrac13+\tfrac14$ ——那是把三个人当成了互斥，<b>但他们完全可以同时译出</b>。而且 $\tfrac{47}{60}\gt\tfrac35$，加法算出来偏大，<b>一眼就该觉得不对</b>。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 1.13 ✔</span>甲、乙两人独立地对同一目标射击一次，其命中率分别为 0.6 和 0.7。现已知目标<b>被击中</b>，则它是<b>甲射中</b>的概率为 ______。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$\approx0.682$（精确值 $\dfrac{0.6}{0.88}=\dfrac{15}{22}$）</span>
+      <br><span class="lab">解</span>记事件 $A$ 为"目标被击中"，事件 $B_1$ 为"甲射中目标"，事件 $B_2$ 为"乙射中目标"。因为 $A=B_1\cup B_2$，所以
+      $$P(A)=P(B_1\cup B_2)=P(B_1)+P(B_2)-P(B_1B_2)=0.6+0.7-0.6\times0.7=0.88.$$
+      考虑到 $B_1\subset A$，故有
+      $$P(B_1\mid A)=\frac{P(AB_1)}{P(A)}=\frac{P(B_1)}{P(A)}=\frac{0.6}{0.88}\approx0.682.$$
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        ・<b>"已知结果，问是谁干的" = 贝叶斯语境</b>，但本题<b>不必套贝叶斯公式的分式</b>——因为 $B_1\subset A$（甲射中了目标就一定被击中），分子直接塌缩成 $P(B_1)$。<b>看出包含关系，比套公式快一倍。</b><br>
+        ・<span class="dock">易错</span>：答成 $0.6$。<b>题目问的是条件概率</b>（在"被击中"的前提下），不是无条件的命中率；$0.682\gt0.6$ 也符合直觉——<b>知道目标被击中这个信息，提高了"甲射中"的可信度</b>（又是权重被改写，见 <a href="#s8">🔀 权重台</a>）。<br>
+        ・注意 $P(B_1\mid A)+P(B_2\mid A)=\tfrac{0.6+0.7}{0.88}\approx1.48\ne1$——<b>$B_1,B_2$ 不是完备事件组（它们能同时发生），后验之和不必为 1</b>。这与权重台里那三个互斥原因是两回事。
+      </div>
+    </div>
+  </div>
+
+  <h3>解答题（1.14–1.19）</h3>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 1.14 ✔</span>用事件 $A,B,C$ 的运算关系表示事件：① $A,B,C$ <b>都不</b>发生；② $A,B,C$ <b>不都</b>发生；③ $A,B,C$ <b>不多于一个</b>发生。</div>
+    <div class="s">
+      <span class="lab">答案 / 解</span>
+      $$\text{①}\ \{A,B,C\text{ 都不发生}\}=\{A\text{ 不发生，且 }B\text{ 不发生，且 }C\text{ 不发生}\}=\overline A\,\overline B\,\overline C=\overline{A\cup B\cup C};$$
+      $$\text{②}\ \{A,B,C\text{ 不都发生}\}=\{A,B,C\text{ 至少有一个不发生}\}=\{A,B,C\text{ 都发生}\}\text{ 的逆事件}=\overline A\cup\overline B\cup\overline C=\overline{ABC};$$
+      $$\text{③}\ \{A,B,C\text{ 不多于一个发生}\}=\{\text{至多有一个发生}\}=\{\text{至少有两个不发生}\}$$
+      $$=\overline A\,\overline B\cup\overline A\,\overline C\cup\overline B\,\overline C
+      =\overline A\,\overline B\,\overline C\cup A\overline B\,\overline C\cup\overline AB\overline C\cup\overline A\,\overline BC.$$
+      <div class="key"><span class="tag">必记 · 中文量词 → 事件运算的对照表（本章最该背的一张表）</span>
+        <div class="gridwrap"><table>
+          <tr><th>中文</th><th>事件</th><th>在 <a href="#s2">📐 运算器</a> 的 8 块里占几块</th></tr>
+          <tr><td><b>都</b>发生</td><td>$ABC$</td><td>1 块</td></tr>
+          <tr><td><b>都不</b>发生</td><td>$\overline A\,\overline B\,\overline C=\overline{A\cup B\cup C}$</td><td>1 块</td></tr>
+          <tr><td><b>不都</b>发生</td><td>$\overline{ABC}=\overline A\cup\overline B\cup\overline C$</td><td>7 块（除 $ABC$）</td></tr>
+          <tr><td><b>至少有一个</b>发生</td><td>$A\cup B\cup C=\overline{\overline A\,\overline B\,\overline C}$</td><td>7 块（除 $\overline A\overline B\overline C$）</td></tr>
+          <tr><td><b>恰有一个</b>发生</td><td>$A\overline B\,\overline C\cup\overline AB\overline C\cup\overline A\,\overline BC$</td><td>3 块</td></tr>
+          <tr><td><b>至多有一个</b>（不多于一个）发生</td><td>上一行 3 块 $\cup\ \overline A\,\overline B\,\overline C$</td><td>4 块</td></tr>
+          <tr><td><b>至少有两个</b>发生</td><td>$AB\cup AC\cup BC$</td><td>4 块</td></tr>
+        </table></div>
+        <span class="dock">最易混的一对</span>：<b>"不都发生"（7 块）≠"都不发生"（1 块）</b>。中文只差一个字的位置，事件差了 6 块。<b>读题时把这两个词圈出来。</b>
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 1.15 ✔</span>设 $X,Y$ 为随机变量，事件 $A$ 表示 $\{X\ge c\}$，事件 $B$ 表示 $\{Y\ge c\}$。用 $A,B$ 表示下列事件：<br>
+    $D:\{\max\{X,Y\}\ge c\}$；$E:\{\min\{X,Y\}\ge c\}$；$F:\{\max\{X,Y\}\lt c\}$；$G:\{\min\{X,Y\}\lt c\}$。</div>
+    <div class="s">
+      <span class="lab">答案 / 解</span>
+      $$D=A\cup B\ (\text{即 }X,Y\text{ 中至少有一个}\ge c);\qquad E=A\cap B\ (\text{即 }X,Y\text{ 都要}\ge c);$$
+      $$F=\overline D=\overline A\cap\overline B\ (\text{即 }X,Y\text{ 都要}\lt c);\qquad G=\overline E=\overline A\cup\overline B\ (\text{即 }X,Y\text{ 中至少有一个}\lt c).$$
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        <b>这道题就是 <a href="#s10e">§十·五</a> 那张最值关系表的①~④条</b>，只是换了字母。<b>口诀：max 要大只需一个大（并），min 要大必须都大（交）；取反则交并互换。</b><br>
+        <b>为什么这道"看着很水"的题要认真做</b>：第 3 章求 $M=\max\{X,Y\}$、$N=\min\{X,Y\}$ 的<b>分布函数</b>时，全靠这四行——$F_M(z)=P\{M\le z\}=F_X(z)F_Y(z)$（独立时）、$F_N(z)=1-[1-F_X(z)][1-F_Y(z)]$，<b>推导的第一步就是本题</b>。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 1.16 ✔</span>判断下列命题是否成立，并说明理由。<br>
+    (1) $A-(B-C)=(A-B)\cup C$；(2) 若 $AB=\varnothing$ 且 $C\subset A$，则 $BC=\varnothing$；(3) $(A\cup B)-B=A$；(4) $(A-B)\cup B=A$。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(1) 不成立　(2) 成立　(3) 不成立　(4) 不成立</span>（四条全部在 <a href="#s2">📐 运算器</a> 里逐区域比对过，可自行复验）
+      <br><span class="lab">解</span>
+      <b>(1) 不成立。</b>
+      $$A-(B-C)=A-B\overline C=A\overline{B\overline C}=A(\overline B\cup C)=A\overline B\cup AC=(A-B)\cup AC\ \ne\ (A-B)\cup C;$$
+      也可由图 1-5 快速判断——图 (a) 的 $A-(B-C)$ 阴影<b>不越出 $A$</b>，而图 (b) 的 $(A-B)\cup C$ 把整个 $C$ 都吞进去了。<br>
+      <b>(2) 成立。</b>因 $C\subset A$，有 $BC\subset AB=\varnothing$，故 $BC=\varnothing$。<br>
+      <b>(3) 不成立。</b>因
+      $$(A\cup B)-B=(A\cup B)\overline B=A\overline B\cup B\overline B=A\overline B=A-B\ \ne\ A.$$
+      <b>(4) 不成立。</b>因
+      $$(A-B)\cup B=A\overline B\cup B=(A\cup B)(\overline B\cup B)=A\cup B\ \ne\ A.$$
+      <div class="key"><span class="tag">必记 · 一句话总结这四条：<b>事件的"减法"不是数的减法</b></span>
+        (3)(4) 合起来说的是：<b>先并再减，减不回去；先减再并，并不回来。</b>数里 $(a+b)-b=a$、$(a-b)+b=a$ 都对，<b>事件里两条都错</b>——因为"减 $B$"删掉的是 $A$ 与 $B$ 的<b>重叠部分</b>，那部分再也回不来（(3)），或者反过来把 $B$ 整个带进来（(4)）。<br>
+        <b>(1) 的正确形式要记住</b>：$A-(B-C)=(A-B)\cup AC$——<b>后面那项要带 $A$</b>。<br>
+        <b>本题的通用解法</b>：<b>把所有的差都换成 $X-Y=X\overline Y$，再用对偶律和分配律硬展开</b>，最后与右端比对。<b>展开永远比画图可靠</b>；画图（或用运算器）是<b>验算</b>，不是<b>论证</b>——考场上要写的是展开式。
+      </div>
+      <div class="mine"><span class="tag">补讲 · 书上顺带留的两道小练习（证明事件运算公式）</span>
+        考生可再做练习，证明下列事件的运算公式：(1) $A=AB\cup A\overline B$；(2) $A\cup B=A\cup\overline AB$。<br>
+        <b>证</b>　(1) $AB\cup A\overline B=A(B\cup\overline B)=A\Omega=A$；<br>
+        　　(2) $A\cup\overline AB=(A\cup\overline A)(A\cup B)=\Omega(A\cup B)=A\cup B$。<br>
+        这两条正是 <a href="#s10b">§十·二</a> 那两条互斥拆分公式的证明，<b>拆分的合法性就来自这里</b>。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 1.17 ✔</span>口袋中有 1 个球，不知它的颜色是黑的还是白的，现再往口袋中放入 1 个白球，然后从口袋中任意取出 1 个，发现取出的是白球，求口袋中<b>原来那个球是白球</b>的概率。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$\dfrac23$</span>
+      <br><span class="lab">解</span>记事件 $A$ 为"取出的是白球"，事件 $B$ 为"原来那个球是白球"。容易看出
+      $$P(A\mid B)=1,\qquad P(A\mid\overline B)=\frac12.$$
+      另外，由于不知道袋中原来那个球的颜色，故 $P(B)=P(\overline B)=\dfrac12$。由贝叶斯公式得
+      $$P(B\mid A)=\frac{P(B)P(A\mid B)}{P(B)P(A\mid B)+P(\overline B)P(A\mid\overline B)}
+      =\frac{\frac12\times1}{\frac12\times1+\frac12\times\frac12}=\frac23.$$
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        ・<b>两个条件概率是怎么读出来的</b>：若原来是白球（$B$），袋中两球全白，取出必白，$P(A\mid B)=1$；若原来是黑球（$\overline B$），袋中一白一黑，$P(A\mid\overline B)=\tfrac12$。<b>先把每个"原因"下的袋子内容写清楚，似然就直接读出来了。</b><br>
+        ・<b>"不知道颜色"就取 $P(B)=\tfrac12$</b>——与村子三小偷里"没有任何附加信息只好认为等可能"是同一句话。<b>这是贝叶斯题里先验的默认取法。</b><br>
+        ・结果 $\tfrac23\gt\tfrac12$：<b>观察到"取出白球"这个证据，把"原来是白球"的可信度从 $\tfrac12$ 抬到了 $\tfrac23$</b>。去 <a href="#s8">🔀 权重台</a> 用两个原因（先验 50/50，似然 100%/50%）拖一遍，会看到同样的 $\tfrac23$ 与 $\tfrac13$。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 1.18 ✔</span>已知装有同种零件的产品两箱，第一箱内装 50 件产品，其中一等品 10 件；第二箱内装 30 件产品，其中一等品 18 件。现从两箱中<b>任意挑选一箱</b>，求：从中先后取出两件产品（<b>取后不放回</b>），先取出的产品是一等品的概率 $p$；已知先取出的产品是一等品，那么第二次取出的产品<b>仍然是</b>一等品的概率 $q$。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$p=\dfrac25$，$q=\dfrac{690}{1421}\approx0.4856$</span>
+
+      <div class="think"><span class="th">💭 思路 · 拿到题先想什么</span>
+        <ol>
+          <li>先把要求的两个量<b>翻译成符号</b>：记 $A=\{$第一次取出的是一等品$\}$，$B=\{$第二次取出的是一等品$\}$，则
+          $$p=P(A),\qquad q=P(B\mid A)=\frac{P(AB)}{P(A)}.$$
+          <b>看清这一点，整道题就只剩两个目标：$P(A)$ 和 $P(AB)$。</b>不要一上来就去想"第二次怎么算"。</li>
+          <li>为什么不能直接算 $P(A)$？——因为<b>事件 $A$、$AB$ 都是试验的结果，它与其前提条件"产品取自哪一箱"有关</b>。两箱的一等品比例完全不同（$\tfrac{10}{50}=0.2$ 与 $\tfrac{18}{30}=0.6$），不说清取自哪箱就算不出来。<b>因此我们自然想到：写出前提条件，应用全概率公式计算 $P(A)$、$P(AB)$。</b></li>
+          <li>完备事件组就是 $C_i=\{$产品取自第 $i$ 箱$\}$，$i=1,2$，$P(C_i)=\tfrac12$（任意挑选一箱）。<b>本题的两次抽取发生在<u>同一箱</u>内，所以只需要这一个完备事件组</b>——这是它与 <a href="#s7">基 1.12</a> 的最大区别（那题第二次要重新算权重，因为中间插了一次"检验合格"的信息）。</li>
+          <li>算 $P(AB\mid C_i)$ 时用<b>乘法公式</b>：在第 1 箱里，$\tfrac{10}{50}\times\tfrac9{49}$（取后不放回，分子分母各减 1）；第 2 箱里 $\tfrac{18}{30}\times\tfrac{17}{29}$。<b>"不放回"三个字就落在这两个分数上。</b></li>
+          <li>最后一步别忘了 $q$ 是<b>比值</b>，不是 $P(AB)$ 本身。</li>
+        </ol>
+      </div>
+
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面 · 照这个写<span class="score">解答题 11 分参考｜⛳ = 采分点</span></div>
+        <div class="step"><span class="k">解</span>　记 $A=\{$第一次取出的产品是一等品$\}$，$B=\{$第二次取出的产品是一等品$\}$，则
+        $$p=P(A),\qquad q=P(B\mid A)=\frac{P(AB)}{P(A)}.\tag{1}$$
+        要计算 $p,q$，仅需求出 $P(A)$、$P(AB)$。
+        <span class="pt">⛳ 引入符号并把目标化为 (1)　2 分</span></div>
+        <div class="step">记 $C_i=\{$产品取自第 $i$ 箱$\}\ (i=1,2)$，则 $C_1C_2=\varnothing$，$C_1\cup C_2=\Omega$，$P(C_1)=P(C_2)=\dfrac12$，且
+        $$A=AC_1\cup AC_2,\qquad AB=ABC_1\cup ABC_2.$$
+        <span class="pt">⛳ 建立完备事件组　2 分</span></div>
+        <div class="step">由全概率公式，
+        $$P(A)=P(C_1)P(A\mid C_1)+P(C_2)P(A\mid C_2)=\frac12\times\frac{10}{50}+\frac12\times\frac{18}{30}=\frac25.\tag{2}$$
+        <span class="pt">⛳ 3 分</span></div>
+        <div class="step">再由全概率公式与乘法公式（取后不放回），
+        $$P(AB)=P(C_1)P(AB\mid C_1)+P(C_2)P(AB\mid C_2)
+        =\frac12\times\frac{10}{50}\times\frac{9}{49}+\frac12\times\frac{18}{30}\times\frac{17}{29}=\frac{276}{1421}.\tag{3}$$
+        <span class="pt">⛳ 3 分</span></div>
+        <div class="step">将 (2)(3) 代入 (1)，得
+        $$p=P(A)=\frac25,\qquad q=\frac{P(AB)}{P(A)}=\frac{276}{1421}\times\frac52=\frac{690}{1421}.$$
+        <span class="pt">⛳ 1 分</span></div>
+        <div class="fin">故先取出的产品是一等品的概率 $p=\dfrac25$，在此条件下第二次取出的产品仍是一等品的概率 $q=\dfrac{690}{1421}$。</div>
+      </div>
+
+      <div class="notekeep"><span class="nh">📌 批注 · 写完对照这一层</span>
+        ・<span class="dock">头号扣分点</span>：不建完备事件组，直接把两箱产品<b>合并成一个 80 件的大箱</b>算 $\tfrac{28}{80}$。<b>错</b>——题目是"任意挑选<u>一箱</u>"，两箱被选中的概率各 $\tfrac12$，而<b>箱内件数不同</b>（50 与 30），合并等于给了第一箱更大的权重。<b>$\tfrac{28}{80}=0.35\ne0.4$，一算就穿帮。</b><br>
+        ・<span class="dock">扣分点</span>：$q$ 直接写成 $P(AB)$。<b>题目问的是条件概率</b>，必须再除一次。<br>
+        ・<b>为什么 $q\approx0.486\gt p=0.4$</b>：这是<b>相互有利</b>（$P(AB)\gt P(A)P(B)$，见 <a href="#s10f">§十·六</a>）。取出一件一等品这个信息，<b>提高了"这箱是一等品比例高的第二箱"的可信度</b>，正效应压过了"箱内少了一件一等品"的负效应。<b>能当场说出这句话，说明贝叶斯真的懂了。</b><br>
+        ・<b>与 <a href="#s7">基 1.12</a> 对照记忆</b>：两题都是"抽一次 → 用信息 → 再抽一次"。差别在于 <b>基 1.12 放回且要显式算后验 $P(C_i)=P(H_i\mid A)$，本题不放回但把后验隐藏在 $\frac{P(AB)}{P(A)}$ 这一个除法里</b>。<b>两种写法都对，本题这种更短。</b>
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 1.19 ✔</span>每箱产品有 10 件，其次品数从 0 到 2 是等可能的，开箱检验时，从中任取 1 件，如检验出是次品，则认为该箱产品不合格而拒收。假设由于<b>检验有误</b>，将 1 件正品误认为次品的概率为 2%，1 件次品被漏查而判为正品的概率为 5%，求该箱产品<b>通过验收</b>的概率。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$0.887$</span>
+
+      <div class="think"><span class="th">💭 思路 · 拿到题先想什么（本章最难的一道，难在"分层"）</span>
+        <ol>
+          <li>先数一数这道题里<b>有几层随机性</b>：①这一箱里到底有几件次品（0、1、2 等可能）；②抽出来的这一件是正品还是次品；③检验员判对了没有。<b>三层，而 (1)(2) 是嵌套的、(3) 又挂在 (2) 上。</b>看不清层次就一定算乱。</li>
+          <li>关键领悟：<b>题中有两个完备事件组</b>——一是箱中次品的件数为 $0,1,2$；二是通过验收是在"抽取正品"和"抽取次品"这两种情况下发生的。<b>所以要用两次全概率公式，一次一层。</b></li>
+          <li>先做<b>里面那一层</b>：设 $A_i=\{$箱中有 $i$ 个次品$\}$，$B_1=\{$抽取正品$\}$。$P(A_i)=\tfrac13$，$P(B_1\mid A_i)=\tfrac{10-i}{10}$，全概率得 $P(B_1)$。<b>这一步把"箱里有几件次品"这一层<u>消掉</u>了</b>，剩下一个干净的 $\{B_1,\overline{B_1}\}$。</li>
+          <li>再做<b>外面那一层</b>：$B=\{$通过验收$\}$。抽到正品时，通过 = 没被误判成次品，$P(B\mid B_1)=1-2\%=0.98$；抽到次品时，通过 = 被漏查了，$P(B\mid\overline{B_1})=5\%=0.05$。全概率一拼即得。</li>
+          <li><b>顺序不能反</b>：必须先把 $A_i$ 那层积掉得到 $P(B_1)$，再拿 $B_1$ 去接 $B$。如果一上来就想"$P(B\mid A_i)$"也能做，但要写三项且每项内部还要再分两种检验结果，<b>式子长一倍</b>。</li>
+        </ol>
+      </div>
+
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面 · 照这个写<span class="score">解答题 11 分参考｜⛳ = 采分点</span></div>
+        <div class="step"><span class="k">解</span>　题中有两个完备事件组：一是箱中次品的件数为 $0,1,2$；二是通过验收是在抽取正品和抽取次品这两种情况下发生的。设 $A_i\ (i=0,1,2)$ 为"箱中有 $i$ 个次品"，$B$ 为"通过验收"，$B_1$ 为"抽取正品"，于是有
+        $$P(A_i)=\frac13,\qquad P(B_1\mid A_i)=\frac{10-i}{10}.$$
+        <span class="pt">⛳ 指明两个完备事件组并引入符号　3 分</span></div>
+        <div class="step">从而由全概率公式得
+        $$P(B_1)=\sum_{i=0}^{2}P(A_i)P(B_1\mid A_i)=\frac13\sum_{i=0}^{2}\frac{10-i}{10}=\frac13\left(\frac{10}{10}+\frac9{10}+\frac8{10}\right)=0.9,\tag{1}$$
+        $$P(\overline{B_1})=1-P(B_1)=0.1.\tag{2}$$
+        <span class="pt">⛳ 第一层全概率　3 分</span></div>
+        <div class="step">因此再由全概率公式得
+        $$P(B)=P(B_1)P(B\mid B_1)+P(\overline{B_1})P(B\mid\overline{B_1})=0.9\times0.98+0.1\times0.05=0.887.\tag{3}$$
+        <span class="pt">⛳ 第二层全概率（两个条件概率读对各 1 分）　4 分</span></div>
+        <div class="fin">故该箱产品通过验收的概率为 $0.887$。</div>
+      </div>
+
+      <div class="notekeep"><span class="nh">📌 批注 · 写完对照这一层</span>
+        ・书上的注是本题的题眼：<b>通过验收是在完备事件组 $B_1,\overline{B_1}$ 背景下发生的，抽取正品则是在完备事件组 $A_0,A_1,A_2$ 背景下实现的，因此，具备全概率概型的特征。</b><b>"两层背景"这四个字要写在卷面上</b>，它是评分点。<br>
+        ・<span class="dock">头号扣分点</span>：把两个错误率读反。<b>"将 1 件正品误认为次品的概率为 2%"</b> ⇒ 抽到正品却<b>不能</b>通过的概率是 0.02，所以 $P(B\mid B_1)=0.98$；<b>"1 件次品被漏查而判为正品的概率为 5%"</b> ⇒ 抽到次品<b>反而</b>通过的概率就是 0.05，$P(B\mid\overline{B_1})=0.05$（<b>不是 0.95</b>）。<b>一个要取补、一个不取补</b>，这是全题最容易翻车的地方。<br>
+        ・<b>自检</b>：若检验完全准确（0% 与 0%），则 $P(B)=P(B_1)=0.9$；现在因为有误检，结果 $0.887\lt0.9$——<b>误判正品的损失（0.9×0.02＝0.018）大于漏查次品的补偿（0.1×0.05＝0.005）</b>，净减 0.013。<b>算完花五秒做这个符号检查，能挡住绝大多数读反的错误。</b><br>
+        ・<b>这道题是第 6 章假设检验的雏形</b>：把"正品被判次品"叫<b>第一类错误</b>（弃真，2%）、"次品被判正品"叫<b>第二类错误</b>（取伪，5%）。<b>现在先把这两个词和这道题绑在一起，第 6 章会省很多事。</b>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= s12 落位表 ================= -->
+  <h2 id="s12"><span class="idx">十二</span>例题落位表 · 自测清单</h2>
+
+  <div class="key"><span class="tag">必记 · 44 道题一览（防漏检查表，逐条点名）</span>
+    <div class="gridwrap"><table>
+      <tr><th>来源</th><th>编号与一句话</th><th>落位</th></tr>
+      <tr><td rowspan="15"><b>基础30讲<br>例题 15 道</b></td><td><b>1.1</b> ★ $n$ 球放 $N$ 盒（生日问题原型），三问 $\tfrac{n!}{N^n}$ / $\tfrac{\mathrm C_N^nn!}{N^n}$ / $\tfrac{\mathrm C_n^kk!(N-k)^{n-k}}{N^n}$　<b>三层</b></td><td><a href="#s4">§四</a></td></tr>
+      <tr><td><b>1.2</b> 5 球取 2 至少一白：三种抽法 $\tfrac{21}{25},\tfrac9{10},\tfrac9{10}$ → 无放回＝任取</td><td><a href="#s4">§四</a></td></tr>
+      <tr><td><b>1.3</b> ★ 100 球取 20，四问；(4) 抓阄模型 $p_3=p_4=\tfrac25$　<b>三层</b></td><td><a href="#s4">§四</a></td></tr>
+      <tr><td><b>1.4</b> $(0,1)$ 取两数，$|x-y|\lt0.5$，$0.75$</td><td><a href="#s5">§五</a></td></tr>
+      <tr><td><b>1.5</b> (A) $P(AB)+P(\overline A\overline B)\le1$（单调性四选一）</td><td><a href="#s6">§六</a></td></tr>
+      <tr><td><b>1.6</b> (C)：$P=1$ 推不出 $=\Omega$，$P=0$ 推不出 $=\varnothing$</td><td><a href="#s6">§六</a></td></tr>
+      <tr><td><b>1.7</b> $P(AB\mid\overline C)=\tfrac34$（把 $AB$ 打包）</td><td><a href="#s6">§六</a></td></tr>
+      <tr><td><b>1.8</b> $P(A\cup B)=\tfrac13$（先榨 $P(AB)$）</td><td><a href="#s6">§六</a></td></tr>
+      <tr><td><b>1.9</b> ★ 装错信封：$\tfrac1{24}$ 与 $\tfrac38$（对立 + 容斥）　<b>三层</b></td><td><a href="#s7">§七</a></td></tr>
+      <tr><td><b>1.10</b> $P\{Y=2\}=\tfrac{13}{48}$（两阶段全概率）</td><td><a href="#s7">§七</a></td></tr>
+      <tr><td><b>1.11</b> 第二次抽次品 $\tfrac16$（抓阄第二次出场）</td><td><a href="#s7">§七</a></td></tr>
+      <tr><td><b>1.12</b> ★ 两批零件，$\tfrac3{28}$（贝叶斯 + 全概率复合）　<b>三层</b></td><td><a href="#s7">§七</a></td></tr>
+      <tr><td><b>1.13</b> (C) 两两独立但不相互独立（掷两次硬币）</td><td><a href="#s9">§九</a></td></tr>
+      <tr><td><b>1.14</b> 至少中一次 $\tfrac78$ ⇒ $p=\tfrac12$</td><td><a href="#s9">§九</a></td></tr>
+      <tr><td><b>1.15</b> (C) 第 4 次恰第 2 次命中 $3p^2(1-p)^2$（帕斯卡）</td><td><a href="#s9">§九</a></td></tr>
+      <tr><td rowspan="19"><b>基础30讲<br>课后习题 19 道</b></td><td><b>1.1</b> (D) 事件运算不能消去（$C=\Omega$/$C=\varnothing$ 反例）</td><td rowspan="19"><a href="#s11">§十一</a></td></tr>
+      <tr><td><b>1.2</b> (D) $P$ 相等推不出事件相等（$[0,2]$ 掷点反例）</td></tr>
+      <tr><td><b>1.3</b> (A) $\tfrac{19}{36}$（$B^2-4C\ge0$ 列表，含两个 $=0$）</td></tr>
+      <tr><td><b>1.4</b> (A) $\tfrac{19}{40}$（分类加 + 分步乘）</td></tr>
+      <tr><td><b>1.5</b> (C) 充要条件是 $AB$ 与 $C$ 独立</td></tr>
+      <tr><td><b>1.6</b> $\tfrac12+\tfrac1\pi$（半圆 + 夹角，四分之一圆 + 三角形）</td></tr>
+      <tr><td><b>1.7</b> $\tfrac{15}{32}-\tfrac12\ln2$（本章唯一要算定积分）</td></tr>
+      <tr><td><b>1.8</b> $1-p$（$P(AB)$ 两端抵消）</td></tr>
+      <tr><td><b>1.9</b> $0.6$（长杠 $\overline{AB}$，别看成短杠）</td></tr>
+      <tr><td><b>1.10</b> $0.25$（分子 $B\cap(A\cup\overline B)=AB$）</td></tr>
+      <tr><td><b>1.11</b> $0.3;\ 0.5;\ 0.7$（互斥 / 独立 / 包含 三吃）</td></tr>
+      <tr><td><b>1.12</b> $\tfrac35$（三人破译，并→交→连乘）</td></tr>
+      <tr><td><b>1.13</b> $\approx0.682$（已知击中问是否甲，$B_1\subset A$）</td></tr>
+      <tr><td><b>1.14</b> 都不 / 不都 / 不多于一个（中文量词对照表）</td></tr>
+      <tr><td><b>1.15</b> $\max,\min$ 与 $A,B$ 的四行对应</td></tr>
+      <tr><td><b>1.16</b> 四个命题：仅 (2) 成立（差不是数的减法）</td></tr>
+      <tr><td><b>1.17</b> $\tfrac23$（口袋一球 + 放入白球，贝叶斯）</td></tr>
+      <tr><td><b>1.18</b> $p=\tfrac25,\ q=\tfrac{690}{1421}$（两箱不放回）　<b>三层</b></td></tr>
+      <tr><td><b>1.19</b> $0.887$（两层完备事件组，误检 2%/5%）　<b>三层</b></td></tr>
+      <tr><td rowspan="10"><b>概率9讲<br>例题 10 道</b></td><td><b>1.1</b> $\tfrac{33}{100}$（既不被 2 又不被 3 整除，对立）</td><td><a href="#s10a">§十·一</a></td></tr>
+      <tr><td><b>1.2</b> (D) $\tfrac5{12}$（恰有一个发生，互斥拆分）</td><td><a href="#s10b">§十·二</a></td></tr>
+      <tr><td><b>1.3</b> $\tfrac58$（$P(B\cup C\mid A\cup B\cup C)$，吸收律）</td><td><a href="#s10c">§十·三</a></td></tr>
+      <tr><td><b>1.4</b> $\tfrac14+\tfrac34\mathrm e^{-1}$、$\tfrac14+\tfrac34\mathrm e^{-1/2}$（离散 + 连续缝合）</td><td><a href="#s10c">§十·三</a></td></tr>
+      <tr><td><b>1.5</b> 两个不等式的证明（单调性 + $P\le1$）　<b>三层</b></td><td><a href="#s10d">§十·四</a></td></tr>
+      <tr><td><b>1.6</b> $\tfrac57$、$\tfrac27$（max/min 关系式 + 全集分解）</td><td><a href="#s10e">§十·五</a></td></tr>
+      <tr><td><b>1.7</b> (C) 独立 $\iff P(B\mid A)=P(B)$</td><td rowspan="4"><a href="#s10f">§十·六</a></td></tr>
+      <tr><td><b>1.8</b> (C) 两式都是独立的充要条件</td></tr>
+      <tr><td><b>1.9</b> (C) 有利 $\iff P(B\mid A)\gt P(B)$</td></tr>
+      <tr><td><b>1.10</b> (C) 有利 $\iff P(B\mid A)\gt P(B\mid\overline A)$</td></tr>
+    </table></div>
+    <b>合计 15＋19＋10 ＝ 44 道，本页 44 张卡，零遗漏、无重复。</b>
+  </div>
+
+  <div class="outro">
+    <h3>合上页面前，自问这 12 条</h3>
+    <p>① "对立事件"与"互不相容事件"的区别是什么？为什么<b>互斥不一定对立</b>？<br>
+    ② 对偶律的口诀是什么？$\overline{\overline A\cap B}=?$　运算顺序"先__、再__、最后__"？<br>
+    ③ <b>$P(A)=0$ 能不能推出 $A=\varnothing$？</b>反例是什么（两个都要能说出来：8:30 进教室 / $[0,2]$ 掷点）？<br>
+    ④ 随机分配的两行公式（$N^n$ 与 $\mathrm P_N^n$）、简单抽样的三行公式（$N^n$、$\mathrm P_N^n$、$\mathrm C_N^n$）能默出来吗？<b>"先后无放回取 $k$ 个"与"任取 $k$ 个"概率相等</b>这条会用吗？<br>
+    ⑤ <b>抓阄模型</b>：无放回时"第 $k$ 次取到白球"的概率是多少？为什么与 $k$ 无关？<br>
+    ⑥ 全概率公式与贝叶斯公式各自解决什么问题（"结果"还是"原因"）？<b>村子三小偷</b>那道题的 $P(B)=\tfrac{11}{36}$ 与三个后验 $0,\tfrac9{11},\tfrac2{11}$ 能重算一遍吗？<br>
+    ⑦ <b>基 1.12</b> 那道两批零件的题，第二次抽取时为什么不能再用 $\tfrac12$？<br>
+    ⑧ "相互独立"与"两两独立"差哪一个式子？<a href="#s9">基 1.13</a> 的反例（掷两次硬币）能复述吗？<br>
+    ⑨ $n$ 重伯努利概型的三个条件？"<b>第 $n$ 次恰好第 $k$ 次成功</b>"的公式为什么是 $\mathrm C_{n-1}^{k-1}$ 而不是 $\mathrm C_n^k$？<br>
+    ⑩ 《9讲》<b>六条主路</b>各自的触发信号词是什么（"既不…又不…"→？"已知…"→？"不等号"→？"$\max$"→？）<br>
+    ⑪ <b>最值关系式 11 条</b>：①~④ 的交并对应关系、⑦~⑪ 的化简式，能默出几条？<br>
+    ⑫ "有利/抑止"取逆之后怎么翻（<a href="#s10f">§十·六④</a>）？$0\lt P\lt1$ 时<b>互斥或包含的两个事件一定不独立</b>，为什么？</p>
+
+    <p><b>真题锚点</b>：第 1 章<b>很少单独出解答题</b>，但它是<b>整本概率论的语法</b>——每一道大题的第一步都是"把中文翻译成事件"。真题里它的固定出场方式是：<b>①一道选择题</b>（独立性 / 充要条件 / $P=0$ 与 $\varnothing$ 的辨析，即本页 <a href="#s6">基 1.5、基 1.6</a> 与 <a href="#s10f">强 1.7–1.10</a> 那一族）；<b>②大题的第一问</b>（用全概率或古典概型求一个概率，再往下接随机变量）。<br>
+    所以本章的 KPI 不是"会算古典概型"，而是三件事：<b>(1) 中文量词 → 事件运算的翻译零失误（<a href="#s11">习 1.14</a> 那张表）；(2) 见到"已知…"立刻想到全集分解，并且知道<b>信息会改写权重</b>；(3) 独立性的四条判定与充要条件群能双向使用。</b></p>
+
+    <p><b>配套速查</b>：<a href="../卡库_概率分布与两大定理.html">卡库·概率：分布 / 数字特征 / 两大定理</a> ·
+    <a href="../公式大全_速查与秒杀.html">公式大全</a> · <a href="../知识串联_考纲主线.html">知识串联</a> · <a href="../直觉馆_图像与数感.html">直觉馆</a>。<br>
+    <b>下一章</b>：概率第 2 章 <b>一维随机变量及其分布</b>（基础 29 页 + 强化<b>第 2、3 讲</b>共 20 页）。
+    <span style="color:var(--red)">⚠️ 注意：<b>《概率9讲》把"一维随机变量"（第 2 讲）与"一维随机变量<u>函数</u>的分布"（第 3 讲）拆成了两讲</b>，而基础30讲把它们合在第 2 章里。写 ch2 时<b>要同时吃掉强化的两讲</b>，别漏掉"函数的分布"那半——这是概率分册里"一章吃两讲"的第一处（ch3 吃第 4、5 讲，ch6 吃第 8、9 讲，同理）。</span><br>
+    本章交付了两个交互模块：<a href="#s2">📐 文氏图事件运算器</a>与<a href="#s8">🔀 贝叶斯权重台</a>。</p>
+  </div>
+
+  <footer>由 Claude 维护 · 融合张宇《基础30讲·概率论与数理统计分册》第 1 讲 +《概率论与数理统计9讲》第 1 讲 · 概念正文为标准概率论理论 ·
+  <b>15 道基础例题 + 19 道课后习题 + 10 道强化例题，答案全部经程序独立复算（古典概型逐样本枚举、几何概型数值积分、分数精确运算），与原书零分歧</b> ·
+  其中基 1.1 用 $n=3,N=5,k=2$ 穷举 $5^3$ 种放法验证三条通式，基 1.9 用 $4!$ 个排列直接数出错排数 9，习 1.3 枚举 36 组 $(B,C)$ 得 19，习 1.6/1.7 用数值积分验到小数点后 6 位 · 具体真题另经盲做后入错题页</footer>
+
+<script>
+/* ========== 📐 文氏图事件运算器 ==========
+   原理：三个圆把 Ω 切成 8 个区域，用 (a,b,c) 三个布尔值编码。
+   任何事件 = 8 个区域的一个子集 ⇒ 判等 = 比较这 8 位。逐像素着色，完全严格。 */
+(function(){
+  const EXPR=[
+    {t:"A",                    f:(a,b,c)=>a},
+    {t:"B",                    f:(a,b,c)=>b},
+    {t:"A∪B",                  f:(a,b,c)=>a||b},
+    {t:"AB",                   f:(a,b,c)=>a&&b},
+    {t:"A−B",                  f:(a,b,c)=>a&&!b},
+    {t:"A B̄  (=A−B)",          f:(a,b,c)=>a&&!b},
+    {t:"Ā B̄  (都不发生)",       f:(a,b,c)=>!a&&!b},
+    {t:"A∪B 的逆",             f:(a,b,c)=>!(a||b)},
+    {t:"AB 的逆",              f:(a,b,c)=>!(a&&b)},
+    {t:"Ā∪B̄",                 f:(a,b,c)=>!a||!b},
+    {t:"Ā B̄",                  f:(a,b,c)=>!a&&!b},
+    {t:"A−(B−C)",              f:(a,b,c)=>a&&!(b&&!c)},
+    {t:"(A−B)∪C",              f:(a,b,c)=>(a&&!b)||c},
+    {t:"(A−B)∪AC",             f:(a,b,c)=>(a&&!b)||(a&&c)},
+    {t:"(A∪B)−B",              f:(a,b,c)=>(a||b)&&!b},
+    {t:"(A−B)∪B",              f:(a,b,c)=>(a&&!b)||b},
+    {t:"AB∪A B̄",               f:(a,b,c)=>(a&&b)||(a&&!b)},
+    {t:"A∪ĀB",                 f:(a,b,c)=>a||(!a&&b)},
+    {t:"A∪B∪C",                f:(a,b,c)=>a||b||c},
+    {t:"ABC",                  f:(a,b,c)=>a&&b&&c},
+    {t:"ABC 的逆",             f:(a,b,c)=>!(a&&b&&c)},
+    {t:"Ā∪B̄∪C̄",              f:(a,b,c)=>!a||!b||!c},
+    {t:"Ā B̄ C̄  (都不发生)",     f:(a,b,c)=>!a&&!b&&!c},
+    {t:"恰有一个发生",          f:(a,b,c)=>(a?1:0)+(b?1:0)+(c?1:0)===1},
+    {t:"恰有两个发生",          f:(a,b,c)=>(a?1:0)+(b?1:0)+(c?1:0)===2},
+    {t:"至多有一个发生",        f:(a,b,c)=>(a?1:0)+(b?1:0)+(c?1:0)<=1},
+    {t:"至少有两个发生",        f:(a,b,c)=>(a?1:0)+(b?1:0)+(c?1:0)>=2},
+    {t:"AB∪AC∪BC",             f:(a,b,c)=>(a&&b)||(a&&c)||(b&&c)},
+    {t:"A∩(B∪C)",              f:(a,b,c)=>a&&(b||c)},
+    {t:"(A∩B)∪(A∩C)",          f:(a,b,c)=>(a&&b)||(a&&c)},
+    {t:"A∩(B−C)",              f:(a,b,c)=>a&&b&&!c},
+    {t:"(A∩B)−(A∩C)",          f:(a,b,c)=>(a&&b)&&!(a&&c)}
+  ];
+  const PRE=[
+    ["习 1.16(1)：A−(B−C) ≟ (A−B)∪C",11,12],
+    ["习 1.16(1) 正解：A−(B−C) ≟ (A−B)∪AC",11,13],
+    ["习 1.16(3)：(A∪B)−B ≟ A",14,0],
+    ["习 1.16(4)：(A−B)∪B ≟ A",15,0],
+    ["对偶律：A∪B 的逆 ≟ Ā B̄",7,10],
+    ["对偶律：AB 的逆 ≟ Ā∪B̄",8,9],
+    ["分配律：A∩(B∪C) ≟ (A∩B)∪(A∩C)",28,29],
+    ["分配律：A∩(B−C) ≟ (A∩B)−(A∩C)",30,31],
+    ["拆分：A ≟ AB∪A B̄",0,16],
+    ["拆分：A∪B ≟ A∪ĀB",2,17],
+    ["习 1.14③：至多一个 ≟ 恰有一个",25,23],
+    ["至少两个 ≟ AB∪AC∪BC",26,27]
+  ];
+  const sel=document.getElementById('vL'), ser=document.getElementById('vR');
+  if(!sel) return;
+  EXPR.forEach((e,i)=>{
+    sel.insertAdjacentHTML('beforeend',`<option value="${i}">${e.t}</option>`);
+    ser.insertAdjacentHTML('beforeend',`<option value="${i}">${e.t}</option>`);
+  });
+  // 圆心与半径（canvas 360x230）
+  const C=[{x:145,y:95,r:58},{x:215,y:95,r:58},{x:180,y:150,r:58}];
+  const NAMES=['A','B','C'];
+  function region(x,y){ return C.map(c=>(x-c.x)**2+(y-c.y)**2<=c.r*c.r); }
+  function css(v){ return getComputedStyle(document.body).getPropertyValue(v).trim(); }
+  function draw(cv,fn){
+    const ctx=cv.getContext('2d'), W=cv.width, H=cv.height;
+    ctx.clearRect(0,0,W,H);
+    const ink=css('--ink')||'#333', accent=css('--accent')||'#345';
+    // 逐像素填色
+    const img=ctx.createImageData(W,H); const d=img.data;
+    const rgb=hex2rgb(accent);
+    for(let y=0;y<H;y++)for(let x=0;x<W;x++){
+      const i=(y*W+x)*4;
+      if(x<8||x>W-8||y<8||y>H-8){ continue; }
+      const [a,b,c]=region(x+.5,y+.5);
+      if(fn(a,b,c)){ d[i]=rgb[0]; d[i+1]=rgb[1]; d[i+2]=rgb[2]; d[i+3]=70; }
+    }
+    ctx.putImageData(img,0,0);
+    // 边框与圆
+    ctx.strokeStyle=ink; ctx.lineWidth=1.2;
+    ctx.strokeRect(8,8,W-16,H-16);
+    ctx.font='13px Georgia,serif'; ctx.fillStyle=ink;
+    ctx.fillText('Ω',W-24,24);
+    C.forEach((c,k)=>{ ctx.beginPath(); ctx.arc(c.x,c.y,c.r,0,7); ctx.stroke(); });
+    ctx.font='bold 14px Georgia,serif';
+    ctx.fillText('A',C[0].x-46,C[0].y-30);
+    ctx.fillText('B',C[1].x+38,C[1].y-30);
+    ctx.fillText('C',C[2].x-6,C[2].y+50);
+  }
+  function hex2rgb(h){
+    h=h.replace('#','').trim();
+    if(h.length===3) h=h.split('').map(c=>c+c).join('');
+    if(!/^[0-9a-f]{6}$/i.test(h)) return [52,82,122];
+    return [parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)];
+  }
+  const BITS=[[0,0,0],[1,0,0],[0,1,0],[0,0,1],[1,1,0],[1,0,1],[0,1,1],[1,1,1]];
+  const BLAB=['Ā B̄ C̄','A B̄ C̄','Ā B C̄','Ā B̄ C','A B C̄','A B̄ C','Ā B C','A B C'];
+  function run(){
+    const L=EXPR[+sel.value], R=EXPR[+ser.value];
+    draw(document.getElementById('cvL'),L.f);
+    draw(document.getElementById('cvR'),R.f);
+    document.getElementById('capL').textContent='左式：'+L.t;
+    document.getElementById('capR').textContent='右式：'+R.t;
+    const lv=BITS.map(([a,b,c])=>!!L.f(!!a,!!b,!!c));
+    const rv=BITS.map(([a,b,c])=>!!R.f(!!a,!!b,!!c));
+    const bad=lv.map((v,i)=>v!==rv[i]);
+    const same=!bad.some(Boolean);
+    const res=document.getElementById('vRes');
+    res.className='vres '+(same?'same':'diff');
+    if(same){ res.innerHTML='<b>✅ 两式相等</b>　8 个区域的取舍完全一致，故这两个事件表达式恒等。'; }
+    else {
+      const diffs=bad.map((v,i)=>v?BLAB[i]:null).filter(Boolean);
+      res.innerHTML='<b>❌ 两式不相等</b>　分歧出现在 <b>'+diffs.length+'</b> 个区域：<b>'+diffs.join('、')+'</b>（表中标红）。只要有一个区域一边要、一边不要，两个事件就不相等。';
+    }
+    let h='<tr><th>区域</th>'+BLAB.map(s=>'<th>'+s+'</th>').join('')+'</tr>';
+    h+='<tr><td><b>左式</b></td>'+lv.map((v,i)=>'<td class="'+(bad[i]?'bad':(v?'y':'n'))+'">'+(v?'✔':'·')+'</td>').join('')+'</tr>';
+    h+='<tr><td><b>右式</b></td>'+rv.map((v,i)=>'<td class="'+(bad[i]?'bad':(v?'y':'n'))+'">'+(v?'✔':'·')+'</td>').join('')+'</tr>';
+    document.getElementById('vTab').innerHTML=h;
+  }
+  document.getElementById('vGo').onclick=run;
+  sel.onchange=run; ser.onchange=run;
+  document.getElementById('vSwap').onclick=()=>{const t=sel.value;sel.value=ser.value;ser.value=t;run();};
+  const pre=document.getElementById('vPre');
+  PRE.forEach(([t,l,r])=>{
+    const b=document.createElement('button'); b.textContent=t;
+    b.onclick=()=>{sel.value=l;ser.value=r;run();};
+    pre.appendChild(b);
+  });
+  sel.value=11; ser.value=12; run();
+  matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change',run);
+})();
+
+/* ========== 🔀 贝叶斯权重台 ========== */
+(function(){
+  const root=document.getElementById('bayes'); if(!root) return;
+  const NM=['$A_1$ 小张','$A_2$ 小英','$A_3$ 小郑'];
+  const NMP=['A₁ 小张','A₂ 小英','A₃ 小郑'];
+  function fmt(x){ return (Math.round(x*1000)/1000).toFixed(3); }
+  function calc(){
+    const pr=[0,1,2].map(i=>+document.getElementById('pr'+i).value);
+    const lk=[0,1,2].map(i=>+document.getElementById('lk'+i).value/1000);
+    const S=pr.reduce((a,b)=>a+b,0);
+    const p=S>0?pr.map(v=>v/S):[1/3,1/3,1/3];
+    [0,1,2].forEach(i=>{
+      document.getElementById('vpr'+i).textContent=fmt(p[i]);
+      document.getElementById('vlk'+i).textContent=fmt(lk[i]);
+    });
+    const joint=[0,1,2].map(i=>p[i]*lk[i]);
+    const PB=joint.reduce((a,b)=>a+b,0);
+    const post=PB>0?joint.map(v=>v/PB):[0,0,0];
+    const tot=document.getElementById('bTot');
+    tot.innerHTML= PB>0
+      ? '全概率公式：<b>P(B) = Σ P(A<sub>i</sub>)·P(B|A<sub>i</sub>) = '+fmt(PB)+'</b>　　'
+        +joint.map((v,i)=>fmt(p[i])+'×'+fmt(lk[i])).join(' + ')
+      : '<b>P(B) = 0</b>　结果 B 不可能发生，贝叶斯公式失效（分母为零）——这正是公式里要求 <b>P(B) &gt; 0</b> 的原因。';
+    const bars=document.getElementById('bBars');
+    bars.innerHTML=[0,1,2].map(i=>{
+      const dir = PB<=0 ? '' : (post[i]>p[i]+1e-9?'　<b style="color:var(--green)">↑ 权重变大</b>'
+                 : post[i]<p[i]-1e-9?'　<b style="color:var(--red)">↓ 权重变小</b>':'　<b>＝ 不变</b>');
+      return '<div class="bar"><div class="t"><span>'+NMP[i]+dir+'</span>'
+        +'<span class="r">先验 '+fmt(p[i])+' → 后验 '+(PB>0?fmt(post[i]):'—')+'</span></div>'
+        +'<div class="track"><div class="pre" style="width:'+(p[i]*50).toFixed(1)+'%"></div>'
+        +'<div class="post" style="width:'+((PB>0?post[i]:0)*50).toFixed(1)+'%"></div></div></div>';
+    }).join('');
+  }
+  root.querySelectorAll('input[type=range]').forEach(el=>el.addEventListener('input',calc));
+  document.querySelectorAll('.presets button[data-b]').forEach(b=>{
+    b.onclick=()=>{
+      const v=b.dataset.b.split(',').map(Number);
+      [0,1,2].forEach(i=>{document.getElementById('pr'+i).value=v[i];document.getElementById('lk'+i).value=v[i+3];});
+      calc();
+    };
+  });
+  calc();
+})();
+</script>
+</div>
+</body>
+</html>
