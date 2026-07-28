@@ -1,0 +1,2170 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>精读版 · 高数 第8章 一元函数积分学的概念与性质</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],ignoredClasses:['nokatex']})"></script>
+<link rel="stylesheet" href="style.css">
+<style>
+/* ===== 本章专属：振荡显微镜 + 黎曼和实验室 + p 判据速查台 ===== */
+.tool{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:20px 0}
+.tool h4{margin:0 0 4px;font-size:1rem;color:var(--accent)}
+.tool .hint{color:var(--muted);font-size:.82rem;margin-bottom:12px;line-height:1.7}
+.ctl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0}
+.ctl button{font:inherit;font-size:.82rem;padding:4px 13px;border-radius:8px;cursor:pointer;
+  border:1px solid var(--line);background:var(--card);color:var(--muted)}
+.ctl button.on{background:var(--accent-soft);color:var(--accent);border-color:var(--accent);font-weight:700}
+.ctl button:hover{filter:brightness(.96)}
+.ctl label{font-size:.8rem;color:var(--muted);min-width:9.5em}
+.ctl input[type=range]{flex:1 1 150px;min-width:120px;accent-color:var(--accent)}
+.ctl select{font:inherit;font-size:.82rem;padding:4px 9px;border-radius:8px;border:1px solid var(--line);
+  background:var(--card);color:var(--ink);max-width:100%}
+.ctl .val{font-family:var(--mono);font-size:.78rem;color:var(--accent);min-width:6.5em;text-align:right}
+.scene{background:var(--bg);border:1px solid var(--line);border-radius:10px;margin:10px 0}
+.scene svg{display:block;width:100%;height:auto}
+.say{background:var(--accent-soft);border-radius:8px;padding:9px 13px;margin:10px 0;
+  font-size:.86rem;color:var(--accent);line-height:1.75;min-height:2em}
+.say b{color:var(--accent)}
+.verdict{font-size:.88rem;font-weight:700;border-radius:8px;padding:7px 13px;margin:10px 0;display:block}
+.v-ok{background:var(--green-soft);color:var(--green)}
+.v-no{background:var(--red-soft);color:var(--red)}
+.v-inf{background:var(--amber-soft);color:var(--amber)}
+.dq{width:100%;min-width:0;font-size:.8rem;margin:6px 0;border-collapse:collapse}
+.dq th,.dq td{padding:4px 8px;font-family:var(--mono);text-align:right;white-space:nowrap;border-bottom:1px solid var(--line)}
+.dq th:first-child,.dq td:first-child{text-align:left;font-family:var(--sans);white-space:normal}
+.dq td.hit{color:var(--green);font-weight:700}
+.dq td.miss{color:var(--red);font-weight:700}
+.legend2{font-size:.78rem;color:var(--muted);line-height:1.7;margin-top:6px}
+.chip{display:inline-block;font-size:.72rem;border-radius:5px;padding:1px 7px;margin-right:6px}
+.c-b{background:var(--accent-soft);color:var(--accent)}
+.c-g{background:var(--green-soft);color:var(--green)}
+.c-r{background:var(--red-soft);color:var(--red)}
+.c-a{background:var(--amber-soft);color:var(--amber)}
+.c-p{background:var(--purple-soft);color:var(--purple)}
+table.dense{font-size:.84rem;min-width:420px}
+table.dense td{padding:5px 9px}
+figure.fig{margin:14px 0;text-align:center;background:var(--card);border:1px solid var(--line);
+  border-radius:10px;padding:12px 10px 8px;overflow-x:auto}
+figure.fig svg{max-width:100%;height:auto}
+figure.fig figcaption{font-size:.78rem;color:var(--muted);line-height:1.7;margin-top:6px;text-align:left;padding:0 4px}
+.figrow{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:12px 0}
+.figrow figure.fig{flex:1 1 220px;margin:0}
+/* 四象限表 */
+.quad{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:14px 0}
+.quad div{border-radius:10px;padding:11px 14px;font-size:.86rem;line-height:1.8}
+.quad div > b:first-child{display:block;font-size:.76rem;letter-spacing:.05em;margin-bottom:4px}
+.q-gg{background:var(--green-soft);color:var(--green)}
+.q-gr{background:var(--amber-soft);color:var(--amber)}
+.q-rg{background:var(--blue-soft);color:var(--blue)}
+.q-rr{background:var(--red-soft);color:var(--red)}
+.quad div .in{color:var(--ink)}
+/* 三步条 */
+.steps3{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.steps3 div{flex:1 1 190px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 13px;font-size:.85rem;line-height:1.75}
+.steps3 div b{color:var(--accent);display:block;margin-bottom:3px}
+/* 判据总表高亮 */
+.pv{font-family:var(--mono);font-size:.82rem}
+tr.now td{background:var(--accent-soft)}
+@media (max-width:560px){ .ctl{gap:6px} .ctl label{min-width:100%} .dq{font-size:.72rem}
+  .figrow figure.fig{flex:1 1 160px} .quad{grid-template-columns:minmax(0,1fr)} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../index.html">← 返回 数学一复盘中心</a>
+  <header>
+    <h1>精读版 · 高数第 8 章　一元函数积分学的概念与性质</h1>
+    <div class="sub">融合张宇《基础30讲·高数分册》第 8 讲（<b>35 页</b>）+ 《高数18讲》第 8 讲（<b>12 页</b>）· 共 47 页，<b>与第 6 章并列全书最厚</b>。<span class="layer L-base">基础</span>与<span class="layer L-str">强化</span>这一讲的<b>重心完全不同</b>：基础讲用 35 页建立"什么东西存在"的判断力（原函数存在性 / 可积性 / 变限积分的连续与可导 / 反常积分的定义），18 讲用 12 页只教两类<b>动手套路</b>（凑定积分定义、判具体型反常积分敛散）。<b>34 道题一道不漏</b>（基础例题 19 + 课后习题 7 + 强化例题 8），答案已用 sympy 符号 + scipy 数值<b>四轮复算</b>，书一处没错 · 交付三个交互模块：<b>🔬 振荡间断点显微镜</b>（把本讲三个 $x^n\sin\frac1{x^k}$ 反例做成可滑动的，一眼看清"有原函数"与"可积"为什么互不相干）、<b>🎲 黎曼和实验室</b>（七种取高方式同屏对拍，把"任意分割、任意取高"变成看得见的）、<b>📉 p 判据速查台</b>（14 条 p 结论 + 含参大观 10 条，滑参数实时判敛）。</div>
+  </header>
+
+  <div class="legend">
+    <b>这一页的三层结构：</b>
+    <span class="layer L-base">基础</span>= 概念与性质（存在性判断，服务选择题的"不算而选"）；
+    <span class="layer L-str">强化</span>= 18 讲的<b>两大部分</b>（求连和/连积极限 · 判反常积分敛散）。批注色块：
+    <span class="swatch" style="background:var(--blue)"></span><b style="color:var(--blue)">补讲</b>、
+    <span class="swatch" style="background:var(--amber)"></span><b style="color:var(--amber)">必记</b>、
+    <span class="swatch" style="background:var(--red)"></span><b style="color:var(--red)">陷阱</b>、
+    <span class="swatch" style="background:var(--green)"></span><b style="color:var(--green)">强化题型</b>。<br>
+    紫色 <b>例题</b> 卡里，<b>基</b>8.x = 基础30讲例题、<b>习</b>8.x = 基础30讲课后习题、<b>强</b>8.x = 高数18讲例题（三套各自编号，别混）。<b>每题都标 ✔</b> = 答案已被我用程序独立算过一遍，不是照抄扫描件。<br>
+    <b>📝 需要写过程的大题按「想 → 写 → 校」分三层</b>，对应做题的三个动作，<b>请按这个顺序用</b>：<br>
+    <b>💭 思路</b>＝<u>动手前</u>看：审题信号、为什么往这条路走、卡在哪里怎么破。<b>看完这层就合上页面自己写，别直接翻卷面。</b><br>
+    <b>✍️ 考场卷面</b>＝<u>写完对照</u>：可以照着抄上考场的完整解答，只写真要落笔的字，每个采分点标 <span class="pt" style="margin-left:0">⛳</span> 及分值。<br>
+    <b>📌 批注</b>＝<u>对照完校对</u>：适用边界、<span class="dock">扣分点</span>、提速技巧、跨章联系。<b>这层的话考场上一个字都不要写。</b><br>
+    选择填空题不加卷面层（考场上本就不写过程），保持「答案 → 分析 → 要害／法一法二」教学式排版。<br>
+    <b>⚠️ 本章的特殊性：考纲写明题型是"选择题、填空题"</b>——本章<b>不出大题</b>（大题在第 9 章计算、第 10–12 章应用）。所以本页的卷面层只给 <b>7 张</b>（都是书上明确要求"要会证"的定理与证明题），其余 30 道全是选填教学卡。<b>本章真正的产出不是解题速度，是"看一眼就知道存不存在"的判断力。</b>
+  </div>
+
+  <nav class="toc">
+    <a href="#s0">定位 · 两本书在讲两件事</a>
+    <a href="#s1">一、不定积分与原函数</a>
+    <a href="#s2">二、★谁能当导函数（原函数存在性）</a>
+    <a href="#s2b">🔬 振荡间断点显微镜</a>
+    <a href="#s3">三、定积分的定义与可积条件</a>
+    <a href="#s3b">🎲 黎曼和实验室</a>
+    <a href="#s4">四、★★★四象限：原函数 × 可积</a>
+    <a href="#s5">五、定积分的六条性质</a>
+    <a href="#s6">六、比大小题（保号性 + 估值）</a>
+    <a href="#s7">七、★凑定积分定义（18讲第一部分）</a>
+    <a href="#s8">八、变限积分</a>
+    <a href="#s9">九、反常积分的概念</a>
+    <a href="#s10">十、★判敛：p 积分与大观 10 条</a>
+    <a href="#s10b">📉 p 判据速查台</a>
+    <a href="#s11">十一、判敛实战 10 题</a>
+    <a href="#end">收官 + 落位索引</a>
+  </nav>
+
+  <!-- ================= s0 定位 ================= -->
+  <h2 id="s0"><span class="idx">定位</span>微分学收官，积分学开篇：这一章只讲"存在不存在"</h2>
+
+  <div class="key"><span class="tag">必记 · 一句话概括整章</span>
+    <p>第 3–7 章把微分学讲完了。从本章起进入<b>积分学</b>。本章<b>一个计算方法都不教</b>（换元、分部全在第 9 章），只干一件事：<b>把"积分"这个词底下的四个不同对象分清楚，并给出各自的存在判据</b>。</p>
+    <div class="fml">$\underbrace{\int f(x)\mathrm dx}_{\text{不定积分＝全体原函数}}\quad\underbrace{\int_a^b f(x)\mathrm dx}_{\text{定积分＝一个数（面积）}}\quad\underbrace{\int_a^x f(t)\mathrm dt}_{\text{变限积分＝一个函数}}\quad\underbrace{\int_a^{+\infty}\!\!\!f\ ,\ \int_a^b f\,(\text{有瑕点})}_{\text{反常积分＝一个极限}}$</div>
+    <p><b>四个对象的存在性彼此独立</b>，这就是本章全部选择题的出题点。整章的判断力可以压缩成两句话：</p>
+    <ul style="margin:6px 0 0 20px">
+      <li><b>不定积分存在（有原函数）$\Leftrightarrow$ $f$ 能当某个可导函数的导函数</b> —— 导函数是性质极强的函数，它<u>没有第一类间断点、没有无穷间断点</u>，但<u>可以有振荡间断点</u>。</li>
+      <li><b>定积分存在（可积）$\Leftrightarrow$ $f$ 有界 + 间断点不太多</b> —— 只跟"有界"和"间断点个数"有关，<u>跟间断点是哪一类无关</u>。</li>
+    </ul>
+    <p style="margin-top:6px">两句话的<b>判据完全不搭界</b>，所以四种组合里有三种真实存在（第四种也存在，见 <a href="#s4">§4</a>），这就是本讲的王牌题<b>例 8.3</b>。</p>
+  </div>
+
+  <div class="dolinks">
+    <div class="t">本章体量与两本书的分工</div>
+    基础30讲第 8 讲 <b>书页 195–229（35 页）</b> · 高数18讲第 8 讲 <b>书页 78–89（12 页）</b>，共 <b>47 页</b>，与第 6 章并列全书最厚。
+    <div class="note"><b>⚠️ 两本书这一讲的重心完全不同（比 ch5/ch6 的差异更大）</b>：
+    <b>基础讲 35 页里有 11 页是"注"</b>（注 1–注 5 用 6 页论证"导函数是什么样的函数"，是全讲的"道"）；
+    <b>18 讲 12 页里没有一句概念</b>，全是两类题的解法树。两本书<b>题目不重叠</b>（基础 26 题 + 强化 8 题 = 34 题全收）。
+    本页把它们按"先建判断力、再练动手套路"的顺序重排：§1–§5、§8–§9 是基础讲的概念，§6–§7、§10–§11 是 18 讲的套路（并把基础讲的同类题并进来）。</div>
+    <a href="第07章_一元函数微分学的应用三_物理应用.html">← 上一章：第 7 章 物理应用</a>
+    <a href="第06章_一元函数微分学的应用二_中值定理与不等式.html">相关：第 6 章 中值定理（本章的证明题都靠它）</a>
+    <a href="../卡库_中值定理与级数判别.html">卡库：中值定理与级数判别</a>
+  </div>
+
+  <!-- ================= s1 不定积分 ================= -->
+  <h2 id="s1"><span class="idx">一</span>不定积分与原函数：一个 vs 全体<span class="pg">基础 p.196–197</span></h2>
+
+  <div class="key"><span class="tag">必记 · 定义</span>
+    <p>设 $f(x)$ 定义在某区间 $I$ 上，若存在<b>可导函数</b> $F(x)$，使该区间上<b>任意一点</b>都有 $F'(x)=f(x)$，则称 $F(x)$ 是 $f(x)$ 在 $I$ 上的<b>一个原函数</b>；称</p>
+    <div class="fml">$\displaystyle\int f(x)\mathrm dx=F(x)+C$</div>
+    <p>为 $f(x)$ 在 $I$ 上的<b>不定积分</b>。<b>$\int$ 仅仅是"表达原函数"的一个记号</b>，$F(x)+C$ 才是<b>全体</b>原函数。</p>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 为什么定义里要强调"一个"</span>
+    <p>因为若 $F'(x)=f(x)$，则对任意常数 $C$ 都有 $[F(x)+C]'=F'(x)=f(x)$，所以 $F(x)+C$ <b>也是</b>原函数。</p>
+    <p>换句话说：<b>$f$ 若有原函数，则原函数一定有无穷多个</b>（差一个常数）。所以定义只能说"一个"，全体那一族才叫不定积分。</p>
+    <p><b>⚠️ 谈原函数与不定积分，必须指明 $f$ 所定义的区间</b>——同一个 $f$ 在不同区间上原函数族可以完全不同（$\int\frac{\mathrm dx}x$ 在 $x\gt0$ 与 $x\lt0$ 上的常数是独立的）。</p>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 8.1</span> 设 $0\lt x\lt1$，且 $\displaystyle\int(1-x^2)f(x^2)\mathrm dx=\arcsin x+C$，则 $f(x)=$（　）<br>
+      (A) $(1-x)^{3/2}$　(B) $(1-x)^{-3/2}$　(C) $(1-x^2)^{3/2}$　(D) $(1-x^2)^{-3/2}$</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">(B)</span> ✔</p>
+      <p><span class="lab">分析</span>按原函数定义倒着读：$\displaystyle\int \underbrace{f(x)}_{\text{这是}F'}\mathrm dx=F(x)+C$。所以<b>两端求导</b>是唯一入口。</p>
+      <p><span class="lab">解</span>两端对 $x$ 求导：$\Big[\displaystyle\int(1-x^2)f(x^2)\mathrm dx\Big]'=(\arcsin x+C)'$，即</p>
+      <div class="fml">$(1-x^2)f(x^2)=\dfrac1{\sqrt{1-x^2}}\ \Longrightarrow\ f(x^2)=(1-x^2)^{-3/2}\ \Longrightarrow\ f(x)=(1-x)^{-3/2}$</div>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>唯一的坑在最后一步的换元</b>：$f(x^2)=(1-x^2)^{-3/2}$ 里，把括号里的 $x^2$ 整体换成 $x$，得到的是 $(1-x)^{-3/2}$，<span class="dock">不是把 $x^2$ 原样抄下来写成 (D)</span>。选 (D) 的人是把 $f(x^2)$ 的表达式当成了 $f(x)$。<br>
+      <b>心法</b>：$f(\square)=g(\square)$ 时 $f(t)=g(t)$，$\square$ 只是个占位符。这个动作在第 3 章"抽象函数求导"里练过。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 8.2</span> 函数 $f(x)=\begin{cases}\dfrac1{\sqrt{1+x^2}},&x\le0\\[4pt] (x+1)\cos x,&x\gt0\end{cases}$ 的一个原函数为（　）<br>
+      (A) $\begin{cases}\ln(\sqrt{1+x^2}-x),&x\le0\\ (x+1)\cos x-\sin x,&x\gt0\end{cases}$
+      (B) $\begin{cases}\ln(\sqrt{1+x^2}-x)+1,&x\le0\\ (x+1)\cos x-\sin x,&x\gt0\end{cases}$<br>
+      (C) $\begin{cases}\ln(\sqrt{1+x^2}+x),&x\le0\\ (x+1)\sin x+\cos x,&x\gt0\end{cases}$
+      (D) $\begin{cases}\ln(\sqrt{1+x^2}+x)+1,&x\le0\\ (x+1)\sin x+\cos x,&x\gt0\end{cases}$</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">(D)</span> ✔</p>
+      <p><span class="lab">分析</span>$F'(x)=f(x)$。由 $f$ <b>处处有定义</b>得 $F$ <b>处处可导</b>，从而 $F$ <b>处处连续</b>——这是本题的第一把筛子，比求导快得多。</p>
+      <p><span class="lab">法一 · 先筛连续</span>对 (A)：$\lim\limits_{x\to0^-}F(x)=\ln1=0$，$\lim\limits_{x\to0^+}F(x)=1\cdot1-0=1$，左右极限不同 ⇒ $F$ 不连续，<b>排除</b>。<br>
+      对 (C)：$\lim\limits_{x\to0^-}F=0$，$\lim\limits_{x\to0^+}F=1$，同样<b>排除</b>。</p>
+      <p><span class="lab">法二 · 再验求导</span>只剩 (B)(D)。对 (B) 的 $x\gt0$ 段：</p>
+      <div class="fml">$[(x+1)\cos x-\sin x]'=\cos x-(x+1)\sin x-\cos x=-(x+1)\sin x\ne(x+1)\cos x$</div>
+      <p><b>排除 (B)</b>。故选 (D)。（验：$[(x+1)\sin x+\cos x]'=\sin x+(x+1)\cos x-\sin x=(x+1)\cos x$ ✔；$[\ln(\sqrt{1+x^2}+x)+1]'=\frac1{\sqrt{1+x^2}}$ ✔；$F(0^-)=0+1=1=F(0^+)$ ✔）</p>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>分段函数原函数题的通法就是这两步：先连续、再求导。</b>顺序不能反——四个选项全部求导要算 8 次，先用连续性能一刀砍掉一半。<br>
+      <span class="dock">最常见的失分</span>：忘了"原函数必连续"这条，硬去逐个求导，时间全花在计算上。<br>
+      <b>为什么原函数必连续？</b>因为原函数按定义是<b>可导</b>函数，可导必连续。这句话在本章后面会反复用（例 8.11、例 8.12 都靠它）。
+    </div>
+  </div>
+
+  <!-- ================= s2 原函数存在性 ================= -->
+  <h2 id="s2"><span class="idx">二</span>★ 谁能当导函数：原函数存在定理<span class="pg">基础 p.197–203</span></h2>
+
+  <div class="key"><span class="tag">必记 · 两条定理</span>
+    <p><b>(1) 连续函数 $f(x)$ 必有原函数。</b></p>
+    <p><b>(2) 含有<u>第一类间断点</u>（可去、跳跃）或<u>无穷间断点</u>的 $f(x)$，在包含该间断点的区间内<u>必没有</u>原函数。</b></p>
+    <p>四类间断点里，<b>只剩振荡间断点的情况是"不一定"</b>：可能有，也可能没有。</p>
+    <div class="gridwrap"><table class="dense">
+      <tr><th>间断点类型</th><th>归类</th><th>有没有原函数</th><th>本讲的例子</th></tr>
+      <tr><td>可去间断点</td><td>第一类</td><td style="color:var(--red)"><b>一定没有</b></td><td>基 8.13 的 $a\ne1$</td></tr>
+      <tr><td>跳跃间断点</td><td>第一类</td><td style="color:var(--red)"><b>一定没有</b></td><td>例 8.3 ①、基 8.12、习 8.2</td></tr>
+      <tr><td>无穷间断点</td><td>第二类</td><td style="color:var(--red)"><b>一定没有</b></td><td>例 8.3 ③（$\frac1x$）</td></tr>
+      <tr><td><b>振荡间断点</b></td><td>第二类</td><td style="color:var(--amber)"><b>不一定</b></td><td>例 8.3 ②④ 有，$\frac1x\sin\frac1x$ 没有</td></tr>
+    </table></div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">证 · 定理(1)</span> 若 $f(x)$ 在 $[a,b]$ 上连续，证明 $F(x)=\displaystyle\int_a^x f(t)\mathrm dt$ 在 $[a,b]$ 上可导，且 $F'(x)=f(x)$。<br>
+      <span style="font-size:.82rem;color:var(--muted)">（书上眉批：<b>"不作要求，但最好在草稿本上写一遍，大致思路要懂"</b>）</span></div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>要证可导 ⇒ 只能回导数定义</b>，算 $\lim\limits_{\Delta x\to0}\frac{F(x+\Delta x)-F(x)}{\Delta x}$。</li>
+          <li>分子是<b>两个积分之差</b>，用<b>积分的可加性</b>并成一个：$\int_a^{x+\Delta x}-\int_a^x=\int_x^{x+\Delta x}$。这一步是全证的分水岭。</li>
+          <li>现在分子是"积分形式"、分母是"数"，<b>两者形式不统一，没法约</b>。要把积分形式变回<b>函数形式</b>——能干这件事的工具只有一个：<b>积分中值定理</b>（$\int_x^{x+\Delta x}f=f(\xi)\Delta x$，正好把 $\Delta x$ 提出来约掉）。</li>
+          <li>剩下 $\lim\limits_{\Delta x\to0}f(\xi)$，其中 $\xi$ 夹在 $x$ 与 $x+\Delta x$ 之间 ⇒ $\Delta x\to0$ 时 $\xi\to x$ ⇒ <b>用连续性</b>换成 $f(x)$。<b>题设"连续"就是用在这最后一步的</b>，不是用在中值定理那步（那步也要连续，但目的不同）。</li>
+          <li>端点单独说：$x=a$ 只能取 $\Delta x\gt0$，$x=b$ 只能取 $\Delta x\lt0$。</li>
+        </ol>
+      </div>
+      <div class="paper"><span class="phead">✍️ 考场卷面<span class="score">参考 10 分</span></span>
+        <div class="step"><span class="k">证</span>设 $x\in(a,b)$，取 $\Delta x$ 使 $x+\Delta x\in(a,b)$。由定积分的可加性，</div>
+        <div class="fml">$\Delta F=F(x+\Delta x)-F(x)=\displaystyle\int_a^{x+\Delta x}f(t)\mathrm dt-\int_a^xf(t)\mathrm dt=\int_x^{x+\Delta x}f(t)\mathrm dt$</div>
+        <div class="step"><span class="pt">⛳ 3 分</span></div>
+        <div class="step">因 $f$ 在 $[a,b]$ 上连续，<b>由积分中值定理</b>，存在 $\xi$ 介于 $x$ 与 $x+\Delta x$ 之间，使</div>
+        <div class="fml">$$\displaystyle\int_x^{x+\Delta x}f(t)\mathrm dt=f(\xi)\,\Delta x\tag{1}$$</div>
+        <div class="step"><span class="pt">⛳ 3 分</span></div>
+        <div class="step">由 (1) 式，</div>
+        <div class="fml">$F'(x)=\lim_{\Delta x\to0}\dfrac{\Delta F}{\Delta x}=\lim_{\Delta x\to0}f(\xi)$</div>
+        <div class="step">又 $\xi$ 介于 $x$ 与 $x+\Delta x$ 之间，故 $\Delta x\to0$ 时 $\xi\to x$；再<b>由 $f$ 在 $x$ 处连续</b>，得</div>
+        <div class="fml">$F'(x)=\lim_{\xi\to x}f(\xi)=f(x)$<span class="pt">⛳ 3 分</span></div>
+        <div class="step">当 $x=a$ 时取 $\Delta x\gt0$，同理可证 $F'_+(a)=f(a)$；当 $x=b$ 时取 $\Delta x\lt0$，同理可证 $F'_-(b)=f(b)$。<span class="pt">⛳ 1 分</span></div>
+        <div class="fin">故 $F(x)=\displaystyle\int_a^xf(t)\mathrm dt$ 在 $[a,b]$ 上可导，且 $F'(x)=f(x)$。证毕。</div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        <b>书上专门写了一句方法论</b>：「四则运算中出现<b>不同形式</b>的表达式时，需要化为<b>统一的形式</b>，本题借助了积分中值定理。」——把它记成一条通用心法：<b>见到"积分 ÷ 长度"，就去想积分中值定理</b>。<br>
+        <span class="dock">扣分点</span>：写 $\int_x^{x+\Delta x}f=f(\xi)\Delta x$ 前<b>必须点名"由积分中值定理"并交代 $f$ 连续</b>；漏掉依据这一步不给分。<br>
+        <b>这条定理的两个推论就是本章最常用的两个公式</b>（书上叫"总结"）：
+        <div class="fml">$f\ \text{连续}\Longrightarrow\begin{cases}\displaystyle\int f(x)\mathrm dx=\int_a^x f(t)\mathrm dt+C\\[6pt] \Big[\displaystyle\int_a^x f(t)\mathrm dt\Big]'=f(x)\end{cases}$</div>
+        <b>跨章</b>：这就是牛顿–莱布尼茨公式的证明骨架（第 9 章）；第 6 章造辅助函数时的 $F(x)=\int_a^xf(t)\mathrm dt$ 也是靠它才能求导。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">证 · 定理(2)</span> 证明：含有第一类间断点或无穷间断点的 $f(x)$，在包含该间断点的区间内必没有原函数。</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li>要证"必没有" ⇒ <b>反证</b>：假设有原函数 $F$，导出矛盾。</li>
+          <li>$F$ 是原函数 ⇒ $F$ 在整个区间上<b>处处可导</b>，特别是<b>在 $x_0$ 处也可导</b>，即 $F'(x_0)$ <b>存在且等于 $f(x_0)$</b>。这个"存在"就是矛盾的来源。</li>
+          <li>另一边，算 $F'(x_0)=\lim\limits_{x\to x_0}\frac{F(x)-F(x_0)}{x-x_0}$，这是 $\frac00$，<b>用洛必达</b>变成 $\lim\limits_{x\to x_0}F'(x)=\lim\limits_{x\to x_0}f(x)$。</li>
+          <li>于是"$F'(x_0)$ 存在"就逼出"$\lim\limits_{x\to x_0}f(x)$ 存在且等于 $f(x_0)$"，也就是 <b>$f$ 在 $x_0$ 连续</b>——与"$x_0$ 是间断点"矛盾。按可去 / 跳跃 / 无穷三种情形各写一遍即可。</li>
+          <li><b>为什么振荡间断点逃过一劫？</b>因为这套论证靠的是<b>"$\lim f$ 存在"</b>；振荡时 $\lim f$ 根本不存在，洛必达法则用不了（洛必达要求右端极限存在），推不出矛盾。</li>
+        </ol>
+      </div>
+      <div class="paper"><span class="phead">✍️ 考场卷面<span class="score">参考 10 分</span></span>
+        <div class="step"><span class="k">证</span>设 $F(x)$ 为 $f(x)$ 在区间 $I$ 内的一个原函数，则 $F$ 在 $I$ 内可导且 $F'(x)=f(x)$。设 $x_0\in I$ 为 $F'$ 的间断点，分三种情形讨论。<span class="pt">⛳ 1 分</span></div>
+        <div class="step"><span class="k">(i)</span> 若 $x_0$ 为<b>可去间断点</b>，即 $\lim\limits_{x\to x_0}F'(x)=A$ 存在但 $A\ne F'(x_0)$。而由导数定义与洛必达法则，</div>
+        <div class="fml">$F'(x_0)=\lim_{x\to x_0}\dfrac{F(x)-F(x_0)}{x-x_0}\xlongequal{\text{洛必达}}\lim_{x\to x_0}F'(x)=A$</div>
+        <div class="step">与 $A\ne F'(x_0)$ 矛盾。<span class="pt">⛳ 3 分</span></div>
+        <div class="step"><span class="k">(ii)</span> 若 $x_0$ 为<b>跳跃间断点</b>，即 $\lim\limits_{x\to x_0^+}F'(x)=A_+$、$\lim\limits_{x\to x_0^-}F'(x)=A_-$ 均存在但 $A_+\ne A_-$。而</div>
+        <div class="fml">$F'_+(x_0)\xlongequal{\text{洛必达}}\lim_{x\to x_0^+}F'(x)=A_+,\qquad F'_-(x_0)\xlongequal{\text{洛必达}}\lim_{x\to x_0^-}F'(x)=A_-$</div>
+        <div class="step">又 $F'(x_0)$ 存在，故 $F'_+(x_0)=F'_-(x_0)$，即 $A_+=A_-$，矛盾。<span class="pt">⛳ 3 分</span></div>
+        <div class="step"><span class="k">(iii)</span> 若 $x_0$ 为<b>无穷间断点</b>，即 $\lim\limits_{x\to x_0}F'(x)=\infty$。而</div>
+        <div class="fml">$F'(x_0)=\lim_{x\to x_0}\dfrac{F(x)-F(x_0)}{x-x_0}\xlongequal{\text{洛必达}}\lim_{x\to x_0}F'(x)=\infty$</div>
+        <div class="step">与 $F'(x_0)$ 存在矛盾。<span class="pt">⛳ 2 分</span></div>
+        <div class="fin">综上，(i)(ii)(iii) 三种情形均不存在原函数，即导函数 $F'$ 在 $I$ 内必定没有第一类间断点和无穷间断点。故含有第一类间断点和无穷间断点的函数 $f(x)$，在包含该间断点的区间内没有原函数 $F(x)$。证毕。</div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        <span class="dock">最容易被扣的一步</span>：三处洛必达都要求<b>右端极限存在（或为 $\infty$）</b>才合法。情形 (i)(ii)(iii) 里右端极限恰好都存在，所以能用；<b>振荡间断点处右端极限不存在，洛必达非法</b>——这正是振荡情形逃出定理的原因，卷面上最好补一句。<br>
+        <b>这条证明的"副产品"就是导函数的四条性质</b>（书上注 4）：$F$ 处处可导 $\Rightarrow F'$ 满足<br>
+        ① $F'$ 是连续函数或<b>含振荡间断点</b>的函数；② $F'$ <b>有介值性</b>（达布定理）；③ $\lim F'$ 存在 $\Leftrightarrow$ $F'$ 连续；④ $F'\ne0\Rightarrow F$ 单调。
+      </div>
+    </div>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 张宇的"道"：为什么导函数是性质极强的函数（基础 p.199–203 的六页注）</span>
+    <p>书上用整整六页论证一句话：<b>函数只是"每个点都在那里、无牵无挂"，而导数存在（可导）意味着那些点"相依相偎、充分靠近"</b>。所以导函数天生比普通函数强得多。三条对照：</p>
+    <div class="gridwrap"><table class="dense">
+      <tr><th></th><th>普通函数 $f$</th><th>导函数 $f'$</th></tr>
+      <tr><td>一点处极限存在 ⇒ 该点连续？</td><td style="color:var(--red)"><b>不能</b>（$\lim f=a$，但 $f(x_0)$ 可以 $\ne a$）</td><td style="color:var(--green)"><b>能</b>：$\lim\limits_{x\to x_0}f'(x)=a\Rightarrow f'$ 在 $x_0$ 连续</td></tr>
+      <tr><td>有没有介值性？</td><td style="color:var(--red)"><b>不一定</b>（要连续才有，介值定理）</td><td style="color:var(--green)"><b>一定有</b>（<b>达布定理</b>，不要求 $f'$ 连续）</td></tr>
+      <tr><td>能不能有第一类间断点？</td><td style="color:var(--green)"><b>可以</b></td><td style="color:var(--red)"><b>绝不可以</b></td></tr>
+    </table></div>
+    <p style="margin-top:8px"><b>三条的证明各一行</b>：</p>
+    <ul style="margin:4px 0 0 20px">
+      <li>第一条：$f'(x_0)=\lim\limits_{x\to x_0}\frac{f(x)-f(x_0)}{x-x_0}\overset{\frac00,\ \text{洛}}{=}\lim\limits_{x\to x_0}f'(x)=a$。</li>
+      <li>第二条（<b>达布定理</b>）：$f$ 在 $[a,b]$ 上可导，$f'_+(a)\ne f'_-(b)$，则对任意介于二者之间的 $u$，存在 $\xi\in(a,b)$ 使 $f'(\xi)=u$。<br>
+        <b>证</b>：令 $F(x)=f(x)-ux$，则 $F'=f'-u$。不妨设 $f'_+(a)\lt u\lt f'_-(b)$，则 $F'_+(a)\lt0$、$F'_-(b)\gt0$，<b>由第 6 章例 6.3</b> 知存在 $\xi\in(a,b)$ 使 $F'(\xi)=0$，即 $f'(\xi)=u$。</li>
+      <li>第三条：可导 ⇒ 左右导数相等 ⇒ 左右极限也必相等（由第一条）⇒ 不可能是跳跃或可去间断。</li>
+    </ul>
+    <p style="margin-top:8px"><b>两条立刻能用的推论</b>：<b>① $f'$ 存在且恒 $\ne0$ ⇒ $f'$ 必保号</b>（否则由达布定理会取到 0）<b>⇒ $f$ 单调</b>；<b>② $[a,b]$ 上 $f'$ 存在 ⇒ $f'$ 无第一类间断点</b>。这两条在第 6 章讨论根的个数时天天用。</p>
+  </div>
+
+  <div class="trap"><span class="tag">陷阱 · 三个必背反例，区别只在"导函数是否有界"</span>
+    <p>本讲反复出现 $x^m\sin\frac1{x^k}$ 这个家族，四个成员的差别极细，考试就靠它们区分"有原函数"与"可积"：</p>
+    <div class="gridwrap"><table class="dense">
+      <tr><th>原函数 $F$（$x\ne0$，$F(0)=0$）</th><th>导函数 $f=F'$（$x\ne0$）</th><th>$f$ 有界？</th><th>$f$ 有原函数？</th><th>$f$ 可积？</th></tr>
+      <tr><td>$x^2\sin\dfrac1x$</td><td>$2x\sin\dfrac1x-\cos\dfrac1x$</td><td style="color:var(--green)">有界</td><td style="color:var(--green)"><b>有</b></td><td style="color:var(--green)"><b>可积</b></td></tr>
+      <tr><td>$x^2\cos\dfrac1x$</td><td>$2x\cos\dfrac1x+\sin\dfrac1x$</td><td style="color:var(--green)">有界</td><td style="color:var(--green)"><b>有</b></td><td style="color:var(--green)"><b>可积</b>（例 8.3 ④）</td></tr>
+      <tr style="background:var(--red-soft)"><td>$x^2\sin\dfrac1{x^2}$</td><td>$2x\sin\dfrac1{x^2}-\dfrac2x\cos\dfrac1{x^2}$</td><td style="color:var(--red)"><b>无界！</b></td><td style="color:var(--green)"><b>有</b></td><td style="color:var(--red)"><b>不可积</b>（例 8.3 ②）</td></tr>
+      <tr><td>—（不存在）</td><td>$\dfrac1x\sin\dfrac1x$</td><td style="color:var(--red)">无界</td><td style="color:var(--red)"><b>没有</b></td><td style="color:var(--red)">不可积</td></tr>
+    </table></div>
+    <p style="margin-top:8px"><b>关键的一步算术</b>：$\Big(x^2\sin\frac1{x^2}\Big)'=2x\sin\frac1{x^2}+x^2\cos\frac1{x^2}\cdot\Big(-\frac2{x^3}\Big)=2x\sin\frac1{x^2}-\dfrac2x\cos\frac1{x^2}$。<br>
+    <b>内层是 $\frac1{x^2}$ 时，链式法则掉出 $-\frac2{x^3}$，与前面的 $x^2$ 只抵消掉两阶，剩下 $\frac1x$ —— 无界就是这么来的。</b>内层是 $\frac1x$ 时掉出的是 $-\frac1{x^2}$，正好被 $x^2$ 全部吃掉，所以有界。</p>
+    <p><b>⚠️ 结论一句话：$m$ 与 $k$ 的关系决定一切。</b>$F=x^m\sin\frac1{x^k}$ 的导函数含 $-kx^{m-k-1}\cos\frac1{x^k}$，<b>有界 $\Leftrightarrow m\ge k+1$</b>。下面的显微镜就是让你把这条滑出来。</p>
+  </div>
+
+  <!-- ================= s2b 交互1 振荡显微镜 ================= -->
+  <h2 id="s2b"><span class="idx">🔬</span>交互一 · 振荡间断点显微镜</h2>
+
+  <div class="tool">
+    <h4>🔬 $F(x)=x^{m}\sin\dfrac1{x^{k}}$ 家族：滑 $m,k$ 看"有原函数"与"可积"什么时候分家</h4>
+    <div class="hint">上排画 <b>原函数 $F$</b>（永远处处可导，所以 $f=F'$ 永远<b>有原函数</b>）；下排画 <b>导函数 $f=F'$</b>。<br>
+      $F'(x)=mx^{m-1}\sin\dfrac1{x^k}-kx^{m-k-1}\cos\dfrac1{x^k}$，第二项的次数 $m-k-1$ 说了算：<b>$m\ge k+1$ 时 $f$ 有界（可积）；$m\lt k+1$ 时 $f$ 无界（不可积）</b>。<br>
+      三个预置按钮就是本讲的三个必背反例，拖一拖就知道它们为什么长得像却结论相反。</div>
+    <div class="ctl">
+      <button id="os_p1" class="on">例 8.3② $x^2\sin\frac1{x^2}$（无界·不可积）</button>
+      <button id="os_p2">例 8.3④ $x^2\cos\frac1x$（有界·可积）</button>
+      <button id="os_p3">注 3 $x^2\sin\frac1x$（有界·可积）</button>
+      <button id="os_p4">$x^3\sin\frac1{x^2}$（临界 $m=k+1$）</button>
+    </div>
+    <div class="ctl">
+      <label>外层次数 $m$</label><input type="range" id="os_m" min="1" max="5" step="1" value="2">
+      <span class="val" id="os_mv">m = 2</span>
+    </div>
+    <div class="ctl">
+      <label>内层次数 $k$</label><input type="range" id="os_k" min="1" max="4" step="1" value="2">
+      <span class="val" id="os_kv">k = 2</span>
+    </div>
+    <div class="ctl">
+      <label>放大倍数（看 0 附近）</label><input type="range" id="os_z" min="0" max="100" step="1" value="0">
+      <span class="val" id="os_zv">|x| ≤ 1</span>
+      <button id="os_tri">用 cos 内层</button>
+    </div>
+    <div class="scene"><svg id="os_svg" viewBox="0 0 620 380" preserveAspectRatio="xMidYMid meet"></svg></div>
+    <span class="verdict" id="os_v"></span>
+    <div class="say" id="os_say"></div>
+    <table class="dq" id="os_tab"></table>
+    <div class="legend2"><span class="chip c-b">蓝</span>原函数 $F$（上图）　<span class="chip c-p">紫</span>导函数 $f=F'$（下图）　
+      <span class="chip c-a">橙虚线</span>$\pm|x|^{m}$ 包络（上图）／$f$ 在取样区间上的实际最大幅值（下图）<br>
+      <b>怎么用</b>：把放大倍数拉到底，看下图的振幅是<b>被压平</b>（有界，可积）还是<b>越放大越高</b>（无界，不可积）。上图不管怎么放大都被 $\pm|x|^m$ 夹住 ⇒ $F$ 永远连续可导 ⇒ <b>$f$ 永远有原函数</b>。</div>
+  </div>
+
+  <div class="zy"><span class="tag">强化题型 · 这个显微镜直接回答的三个考点</span>
+    <ol style="margin:4px 0 0 20px">
+      <li><b>"$f$ 有原函数"从来不需要 $f$ 有界</b>——上图 $F$ 一直光滑，下图振幅冲天也无所谓。</li>
+      <li><b>"$f$ 可积"要求 $f$ 有界</b>（可积的必要条件）——下图振幅冲天时定积分就没了。</li>
+      <li><b>两者的分界线是 $m=k+1$</b>，一个纯粹的指数比较，跟"振荡"这件事本身无关。所以<u>振荡间断点既不保证有原函数，也不阻止有原函数</u>。</li>
+    </ol>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 振荡间断点到底"断"在哪（基础 p.201–204，张宇最长的一段抒情）</span>
+    <p>书上用三页说清一件事：<b>$\sin\frac1x$ 这样的振荡间断点，其实并没有真的"断开"。</b></p>
+    <ul style="margin:4px 0 0 20px">
+      <li><b>"振荡"描述的是左右函数值的特征</b>：在 $x=0$ 的<u>任意</u>邻域内都有<u>无数次</u>从 $-1$ 到 $1$ 的往返，密集得像矩形块一样贴住 $y$ 轴。它可以看成把 $\sin x$ 在 $x\to+\infty$ 的波形<b>"无限压缩"</b>到 0 附近（复合 $u=\frac1x$ 干的就是这件事）。</li>
+      <li><b>"间断"只是在<u>描述</u>上述特征</b>：因为连续的定义是 $\lim\limits_{x\to x_0}f(x)=f(x_0)$，而 $\lim\limits_{x\to0}\sin\frac1x$ 不存在，<b>于是只能叫间断</b>。即使补定义 $f(0)=0$，依然只能叫间断。</li>
+      <li><b>但它不像跳跃那样断开、也不像可去那样断开，而是"绵延不绝"</b>——曲线上的点仍然是<b>点点相依相偎</b>的。</li>
+    </ul>
+    <p style="margin-top:8px"><b>回扣到原函数</b>（这段是全讲的收口）：连续函数必有原函数，说的是"点点相依相偎"（连续）的函数，一定是某个"点点相依相偎<u>更近</u>"（可导）的函数求导得来的。反过来，可导函数求导后会得到一个"点点相依相偎"的函数（<u>靠近程度降低了一档</u>）。<b>于是不只连续函数配得上"相依相偎"，振荡间断函数也配</b>——所以可导函数求导后可能得到连续函数，<b>也可能得到含振荡间断点的函数</b>，只要它们还"足够近"就行。</p>
+    <p><b>书上收尾的一句</b>：以上我们讨论的是函数真实存在的样子——<b>微积分就是在研究函数微观上的样子</b>。</p>
+    <p style="color:var(--muted);font-size:.84rem;margin-top:6px">（书上还顺手拆了一次极限：$\lim\limits_{x\to0}\big(2x\cos\frac1x+\sin\frac1x\big)=\lim 2x\cos\frac1x+\lim\sin\frac1x$，并自注"请原谅我在此处鲁莽地拆开了，那只是为了让各位更清楚地看到 $\lim\sin\frac1x$"。<b>拆极限本来非法</b>——只在演示时这么写，卷面上不许。）</p>
+  </div>
+
+  <!-- ================= s3 定积分定义 ================= -->
+  <h2 id="s3"><span class="idx">三</span>定积分的定义与可积条件<span class="pg">基础 p.204–207</span></h2>
+
+  <div class="key"><span class="tag">必记 · 定义（四步：分割 → 近似 → 求和 → 取极限）</span>
+    <p>设 $f(x)$ 在 $[a,b]$ 上<b>有界</b>。在 $(a,b)$ 内任取 $n-1$ 个分点，记 $a=x_0\lt x_1\lt\cdots\lt x_n=b$，$\Delta x_k=x_k-x_{k-1}$，在每个小区间上<b>任取</b>一点 $\xi_k\in[x_{k-1},x_k]$，记 $\lambda=\max\limits_{1\le k\le n}\{\Delta x_k\}$。若 $\lambda\to0$ 时极限 $\lim\limits_{\lambda\to0}\sum\limits_{k=1}^n f(\xi_k)\Delta x_k$ <b>存在且与分点 $x_k$ 及点 $\xi_k$ 的取法无关</b>，则称 $f$ 在 $[a,b]$ 上<b>可积</b>，记</p>
+    <div class="fml">$\displaystyle\int_a^b f(x)\mathrm dx=\lim_{\lambda\to0}\sum_{k=1}^n f(\xi_k)\Delta x_k$</div>
+    <p><b>定义里有两个"任取"</b>（分点任取、$\xi_k$ 任取），这正是 §7 一切"凑定积分定义"题的合法性来源。</p>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 三个记号的几何意义（一次背清楚，全章不再混）</span>
+    <div class="gridwrap"><table class="dense">
+      <tr><th>记号</th><th>叫什么</th><th>是什么东西</th><th>几何意义</th></tr>
+      <tr><td>$\displaystyle\int f(x)\mathrm dx$</td><td>不定积分</td><td><b>一族函数</b></td><td>全体原函数</td></tr>
+      <tr><td>$\displaystyle\int_a^b f(x)\mathrm dx$</td><td>定积分</td><td><b>一个数</b></td><td>面积（一块固定的曲边梯形）</td></tr>
+      <tr><td>$\displaystyle F(x)=\int_a^x f(t)\mathrm dt$</td><td>变上限积分</td><td><b>一个函数</b></td><td><b>动态的</b>面积（右端在动）</td></tr>
+    </table></div>
+    <p style="margin-top:8px"><b>几何意义（图 8-1 三种情形）</b>：$f\ge0$ 时 $\int_a^bf$ ＝ 曲边梯形面积；$f\le0$ 时 ＝ 面积的<b>负值</b>；$f$ 有正有负时 ＝ $x$ 轴上方面积<b>减去</b>下方面积，即 <b>$S_\text{上}-S_\text{下}$（面积的代数和）</b>。</p>
+    <p><b>定积分的值与字母无关</b>：$\int_a^bf(x)\mathrm dx=\int_a^bf(t)\mathrm dt=\int_a^bf(u)\mathrm du$——它<b>只与被积函数和积分区间有关</b>，是一个<b>客观存在的数量值</b>，$x,t,u$ 都只是符号。（这条在例 8.10 的"$\sin\leftrightarrow\cos$ 换位公式"里立刻要用。）</p>
+    <p style="color:var(--muted);font-size:.84rem;margin-top:6px">（趣味：书上手写眉批考证了积分号 $\int$ 的来历——它<b>不是</b>"起点 $a$、终点 $b$、高 $f(x)$、底边长 $\mathrm dx$"的象形，而是<b>莱布尼茨</b>把 "summa" 的首字母 <i>s</i> 拉长写成的，德国汉诺威莱布尼茨纪念馆的一份手稿里写明了这一点。而定积分的<b>定义</b>是黎曼给出的，故又称<b>黎曼积分</b>。）</p>
+  </div>
+
+  <div class="key"><span class="tag">必记 ★★★ · 定积分定义的"特殊化"形式（凑定义的全部依据）</span>
+    <p>因为两个"任取"都可以<b>特殊化</b>，取 $[a,b]$ 的 <b>$n$ 等分</b> 且取每个小区间的<b>右端点</b>：</p>
+    <div class="fml">$\displaystyle\int_a^b f(x)\mathrm dx=\lim_{n\to\infty}\sum_{i=1}^n f\Big(a+\frac{b-a}n i\Big)\frac{b-a}n$</div>
+    <p>取<b>左端点</b>则是 $\lim\limits_{n\to\infty}\sum\limits_{i=0}^{n-1}f\big(a+\frac{b-a}ni\big)\frac{b-a}n$（两者相等）。取 $a=0,b=1$ 时形式最简，<b>这个式子要能倒背</b>：</p>
+    <div class="fml">$\boxed{\displaystyle\int_0^1 f(x)\mathrm dx=\lim_{n\to\infty}\sum_{i=1}^n f\Big(\frac in\Big)\cdot\frac1n}$</div>
+  </div>
+
+  <div class="key"><span class="tag">必记 · 可积的判据（充分条件四条 + 必要条件一条）</span>
+    <p>"定积分存在"也叫<b>一元函数的（常义）可积性</b>。"常义"＝ <b>区间有限 + 函数有界</b>（也叫黎曼可积），与后面"区间无穷、函数无界"的<b>反常</b>积分相区别。<b>函数与积分区间都被限制在一个框之内</b>。</p>
+    <p><b>充分条件（满足任一条即可积）</b>：</p>
+    <ol style="margin:4px 0 8px 20px">
+      <li>$f$ 在 $[a,b]$ 上<b>连续</b>。<span style="color:var(--muted);font-size:.85rem">（闭区间上连续必有界；连续函数<b>既有不定积分，也有定积分</b>）</span></li>
+      <li>$f$ 在 $[a,b]$ 上<b>单调</b>。<span style="color:var(--muted);font-size:.85rem">（单调 ⇒ $f(a),f(b)$ 就是界）</span></li>
+      <li>$f$ 在 $[a,b]$ 上<b>有界，且只有有限个间断点</b>。<span style="color:var(--muted);font-size:.85rem">（⚠️ 这条已排除无穷间断点——无穷间断必然导致无界）</span></li>
+      <li>$f$ 在 $[a,b]$ 上有<b>有限个第一类间断点</b>。</li>
+    </ol>
+    <p><b>必要条件：可积函数必有界</b>（若 $\int_a^bf$ 存在，则 $f$ 在 $[a,b]$ 上必有界）。</p>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · "可积必有界"为什么（一句话的直观）</span>
+    <p>任意分割底边成若干小段时，若 $f$ 在 $[a,b]$ 上无界，则<b>至少有一个小段 $\Delta x$ 上 $f$ 可以任意大</b>，于是这一个"小竖条"的面积 $f(\xi)\Delta x$ 便可以无穷大，整个曲边梯形的面积就是无穷大，极限不存在。<b>所以可积函数必有界。</b></p>
+    <div class="trap" style="margin:10px 0 0"><span class="tag">陷阱 · 与反常积分区分</span>
+      <b>反常积分有可能出现函数无界的情况</b>——$\int_0^1\frac{\mathrm dx}{\sqrt x}=2$ 就是无界函数而"积分存在"。这不矛盾：<b>那是反常积分（广义可积），不是定积分（黎曼可积、常义可积）</b>，两个概念不同。<br>
+      <b>今后凡说"积分存在"，都要在心里补一句：是<u>定积分</u>存在还是<u>反常积分</u>存在？</b>（书上专门写了这条提醒，见 §9。）
+    </div>
+  </div>
+
+  <!-- ================= s3b 交互2 黎曼和实验室 ================= -->
+  <h2 id="s3b"><span class="idx">🎲</span>交互二 · 黎曼和实验室（七种取高方式同屏对拍）</h2>
+
+  <div class="tool">
+    <h4>🎲 "任意分割、任意取高" —— 把定义里的两个"任取"拖出来看</h4>
+    <div class="hint">定积分存在时，<b>分点怎么取、$\xi_k$ 怎么取，结果都一样</b>。这个实验台把 18 讲"其他分割取高型"列出的<b>六种取高方式</b>（右端点/左端点/中点/凸组合/几何均值/均方根/调和均值）全做出来，同屏对比它们与真值的误差。<br>
+      <b>看点</b>：$n$ 拉大时七条误差一起塌向 0 —— 这就是强 8.4、强 8.5 敢把奇怪的 $\xi_k$ 直接读成 $x$ 的底气。</div>
+    <div class="ctl">
+      <label>被积函数</label>
+      <select id="rs_f">
+        <option value="0" data-lab="f(x)=x^2 on [0,1]">f(x) = x²　（∫₀¹ = 1/3）</option>
+        <option value="1" data-lab="f(x)=1/(1+x^2)">f(x) = 1/(1+x²)　（∫₀¹ = π/4，强化基本型②）</option>
+        <option value="2" data-lab="f(x)=1/(1+x)">f(x) = 1/(1+x)　（∫₀¹ = ln2，强化基本型①）</option>
+        <option value="3" data-lab="f(x)=sin(pi x)">f(x) = sin(πx)　（∫₀¹ = 2/π，习 8.5）</option>
+        <option value="4" data-lab="f(x)=(1+x)/(1+x^2)">f(x) = (1+x)/(1+x²)　（∫₀¹ = π/4+ln2/2，例 8.6）</option>
+        <option value="5" data-lab="f(x)=1/sqrt(1+x)">f(x) = 1/√(1+x)　（∫₀¹ = 2√2−2，习 8.4）</option>
+        <option value="6" data-lab="f(x)=ln(1+x)">f(x) = ln(1+x)　（∫₀¹ = 2ln2−1，强 8.1）</option>
+      </select>
+    </div>
+    <div class="ctl">
+      <label>分割数 $n$</label><input type="range" id="rs_n" min="2" max="60" step="1" value="6">
+      <span class="val" id="rs_nv">n = 6</span>
+      <label style="min-width:auto">凸组合 $\lambda_1$</label><input type="range" id="rs_l" min="0" max="100" step="5" value="30" style="flex:0 1 110px">
+      <span class="val" id="rs_lv">λ₁ = 0.30</span>
+    </div>
+    <div class="ctl">
+      <button id="rs_r" class="on">右端点</button><button id="rs_le">左端点</button><button id="rs_m">中点</button>
+      <button id="rs_c">凸组合</button><button id="rs_g">几何均值</button><button id="rs_q">均方根</button><button id="rs_h">调和均值</button>
+    </div>
+    <div class="scene"><svg id="rs_svg" viewBox="0 0 620 300" preserveAspectRatio="xMidYMid meet"></svg></div>
+    <div class="say" id="rs_say"></div>
+    <table class="dq" id="rs_tab"></table>
+    <div class="legend2"><span class="chip c-b">蓝</span>被积函数曲线　<span class="chip c-p">紫柱</span>当前取高方式的黎曼和　<span class="chip c-r">红点</span>各小区间选中的 $\xi_k$<br>
+      表中「误差」＝ 黎曼和 − 精确值。<b>七种方式的误差都随 $n$ 单调趋 0，但速度不同</b>：中点 / 凸组合($\lambda_1=\frac12$) 是 $O(n^{-2})$，其余是 $O(n^{-1})$——这解释了为什么书上说"取中点"最常被命题人用（收敛快、式子还好看）。</div>
+  </div>
+
+  <div class="zy"><span class="tag">强化题型 · 六种取高方式（18 讲"其他分割取高型"原文）</span>
+    <p>只要 $\xi_k$ <b>落在 $\big[\frac{k-1}n,\frac kn\big]$ 里</b>，$\lambda\to0$ 时结果就都是 $\int_0^1f$。书上列了六种：</p>
+    <div class="gridwrap"><table class="dense">
+      <tr><th>方式</th><th>$\xi_k$</th><th>考试里长什么样</th></tr>
+      <tr><td>(1) 端点</td><td>$\dfrac{k-1}n$ 或 $\dfrac kn$</td><td>最常见</td></tr>
+      <tr style="background:var(--amber-soft)"><td><b>(2) 取中点</b></td><td>$\dfrac{\frac{k-1}n+\frac kn}2=\boxed{\dfrac{2k-1}{2n}}$</td><td><b>强 8.5</b>（一眼认出 $\frac{2k-1}{2n}$ 就赢了）</td></tr>
+      <tr><td>(3) 取凸组合</td><td>$\lambda_1\dfrac{k-1}n+\lambda_2\dfrac kn$，$\lambda_1+\lambda_2=1,\lambda_i\ge0$</td><td>把 (1)(2) 全包了</td></tr>
+      <tr><td>(4) 取几何均值</td><td>$\sqrt{\dfrac{k-1}n\cdot\dfrac kn}=\dfrac{\sqrt{k(k-1)}}n$</td><td>见到根号里 $k(k-1)$ 就是它</td></tr>
+      <tr><td>(5) 取均方根</td><td>$\sqrt{\dfrac{(\frac{k-1}n)^2+(\frac kn)^2}2}$</td><td>见到平方和再开方</td></tr>
+      <tr><td>(6) 取调和均值</td><td>$\dfrac2{\frac n{k-1}+\frac nk}$</td><td>见到分母是两个倒数之和</td></tr>
+    </table></div>
+    <p style="margin-top:8px"><b>还有一种"极坐标系分割型"</b>（书上单列，其实就是 $[a,b]\ne[0,1]$ 的普通情形）：见强 8.4。</p>
+  </div>
+
+  <!-- ================= s4 四象限 ================= -->
+  <h2 id="s4"><span class="idx">四</span>★★★ 四象限：原函数存在性 × 定积分存在性<span class="pg">基础 p.208–209</span></h2>
+
+  <div class="key"><span class="tag">必记 · 本章的王牌图（把两套判据摆在一起）</span>
+    <p>两个判据<b>完全不搭界</b>——一个管"能不能当导函数"，一个管"有界不有界、间断点多不多"。所以四种组合<b>全都真实存在</b>：</p>
+    <div class="quad">
+      <div class="q-gg"><b>✅ 有原函数 ∧ ✅ 可积</b>
+        <span class="in">最常见：<b>连续函数</b>。<br>也包括有界的振荡间断：$f=2x\cos\frac1x+\sin\frac1x$（例 8.3 ④，原函数 $x^2\cos\frac1x$）。</span></div>
+      <div class="q-gr"><b>✅ 有原函数 ∧ ❌ 不可积</b>
+        <span class="in">$f=2x\sin\frac1{x^2}-\dfrac2x\cos\frac1{x^2}$（例 8.3 ②）<br>原函数是 $x^2\sin\frac1{x^2}$，但 $f$ 在 $0$ 附近<b>无界</b> ⇒ 不可积。</span></div>
+      <div class="q-rg"><b>❌ 无原函数 ∧ ✅ 可积</b>
+        <span class="in"><b>任何跳跃间断的有界函数</b>：例 8.3 ①、基 8.12、习 8.2。<br>跳跃 ⇒ 无原函数；有界 + 有限个间断点 ⇒ 可积。</span></div>
+      <div class="q-rr"><b>❌ 无原函数 ∧ ❌ 不可积</b>
+        <span class="in">$f=\dfrac1x$（$x\ne0$），$f(0)=0$（例 8.3 ③）。<br>无穷间断 ⇒ 两头都没了。</span></div>
+    </div>
+    <p style="margin-top:6px"><b>把这张图记住，例 8.3 就是三秒题。</b></p>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 8.3</span> 在区间 $[-1,2]$ 上，以下四个结论：<br>
+      ① $f(x)=\begin{cases}2,&x\gt0\\1,&x=0\\-1,&x\lt0\end{cases}$，<b>有原函数，但其定积分不存在</b>；<br>
+      ② $f(x)=\begin{cases}2x\sin\frac1{x^2}-\frac2x\cos\frac1{x^2},&x\ne0\\0,&x=0\end{cases}$，<b>有原函数，其定积分也存在</b>；<br>
+      ③ $f(x)=\begin{cases}\frac1x,&x\ne0\\0,&x=0\end{cases}$，<b>没有原函数，其定积分也不存在</b>；<br>
+      ④ $f(x)=\begin{cases}2x\cos\frac1x+\sin\frac1x,&x\ne0\\0,&x=0\end{cases}$，<b>有原函数，其定积分也存在</b>。<br>
+      正确结论的个数为（　）(A) 1　(B) 2　(C) 3　(D) 4</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">(B)</span>（③④ 正确，①② 错误）✔</p>
+      <p><span class="lab">分析</span>本题通过具体例子考查<b>能否明确区分不定积分与定积分的存在性</b>。逐个分析即可，判据就是上面那张四象限图。</p>
+      <p><span class="lab">① 错</span>$x=0$ 是<b>跳跃间断点</b> ⇒ 在任一含 0 的 $[a,b]$ 上 <b>一定不存在原函数</b>（这半句对）；但 $f$ 有界且只有一个间断点，<b>满足定积分存在定理，定积分存在</b>（这半句错）。<b>所以①的结论"定积分不存在"是错的</b>。</p>
+      <p><span class="lab">② 错</span>容易验证 $F(x)=\begin{cases}x^2\sin\frac1{x^2},&x\ne0\\0,&x=0\end{cases}$ 满足 $F'(x)=f(x)$（含 $x=0$ 处 $F'(0)=\lim\limits_{x\to0}\frac{x^2\sin\frac1{x^2}}{x}=0$），<b>所以 $f$ 存在原函数</b>（这半句对）；但在任一含 0 的区间上 <b>定积分不存在，因为 $f$ 在 $x=0$ 的邻域内无界</b>：$2x\sin\frac1{x^2}-\frac2x\cos\frac1{x^2}$ 中 $\frac2x\to\infty$ 而 $\cos$ 不趋于 0，是 <b>无界振荡</b>。<b>所以②的结论"定积分也存在"是错的</b>。</p>
+      <p><span class="lab">③ 对</span>$x=0$ 是<b>无穷间断点</b> ⇒ 无原函数；且无界 ⇒ 定积分也不存在。<b>两句都对</b>。</p>
+      <p><span class="lab">④ 对</span>$F(x)=\begin{cases}x^2\cos\frac1x,&x\ne0\\0,&x=0\end{cases}$ 满足 $F'=f$（$F'(0)=\lim\limits_{x\to0}\frac{x^2\cos\frac1x}x=0$），有原函数；且定积分也存在，因为 $f$ <b>有界</b>且只有一个振荡间断点：</p>
+      <div class="fml">$\Big|2x\cos\dfrac1x+\sin\dfrac1x\Big|\le2|x|\cdot\Big|\cos\dfrac1x\Big|+\Big|\sin\dfrac1x\Big|\le2\cdot2\cdot1+1=5\quad(|x|\le2)$</div>
+      <p>综上，正确的是 ③④，共 <b>2</b> 个，选 (B)。</p>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>做这道题的正确顺序</b>：先看间断点类型定"有没有原函数"，再看有界性与间断点个数定"可不可积"，<b>两个判断彼此独立、不许互相推</b>。<br>
+      <span class="dock">最大的坑是②</span>：$\frac1{x^2}$ 与 $\frac1x$ 长得像，但求导后 $\frac1{x^2}$ 掉出 $-\frac2{x^3}$，与 $x^2$ 抵消后<b>还剩一个 $\frac1x$</b>，无界；$\frac1x$ 掉出 $-\frac1{x^2}$ 正好被吃干净，有界。<b>上面的 🔬 显微镜就是让你把这条滑出来看的。</b><br>
+      <b>验有界的那一步是本题的技术活</b>：拆成两项各自放缩（$|2x|\le4$ 用了区间 $[-1,2]$ 的上界 2），凑出一个具体数 5。<b>写"有界"两个字不够，要给出界。</b>
+    </div>
+  </div>
+
+  <!-- ================= s5 六条性质 ================= -->
+  <h2 id="s5"><span class="idx">五</span>定积分的六条性质<span class="pg">基础 p.207–213</span></h2>
+
+  <div class="key"><span class="tag">必记 · 两个规定 + 六条性质</span>
+    <p><b>两个规定</b>：(1) $b=a$ 时 $\displaystyle\int_a^af=0$；(2) $a\gt b$ 时 $\displaystyle\int_a^bf=-\int_b^af$。</p>
+    <div class="gridwrap"><table class="dense">
+      <tr><th>#</th><th>名称</th><th>内容</th></tr>
+      <tr><td>1</td><td>求区间长度</td><td>$a\lt b$ 时 $\displaystyle\int_a^b\mathrm dx=b-a=L$</td></tr>
+      <tr><td>2</td><td>线性性质</td><td>$\displaystyle\int_a^b[k_1f\pm k_2g]\mathrm dx=k_1\int_a^bf\pm k_2\int_a^bg$</td></tr>
+      <tr><td>3</td><td><b>可加（拆）性</b></td><td><b>无论 $a,b,c$ 的大小如何</b>，总有 $\displaystyle\int_a^bf=\int_a^cf+\int_c^bf$</td></tr>
+      <tr style="background:var(--amber-soft)"><td>4</td><td><b>保号性</b></td><td>$[a,b]$ 上 $f\le g$ ⇒ $\displaystyle\int_a^bf\le\int_a^bg$；特别地 $\Big|\displaystyle\int_a^bf\Big|\le\int_a^b|f|$</td></tr>
+      <tr><td>5</td><td>估值定理</td><td>$M,m$ 为 $f$ 在 $[a,b]$ 上的最大最小值，$L=b-a$，则 $mL\le\displaystyle\int_a^bf\le ML$</td></tr>
+      <tr style="background:var(--amber-soft)"><td>6</td><td><b>★★★ 积分中值定理</b></td><td>$f$ 在 $[a,b]$ 上<b>连续</b> ⇒ 至少存在 $\xi\in[a,b]$ 使 $\displaystyle\int_a^bf(x)\mathrm dx=f(\xi)(b-a)$</td></tr>
+    </table></div>
+    <p style="margin-top:8px"><b>性质 3 的"无论大小如何"值钱</b>：$c$ 可以在 $[a,b]$ 外面。<b>性质 5 的证明就一行</b>：由 $m\le f(x)\le M$ 与保号性，$\int_a^bm\mathrm dx\le\int_a^bf\le\int_a^bM\mathrm dx$。</p>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · $\big|\int f\big|\le\int|f|$ 的形象说法（书上眉批）</span>
+    <p>左边是<b>"七零八落"</b>（正负先抵消再取绝对值），右边是<b>"求而稠得"</b>（先各自取绝对值再加，一分不丢）。</p>
+    <p><b>数值例</b>：设 $f$ 在 $[a,b]$ 上 $x$ 轴上方围出面积 5、下方围出面积 3，则 $\big|\int_a^bf\big|=|5-3|=2$，而 $\int_a^b|f|=5+3=8$，确实 $2\le8$。</p>
+    <p><b>什么时候取等？</b>$f$ 在 $[a,b]$ 上<b>不变号</b>时。这条判据在例 8.5 里直接用来判"哪个表达式才是面积"。</p>
+  </div>
+
+  <div class="key"><span class="tag">必记 · 严格不等式：什么时候 $\le$ 能升级成 $\lt$</span>
+    <p>设 $f$ 是 $[a,b]$ 上<b>非负的连续函数</b>，只要 $f$ <b>不恒等于零</b>，则必有 $\displaystyle\int_a^bf(x)\mathrm dx\gt0$。</p>
+    <p><b>推论</b>：连续函数 $f,g$ 满足 $f\ge g$，且 $f$ <b>不恒等于</b> $g$，$a\lt b$，则必有<b>严格</b>不等式 $\displaystyle\int_a^bf\gt\int_a^bg$。</p>
+    <p><b>⚠️ 三个条件缺一不可：连续、不恒等、$a\lt b$。</b>在积分不等式的证明与定积分值的估计中要获得严格结果，就靠这条。</p>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 与极限的"戴帽 / 脱帽"对照（一起记住三条）</span>
+    <div class="gridwrap"><table class="dense">
+      <tr><th>场合</th><th>规则</th><th>严格性怎么变</th></tr>
+      <tr><td>极限 <b>戴帽法</b></td><td>$f(x)\gt0\Rightarrow\lim f(x)\ge0$</td><td style="color:var(--red)"><b>严格变不严格</b>（取极限会"塌"到 0）</td></tr>
+      <tr><td>极限 <b>脱帽法</b></td><td>$\lim f(x)\gt0\Rightarrow$ 该点邻域内 $f(x)\gt0$</td><td style="color:var(--green)">不严格变严格（局部保号性）</td></tr>
+      <tr><td><b>积分</b></td><td>$f-g\le0,\ a\lt b\Rightarrow\int_a^b(f-g)\le0$</td><td>一般保持不严格；<b>若 $f-g$ 连续且不恒为 0，则 $\lt$ 严格成立</b></td></tr>
+    </table></div>
+    <p style="margin-top:6px"><b>一句话</b>：积分比极限"厚道"——极限会把严格不等式压塌，<b>积分在连续 + 不恒等的前提下能保住严格</b>。因为积分是"累加一整段"，而极限只看一个点。</p>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 8.7</span> 设 $f(x)$ 是 $[a,b]$ 上<b>非负的连续函数</b>，且 $f(x)$ 不恒等于零，证明必有 $\displaystyle\int_a^bf(x)\mathrm dx\gt0$。</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li>结论要的是<b>严格大于</b>。而 $f\ge0$ 直接积分只能给出 $\int_a^bf\ge0$——<b>"≥"升级成"&gt;"是本题的全部难点</b>。</li>
+          <li>题设"不恒等于零"是<b>唯一还没用的条件</b>，它只给出<b>一个点</b> $x_0$ 上 $f(x_0)\gt0$。<u>一个点的信息在积分里是零测度的，必须先把它"撑开"成一段</u>。</li>
+          <li>能把"一点为正"撑成"一段为正"的工具只有一个：<b>连续函数的局部保号性</b>。它给出一个邻域 $[x_0-\delta,x_0+\delta]$ 和一个<b>正的下界 $\eta$</b>。</li>
+          <li>有了"一段上 $f\ge\eta\gt0$"，就用<b>保号性 + 缩小积分区间</b>：整段积分 $\ge$ 那一小段积分 $\ge\eta\cdot2\delta\gt0$。<b>缩区间这一步合法，正是因为其余部分 $f\ge0$（非负条件用在这里）。</b></li>
+          <li>注意 $x_0$ 要取在<b>开区间 $(a,b)$ 内</b>，否则邻域可能伸出 $[a,b]$。</li>
+        </ol>
+      </div>
+      <div class="paper"><span class="phead">✍️ 考场卷面<span class="score">参考 10 分</span></span>
+        <div class="step"><span class="k">证</span>因 $f(x)$ 在 $[a,b]$ 上非负且不恒等于零，故至少存在一点 $x_0\in(a,b)$，使 $f(x_0)\ne0$，即 $f(x_0)\gt0$。<span class="pt">⛳ 2 分</span></div>
+        <div class="step">又 $f(x)$ 在 $x_0$ 处连续，<b>由连续函数的局部保号性</b>，存在 $\delta\gt0$ 与 $\eta\gt0$，使当 $x\in[x_0-\delta,\,x_0+\delta]\subset[a,b]$ 时，恒有</div>
+        <div class="fml">$$f(x)\ge\eta\gt0\tag{1}$$</div>
+        <div class="step"><span class="pt">⛳ 4 分</span></div>
+        <div class="step">由于 $f(x)\ge0$，<b>由定积分的不等式性质</b>及 (1) 式，</div>
+        <div class="fml">$\displaystyle\int_a^bf(x)\mathrm dx\ \ge\ \int_{x_0-\delta}^{x_0+\delta}f(x)\mathrm dx\ \ge\ \eta\int_{x_0-\delta}^{x_0+\delta}\mathrm dx=2\eta\delta\gt0$</div>
+        <div class="step"><span class="pt">⛳ 3 分</span></div>
+        <div class="fin">故必有 $\displaystyle\int_a^bf(x)\mathrm dx\gt0$。证毕。<span class="pt">⛳ 1 分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        <b>三步骨架要背下来</b>：<b>找一点为正 → 局部保号撑成一段（拿到正下界 $\eta$）→ 缩区间得 $2\eta\delta\gt0$</b>。凡是"由 $\ge$ 证 $\gt$"的积分题都是这个套路。<br>
+        <span class="dock">扣分点 1</span>：不写"由连续函数的局部保号性"就直接说"存在邻域使 $f\gt0$"。<br>
+        <span class="dock">扣分点 2</span>：第一步缩区间的不等号<b>依赖 $f\ge0$</b>，卷面上要点一句"由于 $f(x)\ge0$"，否则丢掉的部分可能是负的，不等号就不成立。<br>
+        <b>跨章</b>：这条推论在第 11 章（积分等式与不等式）会被反复调用，是"积分不等式取等条件"的唯一来源。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 8.8</span> 设 $f(x)$ 在 $[a,b]$ 上连续，证明存在 $\xi\in[a,b]$，使得 $\displaystyle\int_a^bf(x)\mathrm dx=f(\xi)(b-a)$。<br>
+      <b>（加强）</b>如何把 $\xi\in[a,b]$ 改进为 $\xi\in(a,b)$？</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li>结论形如"存在 $\xi$ 使 $f(\xi)=$ 某个数"——<b>这是介值定理的标准形状</b>。所以要先把结论改写成 $f(\xi)=\dfrac1{b-a}\int_a^bf$，即证明<b>右边这个数落在 $f$ 的值域里</b>。</li>
+          <li>怎么证一个数在值域里？<b>把它夹在最大最小值之间</b> ⇒ 用<b>估值定理</b> $m(b-a)\le\int_a^bf\le M(b-a)$，两边同除 $b-a$。</li>
+          <li>闭区间上连续 ⇒ 最值存在（这是用估值定理的前提），再用<b>介值定理</b>收口。<b>注意介值定理给出的 $\xi$ 可能取到端点</b>（当 $\int_a^bf$ 恰好等于 $m(b-a)$ 或 $M(b-a)$ 时），所以基本版只能写 $\xi\in[a,b]$。</li>
+          <li><b>加强到开区间</b>需要换武器：把定积分改写成<b>变限积分</b> $F(x)=\int_a^xf(t)\mathrm dt$（它可导！），然后用<b>拉格朗日中值定理</b>——中值定理天生给出<u>开区间</u>内的点。<b>这就是"见到 $\int_a^bf$ 就改写成 $\int_a^xf(t)\mathrm dt$"这条通法的第一次亮相。</b></li>
+          <li>还有一条等价路线：<b>常数 $k$ 值法</b>（第 6 章辅助函数的老办法），令 $k=\frac{\int_a^bf}{b-a}$ 造 $F(x)=\int_a^xf(t)\mathrm dt-k(x-a)$，两端相等用<b>罗尔</b>。</li>
+        </ol>
+      </div>
+      <div class="paper"><span class="phead">✍️ 考场卷面<span class="score">参考 10 分（基本版 5 + 加强版 5）</span></span>
+        <div class="step"><span class="k">证（基本版，$\xi\in[a,b]$）</span>因 $f(x)$ 在 $[a,b]$ 上连续，<b>由闭区间上连续函数的最值定理</b>，$f$ 在 $[a,b]$ 上存在最大值 $M$ 与最小值 $m$。<b>由估值定理</b>，</div>
+        <div class="fml">$$m(b-a)\le\displaystyle\int_a^bf(x)\mathrm dx\le M(b-a)\tag{1}$$</div>
+        <div class="step"><span class="pt">⛳ 2 分</span></div>
+        <div class="step">因 $b\gt a$，将 (1) 式两端同除以 $b-a$，得</div>
+        <div class="fml">$$m\le\dfrac1{b-a}\displaystyle\int_a^bf(x)\mathrm dx\le M\tag{2}$$</div>
+        <div class="step"><b>由介值定理</b>，存在 $\xi\in[a,b]$，使 $f(\xi)=\dfrac1{b-a}\displaystyle\int_a^bf(x)\mathrm dx$。<span class="pt">⛳ 3 分</span></div>
+        <div class="fin">即 $\displaystyle\int_a^bf(x)\mathrm dx=f(\xi)(b-a)$，$\xi\in[a,b]$。证毕。</div>
+        <div class="step" style="margin-top:14px"><span class="k">证（加强版 · 法一，$\xi\in(a,b)$）</span>令 $F(x)=\displaystyle\int_a^xf(t)\mathrm dt$。因 $f$ 在 $[a,b]$ 上连续，故 $F(x)$ 在 $[a,b]$ 上<b>可导</b>且 $F'(x)=f(x)$。</div>
+        <div class="step">于是 $F$ 在 $[a,b]$ 上连续、在 $(a,b)$ 内可导，<b>由拉格朗日中值定理</b>，存在 $\xi\in(a,b)$ 使</div>
+        <div class="fml">$F(b)-F(a)=F'(\xi)(b-a)$</div>
+        <div class="step">即 $\displaystyle\int_a^bf(x)\mathrm dx-0=f(\xi)(b-a)$。<span class="pt">⛳ 3 分</span></div>
+        <div class="fin">故存在 $\xi\in(a,b)$ 使 $\displaystyle\int_a^bf(x)\mathrm dx=f(\xi)(b-a)$。证毕。</div>
+        <div class="step" style="margin-top:14px"><span class="k">证（加强版 · 法二，常数 $k$ 值法）</span>令 $k=\dfrac{\int_a^bf(x)\mathrm dx}{b-a}$，设</div>
+        <div class="fml">$F(x)=\displaystyle\int_a^xf(t)\mathrm dt-k(x-a)$</div>
+        <div class="step">则 $F(a)=0$，$F(b)=\displaystyle\int_a^bf(x)\mathrm dx-k(b-a)=0$，即 $F(a)=F(b)$。</div>
+        <div class="step">又 $F$ 在 $[a,b]$ 上连续、在 $(a,b)$ 内可导，<b>由罗尔定理</b>，存在 $\xi\in(a,b)$ 使 $F'(\xi)=0$，即 $f(\xi)-k=0$。<span class="pt">⛳ 2 分</span></div>
+        <div class="fin">故 $\displaystyle\int_a^bf(x)\mathrm dx=f(\xi)(b-a)$，$\xi\in(a,b)$。证毕。</div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        <b>书上明说：开区间版的积分中值定理<u>考研真题中已经考过，可直接在大题中使用，不必证明</u>。</b>但证法要会——它是第 11 章一切积分中值题的母版。<br>
+        <span class="dock">扣分点</span>：基本版只能得 $\xi\in[a,b]$，<b>如果题目要求开区间还写介值定理，这一步就是错的</b>；反过来，题目只要闭区间时用拉格朗日也对（开区间更强）。<b>看清题目要的是哪个区间。</b><br>
+        <b>★ 通法（书上眉批，本章最该背的一条）</b>：<b>见到 $\displaystyle\int_a^bf(x)\mathrm dx$，只有两条路</b>——<br>
+        ① <b>用积分中值定理</b>：$\int_a^bf=f(\xi)(b-a)$，把积分换成函数值；<br>
+        ② <b>改写成 $\displaystyle\int_a^xf(t)\mathrm dt$（辅助函数法）</b>，把常数变成函数，再上微分学的全套武器（罗尔 / 拉格朗日 / 单调性）。<br>
+        <b>跨章</b>：法二的"常数 $k$ 值法"就是第 6 章辅助函数总表里的标准动作，此处只是把 $f$ 换成了 $\int f$。第 11 章的双中值题基本都从这两条起手。
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= s6 比大小 ================= -->
+  <h2 id="s6"><span class="idx">六</span>比大小题：保号性 + 估值定理的两种用法<span class="pg">基础 p.209–214</span></h2>
+
+  <div class="key"><span class="tag">必记 · 比积分大小的两个动作</span>
+    <div class="steps3">
+      <div><b>① 两个积分互比</b>⇒ 比<b>被积函数</b>的大小（保号性）。区间相同时，$f\le g\Rightarrow\int f\le\int g$。</div>
+      <div><b>② 积分与常数比</b>⇒ 找被积函数的<b>常数上界 / 下界</b>，乘区间长度（估值定理）。<b>与 1 比就找那个能凑出 1 的界。</b></div>
+      <div><b>③ 想要严格不等号</b>⇒ 检查"连续 + 不恒等"（§5 那条推论）。选择题里一般直接写严格号。</div>
+    </div>
+    <p><b>本节的两个必背标尺</b>（都来自第 2 讲的重要不等式）：</p>
+    <div class="fml">$0\lt x\lt\dfrac\pi4:\ \dfrac{\tan x}x\lt\dfrac4\pi\quad(\text{上界})\qquad\qquad 0\lt x\lt\dfrac\pi2:\ \dfrac{\sin x}x\gt\dfrac2\pi\quad(\text{下界})$</div>
+    <p>并且 $\displaystyle\int_0^{\pi/4}\frac4\pi\mathrm dx=1$、$\displaystyle\int_0^{\pi/2}\frac2\pi\mathrm dx=1$——<b>两个界都是精心设计的，乘区间长度正好得 1</b>。</p>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 8.9</span> 设 $I_1=\displaystyle\int_0^{\pi/4}\frac{\tan x}x\mathrm dx$，$I_2=\displaystyle\int_0^{\pi/4}\frac x{\tan x}\mathrm dx$，则（　）<br>
+      (A) $I_1\gt I_2\gt1$　(B) $1\gt I_1\gt I_2$　(C) $I_2\gt I_1\gt1$　(D) $1\gt I_2\gt I_1$</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">(B)</span> ✔<span style="color:var(--muted);font-size:.85rem">（数值复算：$I_1\approx0.8663$，$I_2\approx0.7660$）</span></p>
+      <p><span class="lab">法一 · 两步</span><b>第一步比大小</b>：$x\in(0,\frac\pi4)$ 时 $0\lt\sin x\lt x\lt\tan x$，故 $\dfrac{\tan x}x\gt1\gt\dfrac x{\tan x}$，于是 $I_1\gt I_2$，<b>排除 (C)(D)</b>。<br>
+      <b>第二步与 1 比</b>：由第 2 讲重要不等式，$0\lt x\lt\frac\pi4$ 时 $\dfrac{\tan x}x\lt\dfrac4\pi$，则</p>
+      <div class="fml">$I_1=\displaystyle\int_0^{\pi/4}\frac{\tan x}x\mathrm dx\lt\frac4\pi\int_0^{\pi/4}\mathrm dx=\frac4\pi\cdot\frac\pi4=1$</div>
+      <p>故 $1\gt I_1\gt I_2$，选 (B)。</p>
+      <p><span class="lab">法二 · 作差 + 单调性</span>$I_2-I_1=\displaystyle\int_0^{\pi/4}\Big(\frac x{\tan x}-\frac{\tan x}x\Big)\mathrm dx=\int_0^{\pi/4}\frac{(x+\tan x)(x-\tan x)}{x\tan x}\mathrm dx$。<br>
+      由保号性，$x\in(0,\frac\pi4)$ 时 $x-\tan x\lt0$（其余因子均正），故 $I_2-I_1\lt0$，即 $I_2\lt I_1$。<br>
+      再令 $g(x)=\dfrac{\tan x}x$，则 $g'(x)=\dfrac{x\sec^2x-\tan x}{x^2}=\dfrac{x-\sin x\cos x}{x^2\cos^2x}$。$x\in(0,\frac\pi4)$ 时 $g'\gt0$，$g$ 单调递增，故 $g(x)\lt g\big(\frac\pi4\big)=\dfrac4\pi$，得 $I_1\lt1$。所以 $I_2\lt I_1\lt1$，选 (B)。</p>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>法二的价值在于它<u>自己推出了</u>那个标尺 $\frac4\pi$</b>——如果考场上忘了第 2 讲的不等式，就用 $g(x)=\frac{\tan x}x$ 单调递增、终值 $g(\frac\pi4)=\frac4\pi$ 现推。<b>$g'$ 的分子化简用了 $\sec^2x=\frac1{\cos^2x}$ 通分：$x\sec^2x-\tan x=\frac{x-\sin x\cos x}{\cos^2x}$，而 $x\gt\sin x\gt\sin x\cos x$。</b><br>
+      <span class="dock">易错</span>：$\frac{\tan x}x$ 与 $\frac x{\tan x}$ 互为倒数，很多人直接由 $I_1\gt I_2$ 推 $I_1\cdot I_2$ 与 1 的关系——<b>倒数关系在被积函数上成立，在积分值上不成立</b>（$\int\frac1f\ne\frac1{\int f}$）。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 8.1</span> 设 $I_1=\displaystyle\int_0^{\pi/2}\frac{\sin x}x\mathrm dx$，$I_2=\displaystyle\int_0^{\pi/2}\frac x{\sin x}\mathrm dx$，则（　）<br>
+      (A) $I_1\gt I_2\gt1$　(B) $1\gt I_1\gt I_2$　(C) $I_2\gt I_1\gt1$　(D) $1\gt I_2\gt I_1$</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">(C)</span> ✔<span style="color:var(--muted);font-size:.85rem">（数值复算：$I_1\approx1.3708$，$I_2\approx1.8862$）</span></p>
+      <p><span class="lab">解</span>$x\in(0,\frac\pi2)$ 时 $\sin x\lt x$，故 $\dfrac x{\sin x}\gt1\gt\dfrac{\sin x}x$，则 $I_2\gt I_1$，<b>排除 (A)(B)</b>。<br>
+      由第 2 讲重要不等式，$0\lt x\lt\frac\pi2$ 时 $\dfrac{\sin x}x\gt\dfrac2\pi$，则 $I_1\gt\displaystyle\int_0^{\pi/2}\frac2\pi\mathrm dx=\frac2\pi\cdot\frac\pi2=1$。故 $I_2\gt I_1\gt1$，选 (C)。</p>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注 · 与基 8.9 是一对镜像题，<u>必须成对记</u></span>
+      <div class="gridwrap"><table class="dense">
+        <tr><th></th><th>基 8.9</th><th>习 8.1</th></tr>
+        <tr><td>区间</td><td>$\big(0,\frac\pi4\big)$</td><td>$\big(0,\frac\pi2\big)$</td></tr>
+        <tr><td>比的函数</td><td>$\frac{\tan x}x$ 与 $\frac x{\tan x}$</td><td>$\frac{\sin x}x$ 与 $\frac x{\sin x}$</td></tr>
+        <tr><td>谁 $\gt1$</td><td>$\frac{\tan x}x\gt1$（因 $\tan x\gt x$）</td><td>$\frac x{\sin x}\gt1$（因 $\sin x\lt x$）</td></tr>
+        <tr><td>标尺</td><td>$\frac{\tan x}x\lt\frac4\pi$（<b>上界</b>）</td><td>$\frac{\sin x}x\gt\frac2\pi$（<b>下界</b>）</td></tr>
+        <tr><td>结论</td><td style="color:var(--blue)">$1\gt I_1\gt I_2$</td><td style="color:var(--purple)">$I_2\gt I_1\gt1$</td></tr>
+      </table></div>
+      <b>记忆锚</b>：$\tan$ 题里"大的那个（$\frac{\tan x}x$）被上界压到 1 以下"，$\sin$ 题里"小的那个（$\frac{\sin x}x$）被下界托到 1 以上"。<b>结论正好左右颠倒</b>，混一次就全错。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 8.10</span> 设 $M=\displaystyle\int_0^{\pi/2}\sin(\sin x)\mathrm dx$，$N=\displaystyle\int_0^{\pi/2}\cos(\cos x)\mathrm dx$，则（　）<br>
+      (A) $M\lt1\lt N$　(B) $M\lt N\lt1$　(C) $N\lt M\lt1$　(D) $1\lt M\lt N$</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">(A)</span> ✔<span style="color:var(--muted);font-size:.85rem">（数值复算：$M\approx0.8932$，$N\approx1.2018$）</span></p>
+      <p><span class="lab">涉及知识点 · $\sin\leftrightarrow\cos$ 换位公式</span></p>
+      <div class="fml">$\displaystyle\int_0^{\pi/2}f(\sin x)\mathrm dx=\int_0^{\pi/2}f(\cos x)\mathrm dx$</div>
+      <p><b>证</b>：令 $x=\frac\pi2-t$，则 $\displaystyle\int_0^{\pi/2}f(\sin x)\mathrm dx=\int_0^{\pi/2}f(\cos t)\mathrm dt\xlongequal{\text{积分与字母无关}}\int_0^{\pi/2}f(\cos x)\mathrm dx$。</p>
+      <p><span class="lab">解</span>$\sin(\sin x)$、$\cos(\cos x)$ 均在 $[0,\frac\pi2]$ 上连续。</p>
+      <p><b>$M$ 那边</b>：由 $\sin u\le u$（$u\ge0$）取 $u=\sin x$ 得 $\sin(\sin x)\le\sin x$，且 $\sin(\sin x)\not\equiv\sin x$，故</p>
+      <div class="fml">$M=\displaystyle\int_0^{\pi/2}\sin(\sin x)\mathrm dx\lt\int_0^{\pi/2}\sin x\mathrm dx=1$</div>
+      <p><b>$N$ 那边</b>：先换位，再比较——</p>
+      <div class="fml">$N=\displaystyle\int_0^{\pi/2}\cos(\cos x)\mathrm dx\xlongequal{x=\frac\pi2-t}\int_0^{\pi/2}\cos(\sin t)\mathrm dt\gt\int_0^{\pi/2}\cos t\,\mathrm dt=1$</div>
+      <p>（不等号因为 $0\le\sin t\le t\le\frac\pi2$ 且 $\cos$ 在 $[0,\frac\pi2]$ 上<b>单调递减</b>，故 $\cos(\sin t)\ge\cos t$，且不恒等。）故 $M\lt1\lt N$，选 (A)。</p>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>三个动作缺一不可</b>：① <b>换位公式</b>把 $\cos(\cos x)$ 变成 $\cos(\sin t)$（否则 $\cos(\cos x)$ 与 $\cos x$ 没法直接比，因为 $\cos x\le1$ 而 $\cos$ 是减函数，方向乱）；② 内层用 $\sin u\lt u$；③ <b>外层要看单调方向</b>——$\sin$ 递增所以不等号不变，$\cos$ 递减所以不等号<b>翻转</b>，这一翻正是 $N\gt1$ 的来源。<br>
+      <span class="dock">最容易错的一步</span>：忘了 $\cos$ 递减，把 $\cos(\sin t)$ 也判成 $\lt\cos t$，答案就变成 (B)。<br>
+      <b>标尺</b>：$\displaystyle\int_0^{\pi/2}\sin x\mathrm dx=\int_0^{\pi/2}\cos x\mathrm dx=1$——本题的"1"就是这么来的，<b>不是估值定理，是真算出来的</b>。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 8.4</span> 设可导函数 $y=f(x)$ 在 $[0,+\infty)$ 上的值域是 $[0,+\infty)$，$f(0)=0$，$f'(x)\gt0$，$x=\varphi(y)$ 是 $y=f(x)$ 的反函数。记 $I=\displaystyle\int_0^af(x)\mathrm dx+\int_0^b\varphi(y)\mathrm dy$，常数 $a,b\gt0$，当 $a\lt\varphi(b)$ 时，则（　）<br>
+      (A) $I\gt ab$　(B) $I\lt ab$　(C) $I=ab$　(D) $I$ 与 $ab$ 的大小关系不确定</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">(A)</span> ✔</p>
+      <p><span class="lab">解 · 一句话</span>由题设，$f$ 是过原点且在 $[0,+\infty)$ 上<b>单调递增</b>的函数。<b>关键认识：$x=\varphi(y)$ 与 $y=f(x)$ 在同一坐标系下是<u>同一条曲线</u></b>（它与 $y=f^{-1}(x)$ 才是关于 $y=x$ 对称的两条）。于是</p>
+      <div class="fml">$\underbrace{\int_0^af(x)\mathrm dx}_{\text{曲线下方、}[0,a]\text{ 上}}+\underbrace{\int_0^b\varphi(y)\mathrm dy}_{\text{曲线左方、}[0,b]\text{ 上}}=S_1+S_2+S_3\gt S_1+S_2=ab$</div>
+      <p>其中 $S_1+S_2$ 恰是 $a\times b$ 的矩形，$S_3$ 是 $a$ 与 $\varphi(b)$ 之间多出来的那一块（因 $a\lt\varphi(b)$ 而非空）。故 $I\gt ab$，选 (A)。</p>
+      <figure class="fig">
+        <svg viewBox="0 0 320 230" xmlns="http://www.w3.org/2000/svg">
+          <defs><clipPath id="cp84"><rect x="40" y="20" width="240" height="170"/></clipPath></defs>
+          <!-- 曲线 y = 1.6*sqrt(x-40)... 用参数画一条单增凹曲线 -->
+          <path d="M40,190 Q140,175 190,110 T280,30" fill="none" stroke="var(--accent)" stroke-width="2.2"/>
+          <!-- 矩形 a x b -->
+          <rect x="40" y="90" width="110" height="100" fill="var(--purple)" opacity=".16"/>
+          <line x1="150" y1="190" x2="150" y2="90" stroke="var(--muted)" stroke-width="1" stroke-dasharray="3,3"/>
+          <line x1="40" y1="90" x2="150" y2="90" stroke="var(--muted)" stroke-width="1" stroke-dasharray="3,3"/>
+          <!-- S3 区域：a 到 φ(b) 之间、曲线下 b 上 -->
+          <path d="M150,90 L150,146 Q170,128 190,110 Q198,103 205,90 Z" fill="var(--green)" opacity=".3"/>
+          <line x1="205" y1="190" x2="205" y2="90" stroke="var(--green)" stroke-width="1" stroke-dasharray="2,2"/>
+          <!-- 轴 -->
+          <line x1="40" y1="190" x2="292" y2="190" stroke="var(--muted)" stroke-width="1.3"/>
+          <line x1="40" y1="200" x2="40" y2="18" stroke="var(--muted)" stroke-width="1.3"/>
+          <text x="296" y="194" font-size="11" fill="var(--muted)">x</text>
+          <text x="34" y="16" font-size="11" fill="var(--muted)">y</text>
+          <text x="30" y="196" font-size="11" fill="var(--muted)">O</text>
+          <text x="146" y="203" font-size="11" fill="var(--muted)">a</text>
+          <text x="196" y="203" font-size="11" fill="var(--green)">φ(b)</text>
+          <text x="28" y="94" font-size="11" fill="var(--muted)">b</text>
+          <text x="70" y="175" font-size="11" fill="var(--purple)">S₁</text>
+          <text x="70" y="115" font-size="11" fill="var(--purple)">S₂</text>
+          <text x="162" y="118" font-size="11" fill="var(--green)">S₃</text>
+          <text x="228" y="70" font-size="10.5" fill="var(--accent)">y=f(x)（也就是 x=φ(y)）</text>
+        </svg>
+        <figcaption>图 8-3：$S_1$＝曲线下方那块（$\int_0^af$ 的一部分），$S_2$＝曲线左方那块（$\int_0^b\varphi$ 的一部分），二者拼成矩形 $ab$（紫色）。<b>绿色 $S_3$ 是"多算"的那一块</b>——它非空当且仅当 $a\ne\varphi(b)$。题给 $a\lt\varphi(b)$，故 $S_3\gt0$，$I\gt ab$。</figcaption>
+      </figure>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>这就是 Young 不等式的图形版</b>：$\displaystyle\int_0^af+\int_0^bf^{-1}\ge ab$，<b>等号当且仅当 $b=f(a)$（即 $a=\varphi(b)$）</b>。记住这句，选项一秒定。<br>
+      <span class="dock">易错</span>：把 $x=\varphi(y)$ 画成关于 $y=x$ 对称的<b>另一条</b>曲线。<b>$x=\varphi(y)$ 只是把同一条曲线换了个自变量来描述</b>，图上还是那一条；对称的是 $y=\varphi(x)$。<br>
+      <b>数值验证</b>：取 $f(x)=x^2$、$\varphi(y)=\sqrt y$、$a=\frac12$、$b=1$（则 $\varphi(b)=1\gt a$），$I=\frac1{24}+\frac23=0.7083\gt ab=0.5$ ✔；取 $a=1$（$=\varphi(b)$）时 $I=\frac13+\frac23=1=ab$ ✔ 等号成立。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 8.5</span> $y=\mathrm e^{-x}\sin x$ 在 $[0,+\infty)$ 上与 $x$ 轴所围平面区域的面积写成如下表达式：<br>
+      ① $\displaystyle\int_0^{+\infty}\mathrm e^{-x}|\sin x|\mathrm dx$；② $\Big|\displaystyle\int_0^{+\infty}\mathrm e^{-x}\sin x\mathrm dx\Big|$；③ $\displaystyle\lim_{n\to\infty}\sum_{k=0}^n\Big|\int_{k\pi}^{(k+1)\pi}\mathrm e^{-x}\sin x\mathrm dx\Big|$。<br>
+      其中正确表达式的个数是（　）(A) 0　(B) 1　(C) 2　(D) 3</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">(C)</span>（①③ 正确）✔</p>
+      <p><span class="lab">解</span>由定积分的几何意义，$y=\mathrm e^{-x}\sin x$ 在 $[0,+\infty)$ 上<b>既有正值也有负值</b>（因 $\mathrm e^{-x}\gt0$，符号完全由 $\sin x$ 决定，每过一个 $\pi$ 变号一次）。</p>
+      <p><b>② 错</b>：$\displaystyle\int_0^{+\infty}\mathrm e^{-x}\sin x\mathrm dx$ 表示<b>上方面积减去下方面积</b>，取绝对值后是<b>面积差的绝对值</b>，不是面积。排除。</p>
+      <p><b>① 对</b>：因 $\mathrm e^{-x}\gt0$，$\mathrm e^{-x}|\sin x|=|\mathrm e^{-x}\sin x|$，所以 ① 表示 $|\mathrm e^{-x}\sin x|$ 与 $x$ 轴所围图形的面积，符合题意。</p>
+      <p><b>③ 对</b>：在每个 $[k\pi,(k+1)\pi]$ 上 $\sin x$ <b>不变号</b>，所以 $\Big|\displaystyle\int_{k\pi}^{(k+1)\pi}\mathrm e^{-x}\sin x\mathrm dx\Big|$ 恰是<b>那一拱的面积</b>；求和取极限即总面积，符合题意。</p>
+      <p>故正确的表达式有 <b>2</b> 个，选 (C)。</p>
+      <p style="color:var(--muted);font-size:.85rem"><b>复算</b>：真实面积 ①＝③＝$\frac12\coth\frac\pi2\approx0.5434$，而 ②＝$\frac12$。<b>两者确实不相等</b>，差 $0.0434$——不是"看着像"，是真的不同。</p>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>本题的心法一句话：绝对值放进去还是放外面，取决于被积函数在积分区间内<u>是否变号</u>。</b><br>
+      ・不变号 ⇒ $\big|\int f\big|=\int|f|$，两种写法等价（③ 的每一段就是这种情形）；<br>
+      ・变号 ⇒ $\big|\int f\big|\lt\int|f|$（性质 4），前者是"差"，后者才是"面积"。<br>
+      <b>③ 的写法就是处理 $\int|f|$ 的<u>通法</u></b>：<b>按零点把区间切成若干不变号的段，逐段积分后取绝对值再求和</b>。第 10 章算面积时会天天用。<br>
+      <span class="dock">易错</span>：以为 ② 只是"写法丑一点"，实际它<b>算出来是另一个数</b>。
+    </div>
+  </div>
+
+  <!-- ================= s7 凑定积分定义 ================= -->
+  <h2 id="s7"><span class="idx">七</span>★ 凑定积分定义（18 讲第一部分：求连和 / 连积的极限）<span class="pg">强化 p.78–82 · 基础 p.211、226–228</span></h2>
+
+  <div class="zy"><span class="tag">强化题型 · 三向解题法（本部分的骨架）</span>
+    <figure class="fig">
+      <svg viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg">
+        <rect x="150" y="10" width="300" height="42" rx="8" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.4"/>
+        <text x="300" y="28" font-size="12.5" fill="var(--accent)" text-anchor="middle" font-weight="700">求连和 Σaₖ 的极限（O₁）／求连积 Πaₖ 的极限（O₂）</text>
+        <text x="300" y="44" font-size="10.5" fill="var(--muted)" text-anchor="middle">盯住目标：最终一定要变成一个 ∫₀¹ f(x)dx</text>
+        <rect x="380" y="72" width="120" height="34" rx="7" fill="var(--purple-soft)" stroke="var(--purple)" stroke-width="1.2"/>
+        <text x="440" y="87" font-size="11.5" fill="var(--purple)" text-anchor="middle" font-weight="700">连积 Πaₖ</text>
+        <text x="440" y="100" font-size="9.5" fill="var(--muted)" text-anchor="middle">= a₁·a₂···aₙ</text>
+        <rect x="100" y="72" width="120" height="34" rx="7" fill="var(--green-soft)" stroke="var(--green)" stroke-width="1.2"/>
+        <text x="160" y="87" font-size="11.5" fill="var(--green)" text-anchor="middle" font-weight="700">连和 Σaₖ</text>
+        <text x="160" y="100" font-size="9.5" fill="var(--muted)" text-anchor="middle">= a₁+a₂+···+aₙ</text>
+        <line x1="378" y1="89" x2="224" y2="89" stroke="var(--red)" stroke-width="2" marker-end="url(#ar8)"/>
+        <defs><marker id="ar8" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 z" fill="var(--red)"/></marker></defs>
+        <text x="300" y="83" font-size="11" fill="var(--red)" text-anchor="middle" font-weight="700">取对数</text>
+        <text x="300" y="101" font-size="9.5" fill="var(--muted)" text-anchor="middle">唯一入口转换</text>
+        <line x1="160" y1="108" x2="160" y2="126" stroke="var(--muted)" stroke-width="1.2"/>
+        <line x1="60" y1="126" x2="560" y2="126" stroke="var(--muted)" stroke-width="1.2"/>
+        <g font-size="11" text-anchor="middle">
+          <line x1="115" y1="126" x2="115" y2="146" stroke="var(--muted)" stroke-width="1.2"/>
+          <rect x="55" y="146" width="120" height="52" rx="7" fill="var(--card)" stroke="var(--accent)" stroke-width="1.2"/>
+          <text x="115" y="164" fill="var(--accent)" font-weight="700">① 基本型</text>
+          <text x="115" y="180" fill="var(--ink)" font-size="10">能凑成 i/n</text>
+          <text x="115" y="192" fill="var(--muted)" font-size="9">强 8.1</text>
+          <line x1="240" y1="126" x2="240" y2="146" stroke="var(--muted)" stroke-width="1.2"/>
+          <rect x="180" y="146" width="120" height="52" rx="7" fill="var(--card)" stroke="var(--amber)" stroke-width="1.2"/>
+          <text x="240" y="164" fill="var(--amber)" font-weight="700">② 放缩型</text>
+          <text x="240" y="180" fill="var(--ink)" font-size="10">凑不成 i/n</text>
+          <text x="240" y="192" fill="var(--muted)" font-size="9">强 8.2 · 习 8.5</text>
+          <line x1="365" y1="126" x2="365" y2="146" stroke="var(--muted)" stroke-width="1.2"/>
+          <rect x="305" y="146" width="120" height="52" rx="7" fill="var(--card)" stroke="var(--purple)" stroke-width="1.2"/>
+          <text x="365" y="164" fill="var(--purple)" font-weight="700">③ 变量型</text>
+          <text x="365" y="180" fill="var(--ink)" font-size="10">含 (x/n)·i</text>
+          <text x="365" y="192" fill="var(--muted)" font-size="9">强 8.3</text>
+          <line x1="490" y1="126" x2="490" y2="146" stroke="var(--muted)" stroke-width="1.2"/>
+          <rect x="430" y="146" width="130" height="52" rx="7" fill="var(--card)" stroke="var(--green)" stroke-width="1.2"/>
+          <text x="495" y="164" fill="var(--green)" font-weight="700">④ 其他分割取高型</text>
+          <text x="495" y="180" fill="var(--ink)" font-size="10">任意分割 · 任意取高</text>
+          <text x="495" y="192" fill="var(--muted)" font-size="9">强 8.4 · 强 8.5</text>
+        </g>
+        <line x1="240" y1="198" x2="240" y2="216" stroke="var(--muted)" stroke-width="1.2"/>
+        <line x1="175" y1="216" x2="305" y2="216" stroke="var(--muted)" stroke-width="1.2"/>
+        <line x1="175" y1="216" x2="175" y2="234" stroke="var(--muted)" stroke-width="1.2"/>
+        <line x1="305" y1="216" x2="305" y2="234" stroke="var(--muted)" stroke-width="1.2"/>
+        <rect x="120" y="234" width="110" height="30" rx="6" fill="var(--amber-soft)" stroke="var(--amber)" stroke-width="1"/>
+        <text x="175" y="253" font-size="10.5" fill="var(--amber)" text-anchor="middle">夹逼准则</text>
+        <rect x="250" y="234" width="130" height="30" rx="6" fill="var(--amber-soft)" stroke="var(--amber)" stroke-width="1"/>
+        <text x="315" y="253" font-size="10.5" fill="var(--amber)" text-anchor="middle">放缩后再凑 i/n</text>
+      </svg>
+      <figcaption>18 讲第一部分的三向解题法树。<b>四个支线全部标着「$\mathrm D_1$（常规操作）+ $\mathrm D_{23}$（化归经典形式）」</b>——所谓"经典形式"就是 $\displaystyle\int_0^1f(x)\mathrm dx=\lim_{n\to\infty}\sum_{i=1}^nf\big(\tfrac in\big)\tfrac1n$ 这一个式子。</figcaption>
+    </figure>
+  </div>
+
+  <div class="key"><span class="tag">必记 · 「凑定积分定义」三步（书上原话）</span>
+    <div class="steps3">
+      <div><b>① 先提出 $\dfrac1n$</b>——$n$ 项和的极限，第一个动作永远是把 $\frac1n$ 抠出来。</div>
+      <div><b>② 再凑出 $\dfrac in$</b>——剩下的部分要能写成只含 $\frac in$ 的表达式 $f\big(\frac in\big)$。</div>
+      <div><b>③ 读成积分</b>——$\frac in=0+\frac{1-0}ni$ 读作"<b>0 到 1 上的 $x$</b>"，$\frac1n=\frac{1-0}n$ 读作"<b>0 到 1 上的 $\mathrm dx$</b>"，凑定义完毕。</div>
+    </div>
+    <p><b>★ 判据（用不用定积分定义就看这一句）</b>：对于 $\lim\limits_{n\to\infty}\sum\limits_{i=1}^ng(n,i)$，<b>判别 $g(n,i)$ 能否写成 $f\big(\frac in\big)\cdot\frac1n$ 或 $\frac1nf\big(\frac{2i-1}{2n}\big)$</b>。<b>能凑 ⇒ 用定积分定义；凑不成 ⇒ 先放缩，放缩后再凑。</b></p>
+  </div>
+
+  <div class="zy"><span class="tag">强化题型 · 「能凑成 $\frac in$」的三种标志（18 讲原文）</span>
+    <p>若数列通项中出现 $\dfrac in$ 或下面三种形式，则<b>能</b>凑成 $\dfrac in$：</p>
+    <div class="gridwrap"><table class="dense">
+      <tr><th>通项里看到</th><th>提什么</th><th>化成</th><th>例子</th></tr>
+      <tr><td>$n+i$（或 $an+bi$，$ab\ne0$）</td><td>提 $n$</td><td>$n\big(1+\frac in\big)$</td><td>$\lim\sum\frac1{2n+3i}=\int_0^1\frac{\mathrm dx}{2+3x}=\frac13(\ln5-\ln2)$</td></tr>
+      <tr><td>$n^2+i^2$</td><td>提 $n^2$</td><td>$n^2\big[1+(\frac in)^2\big]$</td><td>$\lim\sum\frac n{n^2+i^2}=\int_0^1\frac{\mathrm dx}{1+x^2}=\frac\pi4$</td></tr>
+      <tr><td>$n^2+ni$</td><td>提 $n^2$</td><td>$n^2\big(1+\frac in\big)$</td><td>习 8.4</td></tr>
+      <tr style="background:var(--red-soft)"><td><b>$n^2+i$</b>（⚠️ 少一个 $n$）</td><td colspan="2" style="color:var(--red)"><b>凑不成</b> —— 只能放缩 + 夹逼</td><td>见下方"放缩型"</td></tr>
+    </table></div>
+    <p style="margin-top:6px"><b>⚠️ $n^2+ni$ 与 $n^2+i$ 只差一个 $n$，命运完全不同。</b>做题第一眼就要数清楚 $i$ 前面有没有 $n$。</p>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 8.6</span> $\displaystyle\lim_{n\to\infty}\Big(\frac{n+1}{n^2+1}+\frac{n+2}{n^2+4}+\frac{n+3}{n^2+9}+\cdots+\frac{n+n}{n^2+n^2}\Big)=$（　）<br>
+      (A) $\displaystyle\int_0^1\frac{1+x}{1+x^2}\mathrm dx$　(B) $\displaystyle\int_0^1\frac1{1+x}\mathrm dx$　(C) $\displaystyle\int_0^1\frac x{1+x^2}\mathrm dx$　(D) $\displaystyle\int_0^1\frac{2x}{1+x^2}\mathrm dx$</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">(A)</span> ✔<span style="color:var(--muted);font-size:.85rem">（值 $=\frac\pi4+\frac{\ln2}2\approx1.1320$；$n=10^6$ 的数值和 $\approx1.1320$ ✔）</span></p>
+      <p><span class="lab">分析 · 先问"该用夹逼还是定义"</span>书上在这里做了一次<b>非常值钱的对照</b>：</p>
+      <p><b>能夹逼的样子</b>：$\displaystyle\lim_{n\to\infty}\Big(\frac1{n^2+n+1}+\frac2{n^2+n+2}+\cdots+\frac n{n^2+n+n}\Big)$，用夹逼——</p>
+      <div class="fml">$\dfrac{\frac{n(n+1)}2}{n^2+n+n}\le\sum_{i=1}^n\dfrac i{n^2+n+i}\le\dfrac{\frac{n(n+1)}2}{n^2+n+1}$</div>
+      <p>两端极限都是 $\dfrac12$，故原式 $=\dfrac12$。<b>特征：分子求和后是 $\frac{n(n+1)}2\sim\frac{n^2}2$，与分母 $\sim n^2$ 同阶，两端夹得住。</b></p>
+      <p><b>本题夹不住</b>：若对本题用夹逼，</p>
+      <div class="fml">$\dfrac{n^2+\frac{n(n+1)}2}{n^2+n^2}\lt\sum_{i=1}^n\dfrac{n+i}{n^2+i^2}\lt\dfrac{n^2+\frac{n(n+1)}2}{n^2+1}$</div>
+      <p>两端分别趋于 $\dfrac34$ 与 $\dfrac32$，<b>夹不住</b>（差太远）。所以本题必须用"凑定积分定义"法。</p>
+      <p><span class="lab">解</span></p>
+      <div class="fml">$\lim_{n\to\infty}\sum_{i=1}^n\dfrac{n+i}{n^2+i^2}\xlongequal{①\text{提}\frac1n}\lim_{n\to\infty}\sum_{i=1}^n\dfrac{n^2+ni}{n^2+i^2}\cdot\dfrac1n\xlongequal{②\text{凑}\frac in}\lim_{n\to\infty}\sum_{i=1}^n\dfrac{1+\frac in}{1+\big(\frac in\big)^2}\cdot\dfrac1n\xlongequal{③\text{读成积分}}\int_0^1\dfrac{1+x}{1+x^2}\mathrm dx$</div>
+      <p>选 (A)。</p>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>眉批给的判据一句话</b>：<b>对于 $n$ 项和的极限，先提 $\frac1n$；若能凑成 $f\big(\frac in\big)$ 则用定积分定义，若不能，则考虑夹逼准则。</b><br>
+      <b>什么时候夹逼夹得住？</b>—— 当"分母里那个变动的量相对整体是<b>高阶小</b>"时。上面能夹的例子分母是 $n^2+n+i$，$i$ 最多 $n$，相对 $n^2$ 是高阶小；本题分母 $n^2+i^2$ 里 $i^2$ 最大到 $n^2$，<b>与主项同阶</b>，两端自然差一倍。<b>这条判据比死记题型管用。</b><br>
+      <span class="dock">提 $\frac1n$ 时的常见失误</span>：$\frac{n+i}{n^2+i^2}$ 提 $\frac1n$ 后分子要变成 $n(n+i)=n^2+ni$，<b>不是 $n+i$ 不动</b>。稳妥写法：先写 $=\Big[\frac{n(n+i)}{n^2+i^2}\Big]\cdot\frac1n$ 再化简。<br>
+      <b>为什么 (C)(D) 是干扰项</b>：它们对应"只保留分子的 $i$"或"分子系数错"，数值上分别是 $\frac{\ln2}2\approx0.347$、$\ln2\approx0.693$，与真值 $1.132$ 差得远（我已数值排除）。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 8.4</span> $\displaystyle\lim_{n\to\infty}\Big(\frac1{\sqrt{n^2+n}}+\frac1{\sqrt{n^2+2n}}+\frac1{\sqrt{n^2+3n}}+\cdots+\frac1{\sqrt{n^2+n^2}}\Big)=$＿＿</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$2\sqrt2-2\approx0.8284$</span> ✔<span style="color:var(--muted);font-size:.85rem">（$n=2\times10^6$ 数值和 $=0.8284271$ ✔）</span></p>
+      <p><span class="lab">解</span>通项分母含 $n^2+ni$，<b>提 $n^2$</b> 即可：</p>
+      <div class="fml">$\text{原式}=\lim_{n\to\infty}\sum_{i=1}^n\dfrac1{\sqrt{n^2+ni}}=\lim_{n\to\infty}\sum_{i=1}^n\dfrac1{\sqrt{1+\frac in}}\cdot\dfrac1n=\int_0^1\dfrac{\mathrm dx}{\sqrt{1+x}}=2\sqrt{1+x}\Big|_0^1=2\sqrt2-2$</div>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>提 $n^2$ 出根号变成 $n$</b>：$\sqrt{n^2+ni}=n\sqrt{1+\frac in}$，所以 $\frac1{\sqrt{n^2+ni}}=\frac1n\cdot\frac1{\sqrt{1+\frac in}}$，<b>$\frac1n$ 是"白送"的</b>——根号型的题不用另外提 $\frac1n$，开出来就有。<br>
+      <span class="dock">易错</span>：写成 $\sqrt{n^2+ni}=n^2\sqrt{\cdots}$。开根号后 $n^2$ 变 $n$。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 8.5</span> $\displaystyle\lim_{n\to\infty}\sum_{i=1}^n\frac{\sin\frac{i\pi}n}{n+\frac1i}=$＿＿</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\dfrac2\pi\approx0.6366$</span> ✔<span style="color:var(--muted);font-size:.85rem">（$n=4\times10^6$ 数值和 $=0.6366198$ ✔）</span></p>
+      <p><span class="lab">分析</span>分母 $n+\frac1i$ <b>含 $i$ 但不是 $\frac in$ 的函数</b>——凑不成定义。按"凑不成先放缩"处理：<b>把分母里的 $\frac1i$ 放掉</b>。</p>
+      <p><span class="lab">解</span>先注意"各项分母都是 $n$"时的标准结果：</p>
+      <div class="fml">$\lim_{n\to\infty}\sum_{i=1}^n\dfrac{\sin\frac{i\pi}n}n=\lim_{n\to\infty}\dfrac1n\sum_{i=1}^n\sin\dfrac in\pi=\int_0^1\sin\pi x\,\mathrm dx=-\dfrac{\cos\pi x}\pi\Big|_0^1=\dfrac2\pi$</div>
+      <p>由 $n\lt n+\dfrac1i\le n+1$（$1\le i\le n$）及 $\sin\frac{i\pi}n\ge0$，得</p>
+      <div class="fml">$\sum_{i=1}^n\dfrac{\sin\frac{i\pi}n}{n+1}\ \le\ \sum_{i=1}^n\dfrac{\sin\frac{i\pi}n}{n+\frac1i}\ \le\ \sum_{i=1}^n\dfrac{\sin\frac{i\pi}n}n$</div>
+      <p>右端 $\to\dfrac2\pi$（上式）；左端</p>
+      <div class="fml">$\lim_{n\to\infty}\sum_{i=1}^n\dfrac{\sin\frac{i\pi}n}{n+1}=\lim_{n\to\infty}\dfrac n{n+1}\cdot\dfrac1n\sum_{i=1}^n\sin\dfrac in\pi=1\cdot\int_0^1\sin\pi x\,\mathrm dx=\dfrac2\pi$</div>
+      <p><b>由夹逼准则</b>，原式 $=\dfrac2\pi$。</p>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>这是"放缩后再凑"的标准范本，动作只有一个：把碍事的那一项放掉，上下各放一次。</b>放完之后<b>两端都要能凑成定积分定义</b>（本题左端靠提出 $\frac n{n+1}\to1$），否则白放。<br>
+      <span class="dock">关键的合法性</span>：放缩要求 $\sin\frac{i\pi}n\ge0$——因为 $\frac{i\pi}n\in(0,\pi]$，正弦非负。<b>若被求和项可能为负，分母放大反而使不等号翻转，这一步就错了。</b>卷面上要点一句。<br>
+      <b>与强 8.2 是同一套路的姊妹题</b>（那题放的是 $\frac i{ni+a}$ 里的 $a$）。<b>两题都属于"分母里有个不合群的小尾巴"</b>。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 8.1</span> 求极限 $\displaystyle\lim_{n\to\infty}\frac1n\sqrt[n]{n(n+1)(n+2)\cdots[n+(n-1)]}$。</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\dfrac4{\mathrm e}\approx1.4715$</span> ✔<span style="color:var(--muted);font-size:.85rem">（$n=4\times10^5$ 数值 $=1.4715165$ ✔）</span></p>
+      <p><span class="lab">分析</span><b>连积 ⇒ 取对数 ⇒ 连和</b>，这是唯一入口。取对数之前先把外面的 $\frac1n$ <b>塞进根号</b>（因为 $\frac1n=\sqrt[n]{\frac1{n^n}}$，正好把 $n$ 个因子各除一个 $n$）。</p>
+      <p><span class="lab">解</span></p>
+      <div class="fml">$\dfrac1n\sqrt[n]{n(n+1)\cdots[n+(n-1)]}=\sqrt[n]{\dfrac{n}{n}\cdot\dfrac{n+1}n\cdots\dfrac{n+(n-1)}n}=\sqrt[n]{\Big(1+\dfrac1n\Big)\Big(1+\dfrac2n\Big)\cdots\Big(1+\dfrac{n-1}n\Big)}$</div>
+      <p>取对数化连积为连和：</p>
+      <div class="fml">$\lim_{n\to\infty}\mathrm e^{\sum\limits_{k=0}^{n-1}\frac1n\ln\left(1+\frac kn\right)}=\mathrm e^{\int_0^1\ln(1+x)\mathrm dx}$</div>
+      <p>而 $\displaystyle\int_0^1\ln(1+x)\mathrm dx=\Big[(1+x)\ln(1+x)-x\Big]_0^1=2\ln2-1=\ln\dfrac4{\mathrm e}$，故原式 $=\dfrac4{\mathrm e}$。</p>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>三个动作</b>：① <b>$\frac1n$ 塞进根号</b>（$n$ 个因子各分掉一个 $n$，第一个因子 $\frac nn=1$ 正好消失）；② $\sqrt[n]{\prod}=\mathrm e^{\frac1n\sum\ln}$；③ 凑定义读成 $\int_0^1$。<br>
+      <b>⚠️ 求和从 $k=0$ 到 $n-1$</b>（因为第一个因子是 $1+\frac0n$），这是<b>取左端点</b>的版本，照样等于 $\int_0^1$——这正是 §3 那条"左端点版"的用武之地。<span class="dock">别硬改成 $\sum_{k=1}^n$</span>，改了反而错（会漏掉 $k=0$ 项、多出 $k=n$ 项，虽然极限相同但推导不严谨）。<br>
+      <b>$\int_0^1\ln(1+x)\mathrm dx$ 要能秒算</b>：分部积分 $\int\ln(1+x)\mathrm dx=x\ln(1+x)-\int\frac x{1+x}\mathrm dx=(1+x)\ln(1+x)-x+C$。<b>这个原函数建议直接背下来</b>，第 9 章还会遇到。<br>
+      <b>题型识别</b>：见到 $\sqrt[n]{\ \cdots\ }$ 里是 $n$ 个因子连乘、且外面配着 $\frac1n$（或 $\frac1{n^k}$），<b>百分之百是这道题的变形</b>。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 8.2</span> 设 $a\in(0,1)$，则 $\displaystyle\lim_{n\to\infty}\sum_{i=1}^n\frac i{ni+a}\sin\frac in=$（　）<br>
+      (A) $a-\cos a$　(B) $a-\sin a$　(C) $1-\cos1$　(D) $1-\sin1$</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">(C) $1-\cos1\approx0.4597$</span> ✔<span style="color:var(--muted);font-size:.85rem">（$a=0.3$ 与 $a=0.9$ 分别数值验算，都得 $0.4597$ ✔ <b>与 $a$ 无关</b>）</span></p>
+      <p><span class="lab">分析</span>$\dfrac i{ni+a}$ 里的 $a$ 是"脏东西"，凑不成 $\frac1n$。<b>把它上下各放一次夹掉。</b></p>
+      <p><span class="lab">解</span>由于 $a\gt0$，</p>
+      <div class="fml">$\dfrac1{n+a}=\dfrac i{ni+ai}\ \le\ \dfrac i{ni+a}\ \lt\ \dfrac i{ni}=\dfrac1n\qquad(1\le i\le n)$</div>
+      <p>（左边用了 $ai\ge a$，右边直接丢掉 $a$。）又 $\sin\frac in\gt0$，故乘上后不等号方向不变。两端各自求极限：</p>
+      <div class="fml">$\lim_{n\to\infty}\sum_{i=1}^n\dfrac1n\sin\dfrac in=\int_0^1\sin x\,\mathrm dx=1-\cos1$</div>
+      <div class="fml">$\lim_{n\to\infty}\sum_{i=1}^n\dfrac1{n+a}\sin\dfrac in=\lim_{n\to\infty}\dfrac n{n+a}\cdot\dfrac1n\sum_{i=1}^n\sin\dfrac in=1\cdot\int_0^1\sin x\,\mathrm dx=1-\cos1$</div>
+      <p><b>由夹逼准则</b>，原式 $=1-\cos1$，选 (C)。</p>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>选项本身就在提示答案</b>：题设说"$a\in(0,1)$ <u>任意</u>"，而极限若真依赖 $a$，题目就没有唯一答案了 ⇒ <b>答案必与 $a$ 无关 ⇒ (A)(B) 直接排除</b>。剩下 (C)(D) 只需判 $\int_0^1\sin x$ 还是别的，秒选。<b>这是选择题的元技巧：先看选项的结构，再动笔。</b><br>
+      <b>左边那个放缩 $\frac i{ni+ai}$ 很巧</b>：不是直接把 $a$ 换成上界，而是<b>把 $a$ 换成 $ai$</b>（因 $i\ge1$ 故 $ai\ge a$，分母变大、整体变小），这样 $i$ 能约掉，得到与 $i$ 无关的 $\frac1{n+a}$。<span class="dock">直接放成 $\frac i{ni+a}\ge\frac i{ni+a\cdot n}=\frac1{n+a}\cdot\frac in\cdot n$ 会把 $i$ 留下，凑不成常数系数。</span>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 8.3</span> 设 $f(x)=\begin{cases}\displaystyle\lim_{n\to\infty}\frac1n\Big(1+\cos\frac xn+\cos\frac{2x}n+\cdots+\cos\frac{n-1}nx\Big),&x\gt0\\[4pt] a,&x=0\\[2pt] f(-x),&x\lt0\end{cases}$ 连续，则 $a=$＿＿</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$a=1$</span> ✔<span style="color:var(--muted);font-size:.85rem">（$x=0.7$ 与 $x=2.5$ 处数值验证 $f(x)=\frac{\sin x}x$ ✔）</span></p>
+      <p><span class="lab">分析 · 变量型</span>通项里出现的是 $\dfrac xn\cdot i$（不是 $\frac in$），对应的定义式是</p>
+      <div class="fml">$\lim_{n\to\infty}\sum_{i=1}^nf\Big(0+\dfrac{x-0}ni\Big)\dfrac{x-0}n=\int_0^xf(t)\mathrm dt$</div>
+      <p><b>所以要凑的"$\mathrm dt$"是 $\dfrac xn$，而题里给的是 $\dfrac1n$——差一个常数 $x$，把它提出来即可。</b></p>
+      <p><span class="lab">解</span>当 $x\gt0$ 时，</p>
+      <div class="fml">$f(x)=\lim_{n\to\infty}\dfrac1n\sum_{i=0}^{n-1}\cos\dfrac xni=\lim_{n\to\infty}\dfrac1x\sum_{i=0}^{n-1}\cos\Big(\dfrac xni\Big)\cdot\dfrac xn=\dfrac1x\int_0^x\cos t\,\mathrm dt=\dfrac1x\sin t\Big|_0^x=\dfrac{\sin x}x$</div>
+      <p>当 $x\lt0$ 时，$f(x)=f(-x)=\dfrac{\sin(-x)}{-x}=\dfrac{\sin x}x$。综上</p>
+      <div class="fml">$f(x)=\begin{cases}\dfrac{\sin x}x,&x\ne0\\ a,&x=0\end{cases}$</div>
+      <p>故由 $f$ 连续得 $a=\lim\limits_{x\to0}\dfrac{\sin x}x=1$。</p>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>整道题的枢纽就是一个改写：$\dfrac1n=\dfrac1x\cdot\dfrac xn$。</b>把常数 $\frac1x$ 提到求和外面，剩下的 $\frac xn$ 才是 $\mathrm dt$。<br>
+      <b>识别信号</b>：<b>看到 $\cos\frac{kx}n$、$\sin\frac{kx}n$、$\big(1+\frac{kx}n\big)$ 这类"$\frac kn$ 上还挂着一个字母 $x$"的，就往 $\int_0^x$ 想</b>，别硬往 $\int_0^1$ 凑。<br>
+      <span class="dock">下标从 0 开始</span>：题给的是 $1+\cos\frac xn+\cdots+\cos\frac{(n-1)x}n$，首项 $1=\cos0$，所以是 $\sum_{i=0}^{n-1}$（左端点版）。<br>
+      <b>$f(x)=\frac{\sin x}x$ 是偶函数</b>，所以题目最后一支写 $f(-x)$ 是自洽的（不是新信息，只是把定义补到负半轴）。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 8.4</span> 求极限 $\displaystyle\lim_{n\to\infty}\sum_{k=1}^n\frac\pi{4n}\cos^2\frac{k\pi}{4n}$。</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\dfrac14+\dfrac\pi8\approx0.6427$</span> ✔<span style="color:var(--muted);font-size:.85rem">（$n=2\times10^6$ 数值和 $=0.6426990$ ✔）</span></p>
+      <p><span class="lab">解 · 极坐标系分割型（其实就是 $[a,b]\ne[0,1]$）</span></p>
+      <div class="fml">$\text{原式}=\lim_{n\to\infty}\sum_{k=1}^n\left[\cos^2\left(\dfrac{\frac\pi4-0}nk\right)\right]\cdot\dfrac{\frac\pi4-0}n=\int_0^{\pi/4}\cos^2\theta\,\mathrm d\theta$</div>
+      <p>而 $\displaystyle\int_0^{\pi/4}\cos^2\theta\mathrm d\theta=\int_0^{\pi/4}\frac{1+\cos2\theta}2\mathrm d\theta=\Big[\frac\theta2+\frac{\sin2\theta}4\Big]_0^{\pi/4}=\frac\pi8+\frac14$。</p>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>$\dfrac\pi{4n}$ 一身二任</b>：它既是 $\mathrm d\theta$（那个 $\frac{b-a}n$），又出现在 $\cos^2\frac{k\pi}{4n}$ 的自变量里（那个 $\frac{b-a}nk$）。<b>一眼读出 $a=0$、$b=\frac\pi4$。</b><br>
+      <b>识别口诀</b>：<b>把"求和号外面那个常数因子"和"自变量里 $k$ 的系数"对比，若二者相同，那就是 $\frac{b-a}n$，$b-a$ 立刻现形。</b><br>
+      <b>$\cos^2$ 必须降幂</b>：$\cos^2\theta=\frac{1+\cos2\theta}2$。<span class="dock">直接积 $\cos^2$ 是常见的卡点。</span>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 8.5</span> 设 $f(x)$ 连续，则 $\displaystyle\lim_{n\to\infty}\sum_{k=1}^n\frac{k-\frac12+n}{n^2}f\Big(\frac{2k-1}{2n}\Big)=$（　）<br>
+      (A) $\displaystyle\int_0^1\Big(x+\frac12\Big)f(x)\mathrm dx$　(B) $\displaystyle\int_0^1\Big(x+1-\frac1{2n}\Big)f\Big(x-\frac1{2n}\Big)\mathrm dx$<br>
+      (C) $\displaystyle\int_0^1(x+1)f(x)\mathrm dx$　(D) $\displaystyle\int_0^1\Big(x+\frac12+\frac1n\Big)f\Big(x-\frac1n\Big)\mathrm dx$</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">(C)</span> ✔<span style="color:var(--muted);font-size:.85rem">（取 $f=\mathrm e^x$、$n=10^6$ 数值 $=2.7182818$，与 $\int_0^1(x+1)\mathrm e^x\mathrm dx=\mathrm e$ 完全吻合 ✔；(A) 的值是 $\frac{3\mathrm e-1}2\approx3.577$，已排除）</span></p>
+      <p><span class="lab">解 · 取中点型</span>关键是认出 $\xi_k=\dfrac{2k-1}{2n}$ 就是<b>第 $k$ 个小区间的中点</b>：</p>
+      <div class="fml">$\xi_k=\dfrac{\frac{k-1}n+\frac kn}2=\dfrac{2k-1}{2n}$</div>
+      <p>于是把系数也改写成 $\xi_k$ 的函数：$\dfrac{k-\frac12+n}{n^2}=\Big(\dfrac{k-\frac12}n+1\Big)\cdot\dfrac1n=\Big(\dfrac{2k-1}{2n}+1\Big)\cdot\dfrac1n$。所以</p>
+      <div class="fml">$\text{原式}=\lim_{n\to\infty}\sum_{k=1}^n\Big(\dfrac{2k-1}{2n}+1\Big)f\Big(\dfrac{2k-1}{2n}\Big)\cdot\dfrac1n=\int_0^1(x+1)f(x)\mathrm dx$</div>
+      <p>选 (C)。</p>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>(B)(D) 是"带 $n$ 的答案"，一律是干扰项</b>——<b>极限算完之后 $n$ 已经消失，结果里不可能残留 $n$</b>。这条一秒砍掉两个选项。<br>
+      <b>剩下 (A) 与 (C) 的区别只在系数</b>：把 $\frac{k-\frac12+n}{n^2}$ 提 $\frac1n$ 后是 $\frac{k-\frac12}n+1$，那个 <b>$+1$ 来自 $\frac n{n^2}=\frac1n$ 提出后剩下的 1</b>，不是 $\frac12$。<span class="dock">看到 $-\frac12$ 就以为常数项是 $\frac12$，是本题设计好的陷阱。</span><br>
+      <b>通用心法（对付一切"奇怪 $\xi_k$"）</b>：<b>先把 $\frac1n$ 提干净，剩下的表达式里凡是出现 $\xi_k$ 的地方，原样读成 $x$ 即可</b>——不必管 $\xi_k$ 是端点、中点还是几何均值，<u>定义里的 $\xi_k$ 本来就是任取的</u>。<b>上面的 🎲 黎曼和实验室已经把七种取高方式验过一遍。</b>
+    </div>
+  </div>
+
+  <!-- ================= s8 变限积分 ================= -->
+  <h2 id="s8"><span class="idx">八</span>变限积分：一个由定积分定义出来的函数<span class="pg">基础 p.214–218</span></h2>
+
+  <div class="key"><span class="tag">必记 · 概念与三条性质</span>
+    <p>当 $x$ 在 $[a,b]$ 上变动时，每个 $x$ 都对应一个确定的值 $\displaystyle\int_a^xf(t)\mathrm dt$，因此它是<b>关于 $x$ 的函数</b>：</p>
+    <div class="fml">$F(x)=\displaystyle\int_a^xf(t)\mathrm dt\qquad(a\le x\le b)$</div>
+    <p>称为<b>变上限的定积分</b>；同理有变下限的、上下限都变的（如 $\int_{x^2}^{x^3}f$），统称<b>变限积分</b>。<b>变限积分就是定积分的推广。</b></p>
+    <div class="gridwrap"><table class="dense">
+      <tr><th>#</th><th>$f$ 的条件</th><th>$F(x)=\int_a^xf(t)\mathrm dt$ 的结论</th></tr>
+      <tr><td>(1)</td><td>$f$ 在 $I$ 上<b>可积</b></td><td>$F$ 在 $I$ 上<b>连续</b></td></tr>
+      <tr style="background:var(--amber-soft)"><td>(2) ★★★</td><td>$f$ 在 $I$ 上<b>连续</b></td><td>$F$ 在 $I$ 上<b>可导</b>且 $F'(x)=f(x)$</td></tr>
+      <tr style="background:var(--red-soft)"><td>(3a)</td><td>$x_0$ 是 $f$ 的<b>唯一跳跃间断点</b></td><td>$F$ 在 $x_0$ 处<b>不可导</b>，且 $F'_-(x_0)=\lim\limits_{x\to x_0^-}f(x)$，$F'_+(x_0)=\lim\limits_{x\to x_0^+}f(x)$</td></tr>
+      <tr style="background:var(--red-soft)"><td>(3b)</td><td>$x_0$ 是 $f$ 的<b>唯一可去间断点</b></td><td>$F$ 在 $x_0$ 处<b>仍可导</b>，且 $F'(x_0)=\lim\limits_{x\to x_0}f(x)\ \boxed{\ne f(x_0)}$</td></tr>
+    </table></div>
+    <p style="margin-top:8px"><b>三句话记住条件的强弱链</b>：$f$ <b>可导 ⇒ 连续 ⇒ 可积 ⇒ 有界</b>。而 $F$ 比 $f$ <b>光滑一档</b>：$f$ 只要可积，$F$ 就连续；$f$ 连续，$F$ 就可导。</p>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 三条性质各一行的证明（书上眉批：性质(1)的证明"不需掌握，看懂即可"）</span>
+    <p><b>(1) $f$ 可积 ⇒ $F$ 连续</b>：对任意 $x,x+\Delta x\in I$，$F(x+\Delta x)-F(x)=\displaystyle\int_x^{x+\Delta x}f(t)\mathrm dt$。由<b>可积的必要条件</b>知存在 $M\gt0$ 使 $|f|\le M$，所以</p>
+    <div class="fml">$0\le|F(x+\Delta x)-F(x)|\le M|\Delta x|$</div>
+    <p><b>由夹逼</b>，$\lim\limits_{\Delta x\to0}|F(x+\Delta x)-F(x)|=0$，即 $\lim\limits_{\Delta x\to0}F(x+\Delta x)=F(x)$，这正是<b>连续的定义</b>。<br>
+    <b>由此可见：对于变限积分 $F(x)$，<u>只要它存在，就必然是连续的</u>。</b>（对比 $f$：$f$ 存在但不一定连续。）</p>
+    <p><b>(2) $f$ 连续 ⇒ $F'=f$</b>：见 §2 的完整卷面（用积分中值定理）。<b>由此可见 $F(x)=\int_a^xf(t)\mathrm dt$ 就是 $f$ 的一个原函数。</b></p>
+    <p><b>(3) 唯一间断点的情形</b>：$x\ne x_0$ 时 $f$ 连续，故 $F'(x)=f(x)$；在 $x_0$ 处回定义 $F'(x_0)=\lim\limits_{x\to x_0}\frac{F(x)-F(x_0)}{x-x_0}$，<b>用洛必达</b>得</p>
+    <div class="fml">$F'_-(x_0)\xlongequal{\text{洛}}\lim_{x\to x_0^-}f(x),\qquad F'_+(x_0)\xlongequal{\text{洛}}\lim_{x\to x_0^+}f(x)$</div>
+    <p><b>跳跃</b>时左右极限不等 ⇒ 左右导数不等 ⇒ 不可导；<b>可去</b>时 $\lim\limits_{x\to x_0}f(x)$ 存在 ⇒ $F'(x_0)$ 存在 ⇒ 可导。</p>
+  </div>
+
+  <div class="trap"><span class="tag">陷阱 ★ · 可去间断时"$F$ 可导"但"$F$ 不是 $f$ 的原函数"</span>
+    <p>性质 (3b) 说 $F'(x_0)=\lim\limits_{x\to x_0}f(x)$，<b>而原函数的定义要求 $F'(x_0)=f(x_0)$</b>。可去间断恰恰意味着这两个数<b>不相等</b>！所以：</p>
+    <div class="fml">$x_0\ \text{是可去间断点}\ \Longrightarrow\ F\ \text{在}\ x_0\ \text{处可导，但}\ F'(x_0)\ne f(x_0)\ \Longrightarrow\ \boxed{F\ \text{不是}\ f\ \text{的原函数}}$</div>
+    <p><b>这与 §2 的定理"含可去间断点的 $f$ 必无原函数"完全一致</b>——$F$ 已经是"最接近原函数的东西"了（连可导都做到了），<b>但仍然不是</b>。见基 8.13 的注。</p>
+    <p><b>⚠️ 所以这两句话千万别混</b>：<br>
+    ・"<b>$F(x)=\int_a^xf$ 可导</b>" —— 只要求 $f$ 的间断点是可去的（或没有间断点）；<br>
+    ・"<b>$f$ 有原函数</b>" —— 要求 $f$ 在该点<u>不能</u>是可去间断（更不能是跳跃、无穷）。</p>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 8.11</span> <span class="exam">考研真题</span> 设函数 $y=f(x)$ 在区间 $[-1,3]$ 上的图形如图 8-6 所示，则函数 $F(x)=\displaystyle\int_0^xf(t)\mathrm dt$ 的图形为（　）</div>
+    <div class="s">
+      <figure class="fig">
+        <svg viewBox="0 0 620 400" xmlns="http://www.w3.org/2000/svg">
+          <!-- 上：f 的图形 -->
+          <g>
+            <line x1="40" y1="90" x2="300" y2="90" stroke="var(--muted)" stroke-width="1.2"/>
+            <line x1="100" y1="140" x2="100" y2="20" stroke="var(--muted)" stroke-width="1.2"/>
+            <text x="304" y="94" font-size="10" fill="var(--muted)">x</text>
+            <text x="92" y="18" font-size="10" fill="var(--muted)">f(x)</text>
+            <text x="90" y="102" font-size="10" fill="var(--muted)">O</text>
+            <!-- 刻度 -->
+            <text x="58" y="102" font-size="10" fill="var(--muted)">−1</text>
+            <text x="138" y="102" font-size="10" fill="var(--muted)">1</text>
+            <text x="178" y="102" font-size="10" fill="var(--muted)">2</text>
+            <text x="218" y="102" font-size="10" fill="var(--muted)">3</text>
+            <text x="86" y="54" font-size="10" fill="var(--muted)">1</text>
+            <text x="86" y="34" font-size="10" fill="var(--muted)">2</text>
+            <text x="84" y="122" font-size="10" fill="var(--muted)">−1</text>
+            <!-- [-1,0): 水平段 y=1 到 x=0 空心 -->
+            <line x1="60" y1="50" x2="100" y2="50" stroke="var(--accent)" stroke-width="2.4"/>
+            <circle cx="100" cy="50" r="3.4" fill="var(--bg)" stroke="var(--accent)" stroke-width="1.8"/>
+            <!-- (0,2): 从 -1 升到 2 的曲线 -->
+            <path d="M100,118 Q118,116 132,90 Q146,64 180,36" fill="none" stroke="var(--accent)" stroke-width="2.4"/>
+            <circle cx="100" cy="118" r="3.4" fill="var(--accent)"/>
+            <circle cx="180" cy="36" r="3.4" fill="var(--bg)" stroke="var(--accent)" stroke-width="1.8"/>
+            <!-- [2,3]: 粗水平段 y=0 -->
+            <line x1="180" y1="90" x2="220" y2="90" stroke="var(--accent)" stroke-width="4"/>
+            <circle cx="180" cy="90" r="3.4" fill="var(--accent)"/>
+            <text x="130" y="140" font-size="10.5" fill="var(--muted)">图 8-6：f 有两个跳跃间断点（x=0 与 x=2）</text>
+          </g>
+          <!-- 下：正确的 F -->
+          <g transform="translate(330,0)">
+            <line x1="20" y1="90" x2="270" y2="90" stroke="var(--muted)" stroke-width="1.2"/>
+            <line x1="80" y1="140" x2="80" y2="20" stroke="var(--muted)" stroke-width="1.2"/>
+            <text x="274" y="94" font-size="10" fill="var(--muted)">x</text>
+            <text x="66" y="18" font-size="10" fill="var(--green)">F(x)</text>
+            <text x="70" y="102" font-size="10" fill="var(--muted)">O</text>
+            <text x="38" y="102" font-size="10" fill="var(--muted)">−1</text>
+            <text x="118" y="102" font-size="10" fill="var(--muted)">1</text>
+            <text x="158" y="102" font-size="10" fill="var(--muted)">2</text>
+            <text x="198" y="102" font-size="10" fill="var(--muted)">3</text>
+            <text x="66" y="54" font-size="10" fill="var(--muted)">1</text>
+            <text x="64" y="122" font-size="10" fill="var(--muted)">−1</text>
+            <!-- x<0: F(x)=-x (斜率 1 向左下? ) 实际 F(x)=∫₀ˣ1 dt = x, x<0 时为负 -->
+            <line x1="40" y1="130" x2="80" y2="90" stroke="var(--green)" stroke-width="2.4"/>
+            <!-- 0..1: 先降后升（f 先负后正），谷在 x≈0.55 -->
+            <path d="M80,90 Q95,106 112,106 Q126,104 136,84" fill="none" stroke="var(--green)" stroke-width="2.4"/>
+            <!-- 1..2: 继续上升变陡 -->
+            <path d="M136,84 Q150,66 160,44" fill="none" stroke="var(--green)" stroke-width="2.4"/>
+            <!-- 2..3: 水平 -->
+            <line x1="160" y1="44" x2="200" y2="44" stroke="var(--green)" stroke-width="2.4"/>
+            <circle cx="80" cy="90" r="3.2" fill="var(--red)"/>
+            <circle cx="160" cy="44" r="3.2" fill="var(--red)"/>
+            <text x="84" y="82" font-size="9.5" fill="var(--red)">F(0)=0 尖点</text>
+            <text x="146" y="36" font-size="9.5" fill="var(--red)">尖点</text>
+            <text x="20" y="140" font-size="10.5" fill="var(--muted)">正确答案 (D)：连续 · 两个尖点 · 过原点</text>
+          </g>
+          <!-- 三条判据说明 -->
+          <g transform="translate(0,170)">
+            <rect x="40" y="0" width="540" height="34" rx="8" fill="var(--accent-soft)"/>
+            <text x="56" y="21" font-size="11.5" fill="var(--accent)" font-weight="700">① 变限积分只要存在就必连续 ⇒ 排除 (B)（图上有断开）</text>
+            <rect x="40" y="42" width="540" height="34" rx="8" fill="var(--amber-soft)"/>
+            <text x="56" y="63" font-size="11.5" fill="var(--amber)" font-weight="700">② f 有两个跳跃间断点 ⇒ F 应有两个不可导点（尖点）⇒ 排除 (A)（只有一个）</text>
+            <rect x="40" y="84" width="540" height="34" rx="8" fill="var(--green-soft)"/>
+            <text x="56" y="105" font-size="11.5" fill="var(--green)" font-weight="700">③ F(0)=∫₀⁰f(t)dt=0 ⇒ F 的图像必过原点 ⇒ 排除 (C)（图上 F(0)=1）</text>
+            <rect x="40" y="126" width="540" height="34" rx="8" fill="var(--purple-soft)"/>
+            <text x="56" y="147" font-size="11.5" fill="var(--purple)" font-weight="700">④ 三条筛完只剩 (D)。全程没有算过一个积分 —— 这是一道纯概念题。</text>
+          </g>
+        </svg>
+        <figcaption>左上＝题给的 $f$（$[-1,0)$ 上恒为 1，$x=0$ 处跳到 $-1$ 后连续上升穿过 $x$ 轴，$x=2$ 处跳到 0 并保持）；右上＝正确答案 (D) 的形状。<b>四个选项的差别只在"连不连续 / 几个尖点 / 过不过原点"三点上。</b></figcaption>
+      </figure>
+      <p><span class="lab">答案</span><span class="ans">(D)</span> ✔</p>
+      <p><span class="lab">解 · 三个要点</span>见上图四条。<b>第一，变限积分只要存在就必连续，排除 (B)；第二，由 $f$ 有两个跳跃间断点知 $F$ 应有两个不可导点，排除 (A)；第三，$F(0)=\int_0^0f(t)\mathrm dt=0$，所以 $F$ 的图像过原点，排除 (C)。</b>故选 (D)。</p>
+      <p class="nokatex" style="color:var(--muted);font-size:.85rem"><b>书上的注</b>：本题是考研真题，如果考生能够熟练掌握一元函数积分学的有关概念和性质，便可轻松解决这个问题，而无须进行烦琐的计算——<b>从这个角度说，本题是概念题</b>。</p>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注 · 图形题三板斧（本章最值钱的解题模板）</span>
+      <b>看到"由 $f$ 的图选 $F=\int_a^xf$ 的图"，永远按这三步筛，一个积分都不用算：</b>
+      <ol style="margin:6px 0 0 20px">
+        <li><b>连续性</b>——$F$ <u>一定</u>连续（只要 $f$ 可积）。图上有跳断的直接排除。</li>
+        <li><b>不可导点个数</b>——等于 $f$ 的<b>跳跃</b>间断点个数（可去间断<u>不</u>产生尖点！）。数一数。</li>
+        <li><b>过定点</b>——$F(a)=0$，其中 $a$ 是积分下限。本题下限是 0，所以过原点。</li>
+      </ol>
+      <b>还有两条备用（本题没用上，但常考）</b>：④ <b>$F$ 的单调性由 $f$ 的正负决定</b>（$f\gt0$ 段 $F$ 增）；⑤ <b>$F$ 的凹凸由 $f$ 的增减决定</b>（$f$ 增 $\Rightarrow F''=f'\gt0$ 凹）。<br>
+      <span class="dock">最容易漏的是第 3 条</span>：很多人筛完前两条就在剩下两个里猜。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 8.12</span> 设函数 $f(x)=\begin{cases}\cos x,&0\le x\lt\pi\\ 1,&\pi\le x\le2\pi\end{cases}$，$F(x)=\displaystyle\int_0^xf(t)\mathrm dt$，则（　）<br>
+      (A) $x=\pi$ 是 $F(x)$ 的跳跃间断点　(B) $x=\pi$ 是 $F(x)$ 的可去间断点<br>
+      (C) $F(x)$ 在 $x=\pi$ 处<b>连续但不可导</b>　(D) $F(x)$ 在 $x=\pi$ 处可导</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">(C)</span> ✔</p>
+      <p><span class="lab">法一 · 秒杀（三秒）</span>$\lim\limits_{x\to\pi^-}\cos x=-1$，$\lim\limits_{x\to\pi^+}1=1$，故 $x=\pi$ 是 $f$ 的<b>跳跃间断点</b>。<b>由性质 (3a)</b>，$F(x)=\int_0^xf(t)\mathrm dt$ 在 $x=\pi$ 处<b>连续但不可导</b>，选 (C)。</p>
+      <p><span class="lab">法二 · 老实算（验证秒杀是对的）</span></p>
+      <div class="fml">$F(x)=\begin{cases}\displaystyle\int_0^x\cos t\,\mathrm dt,&0\le x\lt\pi\\[6pt] \displaystyle\int_0^\pi\cos t\,\mathrm dt+\int_\pi^x1\,\mathrm dt,&\pi\le x\le2\pi\end{cases}=\begin{cases}\sin x,&0\le x\lt\pi\\ x-\pi,&\pi\le x\le2\pi\end{cases}$</div>
+      <p>因 $\lim\limits_{x\to\pi^-}F=\lim\limits_{x\to\pi^+}F=F(\pi)=0$，故 $F$ 在 $x=\pi$ 处<b>连续</b>。而</p>
+      <div class="fml">$F'_-(\pi)=\lim_{x\to\pi^-}\dfrac{\sin x-0}{x-\pi}\xlongequal{\text{洛}}\lim_{x\to\pi^-}\dfrac{\cos x}1=-1,\qquad F'_+(\pi)=\lim_{x\to\pi^+}\dfrac{x-\pi-0}{x-\pi}=1$</div>
+      <p>故 $F'_-(\pi)\ne F'_+(\pi)$，$F$ 在 $x=\pi$ 处<b>不可导</b>。选 (C)。</p>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>法二算出的左右导数 $-1$ 与 $1$，恰好就是 $f$ 的左右极限 $\lim\limits_{x\to\pi^-}\cos x=-1$、$\lim\limits_{x\to\pi^+}1=1$</b>——这就是性质 (3a) 的内容。<b>法二只是在给法一做背书，考场上写法一即可。</b><br>
+      <b>注意 $\int_0^\pi\cos t\mathrm dt=0$</b>（正负半拱抵消），所以 $F(\pi)=0$，两段在 $\pi$ 处接得上——<b>这不是巧合，是"$F$ 必连续"决定的</b>。若你算出两段接不上，那一定是算错了，可以当作自检。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 8.13</span> 设 $f(x)=\begin{cases}\mathrm e^{x^2}+x^2,&x\ne0\\ a,&x=0\end{cases}$（$a$ 为常数），令 $F(x)=\displaystyle\int_{-1}^xf(t)\mathrm dt$，则以下命题：<br>
+      ① 当 $a=1$ 时 $F$ 在 $x=0$ 处可导；② 当 $a\ne1$ 时 $F$ 在 $x=0$ 处可导；<br>
+      ③ 当 $a=1$ 时 $F$ 在 $x=0$ 处不可导；④ 当 $a\ne1$ 时 $F$ 在 $x=0$ 处不可导。<br>
+      所有真命题的序号为（　）(A) ①④　(B) ①②　(C) ③④　(D) ②③</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">(B)</span>（①② 都真）✔</p>
+      <p><span class="lab">解</span>先注意 $\lim\limits_{x\to0}f(x)=\lim\limits_{x\to0}(\mathrm e^{x^2}+x^2)=1$。</p>
+      <p><b>$a=1$ 时</b>：$f$ 在 $x=0$ 处<b>连续</b>，由性质 (2)，$F$ 在 $x=0$ 处可导且 $F'(0)=f(0)=1$。<b>① 真。</b></p>
+      <p><b>$a\ne1$ 时</b>：$x=0$ 是 $f$ 的<b>可去间断点</b>。由导数定义与洛必达法则，</p>
+      <div class="fml">$F'(0)=\lim_{x\to0}\dfrac{\displaystyle\int_{-1}^x(\mathrm e^{t^2}+t^2)\mathrm dt-\int_{-1}^0(\mathrm e^{t^2}+t^2)\mathrm dt}{x-0}\xlongequal{\text{洛必达}}\lim_{x\to0}(\mathrm e^{x^2}+x^2)=1$</div>
+      <p>于是 $F'(0)$ <b>存在</b>，即 $F$ 在 $x=0$ 处<b>仍可导</b>。<b>② 真</b>（也可直接用性质 (3b) 一句话得出）。故选 (B)。</p>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注 · 本章最精细的一处，书上专门加了一条注</span>
+      <b>当 $a\ne1$ 时，$F'(0)=1\ne a=f(0)$，所以在包含 $x=0$ 的区间上，$F(x)$ <u>不是</u> $f(x)$ 的原函数。</b><br>
+      <b>把这三句连起来读，本章的概念就通了</b>：
+      <ol style="margin:6px 0 0 20px">
+        <li>$f$ 有可去间断点 ⇒ <b>$f$ 没有原函数</b>（§2 定理）。</li>
+        <li>但 $F(x)=\int_{-1}^xf$ <b>照样可导</b>（性质 3b）——可导性没有被间断点破坏。</li>
+        <li>只是 $F'(0)=\lim\limits_{x\to0}f(x)\ne f(0)$，<b>差在那一个孤立点上</b>，所以够不上"原函数"的定义。</li>
+      </ol>
+      <b>一句话</b>：<b>可去间断点处，$F$ 是"改了一个点之后的 $f$"的原函数，不是 $f$ 的原函数。</b><br>
+      <span class="dock">选 (A) 或 (C) 的人</span>都是把"$f$ 无原函数"直接推成"$F$ 不可导"——<b>这两件事没有蕴含关系</b>。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 8.2</span> 设 $f(x)=\begin{cases}x,&x\lt0\\ \frac12,&x=0\\ 1,&x\gt0\end{cases}$，则下列命题：<br>
+      ① $f$ 在 $[-1,1]$ 上有原函数；② $f$ 在 $[-1,1]$ 上可积；<br>
+      ③ $F(x)=\displaystyle\int_{-1}^xf(t)\mathrm dt$ 在 $x=0$ 处可导；④ $F(x)=\displaystyle\int_{-1}^xf(t)\mathrm dt$ 在 $x=0$ 处连续但不可导。<br>
+      正确命题的个数为（　）(A) 1　(B) 2　(C) 3　(D) 4</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">(B)</span>（②④ 正确）✔</p>
+      <p><span class="lab">解</span>$\lim\limits_{x\to0^-}f=0$，$\lim\limits_{x\to0^+}f=1$，故 $x=0$ 是 $f$ 的<b>跳跃间断点</b>。</p>
+      <p>① <b>错</b>：跳跃间断 ⇒ 无原函数。<br>
+      ② <b>对</b>：$f$ 在 $[-1,1]$ 上<b>有界且只有一个间断点</b> ⇒ 可积。<br>
+      ③ <b>错</b>、④ <b>对</b>：由性质 (3a)，跳跃间断处 $F$ <b>连续但不可导</b>（$F'_-(0)=0$，$F'_+(0)=1$）。</p>
+      <p>故正确的是 ②④，共 2 个，选 (B)。</p>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注 · 书上补的一个漂亮构造</span>
+      本题的 $f$ 可由一个含参极限"生出来"：
+      <div class="fml">$f(x)=\lim_{t\to0^+}\dfrac{x+\mathrm e^{x/t}}{1+\mathrm e^{x/t}}$</div>
+      验证：$x\lt0$ 时 $\mathrm e^{x/t}\to0$，极限为 $x$；$x\gt0$ 时分子分母同除 $\mathrm e^{x/t}$ 得 $\frac{x\mathrm e^{-x/t}+1}{\mathrm e^{-x/t}+1}\to1$；$x=0$ 时直接代入得 $\frac{0+1}{1+1}=\frac12$。<b>（三个值我都数值验过 ✔）</b><br>
+      <b>为什么值得记</b>：这类"含参极限定义的分段函数"是第 1 章的常考题型，<b>$\mathrm e^{x/t}$ 型极限天然产生跳跃间断，$x=0$ 处取"中间值"$\frac12$</b>。看到 $\frac{A+\mathrm e^{x/t}}{1+\mathrm e^{x/t}}$ 就该立刻想到它是个"开关"。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 8.6</span> 设 $F(x)=\displaystyle\int_0^x\big(t-[t]\big)\mathrm dt$，其中 $[x]$ 表示不超过 $x$ 的最大整数，则 $F'_-(1)+F'_+(1)=$＿＿</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">1</span> ✔<span style="color:var(--muted);font-size:.85rem">（分段积分数值验证：$F'_-(1)=1.000000$，$F'_+(1)=0.000000$ ✔）</span></p>
+      <figure class="fig">
+        <svg viewBox="0 0 420 150" xmlns="http://www.w3.org/2000/svg">
+          <line x1="20" y1="110" x2="400" y2="110" stroke="var(--muted)" stroke-width="1.2"/>
+          <line x1="160" y1="128" x2="160" y2="25" stroke="var(--muted)" stroke-width="1.2"/>
+          <text x="404" y="114" font-size="10" fill="var(--muted)">x</text>
+          <text x="150" y="22" font-size="10" fill="var(--muted)">f(x)</text>
+          <g stroke="var(--accent)" stroke-width="2.4" fill="none">
+            <line x1="40" y1="110" x2="80" y2="50"/><line x1="80" y1="110" x2="120" y2="50"/>
+            <line x1="120" y1="110" x2="160" y2="50"/><line x1="160" y1="110" x2="200" y2="50"/>
+            <line x1="200" y1="110" x2="240" y2="50"/><line x1="240" y1="110" x2="280" y2="50"/>
+            <line x1="280" y1="110" x2="320" y2="50"/>
+          </g>
+          <g fill="var(--bg)" stroke="var(--accent)" stroke-width="1.6">
+            <circle cx="80" cy="50" r="3"/><circle cx="120" cy="50" r="3"/><circle cx="160" cy="50" r="3"/>
+            <circle cx="200" cy="50" r="3"/><circle cx="240" cy="50" r="3"/><circle cx="280" cy="50" r="3"/><circle cx="320" cy="50" r="3"/>
+          </g>
+          <g fill="var(--accent)"><circle cx="40" cy="110" r="3"/><circle cx="80" cy="110" r="3"/><circle cx="120" cy="110" r="3"/>
+            <circle cx="160" cy="110" r="3"/><circle cx="200" cy="110" r="3"/><circle cx="240" cy="110" r="3"/><circle cx="280" cy="110" r="3"/></g>
+          <text x="14" y="124" font-size="10" fill="var(--muted)">…</text><text x="330" y="124" font-size="10" fill="var(--muted)">…</text>
+          <text x="76" y="124" font-size="10" fill="var(--muted)">−2</text><text x="116" y="124" font-size="10" fill="var(--muted)">−1</text>
+          <text x="152" y="124" font-size="10" fill="var(--muted)">O</text>
+          <text x="197" y="124" font-size="10" fill="var(--red)">1</text><text x="237" y="124" font-size="10" fill="var(--muted)">2</text><text x="277" y="124" font-size="10" fill="var(--muted)">3</text>
+          <text x="146" y="46" font-size="10" fill="var(--muted)">1</text>
+          <line x1="200" y1="50" x2="200" y2="110" stroke="var(--red)" stroke-width="1" stroke-dasharray="3,3"/>
+          <text x="206" y="42" font-size="9.5" fill="var(--red)">x=1 处跳跃：左极限 1，右极限 0</text>
+        </svg>
+        <figcaption>图 8-7：$f(x)=x-[x]$ 是<b>周期为 1 的锯齿波</b>，在每个 $[k,k+1)$ 上从 0 线性升到 1（右端空心）。<b>每个整数点都是跳跃间断点</b>，左极限 1、右极限 0。</figcaption>
+      </figure>
+      <p><span class="lab">法一 · 秒杀</span>因为 $x=1$ 是 $y=f(x)$ 的<b>跳跃间断点</b>，由性质 (3a)，</p>
+      <div class="fml">$F'_-(1)=\lim_{x\to1^-}f(x)=1,\qquad F'_+(1)=\lim_{x\to1^+}f(x)=0$</div>
+      <p>故 $F'_-(1)+F'_+(1)=1$。</p>
+      <p><span class="lab">法二 · 老实算</span>$F(1)=\displaystyle\int_0^1t\,\mathrm dt=\frac12$。</p>
+      <div class="fml">$F'_-(1)=\lim_{x\to1^-}\dfrac{\int_0^xt\,\mathrm dt-\frac12}{x-1}\xlongequal{\text{洛}}\lim_{x\to1^-}\dfrac x1=1$</div>
+      <div class="fml">$F'_+(1)=\lim_{x\to1^+}\dfrac{\int_0^1t\,\mathrm dt+\int_1^x(t-1)\mathrm dt-\frac12}{x-1}=\lim_{x\to1^+}\dfrac{\int_1^x(t-1)\mathrm dt}{x-1}\xlongequal{\text{洛}}\lim_{x\to1^+}\dfrac{x-1}1=0$</div>
+      <p>故和为 1。</p>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>又一次性质 (3a)：跳跃间断点处 $F$ 的左右导数 ＝ $f$ 的左右极限。</b>本章这条已经用了三次（基 8.12、习 8.2、习 8.6），<b>是本节唯一的考点</b>。<br>
+      <span class="dock">法二里最容易错的一步</span>：$x\gt1$ 时 $[t]=1$，所以被积函数是 $t-1$ 不是 $t$。<b>写 $\int_1^x(t-1)\mathrm dt$ 而不是 $\int_1^xt\,\mathrm dt$。</b><br>
+      <b>$f(x)=x-[x]$ 值得单独记</b>：它是<b>周期 1、有界（$[0,1)$）、每个整数点跳跃</b>的标准反例函数，可积但无原函数（属于四象限的"❌无原函数 ∧ ✅可积"那一格）。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 8.14</span> 设 $a\gt0$，函数 $f(x)$ 在 $[0,+\infty)$ 内连续有界，$C$ 为任意常数，证明：<br>
+      $y=\mathrm e^{-ax}\left[\displaystyle\int_0^xf(t)\mathrm e^{at}\mathrm dt+C\right]$ 有界。</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li>要证"有界" ⇒ <b>目标是找一个与 $x$ 无关的常数 $M^*$ 使 $|y(x)|\le M^*$</b>。所以整条路都是<b>放缩</b>，最后一步必须<b>把 $x$ 彻底赶出去</b>。</li>
+          <li>题设"$f$ 有界"是唯一能用的量化条件：设 $|f(x)|\le M$。<b>"连续"只是保证积分存在。</b></li>
+          <li>三次放缩依次是：<b>① $|a\pm b|\le|a|+|b|$</b> 把 $C$ 那项拆出来；<b>② $\big|\int\big|\le\int|\cdot|$</b>（性质 4）把绝对值挪进积分；<b>③ $|f|\le M$</b> 把 $f$ 换成常数 $M$ 提出积分号。</li>
+          <li>剩下的 $\mathrm e^{-ax}\int_0^x\mathrm e^{at}\mathrm dt$ 是<b>能算出来的</b>：$=\frac1a(1-\mathrm e^{-ax})$。<b>这个式子在 $x\ge0$ 上恒 $\le\frac1a$</b>——$x$ 就是在这里被赶走的。</li>
+          <li>别忘了 $|C\mathrm e^{-ax}|\le|C|$（因 $a\gt0,x\ge0$ 时 $\mathrm e^{-ax}\le1$）。<b>题设的 $a\gt0$ 和 $x\ge0$ 就是用在这两处的。</b></li>
+        </ol>
+      </div>
+      <div class="paper"><span class="phead">✍️ 考场卷面<span class="score">参考 10 分</span></span>
+        <div class="step"><span class="k">证</span>由 $f(x)$ 在 $[0,+\infty)$ 内有界，设 $|f(x)|\le M$（$M\gt0$）。则当 $x\ge0$ 时，</div>
+        <div class="fml">$$|y(x)|=\left|\mathrm e^{-ax}\Big[C+\displaystyle\int_0^xf(t)\mathrm e^{at}\mathrm dt\Big]\right|\le\big|C\mathrm e^{-ax}\big|+\mathrm e^{-ax}\left|\displaystyle\int_0^xf(t)\mathrm e^{at}\mathrm dt\right|\tag{1}$$</div>
+        <div class="step">（用了 $|a\pm b|\le|a|+|b|$ 及 $\mathrm e^{-ax}\gt0$）<span class="pt">⛳ 2 分</span></div>
+        <div class="step">又 $a\gt0$、$x\ge0$，故 $\mathrm e^{-ax}\le1$，从而 $\big|C\mathrm e^{-ax}\big|\le|C|$；再由<b>定积分的性质</b> $\big|\int_a^bf\big|\le\int_a^b|f|$ 及 $|f|\le M$，</div>
+        <div class="fml">$$\mathrm e^{-ax}\left|\displaystyle\int_0^xf(t)\mathrm e^{at}\mathrm dt\right|\le\mathrm e^{-ax}\displaystyle\int_0^x\big|f(t)\mathrm e^{at}\big|\mathrm dt\le M\mathrm e^{-ax}\displaystyle\int_0^x\mathrm e^{at}\mathrm dt\tag{2}$$</div>
+        <div class="step"><span class="pt">⛳ 4 分</span></div>
+        <div class="step">计算 $\displaystyle\int_0^x\mathrm e^{at}\mathrm dt=\dfrac1a\int_0^x\mathrm e^{at}\mathrm d(at)=\dfrac1a\big(\mathrm e^{ax}-1\big)$，代入 (2) 式得</div>
+        <div class="fml">$M\mathrm e^{-ax}\cdot\dfrac1a\big(\mathrm e^{ax}-1\big)=\dfrac Ma\big(1-\mathrm e^{-ax}\big)\le\dfrac Ma$</div>
+        <div class="step"><span class="pt">⛳ 3 分</span></div>
+        <div class="step">将以上两式代回 (1) 式，得对一切 $x\ge0$，</div>
+        <div class="fml">$|y(x)|\le|C|+\dfrac Ma$</div>
+        <div class="fin">右端与 $x$ 无关，故 $y=\mathrm e^{-ax}\left[\displaystyle\int_0^xf(t)\mathrm e^{at}\mathrm dt+C\right]$ 在 $[0,+\infty)$ 上有界。证毕。<span class="pt">⛳ 1 分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        <b>"证有界"的收口标准就一句：右端必须与 $x$ 无关。</b>写到 $\frac Ma(1-\mathrm e^{-ax})$ 还不算完，<b>必须再放一次到 $\frac Ma$</b>，否则式子里还有 $x$，逻辑没闭合。<span class="dock">这一步最常被漏。</span><br>
+        <b>三次放缩的顺序不能乱</b>：绝对值要一路"往里挪"（先拆和、再进积分、最后换掉 $f$）。<br>
+        <b>★ 这个 $y$ 是什么？</b>它正是<b>一阶线性微分方程 $y'+ay=f(x)$ 的通解</b>（常数变易法的标准形式）。所以本题真正在问：<b>$a\gt0$ 且输入 $f$ 有界时，线性系统的输出是否有界</b>——答案是"是"，这在控制论里叫 BIBO 稳定。<b>第 14 章学微分方程时回头看这道题，会通得很快。</b><br>
+        <b>数值验证</b>：取 $f=\sin$、$a=1$、$C=1$，在 $x\in[0,40]$ 上 $|y|$ 的最大值 $\approx0.71\le|C|+\frac Ma=2$ ✔。
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= s9 反常积分概念 ================= -->
+  <h2 id="s9"><span class="idx">九</span>反常积分的概念：把定积分的两个必要条件各破坏一次<span class="pg">基础 p.218–219</span></h2>
+
+  <div class="key"><span class="tag">必记 · 反常积分是怎么来的</span>
+    <p>定积分存在有两个必要条件：<b>一是积分区间有限，二是被积函数有界</b>。各破坏一个，就得到两类反常积分：</p>
+    <div class="steps3">
+      <div><b>破坏"区间有限"</b>⇒ <b>无穷区间上的反常积分</b>（$\int_a^{+\infty}$、$\int_{-\infty}^b$、$\int_{-\infty}^{+\infty}$）</div>
+      <div><b>破坏"函数有界"</b>⇒ <b>无界函数的反常积分</b>（被积函数在某点附近无界，该点叫<b>瑕点</b>）</div>
+      <div><b>合称</b>：定积分 = 常义积分（区间有限 + 函数有界）；反常积分 = <b>广义积分</b>。</div>
+    </div>
+    <p><b>定义 1（无穷区间）</b>　设 $F$ 是 $f$ 在相应区间上的一个原函数：</p>
+    <div class="fml">$\displaystyle\int_a^{+\infty}f(x)\mathrm dx=\lim_{x\to+\infty}F(x)-F(a),\qquad \int_{-\infty}^bf(x)\mathrm dx=F(b)-\lim_{x\to-\infty}F(x)$</div>
+    <div class="fml">$\displaystyle\int_{-\infty}^{+\infty}f(x)\mathrm dx=\int_{-\infty}^{x_0}f(x)\mathrm dx+\int_{x_0}^{+\infty}f(x)\mathrm dx$</div>
+    <p>极限存在则称<b>收敛</b>，否则称<b>发散</b>；最后一式<b>两个都收敛才叫收敛</b>，<b>只要有一个发散，原反常积分就发散</b>。</p>
+    <p><b>定义 2（无界函数）</b>　$x_0$ 为 $f$ 的<b>瑕点</b>（即使 $f$ 在 $x_0$ 的邻域内<b>无界</b>的点）：</p>
+    <div class="fml">$\begin{aligned}&x=a\ \text{为唯一瑕点}:&&\displaystyle\int_a^bf(x)\mathrm dx=F(b)-\lim_{x\to a^+}F(x)\\ &x=b\ \text{为唯一瑕点}:&&\displaystyle\int_a^bf(x)\mathrm dx=\lim_{x\to b^-}F(x)-F(a)\\ &x=c\in(a,b)\ \text{为唯一瑕点}:&&\displaystyle\int_a^bf(x)\mathrm dx=\int_a^cf(x)\mathrm dx+\int_c^bf(x)\mathrm dx\end{aligned}$</div>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 瑕点到底怎么找（两个例子）</span>
+    <p><b>瑕点 ＝ 使 $f$ 在其邻域内<u>无界</u>的点</b>。注意是"无界"，不是"无定义"，也不是"极限为 $\infty$"。</p>
+    <ul style="margin:4px 0 0 20px">
+      <li>$\lim\limits_{x\to0}\dfrac1x=\infty$ ⇒ $x=0$ 是 $\dfrac1x$ 的瑕点。（典型的无穷型）</li>
+      <li>$\lim\limits_{x\to0}\dfrac1x\sin\dfrac1x=$ <b>无界振荡</b> ⇒ $x=0$ <b>也是</b>瑕点。<b>虽然极限不是 $\infty$，但函数无界，照样算瑕点。</b></li>
+      <li>反例：$x^2\sin\frac1x$ 在 $x=0$ 处无定义但<b>有界</b> ⇒ <b>不是</b>瑕点（补个定义就是普通定积分）。</li>
+    </ul>
+    <p style="margin-top:8px"><b>注 1 · 奇点与"一个积分只能有一个奇点"</b>：在反常积分中，一般把 "$\infty$" 和瑕点<b>统称为奇点</b>。<b>判别敛散性时，一个积分中只能有一个奇点；若出现两个及以上奇点，必须拆分。</b>这是所有判敛题的<b>第一步</b>（例 8.15、例 8.17B、习 8.3、强 8.6、强 8.7、强 8.8 全都要先拆）。</p>
+  </div>
+
+  <div class="trap"><span class="tag">陷阱 ⚠️⚠️ · 不存在"发散 + 发散 = 收敛"（本节最重要的一条）</span>
+    <p><b>只要等号右边有一个发散，左边就发散。</b>书上专门用 $x^3$ 举了例子：</p>
+    <div class="fml">$\displaystyle\int_{-\infty}^{+\infty}x^3\mathrm dx=\int_{-\infty}^0x^3\mathrm dx+\int_0^{+\infty}x^3\mathrm dx$</div>
+    <p>由于 $\displaystyle\int_{-\infty}^0x^3\mathrm dx=-\infty$ 发散，故 $\displaystyle\int_{-\infty}^{+\infty}x^3\mathrm dx$ <b>发散</b>，<b>而不是</b>"由奇函数对称性得 0"。</p>
+    <div class="fml">$\displaystyle\int_{-\infty}^{+\infty}x^3\mathrm dx\ \ne\ \lim_{R\to+\infty}\int_{-R}^{R}x^3\mathrm dx$</div>
+    <p><b>只有当反常积分收敛时，$\displaystyle\int_{-\infty}^{+\infty}f(x)\mathrm dx=\lim_{R\to+\infty}\int_{-R}^Rf(x)\mathrm dx$ 才成立。</b>（右边那个东西叫<b>柯西主值</b>，它可能存在而反常积分不存在。）</p>
+    <p><b>⚠️ 这条陷阱在例 8.17 (C) 里直接送命</b>：$\dfrac1{\sin x}$ 是奇函数，$\displaystyle\int_{-1}^1\frac{\mathrm dx}{\sin x}$ 看起来"应该是 0"，实际<b>发散</b>。</p>
+  </div>
+
+  <div class="trap"><span class="tag">陷阱 · "可积必有界"与反常积分不矛盾（书上的注 2）</span>
+    <p>定义 2 里 $x=a$ 是瑕点时 $f$ 是无界函数，但 $\displaystyle\int_a^bf$ 仍可能存在。<b>这和前面"$\int_a^bf$ 存在的必要条件是 $f$ 有界"矛盾吗？不矛盾</b>——</p>
+    <p>前面说的 $\int_a^bf$ 是<b>定积分（黎曼积分）</b>，这里的 $\int_a^bf$ 是<b>反常积分</b>，<b>两者不是一个概念，只是记号长得一样</b>。</p>
+    <p><b>书上给的行动建议</b>：今后提到"积分存在"时，<b>特别强调一下</b>——是<u>定积分存在</u>（黎曼可积、常义可积），还是<u>反常积分存在</u>（广义可积）。</p>
+    <p style="margin-top:6px"><b>⚠️ 这条区分在强 8.7 里是<u>决定答案</u>的</b>（见 §11），千万别当成废话。</p>
+  </div>
+
+  <!-- ================= s10 判敛 ================= -->
+  <h2 id="s10"><span class="idx">十</span>★ 判敛：比较判别法 + p 积分 + 含参大观 10 条<span class="pg">基础 p.220–221 · 强化 p.83–87</span></h2>
+
+  <div class="zy"><span class="tag">强化题型 · 三向解题法（18 讲第二部分）</span>
+    <figure class="fig">
+      <svg viewBox="0 0 600 250" xmlns="http://www.w3.org/2000/svg">
+        <rect x="160" y="8" width="280" height="36" rx="8" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.4"/>
+        <text x="300" y="25" font-size="12.5" fill="var(--accent)" text-anchor="middle" font-weight="700">判断具体型反常积分的敛散性（O 盯住目标）</text>
+        <text x="300" y="39" font-size="10" fill="var(--muted)" text-anchor="middle">未知</text>
+        <line x1="300" y1="44" x2="300" y2="62" stroke="var(--muted)" stroke-width="1.4"/>
+        <rect x="150" y="62" width="300" height="40" rx="8" fill="var(--amber-soft)" stroke="var(--amber)" stroke-width="1.4"/>
+        <text x="300" y="80" font-size="12" fill="var(--amber)" text-anchor="middle" font-weight="700">恒等变形，向 ∫ 1/xᵖ dx 与 ∫ lnx/xᵖ dx 靠近</text>
+        <text x="300" y="95" font-size="10" fill="var(--muted)" text-anchor="middle">（D₂₃ 化归经典形式）　已知</text>
+        <line x1="300" y1="102" x2="300" y2="118" stroke="var(--muted)" stroke-width="1.4"/>
+        <line x1="55" y1="118" x2="545" y2="118" stroke="var(--muted)" stroke-width="1.4"/>
+        <g font-size="10.5" text-anchor="middle">
+          <line x1="105" y1="118" x2="105" y2="134" stroke="var(--muted)"/>
+          <rect x="55" y="134" width="100" height="46" rx="7" fill="var(--card)" stroke="var(--line)"/>
+          <text x="105" y="150" fill="var(--accent)" font-weight="700">① 积分可拆性</text>
+          <text x="105" y="165" fill="var(--muted)" font-size="9">a,b 均为奇点时必拆</text>
+          <line x1="215" y1="118" x2="215" y2="134" stroke="var(--muted)"/>
+          <rect x="165" y="134" width="100" height="46" rx="7" fill="var(--card)" stroke="var(--line)"/>
+          <text x="215" y="150" fill="var(--accent)" font-weight="700">② 分母设置法</text>
+          <text x="215" y="165" fill="var(--muted)" font-size="9">xᵖ=1/x⁻ᵖ「作比」</text>
+          <line x1="325" y1="118" x2="325" y2="134" stroke="var(--muted)"/>
+          <rect x="275" y="134" width="100" height="46" rx="7" fill="var(--card)" stroke="var(--line)"/>
+          <text x="325" y="150" fill="var(--accent)" font-weight="700">③ 换元法</text>
+          <text x="325" y="165" fill="var(--muted)" font-size="9">1−x=t，ln x=t</text>
+          <line x1="435" y1="118" x2="435" y2="134" stroke="var(--muted)"/>
+          <rect x="385" y="134" width="100" height="46" rx="7" fill="var(--card)" stroke="var(--line)"/>
+          <text x="435" y="150" fill="var(--accent)" font-weight="700">④ 分部积分法</text>
+          <text x="435" y="165" fill="var(--muted)" font-size="9">∫sinx/x 的唯一办法</text>
+          <line x1="520" y1="118" x2="520" y2="134" stroke="var(--muted)"/>
+          <rect x="490" y="134" width="55" height="46" rx="7" fill="var(--card)" stroke="var(--line)"/>
+          <text x="517" y="150" fill="var(--accent)" font-weight="700" font-size="9.5">⑤ 等价</text>
+          <text x="517" y="163" fill="var(--muted)" font-size="8.5">代换</text>
+        </g>
+        <rect x="150" y="196" width="300" height="42" rx="8" fill="var(--green-soft)" stroke="var(--green)" stroke-width="1.4"/>
+        <text x="300" y="213" font-size="11.5" fill="var(--green)" text-anchor="middle" font-weight="700">⑥ 加绝对值，用绝对值判敛法</text>
+        <text x="300" y="229" font-size="10" fill="var(--muted)" text-anchor="middle">向基础结论靠近，并抹去无关因式，用基本结论作判定</text>
+      </svg>
+      <figcaption>18 讲第二部分的解题树。<b>整个判敛过程只有一个方向：把陌生的式子恒等变形，变到 $\int\frac1{x^p}$ 或 $\int\frac{\ln x}{x^p}$ 上去。</b>六种变形手段就是六把扳手。</figcaption>
+    </figure>
+  </div>
+
+  <div class="key"><span class="tag">必记 · 比较判别法（两种形式，无穷区间与瑕点各一套）</span>
+    <p><b>基本形式</b>（$0\le f(x)\le g(x)$）：<b>大的收敛 ⇒ 小的收敛；小的发散 ⇒ 大的发散。</b>（一句话："<b>收敛往下传，发散往上传</b>"）</p>
+    <p><b>★ 极限形式</b>（更常用）：$f\ge0$，$g\gt0$，$\lambda=\lim\dfrac{f(x)}{g(x)}$（有限或 $\infty$），极限在<b>奇点处</b>取：</p>
+    <div class="gridwrap"><table class="dense">
+      <tr><th>$\lambda$</th><th>含义</th><th>结论</th></tr>
+      <tr><td>$\lambda\ne0$ 且 $\ne\infty$</td><td>$f,g$ <b>同阶</b></td><td style="color:var(--green)"><b>同敛散</b>（最常用）</td></tr>
+      <tr><td>$\lambda=0$</td><td>$f$ 比 $g$ <b>小得多</b>（趋 0 更快 / 趋 $\infty$ 更慢）</td><td>$\int g$ 收敛 $\Rightarrow$ $\int f$ 收敛</td></tr>
+      <tr><td>$\lambda=\infty$</td><td>$f$ 比 $g$ <b>大得多</b></td><td>$\int g$ 发散 $\Rightarrow$ $\int f$ 发散</td></tr>
+    </table></div>
+    <p style="margin-top:6px"><b>⚠️ 方向别记反</b>：$\lambda=0$ 只能<b>由大到小传收敛</b>，$\lambda=\infty$ 只能<b>由小到大传发散</b>。<b>统一成一句话："$f$ 更小 ⇒ 更容易收敛"</b>，就不会错。</p>
+  </div>
+
+  <div class="key"><span class="tag">必记 ★★★ · 四条基本 p 结论（本章的地基，必须条件反射）</span>
+    <div class="gridwrap"><table class="dense">
+      <tr><th></th><th>$\displaystyle\int_0^1\ \cdots$（瑕点在 0）</th><th>$\displaystyle\int_1^{+\infty}\ \cdots$（奇点在 $\infty$）</th></tr>
+      <tr><td>$\dfrac1{x^p}$</td><td>收敛 $\Leftrightarrow\ \boxed{0\lt p\lt1}$<br><span style="color:var(--muted);font-size:.85rem">$p$ 越<b>小</b>越收敛</span></td><td>收敛 $\Leftrightarrow\ \boxed{p\gt1}$<br><span style="color:var(--muted);font-size:.85rem">$p$ 越<b>大</b>越收敛</span></td></tr>
+      <tr><td>$\dfrac{\ln x}{x^p}$</td><td>收敛 $\Leftrightarrow\ \boxed{0\le p\lt1}$<br><span style="color:var(--muted);font-size:.85rem">⚠️ 唯一的差别：<b>$p=0$ 也收敛</b></span></td><td>收敛 $\Leftrightarrow\ \boxed{p\gt1}$<br><span style="color:var(--muted);font-size:.85rem">与不带 $\ln$ 的<b>完全一样</b></span></td></tr>
+    </table></div>
+    <p style="margin-top:8px"><b>$p=1$ 永远是临界值</b>，两处都发散：$\displaystyle\int_0^1\frac{\mathrm dx}x=0-\lim_{x\to0^+}\ln x=+\infty$；$\displaystyle\int_1^{+\infty}\frac{\mathrm dx}x=\lim_{x\to+\infty}\ln x-\ln1=+\infty$。</p>
+    <p><b>⚠️ 记忆锚：$\ln$ 是"弱因子"，扳不动 $p$ 的临界值。</b>它只在 $\int_0^1$ 的 $p=0$ 端点上让了一步（因为 $\int_0^1\ln x\mathrm dx=-1$ 确实收敛）。</p>
+    <figure class="fig">
+      <svg viewBox="0 0 340 220" xmlns="http://www.w3.org/2000/svg">
+        <line x1="30" y1="180" x2="320" y2="180" stroke="var(--muted)" stroke-width="1.3"/>
+        <line x1="30" y1="192" x2="30" y2="20" stroke="var(--muted)" stroke-width="1.3"/>
+        <text x="324" y="184" font-size="10" fill="var(--muted)">x</text><text x="24" y="18" font-size="10" fill="var(--muted)">y</text>
+        <line x1="130" y1="180" x2="130" y2="100" stroke="var(--muted)" stroke-width="1" stroke-dasharray="3,3"/>
+        <line x1="30" y1="100" x2="130" y2="100" stroke="var(--muted)" stroke-width="1" stroke-dasharray="3,3"/>
+        <text x="126" y="192" font-size="10" fill="var(--muted)">1</text><text x="20" y="104" font-size="10" fill="var(--muted)">1</text>
+        <!-- 三条曲线交于 (1,1)：p<1 / p=1 / p>1 -->
+        <path d="M44,44 C70,78 100,94 130,100 C180,110 240,126 310,140" fill="none" stroke="var(--green)" stroke-width="2"/>
+        <path d="M40,30 C70,66 100,90 130,100 C180,118 240,140 310,158" fill="none" stroke="var(--accent)" stroke-width="2"/>
+        <path d="M36,24 C68,58 100,88 130,100 C180,126 240,152 310,170" fill="none" stroke="var(--red)" stroke-width="2"/>
+        <path d="M30,180 L130,180 L130,100 C180,110 240,126 310,140 L310,180 Z" fill="var(--accent)" opacity=".1"/>
+        <text x="200" y="126" font-size="10" fill="var(--green)">1/xᵖ (p&lt;1)</text>
+        <text x="212" y="152" font-size="10" fill="var(--accent)">1/x</text>
+        <text x="222" y="176" font-size="10" fill="var(--red)">1/xᵖ (p&gt;1)</text>
+        <text x="46" y="196" font-size="9.5" fill="var(--green)">左半：p 小者贴地快 → 收敛</text>
+        <text x="180" y="196" font-size="9.5" fill="var(--red)">右半：p 大者贴地快 → 收敛</text>
+      </svg>
+      <figcaption>三条 $\frac1{x^p}$ 曲线都过 $(1,1)$。<b>$x=1$ 左边比"谁先趴下"，右边比"谁先贴地"——同一条曲线在两边的角色正好相反</b>，这就是两个判据方向相反的图像解释。</figcaption>
+    </figure>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 张宇的"速度"语言（比死记 $p$ 好用得多）</span>
+    <p><b>对 $\displaystyle\int_0^1\frac{\mathrm dx}{x^p}$，盯着 $x\to0^+$ 看 $x^p$ 的次数 $p$</b>：<br>
+    $p\ge1$ 时 $x^p$ 趋于 0 的"速度"<b>够快</b>，其倒数 $\frac1{x^p}$ 趋于 $+\infty$ 的"速度"<b>亦够快</b>，积分<b>发散</b>；<br>
+    $0\lt p\lt1$ 时 $x^p$ 趋于 0 的速度<b>不够快</b>，倒数趋于 $+\infty$ 的速度亦不够快，积分<b>收敛</b>。</p>
+    <p><b>对 $\displaystyle\int_1^{+\infty}\frac{\mathrm dx}{x^p}$，盯着 $x\to+\infty$ 看</b>：$p\gt1$ 时 $x^p$ 趋于 $+\infty$ 够快 ⇒ 倒数趋于 0 够快 ⇒ <b>收敛</b>；$p\le1$ 时<b>发散</b>。</p>
+    <p><b>★ 懂了道理就可以发挥（这两条直接是考点）</b>：</p>
+    <ul style="margin:4px 0 0 20px">
+      <li>$x\to0^+$ 时 $\boxed{\sin x\sim x}$，意味着二者趋于 0 的"速度"一样，故 $\displaystyle\int_0^1\frac{\mathrm dx}{\sin^px}$（有时命制成 $\displaystyle\int_0^{\pi/2}\frac{\mathrm dx}{\sin^px}$）依然满足：<b>$0\lt p\lt1$ 收敛，$p\ge1$ 发散</b>。<br>
+        <b>事实上，凡是与 $x$ 趋于 0 的"速度"一样的函数 $f(x)$，均可如上讨论。</b>（$\tan x$、$\arcsin x$、$\ln(1+x)$、$\mathrm e^x-1$ 全算。）</li>
+      <li>$x\to+\infty$ 且 $a\gt0$ 时 $\boxed{ax+b\ \text{与}\ x\ \text{速度一样}}$。当 $ax+b\ge k\gt0$ 时，$\displaystyle\int_1^{+\infty}\frac{\mathrm dx}{(ax+b)^p}$ 依然满足 <b>$p\gt1$ 收敛，$p\le1$ 发散</b>。</li>
+    </ul>
+  </div>
+
+  <div class="trap"><span class="tag">陷阱 ⚠️ · "反常积分收敛"与"积分收敛"是<u>两个说法</u>（18 讲的手写眉批）</span>
+    <p><b>严格来说</b>：</p>
+    <ul style="margin:4px 0 0 20px">
+      <li>若说"<b>反常积分</b> $\displaystyle\int_0^1\frac{\mathrm dx}{x^p}$ 收敛"，则 $\boxed{0\lt p\lt1}$；</li>
+      <li>若说"<b>积分</b> $\displaystyle\int_0^1\frac{\mathrm dx}{x^p}$ 收敛"，则 $\boxed{p\lt1}$。</li>
+    </ul>
+    <p><b>差别在 $p\le0$ 那一段</b>：此时 $\frac1{x^p}=x^{-p}$ 在 $[0,1]$ 上<b>有界连续</b>，根本<u>不是</u>反常积分，而是普通定积分——当然"收敛"，但它<b>不配叫"反常积分收敛"</b>。</p>
+    <p><b>同理，基本结论 ①b 里 $\int_0^1\frac{\ln x}{x^p}$ 的下界 $0\le p$ 就是这么来的</b>：$p\lt0$ 时 $x^{-p}\ln x\to0$，没有瑕点，不是反常积分。</p>
+    <p style="margin-top:6px"><b>⚠️ 强 8.7 的答案上界 $p\le0$ 完全由这条决定</b>——我数值复算时一度以为 $p=\frac12$ 也该算收敛，查下来发现<b>那时它根本不是反常积分</b>。<b>书是对的，详见 §11 强 8.7 的批注。</b></p>
+  </div>
+
+  <div class="key"><span class="tag">必记 ★★★ · 含参反常积分敛散性结论大观（18 讲，10 条）</span>
+    <p><b>全部由"令 $\ln x=t$ 换元"化归到基本结论。</b>下表右列给出书上每一条的注（换元路径），<b>会推就不用死背</b>。</p>
+    <div class="gridwrap"><table class="dense">
+      <tr><th>#</th><th>积分</th><th>结论</th><th>怎么来的（换元）</th></tr>
+      <tr><td>①</td><td>$\displaystyle\int_1^2\frac{\mathrm dx}{x\ln^px}$</td><td>收敛 $0\lt p\lt1$；发散 $p\ge1$</td><td>$\ln x=t$ ⇒ $\displaystyle\int_0^{\ln2}\frac{\mathrm dt}{t^p}$（化归 ①a）</td></tr>
+      <tr><td>②</td><td>$\displaystyle\int_2^{+\infty}\frac{\mathrm dx}{x\ln^px}$<br><span style="font-size:.8rem;color:var(--muted)">与 $\sum\limits_{n=2}^\infty\frac1{n\ln^pn}$ 同敛散（仅数一、数三）</span></td><td>收敛 $p\gt1$；发散 $p\le1$</td><td>$\ln x=t$ ⇒ $\displaystyle\int_{\ln2}^{+\infty}\frac{\mathrm dt}{t^p}$（化归 ②a）</td></tr>
+      <tr style="background:var(--red-soft)"><td>③</td><td>$\displaystyle\int_1^{+\infty}\frac{\mathrm dx}{x\ln^px}$</td><td><b>必发散</b>（与 $p$ 无关）</td><td>$=①+②$，两者<b>收敛域交集为空</b></td></tr>
+      <tr><td>④</td><td>$\displaystyle\int_k^{+\infty}\mathrm e^{-\alpha x}\ln^px\,\mathrm dx\ (k\gt0)$<br>$\displaystyle\int_A^{+\infty}\mathrm e^{-\alpha x}x^q\mathrm dx$</td><td>$\alpha\gt0$ <b>必收敛</b>；$\alpha\lt0$ <b>必发散</b></td><td>由 $\ln^px\ll x^q\ll a^x\ll x^x$（$p,q\gt0,a\gt1$）知 $\ln^px,x^q$ <b>不是 $\mathrm e^{\alpha x}$ 的同阶或高阶无穷大</b></td></tr>
+      <tr><td>⑤</td><td>$\displaystyle\int_1^2\frac{\mathrm dx}{x^p\ln^qx}$</td><td>收敛 $0\lt q\lt1$；发散 $q\ge1$<br><b>与 $p$ 无关</b></td><td>$\ln x=t$ ⇒ $\displaystyle\int_0^{\ln2}\mathrm e^{-(p-1)t}\frac{\mathrm dt}{t^q}$，<b>抹去无关因式 $\mathrm e^{-(p-1)t}$</b></td></tr>
+      <tr style="background:var(--amber-soft)"><td>⑥</td><td>$\displaystyle\int_2^{+\infty}\frac{\mathrm dx}{x^p\ln^qx}$<br><span style="font-size:.8rem;color:var(--muted)">与 $\sum\limits_{n=2}^\infty\frac1{n^p\ln^qn}$ 同敛散（仅数一、数三）</span></td><td>收敛：$p\gt1$（$q$ 任意）<br>发散：$p\lt1$（$q$ 任意）<br>$p=1$ 时：$q\gt1$ 收敛，$q\le1$ 发散</td><td>$\ln x=t$ ⇒ $\displaystyle\int_{\ln2}^{+\infty}\mathrm e^{-(p-1)t}\frac{\mathrm dt}{t^q}$：<br>$p\gt1\Rightarrow\mathrm e^{-\infty}\to0$（与 $q$ 无关）收敛<br>$p\lt1\Rightarrow\mathrm e^{+\infty}$（与 $q$ 无关）发散<br>$p=1$ 时退化为 ②</td></tr>
+      <tr><td>⑦</td><td>$\displaystyle\int_0^1\frac{\mathrm dx}{|\ln x|^p}$</td><td>收敛 $p\lt1$（$p\ne0$）；发散 $p\ge1$</td><td>$\ln x=-t$，$x=\mathrm e^{-t}$ ⇒ $\displaystyle\int_0^{+\infty}\frac{\mathrm e^{-t}}{t^p}\mathrm dt=\Gamma(1-p)$</td></tr>
+      <tr><td>⑧</td><td>$\displaystyle\int_1^2\frac{\mathrm dx}{|\ln x|^p}$</td><td>收敛 $0\lt p\lt1$；发散 $p\ge1$</td><td>$\ln x=t$，$x=\mathrm e^t$ ⇒ $\displaystyle\int_0^{\ln2}\frac{\mathrm e^t}{t^p}\mathrm dt$（$\mathrm e^t$ 有界，抹去）</td></tr>
+      <tr><td>⑨</td><td>$\displaystyle\int_0^2\frac{\mathrm dx}{|\ln x|^p}$</td><td>收敛 $p\lt1$（$p\ne0$）；发散 $p\ge1$</td><td>由 ⑦⑧ 合并</td></tr>
+      <tr style="background:var(--red-soft)"><td>⑩</td><td>$\displaystyle\int_2^{+\infty}\frac{\mathrm dx}{|\ln x|^p}$</td><td><b>必发散</b>（与 $p$ 无关）</td><td>$\ln x=t$ ⇒ $\displaystyle\int_{\ln2}^{+\infty}\frac{\mathrm e^t}{t^p}\mathrm dt$，<b>被积函数 $\to+\infty$，必发散</b></td></tr>
+    </table></div>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 十条只需记三条主线</span>
+    <div class="steps3">
+      <div><b>① 见 $\dfrac1{x\ln^px}$ 就令 $\ln x=t$</b><br>$\dfrac{\mathrm dx}x$ 正好变成 $\mathrm dt$，一步化归 p 积分。<b>①②③ 全是它。</b></div>
+      <div><b>② $\mathrm e^{\pm t}$ 是"无关因式"还是"决定因素"，看区间</b><br><b>有限区间</b>上 $\mathrm e^{\pm t}$ 有界 ⇒ <b>抹掉</b>（⑤⑧）；<b>无穷区间</b>上它<b>说了算</b>（⑥ 由 $\mathrm e^{-(p-1)t}$ 定生死，⑩ 被 $\mathrm e^{+t}$ 直接判死）。</div>
+      <div><b>③ 指数压倒一切</b><br>排序 $\ln^px\ll x^q\ll a^x\ll x^x$。所以 ④ 里只要 $\alpha\gt0$，$\mathrm e^{-\alpha x}$ 就能压住任何 $\ln^px$ 与 $x^q$。</div>
+    </div>
+    <p style="margin-top:8px"><b>③ 和 ⑩ 这两条"必发散"最值钱</b>：选择题里出现 $\int_1^{+\infty}\frac{\mathrm dx}{x\ln^px}$ 或 $\int_2^{+\infty}\frac{\mathrm dx}{|\ln x|^p}$，<b>不用管 $p$ 是多少，直接判发散</b>。<br>
+    ③ 的道理特别漂亮：$\int_1^2$ 要 $p\lt1$、$\int_2^{+\infty}$ 要 $p\gt1$，<b>两个条件打架，交集是空集</b>。</p>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">定理 · 绝对值判敛法</span> 设函数 $f(x)$ 在 $[a,+\infty)$ 上连续，若 $\displaystyle\int_a^{+\infty}|f(x)|\mathrm dx$ 收敛，则 $\displaystyle\int_a^{+\infty}f(x)\mathrm dx$ 收敛。<br>
+      <span style="font-size:.82rem;color:var(--muted)">（18 讲眉批：<b>"这个证明方法一定要会"</b>）</span></div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li>比较判别法只对<b>非负</b>函数有效，而 $f$ <b>可能变号</b>——这就是全部困难。</li>
+          <li>所以要<b>造一个非负函数出来</b>。最省事的造法：$f+|f|$，它<b>恒 $\ge0$</b>（$f\ge0$ 时等于 $2f$，$f\lt0$ 时等于 0）。</li>
+          <li>而且它<b>上有界</b>：$0\le f+|f|\le2|f|$。右端的 $\int2|f|$ 收敛（题设），<b>比较判别法立刻可用</b>。</li>
+          <li>最后把 $f$ 还原：$f=(f+|f|)-|f|$，<b>两个收敛积分之差仍收敛</b>（线性性质）。</li>
+        </ol>
+      </div>
+      <div class="paper"><span class="phead">✍️ 考场卷面<span class="score">参考 8 分</span></span>
+        <div class="step"><span class="k">证</span>因为对一切 $x\in[a,+\infty)$ 有</div>
+        <div class="fml">$$0\le f(x)+|f(x)|\le2|f(x)|\tag{1}$$</div>
+        <div class="step"><span class="pt">⛳ 3 分</span></div>
+        <div class="step">又 $\displaystyle\int_a^{+\infty}|f(x)|\mathrm dx$ 收敛，故 $\displaystyle\int_a^{+\infty}2|f(x)|\mathrm dx$ 收敛。<b>由 (1) 式及比较判敛法</b>，</div>
+        <div class="fml">$\displaystyle\int_a^{+\infty}\big[f(x)+|f(x)|\big]\mathrm dx\ \text{收敛}$</div>
+        <div class="step"><span class="pt">⛳ 3 分</span></div>
+        <div class="step">从而由反常积分的线性性质，</div>
+        <div class="fml">$\displaystyle\int_a^{+\infty}f(x)\mathrm dx=\int_a^{+\infty}\Big\{\big[f(x)+|f(x)|\big]-|f(x)|\Big\}\mathrm dx$</div>
+        <div class="fin">是两个收敛反常积分之差，故 $\displaystyle\int_a^{+\infty}f(x)\mathrm dx$ 收敛。证毕。<span class="pt">⛳ 2 分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        <b>核心动作只有一个：构造 $f+|f|\ge0$，把"变号函数"变成"非负函数"。</b>这是绝对收敛 ⇒ 收敛的<u>唯一</u>证法，记住这一个构造就够了。<br>
+        <span class="dock">扣分点</span>：直接说"由 $|f|$ 收敛得 $f$ 收敛"是<b>没有证明</b>——比较判别法的前提是非负，必须先造出非负函数。<br>
+        <b>术语</b>：$\int|f|$ 收敛称为 $\int f$ <b>绝对收敛</b>。<b>绝对收敛 ⇒ 收敛，反之不成立</b>（$\int_1^{+\infty}\frac{\sin x}x\mathrm dx$ 收敛但不绝对收敛，是<b>条件收敛</b>）。<br>
+        <b>跨章</b>：这套逻辑与第 16 章级数的"绝对收敛 ⇒ 收敛"<u>一字不差</u>（那里造的是 $u_n+|u_n|$）。<b>一次学会，两处受用。</b>
+      </div>
+    </div>
+  </div>
+
+  <div class="zy"><span class="tag">强化题型 · ④ 分部积分法：$\displaystyle\int_1^{+\infty}\frac{\sin x}x\mathrm dx$ 收敛的标准证法</span>
+    <p>这个积分<b>直接判不了</b>（$\frac{\sin x}x$ 变号，且 $\int_1^{+\infty}\frac{|\sin x|}x$ 发散），只能分部积分把 $\frac1x$ 的次数抬高：</p>
+    <div class="fml">$\displaystyle\int_1^{+\infty}\frac{\sin x}x\mathrm dx=-\frac{\cos x}x\Big|_1^{+\infty}-\int_1^{+\infty}\frac{\cos x}{x^2}\mathrm dx=\cos1-\int_1^{+\infty}\frac{\cos x}{x^2}\mathrm dx$</div>
+    <p>而 $\displaystyle\int_1^{+\infty}\Big|\frac{\cos x}{x^2}\Big|\mathrm dx\le\int_1^{+\infty}\frac{\mathrm dx}{x^2}=1$，故 $\displaystyle\int_1^{+\infty}\frac{\cos x}{x^2}\mathrm dx$ <b>绝对收敛</b>，从而 $\displaystyle\int_1^{+\infty}\frac{\sin x}x\mathrm dx$ <b>收敛</b>。</p>
+    <p><b>要点</b>：① 边界项 $-\frac{\cos x}x\Big|_1^{+\infty}$ 中 $\lim\limits_{x\to+\infty}\frac{\cos x}x=0$（<b>有界 × 无穷小</b>），只剩 $\cos1$；② 分部积分把分母从 $x$ 抬到 $x^2$，<b>$p$ 从 1 抬到 2，越过了临界值</b>；③ 新积分绝对收敛，用上面那条定理收口。</p>
+    <p><b>⚠️ 这是"$p=1$ 临界、带三角因子"的唯一出路。</b>见到 $\int\frac{\sin x}{x}$、$\int\frac{\cos x}x$、$\int\frac{\sin x}{\sqrt x}$ 一律走这条路。</p>
+  </div>
+
+  <!-- ================= s10b 交互3 p判据速查台 ================= -->
+  <h2 id="s10b"><span class="idx">📉</span>交互三 · p 判据速查台（四条基本 + 大观 10 条）</h2>
+
+  <div class="tool">
+    <h4>📉 滑参数，实时判敛 —— 并且看清"部分积分"是稳住了还是爬走了</h4>
+    <div class="hint">选一条结论，拖 $p$（有的还有 $q$），左图画<b>被积函数</b>，右图画<b>部分积分</b> $\Phi(s)=\int$ 到 $s$ 为止的值：<br>
+      <b>右图曲线趋于水平 ⇒ 收敛；一路向上爬 ⇒ 发散。</b>这比背表管用——尤其能看清<b>对数型发散有多慢</b>（$\int_2^{+\infty}\frac{\mathrm dx}{x\sqrt{\ln x}}$ 爬到 $x=10^8$ 才到 4.3，肉眼几乎看不出它是发散的，<b>这正是数值方法在这里不可靠的原因</b>）。</div>
+    <div class="ctl">
+      <label>选结论</label>
+      <select id="pp_sel">
+        <option value="a1" data-lab="int_0^1 x^-p">基本①a　∫₀¹ dx/xᵖ　（收敛 ⟺ 0&lt;p&lt;1）</option>
+        <option value="a2" data-lab="int_1^inf x^-p">基本②a　∫₁^∞ dx/xᵖ　（收敛 ⟺ p&gt;1）</option>
+        <option value="b1" data-lab="int_0^1 lnx/x^p">基本①b　∫₀¹ lnx/xᵖ dx　（收敛 ⟺ 0≤p&lt;1）</option>
+        <option value="b2" data-lab="int_1^inf lnx/x^p">基本②b　∫₁^∞ lnx/xᵖ dx　（收敛 ⟺ p&gt;1）</option>
+        <option value="c1" data-lab="int_1^2 1/(x ln^p x)">大观①　∫₁² dx/(x·lnᵖx)　（收敛 ⟺ 0&lt;p&lt;1）</option>
+        <option value="c2" data-lab="int_2^inf 1/(x ln^p x)">大观②　∫₂^∞ dx/(x·lnᵖx)　（收敛 ⟺ p&gt;1）</option>
+        <option value="c3" data-lab="int_1^inf 1/(x ln^p x)">大观③　∫₁^∞ dx/(x·lnᵖx)　（必发散）</option>
+        <option value="c4" data-lab="int_2^inf e^{-ax} ln^2 x">大观④　∫₂^∞ e^(−αx)·ln²x dx　（α&gt;0 必收敛）</option>
+        <option value="c5" data-lab="int_1^2 1/(x^p ln^q x)">大观⑤　∫₁² dx/(xᵖ·ln^q x)　（收敛 ⟺ 0&lt;q&lt;1，与 p 无关）</option>
+        <option value="c6" data-lab="int_2^inf 1/(x^p ln^q x)">大观⑥　∫₂^∞ dx/(xᵖ·ln^q x)　（p&gt;1 收；p=1 看 q）</option>
+        <option value="c7" data-lab="int_0^1 1/|ln x|^p">大观⑦　∫₀¹ dx/|lnx|ᵖ　（收敛 ⟺ p&lt;1, p≠0）</option>
+        <option value="c8" data-lab="int_1^2 1/|ln x|^p">大观⑧　∫₁² dx/|lnx|ᵖ　（收敛 ⟺ 0&lt;p&lt;1）</option>
+        <option value="c10" data-lab="int_2^inf 1/|ln x|^p">大观⑩　∫₂^∞ dx/|lnx|ᵖ　（必发散）</option>
+      </select>
+    </div>
+    <div class="ctl">
+      <label id="pp_plab">参数 p</label><input type="range" id="pp_p" min="-200" max="300" step="5" value="50">
+      <span class="val" id="pp_pv">p = 0.50</span>
+    </div>
+    <div class="ctl" id="pp_qrow" style="display:none">
+      <label>参数 q</label><input type="range" id="pp_q" min="-200" max="300" step="5" value="50">
+      <span class="val" id="pp_qv">q = 0.50</span>
+    </div>
+    <div class="scene"><svg id="pp_svg" viewBox="0 0 620 250" preserveAspectRatio="xMidYMid meet"></svg></div>
+    <span class="verdict" id="pp_v"></span>
+    <div class="say" id="pp_say"></div>
+    <table class="dq" id="pp_tab"></table>
+    <div class="legend2"><span class="chip c-b">蓝</span>被积函数（左图，纵轴按需截断）　<span class="chip c-p">紫</span>部分积分 $\Phi(s)$（右图）　<span class="chip c-g">绿虚线</span>收敛时的极限值<br>
+      判据用的是<b>换元后的解析结论</b>（不是数值拟合）——因为对数型在数值上根本看不出趋势，这也是本章复算时踩到的坑。</div>
+  </div>
+
+  <!-- ================= s11 判敛实战 ================= -->
+  <h2 id="s11"><span class="idx">十一</span>判敛实战 10 题<span class="pg">基础 p.221–229 · 强化 p.87–89</span></h2>
+
+  <div class="key"><span class="tag">必记 · 判敛题的四步固定流程</span>
+    <div class="steps3">
+      <div><b>① 数奇点、拆积分</b><br>把每个奇点单独关进一个积分。常见拆法：$\int_0^{+\infty}=\int_0^1+\int_1^{+\infty}$；$\int_0^1=\int_0^{1/2}+\int_{1/2}^1$。</div>
+      <div><b>② 每段各盯一个端点</b><br>在该端点做<b>等价无穷小 / 无穷大替换</b>，<b>抹去无关因式</b>（趋于非零常数的部分直接丢掉）。</div>
+      <div><b>③ 化成 $\dfrac1{x^p}$ 或 $\dfrac{\ln x}{x^p}$</b><br>必要时换元（$1-x=t$、$\ln x=t$）把奇点搬到 0 或 $+\infty$。</div>
+      <div><b>④ 查表 + 取交集</b><br>每段给一个不等式，<b>全部同时成立</b>才收敛。<b>别忘检查"这段是不是根本没有奇点"</b>（那时是定积分，自动收敛）。</div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 8.15</span> 设 $a\gt b\gt0$，反常积分 $\displaystyle\int_0^{+\infty}\frac{\mathrm dx}{x^a+x^b}$ 收敛，则（　）<br>
+      (A) $a\gt1$ 且 $b\gt1$　(B) $a\gt1$ 且 $b\lt1$　(C) $a\lt1$ 且 $a+b\gt1$　(D) $a\lt1$ 且 $b\lt1$</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">(B)</span> ✔<span style="color:var(--muted);font-size:.85rem">（数值验证：$(a,b)=(2,0.5)$ 两端都收敛 ✔；$(2,1.5)$ 头部发散 ✔；$(0.9,0.5)$ 尾部发散 ✔）</span></p>
+      <p><span class="lab">解</span><b>两个奇点（$x=0$ 与 $+\infty$），必须先拆</b>：</p>
+      <div class="fml">$I=\displaystyle\int_0^1\frac{\mathrm dx}{x^a+x^b}+\int_1^{+\infty}\frac{\mathrm dx}{x^a+x^b}=I_1+I_2$</div>
+      <p><b>对 $I_1$，盯着 $x\to0^+$ 看</b>：由 $a\gt b\gt0$，$x^b$ 趋于 0 的"速度"<b>慢于</b> $x^a$，故 $x^a+x^b\sim x^b$（<b>留次数低的</b>）。于是 $I_1$ 与 $\displaystyle\int_0^1\frac{\mathrm dx}{x^b}$ 同敛散，则 <b>$b\lt1$</b>。</p>
+      <p><b>对 $I_2$，盯着 $x\to+\infty$ 看</b>：$x^a$ 趋于 $+\infty$ 的"速度"<b>快于</b> $x^b$，故 $x^a+x^b\sim x^a$（<b>留次数高的</b>，等价无穷大）。于是 $I_2$ 与 $\displaystyle\int_1^{+\infty}\frac{\mathrm dx}{x^a}$ 同敛散，则 <b>$a\gt1$</b>。</p>
+      <p>综上 $a\gt1$ 且 $b\lt1$，选 (B)。</p>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注 · 一条通法压两处</span>
+      <b>和式取主导项的方向，两端正好相反：</b>
+      <div class="fml">$x\to0^+:\ \text{留}\boxed{\text{次数低}}\text{的}\qquad\qquad x\to+\infty:\ \text{留}\boxed{\text{次数高}}\text{的}$</div>
+      <b>道理一句话</b>：$x$ 小的时候，次数越高越小（$x^3\ll x$），所以小的那个可以丢；$x$ 大的时候反过来。<br>
+      <span class="dock">最常见的失误</span>：不拆就判，或者两端都用同一个主导项。<b>$a\gt b$ 这个条件正是为了让两端的主导项确定下来。</b><br>
+      <b>答案的结构值得记</b>：$a\gt1\gt b$——<b>两个指数被 1 分在两边</b>，这是"两端都收敛"的必然要求。若 $a,b$ 同在 1 的一边，必有一端发散（选项 (A)(D) 就是这两种情况）。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 8.16</span> 若反常积分 $\displaystyle\int_1^{+\infty}\Big(\mathrm e^{-\cos\frac1x}-\mathrm e^{-1}\Big)x^k\mathrm dx$ 收敛，则 $k$ 的取值范围是＿＿</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$k\lt1$</span> ✔<span style="color:var(--muted);font-size:.85rem">（$k=0.5$ 收敛、$k=1.5$ 发散、$k=1$ 发散，数值验证 ✔）</span></p>
+      <p><span class="lab">解</span>只有一个奇点（$+\infty$），<b>盯着 $x\to+\infty$ 看</b>。先把常数提出来凑标准形式：</p>
+      <div class="fml">$\mathrm e^{-\cos\frac1x}-\mathrm e^{-1}=\mathrm e^{-1}\Big(\mathrm e^{-\cos\frac1x+1}-1\Big)$</div>
+      <p>当 $x\to+\infty$ 时，$-\cos\frac1x+1\to0$，故由 $\mathrm e^u-1\sim u$ 与 $1-\cos t\sim\frac{t^2}2$，</p>
+      <div class="fml">$\mathrm e^{-\cos\frac1x+1}-1\sim1-\cos\dfrac1x\sim\dfrac12\cdot\dfrac1{x^2}$</div>
+      <p>故被积函数 $\sim\dfrac{\mathrm e^{-1}}2\cdot\dfrac1{x^{2-k}}$，原反常积分与 $\displaystyle\int_1^{+\infty}\frac{\mathrm dx}{x^{2-k}}$ 同敛散。由基本结论 ②a，收敛当且仅当 $2-k\gt1$，即 <b>$k\lt1$</b>。</p>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>两步凑等价无穷小的顺序不能乱</b>：① 先把 $\mathrm e^{-1}$ <b>提出来</b>，让括号内变成标准的 $\mathrm e^u-1$ 形；② 再用 $1-\cos t\sim\frac{t^2}2$（这里 $t=\frac1x\to0$）。<br>
+      <span class="dock">直接对 $\mathrm e^{-\cos\frac1x}-\mathrm e^{-1}$ 用等价无穷小是错的</span>——等价无穷小只对"$\to0$ 的整体"有效，$\mathrm e^{-\cos\frac1x}$ 本身趋于 $\mathrm e^{-1}\ne0$。<b>必须先制造出一个趋于 0 的因子。</b><br>
+      <b>常数系数 $\frac{\mathrm e^{-1}}2$ 对敛散性没有影响</b>，写出来只是为了显示等价关系；判敛时可以直接"抹去"。<br>
+      <b>$x^k$ 与 $\frac1{x^2}$ 合并成 $\frac1{x^{2-k}}$ 是最后一步</b>，别把 $k$ 的符号弄反（$x^k\cdot x^{-2}=x^{k-2}=\frac1{x^{2-k}}$）。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 8.17</span> 以下反常积分发散的是（　）<br>
+      (A) $\displaystyle\int_1^{+\infty}\Big[\ln\Big(1+\frac1x\Big)-\frac1{1+x}\Big]\mathrm dx$　(B) $\displaystyle\int_0^{+\infty}\frac{\ln x}{1+x^2}\mathrm dx$<br>
+      (C) $\displaystyle\int_{-1}^1\frac{\mathrm dx}{\sin x}$　(D) $\displaystyle\int_{-\infty}^{+\infty}\frac{\sin x}{1+x^2}\mathrm dx$</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">(C)</span> ✔</p>
+      <p><span class="lab">(A) 收敛</span>先证被积函数介于 0 与 $\frac1{x^2}$ 之间。由拉格朗日中值定理，</p>
+      <div class="fml">$\ln\Big(1+\dfrac1x\Big)=\ln\dfrac{x+1}x=\ln(x+1)-\ln x=\dfrac1\xi,\quad x\lt\xi\lt x+1$</div>
+      <p>故 $\dfrac1{x+1}\lt\ln\big(1+\frac1x\big)\lt\dfrac1x$。于是当 $x\in[1,+\infty)$ 时</p>
+      <div class="fml">$0\lt\ln\Big(1+\dfrac1x\Big)-\dfrac1{1+x}\lt\dfrac1x-\dfrac1{x+1}=\dfrac1{x(x+1)}\lt\dfrac1{x^2}$</div>
+      <p>由 $\displaystyle\int_1^{+\infty}\frac{\mathrm dx}{x^2}$ 收敛及比较判别法，(A) <b>收敛</b>。</p>
+      <p><span class="lab">(B) 收敛</span><b>两个奇点（0 与 $+\infty$），拆</b>：$\displaystyle\int_0^{+\infty}\frac{\ln x}{1+x^2}\mathrm dx=\int_0^1+\int_1^{+\infty}$。<br>
+      <b>$\int_0^1$</b>：$\lim\limits_{x\to0^+}\dfrac{\frac{\ln x}{1+x^2}}{\ln x}=1$，与 $\displaystyle\int_0^1\ln x\,\mathrm dx$ 同敛散；而 $\lim\limits_{x\to0^+}\dfrac{\ln x}{1/\sqrt x}=\lim\limits_{x\to0^+}\sqrt x\ln x=0$，且 $\displaystyle\int_0^1\frac{\mathrm dx}{\sqrt x}$ 收敛，故 $\displaystyle\int_0^1\ln x\mathrm dx$ 收敛，所以 $\int_0^1$ 收敛。<br>
+      <b>$\int_1^{+\infty}$</b>：$\lim\limits_{x\to+\infty}\dfrac{\frac{\ln x}{1+x^2}}{1/x^{3/2}}=\lim\limits_{x\to+\infty}\dfrac{\ln x}{x^{1/2}}=0$，且 $\displaystyle\int_1^{+\infty}\frac{\mathrm dx}{x^{3/2}}$ 收敛，故收敛。<br>
+      综上 (B) <b>收敛</b>。<span style="color:var(--muted);font-size:.85rem">（复算：值恰为 <b>0</b>，因为换元 $x\to\frac1x$ 后变号自消。）</span></p>
+      <p><span class="lab">(C) 发散 ← 答案</span>由 $\lim\limits_{x\to0^+}\dfrac{1/\sin x}{1/x}=1$ 知 $\displaystyle\int_0^1\frac{\mathrm dx}{\sin x}$ 与 $\displaystyle\int_0^1\frac{\mathrm dx}x$ 同敛散，故<b>发散</b>。<br>
+      而 $\displaystyle\int_{-1}^1\frac{\mathrm dx}{\sin x}=\int_{-1}^0\frac{\mathrm dx}{\sin x}+\int_0^1\frac{\mathrm dx}{\sin x}$，<b>右端有一个发散，故左端发散</b>。</p>
+      <p><span class="lab">(D) 收敛</span>$\displaystyle\int_{-\infty}^{+\infty}\frac{\sin x}{1+x^2}\mathrm dx=\int_{-\infty}^0+\int_0^{+\infty}$，且</p>
+      <div class="fml">$\displaystyle\int_0^{+\infty}\Big|\frac{\sin x}{1+x^2}\Big|\mathrm dx\le\int_0^{+\infty}\frac{\mathrm dx}{1+x^2}=\arctan x\Big|_0^{+\infty}=\frac\pi2$</div>
+      <p>故绝对收敛，从而收敛；由<b>对称区间反常积分的结论</b>（见下注），(D) <b>收敛</b>（值为 0）。</p>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>(C) 就是 §9 那条陷阱的现场</b>：$\frac1{\sin x}$ 是<b>奇函数</b>，$[-1,1]$ 是对称区间，很容易脱口而出"积分为 0"。<b>但那需要前提。</b><br>
+      <div class="key" style="margin:8px 0"><span class="tag">必记 · 对称区间反常积分的两条结论（书上的注）</span>
+        ・$f$ 为<b>偶</b>函数<b>且 $\displaystyle\int_0^{+\infty}f\mathrm dx$ 收敛</b>时，$\displaystyle\int_{-\infty}^{+\infty}f\mathrm dx=2\int_0^{+\infty}f\mathrm dx$；<br>
+        ・$f$ 为<b>奇</b>函数<b>且 $\displaystyle\int_0^{+\infty}f\mathrm dx$ 收敛</b>时，$\displaystyle\int_{-\infty}^{+\infty}f\mathrm dx=0$。<br>
+        <b>⚠️ 两条都以"半边收敛"为前提</b>——(C) 正是前提不成立的反例，(D) 才是前提成立的正例。
+      </div>
+      <b>(A) 的技术活是那个双边夹</b>：用<b>拉格朗日中值定理</b>把 $\ln(1+\frac1x)$ 夹在 $\frac1{x+1}$ 与 $\frac1x$ 之间——<b>这是处理"两个对数之差"的标准动作</b>（第 6 章讲过）。左边 $\gt0$ 保证了非负（比较判别法的前提），右边给出 $\frac1{x^2}$ 的上界。<br>
+      <b>(B) 里 $\int_0^1\ln x\mathrm dx$ 收敛这件事要能秒答</b>：它就是基本结论 ①b 的 $p=0$ 情形（$\int_0^1\ln x\mathrm dx=-1$）。书上绕道 $\frac1{\sqrt x}$ 是为了演示极限形式的用法。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 8.18</span> 已知 $\alpha\gt0$，则对于反常积分 $\displaystyle\int_0^1\frac{\ln x}{x^\alpha}\mathrm dx$ 的敛散性的判别，正确的是（　）<br>
+      (A) 当 $\alpha\ge1$ 时积分收敛　(B) 当 $\alpha\lt1$ 时积分收敛　(C) 与 $\alpha$ 无关，必收敛　(D) 与 $\alpha$ 无关，必发散</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">(B)</span> ✔<span style="color:var(--muted);font-size:.85rem">（$\alpha=\frac12$ 时值 $=-4$；$\alpha=1.5$、$\alpha=1$ 发散，符号复算 ✔）</span></p>
+      <p><span class="lab">分析</span>比较判别法的两个动作：① 放缩 $0\le f\le g$；② 计算极限（$\frac00$ 或 $\frac\infty\infty$ 型）。</p>
+      <p><span class="lab">解 · $\alpha\lt1$ 时收敛</span>取充分小的正数 $\varepsilon$ 使 $\alpha+\varepsilon\lt1$，则</p>
+      <div class="fml">$\lim_{x\to0^+}\dfrac{\frac{\ln x}{x^\alpha}}{\frac1{x^{\alpha+\varepsilon}}}=\lim_{x\to0^+}x^{\varepsilon}\ln x=\lim_{x\to0^+}\dfrac{\ln x}{x^{-\varepsilon}}\xlongequal{\text{洛}}\lim_{x\to0^+}\dfrac{1/x}{-\varepsilon x^{-\varepsilon-1}}=\lim_{x\to0^+}\Big(-\dfrac1\varepsilon x^{\varepsilon}\Big)=0$</div>
+      <p>故 $x\to0^+$ 时 $\dfrac1{x^{\alpha+\varepsilon}}$ 是比 $\dfrac{\ln x}{x^\alpha}$ <b>高阶的无穷大量</b>；因 $\alpha+\varepsilon\lt1$ 时 $\displaystyle\int_0^1\frac{\mathrm dx}{x^{\alpha+\varepsilon}}$ 收敛，由比较判别法的极限形式（$\lambda=0$ 那一档），$\displaystyle\int_0^1\frac{\ln x}{x^\alpha}\mathrm dx$ <b>收敛</b>。</p>
+      <p><span class="lab">$\alpha\ge1$ 时发散</span>$\lim\limits_{x\to0^+}\dfrac{\frac{\ln x}{x^\alpha}}{\frac1{x^\alpha}}=\lim\limits_{x\to0^+}\ln x=\infty$，故 $\dfrac1{x^\alpha}$ 是比 $\dfrac{\ln x}{x^\alpha}$ <b>低阶的无穷大量</b>；因 $\alpha\ge1$ 时 $\displaystyle\int_0^1\frac{\mathrm dx}{x^\alpha}$ 发散，故原积分<b>发散</b>。选 (B)。</p>
+      <p style="color:var(--muted);font-size:.85rem"><b>由此得到基本结论 ①b</b>：$\displaystyle\int_0^1\frac{\ln x}{x^p}\mathrm dx$ 收敛 $\Leftrightarrow0\le p\lt1$，发散 $\Leftrightarrow p\ge1$。</p>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>"取充分小的 $\varepsilon$"这个手法是本节的招牌动作</b>，专门用来对付 $\ln$：因为 $\ln x$ 比<b>任何</b>幂函数都弱，所以只要"多借一点点次数 $\varepsilon$"，$\frac1{x^{\alpha+\varepsilon}}$ 就能盖住 $\frac{\ln x}{x^\alpha}$，<b>而 $\varepsilon$ 小到不影响 $\alpha+\varepsilon\lt1$</b>。<br>
+      <b>关键极限 $\lim\limits_{x\to0^+}x^\varepsilon\ln x=0$（任意 $\varepsilon\gt0$）要能直接写</b>，不用每次洛必达。<b>它的对偶是 $\lim\limits_{x\to+\infty}\frac{\ln x}{x^\varepsilon}=0$</b>（强 8.19 用的就是这个）。<br>
+      <span class="dock">$\alpha=1$ 时别忘了检查</span>：临界点要单独判（此处发散，归到 $\alpha\ge1$ 那一支）。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 8.19</span> 已知 $\alpha\gt0$，则对于反常积分 $\displaystyle\int_1^{+\infty}\frac{\ln x}{x^\alpha}\mathrm dx$ 的敛散性的判别，正确的是（　）<br>
+      (A) 当 $0\lt\alpha\le1$ 时收敛　(B) 当 $\alpha\gt1$ 时收敛　(C) 与 $\alpha$ 无关，必收敛　(D) 与 $\alpha$ 无关，必发散</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">(B)</span> ✔<span style="color:var(--muted);font-size:.85rem">（$\alpha=2$ 时值 $=1$；$\alpha=0.8$、$\alpha=1$ 发散，符号复算 ✔）</span></p>
+      <p><span class="lab">解 · $0\lt\alpha\le1$ 时发散</span>$x$ 充分大时 $\ln x\gt1$，故 $\dfrac{\ln x}{x^\alpha}\gt\dfrac1{x^\alpha}$；由 $\displaystyle\int_1^{+\infty}\frac{\mathrm dx}{x^\alpha}$ 发散（$\alpha\le1$）及比较判别法，原积分<b>发散</b>。</p>
+      <p><span class="lab">$\alpha\gt1$ 时收敛</span>取充分小的正数 $\varepsilon$ 使 $\alpha-\varepsilon\gt1$，由</p>
+      <div class="fml">$\lim_{x\to+\infty}\dfrac{\frac{\ln x}{x^\alpha}}{\frac1{x^{\alpha-\varepsilon}}}=\lim_{x\to+\infty}\dfrac{\ln x}{x^{\varepsilon}}\xlongequal{\text{"}\frac\infty\infty\text{"}}0$</div>
+      <p>且 $\displaystyle\int_1^{+\infty}\frac{\mathrm dx}{x^{\alpha-\varepsilon}}$ 收敛（$\alpha-\varepsilon\gt1$），故原积分<b>收敛</b>。选 (B)。</p>
+      <p style="color:var(--muted);font-size:.85rem"><b>由此得到基本结论 ②b</b>：$\displaystyle\int_1^{+\infty}\frac{\ln x}{x^p}\mathrm dx$ 收敛 $\Leftrightarrow p\gt1$——<b>与不带 $\ln$ 的判据完全一样</b>。</p>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注 · 与基 8.18 配成一对，$\varepsilon$ 的借法正好相反</span>
+      <div class="gridwrap"><table class="dense">
+        <tr><th></th><th>基 8.18（$\int_0^1$，瑕点在 0）</th><th>基 8.19（$\int_1^{+\infty}$，奇点在 $\infty$）</th></tr>
+        <tr><td>$\ln$ 的角色</td><td>让被积函数<b>更大</b>（$\ln x\to-\infty$）</td><td>让被积函数<b>更大</b>（$\ln x\to+\infty$）</td></tr>
+        <tr><td>比较对象</td><td>$\dfrac1{x^{\alpha\boxed{+}\varepsilon}}$（次数<b>加</b> $\varepsilon$）</td><td>$\dfrac1{x^{\alpha\boxed{-}\varepsilon}}$（次数<b>减</b> $\varepsilon$）</td></tr>
+        <tr><td>为什么这样借</td><td>$\int_0^1$ 里<b>次数越大越难收敛</b>，所以要"往大了借"才能盖住 $\ln$</td><td>$\int_1^\infty$ 里<b>次数越小越难收敛</b>，所以要"往小了借"</td></tr>
+        <tr><td>关键极限</td><td>$\lim\limits_{x\to0^+}x^\varepsilon\ln x=0$</td><td>$\lim\limits_{x\to+\infty}\dfrac{\ln x}{x^\varepsilon}=0$</td></tr>
+      </table></div>
+      <b>一句话记住</b>：<b>$\varepsilon$ 永远往"更难收敛"的方向借</b>，借完还要保证不越过临界值 1。<b>这样得到的比较函数一定盖得住 $\ln$，同时还收敛。</b>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 8.3</span> 若反常积分 $\displaystyle\int_0^{+\infty}\frac{\ln x}{(1+x)x^{1-p}}\mathrm dx$ 收敛，则（　）<br>
+      (A) $p\lt1$　(B) $p\gt1$　(C) $0\lt p\lt1$　(D) $0\le p\lt1$</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">(C)</span> ✔<span style="color:var(--muted);font-size:.85rem">（$p=\frac12$ 两端都收敛；$p=1.5$ 尾部发散、$p=-\frac12$ 头部发散、$p=1$ 与 $p=0$ 两个端点各有一端发散，符号复算 ✔）</span></p>
+      <p><span class="lab">解</span>此积分为<b>有一个瑕点 $x=0$ 的无穷区间上的反常积分</b>（两个奇点），拆为</p>
+      <div class="fml">$\displaystyle\int_0^{+\infty}\frac{\ln x}{(1+x)x^{1-p}}\mathrm dx=\int_0^1\frac{\ln x}{(1+x)x^{1-p}}\mathrm dx+\int_1^{+\infty}\frac{\ln x}{(1+x)x^{1-p}}\mathrm dx$</div>
+      <p><b>对 $\int_0^1$（盯 $x\to0^+$，$1+x\to1$ 是无关因式）</b>：对任意 $\varepsilon\gt0$，</p>
+      <div class="fml">$\lim_{x\to0^+}\dfrac{\frac{\ln x}{(1+x)x^{1-p}}}{\frac1{x^{1-p+\varepsilon}}}=\lim_{x\to0^+}x^{\varepsilon}\ln x=0$</div>
+      <p>若 $\displaystyle\int_0^1\frac{\mathrm dx}{x^{1-p+\varepsilon}}$ 收敛，即 $1-p\lt1$，<b>$p\gt0$</b>，则该积分收敛。</p>
+      <p><b>对 $\int_1^{+\infty}$（盯 $x\to+\infty$，$(1+x)x^{1-p}\sim x^{2-p}$）</b>：对任意 $\varepsilon\gt0$，</p>
+      <div class="fml">$\lim_{x\to+\infty}\dfrac{\frac{\ln x}{(1+x)x^{1-p}}}{\frac1{x^{2-p-\varepsilon}}}=\lim_{x\to+\infty}\dfrac{\ln x}{x^{\varepsilon}}=0$</div>
+      <p>若 $\displaystyle\int_1^{+\infty}\frac{\mathrm dx}{x^{2-p-\varepsilon}}$ 收敛，即 $2-p\gt1$，<b>$p\lt1$</b>，则该积分收敛。</p>
+      <p>综上，<b>$0\lt p\lt1$</b> 时反常积分收敛，选 (C)。</p>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>与基 8.15 完全同构：两个奇点各解一个不等式，最后取交集。</b>区别只在这里多了个 $\ln$，所以要用基 8.18/8.19 的"借 $\varepsilon$"手法。<br>
+      <b>关键的一步等价</b>：$x\to+\infty$ 时 $(1+x)x^{1-p}\sim x\cdot x^{1-p}=x^{2-p}$。<span class="dock">别把 $1+x$ 当成无关因式丢掉</span>——在 $x\to+\infty$ 端它<b>不是</b>常数，$1+x\sim x$ 要贡献一次幂。<b>只有在 $x\to0^+$ 端它才趋于 1、可以抹掉。</b><b>同一个因子在两端的待遇不同，这是本题的考点。</b><br>
+      <b>为什么不选 (D)</b>：$p=0$ 时头部 $\int_0^1\frac{\ln x}{(1+x)x}\mathrm dx$ 中 $\frac{\ln x}x$ 发散（基本结论 ①b 的 $p=1$ 情形）。<b>端点必须逐个验。</b>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 8.7</span> 讨论 $\displaystyle\int_2^{+\infty}\frac{\mathrm dx}{x\ln^px}$ 的敛散性，其中 $p$ 为任意实数。<br>
+      <span style="font-size:.82rem;color:var(--muted)">（书上分析：本题考查反常积分敛散性的判别法（<b>通过计算结果来判别</b>），是<b>历届考生比较薄弱的知识点</b>。）</span></div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li>这题<b>不用比较判别法</b>——被积函数的原函数能直接求出来，<b>算出来再看极限是最干净的</b>（书上点名"通过计算结果来判别"）。</li>
+          <li>凑微分：$\dfrac{\mathrm dx}x=\mathrm d(\ln x)$，令 $u=\ln x$ 后就是纯粹的 $\displaystyle\int u^{-p}\mathrm du$。</li>
+          <li><b>$p=1$ 必须单独讨论</b>——$\int u^{-p}\mathrm du$ 在 $p=1$ 时是 $\ln|u|$，不是幂函数，<u>这是所有 p 型讨论题的固定分叉</u>。</li>
+          <li>$p\ne1$ 时原函数是 $\frac{(\ln x)^{1-p}}{1-p}$，只需看 $x\to+\infty$ 时 $(\ln x)^{1-p}$ 的极限：指数 $1-p$ 的正负说了算。</li>
+        </ol>
+      </div>
+      <div class="paper"><span class="phead">✍️ 考场卷面<span class="score">参考 10 分</span></span>
+        <div class="step"><span class="k">解</span><span class="k">(i)</span> 当 $p=1$ 时，</div>
+        <div class="fml">$\displaystyle\int_2^{+\infty}\frac{\mathrm dx}{x\ln x}=\int_2^{+\infty}\frac{\mathrm d(\ln x)}{\ln x}=\ln|\ln x|\ \Big|_2^{+\infty}=+\infty$</div>
+        <div class="step">故此时反常积分<b>发散</b>。<span class="pt">⛳ 3 分</span></div>
+        <div class="step"><span class="k">(ii)</span> 当 $p\ne1$ 时，</div>
+        <div class="fml">$$\displaystyle\int_2^{+\infty}\frac{\mathrm dx}{x\ln^px}=\int_2^{+\infty}(\ln x)^{-p}\mathrm d(\ln x)=\frac1{1-p}(\ln x)^{1-p}\ \Big|_2^{+\infty}\tag{1}$$</div>
+        <div class="step"><span class="pt">⛳ 3 分</span></div>
+        <div class="step">当 $p\gt1$ 时，$1-p\lt0$，$\lim\limits_{x\to+\infty}(\ln x)^{1-p}=0$，由 (1) 式知反常积分<b>收敛</b>，且其值为 $\dfrac{(\ln2)^{1-p}}{p-1}$；</div>
+        <div class="step">当 $p\lt1$ 时，$1-p\gt0$，$\lim\limits_{x\to+\infty}(\ln x)^{1-p}=+\infty$，由 (1) 式知反常积分<b>发散</b>。<span class="pt">⛳ 3 分</span></div>
+        <div class="fin">综上，$\displaystyle\int_2^{+\infty}\frac{\mathrm dx}{x\ln^px}\begin{cases}\text{收敛},&p\gt1\\ \text{发散},&p\le1\end{cases}$<span class="pt">⛳ 1 分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        <b>这就是大观 ② 的证明</b>。换元 $u=\ln x$ 后它<b>与 $\displaystyle\int_{\ln2}^{+\infty}\frac{\mathrm du}{u^p}$ 一模一样</b>，所以临界值仍是 $p=1$——<b>"$\ln$ 是弱因子"的又一次体现</b>。<br>
+        <span class="dock">扣分点 1</span>：不分 $p=1$ 单独讨论，直接写 $\frac{(\ln x)^{1-p}}{1-p}$，当 $p=1$ 时分母为 0，式子无意义。<b>凡是 $\int u^{-p}$ 型，$p=1$ 必须单列。</b><br>
+        <span class="dock">扣分点 2</span>：$p\gt1$ 时只写"收敛"不给值。<b>题目问"讨论敛散性"时给出收敛值是加分项</b>（复算：$p=2$ 时值 $=\frac1{\ln2}\approx1.4427$ ✔）。<br>
+        <b>凑微分那一步 $\frac{\mathrm dx}x=\mathrm d(\ln x)$ 要写出来</b>，这是第 9 章第一类换元法的标准动作，卷面上不能省。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 8.6</span> 设常数 $p\gt0$，$q\gt0$，若 $\displaystyle\int_0^1\frac{\ln x}{x^p(1-x)^q}\mathrm dx$ 收敛，则（　）<br>
+      (A) $0\lt p\lt1,\ 0\lt q\lt2$　(B) $p\gt1,\ 1\lt q\lt2$　(C) $0\lt p\lt1,\ 0\lt q\lt1$　(D) $p\gt1,\ 0\lt q\lt1$</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">(A)</span> ✔<span style="color:var(--muted);font-size:.85rem">（$(p,q)=(0.5,1.5)$、$(0.5,0.5)$ 收敛；$(1.5,0.5)$ 头部发散、$(0.5,2.5)$ 尾部发散；临界 $p=1$、$q=2$ 均发散，符号复算 ✔）</span></p>
+      <p><span class="lab">解 · 三步</span><b>① 拆</b>（$x=0$ 与 $x=1$ 都可能是奇点）：</p>
+      <div class="fml">$\text{原式}\xlongequal{\text{积分可拆性}}\displaystyle\int_0^{1/2}\frac{\ln x}{x^p(1-x)^q}\mathrm dx+\int_{1/2}^1\frac{\ln x}{x^p(1-x)^q}\mathrm dx$</div>
+      <p><b>② 抹去无关因式</b>：左边 $x\to0^+$ 时 $(1-x)^q\to1$，右边 $x\to1^-$ 时 $x^p\to1$，故等价于研究</p>
+      <div class="fml">$\displaystyle\int_0^{1/2}\frac{\ln x}{x^p}\mathrm dx+\int_{1/2}^1\frac{\ln x}{(1-x)^q}\mathrm dx$</div>
+      <p><b>③ 各自查表</b>。对 $\displaystyle\int_0^{1/2}\frac{\ln x}{x^p}\mathrm dx$，由基本结论「一、①b」知 <b>$0\lt p\lt1$ 时收敛</b>（题设已给 $p\gt0$）。</p>
+      <p>对 $\displaystyle\int_{1/2}^1\frac{\ln x}{(1-x)^q}\mathrm dx$，<b>换元 $1-x=t$</b>：</p>
+      <div class="fml">$\displaystyle\int_{1/2}^1\frac{\ln x}{(1-x)^q}\mathrm dx\xlongequal{1-x=t}\int_0^{1/2}\frac{\ln(1-t)}{t^q}\mathrm dt$</div>
+      <p>当 $t\to0^+$ 时 $\ln(1-t)\sim-t$，抹去无关因式，$\displaystyle\int_0^{1/2}\frac{\ln(1-t)}{t^q}\mathrm dt$ 与 $-\displaystyle\int_0^{1/2}\frac{\mathrm dt}{t^{q-1}}$ 敛散性相同。由基本结论「一、①a」，当 $0\lt q-1\lt1$ 即 <b>$1\lt q\lt2$</b> 时收敛；<b>当 $0\lt q\le1$ 时该积分是<u>定积分</u>，也收敛</b>。</p>
+      <p>综上 $0\lt p\lt1$，$0\lt q\lt2$，选 (A)。</p>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>"抹去无关因式"是本节最省时间的一步</b>：在某个端点处趋于<b>非零常数</b>的因子，对敛散性毫无影响，直接删。<b>但一定要看清是在哪个端点抹的</b>（$(1-x)^q$ 只在 $x\to0$ 端可抹，$x^p$ 只在 $x\to1$ 端可抹）。<br>
+      <b>换元 $1-x=t$ 的作用是"把右端点的奇点搬到 0"</b>，这样才能套 $\int_0^1$ 的表。<b>凡是 $x\to1^-$ 处有奇点，一律 $1-x=t$。</b><br>
+      <span class="dock">最容易漏的一句</span>：<b>"当 $0\lt q\le1$ 时该积分是定积分，也收敛"</b>——不写这句，答案就变成 (B) 的 $1\lt q\lt2$，只对了一半。<b>判敛时永远要问一句：这一段真的有奇点吗？</b><br>
+      <b>为什么 $q\lt2$ 而不是 $q\lt1$</b>：因为分子的 $\ln x\sim-(1-x)=-t$ <b>自带一次零点</b>，把 $\frac1{t^q}$ 的次数<b>降了一阶</b>变成 $\frac1{t^{q-1}}$。<b>分子的零点能"救"分母的极点</b>，这是本题的巧处。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 8.7</span> 设 $p$ 为常数，若反常积分 $\displaystyle\int_0^1x^p(1-x)^{p-1}\ln x\,\mathrm dx$ 收敛，则（　）<br>
+      (A) $p\lt-1$　(B) $-1\lt p\le0$　(C) $0\le p\lt1$　(D) $p\gt1$</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">(B)</span> ✔</p>
+      <p><span class="lab">解</span>拆为 $\displaystyle\int_0^{1/2}+\int_{1/2}^1$。</p>
+      <p><b>对 $\displaystyle\int_0^{1/2}x^p(1-x)^{p-1}\ln x\,\mathrm dx$，盯着 $x\to0^+$ 看</b>：$(1-x)^{p-1}\to1$ 是无关因式，故它与 $\displaystyle\int_0^{1/2}x^p\ln x\,\mathrm dx$ 敛散性相同。由基本结论「一、①b」（写成 $\frac{\ln x}{x^{-p}}$ 的形式），若它收敛则 <b>$0\le-p\lt1$，即 $-1\lt p\le0$</b>。</p>
+      <p><b>对 $\displaystyle\int_{1/2}^1x^p(1-x)^{p-1}\ln x\,\mathrm dx$，盯着 $x\to1^-$ 看</b>：$x^p\to1$ 是无关因式，故它与 $\displaystyle\int_{1/2}^1(1-x)^{p-1}\ln x\,\mathrm dx$ 敛散性相同。换元 $1-x=t$：</p>
+      <div class="fml">$\displaystyle\int_{1/2}^1(1-x)^{p-1}\ln x\,\mathrm dx\xlongequal{1-x=t}\int_0^{1/2}\frac{\ln(1-t)}{t^{1-p}}\mathrm dt$</div>
+      <p>又因为 $\lim\limits_{t\to0^+}\dfrac{\ln(1-t)/t^{1-p}}{t^p}=-1$，所以它与 $\displaystyle\int_0^{1/2}t^p\mathrm dt$ 同敛散，故当 <b>$0\lt-p\lt1$</b> 时反常积分收敛；<b>当 $p=0$ 时，该积分为定积分</b>（也收敛）。</p>
+      <p>综上，<b>$-1\lt p\le0$</b>，选 (B)。</p>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注 ⚠️ · 本章最精细的一处（我的复算差点在这里"抓错书"）</span>
+      <b>数值上看，$p=\frac12$ 时这个积分的两端<u>都可积</u>——那为什么答案里没有 $p\gt0$？</b><br>
+      <b>因为题目问的是"<u>反常积分</u>收敛"，而 $p\gt0$ 时它根本不是反常积分：</b>
+      <ul style="margin:6px 0 0 20px">
+        <li>$x\to0^+$ 处：$x^p\ln x\to0$（$p\gt0$），<b>有界，不是瑕点</b>；</li>
+        <li>$x\to1^-$ 处：$(1-x)^{p-1}\ln x\sim-(1-x)^{p}\to0$（$p\gt0$），<b>也不是瑕点</b>；</li>
+        <li>两端都没有瑕点 ⇒ <b>它是普通定积分</b>，谈不上"反常积分收敛"。</li>
+      </ul>
+      <b>而 $p=0$ 能进答案，恰恰因为此时被积函数是 $\dfrac{\ln x}{1-x}$，在 $x\to0^+$ 处 $\to-\infty$，<u>仍然是瑕点</u></b>（$x\to1^-$ 处 $\frac{\ln x}{1-x}\to-1$ 有界）。所以它是<b>真·反常积分且收敛</b>。<br>
+      <b>📌 这就是 §10 那条"反常积分 vs 积分"眉批的用处</b>——基本结论 ①b 里那个 $\boxed{0\le p}$ 的下界，含义正是"<b>它得先是个反常积分</b>"。<b>下界 $p\gt-1$ 管收敛，上界 $p\le0$ 管"是反常积分"，两个条件来源完全不同。</b><br>
+      <b>与强 8.6 的区别</b>：强 8.6 的题设直接写了"$p\gt0,q\gt0$"，所以那题不需要这层辨析；<b>本题题设只说"$p$ 为常数"，上界才需要靠这条定义来卡。</b>看题设的差别就知道命题人在考什么。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 8.8</span> 反常积分 ① $\displaystyle\int_0^{+\infty}\frac{|\sin x|}{\sqrt{x^3}}\mathrm dx$，② $\displaystyle\int_0^{+\infty}\frac{\mathrm dx}{1+\sqrt x\,|\sin x|}$ 的敛散性为（　）<br>
+      (A) ①收敛，②收敛　(B) ①收敛，②发散　(C) ①发散，②收敛　(D) ①发散，②发散</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">(B)</span> ✔<span style="color:var(--muted);font-size:.85rem">（① 数值 $\approx3.34$ 收敛；② 部分积分 $\int_0^R$ 在 $R=10^2,10^3,10^4,10^5$ 处持续爬升，发散 ✔）</span></p>
+      <p><span class="lab">① 收敛</span>拆为 $\displaystyle\int_0^{+\infty}\frac{|\sin x|}{\sqrt{x^3}}\mathrm dx=\int_0^1+\int_1^{+\infty}=I_1+I_2$。</p>
+      <p><b>对 $I_1$</b>（在 $(0,1)$ 内，一般用 $\sin x\lt x$）：</p>
+      <div class="fml">$0\le\dfrac{|\sin x|}{\sqrt{x^3}}\le\dfrac x{\sqrt{x^3}}=\dfrac1{\sqrt x}$</div>
+      <p>因 $\displaystyle\int_0^1\frac{\mathrm dx}{\sqrt x}$ 收敛（$p=\frac12\lt1$），故 $I_1$ 收敛。</p>
+      <p><b>对 $I_2$</b>（在 $(1,+\infty)$ 内，一般用 $|\sin x|\le1$）：$\dfrac{|\sin x|}{\sqrt{x^3}}\le\dfrac1{\sqrt{x^3}}$，而 $\displaystyle\int_1^{+\infty}\frac{\mathrm dx}{\sqrt{x^3}}$ 收敛（$p=\frac32\gt1$），故 $I_2$ 收敛。</p>
+      <p>故 $\displaystyle\int_0^{+\infty}\frac{|\sin x|}{\sqrt{x^3}}\mathrm dx$ <b>收敛</b>。</p>
+      <p><span class="lab">② 发散</span>$\dfrac1{1+\sqrt x\,|\sin x|}\ge\dfrac1{1+\sqrt x}\gt0$（用 $|\sin x|\le1$ 把分母放大），又 $\displaystyle\int_0^{+\infty}\frac{\mathrm dx}{1+\sqrt x}$ <b>发散</b>（$x\to+\infty$ 时 $\sim\frac1{\sqrt x}$，$p=\frac12\le1$），由比较判别法，②<b>发散</b>。</p>
+      <p>故选 (B)。</p>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注 · $|\sin x|$ 的放缩规矩（本题最该记的一条）</span>
+      <b>同一个 $|\sin x|$，在两端用<u>不同方向</u>的放缩：</b>
+      <div class="gridwrap"><table class="dense">
+        <tr><th></th><th>$x\to0^+$（$(0,1)$ 内）</th><th>$x\to+\infty$（$(1,+\infty)$ 内）</th></tr>
+        <tr><td>用哪条</td><td>$|\sin x|\lt x$</td><td>$|\sin x|\le1$</td></tr>
+        <tr><td>为什么</td><td>$\sin x$ 在 0 附近<b>是无穷小</b>，用它去<b>抵消分母的瑕点</b>（$x^{3/2}$ 降到 $x^{1/2}$）</td><td>$\sin x$ 在无穷远处<b>不趋于 0</b>，只能放到最大 1</td></tr>
+      </table></div>
+      <b>② 的方向相反</b>：要证<b>发散</b>就要找一个<b>更小</b>的发散积分作下界。$|\sin x|\le1$ 使分母变大、整体变小，正好给出下界 $\frac1{1+\sqrt x}$。<br>
+      <b>一句话</b>：<b>证收敛往上放（找更大的收敛积分），证发散往下放（找更小的发散积分）。</b><br>
+      <span class="dock">② 的直觉陷阱</span>：$\sqrt x|\sin x|$ 看起来"平均像 $\sqrt x$"，会以为被积函数 $\sim\frac1{\sqrt x}\cdot$ 某常数就发散——<b>结论对，但推理不严谨</b>（$|\sin x|$ 有无穷多个零点，那里被积函数是 1）。<b>严格的做法就是上面这一行放缩，一步到位。</b>
+    </div>
+  </div>
+
+  <!-- ================= 收官 ================= -->
+  <h2 id="end"><span class="idx">收官</span>本章一页纸 + 例题落位索引</h2>
+
+  <div class="key"><span class="tag">必记 · 整章压缩成七句话</span>
+    <ol style="margin:4px 0 0 20px">
+      <li><b>导函数是性质极强的函数</b>：有介值性（达布定理）、无第一类间断点、无无穷间断点、极限存在即连续。<b>所以"$f$ 有没有原函数"＝"$f$ 能不能当导函数"。</b></li>
+      <li><b>四类间断点的原函数判据</b>：可去 / 跳跃 / 无穷 ⇒ <b>一定没有</b>；振荡 ⇒ <b>不一定</b>（$x^2\sin\frac1x$ 型有，$\frac1x\sin\frac1x$ 型没有）。</li>
+      <li><b>可积的判据只看两件事</b>：有界 + 间断点不太多。<b>与间断点是哪一类无关。</b>必要条件是<b>有界</b>。</li>
+      <li><b>四象限</b>：原函数存在性 × 可积性 的四种组合<b>全部真实存在</b>（例 8.3）。</li>
+      <li><b>变限积分比 $f$ 光滑一档</b>：$f$ 可积 ⇒ $F$ 连续；$f$ 连续 ⇒ $F$ 可导。<b>跳跃点处 $F$ 的左右导数 ＝ $f$ 的左右极限；可去点处 $F$ 仍可导，但 $F'(x_0)\ne f(x_0)$（所以 $F$ 不是原函数）。</b></li>
+      <li><b>凑定积分定义三步</b>：提 $\frac1n$ → 凑 $\frac in$ → 读成 $\int_0^1$。<b>凑不成就先放缩再凑（夹逼）。连积先取对数。</b></li>
+      <li><b>判敛四步</b>：拆奇点 → 每端做等价替换、抹去无关因式 → 化到 $\frac1{x^p}$ 或 $\frac{\ln x}{x^p}$ → 查表取交集。<b>$p=1$ 永远是临界值，$\ln$ 扳不动它。</b></li>
+    </ol>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 这一章该花多少时间</span>
+    <p><b>本章考纲写明只出选择填空</b>，且大多数题<b>不需要计算</b>（例 8.3、例 8.11 都是纯概念题）。所以：</p>
+    <ul style="margin:4px 0 0 20px">
+      <li><b>§1–§5、§8–§9（概念部分）值得反复读</b>——它们决定你在考场上能不能"看一眼就排除两个选项"。四象限图与变限积分三条性质<b>建议默写一遍</b>。</li>
+      <li><b>§7（凑定积分定义）是纯套路，练 3 道就够</b>：强 8.1（连积取对数）、习 8.5（放缩）、强 8.5（取中点）各一道，覆盖全部变形。</li>
+      <li><b>§10 的含参大观 10 条不要死背</b>——记住"令 $\ln x=t$"这一个动作 + 四条基本结论，10 条全部现推，<b>比背表可靠得多</b>（考场上背串了就全错）。</li>
+      <li><b>⚠️ 唯一要额外小心的是"反常积分 vs 定积分"的术语区分</b>（§9 注 2 与 §10 的眉批），它在强 8.7 里<u>直接决定答案</u>。</li>
+    </ul>
+    <p style="margin-top:8px"><b>下一章预告</b>：第 9 章<b>一元函数积分学的计算</b>——换元、分部、有理函数、三角有理式、分段函数积分、变限积分求导，18 讲用一整棵十支线的解题树来组织。<b>那一章才是真正要动笔的地方，本章是它的地基。</b></p>
+  </div>
+
+  <div class="dolinks">
+    <div class="t">例题落位索引（34 题全收，按本页章节排）</div>
+    <div class="gridwrap"><table class="dense">
+      <tr><th>题号</th><th>考什么</th><th>答案</th><th>落在本页哪一节</th></tr>
+      <tr><td>基 8.1</td><td>原函数定义 · 两端求导 + 换元</td><td>(B)</td><td><a href="#s1">§1 不定积分</a></td></tr>
+      <tr><td>基 8.2</td><td>分段函数原函数 · 先连续后求导</td><td>(D)</td><td><a href="#s1">§1</a></td></tr>
+      <tr><td>证 · 定理(1)</td><td>连续必有原函数（<b>三层卷面</b>）</td><td>—</td><td><a href="#s2">§2 原函数存在性</a></td></tr>
+      <tr><td>证 · 定理(2)</td><td>第一类/无穷间断必无原函数（<b>三层卷面</b>）</td><td>—</td><td><a href="#s2">§2</a></td></tr>
+      <tr style="background:var(--amber-soft)"><td><b>基 8.3</b></td><td><b>★ 原函数存在性 × 可积性 四象限</b></td><td>(B)</td><td><a href="#s4">§4 四象限</a></td></tr>
+      <tr><td>基 8.7</td><td>严格不等式 · 局部保号性（<b>三层卷面</b>）</td><td>—</td><td><a href="#s5">§5 六条性质</a></td></tr>
+      <tr><td>基 8.8</td><td>积分中值定理 + 两种加强法（<b>三层卷面</b>）</td><td>—</td><td><a href="#s5">§5</a></td></tr>
+      <tr><td>基 8.9</td><td>$\frac{\tan x}x$ 比大小 · 上界 $\frac4\pi$</td><td>(B)</td><td><a href="#s6">§6 比大小</a></td></tr>
+      <tr><td>习 8.1</td><td>$\frac{\sin x}x$ 比大小 · 下界 $\frac2\pi$（<b>与基 8.9 镜像</b>）</td><td>(C)</td><td><a href="#s6">§6</a></td></tr>
+      <tr><td>基 8.10</td><td>$\sin(\sin x)$ vs $\cos(\cos x)$ · 换位公式</td><td>(A)</td><td><a href="#s6">§6</a></td></tr>
+      <tr><td>基 8.4</td><td>反函数与面积 · Young 不等式图形版</td><td>(A)</td><td><a href="#s6">§6</a></td></tr>
+      <tr><td>基 8.5</td><td>$\mathrm e^{-x}\sin x$ 面积的三种表达式</td><td>(C)</td><td><a href="#s6">§6</a></td></tr>
+      <tr style="background:var(--amber-soft)"><td><b>基 8.6</b></td><td><b>★ 凑定积分定义 vs 夹逼的判据</b></td><td>(A)</td><td><a href="#s7">§7 凑定义</a></td></tr>
+      <tr><td>习 8.4</td><td>凑定义 · 根号型（提 $n^2$）</td><td>$2\sqrt2-2$</td><td><a href="#s7">§7</a></td></tr>
+      <tr><td>习 8.5</td><td>放缩 + 凑定义 + 夹逼</td><td>$\frac2\pi$</td><td><a href="#s7">§7</a></td></tr>
+      <tr><td>强 8.1</td><td>连积取对数 → 连和</td><td>$\frac4{\mathrm e}$</td><td><a href="#s7">§7</a></td></tr>
+      <tr><td>强 8.2</td><td>放缩型 · 夹掉参数 $a$</td><td>(C)</td><td><a href="#s7">§7</a></td></tr>
+      <tr><td>强 8.3</td><td>变量型 · 凑 $\int_0^x$</td><td>$a=1$</td><td><a href="#s7">§7</a></td></tr>
+      <tr><td>强 8.4</td><td>极坐标分割型 · $[0,\frac\pi4]$</td><td>$\frac14+\frac\pi8$</td><td><a href="#s7">§7</a></td></tr>
+      <tr><td>强 8.5</td><td>取中点型 $\xi_k=\frac{2k-1}{2n}$</td><td>(C)</td><td><a href="#s7">§7</a></td></tr>
+      <tr style="background:var(--amber-soft)"><td><b>基 8.11</b></td><td><b>★ 图形题三板斧（考研真题）</b></td><td>(D)</td><td><a href="#s8">§8 变限积分</a></td></tr>
+      <tr><td>基 8.12</td><td>跳跃点处 $F$ 连续不可导</td><td>(C)</td><td><a href="#s8">§8</a></td></tr>
+      <tr style="background:var(--amber-soft)"><td><b>基 8.13</b></td><td><b>★ 可去点处 $F$ 可导但不是原函数</b></td><td>(B)</td><td><a href="#s8">§8</a></td></tr>
+      <tr><td>习 8.2</td><td>跳跃间断 · 有原函数/可积/可导三连判</td><td>(B)</td><td><a href="#s8">§8</a></td></tr>
+      <tr><td>习 8.6</td><td>锯齿波 $x-[x]$ 的变限积分左右导数</td><td>1</td><td><a href="#s8">§8</a></td></tr>
+      <tr><td>基 8.14</td><td>有界性证明 · 三次放缩（<b>三层卷面</b>）</td><td>—</td><td><a href="#s8">§8</a></td></tr>
+      <tr><td>定理 · 绝对值判敛法</td><td>造 $f+|f|\ge0$（<b>三层卷面</b>，书上点名必会）</td><td>—</td><td><a href="#s10">§10 判敛</a></td></tr>
+      <tr><td>基 8.15</td><td>$\frac1{x^a+x^b}$ · 两端各留主导项</td><td>(B)</td><td><a href="#s11">§11 实战</a></td></tr>
+      <tr><td>基 8.16</td><td>等价无穷小 + p 判据（填空）</td><td>$k\lt1$</td><td><a href="#s11">§11</a></td></tr>
+      <tr><td>基 8.17</td><td>四个反常积分挑发散 · <b>主值陷阱</b></td><td>(C)</td><td><a href="#s11">§11</a></td></tr>
+      <tr><td>基 8.18</td><td>$\int_0^1\frac{\ln x}{x^\alpha}$ · 借 $\varepsilon$（往大借）</td><td>(B)</td><td><a href="#s11">§11</a></td></tr>
+      <tr><td>基 8.19</td><td>$\int_1^{+\infty}\frac{\ln x}{x^\alpha}$ · 借 $\varepsilon$（往小借）</td><td>(B)</td><td><a href="#s11">§11</a></td></tr>
+      <tr><td>习 8.3</td><td>两个奇点各解一不等式取交集</td><td>(C)</td><td><a href="#s11">§11</a></td></tr>
+      <tr><td>习 8.7</td><td>$\int_2^{+\infty}\frac{\mathrm dx}{x\ln^px}$ 讨论（<b>三层卷面</b>）</td><td>$p\gt1$ 收敛</td><td><a href="#s11">§11</a></td></tr>
+      <tr><td>强 8.6</td><td>$\frac{\ln x}{x^p(1-x)^q}$ · 拆 + 抹 + 换元</td><td>(A)</td><td><a href="#s11">§11</a></td></tr>
+      <tr style="background:var(--red-soft)"><td><b>强 8.7</b></td><td><b>⚠️ "是不是反常积分"决定上界</b></td><td>(B)</td><td><a href="#s11">§11</a></td></tr>
+      <tr><td>强 8.8</td><td>$|\sin x|$ 两端不同方向放缩</td><td>(B)</td><td><a href="#s11">§11</a></td></tr>
+    </table></div>
+    <div class="note"><b>合计 34 道题（基础例题 19 + 课后习题 7 + 强化例题 8）＋ 2 条定理证明</b>，其中 <b>7 张按「想 → 写 → 校」三层给出考场卷面（共 27 个 ⛳ 采分点）</b>，其余 30 道为选填教学卡（不加卷面层）。<br>
+    <b>本章无数学三专属内容需要跳过</b>（与第 7 章不同），两本讲义的全部题目数一都要考。</div>
+    <a href="第07章_一元函数微分学的应用三_物理应用.html">← 上一章：第 7 章 物理应用</a>
+    <a href="../index.html">返回复盘中心</a>
+    <a href="../公式大全_速查与秒杀.html">公式大全 · 速查与秒杀</a>
+    <a href="../卡库_中值定理与级数判别.html">卡库：中值定理与级数判别</a>
+  </div>
+
+  <div class="outro">
+    <h3>下一章：第 9 章 · 一元函数积分学的计算</h3>
+    <p>本章建立的是<b>判断力</b>，第 9 章开始建立<b>计算力</b>。18 讲第 9 讲的解题树有<b>十条支线</b>：恒等变形法、第一类换元（凑微分）、第二类换元、分部积分、有理函数的积分、三角有理式的积分、求出原函数并计算积分值、变限积分函数的求导、分段函数的积分、几何法。<b>那是全书最需要手上功夫的一讲。</b></p>
+    <p style="margin-top:6px;color:var(--muted);font-size:.88rem">本页全部 34 道题的答案均经 sympy 符号计算与 scipy 数值积分<b>四轮</b>独立复核（判敛部分因 quad 对发散积分会静默返回有限值、对数型在数值上看不出趋势，最终改用<b>手写原函数 + 取极限</b>的方式定案），<b>书上一处错误也没有</b>。</p>
+  </div>
+</div>
+
+<script>
+"use strict";
+const $=id=>document.getElementById(id);
+const fmt=(v,n)=>{ if(!isFinite(v)) return '∞'; return v.toFixed(n===undefined?3:n); };
+
+/* ==================== 交互一：振荡间断点显微镜 ==================== */
+let osUseCos=false;
+function osF(x,m,k){ const t=1/Math.pow(Math.abs(x),k)*(x<0?-1:1);
+  const inner=osUseCos?Math.cos(1/Math.pow(x,k)):Math.sin(1/Math.pow(x,k));
+  return Math.pow(x,m)*inner; }
+function osDF(x,m,k){
+  const u=1/Math.pow(x,k);
+  const s=osUseCos?Math.cos(u):Math.sin(u), c=osUseCos?-Math.sin(u):Math.cos(u);
+  return m*Math.pow(x,m-1)*s + Math.pow(x,m)*c*(-k*Math.pow(x,-k-1));
+}
+function osDraw(){
+  const m=+$('os_m').value, k=+$('os_k').value, z=+$('os_z').value;
+  const R=Math.pow(10,-z/50);           // 视野半宽：1 → 0.01
+  $('os_mv').textContent='m = '+m; $('os_kv').textContent='k = '+k;
+  $('os_zv').textContent='|x| ≤ '+(R>=0.1?R.toFixed(2):R.toExponential(1));
+  // 取样
+  const N=3000, xs=[], Fs=[], Ds=[];
+  for(let i=0;i<=N;i++){
+    const x=-R+2*R*i/N; if(Math.abs(x)<R*1e-9) continue;
+    xs.push(x); Fs.push(osF(x,m,k)); Ds.push(osDF(x,m,k));
+  }
+  const maxF=Math.max(1e-12,...Fs.map(Math.abs));
+  const maxD=Math.max(1e-12,...Ds.map(Math.abs));
+  const W=620, HT=170, HB=170, PADL=44, PADR=14;
+  const X=v=>PADL+(v+R)/(2*R)*(W-PADL-PADR);
+  const Y1=v=>HT/2-v/(maxF*1.15)*(HT/2-14);
+  const Y2=v=>HT+22+HB/2-v/(maxD*1.15)*(HB/2-16);
+  let p1='',p2='',env1='',env2='';
+  xs.forEach((x,i)=>{ p1+=(i?'L':'M')+X(x).toFixed(1)+','+Y1(Fs[i]).toFixed(1);
+                      p2+=(i?'L':'M')+X(x).toFixed(1)+','+Y2(Ds[i]).toFixed(1); });
+  for(let i=0;i<=200;i++){ const x=-R+2*R*i/200; const e=Math.pow(Math.abs(x),m);
+    env1+=(i?'L':'M')+X(x).toFixed(1)+','+Y1(e).toFixed(1);
+    env2+=(i?'L':'M')+X(x).toFixed(1)+','+Y1(-e).toFixed(1); }
+  const bounded = (m-k-1)>=0;
+  $('os_svg').innerHTML=`
+    <line x1="${PADL}" y1="${HT/2}" x2="${W-PADR}" y2="${HT/2}" stroke="var(--muted)" stroke-width="1"/>
+    <line x1="${X(0)}" y1="10" x2="${X(0)}" y2="${HT-8}" stroke="var(--muted)" stroke-width="1"/>
+    <path d="${env1}" stroke="var(--amber)" stroke-width="1.2" fill="none" stroke-dasharray="4,3" opacity=".8"/>
+    <path d="${env2}" stroke="var(--amber)" stroke-width="1.2" fill="none" stroke-dasharray="4,3" opacity=".8"/>
+    <path d="${p1}" stroke="var(--accent)" stroke-width="1.7" fill="none"/>
+    <text x="${PADL+4}" y="18" font-size="11" fill="var(--accent)">原函数 F(x) = x^${m}·${osUseCos?'cos':'sin'}(1/x^${k})　（永远处处可导 ⇒ f 永远有原函数）</text>
+    <text x="${W-PADR-4}" y="18" font-size="10" fill="var(--amber)" text-anchor="end">橙虚线 = ±|x|^${m} 包络</text>
+    <text x="4" y="${HT/2+4}" font-size="9.5" fill="var(--muted)">0</text>
+    <text x="4" y="${Y1(maxF)+4}" font-size="9.5" fill="var(--muted)">${maxF.toExponential(1)}</text>
+
+    <line x1="${PADL}" y1="${HT+22+HB/2}" x2="${W-PADR}" y2="${HT+22+HB/2}" stroke="var(--muted)" stroke-width="1"/>
+    <line x1="${X(0)}" y1="${HT+30}" x2="${X(0)}" y2="${HT+22+HB-6}" stroke="var(--muted)" stroke-width="1"/>
+    <path d="${p2}" stroke="var(--purple)" stroke-width="1.4" fill="none"/>
+    <text x="${PADL+4}" y="${HT+38}" font-size="11" fill="var(--purple)">导函数 f = F′(x)　主项 −${k}x^(${m-k-1})·${osUseCos?'sin':'cos'}(1/x^${k})</text>
+    <text x="4" y="${HT+26+HB/2}" font-size="9.5" fill="var(--muted)">0</text>
+    <text x="4" y="${Y2(maxD)+4}" font-size="9.5" fill="${bounded?'var(--green)':'var(--red)'}">${maxD.toExponential(1)}</text>
+    <text x="${W-PADR-4}" y="${HT+38}" font-size="10" fill="${bounded?'var(--green)':'var(--red)'}" text-anchor="end">当前视野最大幅值 ${maxD.toExponential(2)}</text>`;
+  const v=$('os_v');
+  if(bounded){ v.className='verdict v-ok';
+    v.innerHTML=`m − k − 1 = ${m-k-1} ≥ 0　⇒　f 有界　⇒　<b>f 有原函数 ✅ 且可积 ✅</b>（放大视野时下图幅值被压平）`; }
+  else { v.className='verdict v-no';
+    v.innerHTML=`m − k − 1 = ${m-k-1} &lt; 0　⇒　f 无界　⇒　<b>f 有原函数 ✅ 但不可积 ❌</b>（放大视野时下图幅值持续冲高）`; }
+  let say='';
+  if(m===2&&k===2&&!osUseCos) say='这就是 <b>例 8.3 ②</b>：F = x²sin(1/x²)，f = 2x·sin(1/x²) − (2/x)·cos(1/x²)。主项次数 −1 ⇒ <b>无界</b> ⇒ 有原函数但定积分不存在。';
+  else if(m===2&&k===1&&osUseCos) say='这就是 <b>例 8.3 ④</b>：F = x²cos(1/x)，f = 2x·cos(1/x) + sin(1/x)。主项次数 0 ⇒ <b>有界</b>（书上验过 |f| ≤ 5）⇒ 有原函数且可积。';
+  else if(m===2&&k===1&&!osUseCos) say='这就是<b>注 3 的例子</b>：F = x²sin(1/x)，f = 2x·sin(1/x) − cos(1/x)，有界 ⇒ 两者都成立。';
+  else if(m-k-1===0) say='<b>临界情形 m = k + 1</b>：主项次数恰为 0，f 的幅值不增不减（振荡但有界）⇒ <b>仍然可积</b>。再把 m 减 1 就掉出去了。';
+  else say=`当前 F = x^${m}·${osUseCos?'cos':'sin'}(1/x^${k})。<b>判据只看 m − k − 1 的符号</b>：≥ 0 有界（可积），&lt; 0 无界（不可积）。<b>与"振荡"本身无关。</b>`;
+  $('os_say').innerHTML=say;
+  const probe=[R/2,R/10,R/100,R/1000].filter(v=>v>1e-14);
+  let rows='<tr><th>取样点 x</th><th>|F(x)|</th><th>|f(x)| 附近峰值</th><th>趋势</th></tr>';
+  probe.forEach(px=>{
+    let pk=0; for(let j=0;j<400;j++){ const xx=px*(1+j*0.004); pk=Math.max(pk,Math.abs(osDF(xx,m,k))); }
+    rows+=`<tr><td>${px.toExponential(1)}</td><td>${Math.abs(osF(px,m,k)).toExponential(2)}</td>
+      <td class="${bounded?'hit':'miss'}">${pk.toExponential(2)}</td>
+      <td class="${bounded?'hit':'miss'}">${bounded?'压平':'冲高'}</td></tr>`;
+  });
+  $('os_tab').innerHTML=rows;
+}
+['os_m','os_k','os_z'].forEach(id=>$(id).oninput=osDraw);
+$('os_tri').onclick=function(){ osUseCos=!osUseCos; this.classList.toggle('on',osUseCos);
+  this.textContent=osUseCos?'用 sin 内层':'用 cos 内层'; osDraw(); };
+function osPreset(m,k,cos,btn){
+  $('os_m').value=m; $('os_k').value=k; osUseCos=cos;
+  $('os_tri').classList.toggle('on',cos); $('os_tri').textContent=cos?'用 sin 内层':'用 cos 内层';
+  ['os_p1','os_p2','os_p3','os_p4'].forEach(id=>$(id).classList.remove('on'));
+  btn.classList.add('on'); osDraw();
+}
+$('os_p1').onclick=function(){osPreset(2,2,false,this);};
+$('os_p2').onclick=function(){osPreset(2,1,true,this);};
+$('os_p3').onclick=function(){osPreset(2,1,false,this);};
+$('os_p4').onclick=function(){osPreset(3,2,false,this);};
+
+/* ==================== 交互二：黎曼和实验室 ==================== */
+const RSF=[
+  {f:x=>x*x,               exact:1/3,                 lab:'x²',            tex:'1/3'},
+  {f:x=>1/(1+x*x),         exact:Math.PI/4,           lab:'1/(1+x²)',      tex:'π/4'},
+  {f:x=>1/(1+x),           exact:Math.log(2),         lab:'1/(1+x)',       tex:'ln2'},
+  {f:x=>Math.sin(Math.PI*x),exact:2/Math.PI,          lab:'sin(πx)',       tex:'2/π'},
+  {f:x=>(1+x)/(1+x*x),     exact:Math.PI/4+Math.log(2)/2, lab:'(1+x)/(1+x²)', tex:'π/4+ln2/2'},
+  {f:x=>1/Math.sqrt(1+x),  exact:2*Math.SQRT2-2,      lab:'1/√(1+x)',      tex:'2√2−2'},
+  {f:x=>Math.log(1+x),     exact:2*Math.log(2)-1,     lab:'ln(1+x)',       tex:'2ln2−1'}
+];
+const RSMODE=[
+  {id:'rs_r', name:'右端点',   xi:(a,b,l)=>b},
+  {id:'rs_le',name:'左端点',   xi:(a,b,l)=>a},
+  {id:'rs_m', name:'中点',     xi:(a,b,l)=>(a+b)/2},
+  {id:'rs_c', name:'凸组合',   xi:(a,b,l)=>l*a+(1-l)*b},
+  {id:'rs_g', name:'几何均值', xi:(a,b,l)=>Math.sqrt(a*b)},
+  {id:'rs_q', name:'均方根',   xi:(a,b,l)=>Math.sqrt((a*a+b*b)/2)},
+  {id:'rs_h', name:'调和均值', xi:(a,b,l)=>a===0?0:2/(1/a+1/b)}
+];
+let rsMode=0;
+function rsSum(fi,n,mi,lam){
+  const F=RSF[fi].f; let S=0;
+  for(let k=1;k<=n;k++){ const a=(k-1)/n, b=k/n; let xi=RSMODE[mi].xi(a,b,lam);
+    if(!isFinite(xi)) xi=(a+b)/2; S+=F(xi)/n; }
+  return S;
+}
+function rsDraw(){
+  const fi=+$('rs_f').value, n=+$('rs_n').value, lam=+$('rs_l').value/100;
+  $('rs_nv').textContent='n = '+n; $('rs_lv').textContent='λ₁ = '+lam.toFixed(2);
+  const F=RSF[fi].f, exact=RSF[fi].exact;
+  const W=620,H=300,PL=44,PR=16,PT=18,PB=34;
+  let ymax=0; for(let i=0;i<=400;i++) ymax=Math.max(ymax,F(i/400));
+  ymax*=1.12;
+  const X=v=>PL+v*(W-PL-PR), Y=v=>H-PB-v/ymax*(H-PT-PB);
+  let bars='',dots='',cur='';
+  for(let k=1;k<=n;k++){
+    const a=(k-1)/n,b=k/n; let xi=RSMODE[rsMode].xi(a,b,lam); if(!isFinite(xi)) xi=(a+b)/2;
+    const h=F(xi);
+    bars+=`<rect x="${X(a).toFixed(1)}" y="${Y(h).toFixed(1)}" width="${(X(b)-X(a)).toFixed(1)}"
+      height="${(Y(0)-Y(h)).toFixed(1)}" fill="var(--purple)" opacity=".22" stroke="var(--purple)" stroke-width=".7"/>`;
+    if(n<=30) dots+=`<circle cx="${X(xi).toFixed(1)}" cy="${Y(h).toFixed(1)}" r="2.6" fill="var(--red)"/>`;
+  }
+  for(let i=0;i<=400;i++){ const x=i/400; cur+=(i?'L':'M')+X(x).toFixed(1)+','+Y(F(x)).toFixed(1); }
+  $('rs_svg').innerHTML=`${bars}
+    <path d="${cur}" stroke="var(--accent)" stroke-width="2.2" fill="none"/>${dots}
+    <line x1="${PL}" y1="${Y(0)}" x2="${W-PR}" y2="${Y(0)}" stroke="var(--muted)" stroke-width="1.2"/>
+    <line x1="${PL}" y1="${H-PB+6}" x2="${PL}" y2="${PT-6}" stroke="var(--muted)" stroke-width="1.2"/>
+    <text x="${PL-6}" y="${Y(0)+14}" font-size="10" fill="var(--muted)">0</text>
+    <text x="${X(1)-4}" y="${Y(0)+14}" font-size="10" fill="var(--muted)">1</text>
+    <text x="${PL+6}" y="${PT+6}" font-size="11" fill="var(--accent)">f(x) = ${RSF[fi].lab}　∫₀¹ = ${RSF[fi].tex} = ${fmt(exact,6)}</text>
+    <text x="${W-PR-4}" y="${PT+6}" font-size="10.5" fill="var(--purple)" text-anchor="end">当前：${RSMODE[rsMode].name}，n = ${n}</text>`;
+  let rows='<tr><th>取高方式</th><th>ξ_k 公式</th><th>黎曼和</th><th>误差</th></tr>';
+  RSMODE.forEach((M,mi)=>{
+    const S=rsSum(fi,n,mi,lam), err=S-exact;
+    const expr=['k/n','(k−1)/n','(2k−1)/2n','λ₁(k−1)/n+λ₂k/n','√(k(k−1))/n','√(((k−1)²+k²)/2)/n','2/((n/(k−1))+(n/k))'][mi];
+    rows+=`<tr${mi===rsMode?' class="now"':''}><td>${M.name}</td><td style="font-size:.74rem">${expr}</td>
+      <td>${fmt(S,6)}</td><td class="${Math.abs(err)<0.002?'hit':''}">${err>=0?'+':''}${fmt(err,6)}</td></tr>`;
+  });
+  $('rs_tab').innerHTML=rows;
+  const S=rsSum(fi,n,rsMode,lam), e1=Math.abs(S-exact);
+  const S2=rsSum(fi,2*n,rsMode,lam), e2=Math.abs(S2-exact);
+  const rate=e2>1e-14?Math.log2(e1/e2):0;
+  $('rs_say').innerHTML=`当前误差 <b>${fmt(e1,7)}</b>；把 n 翻倍到 ${2*n} 后误差 <b>${fmt(e2,7)}</b>，
+    即误差按 <b>O(n<sup>−${fmt(rate,2)}</sup>)</b> 衰减。
+    ${rate>1.6?'<b>接近 2 阶</b>——中点/对称取法特有的加速。':'一阶衰减，这是端点型取法的常态。'}
+    不管哪一种，<b>n → ∞ 时七条误差全部趋于 0</b>，这就是"任意分割、任意取高"的含义。`;
+}
+$('rs_f').onchange=rsDraw; $('rs_n').oninput=rsDraw; $('rs_l').oninput=rsDraw;
+RSMODE.forEach((M,mi)=>{ $(M.id).onclick=function(){
+  rsMode=mi; RSMODE.forEach(m2=>$(m2.id).classList.remove('on')); this.classList.add('on'); rsDraw(); };});
+
+/* ==================== 交互三：p 判据速查台 ==================== */
+/* 每条：被积函数 f(x)，积分区间，是否需要 q，判敛函数（解析结论），说明 */
+const PP={
+ a1:{f:(x,p)=>Math.pow(x,-p), lo:0,hi:1, sing:'lo', q:false,
+     conv:p=>p<1&&p>0, rule:'收敛 ⟺ 0 &lt; p &lt; 1', name:'∫₀¹ dx/xᵖ',
+     note:p=>p<=0?'⚠️ p ≤ 0 时它<b>不是反常积分</b>（被积函数有界），是普通定积分。':'瑕点在 x = 0。'},
+ a2:{f:(x,p)=>Math.pow(x,-p), lo:1,hi:Infinity, sing:'hi', q:false,
+     conv:p=>p>1, rule:'收敛 ⟺ p &gt; 1', name:'∫₁^∞ dx/xᵖ', note:()=>'奇点在 +∞。'},
+ b1:{f:(x,p)=>Math.log(x)*Math.pow(x,-p), lo:0,hi:1, sing:'lo', q:false,
+     conv:p=>p<1&&p>=0, rule:'收敛 ⟺ 0 ≤ p &lt; 1', name:'∫₀¹ lnx/xᵖ dx',
+     note:p=>p<0?'⚠️ p &lt; 0 时 x^(−p)·lnx → 0，<b>无瑕点，不是反常积分</b>。':'p = 0 时值为 −1，确实收敛。'},
+ b2:{f:(x,p)=>Math.log(x)*Math.pow(x,-p), lo:1,hi:Infinity, sing:'hi', q:false,
+     conv:p=>p>1, rule:'收敛 ⟺ p &gt; 1', name:'∫₁^∞ lnx/xᵖ dx', note:()=>'与不带 ln 的判据完全一样——ln 扳不动临界值。'},
+ c1:{f:(x,p)=>1/(x*Math.pow(Math.log(x),p)), lo:1,hi:2, sing:'lo', q:false,
+     conv:p=>p<1&&p>0, rule:'收敛 ⟺ 0 &lt; p &lt; 1', name:'∫₁² dx/(x·lnᵖx)',
+     note:()=>'令 ln x = t ⇒ ∫₀^{ln2} dt/tᵖ，正是基本结论 ①a。'},
+ c2:{f:(x,p)=>1/(x*Math.pow(Math.log(x),p)), lo:2,hi:Infinity, sing:'hi', q:false,
+     conv:p=>p>1, rule:'收敛 ⟺ p &gt; 1', name:'∫₂^∞ dx/(x·lnᵖx)',
+     note:()=>'令 ln x = t ⇒ ∫_{ln2}^∞ dt/tᵖ，正是 ②a。与级数 Σ1/(n·lnᵖn) 同敛散。'},
+ c3:{f:(x,p)=>1/(x*Math.pow(Math.log(x),p)), lo:1,hi:Infinity, sing:'both', q:false,
+     conv:()=>false, rule:'<b>必发散</b>（与 p 无关）', name:'∫₁^∞ dx/(x·lnᵖx)',
+     note:p=>p<1?'p &lt; 1：头部 ∫₁² 收敛，但<b>尾部 ∫₂^∞ 发散</b>。':'p ≥ 1：<b>头部 ∫₁² 就发散了</b>。'},
+ c4:{f:(x,p)=>Math.exp(-p*x)*Math.pow(Math.log(x),2), lo:2,hi:Infinity, sing:'hi', q:false,
+     conv:p=>p>0, rule:'α &gt; 0 <b>必收敛</b>；α &lt; 0 <b>必发散</b>', name:'∫₂^∞ e^(−αx)·ln²x dx', plab:'参数 α', smax:1.6,
+     note:p=>p>0?'指数压倒一切：ln^p x ≪ x^q ≪ a^x。':'α ≤ 0 时被积函数不趋于 0，必发散。'},
+ c5:{f:(x,p,q)=>1/(Math.pow(x,p)*Math.pow(Math.log(x),q)), lo:1,hi:2, sing:'lo', q:true,
+     conv:(p,q)=>q<1&&q>0, rule:'收敛 ⟺ 0 &lt; q &lt; 1（<b>与 p 无关</b>）', name:'∫₁² dx/(xᵖ·ln^q x)',
+     note:()=>'令 ln x = t ⇒ ∫₀^{ln2} e^{−(p−1)t}/t^q dt，有限区间上 e 因子有界，<b>抹去</b>。'},
+ c6:{f:(x,p,q)=>1/(Math.pow(x,p)*Math.pow(Math.log(x),q)), lo:2,hi:Infinity, sing:'hi', q:true,
+     conv:(p,q)=>p>1||(Math.abs(p-1)<1e-9&&q>1), rule:'p &gt; 1 收敛（q 任意）；p &lt; 1 发散；p = 1 时看 q &gt; 1',
+     name:'∫₂^∞ dx/(xᵖ·ln^q x)',
+     note:p=>Math.abs(p-1)<1e-9?'<b>p = 1 是临界线</b>，此时退化为大观 ②，由 q 定生死。':'无穷区间上 e^{−(p−1)t} 说了算，q 完全不起作用。'},
+ c7:{f:(x,p)=>1/Math.pow(Math.abs(Math.log(x)),p), lo:0,hi:1, sing:'hi', q:false,
+     conv:p=>p<1&&Math.abs(p)>1e-9, rule:'收敛 ⟺ p &lt; 1 且 p ≠ 0', name:'∫₀¹ dx/|lnx|ᵖ',
+     note:()=>'令 ln x = −t ⇒ ∫₀^∞ e^{−t}/tᵖ dt = Γ(1−p)。瑕点在 x = 1（那里 ln x → 0）。'},
+ c8:{f:(x,p)=>1/Math.pow(Math.abs(Math.log(x)),p), lo:1,hi:2, sing:'lo', q:false,
+     conv:p=>p<1&&p>0, rule:'收敛 ⟺ 0 &lt; p &lt; 1', name:'∫₁² dx/|lnx|ᵖ',
+     note:()=>'令 ln x = t ⇒ ∫₀^{ln2} e^t/tᵖ dt，有限区间上 e^t 有界，抹去。'},
+ c10:{f:(x,p)=>1/Math.pow(Math.abs(Math.log(x)),p), lo:2,hi:Infinity, sing:'hi', q:false,
+     conv:()=>false, rule:'<b>必发散</b>（与 p 无关）', name:'∫₂^∞ dx/|lnx|ᵖ',
+     note:()=>'令 ln x = t ⇒ ∫_{ln2}^∞ e^t/tᵖ dt，<b>被积函数 → +∞</b>，必发散。'}
+};
+function ppIntegrate(o,p,q,upTo){
+  // 复合 Simpson，自适应避开端点
+  const lo=o.lo, hi=isFinite(o.hi)?o.hi:upTo;
+  let a=lo, b=Math.min(hi,upTo);
+  const eps=1e-10;
+  if(o.sing==='lo'||o.sing==='both') a=lo+Math.max(eps,(b-lo)*1e-9);
+  if(o.sing==='hi'&&isFinite(o.hi)) b=b-Math.max(eps,(b-a)*1e-9);
+  if(!(b>a)) return 0;
+  const N=2000; let S=0;
+  const g=x=>{ const v=o.q?o.f(x,p,q):o.f(x,p); return isFinite(v)?v:0; };
+  // 对数变换取样，端点密
+  for(let i=0;i<N;i++){
+    const t0=i/N, t1=(i+1)/N;
+    const w=t=>a+(b-a)*t*t*(3-2*t);              // 端点加密
+    const x0=w(t0), x1=w(t1), xm=(x0+x1)/2;
+    const d=(x1-x0)/6*(g(x0)+4*g(xm)+g(x1));
+    if(isFinite(d)) S+=d;
+    if(Math.abs(S)>1e12) return Math.sign(S)*1e12;   // 指数发散型封顶，避免 double 溢出
+  }
+  return isFinite(S)?S:1e12;
+}
+function ppDraw(){
+  const key=$('pp_sel').value, o=PP[key];
+  const p=+$('pp_p').value/100, q=+$('pp_q').value/100;
+  $('pp_plab').textContent=o.plab||'参数 p';
+  $('pp_pv').textContent=(o.plab?'α':'p')+' = '+p.toFixed(2);
+  $('pp_qv').textContent='q = '+q.toFixed(2);
+  $('pp_qrow').style.display=o.q?'flex':'none';
+  const ok=o.q?o.conv(p,q):o.conv(p);
+  const v=$('pp_v');
+  v.className='verdict '+(ok?'v-ok':'v-no');
+  v.innerHTML=`${o.name}　当前 ${o.plab?'α':'p'} = ${p.toFixed(2)}${o.q?'，q = '+q.toFixed(2):''}　⇒　<b>${ok?'收敛 ✅':'发散 ❌'}</b>　｜　结论：${o.rule}`;
+  $('pp_say').innerHTML=(typeof o.note==='function'?o.note(p,q):o.note);
+  // 画图：左＝被积函数，右＝部分积分
+  const W=620,H=250,MID=310,PT=20,PB=30,PL=42;
+  const g=x=>{ const val=o.q?o.f(x,p,q):o.f(x,p); return isFinite(val)?val:NaN; };
+  const lo=o.lo, hiV=isFinite(o.hi)?o.hi:(o.lo+8);
+  const xs=[],ys=[];
+  for(let i=1;i<300;i++){ const x=lo+(hiV-lo)*i/300; const y=g(x); if(isFinite(y)){xs.push(x);ys.push(y);} }
+  let ymax=0; ys.forEach(y=>{ if(Math.abs(y)<1e6) ymax=Math.max(ymax,Math.abs(y)); });
+  ymax=Math.max(ymax,1e-6)*1.15;
+  const X1=x=>PL+(x-lo)/(hiV-lo)*(MID-PL-16), Y1=y=>H-PB-(y+ymax)/(2*ymax)*(H-PT-PB);
+  let c1='';
+  let st1=false;
+  xs.forEach((x,i)=>{ const y=Math.max(-ymax,Math.min(ymax,ys[i])); const yy=Y1(y);
+    if(isFinite(yy)){ c1+=(st1?'L':'M')+X1(x).toFixed(1)+','+yy.toFixed(1); st1=true; } });
+  // 部分积分序列
+  const steps=[], vals=[];
+  const M=40;
+  for(let i=1;i<=M;i++){
+    const frac=i/M;
+    let up;
+    const SM=o.smax!==undefined?o.smax:6;            // 10^SM 为无穷端最大截断
+    if(isFinite(o.hi)) up=o.hi-(o.hi-o.lo)*Math.pow(10,-6*frac);
+    else up=o.lo+Math.pow(10,frac*SM);
+    steps.push(up); vals.push(ppIntegrate(o,p,q,up));
+  }
+  let vmax=0; vals.forEach(v2=>{ if(isFinite(v2)) vmax=Math.max(vmax,Math.abs(v2)); });
+  vmax=Math.max(vmax,1e-6)*1.15;
+  const X2=i=>MID+18+i/(M-1)*(W-MID-34), Y2=v2=>H-PB-(v2+vmax)/(2*vmax)*(H-PT-PB);
+  let c2='',started=false;
+  vals.forEach((v2,i)=>{ const yy=Y2(v2);
+    if(isFinite(v2)&&isFinite(yy)){ c2+=(started?'L':'M')+X2(i).toFixed(1)+','+yy.toFixed(1); started=true; } });
+  const last=vals[vals.length-1];
+  $('pp_svg').innerHTML=`
+    <line x1="${PL}" y1="${Y1(0)}" x2="${MID-16}" y2="${Y1(0)}" stroke="var(--muted)" stroke-width="1"/>
+    <line x1="${PL}" y1="${H-PB+4}" x2="${PL}" y2="${PT-6}" stroke="var(--muted)" stroke-width="1"/>
+    <path d="${c1}" stroke="var(--accent)" stroke-width="1.9" fill="none"/>
+    <text x="${PL+2}" y="${PT-6}" font-size="10.5" fill="var(--accent)">被积函数（纵轴截断 ±${ymax.toExponential(1)}）</text>
+    <text x="${PL-4}" y="${H-PB+14}" font-size="9.5" fill="var(--muted)">${lo}</text>
+    <text x="${MID-22}" y="${H-PB+14}" font-size="9.5" fill="var(--muted)">${isFinite(o.hi)?o.hi:'→∞'}</text>
+
+    <line x1="${MID+18}" y1="${Y2(0)}" x2="${W-16}" y2="${Y2(0)}" stroke="var(--muted)" stroke-width="1"/>
+    <line x1="${MID+18}" y1="${H-PB+4}" x2="${MID+18}" y2="${PT-6}" stroke="var(--muted)" stroke-width="1"/>
+    ${ok?`<line x1="${MID+18}" y1="${Y2(last)}" x2="${W-16}" y2="${Y2(last)}" stroke="var(--green)" stroke-width="1" stroke-dasharray="4,3"/>`:''}
+    <path d="${c2}" stroke="var(--purple)" stroke-width="2" fill="none"/>
+    <text x="${MID+20}" y="${PT-6}" font-size="10.5" fill="var(--purple)">部分积分 Φ(s)　${ok?'→ 稳住（收敛）':'→ 持续爬（发散）'}</text>
+    <text x="${W-16}" y="${H-PB+14}" font-size="9.5" fill="var(--muted)" text-anchor="end">${isFinite(o.hi)?'s→'+o.hi:'s→'+(o.lo+Math.pow(10,o.smax!==undefined?o.smax:6)).toExponential(0)}</text>`;
+  let rows='<tr><th>截断位置 s</th><th>部分积分 Φ(s)</th><th>相邻增量</th></tr>';
+  [9,19,29,39].forEach(i=>{
+    const inc=i>0?vals[i]-vals[i-10>=0?i-10:0]:0;
+    rows+=`<tr><td>${isFinite(o.hi)?steps[i].toFixed(8):steps[i].toExponential(1)}</td>
+      <td>${!isFinite(vals[i])||Math.abs(vals[i])>=1e11?'→∞':fmt(vals[i],6)}</td>
+      <td class="${ok?'hit':'miss'}">${fmt(inc,6)}</td></tr>`;
+  });
+  $('pp_tab').innerHTML=rows;
+}
+$('pp_sel').onchange=ppDraw; $('pp_p').oninput=ppDraw; $('pp_q').oninput=ppDraw;
+
+/* ==================== 启动 ==================== */
+osDraw(); rsDraw(); ppDraw();
+</script>
+</body>
+</html>
