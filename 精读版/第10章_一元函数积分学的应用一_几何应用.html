@@ -1,0 +1,1861 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>精读版 · 高数 第10章 一元函数积分学的应用（一）几何应用</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],ignoredClasses:['nokatex']})"></script>
+<link rel="stylesheet" href="style.css">
+<style>
+/* ===== 本章专属：大观速查台 / 绕谁转对拍台 / ds三形态 / 定直线旋转计算器 ===== */
+.tool{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:20px 0}
+.tool h4{margin:0 0 4px;font-size:1rem;color:var(--accent)}
+.tool .hint{color:var(--muted);font-size:.82rem;margin-bottom:12px;line-height:1.7}
+.ctl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0}
+.ctl button{font:inherit;font-size:.82rem;padding:4px 13px;border-radius:8px;cursor:pointer;
+  border:1px solid var(--line);background:var(--card);color:var(--muted)}
+.ctl button.on{background:var(--accent-soft);color:var(--accent);border-color:var(--accent);font-weight:700}
+.ctl button:hover{filter:brightness(.96)}
+.ctl label{font-size:.8rem;color:var(--muted);min-width:9.5em}
+.ctl input[type=range]{flex:1 1 150px;min-width:120px;accent-color:var(--accent)}
+.ctl input[type=number]{font:inherit;font-size:.82rem;width:4.8em;padding:3px 7px;border-radius:7px;
+  border:1px solid var(--line);background:var(--card);color:var(--ink)}
+.ctl select{font:inherit;font-size:.82rem;padding:4px 9px;border-radius:8px;border:1px solid var(--line);
+  background:var(--card);color:var(--ink);max-width:100%}
+.ctl .val{font-family:var(--mono);font-size:.78rem;color:var(--accent);min-width:6.5em;text-align:right}
+.scene{background:var(--bg);border:1px solid var(--line);border-radius:10px;margin:10px 0}
+.scene svg{display:block;width:100%;height:auto}
+.say{background:var(--accent-soft);border-radius:8px;padding:9px 13px;margin:10px 0;
+  font-size:.86rem;color:var(--accent);line-height:1.75;min-height:2em}
+.say b{color:var(--accent)}
+.verdict{font-size:.88rem;font-weight:700;border-radius:8px;padding:7px 13px;margin:10px 0;display:block}
+.v-ok{background:var(--green-soft);color:var(--green)}
+.v-no{background:var(--red-soft);color:var(--red)}
+.v-inf{background:var(--amber-soft);color:var(--amber)}
+.dq{width:100%;min-width:0;font-size:.8rem;margin:6px 0;border-collapse:collapse}
+.dq th,.dq td{padding:4px 8px;font-family:var(--mono);text-align:right;white-space:nowrap;border-bottom:1px solid var(--line)}
+.dq th:first-child,.dq td:first-child{text-align:left;font-family:var(--sans);white-space:normal}
+.dq td.hit{color:var(--green);font-weight:700}
+.legend2{font-size:.78rem;color:var(--muted);line-height:1.7;margin-top:6px}
+.chip{display:inline-block;font-size:.72rem;border-radius:5px;padding:1px 7px;margin-right:6px}
+.c-b{background:var(--accent-soft);color:var(--accent)}
+.c-g{background:var(--green-soft);color:var(--green)}
+.c-r{background:var(--red-soft);color:var(--red)}
+.c-a{background:var(--amber-soft);color:var(--amber)}
+.c-p{background:var(--purple-soft);color:var(--purple)}
+table.dense{font-size:.84rem;min-width:420px}
+table.dense td{padding:5px 9px}
+figure.fig{margin:14px 0;text-align:center;background:var(--card);border:1px solid var(--line);
+  border-radius:10px;padding:12px 10px 8px;overflow-x:auto}
+figure.fig svg{max-width:100%;height:auto}
+figure.fig figcaption{font-size:.78rem;color:var(--muted);line-height:1.7;margin-top:6px;text-align:left;padding:0 4px}
+.figrow{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:12px 0}
+.figrow figure.fig{flex:1 1 220px;margin:0}
+/* 总图 */
+.tenline{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 12px;margin:16px 0}
+.tenline svg{display:block;min-width:660px}
+/* 三步条 */
+.steps3{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.steps3 div{flex:1 1 190px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 13px;font-size:.85rem;line-height:1.75}
+.steps3 div b{color:var(--accent);display:block;margin-bottom:3px}
+/* 公式速查小卡 */
+.fcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,230px),1fr));gap:9px;margin:14px 0}
+.fcards div{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:9px 12px;font-size:.84rem;line-height:1.8}
+.fcards div b{color:var(--accent);font-size:.74rem;display:block;letter-spacing:.05em;margin-bottom:2px}
+tr.now td{background:var(--accent-soft)}
+/* 大观速查台：图形网格 */
+.gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,148px),1fr));gap:8px;margin:10px 0}
+.gallery button{padding:6px 4px 4px;border-radius:10px;border:1px solid var(--line);background:var(--card);
+  cursor:pointer;font:inherit;font-size:.74rem;color:var(--muted);line-height:1.5;text-align:center}
+.gallery button.on{border-color:var(--accent);background:var(--accent-soft);color:var(--accent);font-weight:700}
+.gallery button svg{display:block;margin:0 auto 2px;width:100%;height:52px}
+.quant{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:8px;margin:8px 0}
+.quant div{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px 11px;font-size:.85rem;text-align:center}
+.quant div b{display:block;font-size:.72rem;color:var(--muted);letter-spacing:.05em;margin-bottom:3px}
+.quant div .hid{color:var(--muted);opacity:.35;letter-spacing:.2em}
+.quant div.none{color:var(--muted);opacity:.55}
+@media (max-width:560px){ .ctl{gap:6px} .ctl label{min-width:100%} .dq{font-size:.72rem}
+  .figrow figure.fig{flex:1 1 160px} .gallery{grid-template-columns:repeat(auto-fill,minmax(120px,1fr))} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <a class="back" href="../index.html">← 返回数学复盘中心</a>
+
+  <header>
+    <h1>第 10 章 · 一元函数积分学的应用（一）——几何应用</h1>
+    <div class="sub">
+      张宇《基础30讲》第 10 讲（书页 <b>263–281</b>，19 页）＋《高数18讲》第 10 讲（书页 <b>105–119</b>，15 页），共 <b>34 页</b>逐页转录。<br>
+      <b>本章的全部内容就四个字：套公式，做计算。</b>——上一讲（第 9 讲）练的是"怎么算积分"，这一讲练的是"该列哪个积分"。<br>
+      <b>38 道题一道不漏</b>（基础例题 14 ＋ 课后习题 9 ＋ 强化例题 15），全部结论经 <b>mpmath 高精度独立复算（87 项）</b>，<b>书一处没错</b>。
+    </div>
+  </header>
+
+  <div class="legend">
+    <b>怎么读这一页</b>（大题一律「想 → 写 → 校」三层，<b>顺序固定，别跳着看</b>）：<br>
+    <span class="swatch" style="background:var(--purple)"></span><b>💭 思路</b>：动手<b>前</b>看／卡壳时看。只讲"为什么走这条路"，不含结果。<b>看完就合上页面自己写，别直接翻卷面。</b><br>
+    <span class="swatch" style="background:var(--accent)"></span><b>✍️ 考场卷面</b>：写完<b>对照</b>。只有考场上真要落笔的字，<span style="color:var(--green);font-weight:700">⛳</span> 标采分点。<br>
+    <span class="swatch" style="background:var(--muted)"></span><b>📌 批注</b>：对照完<b>校对</b>。公式适用边界、扣分点、心算技巧——这些考场上<b>不要</b>落笔。<br>
+    <span class="swatch" style="background:var(--amber)"></span><b>必记</b>　<span class="swatch" style="background:var(--red)"></span><b>陷阱</b>　<span class="swatch" style="background:var(--blue)"></span><b>补讲</b>（书上没写但该知道的）　<span class="swatch" style="background:var(--green)"></span><b>强化专属</b>（18 讲有、基础讲没有）<br>
+    <span class="layer L-base">基</span>＝基础30讲　<span class="layer L-str">强</span>＝高数18讲　右上角 <span class="pg" style="float:none">P.264</span> 是书页码。<br>
+    <b>选择填空题不写卷面层</b>——考场上本就不写过程，那类卡保持"答案 → 分析 → 要害"的教学式排版。
+  </div>
+
+  <nav class="toc">
+    <a href="#s0">定位：测度 vs 性态</a>
+    <a href="#s1">一、平面图形的面积</a>
+    <a href="#s2">二、旋转体的体积</a>
+    <a href="#s3">三、函数的平均值</a>
+    <a href="#s4">四、平面曲线的弧长</a>
+    <a href="#s5">五、旋转曲面的侧面积</a>
+    <a href="#s6">六、平行截面 · 绕 y=x</a>
+    <a href="#s7">七、形心坐标</a>
+    <a href="#s8">八、★基本图形大观</a>
+    <a href="#s9">九、四类函数表达形式</a>
+    <a href="#s10">十、综合题</a>
+    <a href="#end">收官 + 落位索引</a>
+  </nav>
+
+  <!-- ================= s0 定位 ================= -->
+  <h2 id="s0"><span class="idx">定位</span>同是"几何应用"，第 5 讲研究<u>性态</u>，本讲研究<u>测度</u></h2>
+
+  <div class="key"><span class="tag">必记 · 一句话概括整章</span>
+    <p>基础讲知识结构页的<b>页边对比</b>（原话）：</p>
+    <ul>
+      <li><b>微分学几何应用</b>（第 5 讲）：研究<b>性态</b>——极值、最值点、拐点、单调性、凹凸性、渐近线。<em>比较复杂</em>（要判别最值、要找出整个区间所有可疑点）。</li>
+      <li><b>积分学几何应用</b>（本讲）：研究<b>测度</b>——面积、体积、弧长、侧面积。<em>相对简单</em>，<b>套公式，做计算</b>。</li>
+    </ul>
+    <p>扉页顶上那行手写批注把整讲的目标写死了：<b>总目标＝套公式，做计算</b>，而"做计算"三个字被框起来打了个箭头指向 <b>→ 第 9 讲的内容</b>。<br>
+    <b>所以本讲真正的难点不在本讲</b>：列式子只要认准图形选公式，<u>难的是列完之后那个积分你算不算得动</u>——这就是为什么第 9 讲要花 48 页。</p>
+  </div>
+
+  <div class="tenline">
+    <svg viewBox="0 0 700 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="第10讲基础知识结构图">
+      <defs><marker id="ar" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+        <path d="M0,0 L6,3 L0,6 z" fill="var(--muted)"/></marker></defs>
+      <rect x="240" y="6" width="220" height="38" rx="9" fill="var(--amber-soft)" stroke="var(--amber)" stroke-width="1.5"/>
+      <text x="350" y="23" text-anchor="middle" font-size="12.5" font-weight="700" fill="var(--amber)">O（盯住目标）</text>
+      <text x="350" y="38" text-anchor="middle" font-size="11" fill="var(--amber)">计算图形的相关几何量（测度）</text>
+      <path d="M350,44 L350,60" stroke="var(--muted)" stroke-width="1.2" fill="none" marker-end="url(#ar)"/>
+      <path d="M120,64 L580,64" stroke="var(--line)" stroke-width="1.4"/>
+      <!-- 左：三科公共 -->
+      <path d="M120,64 L120,80" stroke="var(--line)" stroke-width="1.2"/>
+      <rect x="20" y="80" width="200" height="96" rx="9" fill="var(--accent-soft)" stroke="var(--accent)"/>
+      <text x="120" y="99" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--accent)">三科公共部分</text>
+      <text x="120" y="118" text-anchor="middle" font-size="11" fill="var(--ink)">① 平面图形的面积</text>
+      <text x="120" y="136" text-anchor="middle" font-size="11" fill="var(--ink)">② 旋转体的体积</text>
+      <text x="120" y="154" text-anchor="middle" font-size="11" fill="var(--ink)">③ 函数的平均值</text>
+      <text x="120" y="170" text-anchor="middle" font-size="10" fill="var(--red)" font-weight="700">＝本讲重难点在①②</text>
+      <!-- 右：数一数二 -->
+      <path d="M470,64 L470,80" stroke="var(--line)" stroke-width="1.2"/>
+      <rect x="330" y="80" width="290" height="114" rx="9" fill="var(--green-soft)" stroke="var(--green)"/>
+      <text x="475" y="99" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--green)">其他几何应用（仅数一、数二）</text>
+      <text x="475" y="118" text-anchor="middle" font-size="11" fill="var(--ink)">④ 形心坐标公式</text>
+      <text x="475" y="136" text-anchor="middle" font-size="11" fill="var(--ink)">⑤ 平面曲线的弧长　<tspan fill="var(--red)" font-weight="700">数二必考</tspan></text>
+      <text x="475" y="154" text-anchor="middle" font-size="11" fill="var(--ink)">⑥ 旋转曲面的面积（侧面积）</text>
+      <text x="475" y="172" text-anchor="middle" font-size="11" fill="var(--ink)">⑦ 平行截面面积为已知的立体体积</text>
+      <text x="475" y="188" text-anchor="middle" font-size="10" fill="var(--muted)">＝旋转体体积的推广（旋转体是它的特例）</text>
+      <!-- 底注 -->
+      <rect x="20" y="206" width="600" height="86" rx="9" fill="var(--bg)" stroke="var(--line)"/>
+      <text x="34" y="225" font-size="11" font-weight="700" fill="var(--accent)">两讲对照（基础讲页边原批注）</text>
+      <text x="34" y="245" font-size="10.5" fill="var(--ink)">第 5 讲 微分学几何应用：研究<tspan font-weight="700">性态</tspan> —— 极值/最值/拐点/单调/凹凸/渐近线，比较复杂。</text>
+      <text x="34" y="263" font-size="10.5" fill="var(--ink)">第 10 讲 积分学几何应用：研究<tspan font-weight="700">测度</tspan> —— 面积/体积/弧长/侧面积，相对简单。</text>
+      <text x="34" y="282" font-size="10.5" font-weight="700" fill="var(--red)">⚠️ 本讲会做题的关键不是记公式，是<tspan font-weight="400" fill="var(--ink)">先把图画对</tspan>——「考试不会给出图！！！」（例10.2 原话）</text>
+    </svg>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 全章只有一件事要练：把"微元"取对</span>
+    <p>本讲所有公式都是同一个动作生出来的——<b>微元法三步</b>：</p>
+    <div class="steps3">
+      <div><b>① 取微元</b>在 $[x,x+\mathrm dx]$ 上把图形近似成<u>一个规则的东西</u>：矩形／圆片／圆柱壳／小三角形／圆台侧面。</div>
+      <div><b>② 写出 $\mathrm d(量)$</b>用初等几何公式写出这一小块的面积／体积／长度。<b>整章的差别只在这一行。</b></div>
+      <div><b>③ 积分</b>把 $\mathrm d(量)$ 从 $a$ 积到 $b$。这一步交给第 9 讲。</div>
+    </div>
+    <p><b>把 ② 那一行列成表，全章就没了</b>：</p>
+    <div class="gridwrap"><table class="dense">
+      <tr><th>要算什么</th><th>微元近似成</th><th>$\mathrm d(量)$</th><th>结果</th></tr>
+      <tr><td>面积（直角）</td><td>竖直细矩形</td><td>$|y_1-y_2|\mathrm dx$</td><td>$S=\int_a^b|y_1-y_2|\mathrm dx$</td></tr>
+      <tr><td>面积（极坐标）</td><td>小扇形≈三角形</td><td>$\frac12|r_2^2-r_1^2|\mathrm d\theta$</td><td>$S=\frac12\int_\alpha^\beta|r_2^2-r_1^2|\mathrm d\theta$</td></tr>
+      <tr><td>体积（绕 $x$）</td><td>小硬币（圆片）</td><td>$\pi y^2\mathrm dx$</td><td>$V_x=\pi\int_a^by^2\mathrm dx$</td></tr>
+      <tr><td>体积（绕 $y$）</td><td>圆柱壳→展成长方体</td><td>$2\pi x|y|\mathrm dx$</td><td>$V_y=2\pi\int_a^bx|y|\mathrm dx$</td></tr>
+      <tr><td>弧长</td><td>斜边（勾股）</td><td>$\mathrm ds=\sqrt{(\mathrm dx)^2+(\mathrm dy)^2}$</td><td>$s=\int\mathrm ds$</td></tr>
+      <tr><td>侧面积</td><td>圆台侧面＝周长×斜高</td><td>$2\pi|y|\,\mathrm ds$</td><td>$S=2\pi\int|y|\mathrm ds$</td></tr>
+      <tr><td>平行截面立体</td><td>薄片</td><td>$A(x)\mathrm dx$</td><td>$V=\int_a^bA(x)\mathrm dx$</td></tr>
+    </table></div>
+    <p style="margin-top:8px"><b>★★ 全表只有两行需要区分记忆</b>：<b>体积用 $\mathrm dx$，侧面积用 $\mathrm ds$</b>（基础讲 P.274 页边原批注）。把这两个搞混，是本讲最常见的失分——<u>侧面积多的那个 $\sqrt{1+y'^2}$ 不是装饰，是因为侧面沿着<b>斜坡</b>展开，不是沿着底边。</u></p>
+  </div>
+
+  <div class="dolinks">
+    <div class="t">本章体量与两本书的分工</div>
+    基础30讲第 10 讲 <b>书页 263–281（19 页）</b> · 高数18讲第 10 讲 <b>书页 105–119（15 页）</b>，共 <b>34 页</b>（本章是继第 7 讲之后<b>第二短</b>的一讲）。
+    <div class="note"><b>⚠️ 两本书分工非常清楚，差集必须都吃</b>：<br>
+    <b>基础讲独有</b>：形心坐标公式、平行截面立体体积、<b>★★★绕 $y=x$ 旋转的斜截面微元</b>（例 10.14 及其"误差抵消"长注）、两道<b>最值型</b>解答题（习 10.6 面积最小 / 习 10.7 体积最大）。<br>
+    <b>18 讲独有</b>：<b>★极坐标绕极轴的体积公式 $V=\frac23\pi\int r^3\sin\theta\mathrm d\theta$</b>（基础讲根本没给，心形线体积没它做不了）、<b>★★16 行基本图形大观表</b>、笛卡儿叶形线、按"幂/三角/对数/指数"分类的四组题。<br>
+    ⚠️ 索引 md 的页码两本都不准：基础偏 6 页、强化偏 13 页，本页所有页码<b>以渲染页首实际印刷页码为准</b>。</div>
+    <a href="第09章_一元函数积分学的计算.html">← 上一章：第 9 章 积分学的计算</a>
+    <a href="../../../张宇系列_分章易识别版/高等数学/10_一元函数积分学的应用（一）_几何应用/高数_第10章_基础30讲.pdf">📕 基础30讲 第10讲 PDF</a>
+    <a href="../../../张宇系列_分章易识别版/高等数学/10_一元函数积分学的应用（一）_几何应用/高数_第10章_强化18讲.pdf">📗 高数18讲 第10讲 PDF</a>
+    <a href="../../../张宇系列_分章易识别版/高等数学/10_一元函数积分学的应用（一）_几何应用/高数_第10章_1000题_强化_题目.pdf">📝 1000题强化篇</a>
+  </div>
+
+  <!-- ================= s1 面积 ================= -->
+  <h2 id="s1"><span class="idx">一</span>平面图形的面积——三大坐标体系，三个公式</h2>
+
+  <div class="key"><span class="tag">必记 · 三体系面积公式</span>
+    <span class="pg">P.264 · P.105</span>
+    <p>前提：<b>假设以下曲线都是光滑的</b>。</p>
+    <div class="fcards">
+      <div><b>① 直角坐标（直接算）</b>$S=\displaystyle\int_a^b|y_1(x)-y_2(x)|\mathrm dx$<br><span style="color:var(--muted);font-size:.8rem">＝算一个带绝对值的定积分；上减下</span></div>
+      <div><b>② 极坐标（直接算）</b>$S=\dfrac12\displaystyle\int_\alpha^\beta\bigl|r_2^2(\theta)-r_1^2(\theta)\bigr|\mathrm d\theta$<br><span style="color:var(--muted);font-size:.8rem">$0\lt\beta-\alpha\le2\pi$；绝对值保证差值非负</span></div>
+      <div><b>③ 参数方程（少；换元法）</b>$S=\displaystyle\int_a^b|y|\mathrm dx\xlongequal{x=x(t)}\int_\alpha^\beta|y(t)x'(t)|\mathrm dt$<br><span style="color:var(--muted);font-size:.8rem">本质＝直角坐标公式的换元形式</span></div>
+      <div><b>推广：反常积分</b>图形无界时，面积就是一个<u>收敛的反常积分</u>（例 10.4、例 10.7、习 10.1）</div>
+    </div>
+    <p><b>极坐标公式的来历</b>（微元法）：用经过 $O$ 的射线切分扇形区域，$\mathrm d\theta\to0$ 时小扇形近似成三角形，
+    $\Delta S=\frac12r_2\cdot r_2\mathrm d\theta-\frac12r_1\cdot r_1\mathrm d\theta=\frac12|r_2^2-r_1^2|\mathrm d\theta$。<b>那个 $\frac12$ 来自三角形面积，不是凭空的。</b></p>
+  </div>
+
+  <div class="key"><span class="tag">必记 · 参数方程面积的本质（★这是考点，不是形式）</span>
+    <span class="pg">P.265</span>
+    <p>基础讲页边用箭头写死了：<b>给定参数方程，其实是对定积分计算的换元法的变相考查</b>。</p>
+    <div class="fml">$\begin{cases}x=x(t)\\ y=y(t)\end{cases}\ \Longrightarrow\ y=f(x)=f[x(t)]=y(t)\qquad\text{（对应点的函数值相同）}$</div>
+    <div class="fml">$S=\int_a^bf(x)\mathrm dx\xlongequal{x=x(t)}\int_\alpha^\beta f[x(t)]\,\mathrm d[x(t)]=\int_\alpha^\beta y(t)x'(t)\mathrm dt$</div>
+    <p>书上给的小例子（<u>为什么 $f[x(t)]$ 就是 $y(t)$</u>）：$\begin{cases}x=2t\\y=t^2\end{cases}\Rightarrow y=\frac14x^2=f(x)$，而 $f[x(t)]=\frac14(2t)^2=t^2=y(t)$ ✔</p>
+    <div class="trap" style="margin:10px 0 0"><span class="tag">⚠️ 换限是唯一的坑</span>
+      <p>$\int_a^b\to\int_\alpha^\beta$ 要满足 $x(\alpha)=a,\ x(\beta)=b$。<b>星形线（强 10.5）里 $x=a\cos^3t$ 是减函数</b>：$x=0$ 对应 $t=\frac\pi2$、$x=a$ 对应 $t=0$，<u>上下限是反着来的</u>。写成 $\int_0^{\pi/2}$ 会差一个负号。</p>
+    </div>
+  </div>
+
+  <div class="eg" id="eg101">
+    <div class="q"><span class="no">基 例10.1</span><span class="pg">P.264</span>
+      设 $A_n$ 是曲线 $y=x^n$ 与 $y=x^{n+1}\,(n=1,2,\cdots)$ 所围区域的面积，则 $\displaystyle\lim_{n\to\infty}\Bigl(2\sum_{k=1}^nA_k\Bigr)^n=$ ＿＿．</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\mathrm e^{-2}$</span></p>
+      <p><span class="lab">四步</span>① 求交点：$x^n=x^{n+1}\Rightarrow x^n(x-1)=0\Rightarrow x=0,1$；② 画图（$[0,1]$ 上 $x^n\gt x^{n+1}$）；③ 套公式算 $A_n$；④ 代入求极限。</p>
+      <div class="fml">$A_n=\int_0^1(x^n-x^{n+1})\mathrm dx=\Bigl(\tfrac{x^{n+1}}{n+1}-\tfrac{x^{n+2}}{n+2}\Bigr)\Big|_0^1=\frac1{n+1}-\frac1{n+2}$</div>
+      <div class="fml">$\lim_{n\to\infty}\Bigl(2\sum_{k=1}^nA_k\Bigr)^n=\lim_{n\to\infty}\Bigl(\frac22-\frac23+\frac23-\frac24+\cdots+\frac2{n+1}-\frac2{n+2}\Bigr)^n=\lim_{n\to\infty}\Bigl(1-\frac2{n+2}\Bigr)^n=\mathrm e^{-2}$</div>
+      <p><span class="lab">要害</span>面积只是<b>外壳</b>，真考点是<b>裂项望远镜求和 + $1^\infty$ 幂指型</b>。$\mathrm e^{\lim n\cdot(-\frac2{n+2})}=\mathrm e^{-2}$。<br>
+      页边批注：<b>可以把 $n$ 当作 $x$，无须用归结原则化为函数极限</b>（考场上省两行）。</p>
+    </div>
+  </div>
+
+  <div class="eg" id="eg102">
+    <div class="q"><span class="no">基 例10.2 ★★★</span><span class="pg">P.265</span>
+      求由摆线（平摆线）$\begin{cases}x=a(t-\sin t)\\ y=a(1-\cos t)\end{cases}(a\gt0)$ 的一拱与 $x$ 轴所围平面图形的面积。</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>先想"一拱"是哪一段</b>。$y=0\Leftrightarrow\cos t=1\Leftrightarrow t=0$ 或 $2\pi$——<u>参数区间是被 $y=0$ 定出来的，不是猜的</u>。对应 $x$ 从 $0$ 走到 $2\pi a$。</li>
+          <li><b>不要试图消参</b>。$x=a(t-\sin t)$ 反解不出 $t$，$y=f(x)$ 写不出来。但公式 $S=\int_0^{2\pi a}y\,\mathrm dx$ 里根本不需要写出 $f$——<u>把 $\mathrm dx$ 换成 $x'(t)\mathrm dt$ 就行</u>。这就是"参数方程＝换元法的变相考查"。</li>
+          <li><b>算之前先看被积函数长什么样</b>：$(1-\cos t)^2$ 展开有 $\cos^2t$，在 $[0,2\pi]$ 上——<u>这是点火公式的活</u>，别老实用倍角公式。</li>
+          <li>画图这步在考场上必须自己完成：<b>"考试不会给出图！！！"</b>（书上原话，三个感叹号）。</li>
+        </ol>
+      </div>
+      <div class="paper"><span class="phead">✍️ 考场卷面 —— 照这个抄<span class="score">参考 10 分</span></span>
+        <div class="step"><span class="k">解</span>当 $t=0$ 或 $t=2\pi$ 时 $y=0$，故 $t$ 由 $0$ 变到 $2\pi$ 时曲线正好成一拱，此时 $x$ 由 $0$ 变到 $2\pi a$。<span class="pt">⛳ 定参数区间 2分</span></div>
+        <div class="step">由参数方程下的面积公式
+          $$S=\int_0^{2\pi a}y\,\mathrm dx\xlongequal{x=a(t-\sin t)}\int_0^{2\pi}a(1-\cos t)\cdot\bigl[a(t-\sin t)\bigr]'\mathrm dt\tag{1}$$
+          <span class="pt">⛳ 换元换限正确 3分</span></div>
+        <div class="step">$(1)$ 式
+          $$=\int_0^{2\pi}a^2(1-\cos t)^2\mathrm dt=a^2\int_0^{2\pi}(1-2\cos t+\cos^2t)\mathrm dt\tag{2}$$</div>
+        <div class="step">$(2)$ 式中 $\displaystyle\int_0^{2\pi}\mathrm dt=2\pi$，$\displaystyle\int_0^{2\pi}\cos t\,\mathrm dt=0$，$\displaystyle\int_0^{2\pi}\cos^2t\,\mathrm dt=4\int_0^{\frac\pi2}\cos^2t\,\mathrm dt=4\cdot\frac\pi4=\pi$，<span class="pt">⛳ 点火公式系数是 4 不是 2　3分</span></div>
+        <div class="step fin">故 $S=a^2(2\pi+\pi)=3a^2\pi$，即摆线一拱与 $x$ 轴所围平面图形的面积为 $3\pi a^2$。<span class="pt">⛳ 结论回扣 2分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（写完校对，考场不落笔）</span>
+        <p>① <b><span class="dock">扣分点</span>换元后必须换限</b>：$\int_0^{2\pi a}\mathrm dx\to\int_0^{2\pi}\mathrm dt$。写着 $\mathrm dt$ 却留着 $2\pi a$ 是本题最常见的低级失分。</p>
+        <p>② <b>点火公式在 $[0,2\pi]$ 上的系数是 4</b>（$\int_0^{2\pi}\cos^2=4\int_0^{\pi/2}\cos^2$），第 9 讲反复强调过；写成 2 会得到 $\frac52\pi a^2$。</p>
+        <p>③ <b>结果 $3\pi a^2$ 值得当结论背</b>：它是<u>滚动圆面积 $\pi a^2$ 的 3 倍</u>——伽利略当年称重量猜的就是这个数。大观表里它带 (*) 号，属于"可记之"的那一档。</p>
+        <p>④ 同一条摆线在本讲一共出现 <b>4 次</b>：本题（面积）、<a href="#xt108">习 10.8</a>（绕 $y$ 轴体积）、<a href="#qeg104">强 10.4</a>（弧长＋绕 $x$ 轴体积）、大观表第 14 行。<b>把 $3\pi a^2/5\pi^2a^3/8a$ 三个数一起记，比每次现推划算。</b></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="eg" id="eg103">
+    <div class="q"><span class="no">基 例10.3</span><span class="pg">P.266</span>
+      伯努利双纽线 $r^2=a^2\cos2\theta$ 围成的图形的面积为＿＿．</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$a^2$</span></p>
+      <p><span class="lab">两步</span>① 画图；② 套公式，<b>借助对称性简化计算</b>。</p>
+      <p>双纽线是"横躺的 8 字"：$\cos2\theta\ge0$ 要求 $\theta\in[-\frac\pi4,\frac\pi4]\cup[\frac{3\pi}4,\frac{5\pi}4]$，共两叶，右顶点 $(a,0)$。所求面积是<b>第一象限那一小片的 4 倍</b>：</p>
+      <div class="fml">$S=4\int_0^{\frac\pi4}\frac12a^2\cos2\theta\,\mathrm d\theta=a^2\sin2\theta\Big|_0^{\frac\pi4}=a^2$</div>
+      <p><span class="lab">要害</span><b>面积里没有 $\pi$</b>——这是双纽线最容易被怀疑算错的地方（$r^2$ 型曲线积分时 $r^2$ 直接就是 $a^2\cos2\theta$，$\frac12$ 与 $\mathrm d(\sin2\theta)$ 的 $\frac12$ 抵消得干干净净）。<b>算出来多少就是多少，不用担心结果古怪</b>（P.275 页边原话）。</p>
+    </div>
+  </div>
+
+  <div class="eg" id="eg104">
+    <div class="q"><span class="no">基 例10.4</span><span class="pg">P.266–267</span>
+      求曲线 $y=\mathrm e^{-x}\sin x\,(x\ge0)$ 与 $x$ 轴所围平面图形的面积。</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>先画图再列式</b>：$\mathrm e^{-x}$ 是逐渐衰减的振幅，曲线在 $\pi,2\pi,3\pi,\cdots$ 处穿过 $x$ 轴，<u>拱有无穷多个、且一上一下交替</u>。</li>
+          <li><b>"所围面积"必须为正</b> ⇒ 公式里要带绝对值：$S=\int_0^{+\infty}\mathrm e^{-x}|\sin x|\mathrm dx$。<u>绝对值的几何意义＝把 $x$ 轴下方的部分翻折上来。</u></li>
+          <li><b>难点全在处理绝对值</b>（书上原话）。按 ch9 支线九：<u>拆区间</u>。每个 $[k\pi,(k+1)\pi]$ 上 $\sin x$ 不变号，一段一段积，最后把无穷多段加起来——<b>加起来的形式是等比级数</b>，这是本题的落点。</li>
+          <li>每段积分 $\int\mathrm e^{-x}\sin x$ 是<b>积分再现</b>（ch9 支线四子类"再现建方程"），书上用<u>行列式速记</u>写它，考场上直接用。</li>
+        </ol>
+      </div>
+      <div class="paper"><span class="phead">✍️ 考场卷面 —— 照这个抄<span class="score">参考 11 分</span></span>
+        <div class="step"><span class="k">解</span>由图形知所求面积
+          $$S=\int_0^{+\infty}\mathrm e^{-x}|\sin x|\mathrm dx=\lim_{n\to\infty}\sum_{k=0}^n\left|\int_{k\pi}^{(k+1)\pi}\mathrm e^{-x}\sin x\,\mathrm dx\right|\tag{1}$$
+          <span class="pt">⛳ 加绝对值并按 $k\pi$ 拆区间 3分</span></div>
+        <div class="step">由分部积分（积分再现）
+          $$\int_{k\pi}^{(k+1)\pi}\mathrm e^{-x}\sin x\,\mathrm dx=\frac12\begin{vmatrix}(\mathrm e^{-x})' & (\sin x)'\\ \mathrm e^{-x} & \sin x\end{vmatrix}\Bigg|_{k\pi}^{(k+1)\pi}=-\frac12\mathrm e^{-x}(\cos x+\sin x)\Big|_{k\pi}^{(k+1)\pi}\tag{2}$$
+          <span class="pt">⛳ 单段积分算对 3分</span></div>
+        <div class="step">$(2)$ 式 $=-\dfrac12\mathrm e^{-(k+1)\pi}(-1)^{k+1}+\dfrac12\mathrm e^{-k\pi}(-1)^k=\dfrac{(-1)^k}2\mathrm e^{-k\pi}(\mathrm e^{-\pi}+1)$，故其绝对值为 $\dfrac{\mathrm e^{-\pi}+1}2(\mathrm e^{-\pi})^k$。<span class="pt">⛳ 取绝对值消去 $(-1)^k$ 2分</span></div>
+        <div class="step">代回 $(1)$ 式，得公比 $\mathrm e^{-\pi}\in(0,1)$ 的等比级数
+          $$S=\frac{\mathrm e^{-\pi}+1}2\lim_{n\to\infty}\sum_{k=0}^n(\mathrm e^{-\pi})^k=\frac{\mathrm e^{-\pi}+1}2\cdot\frac1{1-\mathrm e^{-\pi}}\tag{3}$$
+          <span class="pt">⛳ 等比求和（收敛性说明）2分</span></div>
+        <div class="step fin">故曲线 $y=\mathrm e^{-x}\sin x\,(x\ge0)$ 与 $x$ 轴所围平面图形的面积为 $S=\dfrac{\mathrm e^{-\pi}+1}{2(1-\mathrm e^{-\pi})}$。<span class="pt">⛳ 结论回扣 1分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（写完校对，考场不落笔）</span>
+        <p>① <b>"前世今生"见例 8.5③</b>（书上原注）：第 8 讲判过 $\int_0^{+\infty}\mathrm e^{-x}|\sin x|\mathrm dx$ 收敛，本题才敢放心去算。<u>先判敛后计算，是反常积分题的标准顺序。</u></p>
+        <p>② <b>行列式写法</b> $\int\mathrm e^{\alpha x}\sin\beta x\,\mathrm dx$ 的速记：$\dfrac1{\alpha^2+\beta^2}\begin{vmatrix}(\mathrm e^{\alpha x})'&(\sin\beta x)'\\ \mathrm e^{\alpha x}&\sin\beta x\end{vmatrix}$。本题 $\alpha=-1,\beta=1$，前系数 $\frac12$。<b>这个记号 ch9 学过，考场上比两次分部快得多。</b></p>
+        <p>③ <b><span class="dock">扣分点</span>不能先积再取绝对值</b>：$\left|\int\right|$ 与 $\int|\cdot|$ 只有在<u>被积函数在该段不变号</u>时才相等——所以拆点必须取在零点 $k\pi$ 上，不能随便拆。</p>
+        <p>④ 结果可化简为 $\dfrac{\mathrm e^\pi+1}{2(\mathrm e^\pi-1)}=\dfrac12\coth\dfrac\pi2\approx0.5216$（分子分母同乘 $\mathrm e^\pi$）。<b>考场上写哪个形式都给分，但要保证是正数——面积算出负数一定是绝对值没处理。</b></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="eg" id="qeg102">
+    <div class="q"><span class="no">强 例10.2</span><span class="pg">P.112</span>
+      求阿基米德螺线 $r=a\theta\,(a\gt0,0\le\theta\le2\pi)$ 与 $Ox$ 轴所围图形的面积。</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\dfrac43a^2\pi^3$</span></p>
+      <p><span class="lab">解</span>在指定的这段螺线上，$\theta$ 的变化区间为 $[0,2\pi]$，面积微元 $\mathrm dS=\frac12(a\theta)^2\mathrm d\theta$，于是</p>
+      <div class="fml">$S=\int_0^{2\pi}\frac{a^2}2\theta^2\mathrm d\theta=\frac{a^2}2\cdot\frac{\theta^3}3\Big|_0^{2\pi}=\frac43a^2\pi^3$</div>
+      <p><span class="lab">要害</span><b>只有一条曲线时 $r_1\equiv0$</b>，公式退化成 $S=\frac12\int r^2\mathrm d\theta$，扇形直接扫过去，不需要减。<br>
+      <b>$\pi^3$ 不是笔误</b>：$\theta$ 上限本身是 $2\pi$，立方后就带 $\pi^3$。<u>凡是"极坐标 + 螺线"的面积，结果里出现 $\pi$ 的高次方是正常的。</u></p>
+    </div>
+  </div>
+
+  <div class="eg" id="qeg103">
+    <div class="q"><span class="no">强 例10.3</span><span class="pg">P.112–113</span>
+      求三叶玫瑰线 $r=a\sin3\theta\,(a\gt0)$ 所围图形的面积。</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\dfrac{\pi a^2}4$</span></p>
+      <div class="fml">$S=3\int_0^{\frac\pi3}\frac12r^2(\theta)\mathrm d\theta=\frac32a^2\int_0^{\frac\pi3}\sin^23\theta\,\mathrm d\theta\xlongequal{t=3\theta}\frac{a^2}2\int_0^\pi\sin^2t\,\mathrm dt=\frac{a^2}2\times2\times\frac12\times\frac\pi2=\frac\pi4a^2$</div>
+      <p><span class="lab">注（书上给了姊妹题）</span>$r=a\cos3\theta$ 所围面积<b>也是</b> $\dfrac{\pi a^2}4$：</p>
+      <div class="fml">$S=3\int_{-\frac\pi6}^{\frac\pi6}\frac12r^2\mathrm d\theta=3a^2\int_0^{\frac\pi6}\cos^23\theta\,\mathrm d\theta\xlongequal{t=3\theta}a^2\int_0^{\frac\pi2}\cos^2t\,\mathrm dt=\frac\pi4a^2$</div>
+      <div class="trap" style="margin:10px 0 0"><span class="tag">⚠️ 玫瑰线唯一的坑：一叶的积分区间</span>
+        <p><b>$\sin3\theta$ 的一叶取 $\left[0,\frac\pi3\right]$；$\cos3\theta$ 的一叶取 $\left[-\frac\pi6,\frac\pi6\right]$（跨过 $0$ 对称）</b>，然后 $\times3$。<br>
+        <u>判法</u>：一叶＝从 $r=0$ 到下一个 $r=0$ 之间。$\sin3\theta=0$ 的相邻两根是 $0,\frac\pi3$；$\cos3\theta=0$ 的相邻两根是 $-\frac\pi6,\frac\pi6$。<b>照着零点取，不要背。</b></p>
+        <p><b>玫瑰线口诀</b>：$r=a\sin/\cos3\theta$ <b>三</b>叶 → $\frac{\pi a^2}4$；$r=a\sin/\cos2\theta$ <b>四</b>叶 → $\frac{\pi a^2}2$。<u>四叶是三叶的两倍，且与 $\sin/\cos$ 无关</u>——$\sin$ 与 $\cos$ 只是把整朵花转了个角度，面积当然一样。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="eg" id="qeg106">
+    <div class="q"><span class="no">强 例10.6 ★</span><span class="pg">P.115</span>
+      求笛卡儿叶形线 $x^3+y^3-3axy=0\,(a\gt0)$（参数方程 $x=\dfrac{3at}{1+t^3},\ y=\dfrac{3at^2}{1+t^3}$）所围图形的<b>面积</b>及<b>渐近线</b>。</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>两问要用两套表达式，别硬用一套。</b>算面积用<u>极坐标</u>（因为方程齐次，$x=r\cos\theta,y=r\sin\theta$ 代进去 $r$ 能解出来）；求渐近线用<u>参数式</u>（因为 $x\to\infty$ 对应参数的一个具体值）。<b>"一题两形式"正是本题被选为例题的原因。</b></li>
+          <li><b>面积：先看那个圈占哪段 $\theta$。</b>第一象限的那个环 $\Leftrightarrow x,y\ge0\Leftrightarrow\theta\in[0,\frac\pi2]$，一段扫完，不用减。</li>
+          <li><b>被积函数别急着展开</b>：$\dfrac{\sin^2\theta\cos^2\theta}{(\sin^3\theta+\cos^3\theta)^2}$ 满足 $R(-\sin,-\cos)=R(\sin,\cos)$——按 ch9 三角有理式判据，<u>令 $\tan\theta=t$</u>，分子分母同除 $\cos^6\theta$，立刻变成 $\dfrac{\tan^2\theta}{(1+\tan^3\theta)^2}\mathrm d(\tan\theta)$，一眼是凑微分。</li>
+          <li><b>渐近线：先定 $x\to\infty$ 对应哪个 $t$。</b>分母 $1+t^3\to0\Rightarrow t\to-1$。之后 $k=\lim\frac yx$、$b=\lim(y-kx)$ 照第 5 讲的老套路，<u>把极限从"对 $x$"改成"对 $t$"</u>（这就是页边写的 $\mathrm D_{23}$ 化归经典形式）。</li>
+        </ol>
+      </div>
+      <div class="paper"><span class="phead">✍️ 考场卷面 —— 照这个抄<span class="score">参考 12 分</span></span>
+        <div class="step"><span class="k">解</span><b>(i) 面积。</b>令 $x=r\cos\theta,\ y=r\sin\theta$，代入 $x^3+y^3=3axy$ 得
+          $$r=\frac{3a\sin\theta\cos\theta}{\sin^3\theta+\cos^3\theta},\qquad \theta\in\Bigl[0,\frac\pi2\Bigr]\tag{1}$$
+          <span class="pt">⛳ 化极坐标并定 $\theta$ 范围 3分</span></div>
+        <div class="step">由极坐标下的面积公式及 $(1)$ 式，
+          $$S=\int_0^{\frac\pi2}\frac12r^2\mathrm d\theta=\frac92a^2\int_0^{\frac\pi2}\frac{\sin^2\theta\cos^2\theta}{(\sin^3\theta+\cos^3\theta)^2}\mathrm d\theta
+          =\frac92a^2\int_0^{\frac\pi2}\frac{\tan^2\theta}{(1+\tan^3\theta)^2}\mathrm d(\tan\theta)\tag{2}$$
+          <span class="pt">⛳ 令 $\tan\theta=t$ 化为凑微分 3分</span></div>
+        <div class="step">$(2)$ 式 $=\dfrac92a^2\cdot\dfrac13\cdot\Bigl(-\dfrac1{1+\tan^3\theta}\Bigr)\Big|_0^{\frac\pi2}=\dfrac32a^2$。<span class="pt">⛳ 面积结果 2分</span></div>
+        <div class="step"><b>(ii) 渐近线。</b>由 $x=\dfrac{3at}{1+t^3}$ 知 $x\to\infty$ 时 $t\to-1$，于是
+          $$k=\lim_{x\to\infty}\frac yx=\lim_{t\to-1}\frac{3at^2/(1+t^3)}{3at/(1+t^3)}=\lim_{t\to-1}t=-1\tag{3}$$
+          <span class="pt">⛳ 斜率 2分</span></div>
+        <div class="step">$$b=\lim_{x\to\infty}(y+x)=\lim_{t\to-1}\frac{3at+3at^2}{1+t^3}=\lim_{t\to-1}\frac{3at(1+t)}{(1+t)(t^2-t+1)}=\lim_{t\to-1}\frac{3at}{t^2-t+1}=-a\tag{4}$$
+          <span class="pt">⛳ 约去 $(1+t)$ 求截距 2分</span></div>
+        <div class="step fin">故所围图形的面积为 $\dfrac32a^2$，渐近线方程为 $y=-x-a$，即 $x+y+a=0$。</div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（写完校对，考场不落笔）</span>
+        <p>① <b>为什么极坐标能解出 $r$</b>：原方程<u>三次齐次 + 二次齐次</u>，代入后 $r^3(\cdots)=3ar^2(\cdots)$，两边约掉 $r^2$ 就只剩一次的 $r$。<b>凡是 $x^3+y^3=3axy$ 这类"次数只差 1 的齐次式"，极坐标必能解出 $r$。</b></p>
+        <p>② <b><span class="dock">扣分点</span>求 $b$ 时必须先约 $(1+t)$</b>：直接代 $t=-1$ 是 $\frac00$。$1+t^3=(1+t)(t^2-t+1)$ 这个分解要脱口而出。</p>
+        <p>③ <b>$k=-1$ 有几何含义</b>：叶形线关于 $y=x$ 对称，两条无穷支沿着第二、四象限方向跑，渐近线自然斜率 $-1$。<u>算出 $k=+1$ 一定是抄错了。</u></p>
+        <p>④ 大观表第 16 行只给了面积 $\frac32a^2$，<b>渐近线这问是强化独有的</b>。两问的分值几乎对半，别只练面积。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= s2 旋转体体积 ================= -->
+  <h2 id="s2"><span class="idx">二</span>旋转体的体积——四个公式，按"绕谁转"选</h2>
+
+  <div class="key"><span class="tag">必记 · 四个体积公式（第 4 个是强化独有）</span>
+    <span class="pg">P.267–269 · P.106–107</span>
+    <div class="fcards">
+      <div><b>① 绕 $x$ 轴（小硬币）</b>$V_x=\displaystyle\int_a^b\pi y^2(x)\mathrm dx$<br><span style="color:var(--muted);font-size:.8rem">微元＝厚 $\mathrm dx$、半径 $|y|$ 的圆片</span></div>
+      <div><b>② 绕 $y$ 轴（柱壳法）</b>$V_y=2\pi\displaystyle\int_a^bx|y(x)|\mathrm dx\ \ (0\le a\lt b)$<br><span style="color:var(--muted);font-size:.8rem">微元＝圆柱壳切开摊平的长方体</span></div>
+      <div><b>③ 绕定直线 $Ax+By+C=0$</b>$V=\dfrac\pi{(A^2+B^2)^{3/2}}\displaystyle\int_a^b[Ax+Bf(x)+C]^2\bigl|Af'(x)-B\bigr|\mathrm dx$<br><span style="color:var(--muted);font-size:.8rem">条件：$f$ 可导，且 $L_0$ 的任一垂线与 $L$ <b>至多一个交点</b></span></div>
+      <div><b>④ 极坐标绕极轴 <span class="chip c-g">强化独有</span></b>$V=\dfrac23\pi\displaystyle\int_\alpha^\beta r^3(\theta)\sin\theta\,\mathrm d\theta$<br><span style="color:var(--muted);font-size:.8rem">$D=\{0\le r\le r(\theta),\theta\in[\alpha,\beta]\subset[0,\pi]\}$</span></div>
+    </div>
+    <p><b>公式 ② 的来历（柱壳法，微元法推导）</b>：取 $[x,x+\Delta x]$ 得一个小竖条，绕 $y$ 轴转一周成为"圆柱壳"，<u>沿任何一条竖线切开摊平</u>就是一个长方体：长 $2\pi x$、高 $|y(x)|$、厚 $\mathrm dx$，故 $\mathrm dV_y=2\pi x|y(x)|\mathrm dx$。</p>
+    <p><b>基础讲的"套 □ 里代"总结</b>：$V_x=\pi\int_a^b\square^2\mathrm dx$，$V_y=2\pi\int_a^bx|\square|\mathrm dx$——<u>方框里填的都是同一个 $y(x)$</u>，区别只在"平方"还是"乘 $x$"。</p>
+    <p><b>公式 ③ 的自洽检验</b>（书上原推）：取 $A=C=0,B\ne0$（即 $L_0$ 就是 $x$ 轴），
+    $V=\dfrac\pi{(B^2)^{3/2}}\int_a^b[Bf]^2|-B|\mathrm dx=\dfrac\pi{|B|^3}\int_a^bB^2|B|f^2\mathrm dx=\pi\int_a^bf^2\mathrm dx$ ✔ 退化回 ①。<b>考场上先用这个自检，能挡住把 $\frac32$ 次方写错的错误。</b></p>
+    <p style="color:var(--green);font-weight:700">18 讲对公式 ③④ 的原批注：<b>"考前记一记，喝前摇一摇。"</b>——它自己都承认这两个公式<u>只需要临考背下来会代</u>，不必推。</p>
+  </div>
+
+  <div class="trap"><span class="tag">⚠️ 公式 ③ 的使用前提：垂线与曲线"至多一个交点"</span>
+    <p>基础讲页边红字：<b>若出现 2 个及以上的交点，则不适用</b>。<br>
+    <u>为什么</u>：公式的微元是"以曲线到轴的距离为半径的圆片"。<b>如果同一条垂线上曲线有两个点，那这条垂线上就有两个半径，旋转后一个套一个（成了圆环而不是圆片）</b>，$[Ax+Bf+C]^2$ 只算了一个，必然算错。<br>
+    <b>考场自检</b>：把 $L_0$ 想象成一根尺子在图上平移扫过去，看曲线有没有被"扫到两次"。</p>
+  </div>
+
+  <!-- ===== 交互 1：绕谁转 · 体积五法对拍台 ===== -->
+  <div class="tool">
+    <h4>🔄 绕谁转 · 体积五法对拍台</h4>
+    <div class="hint">同一块平面区域，<b>绕不同的轴转，公式和答案完全不同</b>——本讲的失分几乎全出在"拿错公式"。<br>
+    选区域、选旋转轴，下面实时给出<b>该用哪个公式、微元长什么样、算出来是多少</b>，并用<b>高精度数值积分独立对拍</b>（两条独立路径一致才显示 ✅）。</div>
+    <div class="ctl">
+      <label>平面区域</label>
+      <select id="rvRegion">
+        <option value="sqrt">y=√x 与 y=x 围成（0 ≤ x ≤ 1）</option>
+        <option value="par">y=x² 与 y=0, x=1 围成</option>
+        <option value="sin">y=sin x 与 y=0（0 ≤ x ≤ π）</option>
+        <option value="lin">y=1−x 与两坐标轴围成（三角形）</option>
+      </select>
+    </div>
+    <div class="ctl">
+      <label>绕哪条轴</label>
+      <button class="on" data-ax="x">$x$ 轴</button>
+      <button data-ax="y">$y$ 轴</button>
+      <button data-ax="y1">$y=1$</button>
+      <button data-ax="x1">$x=1$</button>
+      <button data-ax="yx">$y=x$（斜轴）</button>
+    </div>
+    <div class="scene"><svg id="rvSvg" viewBox="0 0 640 260" xmlns="http://www.w3.org/2000/svg"></svg></div>
+    <div class="say" id="rvSay"></div>
+    <span class="verdict" id="rvV"></span>
+    <div class="legend2"><span class="chip c-b">蓝</span>区域　<span class="chip c-r">红</span>旋转轴　<span class="chip c-g">绿</span>当前微元（拖不同轴看它换形状）<br>
+    <b>对拍口径</b>：①＝按所选公式列式后的数值积分；②＝<u>帕普斯定理</u> $V=2\pi\bar dA$（先用网格二重积分求出面积与形心，再乘形心走过的周长）——<b>与切片公式完全无关的独立路径</b>，且它<u>只在区域不跨轴时成立</u>，所以两个数对不上本身就是"跨轴了"的警报。</div>
+  </div>
+
+  <div class="eg" id="eg105">
+    <div class="q"><span class="no">基 例10.5</span><span class="pg">P.267–268</span>
+      求曲线 $y=\mathrm e^{-\frac x2}\sqrt{\sin x}$ 在 $[0,2\pi]$ 部分与 $x$ 轴围成的平面图形绕 $x$ 轴旋转一周所成的旋转体的体积。</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$V=\dfrac\pi2(1+\mathrm e^{-\pi})$</span></p>
+      <p><span class="lab">两步</span>① <b>先确定 $x$ 的取值范围</b>：$\sqrt{\sin x}$ 要求 $\sin x\ge0$，在 $[0,2\pi]$ 内即 $x\in[0,\pi]$——<u>函数在 $(\pi,2\pi)$ 内根本不存在</u>；② 套公式。</p>
+      <div class="fml">$V=\int_0^\pi\pi y^2\mathrm dx=\int_0^\pi\pi\mathrm e^{-x}\sin x\,\mathrm dx=\frac\pi2\begin{vmatrix}(\mathrm e^{-x})'&(\sin x)'\\ \mathrm e^{-x}&\sin x\end{vmatrix}\Bigg|_0^\pi=-\frac\pi2(\cos x+\sin x)\mathrm e^{-x}\Big|_0^\pi=\frac\pi2(\mathrm e^{-\pi}+1)$</div>
+      <p><span class="lab">要害</span><b>题目写 $[0,2\pi]$ 是个诱饵</b>。$V_x$ 公式里 $y^2$ 把根号消掉了，如果不先看定义域，会一路积到 $2\pi$ 得到 $\frac\pi2(1-\mathrm e^{-2\pi})$——<u>形式漂亮但错</u>。<b>凡是被积函数带偶次方、而原函数带根号的题，定义域必须在动笔前定。</b></p>
+    </div>
+  </div>
+
+  <div class="eg" id="eg106">
+    <div class="q"><span class="no">基 例10.6</span><span class="pg">P.268–269</span>
+      设函数 $f(x)$ 的定义域为 $(0,+\infty)$，且满足 $2f(x)+x^2f\left(\dfrac1x\right)=\dfrac{x^2+2x}{\sqrt{1+x^2}}$。求 $f(x)$，并求曲线 $y=f(x)$、直线 $y=\dfrac12$、$y=\dfrac{\sqrt3}2$ 及 $y$ 轴所围图形<b>绕 $x$ 轴</b>旋转一周所成旋转体的体积。</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>第一问是第 1 讲的老题</b>（书上注明"前世今生见例 1.2"）：含 $f(x)$ 与 $f(\frac1x)$ 的函数方程，<u>把 $x$ 换成 $\frac1x$ 再写一遍，两式联立消去 $f(\frac1x)$</u>。这是固定动作。</li>
+          <li><b>第二问的边界全是"横线"</b>：$y=\frac12$、$y=\frac{\sqrt3}2$、$y$ 轴（$x=0$）。<u>用 $y$ 当自变量描述这块区域最省事</u>，说明该把 $x$ 反解成 $\varphi(y)$。</li>
+          <li><b>⚠️ 关键判断：绕 $x$ 轴转，却要用 $V_y$ 的公式。</b>为什么？——把 $x,y$ 的地位互换后，"绕 $x$ 轴"在新坐标里就是"绕竖直轴"，正好是柱壳法 $2\pi\int y\cdot\varphi(y)\mathrm dy$ 的形状。<u>判据：区域是被两条水平线夹住的横条 ⇒ 对 $y$ 积分 ⇒ 绕 $x$ 轴用柱壳。</u></li>
+          <li>反解出 $x=\varphi(y)$ 后被积函数带 $\sqrt{1-y^2}$，<b>预判要三角代换 $y=\sin t$</b>（ch9 判据：根号里有平方项走三角代换）。</li>
+        </ol>
+      </div>
+      <div class="paper"><span class="phead">✍️ 考场卷面 —— 照这个抄<span class="score">参考 11 分</span></span>
+        <div class="step"><span class="k">解</span><b>(i) 求 $f(x)$。</b>在已知等式中以 $\dfrac1x$ 代 $x$，得
+          $$2f\Bigl(\frac1x\Bigr)+\frac1{x^2}f(x)=\frac{\frac1{x^2}+\frac2x}{\sqrt{1+\frac1{x^2}}}\tag{1}$$
+          <span class="pt">⛳ 想到换 $\frac1x$ 联立 2分</span></div>
+        <div class="step">原式与 $(1)$ 式联立消去 $f\bigl(\frac1x\bigr)$，解得
+          $$f(x)=\frac x{\sqrt{1+x^2}}\quad(x\gt0)\tag{2}$$
+          <span class="pt">⛳ 解出 $f$ 2分</span></div>
+        <div class="step"><b>(ii) 求体积。</b>由 $(2)$ 式，$y=\dfrac x{\sqrt{1+x^2}}$ 中 $x,y$ 地位互换，反解得
+          $$x=\varphi(y)=\frac y{\sqrt{1-y^2}}\quad(0\lt y\lt1)\tag{3}$$
+          <span class="pt">⛳ 反解出 $x=\varphi(y)$ 2分</span></div>
+        <div class="step">该图形绕 $x$ 轴旋转，以 $y$ 为自变量套柱壳公式，并由 $(3)$ 式得
+          $$V=2\pi\int_{\frac12}^{\frac{\sqrt3}2}y\,\varphi(y)\mathrm dy=2\pi\int_{\frac12}^{\frac{\sqrt3}2}\frac{y^2}{\sqrt{1-y^2}}\mathrm dy\tag{4}$$
+          <span class="pt">⛳ 列对公式与积限 2分</span></div>
+        <div class="step">令 $y=\sin t$，则 $(4)$ 式
+          $$=2\pi\int_{\frac\pi6}^{\frac\pi3}\sin^2t\,\mathrm dt=2\pi\int_{\frac\pi6}^{\frac\pi3}\frac{1-\cos2t}2\mathrm dt=\pi\Bigl(t-\frac{\sin2t}2\Bigr)\Big|_{\frac\pi6}^{\frac\pi3}=\frac{\pi^2}6$$
+          <span class="pt">⛳ 三角代换算出 2分</span></div>
+        <div class="step fin">故 $f(x)=\dfrac x{\sqrt{1+x^2}}\,(x\gt0)$，所求旋转体的体积为 $\dfrac{\pi^2}6$。<span class="pt">⛳ 结论回扣 1分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（写完校对，考场不落笔）</span>
+        <p>① <b>方法总结（书上原话）</b>：学会利用反函数，把"绕 $x$ 轴旋转"用 $V_y$ 的体积公式表示出来。<b>注：此题增加了 2 个综合性考查</b>——① 要把 $f(x)$ 求出来；② $x,y$ 地位交换，先反解，再套公式。</p>
+        <p>② <b><span class="dock">扣分点</span>反解后要写定义域</b> $0\lt y\lt1$：$\sqrt{1-y^2}$ 要求 $|y|\lt1$，而题给的 $\frac12,\frac{\sqrt3}2$ 恰好都在里面——<u>不写这句，$t$ 的积限 $\frac\pi6,\frac\pi3$ 就没有依据。</u></p>
+        <p>③ <b>三角代换后积限怎么来</b>：$y=\frac12\Rightarrow\sin t=\frac12\Rightarrow t=\frac\pi6$；$y=\frac{\sqrt3}2\Rightarrow t=\frac\pi3$。<u>换元必换限，这在 ch9 已是铁律。</u></p>
+        <p>④ <b>心算加速</b>：$\int\sin^2t\,\mathrm dt$ 在<u>非标准区间</u>上不能用点火公式（点火只管 $[0,\frac\pi2]$ 等特定区间），老实降幂。$\frac{\pi^2}6$ 这个答案很好记——但别和 $\sum\frac1{n^2}$ 的 $\frac{\pi^2}6$ 搞混，纯属巧合。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="eg" id="eg107">
+    <div class="q"><span class="no">基 例10.7 ★★</span><span class="pg">P.270–271</span>
+      过坐标原点作曲线 $y=\mathrm e^x$ 的切线，该切线与曲线 $y=\mathrm e^x$ 以及 $x$ 轴围成的<b>向 $x$ 轴负向无限伸展</b>的平面图形记为 $D$。求：(1) $D$ 的面积 $A$；(2) $D$ 绕直线 $x=1$ 旋转一周所成的旋转体的体积 $V$。</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>切点未知就设出来。</b>设切点 $P(x_0,\mathrm e^{x_0})$，写切线，再用"过原点"这个条件把 $x_0$ 定死。<u>"过某点作某曲线的切线"永远是这三步：设切点 → 写切线 → 代点定参数。</u></li>
+          <li><b>竖着切还是横着切？——这题必须横着切。</b>图形向 $x\to-\infty$ 无限伸展，竖条要拆成 $\int_{-\infty}^0$ 与 $\int_0^1$ 两段（书上明说"<u>则较为麻烦，故不建议</u>"）；而横条只需一个 $\int_0^{\mathrm e}$。<b>判据：无限伸展的方向上不要取微元。</b></li>
+          <li><b>横着切以后左右边界是谁</b>：左边是曲线 $x=\ln y$，右边是切线 $x=\frac y{\mathrm e}$。<u>先把两条边界都写成 $x=\cdots$ 的形式，再相减。</u></li>
+          <li><b>第 (2) 问绕 $x=1$：垫圈法。</b>同一条水平线上，"大半径"是到 $x=\ln y$ 的距离 $1-\ln y$，"小半径"是到 $x=\frac y{\mathrm e}$ 的距离 $1-\frac y{\mathrm e}$，<u>大圆减小圆</u>。也可以直接套公式 (10-1)（见批注的法二）。</li>
+        </ol>
+      </div>
+      <div class="paper"><span class="phead">✍️ 考场卷面 —— 照这个抄<span class="score">参考 12 分</span></span>
+        <div class="step"><span class="k">解</span>设切点坐标为 $P(x_0,y_0)$，则曲线 $y=\mathrm e^x$ 在点 $P$ 处的切线斜率为 $y'(x_0)=\mathrm e^{x_0}$，切线方程为
+          $$y-y_0=\mathrm e^{x_0}(x-x_0)\tag{1}$$</div>
+        <div class="step">因该切线经过点 $(0,0)$，代入 $(1)$ 式得 $-y_0=-x_0\mathrm e^{x_0}$；又 $y_0=\mathrm e^{x_0}$，故 $x_0=1,\ y_0=\mathrm e$，切线方程为 $y=\mathrm ex$。<span class="pt">⛳ 定出切点与切线 3分</span></div>
+        <div class="step"><b>(1) 求面积。</b>取水平条面积微元（图形沿 $x$ 负向无界，故对 $y$ 积分），$D$ 的面积
+          $$A=\int_0^{\mathrm e}\Bigl(\frac y{\mathrm e}-\ln y\Bigr)\mathrm dy=\frac1{\mathrm e}\cdot\frac{y^2}2\Big|_0^{\mathrm e}-(y\ln y-y)\Big|_0^{\mathrm e}=\frac{\mathrm e}2+\lim_{y\to0^+}y\ln y=\frac{\mathrm e}2$$
+          <span class="pt">⛳ 对 $y$ 积分 2分</span><span class="pt">⛳ 反常积分取极限 2分</span></div>
+        <div class="step"><b>(2) 求体积。</b>$D$ 绕直线 $x=1$ 旋转一周所成旋转体的体积微元为
+          $$\mathrm dV=\Bigl[\pi(1-\ln y)^2-\pi\Bigl(1-\frac y{\mathrm e}\Bigr)^2\Bigr]\mathrm dy\tag{2}$$
+          <span class="pt">⛳ 垫圈法：大圆减小圆 3分</span></div>
+        <div class="step">由 $(2)$ 式积分得
+          $$V=\pi\int_0^{\mathrm e}\Bigl(\ln^2y-2\ln y+\frac{2y}{\mathrm e}-\frac{y^2}{\mathrm e^2}\Bigr)\mathrm dy=\pi\Bigl(y\ln^2y-4y\ln y+4y+\frac{y^2}{\mathrm e}-\frac{y^3}{3\mathrm e^2}\Bigr)\Big|_0^{\mathrm e}=\frac53\pi\mathrm e$$
+          <span class="pt">⛳ 算出体积 2分</span></div>
+        <div class="step fin">故 $D$ 的面积为 $A=\dfrac{\mathrm e}2$，$D$ 绕直线 $x=1$ 旋转一周所成旋转体的体积为 $V=\dfrac53\pi\mathrm e$。</div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（写完校对，考场不落笔）</span>
+        <p>① <b>$\lim\limits_{y\to0^+}y\ln y=0$ 必须写出来</b>（书上注明"见例 1.28 的注"）。这一步是<u>反常积分收敛的证据</u>，不写就等于默认 $\int_0^{\mathrm e}\ln y\,\mathrm dy$ 是普通定积分——<span class="dock">直接扣分</span>。</p>
+        <p>② <b>法二：直接套公式 (10-1)</b>（书上给了完整过程）。$L_0:x=1\Rightarrow A=1,B=0,C=-1$；$y_大=\mathrm e^x,\ y_小=\mathrm ex$：
+        $$V_大=\pi\int_{-\infty}^1(x-1)^2\mathrm e^x\mathrm dx,\quad V_小=\pi\int_0^1(x-1)^2\mathrm e\,\mathrm dx,\quad V=V_大-V_小=\frac{5\pi\mathrm e}3$$
+        <b>两法同答案，已用 mpmath 双路对拍。</b>法二的好处是不用反解 $x=\ln y$；坏处是要算 $\int_{-\infty}^1(x-1)^2\mathrm e^x\mathrm dx$（两次分部）。<u>考场上哪条路熟就走哪条，但要在卷面上写清用的是哪个公式。</u></p>
+        <p>③ <b>为什么公式 (10-1) 在这里合法</b>：$L_0:x=1$ 的垂线是水平线，$y=\mathrm e^x$ 单调 ⇒ 每条水平线只交一次 ✔ 前提满足。</p>
+        <p>④ <b>心算校验</b>：$A=\frac{\mathrm e}2\approx1.359$；曲边三角形夹在宽 $\mathrm e$、高 1 的框里，$\frac{\mathrm e}2$ 正好是它的一半——<u>数量级对得上就放心。</u></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="eg" id="xt101">
+    <div class="q"><span class="no">基 习10.1</span><span class="pg">P.277·P.278</span>
+      位于曲线 $y=\dfrac1{\sqrt{1+x^2}}\,(0\le x\lt+\infty)$ 下方、$x$ 轴上方的<b>无界区域</b>绕 $x$ 轴旋转一周所得旋转体的体积为＿＿．</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\dfrac{\pi^2}2$</span></p>
+      <div class="fml">$V=\int_0^{+\infty}\pi\Bigl(\frac1{\sqrt{1+x^2}}\Bigr)^2\mathrm dx=\lim_{b\to+\infty}\pi\int_0^b\frac{\mathrm dx}{1+x^2}=\pi\lim_{b\to+\infty}\arctan x\Big|_0^b=\frac{\pi^2}2$</div>
+      <p><span class="lab">要害</span><b>平方把根号吃掉了</b>——这正是 $V_x$ 公式最讨人喜欢的地方：<u>$y$ 带根号的题，绕 $x$ 轴往往比绕 $y$ 轴好算得多</u>。注意"无界区域"三个字提示这是反常积分，写 $\lim\limits_{b\to+\infty}$ 是规范动作。</p>
+    </div>
+  </div>
+
+  <div class="eg" id="xt102">
+    <div class="q"><span class="no">基 习10.2</span><span class="pg">P.277·P.278</span>
+      圆域 $x^2+(y-b)^2\le k^2\,(0\lt k\lt b)$ 绕 $x$ 轴旋转一周所得旋转体的体积 $V=$＿＿．</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$2\pi^2k^2b$</span>（这就是<b>圆环体/救生圈</b>）</p>
+      <p>上半圆周 $y_2=b+\sqrt{k^2-x^2}$，下半圆周 $y_1=b-\sqrt{k^2-x^2}$，体积微元（垫圈）</p>
+      <div class="fml">$\mathrm dV=(\pi y_2^2-\pi y_1^2)\mathrm dx=\pi\bigl[(b+\sqrt{k^2-x^2})^2-(b-\sqrt{k^2-x^2})^2\bigr]\mathrm dx=4\pi b\sqrt{k^2-x^2}\,\mathrm dx$</div>
+      <div class="fml">$V=4\pi b\int_{-k}^k\sqrt{k^2-x^2}\,\mathrm dx=8\pi b\int_0^k\sqrt{k^2-x^2}\,\mathrm dx=8\pi b\cdot\frac{\pi k^2}4=2\pi^2k^2b$</div>
+      <p><span class="lab">要害</span>① <b>平方差公式让根号自己消掉</b>：$(b+u)^2-(b-u)^2=4bu$，<u>不要傻乎乎地各自展开</u>。<br>
+      ② <b>$\int_0^k\sqrt{k^2-x^2}\mathrm dx=\frac{\pi k^2}4$ 是四分之一圆面积</b>，几何法秒杀（ch9 支线十）。<br>
+      ③ <b>结果的形状值得记</b>：$V=2\pi b\cdot\pi k^2=$（形心走过的周长）×（截面圆面积）——<b>这就是帕普斯定理</b>。书上的注也提到"采用对 $y$ 积分亦可算出 $V$"。</p>
+    </div>
+  </div>
+
+  <div class="eg" id="xt108">
+    <div class="q"><span class="no">基 习10.8 ★★</span><span class="pg">P.277·P.280–281</span>
+      计算由摆线 $\begin{cases}x=a(t-\sin t)\\ y=a(1-\cos t)\end{cases}(a\gt0,0\le t\le2\pi)$ 与 $x$ 轴所围平面图形<b>绕 $y$ 轴</b>旋转一周所得旋转体的体积。</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>先判该用哪条路。</b>绕 $y$ 轴有两条路：<u>柱壳法</u> $2\pi\int x|y|\mathrm dx$（对 $x$ 积分）或<u>垫圈法</u> $\pi\int(x_2^2-x_1^2)\mathrm dy$（对 $y$ 积分）。</li>
+          <li><b>看图判断：这个拱是"一个 $y$ 对两个 $x$"</b>（左支 $x_1(y)$、右支 $x_2(y)$）。走垫圈法就必须<u>把拱劈成左右两半、分别写出 $x(y)$、积分限还要反着来</u>；走柱壳法则一路顺着 $t$ 从 $0$ 到 $2\pi$ 积完。<b>柱壳法明显更快。</b></li>
+          <li><b>柱壳法的三个因子都用参数表示</b>：$x=a(t-\sin t)$、$|y|=a(1-\cos t)$、$\mathrm dx=a(1-\cos t)\mathrm dt$——<u>注意 $\mathrm dx$ 里又出现一个 $(1-\cos t)$，所以最后是三次方，不是二次方</u>。这是本题最容易漏的地方。</li>
+          <li>展开后是 $\int_0^{2\pi}$ 上一堆 $t\cos t,\ t\cos^2t,\ \sin t\cos^2 t$ 之类，<b>逐项用奇偶/周期/分部处理</b>，别想着一口气算完。</li>
+        </ol>
+      </div>
+      <div class="paper"><span class="phead">✍️ 考场卷面 —— 照这个抄（柱壳法）<span class="score">参考 11 分</span></span>
+        <div class="step"><span class="k">解</span>作平面图形。该图形绕 $y$ 轴旋转，由柱壳法体积公式
+          $$V_y=2\pi\int_0^{2\pi a}x\,y(x)\mathrm dx\tag{1}$$
+          <span class="pt">⛳ 选对公式 2分</span></div>
+        <div class="step">在 $(1)$ 式中作代换 $x=a(t-\sin t)$，则 $\mathrm dx=a(1-\cos t)\mathrm dt$，$x:0\to2\pi a$ 对应 $t:0\to2\pi$，故
+          $$V_y=2\pi\int_0^{2\pi}a(t-\sin t)\cdot a(1-\cos t)\cdot a(1-\cos t)\mathrm dt=2\pi a^3\int_0^{2\pi}(t-\sin t)(1-\cos t)^2\mathrm dt\tag{2}$$
+          <span class="pt">⛳ 三个因子都换成 $t$（含 $\mathrm dx$）3分</span></div>
+        <div class="step">展开 $(2)$ 式的被积函数：
+          $$(t-\sin t)(1-\cos t)^2=t-2t\cos t+t\cos^2t-\sin t+2\sin t\cos t-\sin t\cos^2t$$
+          <span class="pt">⛳ 展开正确 2分</span></div>
+        <div class="step">在 $[0,2\pi]$ 上逐项积分：$\displaystyle\int_0^{2\pi}t\,\mathrm dt=2\pi^2$，$\displaystyle\int_0^{2\pi}t\cos t\,\mathrm dt=0$，$\displaystyle\int_0^{2\pi}t\cos^2t\,\mathrm dt=\pi^2$，
+          而 $\sin t,\ \sin t\cos t,\ \sin t\cos^2t$ 在整周期上的积分均为 $0$，故
+          $$V_y=2\pi a^3(2\pi^2-0+\pi^2-0+0-0)=6\pi^3a^3$$
+          <span class="pt">⛳ 整周期为零的项直接判掉 3分</span></div>
+        <div class="step fin">故摆线一拱与 $x$ 轴所围图形绕 $y$ 轴旋转一周所得旋转体的体积为 $6\pi^3a^3$。<span class="pt">⛳ 结论回扣 1分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（写完校对，考场不落笔）</span>
+        <p>① <b>书上的"方法一"走的是垫圈法</b>，要写成
+        $V_y=\pi\bigl[\int_0^{2a}x_2^2(y)\mathrm dy-\int_0^{2a}x_1^2(y)\mathrm dy\bigr]$，换元后变成 $-\pi a^3\int_0^{2\pi}(t-\sin t)^2\sin t\,\mathrm dt$，还要单独算 $\int_0^{2\pi}t^2\sin t\mathrm dt=-4\pi^2$ 与 $\int_0^{2\pi}2t\sin^2t\mathrm dt=2\pi^2$，<b>整整多出两页</b>。<u>两法都对（已数值对拍），但考场上选柱壳。</u></p>
+        <p>② <b><span class="dock">扣分点</span>漏掉 $\mathrm dx$ 里的 $(1-\cos t)$</b>：写成 $2\pi\int a(t-\sin t)\cdot a(1-\cos t)\mathrm dt$ 就变成二次方，答案会掉到 $\frac{2}{3}$——<b>这是本题头号错误</b>。</p>
+        <p>③ <b>整周期为零的判法要快</b>：$\int_0^{2\pi}\sin t\cdot g(\cos t)\mathrm dt$ 型，令 $u=\cos t$ 上下限相同 ⇒ 恒为 $0$。$\int_0^{2\pi}t\cos t\,\mathrm dt$ 分部后 $=t\sin t|_0^{2\pi}-\int\sin=0$。<u>这三项加起来占 2 分，不该现算。</u></p>
+        <p>④ <b>对照记忆</b>：同一拱，绕 $x$ 轴是 $5\pi^2a^3$（大观表 (*)），绕 $y$ 轴是 $6\pi^3a^3$。<u>绕 $y$ 轴多一个 $\pi$，因为柱壳的"周长因子" $2\pi x$ 里 $x$ 最大到 $2\pi a$。</u></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="eg" id="xt109">
+    <div class="q"><span class="no">基 习10.9 ★</span><span class="pg">P.277·P.281</span>
+      求曲线 $y=3-|x^2-1|$ 与 $x$ 轴围成的封闭图形<b>绕直线 $y=3$</b> 旋转一周所得旋转体的体积。</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>先去绝对值，把曲线写成分段函数。</b>$|x|\le1$ 时 $y=3-(1-x^2)=x^2+2$；$|x|\ge1$ 时 $y=3-(x^2-1)=4-x^2$。<u>两段抛物线一凹一凸，在 $x=\pm1$ 处接上（接点 $(1,3)$ 恰好落在旋转轴上）。</u></li>
+          <li><b>定出图形的边界</b>：与 $x$ 轴交点由 $4-x^2=0$ 得 $x=\pm2$。所以图形在 $[-2,2]$ 上，<u>关于 $y$ 轴对称 ⇒ 只算右半再 ×2</u>。</li>
+          <li><b>绕 $y=3$ 转，微元是垫圈</b>：外半径 $3-0=3$（下边界是 $x$ 轴，到轴距离 3），内半径 $3-y$（上边界是曲线）。所以 $\mathrm dV=\pi[3^2-(3-y)^2]\mathrm dx$。<u>先想清楚"谁离轴远"，别把内外搞反。</u></li>
+          <li><b>算之前先把两段的 $\mathrm dV$ 都写出来对比一眼</b>——本题有个小彩蛋：<u>两段的被积函数会长得一模一样</u>，于是两个积分能合并成一个，省一半计算。</li>
+        </ol>
+      </div>
+      <div class="paper"><span class="phead">✍️ 考场卷面 —— 照这个抄<span class="score">参考 10 分</span></span>
+        <div class="step"><span class="k">解</span>去绝对值得曲线方程
+          $$y=\begin{cases}x^2+2,&|x|\le1\\ 4-x^2,&|x|\ge1\end{cases}$$
+          它与 $x$ 轴交于 $x=\pm2$，图形关于 $y$ 轴对称。<span class="pt">⛳ 分段写出并定边界 2分</span></div>
+        <div class="step">设旋转体在区间 $[0,1]$ 上的体积为 $V_1$、在 $[1,2]$ 上的体积为 $V_2$。绕 $y=3$ 旋转，取垫圈微元，则
+          $$\mathrm dV_1=\pi\{3^2-[3-(x^2+2)]^2\}\mathrm dx=\pi(8+2x^2-x^4)\mathrm dx\tag{1}$$
+          $$\mathrm dV_2=\pi\{3^2-[3-(4-x^2)]^2\}\mathrm dx=\pi(8+2x^2-x^4)\mathrm dx\tag{2}$$
+          <span class="pt">⛳ 两段微元各 2分，共 4分</span></div>
+        <div class="step">由 $(1)(2)$ 两式相同及对称性得
+          $$V=2(V_1+V_2)=2\pi\int_0^1(8+2x^2-x^4)\mathrm dx+2\pi\int_1^2(8+2x^2-x^4)\mathrm dx=2\pi\int_0^2(8+2x^2-x^4)\mathrm dx$$
+          <span class="pt">⛳ 合并成一个积分 2分</span></div>
+        <div class="step">$$=2\pi\Bigl(8x+\frac23x^3-\frac15x^5\Bigr)\Big|_0^2=2\pi\Bigl(16+\frac{16}3-\frac{32}5\Bigr)=\frac{448}{15}\pi$$
+          <span class="pt">⛳ 算出 1分</span></div>
+        <div class="step fin">故所求旋转体的体积为 $\dfrac{448}{15}\pi$。<span class="pt">⛳ 结论回扣 1分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（写完校对，考场不落笔）</span>
+        <p>① <b>为什么两段微元相同</b>：$[3-(x^2+2)]^2=(1-x^2)^2$，$[3-(4-x^2)]^2=(x^2-1)^2$——<u>互为相反数，平方后当然相等</u>。这正是 $y=3-|x^2-1|$ 这个"带绝对值"的设计所致。<b>发现这一点能省掉一半计算，但即使没发现、分开算两遍也不扣分。</b></p>
+        <p>② <b><span class="dock">扣分点</span>把内外半径搞反</b>：绕 $y=3$ 转时，<u>离轴最远的是 $x$ 轴（距离 3），最近的是曲线（距离 $3-y$）</u>，所以是 $3^2-(3-y)^2$。写成 $(3-y)^2-3^2$ 会得到负体积。</p>
+        <p>③ <b>为什么不用公式 (10-1)</b>：本题 $L_0:y=3$ 的垂线是竖直线，与曲线只交一次 ✔ 其实可用，代 $A=0,B=1,C=-3$ 得 $V=\pi\int(f-3)^2\mathrm dx$——<u>但那算的是"曲线到轴"围出的实心体，与本题"曲线与 $x$ 轴之间"的区域不是一回事</u>。<b>公式 (10-1) 只管一条曲线绕轴，遇到"两条边界夹出的区域"仍要老老实实做垫圈减法。</b></p>
+        <p>④ 心算校验：区域宽 4、高最多 3，绕 $y=3$ 转出来的东西体积约 $\frac{448}{15}\pi\approx93.8$，而外接圆柱体积 $\pi\cdot3^2\cdot4\approx113$——<u>比它小一点，合理。</u></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="eg" id="qeg1012">
+    <div class="q"><span class="no">强 例10.12 ★</span><span class="pg">P.117</span>
+      求曲线 $(y+1)^2=(2-x)\ln x$ 在区间 $[1,2]$ 上所围成的平面图形<b>绕直线 $y=-1$</b> 旋转一周所生成的旋转体的体积。</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>先认出题目已经把答案喂到嘴边了。</b>绕 $y=c$ 旋转，微元是 $\pi(y-c)^2\mathrm dx$；这里 $c=-1$，$(y-c)^2=(y+1)^2$——<u>而题目给的方程左边正好就是 $(y+1)^2$</u>。<b>不用解出 $y$。</b></li>
+          <li><b>另一种看法（法一，平移）</b>：整个图形连同轴一起上移 1 个单位，方程变成 $y^2=(2-x)\ln x$，轴变成 $y=0$——<u>平移不改变体积</u>。这是"化归经典形式"的标准动作。</li>
+          <li><b>定积分区间</b>：题目直接给了 $[1,2]$，且 $(2-x)\ln x\ge0$ 在 $[1,2]$ 上成立（两个因子都非负），图形闭合。<u>检查被开方式非负，是这类题的隐含审题动作。</u></li>
+          <li>剩下就是算 $\int_1^2(2-x)\ln x\,\mathrm dx$：<b>对数配多项式 ⇒ 分部积分，$\ln x$ 当 $u$</b>（ch9 反对幂指三，"对"排第二）。</li>
+        </ol>
+      </div>
+      <div class="paper"><span class="phead">✍️ 考场卷面 —— 照这个抄<span class="score">参考 10 分</span></span>
+        <div class="step"><span class="k">解</span>该平面图形绕直线 $y=-1$ 旋转，取垂直于 $x$ 轴的圆片微元，其半径为 $|y-(-1)|=|y+1|$，故
+          $$V=\pi\int_1^2(y+1)^2\mathrm dx\tag{1}$$
+          <span class="pt">⛳ 半径写成 $y-(-1)$ 3分</span></div>
+        <div class="step">将已知曲线方程 $(y+1)^2=(2-x)\ln x$ 代入 $(1)$ 式，得
+          $$V=\pi\int_1^2(2-x)\ln x\,\mathrm dx\tag{2}$$
+          <span class="pt">⛳ 直接代入、不必解出 $y$ 2分</span></div>
+        <div class="step">对 $(2)$ 式用分部积分（取 $u=\ln x,\ \mathrm dv=(2-x)\mathrm dx,\ v=2x-\frac{x^2}2$）：
+          $$\int_1^2(2-x)\ln x\,\mathrm dx=\Bigl(2x-\frac{x^2}2\Bigr)\ln x\Big|_1^2-\int_1^2\Bigl(2-\frac x2\Bigr)\mathrm dx=2\ln2-\Bigl(2x-\frac{x^2}4\Bigr)\Big|_1^2=2\ln2-\frac54$$
+          <span class="pt">⛳ 分部积分算对 4分</span></div>
+        <div class="step fin">故所求旋转体的体积为 $V=\Bigl(2\ln2-\dfrac54\Bigr)\pi$。<span class="pt">⛳ 结论回扣 1分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（写完校对，考场不落笔）</span>
+        <p>① <b>法一（书上给的）的写法</b>：令 $f(x,y)=(y+1)^2+(x-2)\ln x$，则 $f=0$ 所围图形绕 $y=-1$ 旋转的体积 $V$，与 $y^2=-(x-2)\ln x$ 所围图形绕 $y=0$ 旋转的体积 $V_1$ <b>相等</b>（整体平移），于是 $V=V_1=\pi\int_1^2y^2\mathrm dx$。<u>两法落到同一个积分上，法二少写一句平移说明。</u></p>
+        <p>② <b>一句话记住</b>：<b>绕 $y=c$ 转，被积的就是 $(y-c)^2$；绕 $x=c$ 转，被积的就是 $(x-c)^2$。</b>本讲所有"绕水平/竖直线"的题（<a href="#eg107">基 10.7</a> 绕 $x=1$、<a href="#xt109">习 10.9</a> 绕 $y=3$、本题绕 $y=-1$）都是这一句。</p>
+        <p>③ <b>验算 $v$ 的取法</b>：$v=2x-\frac{x^2}2$，$v(2)=2,\ v(1)=\frac32$；边界项 $v\ln x\big|_1^2=2\ln2-0$（$\ln1=0$ 把下限干掉了）。<u>选 $v$ 时不必加常数，但要选到能让边界项简单。</u></p>
+        <p>④ <b>数值自检</b>：$2\ln2-\frac54\approx0.1363\gt0$ ✔ 体积为正。<u>若算出负数，一定是分部积分符号错了。</u></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="eg" id="qeg1013">
+    <div class="q"><span class="no">强 例10.13</span><span class="pg">P.118</span>
+      $y=\sqrt x\,\mathrm e^{-\frac32x}\,(x\ge0)$ 下方及 $x$ 轴上方的无界区域绕 $x$ 轴旋转一周所生成的旋转体的体积为＿＿．</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\dfrac\pi9$</span></p>
+      <div class="fml">$V=\int_0^{+\infty}\pi y^2\mathrm dx=\pi\int_0^{+\infty}x\mathrm e^{-3x}\mathrm dx=\pi\Bigl(-\frac x3\mathrm e^{-3x}\Big|_0^{+\infty}+\frac13\int_0^{+\infty}\mathrm e^{-3x}\mathrm dx\Bigr)=\frac\pi3\cdot\frac13=\frac\pi9$</div>
+      <p><span class="lab">要害</span>① <b>先平方再看</b>：$y^2=x\mathrm e^{-3x}$，指数上的 $-\frac32$ 翻倍成 $-3$，<u>根号与平方对消，剩下最标准的 $\int_0^{+\infty}x\mathrm e^{-kx}\mathrm dx$</u>。<br>
+      ② <b>用 Γ 函数一秒出</b>（ch9 学过）：$\int_0^{+\infty}x\mathrm e^{-3x}\mathrm dx=\dfrac{\Gamma(2)}{3^2}=\dfrac{1!}9=\dfrac19$，乘 $\pi$ 得 $\dfrac\pi9$。<b>填空题就该这么做。</b></p>
+    </div>
+  </div>
+
+  <div class="eg" id="qeg109">
+    <div class="q"><span class="no">强 例10.9</span><span class="pg">P.116</span>
+      已知 $y=\sqrt x\,a^{-\frac x{2a}}\,(a\gt1,0\le x\lt+\infty)$ 与 $x$ 轴中间部分区域绕 $x$ 轴旋转一周生成的旋转体的体积为 $\pi\mathrm e^2$，则 $a=$＿＿．</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$a=\mathrm e$</span></p>
+      <div class="fml">$V(a)=\pi\int_0^{+\infty}y^2\mathrm dx=\pi\int_0^{+\infty}xa^{-\frac xa}\mathrm dx=-\frac{a\pi}{\ln a}\int_0^{+\infty}x\,\mathrm d\bigl(a^{-\frac xa}\bigr)=-\frac{a\pi}{\ln a}xa^{-\frac xa}\Big|_0^{+\infty}+\frac{a\pi}{\ln a}\int_0^{+\infty}a^{-\frac xa}\mathrm dx=\pi\Bigl(\frac a{\ln a}\Bigr)^2$</div>
+      <p>故 $\Bigl(\dfrac a{\ln a}\Bigr)^2=\mathrm e^2\Rightarrow\dfrac a{\ln a}=\mathrm e\Rightarrow a=\mathrm e$。</p>
+      <p><span class="lab">要害</span>① <b>底数不是 $\mathrm e$ 就先换底</b>：$a^{-\frac xa}=\mathrm e^{-\frac{x\ln a}a}$，于是 $\int_0^{+\infty}x\mathrm e^{-kx}\mathrm dx=\frac1{k^2}$，其中 $k=\frac{\ln a}a$，<u>直接得 $V=\pi\bigl(\frac a{\ln a}\bigr)^2$，一步到位</u>。<br>
+      ② <b>解 $\frac a{\ln a}=\mathrm e$ 只有 $a=\mathrm e$ 这一个根</b>：函数 $g(a)=\frac a{\ln a}$ 在 $a\gt1$ 上先减后增，最小值恰在 $a=\mathrm e$ 处取到 $\mathrm e$——<u>所以 $\mathrm e$ 是唯一解，不需要再讨论</u>。<b>这一点书上没说，但填空题若改成解答题就要写。</b></p>
+    </div>
+  </div>
+
+  <!-- ================= s3 平均值 ================= -->
+  <h2 id="s3"><span class="idx">三</span>函数的平均值——一个公式，考的却是变限积分</h2>
+
+  <div class="key"><span class="tag">必记 · 平均值</span><span class="pg">P.271 · P.107</span>
+    <div class="fml">$\bar y=\frac1{b-a}\int_a^by(x)\mathrm dx\quad\Longrightarrow\quad\bar y=y(\xi),\ \xi\in[a,b]\ \text{（由积分中值定理）}$</div>
+    <p>眉批：一般认为 $y(x)$ 是<b>连续函数</b>。<u>这个公式本身没有难度</u>——难度全在"$\int_a^by$ 你算不算得出来"。<b>所以平均值题的真考点，从来不是平均值。</b></p>
+  </div>
+
+  <div class="eg" id="eg108">
+    <div class="q"><span class="no">基 例10.8</span><span class="pg">P.271–272</span>
+      设 $f(x)$ 连续，且 $f(x+2)-f(x)=x$，$\displaystyle\int_0^2f(x)\mathrm dx=0$，则 $f(x)$ 在 $[1,3]$ 上的平均值为＿＿．</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\dfrac14$</span></p>
+      <p><span class="lab">观察</span>套公式 $\bar f=\dfrac1{3-1}\int_1^3f=\dfrac12\int_1^3f$。<b>观察可知两个区间 $[0,2]$ 与 $[1,3]$ 长度都是 2</b>——这就是题眼。</p>
+      <p><span class="lab">两条联想路径（书上都写了，任取其一）</span></p>
+      <ul>
+        <li><b>a. 从 $f(x+2)-f(x)$ 联想周期性</b>（注意：本题的 $f$ <u>未必</u>真有周期）。若 $f$ 以 $T$ 为周期则 $\int_a^{a+T}f=\int_0^Tf$；受此启发设 $F(x)=\int_x^{x+2}f(t)\mathrm dt$，则 $\bar f=\dfrac{F(1)}2$。</li>
+        <li><b>b. 把条件反写一两步</b>，联想经典形式 $\Bigl[\int_{\varphi_1(x)}^{\varphi_2(x)}f(t)\mathrm dt\Bigr]'$：注意到 $\Bigl[\int_x^{x+2}f(t)\mathrm dt\Bigr]'=f(x+2)-f(x)$，<b>正好是题给的左边</b>。</li>
+      </ul>
+      <p><span class="lab">解</span>记 $F(x)=\displaystyle\int_x^{x+2}f(t)\mathrm dt$（变限积分函数），则</p>
+      <div class="fml">$F'(x)=f(x+2)-f(x)=x\ \Rightarrow\ F(x)=\frac12x^2+C$</div>
+      <p>由 $F(0)=\displaystyle\int_0^2f(x)\mathrm dx=0$ 得 $C=0$，故 $F(x)=\frac12x^2$，于是 $\displaystyle\int_1^3f=F(1)=\frac12$，</p>
+      <div class="fml">$\bar f=\frac1{3-1}\int_1^3f(x)\mathrm dx=\frac12F(1)=\frac14$</div>
+      <p><span class="lab">要害</span><b>方法总结（书上原话）：学会观察条件，得到有效信息，产生联想，进而快速解题。</b><br>
+      <b>本题真正的考点是"造变限积分函数"</b>（ch9 支线八）：给你一个<u>差分关系</u> $f(x+2)-f(x)$，就该立刻反应到 $\int_x^{x+2}$ 的导数。<u>$\int_0^2f=0$ 这个条件的唯一作用是定常数 $C$</u>——凡是给了一个具体积分值的题，多半就是用来定积分常数的。</p>
+    </div>
+  </div>
+
+  <div class="eg" id="xt105">
+    <div class="q"><span class="no">基 习10.5</span><span class="pg">P.277·P.279</span>
+      函数 $y=\dfrac{x^2}{\sqrt{1-x^2}}$ 在区间 $\Bigl[\dfrac12,\dfrac{\sqrt3}2\Bigr]$ 上的平均值为＿＿．</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\dfrac{\sqrt3+1}{12}\pi$</span></p>
+      <div class="fml">$\bar y=\frac2{\sqrt3-1}\int_{\frac12}^{\frac{\sqrt3}2}\frac{x^2}{\sqrt{1-x^2}}\mathrm dx\xlongequal{x=\sin\theta}\frac2{\sqrt3-1}\int_{\frac\pi6}^{\frac\pi3}\sin^2\theta\,\mathrm d\theta=\frac2{\sqrt3-1}\Bigl(\frac12\theta-\frac14\sin2\theta\Bigr)\Big|_{\frac\pi6}^{\frac\pi3}=\frac{\sqrt3+1}{12}\pi$$</div>
+      <p><span class="lab">要害</span>① <b>$\frac1{b-a}=\frac2{\sqrt3-1}$ 别忘了分母有理化</b>：$\frac2{\sqrt3-1}=\sqrt3+1$，最后那个 $\sqrt3+1$ 就是这么来的，<u>不是从积分里出来的</u>。<br>
+      ② 积分部分与<a href="#eg106">基 10.6</a> 是同一个换元（$\sin^2$ 在 $[\frac\pi6,\frac\pi3]$ 上），<b>$\frac12\theta-\frac14\sin2\theta$ 这个原函数本讲用了两次，直接背下来。</b></p>
+    </div>
+  </div>
+
+  <!-- ================= s4 弧长 ================= -->
+  <h2 id="s4"><span class="idx">四</span>平面曲线的弧长——三个公式其实是一个（仅数一、数二）</h2>
+
+  <div class="key"><span class="tag">必记 · ★弧微分 $\mathrm ds$ 是三式的共同祖先</span><span class="pg">P.273 · P.107</span>
+    <p>18 讲眉批：<b>数二必考！</b>数一也年年可能出现在填空题里。三个公式不要分开记，<u>记住一个 $\mathrm ds$ 就够</u>：</p>
+    <div class="fml">$\mathrm ds=\sqrt{(\mathrm dx)^2+(\mathrm dy)^2}\ \Longrightarrow\
+    \begin{cases}\sqrt{1+\Bigl(\dfrac{\mathrm dy}{\mathrm dx}\Bigr)^2}\,\mathrm dx=\sqrt{1+[y'(x)]^2}\,\mathrm dx & \text{直角坐标（提出 }\mathrm dx)\\[6pt]
+    \sqrt{[x'(t)]^2+[y'(t)]^2}\,\mathrm dt & \text{参数方程（}\mathrm dx=x'\mathrm dt,\mathrm dy=y'\mathrm dt)\\[6pt]
+    \sqrt{[r(\theta)]^2+[r'(\theta)]^2}\,\mathrm d\theta & \text{极坐标}\end{cases}$</div>
+    <div class="fml">$s=\int_a^b\sqrt{(\mathrm dx)^2+(\mathrm dy)^2}=\int\mathrm ds$</div>
+    <p><b>几何来源</b>：$\mathrm dx,\mathrm dy$ 是无穷小的两条直角边，$\mathrm ds$ 是斜边——<b>就是勾股定理</b>。前两式一眼可见；<u>极坐标式的推法</u>：$x=r\cos\theta,y=r\sin\theta$，
+    $\mathrm dx=(r'\cos\theta-r\sin\theta)\mathrm d\theta$，$\mathrm dy=(r'\sin\theta+r\cos\theta)\mathrm d\theta$，平方相加交叉项抵消，得 $r^2+r'^2$。</p>
+  </div>
+
+  <!-- ===== 交互 2：ds 三形态 ===== -->
+  <div class="tool">
+    <h4>📏 弧微分 $\mathrm ds$ 三形态 · 同源演示台</h4>
+    <div class="hint">同一条曲线，用<b>三种坐标写法</b>算弧长，$\mathrm ds$ 的表达式完全不同，<b>但值必须一样</b>。<br>
+    拖动 $t$ 看那个小直角三角形怎么贴在曲线上，下面同时给出三种写法的被积函数值与最终弧长（与数值折线长度对拍）。</div>
+    <div class="ctl">
+      <label>曲线</label>
+      <select id="dsCurve">
+        <option value="cycloid">摆线 x=a(t−sin t), y=a(1−cos t)（a=1）</option>
+        <option value="astroid">星形线 x=cos³t, y=sin³t（第一象限）</option>
+        <option value="circle">单位圆 r=1（x=cos t, y=sin t）</option>
+        <option value="cardio">心形线 r=1−cosθ（上半条）</option>
+        <option value="parab">抛物线 y=x²（0 ≤ x ≤ 2）</option>
+      </select>
+    </div>
+    <div class="ctl">
+      <label>参数 $t$（放大镜位置）</label>
+      <input type="range" id="dsT" min="0.06" max="6.22" step="0.01" value="1.4">
+      <span class="val" id="dsTv">t = 1.40</span>
+    </div>
+    <div class="ctl">
+      <label>微元放大倍数</label>
+      <input type="range" id="dsZ" min="1" max="14" step="0.5" value="6">
+      <span class="val" id="dsZv">×4</span>
+    </div>
+    <div class="scene"><svg id="dsSvg" viewBox="0 0 640 300" xmlns="http://www.w3.org/2000/svg"></svg></div>
+    <div class="say" id="dsSay"></div>
+    <span class="verdict" id="dsV"></span>
+    <div class="legend2"><span class="chip c-b">蓝</span>曲线　<span class="chip c-g">绿</span>$\mathrm dx$　<span class="chip c-p">紫</span>$\mathrm dy$　<span class="chip c-r">红</span>$\mathrm ds$（斜边）<br>
+    <b>对拍口径</b>：可用的每种写法各自数值积分，再对上"把曲线切成 20000 段直接量折线总长"这条纯几何路径。<b>全部一致才 ✅</b>（某些曲线写不成 $y(x)$ 或非极坐标给出，对应行自动省略）。</div>
+  </div>
+
+  <div class="eg" id="eg1010">
+    <div class="q"><span class="no">基 例10.10</span><span class="pg">P.273–274</span>
+      曲线 $y=\ln(1-x^2)$ 上相应于 $0\le x\le\dfrac12$ 的一段弧的长度为＿＿．</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\ln3-\dfrac12$</span></p>
+      <p><span class="lab">分析</span>只需套公式做计算即可，<b>不用画图</b>。</p>
+      <div class="fml">$s=\int_0^{\frac12}\sqrt{1+(y')^2}\mathrm dx=\int_0^{\frac12}\sqrt{1+\Bigl(\frac{-2x}{1-x^2}\Bigr)^2}\mathrm dx=\int_0^{\frac12}\frac{1+x^2}{1-x^2}\mathrm dx$</div>
+      <div class="fml">$=\int_0^{\frac12}\frac{x^2-1+2}{1-x^2}\mathrm dx=\int_0^{\frac12}\Bigl(\frac2{1-x^2}-1\Bigr)\mathrm dx=\int_0^{\frac12}\Bigl(\frac1{1+x}+\frac1{1-x}-1\Bigr)\mathrm dx=\ln3-\frac12$</div>
+      <p><span class="lab">要害</span><b>关键一步是根号开得干净</b>：$1+\dfrac{4x^2}{(1-x^2)^2}=\dfrac{(1-x^2)^2+4x^2}{(1-x^2)^2}=\dfrac{(1+x^2)^2}{(1-x^2)^2}$——<u>分子是完全平方</u>。<br>
+      <b>★弧长题被选中的唯一理由就是"$1+y'^2$ 是完全平方"</b>。本讲所有弧长题都满足这一条（见 <a href="#s5">下节</a> 的完全平方族总表）。<u>考场上开完根号还带根号，八成是求导抄错了。</u></p>
+    </div>
+  </div>
+
+  <div class="eg" id="eg1011">
+    <div class="q"><span class="no">基 例10.11</span><span class="pg">P.274</span>
+      阿基米德螺线 $r=\theta$ 上相应于 $\theta$ 从 $0$ 到 $2\pi$ 一段的弧长为＿＿．</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\pi\sqrt{1+4\pi^2}+\dfrac12\ln\bigl(2\pi+\sqrt{1+4\pi^2}\bigr)$</span></p>
+      <div class="fml">$s=\int_0^{2\pi}\sqrt{r^2+r'^2}\,\mathrm d\theta=\int_0^{2\pi}\sqrt{\theta^2+1}\,\mathrm d\theta=\Bigl[\frac\theta2\sqrt{1+\theta^2}+\frac12\ln\bigl(\theta+\sqrt{1+\theta^2}\bigr)\Bigr]_0^{2\pi}$</div>
+      <p><span class="lab">要害 · $\int\sqrt{1+\theta^2}\mathrm d\theta$ 必须会推</span>书上把整个 $\int\sec^3$ 循环法写在页边（令 $\theta=\tan t$，辅助直角三角形：直角边 $1,\theta$，斜边 $\sqrt{\theta^2+1}$）：</p>
+      <div class="fml">$\int\sec^3t\,\mathrm dt=\sec t\tan t-\int\tan^2t\sec t\,\mathrm dt=\sec t\tan t-\int\sec^3t\,\mathrm dt+\int\sec t\,\mathrm dt$</div>
+      <div class="fml">$\Rightarrow\int\sec^3t\,\mathrm dt=\frac12\sec t\tan t+\frac12\ln|\sec t+\tan t|+C=\frac12\theta\sqrt{1+\theta^2}+\frac12\ln\bigl(\theta+\sqrt{1+\theta^2}\bigr)+C$</div>
+      <p><b>这是 ch9 支线四"再现建方程"的招牌题</b>，本讲直接拿来用。<u>凡是极坐标弧长题，被积函数十有八九是 $\sqrt{\theta^2+1}$ 或 $\sqrt{1\pm\cos\theta}$ 两种——前者用 $\sec^3$ 循环，后者用半角公式。</u></p>
+    </div>
+  </div>
+
+  <div class="eg" id="xt103">
+    <div class="q"><span class="no">基 习10.3</span><span class="pg">P.277·P.279</span>
+      （仅数一、数二）曲线 $x=\dfrac14y^2-\dfrac12\ln y$ 相应于 $1\le y\le\mathrm e$ 的一段弧的长度为＿＿．</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\dfrac14(\mathrm e^2+1)$</span></p>
+      <p><span class="lab">解</span><b>以 $y$ 作为参数</b>（曲线本来就写成 $x=x(y)$，横着看最省事）：</p>
+      <div class="fml">$\mathrm ds=\sqrt{\Bigl(\frac{\mathrm dx}{\mathrm dy}\Bigr)^2+1}\,\mathrm dy=\sqrt{\Bigl(\frac y2-\frac1{2y}\Bigr)^2+1}\,\mathrm dy=\frac12\Bigl(y+\frac1y\Bigr)\mathrm dy$</div>
+      <div class="fml">$s=\int_1^{\mathrm e}\frac12\Bigl(y+\frac1y\Bigr)\mathrm dy=\frac12\Bigl(\frac{y^2}2+\ln y\Bigr)\Big|_1^{\mathrm e}=\frac14(\mathrm e^2+1)$</div>
+      <div class="key" style="margin:10px 0 0"><span class="tag">★★ 完全平方族：弧长题的"命题模具"</span>
+        <p>$\Bigl(\dfrac y2-\dfrac1{2y}\Bigr)^2+1=\Bigl(\dfrac y2+\dfrac1{2y}\Bigr)^2$——<b>$(u-v)^2+4uv=(u+v)^2$</b>。凡是导数长成 $\dfrac12\bigl(y-\frac1y\bigr)$ 的曲线，$1+y'^2$ 必是完全平方。本讲一共出现 <b>4 次</b>：</p>
+        <ul>
+          <li>本题 & <a href="#qeg1011">强 10.11(2)</a>（<b>同一道题，两本书都收了</b>）：$y'=\frac12(y-\frac1y)\Rightarrow\mathrm ds=\frac12(y+\frac1y)\mathrm dy$</li>
+          <li><a href="#qeg108">强 10.8</a>：$f'=\frac12\bigl(\sqrt x-\frac1{\sqrt x}\bigr)\Rightarrow\sqrt{1+f'^2}=\frac12\bigl(\sqrt x+\frac1{\sqrt x}\bigr)$</li>
+          <li><a href="#qeg1014">强 10.14</a>（悬链线）：$y=\frac{\mathrm e^x+\mathrm e^{-x}}2\Rightarrow1+y'^2=y^2$，<b>根号开出来就是 $y$ 本身</b></li>
+          <li><a href="#eg1010">基 10.10</a>：$1+\frac{4x^2}{(1-x^2)^2}=\frac{(1+x^2)^2}{(1-x^2)^2}$</li>
+        </ul>
+        <p><b>反过来用</b>：考场上如果 $1+y'^2$ 开不出根号，<u>先怀疑自己求导错了</u>，而不是硬算——<b>考研不会出开不出根号的弧长题。</b></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="eg" id="xt104">
+    <div class="q"><span class="no">基 习10.4</span><span class="pg">P.277·P.279</span>
+      （仅数一、数二）星形线 $x=\cos^3t,\ y=\sin^3t\,(0\le t\le2\pi)$ 的弧长为＿＿．</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$6$</span></p>
+      <p>曲线具有对称性，只需计算第一象限的弧段（$t\in[0,\frac\pi2]$）再 ×4：</p>
+      <div class="fml">$s=4\int_0^{\frac\pi2}\sqrt{(-3\cos^2t\sin t)^2+(3\sin^2t\cos t)^2}\,\mathrm dt=4\int_0^{\frac\pi2}3|\sin t\cos t|\mathrm dt=12\int_0^{\frac\pi2}\sin t\cos t\,\mathrm dt=6$</div>
+      <p><span class="lab">要害</span>① <b>$\sqrt{9\sin^2t\cos^2t(\cos^2t+\sin^2t)}=3|\sin t\cos t|$</b>——提公因式后 $\sin^2+\cos^2=1$ 直接消失，<u>这是星形线所有计算的共同起手式</u>。<br>
+      ② <b><span class="dock">绝对值不能丢</span></b>：若不用对称性、直接积 $t\in[0,2\pi]$，$\sin t\cos t$ 会变号，不加绝对值算出来是 $0$。<b>用对称性只算第一象限，正是为了甩掉绝对值。</b><br>
+      ③ 一般形式 $s=6a$（大观表带 (*)，$a=1$ 时为 6）。</p>
+    </div>
+  </div>
+
+  <div class="eg" id="qeg1010">
+    <div class="q"><span class="no">强 例10.10</span><span class="pg">P.116–117</span>
+      （仅数一、数二）曲线 $y=\displaystyle\int_0^x\sqrt{\cos t}\,\mathrm dt$ 的<b>全长</b>为＿＿．</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$4$</span></p>
+      <p><span class="lab">分析</span>要求 $\cos t\ge0$（$t\in[0,x]$），则 <b>$x\in\Bigl[-\dfrac\pi2,\dfrac\pi2\Bigr]$</b>。</p>
+      <p><span class="lab">解</span>因为 $y(0)=0$，故 $x=0$ 对应的点 $(0,0)$ 在曲线上；曲线 $y$ 只在 $-\frac\pi2\le x\le\frac\pi2$ 上存在，则 $y'=\sqrt{\cos x}$，$\mathrm ds=\sqrt{1+\cos x}\,\mathrm dx$，故</p>
+      <div class="fml">$s=\int_{-\frac\pi2}^{\frac\pi2}\sqrt{1+\cos x}\,\mathrm dx=2\sqrt2\int_0^{\frac\pi2}\cos\frac x2\,\mathrm dx=2\sqrt2\cdot2\sin\frac x2\Big|_0^{\frac\pi2}=4$</div>
+      <p><span class="lab">要害</span>⚠️ <b>"全长"这两个字的真考点是"先定定义域"</b>，不是算积分。<u>变限积分的被积函数带根号 ⇒ 根号内非负 ⇒ 反过来限制了上限 $x$ 的范围</u>。<br>
+      <b>$\sqrt{1+\cos x}=\sqrt2\bigl|\cos\frac x2\bigr|$</b>（半角），在 $[-\frac\pi2,\frac\pi2]$ 上 $\cos\frac x2\gt0$，绝对值可去——<u>这个化简本讲用了 3 次（还有心形线的 $\sqrt{1\pm\cos\theta}$ 两次）</u>，是极坐标/根式弧长的标准动作。</p>
+    </div>
+  </div>
+
+  <div class="eg" id="qeg1011">
+    <div class="q"><span class="no">强 例10.11</span><span class="pg">P.117</span>
+      （仅数一、数二）计算下列曲线的弧长：(1) $y=\ln\cos x\ \Bigl(0\le x\le\dfrac\pi6\Bigr)$；(2) $\ln y+2x-\dfrac12y^2=0\ (1\le y\le\mathrm e)$。</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>(1) 一看就是"对数 + 三角"</b>：$y'=-\tan x$，则 $1+y'^2=\sec^2x$——<u>三角恒等式天然是完全平方</u>，根号必开得干净。开完是 $\sec x$，而 $\int\sec x\,\mathrm dx=\ln|\sec x+\tan x|$ 是必背公式。</li>
+          <li><b>(2) 先看方程给的是谁关于谁的函数。</b>$\ln y+2x-\frac12y^2=0$ 里 <u>$x$ 能被 $y$ 显式解出</u>（$x=\frac14y^2-\frac12\ln y$），而 $y$ 解不出 $x$。<b>所以必须视 $y$ 为自变量、横着积。</b></li>
+          <li>题目给的范围也在提示这件事：<b>$1\le y\le\mathrm e$ 是对 $y$ 说的</b>，不是对 $x$。<u>范围写给谁，就把谁当自变量</u>——这是弧长题的选路口诀。</li>
+        </ol>
+      </div>
+      <div class="paper"><span class="phead">✍️ 考场卷面 —— 照这个抄<span class="score">参考 10 分（每问 5 分）</span></span>
+        <div class="step"><span class="k">解</span><b>(i)</b> 由 $y=\ln\cos x$ 得 $y'=-\tan x$，则由弧长公式
+          $$s=\int_0^{\frac\pi6}\sqrt{1+y'^2}\,\mathrm dx=\int_0^{\frac\pi6}\sqrt{1+\tan^2x}\,\mathrm dx=\int_0^{\frac\pi6}\sec x\,\mathrm dx\tag{1}$$
+          <span class="pt">⛳ 化成 $\sec x$ 3分</span></div>
+        <div class="step">$(1)$ 式 $=\ln|\sec x+\tan x|\Big|_0^{\frac\pi6}=\ln\Bigl(\dfrac2{\sqrt3}+\dfrac1{\sqrt3}\Bigr)-\ln1=\ln\sqrt3=\dfrac12\ln3$。<span class="pt">⛳ 积出并化简 2分</span></div>
+        <div class="step"><b>(ii)</b> 由 $\ln y+2x-\frac12y^2=0$ 得 $x=\dfrac14y^2-\dfrac12\ln y$。视 $y$ 为自变量，则 $x'_y=\dfrac y2-\dfrac1{2y}$，于是
+          $$s=\int_1^{\mathrm e}\sqrt{1+(x'_y)^2}\,\mathrm dy=\int_1^{\mathrm e}\sqrt{1+\Bigl(\frac y2-\frac1{2y}\Bigr)^2}\,\mathrm dy=\int_1^{\mathrm e}\frac12\Bigl(y+\frac1y\Bigr)\mathrm dy\tag{2}$$
+          <span class="pt">⛳ 视 $y$ 为自变量 2分</span><span class="pt">⛳ 完全平方开根 2分</span></div>
+        <div class="step fin">$(2)$ 式 $=\dfrac12\Bigl(\dfrac{y^2}2+\ln y\Bigr)\Big|_1^{\mathrm e}=\dfrac14(\mathrm e^2+1)$。故两段弧长分别为 $\dfrac12\ln3$ 与 $\dfrac14(\mathrm e^2+1)$。<span class="pt">⛳ 结论 1分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（写完校对，考场不落笔）</span>
+        <p>① <b>$\sqrt{1+\tan^2x}=|\sec x|$，在 $[0,\frac\pi6]$ 上 $\sec x\gt0$ 才能去绝对值</b>。<u>区间跨过 $\frac\pi2$ 时这一步就不成立</u>——这是 ch9 "误用牛莱"陷阱的同一个病根。</p>
+        <p>② <b>(2) 与 <a href="#xt103">基 习10.3</a> 是同一道题</b>（基础讲写成 $x=\frac14y^2-\frac12\ln y$，强化讲写成隐式）。<b>两本书都收 ⇒ 这是"完全平方族"的母题，务必背下 $\mathrm ds=\frac12(y+\frac1y)\mathrm dy$。</b></p>
+        <p>③ <b><span class="dock">扣分点</span>(2) 若强行对 $x$ 积分</b>：要先解出 $y=y(x)$（超越方程，解不出），必然做不下去。<u>卷面上写一句"视 $y$ 为自变量"，就是这 2 分的采分点。</u></p>
+        <p>④ $\ln\sqrt3=\frac12\ln3$ 这一步别漏化简，阅卷按最简形式给分。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= s5 侧面积 ================= -->
+  <h2 id="s5"><span class="idx">五</span>旋转曲面的面积（侧面积）——比弧长多乘一个 $2\pi|y|$（仅数一、数二）</h2>
+
+  <div class="key"><span class="tag">必记 · ★★体积用 $\mathrm dx$，侧面积用 $\mathrm ds$</span><span class="pg">P.274 · P.107</span>
+    <p>基础讲页边的一句话把这一节讲完了：<b>算体积用 $\mathrm dx$，算侧面积用 $\mathrm ds$</b>。</p>
+    <div class="fml">$S=\int_a^b2\pi|f(x)|\,\boxed{\mathrm ds}\qquad\text{（周长 }2\pi|y|\ \times\ \text{斜高 }\mathrm ds)$</div>
+    <div class="fcards">
+      <div><b>① 直角坐标</b>$S=2\pi\displaystyle\int_a^b|y|\sqrt{1+(y'_x)^2}\,\mathrm dx$</div>
+      <div><b>② 参数方程（$x'(t)\ne0$）</b>$S=2\pi\displaystyle\int_\alpha^\beta|y(t)|\sqrt{(x'_t)^2+(y'_t)^2}\,\mathrm dt$</div>
+      <div><b>③ 极坐标（$[\alpha,\beta]\subset[0,\pi]$）</b>$S=2\pi\displaystyle\int_\alpha^\beta|r(\theta)\sin\theta|\sqrt{r^2+r'^2}\,\mathrm d\theta$<br><span style="color:var(--muted);font-size:.8rem">$r\sin\theta$ 就是 $y$</span></div>
+    </div>
+    <div class="trap" style="margin:12px 0 0"><span class="tag">⚠️ 本节唯一的错法：把 $\mathrm ds$ 写成 $\mathrm dx$</span>
+      <p>侧面积微元是<b>圆台的侧面</b>（母线长 $\mathrm ds$），不是圆柱的侧面（高 $\mathrm dx$）。<u>掉了 $\sqrt{1+y'^2}$，答案必然偏小</u>。<br>
+      <b>一句话记忆</b>：<b>体积是"填满"，只关心底面推进的距离 $\mathrm dx$；面积是"糊一层"，必须沿着斜坡走 $\mathrm ds$。</b></p>
+    </div>
+  </div>
+
+  <div class="eg" id="eg1012">
+    <div class="q"><span class="no">基 例10.12</span><span class="pg">P.274–275</span>
+      曲线 $y=\sqrt{x-1}\ (1\le x\le2)$ 绕 $x$ 轴旋转一周所得到的旋转体的表面积为＿＿．</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\dfrac\pi6(5\sqrt5-1)$</span></p>
+      <div class="fml">$S=\int_1^22\pi y\sqrt{1+(y')^2}\,\mathrm dx=\int_1^22\pi\sqrt{x-1}\sqrt{1+\frac1{4(x-1)}}\,\mathrm dx=\pi\int_1^2\sqrt{4x-3}\,\mathrm dx=\frac\pi6(5\sqrt5-1)$</div>
+      <p><span class="lab">要害</span>① <b>把根号乘进去再化简</b>：$\sqrt{x-1}\cdot\sqrt{1+\frac1{4(x-1)}}=\sqrt{(x-1)+\frac14}=\frac12\sqrt{4x-3}$，<u>两个根号合成一个，瑕点 $x=1$ 也一起消失了</u>。<b>这是侧面积题的通用手法：$|y|\sqrt{1+y'^2}$ 一定先合并再积。</b><br>
+      ② 页边原话：<b>算出来多少就是多少，不用担心结果古怪</b>——$5\sqrt5-1$ 这种形状在弧长/侧面积题里是常态。</p>
+    </div>
+  </div>
+
+  <div class="eg" id="eg1013">
+    <div class="q"><span class="no">基 例10.13</span><span class="pg">P.275</span>
+      已知星形线的方程为 $\begin{cases}x=2\cos^3t\\ y=2\sin^3t\end{cases}$，则它绕 $x$ 轴旋转一周而成的旋转体的表面积为＿＿．</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\dfrac{48}5\pi$</span></p>
+      <p><span class="lab">分析</span>利用对称性算出 $y$ 轴右侧的表面积，再乘以 2 即可。</p>
+      <div class="fml">$S=2\int_0^{\frac\pi2}2\pi y\sqrt{(x'_t)^2+(y'_t)^2}\,\mathrm dt=4\pi\int_0^{\frac\pi2}2\sin^3t\cdot6\sin t\cos t\,\mathrm dt=48\pi\int_0^{\frac\pi2}\sin^4t\,\mathrm d(\sin t)=48\pi\cdot\frac{\sin^5t}5\Big|_0^{\frac\pi2}=\frac{48}5\pi$</div>
+      <p><span class="lab">要害</span>① 根式化简：$\sqrt{[6\cos^2t(-\sin t)]^2+(6\sin^2t\cos t)^2}=\sqrt{36\sin^2t\cos^2t(\cos^2t+\sin^2t)}=6\sin t\cos t$（$a=2$ 时）。<br>
+      ② <b>凑微分：$\sin^4t\cos t\,\mathrm dt=\sin^4t\,\mathrm d(\sin t)$</b>，别去查点火公式——<u>点火只管纯 $\sin^n$ 或 $\cos^n$，出现 $\sin^m\cos^n$ 且有一个是奇次时，凑微分更快</u>（ch9 三角有理式判据）。<br>
+      ③ <b>⚠️ 这题和 <a href="#xt104">习 10.4</a>（星形线<u>弧长</u> $6a$）容易记混</b>：一个乘了 $2\pi y$，一个没乘。<b>看到"表面积/侧面积"就找 $2\pi|y|$。</b></p>
+    </div>
+  </div>
+
+  <div class="eg" id="qeg108">
+    <div class="q"><span class="no">强 例10.8 ★</span><span class="pg">P.116</span>
+      （仅数一、数二）设函数 $f(x)$ 满足 $\displaystyle\int\frac{f(x)}{\sqrt x}\mathrm dx=\frac16x^2-x+C$，$L$ 为曲线 $y=f(x)\ (4\le x\le9)$。求 $L$ 绕 $x$ 轴旋转所成<b>旋转曲面的面积</b>。</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>条件是"不定积分等式"⇒ 两端求导。</b>这是把未知函数从积分号里救出来的唯一办法：$\Bigl[\int\frac{f}{\sqrt x}\mathrm dx\Bigr]'=\frac{f(x)}{\sqrt x}$，右端 $\bigl(\frac16x^2-x+C\bigr)'=\frac13x-1$。<u>常数 $C$ 求导后消失，所以它在这里毫无信息量。</u></li>
+          <li><b>解出 $f$ 之后先别急着套公式，先求 $f'$ 看根号能不能开。</b>$f=\frac13x^{3/2}-x^{1/2}\Rightarrow f'=\frac12x^{1/2}-\frac12x^{-1/2}=\frac12\bigl(\sqrt x-\frac1{\sqrt x}\bigr)$——<u>又是完全平方族</u>，$1+f'^2=\bigl[\frac12(\sqrt x+\frac1{\sqrt x})\bigr]^2$。</li>
+          <li><b>再检查 $f$ 在 $[4,9]$ 上的符号</b>：$f=\sqrt x(\frac x3-1)$，$x\ge4$ 时 $\frac x3-1\gt0$ ⇒ $f\gt0$，<u>公式里的 $|y|$ 可以直接去绝对值</u>。这一步不检查就写 $|f|=f$ 是不严谨的。</li>
+          <li>相乘后是多项式，直接积分——<b>整道题的难度全在前两步的"识别"，计算是白送的。</b></li>
+        </ol>
+      </div>
+      <div class="paper"><span class="phead">✍️ 考场卷面 —— 照这个抄<span class="score">参考 10 分</span></span>
+        <div class="step"><span class="k">解</span>在等式 $\displaystyle\int\frac{f(x)}{\sqrt x}\mathrm dx=\frac16x^2-x+C$ 两端对 $x$ 求导，得
+          $$\frac{f(x)}{\sqrt x}=\frac13x-1\ \Longrightarrow\ f(x)=\frac13x\sqrt x-\sqrt x\tag{1}$$
+          <span class="pt">⛳ 两端求导解出 $f$ 3分</span></div>
+        <div class="step">由 $(1)$ 式得 $f'(x)=\dfrac12\Bigl(\sqrt x-\dfrac1{\sqrt x}\Bigr)$，于是
+          $$\sqrt{1+[f'(x)]^2}=\sqrt{\Bigl[\frac12\Bigl(\sqrt x+\frac1{\sqrt x}\Bigr)\Bigr]^2}=\frac12\Bigl(\sqrt x+\frac1{\sqrt x}\Bigr)\tag{2}$$
+          <span class="pt">⛳ 完全平方开根 2分</span></div>
+        <div class="step">又当 $4\le x\le9$ 时 $f(x)=\sqrt x\Bigl(\dfrac x3-1\Bigr)\gt0$，故由旋转曲面面积公式及 $(1)(2)$ 两式，
+          $$A=2\pi\int_4^9f(x)\sqrt{1+[f'(x)]^2}\,\mathrm dx=2\pi\int_4^9\Bigl(\frac13x\sqrt x-\sqrt x\Bigr)\cdot\frac12\Bigl(\sqrt x+\frac1{\sqrt x}\Bigr)\mathrm dx\tag{3}$$
+          <span class="pt">⛳ 列对公式并说明 $f\gt0$ 2分</span></div>
+        <div class="step">$(3)$ 式 $=\pi\displaystyle\int_4^9\Bigl(\frac13x^2-\frac23x-1\Bigr)\mathrm dx=\pi\Bigl(\frac19x^3-\frac13x^2-x\Bigr)\Big|_4^9=\dfrac{425}9\pi$。<span class="pt">⛳ 展开积出 2分</span></div>
+        <div class="step fin">故 $L$ 绕 $x$ 轴旋转所成旋转曲面的面积为 $\dfrac{425}9\pi$。<span class="pt">⛳ 结论回扣 1分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（写完校对，考场不落笔）</span>
+        <p>① <b>展开那一步的心算</b>：$\bigl(\frac13x\sqrt x-\sqrt x\bigr)\bigl(\sqrt x+\frac1{\sqrt x}\bigr)=\frac13x^2+\frac13x-x-1=\frac13x^2-\frac23x-1$。<u>交叉项 $\frac13x-x=-\frac23x$ 是最容易算错的一项。</u></p>
+        <p>② <b><span class="dock">扣分点</span>漏掉 $|y|$ 的符号讨论</b>：公式里写的是 $|y|$，卷面上必须有一句"$f(x)\gt0$"。<u>本讲的 $y$ 全部为正是巧合，不是规定。</u></p>
+        <p>③ <b>$C$ 是幌子</b>：不定积分等式两端求导，$C$ 自动消失。<u>看到 $+C$ 就知道题目在提示"这里要求导"，不是要你去定 $C$。</u></p>
+        <p>④ 与 <a href="#xt103">基 习10.3</a>、<a href="#qeg1011">强 10.11(2)</a> 同属完全平方族，<b>三题共用一条化简</b>。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="eg" id="qeg1014">
+    <div class="q"><span class="no">强 例10.14 ★</span><span class="pg">P.118</span>
+      （仅数一、数二）求曲线 $y=\dfrac{\mathrm e^x+\mathrm e^{-x}}2$、$x=0$、$x=t\,(t\gt0)$、$y=0$ 所围成的曲边梯形绕 $x$ 轴旋转一周所得旋转体的<b>侧面积</b>。</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>先认出这条曲线</b>：$y=\frac{\mathrm e^x+\mathrm e^{-x}}2=\cosh x$（悬链线）。它的招牌性质是 <b>$y'=\frac{\mathrm e^x-\mathrm e^{-x}}2$，而 $1+y'^2=y^2$</b>——<u>根号开出来就是函数本身</u>。</li>
+          <li>所以 $2\pi y\sqrt{1+y'^2}=2\pi y^2$，被积函数<b>直接变成平方</b>，与体积公式 $\pi\int y^2$ 只差个系数 2。<u>这是全讲最"巧"的一道，巧就巧在悬链线。</u></li>
+          <li><b>答案带参数 $t$</b>，说明结果是一个关于 $t$ 的函数 $S(t)$，最后不必代数值——<u>但要把 $t$ 一路带到底，别中途丢掉</u>。</li>
+          <li>$\bigl(\frac{\mathrm e^x+\mathrm e^{-x}}2\bigr)^2=\frac{\mathrm e^{2x}+2+\mathrm e^{-2x}}4$，逐项积分即可，<b>那个常数项 2 会积出 $\frac{4t}4=t$，正是答案里 $4t$ 的来源。</b></li>
+        </ol>
+      </div>
+      <div class="paper"><span class="phead">✍️ 考场卷面 —— 照这个抄<span class="score">参考 10 分</span></span>
+        <div class="step"><span class="k">解</span>记 $y=\dfrac{\mathrm e^x+\mathrm e^{-x}}2$，则 $y'=\dfrac{\mathrm e^x-\mathrm e^{-x}}2$，于是
+          $$1+y'^2=1+\frac{\mathrm e^{2x}-2+\mathrm e^{-2x}}4=\frac{\mathrm e^{2x}+2+\mathrm e^{-2x}}4=\Bigl(\frac{\mathrm e^x+\mathrm e^{-x}}2\Bigr)^2=y^2\tag{1}$$
+          <span class="pt">⛳ 算出 $1+y'^2=y^2$ 3分</span></div>
+        <div class="step">又 $y\gt0$，故由旋转曲面面积公式及 $(1)$ 式，所求侧面积
+          $$S(t)=\int_0^t2\pi y\sqrt{1+y'^2}\,\mathrm dx=2\pi\int_0^t y^2\mathrm dx=2\pi\int_0^t\Bigl(\frac{\mathrm e^x+\mathrm e^{-x}}2\Bigr)^2\mathrm dx\tag{2}$$
+          <span class="pt">⛳ 化为 $2\pi\int y^2$ 3分</span></div>
+        <div class="step">$(2)$ 式 $=\dfrac\pi2\displaystyle\int_0^t(\mathrm e^{2x}+2+\mathrm e^{-2x})\mathrm dx=\dfrac\pi2\Bigl(\dfrac{\mathrm e^{2x}}2-\dfrac{\mathrm e^{-2x}}2+2x\Bigr)\Big|_0^t$。<span class="pt">⛳ 展开积出 3分</span></div>
+        <div class="step fin">故所求侧面积为 $S(t)=\dfrac\pi4\bigl(\mathrm e^{2t}-\mathrm e^{-2t}+4t\bigr)$。<span class="pt">⛳ 结论回扣 1分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（写完校对，考场不落笔）</span>
+        <p>① <b>悬链线三件套</b>：$\cosh^2-\sinh^2=1\Rightarrow1+\sinh^2=\cosh^2$。<u>本题、<a href="#xt103">习 10.3</a>、<a href="#qeg108">强 10.8</a> 是同一个"完全平方"母题的三种打扮。</u></p>
+        <p>② <b>验算 $t\to0^+$</b>：$S(0)=\frac\pi4(1-1+0)=0$ ✔ 面积从 0 长起来，合理。<b>带参数的答案一定要代边界值自检</b>，这比重算一遍快。</p>
+        <p>③ <b>侧面积恰好 $=2\times$ 体积</b>（因为 $V=\pi\int y^2$、$S=2\pi\int y^2$）——<u>这只在悬链线上成立</u>，别推广。</p>
+        <p>④ <b><span class="dock">扣分点</span>把 $\mathrm e^{-2x}$ 的原函数写成 $+\frac{\mathrm e^{-2x}}2$</b>：应为 $-\frac{\mathrm e^{-2x}}2$。<u>符号错会把 $\mathrm e^{2t}-\mathrm e^{-2t}$ 变成 $\mathrm e^{2t}+\mathrm e^{-2t}$，与 $t\to0$ 自检对不上。</u></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= s6 平行截面 + 绕 y=x ================= -->
+  <h2 id="s6"><span class="idx">六</span>平行截面面积已知的立体 · 绕 $y=x$ 旋转（仅数一、数二）</h2>
+
+  <div class="key"><span class="tag">必记 · 平行截面立体体积</span><span class="pg">P.275</span>
+    <p>在区间 $[a,b]$ 上，垂直于 $x$ 轴的平面截立体 $\Omega$ 所得截面面积为 $x$ 的<b>连续函数</b> $A(x)$，取体积微元 $\mathrm dV=A(x)\mathrm dx$，则</p>
+    <div class="fml">$V=\int_a^bA(x)\mathrm dx$</div>
+    <p><b>旋转体体积是其特例</b>（取 $A(x)=\pi y^2$ 即得 $V_x$）。<br>
+    <span style="color:var(--red);font-weight:700">书上页边注明：考研历史上尚未出现过，考题不太好出。</span><u>所以这个公式本身不用花时间——但它下面那道例 10.14 是全讲最有分量的一题。</u></p>
+  </div>
+
+  <div class="eg" id="eg1014">
+    <div class="q"><span class="no">基 例10.14 ★★★</span><span class="pg">P.275–277</span>
+      曲线 $y=\sqrt x$ 与 $y=x$ 所围平面有界区域<b>绕直线 $y=x$</b> 旋转一周所得旋转体的体积为＿＿．</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\dfrac{\sqrt2}{60}\pi$</span></p>
+      <p><span class="lab">分析</span>曲线上的点到直线 $y=x$ 的距离 $r=\dfrac{\sqrt x-x}{\sqrt2}$。取微元 $\mathrm dV=\pi\cdot\Bigl(\dfrac{\sqrt x-x}{\sqrt2}\Bigr)^2\cdot\underbrace{\sqrt2\,\mathrm dx}_{\text{沿轴方向的推进}}$，下划线整体即 $A(x)\mathrm dx$。</p>
+      <p><span class="lab">解</span>$y=\sqrt x$ 与 $y=x$ 交于 $(0,0),(1,1)$。垂直于旋转轴的平面截该旋转体所得截面是<b>半径为 $r$ 的圆</b>，故</p>
+      <div class="fml">$V=\int_0^1\sqrt2\pi\Bigl(\frac{\sqrt x-x}{\sqrt2}\Bigr)^2\mathrm dx=\int_0^1\frac\pi{\sqrt2}\bigl(x-2x^{\frac32}+x^2\bigr)\mathrm dx=\frac\pi{\sqrt2}\Bigl(\frac12-\frac45+\frac13\Bigr)=\frac{\sqrt2}{60}\pi$</div>
+
+      <div class="mine"><span class="tag">补讲 · 那个 $\sqrt2$ 到底是什么（书上用了整整两页解释）</span>
+        <p><b>问题</b>：为什么截面面积是 $A(x)=\sqrt2\cdot\pi\Bigl(\dfrac{\sqrt x-x}{\sqrt2}\Bigr)^2$，前面凭什么多一个 $\sqrt2$？</p>
+        <p><b>书上的解释</b>：在曲线 $y=\sqrt x$ 上任一点 $(x_i,\sqrt{x_i})$ 处作平行于 $y=x$ 的直线，把区间 $[x_i,x_i+\Delta x]$ 沿<b>斜轴方向</b>的推进量记为 $\Delta u$，则</p>
+        <div class="fml">$\Delta u=\sqrt2\,\Delta x,\qquad r(x_i)=[f(x_i)-x_i]\cdot\frac1{\sqrt2}=\frac{\sqrt{x_i}-x_i}{\sqrt2}$</div>
+        <div class="fml">$V=\lim_{n\to\infty}\sum_{i=1}^n\pi r^2(x_i)\Delta u=\int_0^1\pi\Bigl(\frac{\sqrt x-x}{\sqrt2}\Bigr)^2\sqrt2\,\mathrm dx=\frac{\sqrt2}{60}\pi$</div>
+        <p><b>一句话</b>：$\Delta x$ 是<u>沿 $x$ 轴</u>的推进，而旋转轴是斜的，<b>沿斜轴的推进要长 $\sqrt2$ 倍</b>（$45^\circ$ 的斜边比直角边长 $\sqrt2$ 倍）。<u>那个 $\sqrt2$ 是"轴换了方向"的代价，$\frac1{\sqrt2}$ 则是点到直线距离公式里的分母，两者不是一回事。</u></p>
+        <p><b>严格吗？——书自己说了不严格，但误差为 0</b>。设 $\alpha$ 为曲线 $y=\sqrt x$ 任一点切线的倾角，$\beta=\frac\pi4$ 为 $y=x$ 的倾角。真正的截面并不垂直于轴（切线与轴不平行），于是每一片都会<b>多算或少算一个小楔形</b> $\Delta l$：</p>
+        <figure class="fig">
+          <svg viewBox="0 0 640 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="误差抵消示意（书图10-14重绘）">
+            <!-- 左：alpha>beta 多计算 -->
+            <g>
+              <line x1="20" y1="140" x2="200" y2="140" stroke="var(--line)"/>
+              <line x1="40" y1="140" x2="180" y2="60" stroke="var(--muted)" stroke-width="1.3"/>
+              <line x1="70" y1="140" x2="140" y2="30" stroke="var(--ink)" stroke-width="1.3"/>
+              <path d="M104,86 L126,73 L118,58 Z" fill="var(--red-soft)" stroke="var(--red)" stroke-width="1.2"/>
+              <text x="110" y="26" font-size="11" font-weight="700" fill="var(--red)" text-anchor="middle">多计算 Δl</text>
+              <text x="60" y="134" font-size="10.5" fill="var(--muted)">α</text>
+              <text x="152" y="134" font-size="10.5" fill="var(--muted)">β</text>
+              <text x="110" y="160" font-size="11" fill="var(--ink)" text-anchor="middle">α &gt; β</text>
+            </g>
+            <!-- 右：alpha<beta 少计算 -->
+            <g>
+              <line x1="240" y1="140" x2="420" y2="140" stroke="var(--line)"/>
+              <line x1="260" y1="140" x2="360" y2="40" stroke="var(--muted)" stroke-width="1.3"/>
+              <line x1="300" y1="140" x2="415" y2="55" stroke="var(--ink)" stroke-width="1.3"/>
+              <path d="M348,88 L366,74 L372,88 Z" fill="var(--blue-soft)" stroke="var(--blue)" stroke-width="1.2"/>
+              <text x="352" y="30" font-size="11" font-weight="700" fill="var(--blue)" text-anchor="middle">少计算 Δl</text>
+              <text x="278" y="134" font-size="10.5" fill="var(--muted)">α</text>
+              <text x="330" y="134" font-size="10.5" fill="var(--muted)">β</text>
+              <text x="330" y="160" font-size="11" fill="var(--ink)" text-anchor="middle">α &lt; β</text>
+            </g>
+            <!-- 右端：抵消 -->
+            <g>
+              <line x1="455" y1="140" x2="625" y2="140" stroke="var(--line)"/>
+              <line x1="475" y1="140" x2="585" y2="45" stroke="var(--muted)" stroke-width="1.3"/>
+              <line x1="515" y1="140" x2="625" y2="45" stroke="var(--ink)" stroke-width="1.3"/>
+              <text x="540" y="30" font-size="11" font-weight="700" fill="var(--green)" text-anchor="middle">Δl = Δu，抵消</text>
+              <text x="492" y="134" font-size="10.5" fill="var(--muted)">α</text>
+              <text x="534" y="134" font-size="10.5" fill="var(--muted)">β</text>
+              <text x="540" y="160" font-size="11" font-weight="700" fill="var(--green)" text-anchor="middle">α = β</text>
+            </g>
+          </svg>
+          <figcaption>书图 10-14 重绘：切线倾角 $\alpha$ 大于轴倾角 $\beta$ 时每片<b>多算</b>一个小楔形，小于时<b>少算</b>一个。<b>由于本题的区域关于 $y=x$ 对称</b>（$y=\sqrt x$ 与 $y=x$ 互为反函数），多算的那些与少算的那些一一配对、<b>误差整体抵消为 0</b>，所以这个"不严格"的做法给出的正是精确值。</figcaption>
+        </figure>
+        <p><b>书末的原话（语气值得保留）</b>：本题所用方法要有足够的经验，才能作上述等价变换，这是一种数学"<b>直觉</b>"，此方法要视具体情况而定，<b>不能一味套公式</b>，要求较高，供参考。</p>
+      </div>
+
+      <div class="trap"><span class="tag">⚠️ 考场上遇到"绕 $y=x$"该怎么办</span>
+        <p><b>首选公式 (10-1)</b>（$A=1,B=-1,C=0$）：
+        $$V=\frac\pi{2\sqrt2}\int_a^b[x-f(x)]^2\bigl|f'(x)+1\bigr|\mathrm dx$$
+        <u>拿本题验一下</u>：$f=\sqrt x$，$V=\frac\pi{2\sqrt2}\int_0^1(x-\sqrt x)^2\bigl(\frac1{2\sqrt x}+1\bigr)\mathrm dx$——<b>这是"曲线 $y=\sqrt x$ 绕 $y=x$"扫出的体积</b>，而题目要的是<u>两条曲线夹出的区域</u>绕轴转的体积；因为 $y=x$ 本身就在轴上（转出来是零体积），<b>两者恰好相等</b>，算出来同样是 $\frac{\sqrt2}{60}\pi$。</p>
+        <p><b>结论</b>：<b>绕斜轴的题优先套 (10-1)，那是有公式护航的正规路线；例 10.14 的"斜截面微元"是理解为什么，不是考场首选。</b><u>但若被积区域的两条边界都不在轴上（例如绕 $y=x+1$），就必须像 <a href="#xt109">习 10.9</a> 那样做大减小。</u></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= s7 形心 ================= -->
+  <h2 id="s7"><span class="idx">七</span>形心坐标公式（仅数一、数二）</h2>
+
+  <div class="key"><span class="tag">必记 · 形心（记住结论即可）</span><span class="pg">P.272</span>
+    <p>设 $D=\{(x,y)\mid0\le y\le f(x),\ a\le x\le b\}$，$f$ 在 $[a,b]$ 上连续，则由累次积分</p>
+    <div class="fml">$\bar x=\frac{\displaystyle\iint_Dx\,\mathrm d\sigma}{\displaystyle\iint_D\mathrm d\sigma}=\frac{\displaystyle\int_a^bxf(x)\mathrm dx}{\displaystyle\int_a^bf(x)\mathrm dx},\qquad
+    \bar y=\frac{\displaystyle\iint_Dy\,\mathrm d\sigma}{\displaystyle\iint_D\mathrm d\sigma}=\frac{\dfrac12\displaystyle\int_a^bf^2(x)\mathrm dx}{\displaystyle\int_a^bf(x)\mathrm dx}$</div>
+    <p><b>怎么不背也能写出来</b>：分母都是面积；分子 $\bar x$ 是"横坐标 × 竖条面积"，$\bar y$ 是"竖条中点高 $\frac{f}2$ × 竖条面积 $f\mathrm dx$"——<u>那个 $\frac12$ 来自"竖条的形心在它的中点"</u>。</p>
+    <p><b>与帕普斯定理连起来</b>（补讲）：$V_y=2\pi\bar xA$、$V_x=2\pi\bar yA$。代进去正好还原成 $V_y=2\pi\int xf\mathrm dx$、$V_x=\pi\int f^2\mathrm dx$——<b>形心公式和体积公式是同一个东西的两种写法</b>。<a href="#xt102">习 10.2</a> 的圆环体就是这么秒杀的。</p>
+  </div>
+
+  <div class="eg" id="eg109">
+    <div class="q"><span class="no">基 例10.9</span><span class="pg">P.272–273</span>
+      设曲线 $L$ 的方程为 $y=\dfrac14x^2-\dfrac12\ln x,\ 1\le x\le\mathrm e$，$D$ 是由曲线 $L$ 和直线 $x=1$、$x=\mathrm e$ 及 $x$ 轴围成的平面图形，则 $D$ 的形心的横坐标为＿＿．</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\dfrac{3(\mathrm e^2+1)(\mathrm e^2-3)}{4(\mathrm e^3-7)}$</span></p>
+      <div class="fml">$\int_1^{\mathrm e}xy\,\mathrm dx=\int_1^{\mathrm e}x\Bigl(\frac14x^2-\frac12\ln x\Bigr)\mathrm dx=\Bigl(\frac1{16}x^4-\frac14x^2\ln x+\frac18x^2\Bigr)\Big|_1^{\mathrm e}=\frac1{16}(\mathrm e^2+1)(\mathrm e^2-3)$</div>
+      <div class="fml">$\int_1^{\mathrm e}y\,\mathrm dx=\int_1^{\mathrm e}\Bigl(\frac14x^2-\frac12\ln x\Bigr)\mathrm dx=\Bigl(\frac1{12}x^3-\frac12x\ln x+\frac12x\Bigr)\Big|_1^{\mathrm e}=\frac1{12}\mathrm e^3-\frac7{12}$</div>
+      <div class="fml">$\bar x=\frac{\frac1{16}(\mathrm e^2+1)(\mathrm e^2-3)}{\frac1{12}\mathrm e^3-\frac7{12}}=\frac{3(\mathrm e^2+1)(\mathrm e^2-3)}{4(\mathrm e^3-7)}$</div>
+      <p><span class="lab">要害</span>① <b>页边原话：考研题答案未必简洁，要多做计算。</b><u>看到这么丑的答案不要慌</u>，形心题的分母是面积、分子是矩，两个都不化简才是常态。<br>
+      ② <b>$\int x\ln x\,\mathrm dx=\frac12x^2\ln x-\frac14x^2$、$\int\ln x\,\mathrm dx=x\ln x-x$ 这两个原函数要脱口而出</b>，本题两次都用到。<br>
+      ③ <b>数值自检</b>：$\bar x\approx\frac{3\times8.389\times4.389}{4\times13.086}\approx2.11$——<u>落在 $[1,\mathrm e]=[1,2.718]$ 内偏右</u>，与 $\frac14x^2$ 主导、右边更"胖"的图形相符 ✔ <b>形心必须落在图形的横坐标范围内，这是零成本的检查。</b></p>
+    </div>
+  </div>
+
+  <!-- ================= s8 大观表 ================= -->
+  <h2 id="s8"><span class="idx">八</span>★★基本图形的相关几何量大观（18 讲独有 · 本章最大的考场资产）</h2>
+
+  <div class="key"><span class="tag">必记 · 这张表是干什么用的</span><span class="pg">P.108–110</span>
+    <p>18 讲原话：在数学试题中，经常考到基本图形的某些几何量，现将此问题汇总于此，一是<b>供考生练习之用</b>（后附详解），二是<b>供考生时常翻阅</b>。<b>图形与对应表达式须熟知</b>，表格中打 <b>(*)</b> 的几何量，<b>可记之</b>。</p>
+    <p><b>翻译成人话</b>：带 (*) 的那 <b>9 个数</b>是要背的（心形线 3 个、摆线 3 个、星形线 3 个）；其余的<u>要能在 3 分钟内推出来</u>。<b>填空题直接写答案，解答题现推。</b></p>
+    <p>表中"/"是书上<b>留空</b>（该量不是常考点，或推起来超纲），本页照录，不擅自补。</p>
+  </div>
+
+  <div class="gridwrap"><table>
+    <tr><th>#</th><th>图形</th><th>表达式</th><th>所围面积</th><th>绕轴体积</th><th>弧长（数一、数二）</th></tr>
+    <tr><td>1 ★</td><td>心形线（尖点朝右）</td><td>$r=a(1-\cos\theta)$</td><td>(*) $\dfrac32\pi a^2$</td><td>(*) $\dfrac83\pi a^3$（绕极轴）</td><td>(*) $8a$</td></tr>
+    <tr><td>2</td><td>心形线（尖点朝左）</td><td>$r=a(1+\cos\theta)$</td><td>$\dfrac32\pi a^2$</td><td>$\dfrac83\pi a^3$（绕极轴）</td><td>$8a$</td></tr>
+    <tr><td>3</td><td>心形线（尖点朝上）</td><td>$r=a(1-\sin\theta)$</td><td>$\dfrac32\pi a^2$</td><td>/</td><td>$8a$</td></tr>
+    <tr><td>4</td><td>心形线（尖点朝下）</td><td>$r=a(1+\sin\theta)$</td><td>$\dfrac32\pi a^2$</td><td>/</td><td>$8a$</td></tr>
+    <tr><td>5</td><td>伯努利双纽线（横放）</td><td>$r^2=a^2\cos2\theta$</td><td>$a^2$</td><td>$\dfrac{\sqrt2}8\pi^2a^3$（绕 $y$ 轴）</td><td>/</td></tr>
+    <tr><td>6</td><td>伯努利双纽线（斜放）</td><td>$r^2=a^2\sin2\theta$</td><td>$a^2$</td><td>$\dfrac{\pi^2}4a^3$（绕极轴）</td><td>/</td></tr>
+    <tr><td>7</td><td>阿基米德螺线</td><td>$r=a\theta\ (\theta\ge0)$</td><td>$\dfrac43a^2\pi^3$<br><span style="color:var(--muted);font-size:.8rem">$(0,2\pi)$ 段与极轴所围</span></td><td>/</td><td>/</td></tr>
+    <tr><td>8</td><td>对数螺线</td><td>$r=\mathrm e^{a\theta}$</td><td>$\dfrac1{4a}(\mathrm e^{4a\pi}-1)$<br><span style="color:var(--muted);font-size:.8rem">$(0,2\pi)$ 段与极轴所围</span></td><td>/</td><td>$\dfrac{\sqrt{1+a^2}}a(\mathrm e^{2a\pi}-1)$</td></tr>
+    <tr><td>9</td><td>双曲螺线</td><td>$r\theta=a$</td><td>$\dfrac{a^2}2\Bigl(1-\dfrac{\sqrt3}3\Bigr)$<br><span style="color:var(--muted);font-size:.8rem">指 $1\le\theta\le\sqrt3$ 段与极轴</span></td><td>/</td><td>/</td></tr>
+    <tr><td>10</td><td>三叶玫瑰线</td><td>$r=a\sin3\theta$</td><td>$\dfrac{\pi a^2}4$</td><td>/</td><td>/</td></tr>
+    <tr><td>11</td><td>三叶玫瑰线</td><td>$r=a\cos3\theta$</td><td>$\dfrac\pi4a^2$</td><td>/</td><td>/</td></tr>
+    <tr><td>12</td><td>四叶玫瑰线</td><td>$r=a\sin2\theta$</td><td>$\dfrac\pi2a^2$</td><td>/</td><td>/</td></tr>
+    <tr><td>13</td><td>四叶玫瑰线</td><td>$r=a\cos2\theta$</td><td>$\dfrac\pi2a^2$</td><td>/</td><td>/</td></tr>
+    <tr><td>14 ★</td><td>摆线一拱（峰 $(\pi a,2a)$）</td><td>$\begin{cases}x=a(t-\sin t)\\ y=a(1-\cos t)\end{cases}$</td><td>(*) $3\pi a^2$</td><td>(*) $5\pi^2a^3$（绕 $x$ 轴）</td><td>(*) $8a$</td></tr>
+    <tr><td>15 ★<b>重点</b></td><td>星形线</td><td>$\begin{cases}x=a\cos^3t\\ y=a\sin^3t\end{cases}$ 或 $x^{\frac23}+y^{\frac23}=a^{\frac23}$</td><td>(*) $\dfrac38\pi a^2$</td><td>(*) $\dfrac{32\pi}{105}a^3$（绕 $x$ 轴）</td><td>(*) $6a$</td></tr>
+    <tr><td>16 ★</td><td>笛卡儿叶形线</td><td>$x^3+y^3-3axy=0$ 或 $x=\dfrac{3at}{1+t^3},y=\dfrac{3at^2}{1+t^3}$</td><td>$\dfrac32a^2$</td><td>/</td><td>/</td></tr>
+  </table></div>
+
+  <div class="key"><span class="tag">必记 · 这 16 行的记忆锚点（自己整理，比死记有效）</span>
+    <ul>
+      <li><b>心形线四兄弟完全同规格</b>：面积一律 $\frac32\pi a^2$、弧长一律 $8a$、绕对称轴一律 $\frac83\pi a^3$。<u>$\pm\cos$ 与 $\pm\sin$ 只是把心转了个方向，测度当然不变</u>——书只给前两行的体积，是因为后两行的对称轴是 $y$ 轴、不叫"绕极轴"。</li>
+      <li><b>两条双纽线面积都是 $a^2$，都不带 $\pi$</b>（$r^2$ 型的特权）。</li>
+      <li><b>玫瑰线：三叶 $\frac{\pi a^2}4$，四叶 $\frac{\pi a^2}2$，四叶恰是三叶的 2 倍</b>，与 $\sin/\cos$ 无关。<u>记法：$r=a\sin n\theta$，$n$ 奇数则 $n$ 片、总面积 $\frac{\pi a^2}4$；$n$ 偶数则 $2n$ 片、总面积 $\frac{\pi a^2}2$。</u></li>
+      <li><b>三个 (*) 组各背 3 个数</b>：心形线 $\bigl(\frac32\pi a^2,\ \frac83\pi a^3,\ 8a\bigr)$｜摆线 $\bigl(3\pi a^2,\ 5\pi^2a^3,\ 8a\bigr)$｜星形线 $\bigl(\frac38\pi a^2,\ \frac{32\pi}{105}a^3,\ 6a\bigr)$。<u>心形线与摆线的弧长都是 $8a$，是本表最好记的一条巧合。</u></li>
+      <li><b>螺线三条（阿基米德/对数/双曲）只考面积</b>，且都是"某段与极轴所围"——<u>注意读清楚是哪一段</u>，书上双曲螺线那行特意用箭头标了"指 $1\le\theta\le\sqrt3$"。</li>
+    </ul>
+  </div>
+
+  <!-- ===== 交互 3：大观速查台 ===== -->
+  <div class="tool">
+    <h4>🌹 基本图形大观 · 速查台（含遮挡默写）</h4>
+    <div class="hint">16 个基本图形<b>实时绘制</b>（不是贴图，是按方程逐点算出来的），点一个看它的三个几何量。<br>
+    打开<b>默写模式</b>后数值会被遮住，先自己说出来再点开——<b>这张表本来就是拿来背的。</b></div>
+    <div class="ctl">
+      <button id="gaQuiz">🙈 默写模式：关</button>
+      <button id="gaStar">仅看 ★(*) 必背 9 数</button>
+      <button id="gaAll" class="on">看全部 16 个</button>
+    </div>
+    <div class="gallery" id="gaGrid"></div>
+    <div class="scene"><svg id="gaSvg" viewBox="0 0 640 300" xmlns="http://www.w3.org/2000/svg"></svg></div>
+    <div class="quant" id="gaQuant"></div>
+    <div class="say" id="gaSay"></div>
+    <div class="legend2">所有数值均由 mpmath 高精度积分独立复算（本页 87 项校验的一部分），<b>与书完全一致</b>。"/"＝书上留空，本台照录不补。</div>
+  </div>
+
+  <div class="trap"><span class="tag">⚠️ 复算时挖出来的一个真陷阱：绕轴体积什么时候要 ×2</span>
+    <p>做本页的独立复算时，双纽线那两行差点被判成"书错了"——查下来<b>书是对的，错的是"想当然"</b>。规则如下：</p>
+    <div class="gridwrap"><table class="dense">
+      <tr><th>情形</th><th>两叶（或两半）转出来的立体</th><th>体积怎么算</th></tr>
+      <tr><td><b>图形关于旋转轴对称</b><br>（如 $r^2=a^2\cos2\theta$ <b>绕 $y$ 轴</b>：左右两叶关于 $y$ 轴对称）</td><td><b>完全重合</b></td><td><b>只算一叶</b>（$\frac{\sqrt2}8\pi^2a^3$）</td></tr>
+      <tr><td><b>图形关于原点对称、但不关于轴对称</b><br>（如 $r^2=a^2\sin2\theta$ <b>绕极轴</b>：一叶在第一象限、一叶在第三象限）</td><td><b>互为镜像、不重合</b></td><td><b>两叶都要算</b>（$2\times\frac{\pi^2}8a^3=\frac{\pi^2}4a^3$）</td></tr>
+    </table></div>
+    <p><b>考场判法（三秒）</b>：把旋转轴当镜子，问一句"<b>另一半照过来会不会盖住这一半</b>"。盖得住就只算一次，盖不住就要加起来。<br>
+    <u>这条规则对心形线、摆线、星形线全部适用</u>——它们绕的都是自身的对称轴，所以永远"只算一半再乘 2"式地处理，从不会重复计数。</p>
+  </div>
+
+  <div class="eg" id="qeg101">
+    <div class="q"><span class="no">强 例10.1 ★</span><span class="pg">P.110–111</span>
+      求心形线 $r=a(1-\cos\theta)\,(a\gt0,\ 0\le\theta\le2\pi)$ 的<b>弧长</b>（仅数一、数二）、<b>所围图形的面积</b>以及<b>绕 $Ox$ 轴旋转得到的旋转体的体积</b>。</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>三问共用一个化简</b>：$1-\cos\theta=2\sin^2\frac\theta2$。<u>整道题的成败就在这一步半角公式</u>——不用它，三个积分都做不下去。</li>
+          <li><b>先用对称性把区间砍一半</b>：心形线关于极轴对称（$r(\theta)=r(-\theta)$），所以弧长、面积都可以在 $[0,\pi]$ 上算再 ×2。<u>这不只是省事：在 $[0,\pi]$ 上 $\sin\frac\theta2\ge0$，开根号时绝对值可以直接去掉</u>，这是真正的动机。</li>
+          <li><b>体积必须用极坐标绕极轴的公式</b> $V=\frac23\pi\int_0^\pi r^3\sin\theta\,\mathrm d\theta$——<u>基础 30 讲没有这个公式</u>，只学基础讲会卡在这一问。注意积分区间是 $[0,\pi]$（上半个心转一圈就扫出整个立体），<b>不要写成 $[0,2\pi]$（会算成两倍）</b>。</li>
+          <li>体积那一问的被积函数含 $\sin\theta\,\mathrm d\theta=-\mathrm d(\cos\theta)$，<b>凑微分令 $t=\cos\theta$</b> 最省事，不必再用半角。</li>
+        </ol>
+      </div>
+      <div class="paper"><span class="phead">✍️ 考场卷面 —— 照这个抄<span class="score">参考 12 分（每问 4 分）</span></span>
+        <div class="step"><span class="k">解</span><b>(i) 弧长。</b>因心形线关于极轴对称，由极坐标下的弧长公式
+          $$s=2\int_0^\pi\sqrt{r^2(\theta)+[r'(\theta)]^2}\,\mathrm d\theta=2\int_0^\pi\sqrt{a^2(1-\cos\theta)^2+a^2\sin^2\theta}\,\mathrm d\theta=2\sqrt2a\int_0^\pi\sqrt{1-\cos\theta}\,\mathrm d\theta\tag{1}$$
+          <span class="pt">⛳ 用对称性 + 化简根式 2分</span></div>
+        <div class="step">由 $1-\cos\theta=2\sin^2\dfrac\theta2$ 及 $\theta\in[0,\pi]$ 时 $\sin\dfrac\theta2\ge0$，$(1)$ 式
+          $$=2\sqrt2a\int_0^\pi\sqrt2\sin\frac\theta2\,\mathrm d\theta=4a\int_0^\pi\sin\frac\theta2\,\mathrm d\theta=-8a\cos\frac\theta2\Big|_0^\pi=8a$$
+          <span class="pt">⛳ 半角去根号 2分</span></div>
+        <div class="step"><b>(ii) 面积。</b>由极坐标下的面积公式
+          $$S=2\int_0^\pi\frac12r^2(\theta)\mathrm d\theta=\int_0^\pi a^2(1-\cos\theta)^2\mathrm d\theta=a^2\int_0^\pi4\sin^4\frac\theta2\,\mathrm d\theta\tag{2}$$
+          <span class="pt">⛳ 化为 $\sin^4$ 2分</span></div>
+        <div class="step">令 $t=\dfrac\theta2$，$(2)$ 式 $=8a^2\displaystyle\int_0^{\frac\pi2}\sin^4t\,\mathrm dt=8a^2\times\dfrac34\times\dfrac12\times\dfrac\pi2=\dfrac32\pi a^2$（点火公式）。<span class="pt">⛳ 点火公式 2分</span></div>
+        <div class="step"><b>(iii) 体积。</b>由极坐标图形绕极轴旋转的体积公式
+          $$V=\frac{2\pi}3\int_0^\pi r^3(\theta)\sin\theta\,\mathrm d\theta=-\frac{2\pi}3a^3\int_0^\pi(1-\cos\theta)^3\mathrm d(\cos\theta)\tag{3}$$
+          <span class="pt">⛳ 选对公式并凑微分 2分</span></div>
+        <div class="step">令 $t=\cos\theta$，再令 $u=1-t$，$(3)$ 式 $=-\dfrac{2\pi}3a^3\displaystyle\int_1^{-1}(1-t)^3\mathrm dt=\dfrac{2\pi}3a^3\displaystyle\int_0^2u^3\mathrm du=\dfrac{2\pi}3a^3\cdot4=\dfrac83\pi a^3$。<span class="pt">⛳ 换元换限算出 2分</span></div>
+        <div class="step fin">故该心形线的弧长为 $8a$，所围图形的面积为 $\dfrac32\pi a^2$，绕 $Ox$ 轴旋转所得旋转体的体积为 $\dfrac83\pi a^3$。</div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（写完校对，考场不落笔）</span>
+        <p>① <b>书上把姊妹题 $r=a(1+\cos\theta)$ 的全过程也写了</b>，三个量完全相同，只是半角换成 $1+\cos\theta=2\cos^2\frac\theta2$：$s=4a\int_0^\pi\cos\frac\theta2\mathrm d\theta=8a$。<b>记忆：减号配 $\sin\frac\theta2$，加号配 $\cos\frac\theta2$。</b></p>
+        <p>② <b><span class="dock">扣分点</span>体积那问写成 $\int_0^{2\pi}$</b>：$\theta$ 从 $0$ 到 $\pi$ 已经扫过上半个心形，绕极轴转一圈就是整个立体；再积到 $2\pi$ 等于把下半个心又转一遍，<u>体积翻倍</u>。<b>公式里明写着 $[\alpha,\beta]\subset[0,\pi]$，这个条件就是为它设的。</b></p>
+        <p>③ <b>点火公式在 $[0,\frac\pi2]$ 上：$\int_0^{\pi/2}\sin^4=\frac34\cdot\frac12\cdot\frac\pi2$</b>（偶次要补 $\frac\pi2$）。换元 $t=\frac\theta2$ 时 $\mathrm d\theta=2\mathrm dt$，那个 2 别丢——$4a^2\cdot2=8a^2$。</p>
+        <p>④ <b>三个数一起背</b>（大观表 (*)）：$8a$、$\frac32\pi a^2$、$\frac83\pi a^3$。<u>心形线是极坐标题的头号常客，这三个数值得占一个脑内位置。</u></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="eg" id="qeg104">
+    <div class="q"><span class="no">强 例10.4 ★</span><span class="pg">P.113–114</span>
+      求摆线 $\begin{cases}x=a(t-\sin t)\\ y=a(1-\cos t)\end{cases}(a\gt0)$ 一拱的<b>弧长</b>（仅数一、数二）、与 $x$ 轴所围图形的<b>面积</b>及绕 $x$ 轴旋转一周得到的旋转体的<b>体积</b>。</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>三问共用同一个化简</b>：$\sqrt{(1-\cos t)^2+\sin^2t}=\sqrt{2-2\cos t}=2\bigl|\sin\frac t2\bigr|$，在 $[0,2\pi]$ 上 $\sin\frac t2\ge0$ 可去绝对值。<u>与心形线是同一招（半角），只不过一个在参数式里、一个在极坐标里。</u></li>
+          <li><b>面积那问上一节已经做过</b>（<a href="#eg102">基 10.2</a>），这里是复用；<b>重点在第三问的体积</b>。</li>
+          <li><b>体积别忘了 $\mathrm dx=x'(t)\mathrm dt$</b>：$V_x=\int_0^{2\pi a}\pi y^2\mathrm dx=\pi a^3\int_0^{2\pi}(1-\cos t)^2\cdot(1-\cos t)\mathrm dt$——<u>又是三次方</u>（与 <a href="#xt108">习 10.8</a> 同一个坑）。</li>
+          <li>$(1-\cos t)^3$ 展开后有 $\cos^3t$，在整周期上积分为 0（奇次幂）；$\cos^2t$ 用点火。<b>先判掉零项再算，能省一半笔墨。</b></li>
+        </ol>
+      </div>
+      <div class="paper"><span class="phead">✍️ 考场卷面 —— 照这个抄<span class="score">参考 12 分（每问 4 分）</span></span>
+        <div class="step"><span class="k">解</span><b>(i) 弧长。</b>由参数方程下的弧长公式
+          $$s=\int_0^{2\pi}\sqrt{[x'(t)]^2+[y'(t)]^2}\,\mathrm dt=a\int_0^{2\pi}\sqrt{(1-\cos t)^2+\sin^2t}\,\mathrm dt=2a\int_0^{2\pi}\sin\frac t2\,\mathrm dt\tag{1}$$
+          <span class="pt">⛳ 化简根式（半角）2分</span></div>
+        <div class="step">$(1)$ 式 $=-4a\cos\dfrac t2\Big|_0^{2\pi}=8a$。<span class="pt">⛳ 算出 2分</span></div>
+        <div class="step"><b>(ii) 面积。</b>由参数方程下的面积公式
+          $$S=\int_0^{2\pi a}y(x)\mathrm dx=a^2\int_0^{2\pi}(1-\cos t)^2\mathrm dt=a^2\int_0^{2\pi}(1+\cos^2t-2\cos t)\mathrm dt=\Bigl(2\pi+4\times\frac12\times\frac\pi2-0\Bigr)a^2=3\pi a^2$$
+          <span class="pt">⛳ 换元 2分</span><span class="pt">⛳ 点火系数是 4 2分</span></div>
+        <div class="step"><b>(iii) 体积。</b>由绕 $x$ 轴的体积公式，
+          $$V_x=\int_0^{2\pi a}\pi y^2(x)\mathrm dx=\pi a^3\int_0^{2\pi}(1-\cos t)^3\mathrm dt=\pi a^3\int_0^{2\pi}(1-3\cos t+3\cos^2t-\cos^3t)\mathrm dt\tag{2}$$
+          <span class="pt">⛳ $\mathrm dx$ 也换成 $t$（三次方）2分</span></div>
+        <div class="step">在 $[0,2\pi]$ 上 $\displaystyle\int\cos t\,\mathrm dt=\int\cos^3t\,\mathrm dt=0$，$\displaystyle\int\cos^2t\,\mathrm dt=4\times\frac12\times\frac\pi2=\pi$，故 $(2)$ 式
+          $$=\pi a^3\Bigl(2\pi+3\times4\times\frac12\times\frac\pi2\Bigr)=\pi a^3(2\pi+3\pi)=5\pi^2a^3$$
+          <span class="pt">⛳ 判零 + 点火 2分</span></div>
+        <div class="step fin">故摆线一拱的弧长为 $8a$，与 $x$ 轴所围图形的面积为 $3\pi a^2$，绕 $x$ 轴旋转所得旋转体的体积为 $5\pi^2a^3$。</div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（写完校对，考场不落笔）</span>
+        <p>① <b>摆线的物理来历</b>：半径 $a$ 的圆沿直线滚动时，圆周上一个定点画出的轨迹（书上的图画了滚圆和 $Q$ 点）。<u>一拱的宽 $2\pi a$＝圆的周长，峰高 $2a$＝直径</u>——图能自己画出来，就不怕"考试不给图"。</p>
+        <p>② <b>三个数的记忆链</b>：弧长 $8a$＝<u>直径的 4 倍</u>；面积 $3\pi a^2$＝<u>滚圆面积的 3 倍</u>；绕 $x$ 轴体积 $5\pi^2a^3$。<b>大观表带 (*)，属于必背。</b></p>
+        <p>③ <b>$\int_0^{2\pi}\cos^3t\,\mathrm dt=0$ 的快判</b>：奇次幂在整周期上积分为零（或令 $u=\sin t$ 上下限相同）。<u>不要傻算 $\cos^3$ 的原函数。</u></p>
+        <p>④ <b>三问的公式各不相同却共用一个根式化简</b>——这就是 18 讲把摆线、星形线、心形线各做成"三连问"的用意：<b>一条曲线练三个公式，性价比最高。</b></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="eg" id="qeg105">
+    <div class="q"><span class="no">强 例10.5 ★★</span><span class="pg">P.114–115</span>
+      求星形线 $x^{\frac23}+y^{\frac23}=a^{\frac23}\,(a\gt0)$ 的<b>弧长</b>（仅数一、数二）、<b>所围图形的面积</b>及绕 $x$ 轴旋转一周所得旋转体的<b>体积</b>。</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>隐式先换成参数式</b>：$x=a\cos^3t,\ y=a\sin^3t$（因为 $(\cos^3)^{2/3}+(\sin^3)^{2/3}=\cos^2+\sin^2=1$）。<u>凡是 $x^{2/3}+y^{2/3}=a^{2/3}$，一律这么参数化，不要试图解出 $y(x)$。</u></li>
+          <li><b>三问都用对称性只算第一象限</b>（$t\in[0,\frac\pi2]$）：弧长 ×4、面积 ×4、体积 ×2（体积绕 $x$ 轴转，上下已经转到一起了，只需左右各一次）。<b>⚠️ 三个倍数不一样，这是本题最易错处。</b></li>
+          <li><b>⚠️⚠️ 换限是反的</b>：$x=a\cos^3t$ 单调减，$x=0\Leftrightarrow t=\frac\pi2$，$x=a\Leftrightarrow t=0$。<u>写 $\int_0^a\cdots\mathrm dx=\int_{\pi/2}^0\cdots x'(t)\mathrm dt$，上下限倒过来</u>——书上专门在页边把这句话写出来了。</li>
+          <li>剩下全是 $\int_0^{\pi/2}\sin^m t\cos^n t$，<b>点火公式（含双阶乘）连乘链</b>直接出结果。</li>
+        </ol>
+      </div>
+      <div class="paper"><span class="phead">✍️ 考场卷面 —— 照这个抄<span class="score">参考 12 分（每问 4 分）</span></span>
+        <div class="step"><span class="k">解</span>星形线的参数方程为 $x=a\cos^3t,\ y=a\sin^3t\ (0\le t\le2\pi)$，图形关于两坐标轴均对称。</div>
+        <div class="step"><b>(i) 弧长。</b>
+          $$s=4\int_0^{\frac\pi2}\sqrt{[x'(t)]^2+[y'(t)]^2}\,\mathrm dt=4a\int_0^{\frac\pi2}\sqrt{9\cos^4t\sin^2t+9\sin^4t\cos^2t}\,\mathrm dt=12a\int_0^{\frac\pi2}\sin t\cos t\,\mathrm dt$$
+          $$=6a\sin^2t\Big|_0^{\frac\pi2}=6a$$
+          <span class="pt">⛳ 提公因式化根 2分</span><span class="pt">⛳ 算出 2分</span></div>
+        <div class="step"><b>(ii) 面积。</b>$S=4\displaystyle\int_0^ay(x)\mathrm dx$，其中 $x=a\cos^3t,\ y=a\sin^3t$；当 $x=0$ 时 $t=\dfrac\pi2$，当 $x=a$ 时 $t=0$，故
+          $$S=4a^2\int_{\frac\pi2}^0\sin^3t\,\mathrm d(\cos^3t)=4a^2\int_0^{\frac\pi2}\sin^4t\cdot3\cos^2t\,\mathrm dt=12a^2\int_0^{\frac\pi2}\sin^4t(1-\sin^2t)\mathrm dt\tag{1}$$
+          <span class="pt">⛳ 换限方向正确 2分</span></div>
+        <div class="step">由点火公式，$(1)$ 式 $=12a^2\Bigl(\dfrac34\times\dfrac12\times\dfrac\pi2-\dfrac56\times\dfrac34\times\dfrac12\times\dfrac\pi2\Bigr)=\dfrac38\pi a^2$。<span class="pt">⛳ 点火两项相减 2分</span></div>
+        <div class="step"><b>(iii) 体积。</b>由绕 $x$ 轴的体积公式并利用对称性（左右各一次），
+          $$V_x=2\int_0^a\pi y^2\mathrm dx=6\pi a^3\int_0^{\frac\pi2}\sin^6t\cos^2t\sin t\,\mathrm dt=6\pi a^3\int_0^{\frac\pi2}\sin^7t(1-\sin^2t)\mathrm dt\tag{2}$$
+          <span class="pt">⛳ 列式 2分</span></div>
+        <div class="step">由点火公式，$(2)$ 式 $=6\pi a^3\Bigl(\dfrac67\times\dfrac45\times\dfrac23-\dfrac89\times\dfrac67\times\dfrac45\times\dfrac23\Bigr)=\dfrac{32\pi}{105}a^3$。<span class="pt">⛳ 算出 2分</span></div>
+        <div class="step fin">故星形线的弧长为 $6a$，所围图形的面积为 $\dfrac38\pi a^2$，绕 $x$ 轴旋转所得旋转体的体积为 $\dfrac{32\pi}{105}a^3$。</div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（写完校对，考场不落笔）</span>
+        <p>① <b><span class="dock">头号扣分点：换限方向</span></b>。书上在页边专门写了：<u>本题中当 $x=0$ 时 $t=\frac\pi2$，当 $x=a$ 时 $t=0$</u>。写成 $\int_0^{\pi/2}$ 会得到负面积。<b>参数方程换限的通则：$x(\alpha)=a,\ x(\beta)=b$，$\alpha$ 未必小于 $\beta$。</b></p>
+        <p>② <b>三个倍数为什么不同</b>：弧长 ×4（四段弧）、面积 ×4（四个象限）、<b>体积 ×2</b>（绕 $x$ 轴时上下半已经转成同一个立体，只剩左右两半）。<u>把体积也写成 ×4 会翻倍。</u></p>
+        <p>③ <b>点火奇偶两套系数</b>：$\int_0^{\pi/2}\sin^{2k}$ 末尾要乘 $\frac\pi2$，$\int_0^{\pi/2}\sin^{2k+1}$ 末尾乘 $1$。第 (iii) 问是奇次（$\sin^7,\sin^9$），<u>所以那两串连乘后面没有 $\frac\pi2$</u>——本题两问一奇一偶，正好是点火公式的对照练习。</p>
+        <p>④ <b>$\frac{32}{105}$ 这个丑数字必须背</b>（大观表 (*)）：$105=3\times5\times7$，来自 $\frac67\cdot\frac45\cdot\frac23$ 的分母。<u>考场上现推要 2 分钟，背下来 0 秒。</u></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= s9 四类函数表达形式 ================= -->
+  <h2 id="s9"><span class="idx">九</span>各种函数表达形式的几何量计算（18 讲的第三向）</h2>
+
+  <div class="zy"><span class="tag">强化专属 · 三向解题法的第三条</span><span class="pg">P.115</span>
+    <p>18 讲把本讲拆成三向：<b>一、计算公式（D₁ 常规操作）｜二、基本图形大观（D₁）｜三、各种函数表达形式的几何量计算（D₁ + D₂₃ 化归经典形式）</b>。<br>
+    第三向的意思是：<b>公式你都会了，但题目不会直接给你一条干净的曲线</b>——它给你一个<u>含参极限</u>、一个<u>积分等式</u>、一个<u>变限积分</u>、一个<u>指数里带未知底数的表达式</u>。<b>第一步永远是把"函数"从这些包装里剥出来。</b></p>
+    <div class="gridwrap"><table class="dense">
+      <tr><th>包装形式</th><th>剥法（D₂₃）</th><th>本讲例题</th></tr>
+      <tr><td><b>1. 幂函数型</b>：含参数的极限</td><td>分 $|x|\lt1,|x|\ge1$ 讨论 → 分段函数</td><td><a href="#qeg107">强 10.7</a></td></tr>
+      <tr><td><b>1. 幂函数型</b>：不定积分等式</td><td><b>两端求导</b>，$C$ 自动消失</td><td><a href="#qeg108">强 10.8</a></td></tr>
+      <tr><td><b>1. 幂函数型</b>：反常体积定参数</td><td>先算出 $V(a)$ 的闭式，再解方程</td><td><a href="#qeg109">强 10.9</a></td></tr>
+      <tr><td><b>2. 三角函数型</b>：变限积分定义的曲线</td><td><b>先由被积函数定出定义域</b>，再求导</td><td><a href="#qeg1010">强 10.10</a></td></tr>
+      <tr><td><b>3. 对数函数型</b>：隐式给出的曲线</td><td>看范围写给谁 → 谁当自变量</td><td><a href="#qeg1011">强 10.11</a>、<a href="#qeg1012">强 10.12</a></td></tr>
+      <tr><td><b>4. 指数函数型</b>：无界区域</td><td>换底成 $\mathrm e$，用 Γ 函数或分部</td><td><a href="#qeg1013">强 10.13</a>、<a href="#qeg1014">强 10.14</a></td></tr>
+    </table></div>
+    <p>这六道题<b>已经按"要算什么量"分散在前面各节</b>（体积的进 <a href="#s2">二</a>、弧长的进 <a href="#s4">四</a>、侧面积的进 <a href="#s5">五</a>），此处只补上尚未出现的那一道。</p>
+  </div>
+
+  <div class="eg" id="qeg107">
+    <div class="q"><span class="no">强 例10.7</span><span class="pg">P.115–116</span>
+      设 $y=\lim\limits_{n\to\infty}\dfrac{1+x}{1+nx^{2n}}$，则曲线 $y=y(x)$ 与 $x$ 轴及 $x=1$ 所围图形的面积为＿＿．</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$2$</span></p>
+      <p><span class="lab">解</span>先求出 $y(x)$：</p>
+      <ul>
+        <li>当 $|x|\lt1,\ n\to\infty$ 时，$x^{2n}\to0$，故 $\dfrac{1+x}{1+nx^{2n}}\to1+x$；</li>
+        <li>当 $|x|\ge1,\ n\to\infty$ 时，$nx^{2n}\to+\infty$，故 $\dfrac{1+x}{1+nx^{2n}}\to0$。</li>
+      </ul>
+      <div class="fml">$y=\begin{cases}0,&|x|\ge1\\ 1+x,&|x|\lt1\end{cases}$</div>
+      <div class="fml">$S=\int_{-1}^1(1+x)\mathrm dx=\Bigl(x+\frac{x^2}2\Bigr)\Big|_{-1}^1=2$</div>
+      <p><span class="lab">要害</span>① <b>真考点是含参极限的分段化</b>（第 1 讲的功夫），面积只是外壳。<u>$nx^{2n}$ 里那个 $n$ 是关键：$|x|=1$ 时 $nx^{2n}=n\to\infty$，所以 $x=\pm1$ 也归到 0 那一支</u>——如果没有这个 $n$，$x=1$ 处会得到 $\frac{1+x}2=1$，分段点就变了。<br>
+      ② <b>页边小彩蛋</b>：算面积也可以直接用面积公式——图形是底 2、高 2 的<b>直角三角形</b>，$S_\triangle=\frac12\times2\times2=2$。<u>这就是 ch9 支线十"几何法"：看出是什么形状就秒算，不必积分。</u><br>
+      ③ 题目虽写"与 $x=1$ 所围"，但曲线在 $x\ge1$ 上恒为 0，<b>实际积分区间是 $[-1,1]$</b>。<u>别被 $x=1$ 带偏而只积 $[0,1]$（会得到 $\frac32$）。</u></p>
+    </div>
+  </div>
+
+  <!-- ================= s10 综合题 ================= -->
+  <h2 id="s10"><span class="idx">十</span>综合题——几何量 + 前面九讲的东西一起考</h2>
+
+  <div class="key"><span class="tag">必记 · 综合题的三种缝合方式</span>
+    <p>本讲的解答题极少"只考一个几何量"，几乎都要先做一段别的事：</p>
+    <ul>
+      <li><b>缝微分学（第 3–6 讲）</b>：先求切线（<a href="#eg107">基 10.7</a>）、先求拐点（<a href="#qeg1015">强 10.15</a>）、先求渐近线（<a href="#qeg106">强 10.6</a>）。</li>
+      <li><b>缝最值（第 5 讲）</b>：算出的面积/体积是参数的函数，再求它的最值（<a href="#xt106">习 10.6</a>、<a href="#xt107">习 10.7</a>）——<b>这类题的分值一半在"证明它确实是最值"上。</b></li>
+      <li><b>缝反常积分（第 8–9 讲）</b>：无界区域的面积/体积（<a href="#eg104">基 10.4</a>、<a href="#eg107">基 10.7</a>、<a href="#xt101">习 10.1</a>、<a href="#qeg1013">强 10.13</a>、<a href="#qeg1015">强 10.15</a>）。</li>
+    </ul>
+  </div>
+
+  <div class="eg" id="xt106">
+    <div class="q"><span class="no">基 习10.6 ★</span><span class="pg">P.277·P.279–280</span>
+      求曲线 $y=\sqrt x$ 的一条切线 $l$，使该曲线与切线 $l$ 及直线 $x=0,\ x=2$ 所围成图形的<b>面积最小</b>。</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>"求一条切线使……最小"＝把切点当参数。</b>设切点 $(t,\sqrt t)$，写出切线，<u>面积就成了 $t$ 的函数 $S(t)$</u>，问题化为一元函数求最值（第 5 讲）。</li>
+          <li><b>列面积时要判上下</b>：切线在曲线上方（$\sqrt x$ 是凹函数，切线全在其上方），所以 $S=\int_0^2(\text{切线}-\sqrt x)\mathrm dx$，<u>不用加绝对值、也不用分段</u>。<b>这一句要在卷面上有交代。</b></li>
+          <li>算出 $S(t)=\dfrac1{\sqrt t}+\sqrt t-\dfrac{4\sqrt2}3$ 后，<b>令 $S'=0$ 得驻点，再用二阶导判极小</b>——闭区间外的最值题必须补这一步论证。</li>
+          <li>预判结果：$\frac1{\sqrt t}+\sqrt t$ 由均值不等式在 $t=1$ 处取最小值 2。<u>心里有数再动笔。</u></li>
+        </ol>
+      </div>
+      <div class="paper"><span class="phead">✍️ 考场卷面 —— 照这个抄<span class="score">参考 10 分</span></span>
+        <div class="step"><span class="k">解</span>因为 $y'=\dfrac1{2\sqrt x}$，所以 $y=\sqrt x$ 在点 $(t,\sqrt t)\ (t\gt0)$ 处的切线 $l$ 的方程为
+          $$y-\sqrt t=\frac1{2\sqrt t}(x-t),\quad\text{即}\quad y=\frac1{2\sqrt t}x+\frac{\sqrt t}2\tag{1}$$
+          <span class="pt">⛳ 设切点写切线 2分</span></div>
+        <div class="step">因 $y=\sqrt x$ 在 $(0,+\infty)$ 内是凹函数，其切线位于曲线上方，故由 $(1)$ 式，所围面积
+          $$S(t)=\int_0^2\Bigl[\Bigl(\frac1{2\sqrt t}x+\frac{\sqrt t}2\Bigr)-\sqrt x\Bigr]\mathrm dx=\frac1{\sqrt t}+\sqrt t-\frac{4\sqrt2}3\tag{2}$$
+          <span class="pt">⛳ 判上下并列出 $S(t)$ 3分</span></div>
+        <div class="step">对 $(2)$ 式求导，令
+          $$S'(t)=-\frac12t^{-\frac32}+\frac12t^{-\frac12}=0\ \Longrightarrow\ t=1$$
+          <span class="pt">⛳ 求驻点 2分</span></div>
+        <div class="step">又 $S''(t)=\dfrac34t^{-\frac52}-\dfrac14t^{-\frac32}$，故 $S''(1)=\dfrac34-\dfrac14=\dfrac12\gt0$，由极值的第二充分条件知 $t=1$ 是 $S(t)$ 的极小值点；<b>又 $t=1$ 是 $(0,+\infty)$ 内唯一驻点</b>，故它就是最小值点。<span class="pt">⛳ 二阶导判定 + 唯一驻点 2分</span></div>
+        <div class="step fin">故当 $t=1$ 时 $S$ 取最小值，此时所求切线 $l$ 的方程为 $y=\dfrac x2+\dfrac12$。<span class="pt">⛳ 结论回扣（答的是"切线"不是"面积"）1分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（写完校对，考场不落笔）</span>
+        <p>① <b><span class="dock">头号扣分点：答非所问</span></b>。题目要的是<b>切线 $l$ 的方程</b>，不是最小面积。<u>算到 $t=1$ 就停笔，白丢 1 分。</u></p>
+        <p>② <b><span class="dock">扣分点</span>只找驻点不作判定</b>。开区间上的最值必须交代"唯一驻点 + 极小 ⇒ 最小"，<b>这是第 5 讲立的规矩</b>，本讲照用。</p>
+        <p>③ <b>心算校验</b>：$S(1)=1+1-\frac{4\sqrt2}3\approx2-1.886=0.114\gt0$ ✔ 面积为正。<u>若算出负数，说明"切线在上"判反了。</u></p>
+        <p>④ <b>$\int_0^2\sqrt x\,\mathrm dx=\frac23x^{3/2}\big|_0^2=\frac{4\sqrt2}3$</b>——这个数在 $S(t)$ 里是<u>与 $t$ 无关的常数</u>，求导时直接消失。<b>看出这一点，可以不必把它算出来就先求导。</b></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="eg" id="xt107">
+    <div class="q"><span class="no">基 习10.7 ★</span><span class="pg">P.277–278·P.280</span>
+      设 $D_1$ 是由抛物线 $y=2x^2$ 和直线 $x=a,\ x=2,\ y=0$ 所围成的平面区域，$D_2$ 是由抛物线 $y=2x^2$ 和直线 $y=0,\ x=a$ 所围成的平面区域，其中 $0\lt a\lt2$。<br>
+      (1) 求 $D_1$ 绕 $x$ 轴旋转一周而成的旋转体体积 $V_1$，$D_2$ 绕 $y$ 轴旋转一周而成的旋转体体积 $V_2$；<br>
+      (2) 问当 $a$ 为何值时，$V_1+V_2$ 取得最大值？并求此最大值。</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>$V_1$ 是标准的绕 $x$ 轴</b>：$\pi\int_a^2(2x^2)^2\mathrm dx$，一眼可写。</li>
+          <li><b>$V_2$ 是"绕 $y$ 轴"，但 $D_2$ 的形状要看清</b>：它是 $y=2x^2$ 下方、$x=a$ 左边、$y=0$ 上方那块。绕 $y$ 轴转出来的是<u>一个圆柱挖掉中间的抛物面</u>：<b>大圆柱（半径 $a$、高 $2a^2$）减去抛物面绕 $y$ 轴的体积</b> $\pi\int_0^{2a^2}x^2(y)\mathrm dy=\pi\int_0^{2a^2}\frac y2\mathrm dy$。</li>
+          <li><u>也可以用柱壳法</u> $V_2=2\pi\int_0^a x\cdot(2a^2-2x^2)\mathrm dx$——两法同答案，<b>"大减小"更贴书</b>。</li>
+          <li><b>第 (2) 问是最值题</b>：$V(a)=V_1+V_2$ 求导，注意 $V_1$ 对 $a$ 求导要用<u>变限积分求导</u>（下限含 $a$，导数带负号），或者干脆先积出来再求导——后者更稳。</li>
+        </ol>
+      </div>
+      <div class="paper"><span class="phead">✍️ 考场卷面 —— 照这个抄<span class="score">参考 11 分</span></span>
+        <div class="step"><span class="k">解</span><b>(1)</b> 由题意，$D_1$ 绕 $x$ 轴旋转所得旋转体体积
+          $$V_1=\pi\int_a^2(2x^2)^2\mathrm dx=4\pi\int_a^2x^4\mathrm dx=\frac45\pi(32-a^5)\tag{1}$$
+          <span class="pt">⛳ $V_1$ 3分</span></div>
+        <div class="step">$D_2$ 绕 $y$ 轴旋转所得旋转体体积＝底半径 $a$、高 $2a^2$ 的圆柱体积减去抛物面部分，即
+          $$V_2=\pi a^2\cdot2a^2-\pi\int_0^{2a^2}\frac y2\mathrm dy=2\pi a^4-\pi a^4=\pi a^4\tag{2}$$
+          <span class="pt">⛳ $V_2$（大减小）3分</span></div>
+        <div class="step"><b>(2)</b> 由 $(1)(2)$ 两式，
+          $$V=V_1+V_2=\frac45\pi(32-a^5)+\pi a^4,\qquad 0\lt a\lt2$$</div>
+        <div class="step">令 $V'=-4\pi a^4+4\pi a^3=4\pi a^3(1-a)=0$，得区间 $(0,2)$ 内唯一的驻点 $a=1$。<span class="pt">⛳ 求驻点 2分</span></div>
+        <div class="step">又 $V''(a)=-16\pi a^3+12\pi a^2$，$V''(1)=-4\pi\lt0$，故 $a=1$ 是极大值点；<b>又它是 $(0,2)$ 内唯一驻点</b>，因此是最大值点，此时
+          $$V_{\max}=\frac45\pi(32-1)+\pi=\frac{124}5\pi+\pi=\frac{129}5\pi$$
+          <span class="pt">⛳ 二阶导判定 + 算出最大值 2分</span></div>
+        <div class="step fin">故当 $a=1$ 时 $V_1+V_2$ 取得最大值，最大值为 $\dfrac{129}5\pi$。<span class="pt">⛳ 结论回扣 1分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（写完校对，考场不落笔）</span>
+        <p>① <b>$V_2$ 的"大减小"写法要点明谁是大谁是小</b>：<u>大＝把 $D_2$ 撑成整个圆柱</u>（半径 $a$、高 $2a^2$），<u>小＝抛物面内部那块</u>。写不清楚容易被判为"公式来路不明"。</p>
+        <p>② <b>为什么 $V_1$ 里 $a$ 在下限、求导带负号</b>：$\frac{\mathrm d}{\mathrm da}\int_a^2f=-f(a)$。<u>本题因为先积出来了，看不到这个负号——但它就藏在 $-\frac45\pi\cdot5a^4=-4\pi a^4$ 里。</u></p>
+        <p>③ <b>$V'=4\pi a^3(1-a)$ 的因式分解很关键</b>：在 $(0,2)$ 上 $a^3\gt0$，符号只由 $(1-a)$ 决定 ⇒ <u>$a\lt1$ 时增、$a\gt1$ 时减</u>，其实一眼可判最大，二阶导只是走个规范流程。</p>
+        <p>④ <b>端点值自检</b>：$V(0^+)=\frac{128}5\pi=25.6\pi$，$V(2^-)=0+16\pi=16\pi$，而 $V(1)=\frac{129}5\pi=25.8\pi$——<u>确实比两端都大</u> ✔ <b>最值题写完代两个端点，10 秒钟买个安心。</b></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="eg" id="qeg1015">
+    <div class="q"><span class="no">强 例10.15 ★★★</span><span class="pg">P.118–119</span>
+      已知 $M(x_0,y_0)$ 是曲线 $y=\dfrac1{1+x^2}\,(x\ge0)$ 的<b>拐点</b>，$O$ 为坐标原点。记 $D$ 是第一象限中以曲线 $y=\dfrac1{1+x^2}\,(x\ge x_0)$、<b>线段 $OM$</b> 及 $x$ 正半轴为边界的无界区域，求 $D$ 绕 $x$ 轴旋转所成旋转体的体积。</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>三个词决定了三段工作</b>：<u>"拐点"</u>⇒ 先求二阶导定 $x_0$（第 3 讲）；<u>"线段 $OM$"</u>⇒ 那一段转出来是<b>圆锥</b>，别去积分；<u>"无界区域"</u>⇒ 后一段是<b>反常积分</b>（第 8–9 讲）。</li>
+          <li><b>把体积拆成两块</b>：$[0,x_0]$ 上边界是直线 $OM$ → 圆锥；$[x_0,+\infty)$ 上边界是曲线 → $\pi\int y^2\mathrm dx$。<u>拆点就是拐点横坐标</u>。</li>
+          <li><b>圆锥体积别用积分</b>：$\frac13\pi r^2h$，其中 $r=y_0$、$h=x_0$。<u>能用初等几何公式的地方就不要列积分</u>——这是本题的"送分设计"，也是阅卷时的采分点之一。</li>
+          <li><b>$\int\frac{\mathrm dx}{(1+x^2)^2}$ 用三角代换 $x=\tan t$</b>：$\frac{1}{(1+x^2)^2}\mathrm dx=\cos^4t\cdot\sec^2t\,\mathrm dt=\cos^2t\,\mathrm dt$。<u>降一次幂后就是标准积分</u>，注意上限 $x\to+\infty$ 对应 $t\to\frac\pi2$。</li>
+        </ol>
+      </div>
+      <div class="paper"><span class="phead">✍️ 考场卷面 —— 照这个抄<span class="score">参考 12 分</span></span>
+        <div class="step"><span class="k">解</span>由已知得
+          $$\frac{\mathrm dy}{\mathrm dx}=\frac{-2x}{(1+x^2)^2},\qquad\frac{\mathrm d^2y}{\mathrm dx^2}=\frac{6x^2-2}{(1+x^2)^3}\tag{1}$$
+          <span class="pt">⛳ 二阶导 2分</span></div>
+        <div class="step">令 $\dfrac{\mathrm d^2y}{\mathrm dx^2}=0$，在 $x\ge0$ 内解得 $x=\dfrac{\sqrt3}3$；当 $x$ 经过 $\dfrac{\sqrt3}3$ 时 $(1)$ 式中二阶导变号，且 $y\big|_{x=\frac{\sqrt3}3}=\dfrac34$，所以 $M$ 的坐标为 $\Bigl(\dfrac{\sqrt3}3,\dfrac34\Bigr)$。<span class="pt">⛳ 定出拐点 2分</span></div>
+        <div class="step">$D$ 绕 $x$ 轴旋转所成的立体，在 $\Bigl[0,\dfrac{\sqrt3}3\Bigr]$ 上是底半径 $\dfrac34$、高 $\dfrac{\sqrt3}3$ 的圆锥，在 $\Bigl[\dfrac{\sqrt3}3,+\infty\Bigr)$ 上由曲线绕轴旋转而成，故
+          $$V=\frac\pi3\cdot\Bigl(\frac34\Bigr)^2\cdot\frac{\sqrt3}3+\pi\int_{\frac{\sqrt3}3}^{+\infty}y^2\mathrm dx=\frac{\sqrt3}{16}\pi+\pi\int_{\frac{\sqrt3}3}^{+\infty}\frac{\mathrm dx}{(1+x^2)^2}\tag{2}$$
+          <span class="pt">⛳ 分成圆锥 + 反常积分两段 3分</span></div>
+        <div class="step">令 $x=\tan t$，则 $\mathrm dx=\sec^2t\,\mathrm dt$，$x=\dfrac{\sqrt3}3$ 对应 $t=\dfrac\pi6$，$x\to+\infty$ 对应 $t\to\dfrac\pi2$，$(2)$ 式
+          $$=\frac{\sqrt3}{16}\pi+\pi\int_{\frac\pi6}^{\frac\pi2}\cos^4t\cdot\sec^2t\,\mathrm dt=\frac{\sqrt3}{16}\pi+\pi\int_{\frac\pi6}^{\frac\pi2}\frac{1+\cos2t}2\mathrm dt\tag{3}$$
+          <span class="pt">⛳ 三角代换换限 3分</span></div>
+        <div class="step">$(3)$ 式 $=\dfrac{\sqrt3}{16}\pi+\pi\Bigl(\dfrac t2+\dfrac{\sin2t}4\Bigr)\Big|_{\frac\pi6}^{\frac\pi2}=\dfrac{\sqrt3}{16}\pi+\pi\Bigl(\dfrac\pi6-\dfrac{\sqrt3}8\Bigr)$。<span class="pt">⛳ 积出 1分</span></div>
+        <div class="step fin">故 $D$ 绕 $x$ 轴旋转所成旋转体的体积为 $V=\dfrac{\pi^2}6-\dfrac{\sqrt3}{16}\pi$。<span class="pt">⛳ 合并结论 1分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（写完校对，考场不落笔）</span>
+        <p>① <b>合并那一步的心算</b>：$\dfrac{\sqrt3}{16}\pi-\dfrac{\sqrt3}8\pi=\dfrac{\sqrt3\pi}{16}-\dfrac{2\sqrt3\pi}{16}=-\dfrac{\sqrt3}{16}\pi$。<u>一正一负恰好留下同样的系数、只是变号</u>——这个巧合让答案变得很干净，<b>算出来不是 $\frac{\pi^2}6-\frac{\sqrt3}{16}\pi$ 就要回头查。</b></p>
+        <p>② <b>拐点必须验证变号</b>（或用三阶导）。只令 $y''=0$ 解出 $x$ 就说它是拐点，<span class="dock">按第 3 讲的规矩要扣分</span>——$y''=0$ 只是必要条件。</p>
+        <p>③ <b>圆锥那段为什么不用积分</b>：其实 $\pi\int_0^{x_0}\bigl(\frac{y_0}{x_0}x\bigr)^2\mathrm dx=\frac\pi3y_0^2x_0$ 结果一样。<u>但直接写圆锥公式省下的两分钟，在 12 分的大题里很值钱。</u></p>
+        <p>④ <b>$\int\frac{\mathrm dx}{(1+x^2)^2}$ 是本讲第二次出现的"经典反常"</b>（第一次是 <a href="#xt101">习 10.1</a> 的 $\frac1{1+x^2}$）。<u>记住：$x=\tan t$ 后 $\frac1{(1+x^2)^n}\mathrm dx=\cos^{2n-2}t\,\mathrm dt$</u>，$n=1$ 得 $\mathrm dt$、$n=2$ 得 $\cos^2t\,\mathrm dt$。</p>
+        <p>⑤ <b>数值自检</b>：$\frac{\pi^2}6-\frac{\sqrt3}{16}\pi\approx1.645-0.340=1.305\gt0$ ✔</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= 收官 ================= -->
+  <h2 id="end"><span class="idx">收官</span>这一章考场上真正要带走的东西</h2>
+
+  <div class="key"><span class="tag">必记 · 一页纸带走版</span>
+    <ol>
+      <li><b>七个微元，一张表</b>（见 <a href="#s0">定位</a> 节）：面积 $|y_1-y_2|\mathrm dx$／$\frac12|r_2^2-r_1^2|\mathrm d\theta$；体积 $\pi y^2\mathrm dx$／$2\pi x|y|\mathrm dx$／$\frac23\pi r^3\sin\theta\mathrm d\theta$；弧长 $\mathrm ds$；侧面积 $2\pi|y|\mathrm ds$；平行截面 $A(x)\mathrm dx$。</li>
+      <li><b>★★ 体积用 $\mathrm dx$，侧面积用 $\mathrm ds$。</b>本讲最高频的失分点，没有之一。</li>
+      <li><b>绕 $y=c$ 转，被积 $(y-c)^2$；绕 $x=c$ 转，被积 $(x-c)^2$；绕斜线转，套公式 (10-1)</b>（先检查"垂线至多一交点"）。</li>
+      <li><b>参数方程题＝换元题</b>：$\mathrm dx=x'(t)\mathrm dt$ 必须换、<b>限也必须换</b>，且<u>上下限可能是反的</u>（星形线）。</li>
+      <li><b>大观表的 9 个 (*) 数背下来</b>：心形线 $\bigl(\frac32\pi a^2,\frac83\pi a^3,8a\bigr)$｜摆线 $\bigl(3\pi a^2,5\pi^2a^3,8a\bigr)$｜星形线 $\bigl(\frac38\pi a^2,\frac{32\pi}{105}a^3,6a\bigr)$。</li>
+      <li><b>弧长题的 $1+y'^2$ 一定是完全平方</b>——开不出来先怀疑自己求导错，别硬算。</li>
+      <li><b>"最值型"解答题（习 10.6/10.7）一半的分在论证上</b>：唯一驻点 + 二阶导（或单调性）⇒ 最值，且<u>答题目问的那个东西</u>。</li>
+      <li><b>无界区域＝反常积分</b>，要写 $\lim\limits_{b\to+\infty}$ 或说明收敛；$\lim\limits_{y\to0^+}y\ln y=0$ 这类极限必须落在卷面上。</li>
+    </ol>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 本章与相邻各讲的接口</span>
+    <ul>
+      <li><b>← 第 5 讲（微分学几何应用）</b>：切线、拐点、最值判定，本讲的解答题几乎题题要用。</li>
+      <li><b>← 第 8–9 讲（积分学）</b>：本讲列出的积分全靠它们算。<b>点火公式、区间再现、$\int\sec^3$、Γ 函数、反常积分判敛</b>在本讲出现频次极高。</li>
+      <li><b>→ 第 11 讲（积分等式与不等式）</b>：下一讲把"积分"从<u>算数值</u>转向<u>作论证</u>，是本讲的另一个方向。</li>
+      <li><b>→ 第 12 讲（物理应用）</b>：微元法完全相同，只是把"面积/体积"换成"功/压力/引力"。<b>本讲的微元法练熟了，第 12 讲基本是白送。</b></li>
+      <li><b>→ 第 14 讲（二重积分）</b>：形心公式的分子分母本来就是二重积分，本讲用的是它的累次积分形式。</li>
+    </ul>
+  </div>
+
+  <h3>落位索引 —— 38 道题一道不漏</h3>
+  <div class="gridwrap"><table>
+    <tr><th>来源</th><th>题号</th><th>一句话考点</th><th>落位</th></tr>
+    <tr><td rowspan="14"><b>基础30讲<br>例题 14</b></td><td>10.1</td><td>两幂函数围面积 + 裂项望远镜 + $1^\infty$</td><td><a href="#eg101">§一</a></td></tr>
+    <tr><td><b>10.2 ★★★</b></td><td>摆线一拱面积 $3a^2\pi$（参数方程＝换元）</td><td><a href="#eg102">§一 三层</a></td></tr>
+    <tr><td>10.3</td><td>伯努利双纽线面积 $a^2$（对称性 ×4）</td><td><a href="#eg103">§一</a></td></tr>
+    <tr><td>10.4</td><td>$\mathrm e^{-x}|\sin x|$ 无穷多拱 ⇒ 等比级数</td><td><a href="#eg104">§一 三层</a></td></tr>
+    <tr><td>10.5</td><td>先定定义域再套 $V_x$（$[0,2\pi]$ 是诱饵）</td><td><a href="#eg105">§二</a></td></tr>
+    <tr><td><b>10.6</b></td><td>函数方程求 $f$ ＋ 反解绕 $x$ 轴用 $V_y$ 公式</td><td><a href="#eg106">§二 三层</a></td></tr>
+    <tr><td><b>10.7 ★★</b></td><td>过原点切线 + 反常面积 + 绕 $x=1$（垫圈／公式(10-1) 两法）</td><td><a href="#eg107">§二 三层</a></td></tr>
+    <tr><td>10.8</td><td>平均值外壳，真考点是造变限积分 $F(x)=\int_x^{x+2}f$</td><td><a href="#eg108">§三</a></td></tr>
+    <tr><td>10.9</td><td>形心横坐标（答案不简洁是常态）</td><td><a href="#eg109">§七</a></td></tr>
+    <tr><td>10.10</td><td>弧长 $\ln3-\frac12$（$1+y'^2$ 是完全平方）</td><td><a href="#eg1010">§四</a></td></tr>
+    <tr><td>10.11</td><td>阿基米德螺线弧长（$\int\sec^3$ 循环）</td><td><a href="#eg1011">§四</a></td></tr>
+    <tr><td>10.12</td><td>$\sqrt{x-1}$ 旋转面积（两根号合并）</td><td><a href="#eg1012">§五</a></td></tr>
+    <tr><td>10.13</td><td>星形线旋转面 $\frac{48}5\pi$（凑微分优于点火）</td><td><a href="#eg1013">§五</a></td></tr>
+    <tr><td><b>10.14 ★★★</b></td><td>绕 $y=x$ 斜截面微元 + 误差抵消长注</td><td><a href="#eg1014">§六</a></td></tr>
+    <tr><td rowspan="9"><b>基础30讲<br>课后习题 9</b></td><td>10.1</td><td>反常体积 $\frac{\pi^2}2$</td><td><a href="#xt101">§二</a></td></tr>
+    <tr><td>10.2</td><td>圆环体 $2\pi^2k^2b$（平方差 + 帕普斯）</td><td><a href="#xt102">§二</a></td></tr>
+    <tr><td>10.3</td><td>以 $y$ 为参数的弧长（完全平方族母题）</td><td><a href="#xt103">§四</a></td></tr>
+    <tr><td>10.4</td><td>星形线全长 $6$（对称性甩掉绝对值）</td><td><a href="#xt104">§四</a></td></tr>
+    <tr><td>10.5</td><td>平均值 $\frac{\sqrt3+1}{12}\pi$</td><td><a href="#xt105">§三</a></td></tr>
+    <tr><td><b>10.6 ★</b></td><td>切线使面积最小（答的是切线，不是面积）</td><td><a href="#xt106">§十 三层</a></td></tr>
+    <tr><td><b>10.7 ★</b></td><td>$V_1+V_2$ 最大值 $\frac{129}5\pi$（大减小 + 唯一驻点）</td><td><a href="#xt107">§十 三层</a></td></tr>
+    <tr><td><b>10.8 ★★</b></td><td>摆线绕 $y$ 轴 $6\pi^3a^3$（柱壳 vs 垫圈两法）</td><td><a href="#xt108">§二 三层</a></td></tr>
+    <tr><td><b>10.9 ★</b></td><td>绕 $y=3$ 旋转 $\frac{448}{15}\pi$（两段微元恰好相同）</td><td><a href="#xt109">§二 三层</a></td></tr>
+    <tr><td rowspan="15"><b>高数18讲<br>例题 15</b></td><td><b>10.1 ★</b></td><td>心形线三连（$8a$／$\frac32\pi a^2$／$\frac83\pi a^3$）</td><td><a href="#qeg101">§八 三层</a></td></tr>
+    <tr><td>10.2</td><td>阿基米德螺线面积 $\frac43a^2\pi^3$</td><td><a href="#qeg102">§一</a></td></tr>
+    <tr><td>10.3</td><td>三叶玫瑰线 $\frac{\pi a^2}4$（一叶的积分限）</td><td><a href="#qeg103">§一</a></td></tr>
+    <tr><td><b>10.4 ★</b></td><td>摆线三连（$8a$／$3\pi a^2$／$5\pi^2a^3$）</td><td><a href="#qeg104">§八 三层</a></td></tr>
+    <tr><td><b>10.5 ★★</b></td><td>星形线三连 + <b>换限方向反了会出负号</b></td><td><a href="#qeg105">§八 三层</a></td></tr>
+    <tr><td><b>10.6 ★</b></td><td>叶形线：极坐标求面积 + 参数式求渐近线</td><td><a href="#qeg106">§一 三层</a></td></tr>
+    <tr><td>10.7</td><td>含参极限定义的分段函数（几何法秒杀）</td><td><a href="#qeg107">§九</a></td></tr>
+    <tr><td><b>10.8 ★</b></td><td>积分等式两端求导定 $f$ + 侧面积 $\frac{425}9\pi$</td><td><a href="#qeg108">§五 三层</a></td></tr>
+    <tr><td>10.9</td><td>反常体积定参数 $a=\mathrm e$（换底 + Γ）</td><td><a href="#qeg109">§二</a></td></tr>
+    <tr><td>10.10</td><td>变限积分曲线"全长"（真考点是定义域）</td><td><a href="#qeg1010">§四</a></td></tr>
+    <tr><td><b>10.11</b></td><td>弧长两问：$\sec x$ 型 / 视 $y$ 为自变量</td><td><a href="#qeg1011">§四 三层</a></td></tr>
+    <tr><td><b>10.12 ★</b></td><td>绕 $y=-1$：题目已把 $(y+1)^2$ 喂到嘴边</td><td><a href="#qeg1012">§二 三层</a></td></tr>
+    <tr><td>10.13</td><td>$\sqrt x\mathrm e^{-\frac32x}$ 反常体积 $\frac\pi9$</td><td><a href="#qeg1013">§二</a></td></tr>
+    <tr><td><b>10.14 ★</b></td><td>悬链线侧面积（$1+y'^2=y^2$）</td><td><a href="#qeg1014">§五 三层</a></td></tr>
+    <tr><td><b>10.15 ★★★</b></td><td>综合：拐点 + 圆锥 + 反常积分 $\frac{\pi^2}6-\frac{\sqrt3}{16}\pi$</td><td><a href="#qeg1015">§十 三层</a></td></tr>
+  </table></div>
+
+  <div class="outro">
+    <h3>下一步</h3>
+    <p>本讲之后，一元函数积分学的应用还剩两讲：<b>第 11 讲 积分等式与不等式</b>（从"算"转向"证"）、<b>第 12 讲 物理应用</b>（微元法原样搬到功、压力、引力上）。</p>
+    <p><a href="第09章_一元函数积分学的计算.html">← 上一章：第 9 章 一元函数积分学的计算</a>　·　<a href="../index.html">返回数学复盘中心</a></p>
+  </div>
+
+  <footer>
+    张宇《基础30讲》第 10 讲（书页 263–281）＋《高数18讲》第 10 讲（书页 105–119），共 34 页逐页转录。<br>
+    38 道题全收（基础例题 14 ＋ 课后习题 9 ＋ 强化例题 15），<b>17 张大题「想→写→校」三层卷面</b>，所有结论经 mpmath 高精度独立复算（87 项），书一处没错。
+  </footer>
+</div>
+
+<script>
+(function(){
+'use strict';
+var $=function(id){return document.getElementById(id);};
+function tex(el){ if(window.renderMathInElement&&el) try{ renderMathInElement(el,{delimiters:[
+  {left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]}); }catch(e){} }
+function fmt(v,n){ return (Math.abs(v)<1e-13?0:v).toFixed(n===undefined?4:n); }
+/* 复化辛普森 */
+function simp(f,a,b,n){ n=n||2000; if(n%2)n++; var h=(b-a)/n,s=f(a)+f(b),i;
+  for(i=1;i<n;i++) s+=f(a+i*h)*((i%2)?4:2); return s*h/3; }
+
+/* ============ 1. 绕谁转 · 体积五法对拍台 ============ */
+var REG={
+  sqrt:{name:'$y=\\sqrt x$ 与 $y=x$', f:function(x){return Math.sqrt(x);}, g:function(x){return x;},
+        fp:function(x){return 0.5/Math.sqrt(Math.max(x,1e-9));}, a:0,b:1,
+        ftex:'\\sqrt x', gtex:'x'},
+  par:{name:'$y=x^2$ 与 $y=0,x=1$', f:function(x){return x*x;}, g:function(){return 0;},
+       fp:function(x){return 2*x;}, a:0,b:1, ftex:'x^2', gtex:'0'},
+  sin:{name:'$y=\\sin x$ 与 $y=0$', f:function(x){return Math.sin(x);}, g:function(){return 0;},
+       fp:function(x){return Math.cos(x);}, a:0,b:Math.PI, ftex:'\\sin x', gtex:'0'},
+  lin:{name:'$y=1-x$ 与两轴', f:function(x){return 1-x;}, g:function(){return 0;},
+       fp:function(){return -1;}, a:0,b:1, ftex:'1-x', gtex:'0'}
+};
+var rvKey='sqrt', rvAx='x';
+function rvGeom(R){ // 面积与形心（网格二重积分，与切片公式独立）
+  var N=600,M=260,A=0,Mx=0,My=0,i,j,x,y1,y2,dx=(R.b-R.a)/N;
+  for(i=0;i<N;i++){ x=R.a+(i+0.5)*dx; y1=Math.min(R.f(x),R.g(x)); y2=Math.max(R.f(x),R.g(x));
+    var dy=(y2-y1)/M;
+    for(j=0;j<M;j++){ var y=y1+(j+0.5)*dy, da=dx*dy; A+=da; Mx+=x*da; My+=y*da; } }
+  return {A:A, xb:Mx/A, yb:My/A};
+}
+function rvCalc(){
+  var R=REG[rvKey], G=rvGeom(R), V=null, formula='', d=null, cross=false, note='';
+  var top=function(x){return Math.max(R.f(x),R.g(x));}, bot=function(x){return Math.min(R.f(x),R.g(x));};
+  if(rvAx==='x'){
+    V=Math.PI*simp(function(x){return top(x)*top(x)-bot(x)*bot(x);},R.a,R.b);
+    formula='V=\\pi\\int_{'+R.a.toFixed(0)+'}^{b}\\left[('+R.ftex+')^2-('+R.gtex+')^2\\right]\\mathrm dx';
+    d=G.yb;
+  }else if(rvAx==='y'){
+    V=2*Math.PI*simp(function(x){return x*(top(x)-bot(x));},R.a,R.b);
+    formula='V=2\\pi\\int_a^b x\\left['+R.ftex+'-('+R.gtex+')\\right]\\mathrm dx\\quad(\\text{柱壳})';
+    d=G.xb;
+  }else if(rvAx==='y1'){
+    V=Math.PI*simp(function(x){var t=1-bot(x),u=1-top(x);return t*t-u*u;},R.a,R.b);
+    formula='V=\\pi\\int_a^b\\left[(1-'+R.gtex+')^2-(1-'+R.ftex+')^2\\right]\\mathrm dx';
+    d=Math.abs(1-G.yb);
+    for(var k=0;k<=200;k++){var xx=R.a+(R.b-R.a)*k/200; if(bot(xx)<1&&top(xx)>1){cross=true;break;} }
+  }else if(rvAx==='x1'){
+    V=2*Math.PI*simp(function(x){return Math.abs(1-x)*(top(x)-bot(x));},R.a,R.b);
+    formula='V=2\\pi\\int_a^b|1-x|\\left['+R.ftex+'-('+R.gtex+')\\right]\\mathrm dx';
+    d=Math.abs(1-G.xb);
+    cross=(R.a<1&&R.b>1);
+  }else{ // y=x
+    V=Math.PI/Math.pow(2,1.5)*simp(function(x){var t=x-R.f(x);return t*t*Math.abs(R.fp(x)+1);},
+        Math.max(R.a,1e-7),R.b);
+    formula='V=\\dfrac\\pi{(A^2+B^2)^{3/2}}\\displaystyle\\int_a^b[x-f(x)]^2|f\'(x)+1|\\mathrm dx\\ \\ (A=1,B=-1,C=0)';
+    d=Math.abs(G.yb-G.xb)/Math.SQRT2;
+    for(var k2=0;k2<=200;k2++){var x2=R.a+(R.b-R.a)*k2/200;
+      if(bot(x2)<x2-1e-6&&top(x2)>x2+1e-6){cross=true;break;} }
+    if(rvKey!=='sqrt') note='（此区域的上下边界不含 $y=x$，公式 (10-1) 只算"曲线 $f$ 绕轴"，与本区域旋转体不同）';
+  }
+  var Vp=2*Math.PI*d*G.A;  // 帕普斯（独立路径）
+  return {V:V,Vp:Vp,G:G,formula:formula,cross:cross,note:note,d:d};
+}
+function rvDraw(){
+  var R=REG[rvKey], r=rvCalc(), W=640,H=260,L=60,Rr=430,T=20,B=215;
+  var xr=[Math.min(R.a,-0.2), Math.max(R.b,1.25)], yr=[-0.25,1.35];
+  if(rvKey==='sin'){xr=[-0.3,3.5];yr=[-0.35,1.45];}
+  var sx=function(x){return L+(Rr-L)*(x-xr[0])/(xr[1]-xr[0]);};
+  var sy=function(y){return B-(B-T)*(y-yr[0])/(yr[1]-yr[0]);};
+  var s='',i,N=160;
+  // 坐标轴
+  s+='<line x1="'+sx(xr[0])+'" y1="'+sy(0)+'" x2="'+sx(xr[1])+'" y2="'+sy(0)+'" stroke="var(--line)"/>';
+  s+='<line x1="'+sx(0)+'" y1="'+sy(yr[0])+'" x2="'+sx(0)+'" y2="'+sy(yr[1])+'" stroke="var(--line)"/>';
+  // 区域填充
+  var dpath='M'+sx(R.a)+','+sy(Math.min(R.f(R.a),R.g(R.a)));
+  for(i=0;i<=N;i++){var x=R.a+(R.b-R.a)*i/N; dpath+=' L'+sx(x)+','+sy(Math.max(R.f(x),R.g(x)));}
+  for(i=N;i>=0;i--){var x2=R.a+(R.b-R.a)*i/N; dpath+=' L'+sx(x2)+','+sy(Math.min(R.f(x2),R.g(x2)));}
+  dpath+=' Z';
+  s+='<path d="'+dpath+'" fill="var(--blue-soft)" stroke="var(--blue)" stroke-width="1.6"/>';
+  // 旋转轴
+  var axd='';
+  if(rvAx==='x') axd='M'+sx(xr[0])+','+sy(0)+' L'+sx(xr[1])+','+sy(0);
+  else if(rvAx==='y') axd='M'+sx(0)+','+sy(yr[0])+' L'+sx(0)+','+sy(yr[1]);
+  else if(rvAx==='y1') axd='M'+sx(xr[0])+','+sy(1)+' L'+sx(xr[1])+','+sy(1);
+  else if(rvAx==='x1') axd='M'+sx(1)+','+sy(yr[0])+' L'+sx(1)+','+sy(yr[1]);
+  else axd='M'+sx(Math.max(xr[0],yr[0]))+','+sy(Math.max(xr[0],yr[0]))+' L'+sx(Math.min(xr[1],yr[1]))+','+sy(Math.min(xr[1],yr[1]));
+  s+='<path d="'+axd+'" stroke="var(--red)" stroke-width="2" stroke-dasharray="6 4"/>';
+  // 当前微元（示意）
+  var xm=R.a+(R.b-R.a)*0.55, wpix=Math.max(6,(Rr-L)*(R.b-R.a)/(xr[1]-xr[0])*0.06);
+  var yl=Math.min(R.f(xm),R.g(xm)), yh=Math.max(R.f(xm),R.g(xm));
+  if(rvAx==='x'||rvAx==='y1'||rvAx==='y'||rvAx==='x1'){
+    s+='<rect x="'+(sx(xm)-wpix/2)+'" y="'+sy(yh)+'" width="'+wpix+'" height="'+(sy(yl)-sy(yh))+
+       '" fill="var(--green-soft)" stroke="var(--green)" stroke-width="1.4"/>';
+  }else{
+    var ym=(R.f(xm)+R.g(xm))/2;
+    s+='<line x1="'+sx(xm)+'" y1="'+sy(R.f(xm))+'" x2="'+sx((xm+R.f(xm))/2)+'" y2="'+sy((xm+R.f(xm))/2)+
+       '" stroke="var(--green)" stroke-width="2"/>';
+    s+='<circle cx="'+sx(xm)+'" cy="'+sy(R.f(xm))+'" r="3" fill="var(--green)"/>';
+  }
+  // 形心
+  s+='<circle cx="'+sx(r.G.xb)+'" cy="'+sy(r.G.yb)+'" r="3.5" fill="none" stroke="var(--purple)" stroke-width="1.8"/>';
+  s+='<text x="'+(sx(r.G.xb)+7)+'" y="'+(sy(r.G.yb)-5)+'" font-size="10.5" fill="var(--purple)">形心 ('+fmt(r.G.xb,3)+', '+fmt(r.G.yb,3)+')</text>';
+  // 右侧数据
+  var bx=452;
+  s+='<rect x="'+bx+'" y="14" width="176" height="200" rx="9" fill="var(--bg)" stroke="var(--line)"/>';
+  s+='<text x="'+(bx+12)+'" y="34" font-size="11.5" font-weight="700" fill="var(--accent)">两条独立路径</text>';
+  s+='<text x="'+(bx+12)+'" y="58" font-size="10.5" fill="var(--ink)">① 按公式切片积分</text>';
+  s+='<text x="'+(bx+12)+'" y="76" font-size="12" font-family="monospace" fill="var(--green)">V = '+fmt(r.V,6)+'</text>';
+  s+='<text x="'+(bx+12)+'" y="100" font-size="10.5" fill="var(--ink)">② 帕普斯 2π·d·A</text>';
+  s+='<text x="'+(bx+12)+'" y="118" font-size="12" font-family="monospace" fill="'+(r.cross?'var(--red)':'var(--green)')+'">V = '+fmt(r.Vp,6)+'</text>';
+  s+='<text x="'+(bx+12)+'" y="142" font-size="10.5" fill="var(--muted)">面积 A = '+fmt(r.G.A,5)+'</text>';
+  s+='<text x="'+(bx+12)+'" y="160" font-size="10.5" fill="var(--muted)">形心到轴 d = '+fmt(r.d,5)+'</text>';
+  s+='<text x="'+(bx+12)+'" y="184" font-size="10.5" fill="var(--muted)">差 = '+fmt(Math.abs(r.V-r.Vp),8)+'</text>';
+  s+='<text x="'+(bx+12)+'" y="204" font-size="10" fill="var(--muted)">（帕普斯仅在不跨轴时成立）</text>';
+  $('rvSvg').innerHTML=s;
+
+  var ok=Math.abs(r.V-r.Vp)<1e-4*Math.max(1,Math.abs(r.V));
+  $('rvSay').innerHTML='<b>该用的公式</b>：$'+r.formula+'$ '+r.note;
+  if(r.cross){
+    $('rvV').className='verdict v-no';
+    $('rvV').innerHTML='❌ <b>旋转轴穿过了区域内部</b>：轴两侧的部分转过来会<u>互相重叠</u>，'+
+      '此时既不能直接用柱壳/垫圈公式，帕普斯定理也失效（两个数对不上就是证据）。'+
+      '<b>正确做法：以轴为界把区域劈成两块，分别旋转后取"较大的那个"（不是相加）。</b>';
+  }else if(ok){
+    $('rvV').className='verdict v-ok';
+    $('rvV').innerHTML='✅ <b>两条独立路径一致</b>（差 '+fmt(Math.abs(r.V-r.Vp),8)+'）：公式列对了。'+
+      (rvAx==='yx'&&rvKey==='sqrt'?' 这正是 <b>基 例10.14</b> 的 $\\dfrac{\\sqrt2}{60}\\pi\\approx0.074048$。':'');
+  }else{
+    $('rvV').className='verdict v-inf';
+    $('rvV').innerHTML='⚠️ <b>两条路径不一致</b>：'+(rvAx==='yx'?
+      '公式 (10-1) 算的是"<u>单条曲线</u> $f$ 绕轴"扫出的实心体，而帕普斯算的是"<u>两条边界夹出的区域</u>"绕轴——'+
+      '只有当另一条边界正好躺在轴上（$y=\\sqrt x$ 与 $y=x$ 那一组）时两者才相等。':'请检查区域与轴的相对位置。');
+  }
+  tex($('rvSay')); tex($('rvV'));
+}
+$('rvRegion').addEventListener('change',function(){rvKey=this.value;rvDraw();});
+Array.prototype.forEach.call(document.querySelectorAll('[data-ax]'),function(b){
+  b.onclick=function(){ Array.prototype.forEach.call(document.querySelectorAll('[data-ax]'),function(z){z.classList.remove('on');});
+    b.classList.add('on'); rvAx=b.getAttribute('data-ax'); rvDraw(); };
+});
+rvDraw();
+
+/* ============ 2. 弧微分 ds 三形态 ============ */
+var DS={
+  cycloid:{t0:0.0001,t1:2*Math.PI, x:function(t){return t-Math.sin(t);}, y:function(t){return 1-Math.cos(t);},
+    dx:function(t){return 1-Math.cos(t);}, dy:function(t){return Math.sin(t);},
+    kind:'param', exact:'8', name:'摆线（$a=1$）', rect:true},
+  astroid:{t0:0.0001,t1:Math.PI/2, x:function(t){return Math.pow(Math.cos(t),3);}, y:function(t){return Math.pow(Math.sin(t),3);},
+    dx:function(t){return -3*Math.cos(t)*Math.cos(t)*Math.sin(t);}, dy:function(t){return 3*Math.sin(t)*Math.sin(t)*Math.cos(t);},
+    kind:'param', exact:'1.5（全长 6 的四分之一）', name:'星形线第一象限', rect:false},
+  circle:{t0:0,t1:2*Math.PI, x:function(t){return Math.cos(t);}, y:function(t){return Math.sin(t);},
+    dx:function(t){return -Math.sin(t);}, dy:function(t){return Math.cos(t);},
+    kind:'polar', r:function(){return 1;}, dr:function(){return 0;}, exact:'2π ≈ 6.283185', name:'单位圆 $r=1$', rect:false},
+  cardio:{t0:0.0001,t1:Math.PI, r:function(th){return 1-Math.cos(th);}, dr:function(th){return Math.sin(th);},
+    x:function(th){return (1-Math.cos(th))*Math.cos(th);}, y:function(th){return (1-Math.cos(th))*Math.sin(th);},
+    dx:function(th){return Math.sin(th)*Math.cos(th)-(1-Math.cos(th))*Math.sin(th);},
+    dy:function(th){return Math.sin(th)*Math.sin(th)+(1-Math.cos(th))*Math.cos(th);},
+    kind:'polar', exact:'4（半条，全长 8a=8）', name:'心形线上半 $r=1-\\cos\\theta$', rect:false},
+  parab:{t0:0,t1:2, x:function(t){return t;}, y:function(t){return t*t;},
+    dx:function(){return 1;}, dy:function(t){return 2*t;},
+    kind:'rect', yx:function(x){return x*x;}, ypx:function(x){return 2*x;},
+    exact:'≈ 4.646784', name:'抛物线 $y=x^2$（$0\\le x\\le2$）', rect:true}
+};
+var dsKey='cycloid';
+function dsLen(C){
+  var Ip=simp(function(t){return Math.hypot(C.dx(t),C.dy(t));},C.t0,C.t1,4000);
+  var poly=0,N=20000,i,px=C.x(C.t0),py=C.y(C.t0);
+  for(i=1;i<=N;i++){var t=C.t0+(C.t1-C.t0)*i/N,qx=C.x(t),qy=C.y(t);poly+=Math.hypot(qx-px,qy-py);px=qx;py=qy;}
+  var Ir=null,Ipl=null;
+  if(C.kind==='rect') Ir=simp(function(x){return Math.sqrt(1+C.ypx(x)*C.ypx(x));},C.x(C.t0),C.x(C.t1),4000);
+  if(C.kind==='polar') Ipl=simp(function(th){return Math.sqrt(C.r(th)*C.r(th)+C.dr(th)*C.dr(th));},C.t0,C.t1,4000);
+  return {param:Ip,poly:poly,rect:Ir,polar:Ipl};
+}
+function dsDraw(){
+  var C=DS[dsKey], t=+$('dsT').value, Z=+$('dsZ').value;
+  t=Math.max(C.t0,Math.min(C.t1*0.999,C.t0+(C.t1-C.t0)*(t-0.06)/(6.22-0.06)));
+  $('dsTv').textContent='t = '+t.toFixed(2);
+  $('dsZv').textContent='×'+Z;
+  var W=640,H=300,L=50,R=400,T=18,B=270,i,N=400;
+  var xs=[],ys=[];
+  for(i=0;i<=N;i++){var tt=C.t0+(C.t1-C.t0)*i/N; xs.push(C.x(tt)); ys.push(C.y(tt));}
+  var x0=Math.min.apply(null,xs),x1=Math.max.apply(null,xs),y0=Math.min.apply(null,ys),y1=Math.max.apply(null,ys);
+  var pad=0.12*Math.max(x1-x0,y1-y0);
+  x0-=pad;x1+=pad;y0-=pad;y1+=pad;
+  var sc=Math.min((R-L)/(x1-x0),(B-T)/(y1-y0));
+  var sx=function(x){return L+(x-x0)*sc;}, sy=function(y){return B-(y-y0)*sc;};
+  var s='',d='';
+  for(i=0;i<=N;i++) d+=(i?' L':'M')+sx(xs[i])+','+sy(ys[i]);
+  s+='<path d="'+d+'" fill="none" stroke="var(--blue)" stroke-width="2"/>';
+  // 微元三角形
+  var dt=(C.t1-C.t0)/60, X=C.x(t),Y=C.y(t), DX=C.dx(t)*dt*Z*1.6, DY=C.dy(t)*dt*Z*1.6;
+  s+='<line x1="'+sx(X)+'" y1="'+sy(Y)+'" x2="'+sx(X+DX)+'" y2="'+sy(Y)+'" stroke="var(--green)" stroke-width="2.4"/>';
+  s+='<line x1="'+sx(X+DX)+'" y1="'+sy(Y)+'" x2="'+sx(X+DX)+'" y2="'+sy(Y+DY)+'" stroke="var(--purple)" stroke-width="2.4"/>';
+  s+='<line x1="'+sx(X)+'" y1="'+sy(Y)+'" x2="'+sx(X+DX)+'" y2="'+sy(Y+DY)+'" stroke="var(--red)" stroke-width="2.4"/>';
+  s+='<circle cx="'+sx(X)+'" cy="'+sy(Y)+'" r="3.2" fill="var(--red)"/>';
+  s+='<text x="'+(sx(X+DX/2))+'" y="'+(sy(Y)+15)+'" font-size="11" fill="var(--green)" text-anchor="middle">dx</text>';
+  s+='<text x="'+(sx(X+DX)+8)+'" y="'+(sy(Y+DY/2))+'" font-size="11" fill="var(--purple)">dy</text>';
+  s+='<text x="'+(sx(X+DX/2)-14)+'" y="'+(sy(Y+DY/2)-5)+'" font-size="11" font-weight="700" fill="var(--red)">ds</text>';
+  // 数据框
+  var Lr=dsLen(C), bx=420;
+  var rows=[['参数式 ∫√(x′²+y′²)dt', Lr.param],
+            ['折线法（20000 段）', Lr.poly]];
+  if(Lr.rect!==null&&Lr.rect!==undefined) rows.push(['直角 ∫√(1+y′²)dx', Lr.rect]);
+  if(Lr.polar!==null&&Lr.polar!==undefined) rows.push(['极坐标 ∫√(r²+r′²)dθ', Lr.polar]);
+  s+='<rect x="'+bx+'" y="14" width="208" height="252" rx="9" fill="var(--bg)" stroke="var(--line)"/>';
+  s+='<text x="'+(bx+12)+'" y="34" font-size="11.5" font-weight="700" fill="var(--accent)">'+rows.length+' 条独立路径的弧长</text>';
+  rows.forEach(function(rw,k){
+    s+='<text x="'+(bx+12)+'" y="'+(60+k*38)+'" font-size="10" fill="var(--muted)">'+rw[0]+'</text>';
+    s+='<text x="'+(bx+12)+'" y="'+(76+k*38)+'" font-size="12.5" font-family="monospace" fill="var(--green)">'+fmt(rw[1],6)+'</text>';
+  });
+  s+='<text x="'+(bx+12)+'" y="'+(60+rows.length*38+8)+'" font-size="10" fill="var(--muted)">书上精确值</text>';
+  s+='<text x="'+(bx+12)+'" y="'+(76+rows.length*38+8)+'" font-size="11.5" fill="var(--accent)">'+C.exact.replace(/\$/g,'')+'</text>';
+  s+='<text x="'+(bx+12)+'" y="'+(76+rows.length*38+30)+'" font-size="10" fill="var(--muted)">当前微元：</text>';
+  s+='<text x="'+(bx+12)+'" y="'+(76+rows.length*38+46)+'" font-size="10.5" font-family="monospace" fill="var(--ink)">dx='+fmt(C.dx(t),3)+'dt, dy='+fmt(C.dy(t),3)+'dt</text>';
+  s+='<text x="'+(bx+12)+'" y="'+(76+rows.length*38+62)+'" font-size="10.5" font-family="monospace" fill="var(--red)">ds/dt='+fmt(Math.hypot(C.dx(t),C.dy(t)),4)+'</text>';
+  $('dsSvg').innerHTML=s;
+
+  var vals=rows.map(function(r){return r[1];});
+  var mx=Math.max.apply(null,vals), mn=Math.min.apply(null,vals);
+  var ok=(mx-mn)<2e-3*Math.max(1,mx);
+  $('dsV').className='verdict '+(ok?'v-ok':'v-inf');
+  $('dsV').innerHTML=ok
+    ? '✅ <b>'+rows.length+' 条路径全部一致</b>（极差 '+fmt(mx-mn,7)+'）——<b>$\\mathrm ds$ 只有一个，写法有三种。</b>'
+    : '⚠️ 路径间存在差异 '+fmt(mx-mn,6)+'（尖点或端点附近数值积分收敛慢时会出现）。';
+  $('dsSay').innerHTML='<b>'+C.name+'</b>：把红色斜边看成 $\\mathrm ds=\\sqrt{(\\mathrm dx)^2+(\\mathrm dy)^2}$——'+
+    '提出 $\\mathrm dx$ 就是直角坐标式，提出 $\\mathrm dt$ 就是参数式，换成极坐标算 $\\mathrm dx,\\mathrm dy$ 后平方相加、交叉项抵消就得 $\\sqrt{r^2+r\'^2}$。'+
+    '<b>三个公式从来不是三件事。</b>';
+  tex($('dsSay')); tex($('dsV'));
+}
+$('dsCurve').addEventListener('change',function(){dsKey=this.value;dsDraw();});
+$('dsT').addEventListener('input',dsDraw);
+$('dsZ').addEventListener('input',dsDraw);
+dsDraw();
+
+/* ============ 3. 基本图形大观 · 速查台 ============ */
+var GA=[
+ {n:1,star:1,label:'心形线',eq:'r=a(1-\\cos\\theta)',type:'polar',r:function(th){return 1-Math.cos(th);},t0:0,t1:2*Math.PI,
+  S:'\\dfrac32\\pi a^2',V:'\\dfrac83\\pi a^3（绕极轴）',Ls:'8a',starq:'S,V,s',
+  tip:'尖点朝右。四兄弟中最常考的一条，三个量全部要背。'},
+ {n:2,star:0,label:'心形线',eq:'r=a(1+\\cos\\theta)',type:'polar',r:function(th){return 1+Math.cos(th);},t0:0,t1:2*Math.PI,
+  S:'\\dfrac32\\pi a^2',V:'\\dfrac83\\pi a^3（绕极轴）',Ls:'8a',
+  tip:'尖点朝左。半角化简时用 $1+\\cos\\theta=2\\cos^2\\frac\\theta2$。'},
+ {n:3,star:0,label:'心形线',eq:'r=a(1-\\sin\\theta)',type:'polar',r:function(th){return 1-Math.sin(th);},t0:0,t1:2*Math.PI,
+  S:'\\dfrac32\\pi a^2',V:'/',Ls:'8a',
+  tip:'尖点朝上。书上体积栏留空——它的对称轴是 $y$ 轴，不叫"绕极轴"。'},
+ {n:4,star:0,label:'心形线',eq:'r=a(1+\\sin\\theta)',type:'polar',r:function(th){return 1+Math.sin(th);},t0:0,t1:2*Math.PI,
+  S:'\\dfrac32\\pi a^2',V:'/',Ls:'8a',tip:'尖点朝下。与上一条只差一个方向。'},
+ {n:5,star:0,label:'伯努利双纽线',eq:'r^2=a^2\\cos2\\theta',type:'lemn',phase:0,
+  S:'a^2',V:'\\dfrac{\\sqrt2}8\\pi^2a^3（绕 y 轴）',Ls:'/',
+  tip:'横躺的 8 字。<b>绕 $y$ 轴时两叶重合，只算一叶</b>。'},
+ {n:6,star:0,label:'伯努利双纽线',eq:'r^2=a^2\\sin2\\theta',type:'lemn',phase:1,
+  S:'a^2',V:'\\dfrac{\\pi^2}4a^3（绕极轴）',Ls:'/',
+  tip:'斜放的 8 字。<b>绕极轴时两叶不重合，要算两叶</b>（这是 5 与 6 体积不同的唯一原因）。'},
+ {n:7,star:0,label:'阿基米德螺线',eq:'r=a\\theta\\ (\\theta\\ge0)',type:'polar',r:function(th){return th/(2*Math.PI);},t0:0,t1:2*Math.PI,
+  S:'\\dfrac43a^2\\pi^3',V:'/',Ls:'/',
+  tip:'面积指 $(0,2\\pi)$ 段与极轴所围。$\\pi^3$ 来自上限 $2\\pi$ 的立方。弧长要用 $\\int\\sec^3$（见基 例10.11）。'},
+ {n:8,star:0,label:'对数螺线',eq:'r=\\mathrm e^{a\\theta}',type:'polar',r:function(th){return Math.exp(0.28*th)/Math.exp(0.28*2*Math.PI);},t0:0,t1:2*Math.PI,
+  S:'\\dfrac1{4a}(\\mathrm e^{4a\\pi}-1)',V:'/',Ls:'\\dfrac{\\sqrt{1+a^2}}a(\\mathrm e^{2a\\pi}-1)',
+  tip:'唯一给了弧长的螺线——因为 $r\'=ar$，根号里能提出 $r$，$\\sqrt{r^2+r\'^2}=r\\sqrt{1+a^2}$。'},
+ {n:9,star:0,label:'双曲螺线',eq:'r\\theta=a',type:'polar',r:function(th){return 0.35/Math.max(th,0.35);},t0:0.35,t1:2*Math.PI,
+  S:'\\dfrac{a^2}2\\Bigl(1-\\dfrac{\\sqrt3}3\\Bigr)',V:'/',Ls:'/',
+  tip:'面积指 $1\\le\\theta\\le\\sqrt3$ 那一段（书上用箭头特别标注）。'},
+ {n:10,star:0,label:'三叶玫瑰线',eq:'r=a\\sin3\\theta',type:'polar',r:function(th){return Math.abs(Math.sin(3*th));},t0:0,t1:Math.PI,
+  S:'\\dfrac{\\pi a^2}4',V:'/',Ls:'/',tip:'一叶取 $[0,\\frac\\pi3]$（相邻两个零点之间），再 ×3。'},
+ {n:11,star:0,label:'三叶玫瑰线',eq:'r=a\\cos3\\theta',type:'polar',r:function(th){return Math.abs(Math.cos(3*th));},t0:0,t1:Math.PI,
+  S:'\\dfrac\\pi4a^2',V:'/',Ls:'/',tip:'一叶取 $[-\\frac\\pi6,\\frac\\pi6]$（<b>跨过 0 对称</b>），再 ×3。'},
+ {n:12,star:0,label:'四叶玫瑰线',eq:'r=a\\sin2\\theta',type:'polar',r:function(th){return Math.abs(Math.sin(2*th));},t0:0,t1:2*Math.PI,
+  S:'\\dfrac\\pi2a^2',V:'/',Ls:'/',tip:'四叶恰是三叶的两倍。叶子落在四个象限里。'},
+ {n:13,star:0,label:'四叶玫瑰线',eq:'r=a\\cos2\\theta',type:'polar',r:function(th){return Math.abs(Math.cos(2*th));},t0:0,t1:2*Math.PI,
+  S:'\\dfrac\\pi2a^2',V:'/',Ls:'/',tip:'与上一条只差 45° 旋转，叶子沿坐标轴。'},
+ {n:14,star:1,label:'摆线一拱',eq:'x=a(t-\\sin t),\\ y=a(1-\\cos t)',type:'param',
+  x:function(t){return (t-Math.sin(t))/(2*Math.PI);},y:function(t){return (1-Math.cos(t))/(2*Math.PI);},t0:0,t1:2*Math.PI,
+  S:'3\\pi a^2',V:'5\\pi^2a^3（绕 x 轴）',Ls:'8a',starq:'S,V,s',
+  tip:'滚圆上一点的轨迹。面积＝滚圆面积的 3 倍，弧长＝直径的 4 倍。'},
+ {n:15,star:1,label:'星形线',eq:'x=a\\cos^3t,\\ y=a\\sin^3t',type:'param',
+  x:function(t){return Math.pow(Math.cos(t),3);},y:function(t){return Math.pow(Math.sin(t),3);},t0:0,t1:2*Math.PI,
+  S:'\\dfrac38\\pi a^2',V:'\\dfrac{32\\pi}{105}a^3（绕 x 轴）',Ls:'6a',starq:'S,V,s',
+  tip:'18 讲页边标"重点"。弧长/面积 ×4、<b>体积只 ×2</b>；换限方向是反的。'},
+ {n:16,star:1,label:'笛卡儿叶形线',eq:'x^3+y^3-3axy=0',type:'folium',
+  S:'\\dfrac32a^2',V:'/',Ls:'/',
+  tip:'面积用极坐标（$\\tan\\theta=t$ 凑微分），渐近线 $x+y+a=0$ 用参数式（$t\\to-1$）。'}
+];
+var gaCur=0, gaQuizOn=false, gaFilter='all';
+function gaPath(g,sc,cx,cy,thin){
+  var i,N=(g.type==='folium'?600:400),d='',pts=[];
+  if(g.type==='polar'){
+    for(i=0;i<=N;i++){var th=g.t0+(g.t1-g.t0)*i/N,rr=g.r(th);pts.push([rr*Math.cos(th),rr*Math.sin(th)]);}
+  }else if(g.type==='param'){
+    for(i=0;i<=N;i++){var t=g.t0+(g.t1-g.t0)*i/N;pts.push([g.x(t),g.y(t)]);}
+  }else if(g.type==='lemn'){
+    var segs=[[-Math.PI/4,Math.PI/4],[3*Math.PI/4,5*Math.PI/4]];
+    var out='';
+    segs.forEach(function(sg){
+      var dd='';
+      for(i=0;i<=200;i++){var th2=sg[0]+(sg[1]-sg[0])*i/200;
+        var c=(g.phase?Math.sin(2*(th2+Math.PI/4)):Math.cos(2*th2));
+        if(c<0)c=0; var rr2=Math.sqrt(c);
+        var X=rr2*Math.cos(th2+(g.phase?Math.PI/4:0)),Y=rr2*Math.sin(th2+(g.phase?Math.PI/4:0));
+        dd+=(i?' L':'M')+(cx+X*sc)+','+(cy-Y*sc);}
+      out+='<path d="'+dd+'" fill="none" stroke="var(--blue)" stroke-width="'+(thin?1.3:2)+'"/>';
+    });
+    return out;
+  }else{ // folium
+    for(i=0;i<=N;i++){
+      var tt=-0.98+ (i/N)*(12);   // t from -0.98 上行
+      if(Math.abs(1+tt*tt*tt)<0.02) continue;
+      var X2=3*tt/(1+tt*tt*tt)/3, Y2=3*tt*tt/(1+tt*tt*tt)/3;
+      if(Math.abs(X2)>1.6||Math.abs(Y2)>1.6){pts.push(null);continue;}
+      pts.push([X2,Y2]);
+    }
+    for(i=0;i<=N;i++){
+      var t3=-30+ (i/N)*(29);
+      if(Math.abs(1+t3*t3*t3)<0.02) continue;
+      var X3=3*t3/(1+t3*t3*t3)/3, Y3=3*t3*t3/(1+t3*t3*t3)/3;
+      if(Math.abs(X3)>1.6||Math.abs(Y3)>1.6){pts.push(null);continue;}
+      pts.push([X3,Y3]);
+    }
+  }
+  var started=false;
+  pts.forEach(function(p){
+    if(!p){started=false;return;}
+    d+=(started?' L':'M')+(cx+p[0]*sc)+','+(cy-p[1]*sc); started=true;});
+  return '<path d="'+d+'" fill="none" stroke="var(--blue)" stroke-width="'+(thin?1.3:2)+'"/>';
+}
+function gaGrid(){
+  var s='';
+  GA.forEach(function(g,k){
+    if(gaFilter==='star'&&!g.star) return;
+    s+='<button data-k="'+k+'" class="'+(k===gaCur?'on':'')+'">'+
+       '<svg viewBox="0 0 100 52">'+gaPath(g,17,50,26,true)+
+       '<line x1="6" y1="26" x2="94" y2="26" stroke="var(--line)" stroke-width=".7"/></svg>'+
+       (g.star?'★':'')+g.n+'. '+g.label+'</button>';
+  });
+  $('gaGrid').innerHTML=s;
+  Array.prototype.forEach.call($('gaGrid').querySelectorAll('button'),function(b){
+    b.onclick=function(){ gaCur=+b.getAttribute('data-k'); gaGrid(); gaShow(); };
+  });
+}
+function gaShow(){
+  var g=GA[gaCur];
+  $('gaSvg').innerHTML='<line x1="60" y1="150" x2="580" y2="150" stroke="var(--line)"/>'+
+    '<line x1="320" y1="18" x2="320" y2="282" stroke="var(--line)"/>'+
+    '<text x="584" y="146" font-size="11" fill="var(--muted)">x</text>'+
+    '<text x="325" y="26" font-size="11" fill="var(--muted)">y</text>'+
+    gaPath(g,105,320,150,false)+
+    '<text x="70" y="34" font-size="12.5" font-weight="700" fill="var(--accent)">'+(g.star?'★ ':'')+g.n+'. '+g.label+'</text>';
+  var hid=function(v){ return (gaQuizOn&&v!=='/')?'<span class="hid">＿＿＿</span>':(v==='/'?'—':'$'+v+'$'); };
+  $('gaQuant').innerHTML=
+    '<div'+(g.S==='/'?' class="none"':'')+'><b>所围面积</b>'+hid(g.S)+'</div>'+
+    '<div'+(g.V==='/'?' class="none"':'')+'><b>绕轴体积</b>'+hid(g.V)+'</div>'+
+    '<div'+(g.Ls==='/'?' class="none"':'')+'><b>弧长（数一二）</b>'+hid(g.Ls)+'</div>';
+  $('gaSay').innerHTML='<b>$'+g.eq+'$</b>　'+g.tip+
+    (g.starq?'　<b style="color:var(--red)">［这三个数带 (*)，必背］</b>':'');
+  tex($('gaQuant')); tex($('gaSay'));
+}
+$('gaQuiz').onclick=function(){ gaQuizOn=!gaQuizOn;
+  this.textContent=gaQuizOn?'🙉 默写模式：开（点数值区揭晓）':'🙈 默写模式：关';
+  this.classList.toggle('on',gaQuizOn); gaShow(); };
+$('gaQuant').addEventListener('click',function(){ if(gaQuizOn){ gaQuizOn=false;
+  $('gaQuiz').textContent='🙈 默写模式：关'; $('gaQuiz').classList.remove('on'); gaShow(); } });
+$('gaStar').onclick=function(){ gaFilter='star'; this.classList.add('on'); $('gaAll').classList.remove('on');
+  if(!GA[gaCur].star) gaCur=0; gaGrid(); gaShow(); };
+$('gaAll').onclick=function(){ gaFilter='all'; this.classList.add('on'); $('gaStar').classList.remove('on');
+  gaGrid(); gaShow(); };
+gaGrid(); gaShow();
+})();
+</script>
+</body>
+</html>
