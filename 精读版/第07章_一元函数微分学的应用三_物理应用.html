@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>精读版 · 高数 第7章 一元函数微分学的应用（三）· 物理应用与相关变化率</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],ignoredClasses:['nokatex']})"></script>
+<link rel="stylesheet" href="style.css">
+<style>
+/* ===== 本章专属：相关变化率沙盘 + 牛顿冷却实验台 + 切线面积变化率台 ===== */
+.tool{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:20px 0}
+.tool h4{margin:0 0 4px;font-size:1rem;color:var(--accent)}
+.tool .hint{color:var(--muted);font-size:.82rem;margin-bottom:12px;line-height:1.7}
+.ctl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0}
+.ctl button{font:inherit;font-size:.82rem;padding:4px 13px;border-radius:8px;cursor:pointer;
+  border:1px solid var(--line);background:var(--card);color:var(--muted)}
+.ctl button.on{background:var(--accent-soft);color:var(--accent);border-color:var(--accent);font-weight:700}
+.ctl button:hover{filter:brightness(.96)}
+.ctl label{font-size:.8rem;color:var(--muted);min-width:9.5em}
+.ctl input[type=range]{flex:1 1 150px;min-width:120px;accent-color:var(--accent)}
+.ctl .val{font-family:var(--mono);font-size:.78rem;color:var(--accent);min-width:6.5em;text-align:right}
+.scene{background:var(--bg);border:1px solid var(--line);border-radius:10px;margin:10px 0}
+.scene svg{display:block;width:100%;height:auto}
+.say{background:var(--accent-soft);border-radius:8px;padding:9px 13px;margin:10px 0;
+  font-size:.86rem;color:var(--accent);line-height:1.75;min-height:2em}
+.say b{color:var(--accent)}
+.verdict{font-size:.88rem;font-weight:700;border-radius:8px;padding:7px 13px;margin:10px 0;display:block}
+.v-ok{background:var(--green-soft);color:var(--green)}
+.v-no{background:var(--red-soft);color:var(--red)}
+.v-inf{background:var(--amber-soft);color:var(--amber)}
+.dq{width:100%;min-width:0;font-size:.8rem;margin:6px 0;border-collapse:collapse}
+.dq th,.dq td{padding:4px 8px;font-family:var(--mono);text-align:right;white-space:nowrap;border-bottom:1px solid var(--line)}
+.dq th:first-child,.dq td:first-child{text-align:left;font-family:var(--sans);white-space:normal}
+.dq td.hit{color:var(--green);font-weight:700}
+.dq td.miss{color:var(--red);font-weight:700}
+.dq tr.givn td{color:var(--blue)}
+.legend2{font-size:.78rem;color:var(--muted);line-height:1.7;margin-top:6px}
+.chip{display:inline-block;font-size:.72rem;border-radius:5px;padding:1px 7px;margin-right:6px}
+.c-b{background:var(--accent-soft);color:var(--accent)}
+.c-g{background:var(--green-soft);color:var(--green)}
+.c-r{background:var(--red-soft);color:var(--red)}
+.c-a{background:var(--amber-soft);color:var(--amber)}
+.c-p{background:var(--purple-soft);color:var(--purple)}
+table.dense{font-size:.84rem;min-width:420px}
+table.dense td{padding:5px 9px}
+figure.fig{margin:14px 0;text-align:center;background:var(--card);border:1px solid var(--line);
+  border-radius:10px;padding:12px 10px 8px;overflow-x:auto}
+figure.fig svg{max-width:100%;height:auto}
+figure.fig figcaption{font-size:.78rem;color:var(--muted);line-height:1.7;margin-top:6px;text-align:left;padding:0 4px}
+.figrow{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:12px 0}
+.figrow figure.fig{flex:1 1 220px;margin:0}
+/* 链式法则三段式 */
+.chain{background:var(--bg);border-radius:9px;padding:10px 13px;margin:8px 0;font-size:.88rem;line-height:2.1;overflow-x:auto}
+.chain .ar{color:var(--muted);margin:0 6px}
+.chain .hi{color:var(--purple);font-weight:700}
+/* 三步法条 */
+.steps3{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.steps3 div{flex:1 1 190px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 13px;font-size:.85rem;line-height:1.75}
+.steps3 div b{color:var(--accent);display:block;margin-bottom:3px}
+@media (max-width:560px){ .ctl{gap:6px} .ctl label{min-width:100%} .dq{font-size:.72rem} .figrow figure.fig{flex:1 1 160px} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../index.html">← 返回 数学一复盘中心</a>
+  <header>
+    <h1>精读版 · 高数第 7 章　一元函数微分学的应用（三）· 物理应用与相关变化率</h1>
+    <div class="sub">融合张宇《基础30讲·高数分册》第 7 讲（9 页）+ 《高数18讲》第 7 讲（6 页）· <b>全书最短的一讲</b>，而且两本书的<b>大半篇幅是数学三专属</b>（复利与连续复利、边际与弹性）——<span class="layer L-base">基础</span>与<span class="layer L-str">强化</span>加起来，数一实占内容<b>只有 5 道题</b>。<b>题量不够，本页用《1000 题》第 7 章的 8 道数一题补齐到 12 道，全收全解</b>，答案已用 sympy 符号复算 + scipy 数值对拍，零分歧 · 交付三个交互模块：<b>🎛️ 相关变化率沙盘</b>（5 个经典场景，滑动看链式法则的每一环，并用中心差分实时验证解析式）、<b>🌡️ 牛顿冷却实验台</b>（把"每降 10 倍温差用同样时间"这条数感做成可拖曲线）、<b>📐 切线面积变化率台</b>（拖切点看 $S(x)$ 与 $\frac{\mathrm dS}{\mathrm dx}$ 同步变化，一次讲透本章最难的综合题）。</div>
+  </header>
+
+  <div class="legend">
+    <b>这一页的三层结构：</b>
+    <span class="layer L-base">基础</span>= 导数的物理意义（$v,a$）与相关变化率的三步法；
+    <span class="layer L-str">强化</span>= 18 讲的<b>两条支线</b>（建相关变化率等式 / 写物理量微元建微分方程）。批注色块：
+    <span class="swatch" style="background:var(--blue)"></span><b style="color:var(--blue)">补讲</b>、
+    <span class="swatch" style="background:var(--amber)"></span><b style="color:var(--amber)">必记</b>、
+    <span class="swatch" style="background:var(--red)"></span><b style="color:var(--red)">陷阱</b>、
+    <span class="swatch" style="background:var(--green)"></span><b style="color:var(--green)">强化题型</b>。<br>
+    紫色 <b>例题</b> 卡里，<b>基</b>7.x = 基础30讲例题、<b>习</b>7.x = 基础30讲课后习题、<b>强</b>7.x = 高数18讲例题、<b>千基/千强</b>7.x = 1000 题基础篇/强化篇（四套各自编号，别混）。<b>每题都标 ✔</b> = 答案已被我用程序独立算过一遍，不是照抄扫描件。<br>
+    <b>📝 需要写过程的大题按「想 → 写 → 校」分三层</b>，对应做题的三个动作，<b>请按这个顺序用</b>：<br>
+    <b>💭 思路</b>＝<u>动手前</u>看：审题信号、为什么往这条路走、卡在哪里怎么破。<b>看完这层就合上页面自己写，别直接翻卷面。</b><br>
+    <b>✍️ 考场卷面</b>＝<u>写完对照</u>：可以照着抄上考场的完整解答，只写真要落笔的字，每个采分点标 <span class="pt" style="margin-left:0">⛳</span> 及分值。<br>
+    <b>📌 批注</b>＝<u>对照完校对</u>：适用边界、<span class="dock">扣分点</span>、提速技巧、跨章联系。<b>这层的话考场上一个字都不要写。</b><br>
+    选择填空题不加卷面层（考场上本就不写过程），保持「答案 → 分析 → 要害／法一法二」教学式排版。<br>
+    <b>⚠️ 本章的三层里最该盯的是<u>思路层的第一句</u></b>——相关变化率题的分不丢在计算上，<b>丢在"没把几何/物理关系写成一个方程"上</b>。方程一写出来，剩下的就是链式法则代数值，是全书最不容易算错的一类题。
+  </div>
+
+  <nav class="toc">
+    <a href="#s0">定位 · 这一章为什么这么短</a>
+    <a href="#s1">导数的物理意义 · $v$ 与 $a$ 的两条路</a>
+    <a href="#s2">相关变化率 · 三步法</a>
+    <a href="#s2b">🎛️ 相关变化率沙盘</a>
+    <a href="#s3">题型一 · 动点沿曲线（距离型）</a>
+    <a href="#s4">题型二 · 几何体膨胀（体积表面积型）</a>
+    <a href="#s5">题型三 · 角度与相对运动</a>
+    <a href="#s6">题型四 · 从图像读变化率</a>
+    <a href="#s7">题型五 · 微元建微分方程</a>
+    <a href="#s7b">🌡️ 牛顿冷却实验台</a>
+    <a href="#s8">题型六 · 积分 + 变化率综合</a>
+    <a href="#s8b">📐 切线面积变化率台</a>
+    <a href="#end">收官 + 落位索引</a>
+  </nav>
+
+  <!-- ================= s0 定位 ================= -->
+  <h2 id="s0"><span class="idx">定位</span>这一章在干什么：把链式法则挂到"时间"上</h2>
+
+  <div class="key"><span class="tag">必记 · 一句话概括整章</span>
+    <p><b>整章只有一个动作</b>：题目给你两个量之间的<b>几何或物理关系</b>（一个方程），给你其中一个量对时间的变化率，问另一个量对时间的变化率。你要做的是<b>把那个关系式两边对 $t$ 求导</b>——</p>
+    <div class="fml">$\underbrace{F(A,B)=0}_{\text{关系式（几何/物理）}}\ \xrightarrow{\ \text{两边对 }t\text{ 求导}\ }\ \underbrace{F_A\cdot\frac{\mathrm dA}{\mathrm dt}+F_B\cdot\frac{\mathrm dB}{\mathrm dt}=0}_{\text{相关变化率等式}}\ \xrightarrow{\ \text{代数值}\ }\ \text{未知变化率}$</div>
+    <p><b>它是第 4 章"隐函数求导 / 复合函数求导"的一次应用</b>，唯一的新东西是：<b>所有变量都被看成时间 $t$ 的函数</b>，于是每个变量求导都要多带一个 $\frac{\mathrm d\,\cdot}{\mathrm dt}$ 的尾巴。技术上没有任何新工具。</p>
+  </div>
+
+  <div class="dolinks">
+    <div class="t">本章体量与"数一实占率"</div>
+    基础30讲第 7 讲 <b>p.186–194（9 页）</b> · 高数18讲第 7 讲 <b>p.72–77（6 页）</b>，共 <b>15 页</b>，是全书最短的一讲。
+    <b>但其中数一要考的只有开头两节</b>：基础讲的「一、物理应用与相关变化率（仅数学一、数学二）」占 2 页 + 1 例，强化讲的「第一部分 求解物理应用题（仅数学一、数学二）」占 2 页 + 2 例。
+    <div class="note"><b>⚠️ 明确跳过（数学三专属，考纲外，不要花时间）</b>：基础讲「二、复利与连续复利」（例 7.2）、「三、导数的经济应用」（例 7.3–7.5、习 7.2、习 7.4）；强化讲「第二部分 求解经济应用题」（例 7.3–7.5）。<b>边际、弹性、$\eta_d$、$\frac{Ey}{Ex}$ 这些符号数一不考，见到直接翻页。</b></div>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 那么这一章值得花多少时间</span>
+    <ul>
+      <li><b>纯相关变化率单独出题，难度是全书倒数第一</b>——书上原话：「<b>单独出题不难</b>」。会写关系式就满分，写不出关系式就零分，中间没有灰色地带。<b>所以这一章的复习目标不是"练熟"，是"把五种常见关系式认全"</b>（距离、体积表面积、角度、相对位置、面积），本页 §三–§六 就是按这五类排的。</li>
+      <li><b>真正的考点在"和微分方程结合"</b>——书上两处都提示了：「常见的是速度、位移、加速度与相关变化率的<b>综合题</b>，<b>难度在于和微分方程相结合</b>」「更为综合的物理应用会涉及微分方程，将在<b>第 15 讲</b>学习」。<b>本章的 <a href="#eg72q">强 7.2</a>（牛顿冷却）就是那种题的最小样本</b>，把它吃透，第 15 讲的物理应用题就只剩解方程的活。</li>
+      <li><b>★ 一个提前埋的钩子</b>：<a href="#s1">§一</a>里 $a=v\dfrac{\mathrm dv}{\mathrm ds}$ 这条写法，本章一道题都用不上，<b>但它是第 15 讲"可降阶微分方程 $y''=f(y,y')$"的入口</b>。书上眉批专门标了「更利于解决含 $s,v$ 不涉及 $t$ 的相关微分方程问题，第 15 讲再学习」。<b>现在记住这句话本身，比记公式更重要。</b></li>
+    </ul>
+  </div>
+
+  <!-- ================= s1 物理意义 ================= -->
+  <h2 id="s1"><span class="idx">一</span>导数的物理意义：$v$ 与 $a$，以及 $a$ 的两条写法</h2>
+
+  <div class="key"><span class="tag">必记 · 基础30讲 p.186（三个物理概念）</span>
+    <p>①<b>位移对时间的变化率 = 速度</b>；②<b>速度对时间的变化率 = 加速度</b>；③<b>牛顿第二定律 $F=ma$</b>（力 = 质量 × 加速度）。</p>
+    <p>已知质点运动的位移 $s$ 关于时间 $t$ 的函数为 $s=s(t)$，称它为质点的<b>运动方程（位移方程）</b>，则</p>
+    <div class="fml">$v(t)=\lim\limits_{\Delta t\to0}\dfrac{\Delta s}{\Delta t}=s'(t)=\dfrac{\mathrm ds}{\mathrm dt},\qquad a(t)=\lim\limits_{\Delta t\to0}\dfrac{\Delta v}{\Delta t}=v'(t)=s''(t)$</div>
+    <p>这就是<b>导数的物理意义</b>。</p>
+  </div>
+
+  <div class="zy"><span class="tag">强化题型 · ★ 加速度的两条写法，取舍标准是"题里没有谁"</span>
+    <p>18 讲 p.73 把书上的眉批展开成一条明确的分岔（<b>这是本章唯一需要"选路"的地方</b>）：</p>
+    <div class="gridwrap"><table class="dense">
+      <tr><th>写法</th><th>式子</th><th>消掉了谁</th><th>什么时候用</th></tr>
+      <tr><td><b>常规</b></td><td>$a=\dfrac{\mathrm dv}{\mathrm dt}=\dfrac{\mathrm d^2s}{\mathrm dt^2}$</td><td>消掉 <b>$v$</b></td><td>题目给的是 $s$ 与 $t$ 的关系（有时间坐标）</td></tr>
+      <tr><td><b>★ 换元</b></td><td>$a=\dfrac{\mathrm dv}{\mathrm dt}=\dfrac{\mathrm dv}{\mathrm ds}\cdot\dfrac{\mathrm ds}{\mathrm dt}=v\dfrac{\mathrm dv}{\mathrm ds}$</td><td>消掉 <b>$t$</b></td><td><b>题里根本不出现 $t$</b>，只给 $v$ 与 $s$（或 $F$ 与 $s$）的关系</td></tr>
+    </table></div>
+    <p><b>判据一句话</b>：<b>题干里没出现的那个变量，就是你要消掉的那个。</b>受力题常写成「阻力与速度平方成正比，求走到 $s$ 处的速度」——全程没有 $t$，那就必走 $v\frac{\mathrm dv}{\mathrm ds}$，否则会凭空引入一个求不出来的 $t$。</p>
+    <p><span class="chip c-a">第 15 讲预告</span>这条换元的正式名字叫<b>「$y''=f(y,y')$ 型可降阶方程」的降阶法</b>：令 $p=y'$，把 $y''$ 写成 $p\dfrac{\mathrm dp}{\mathrm dy}$，二阶方程立刻降成一阶。<b>本章先把这个动作在物理语境里认一遍，第 15 讲就不用重新理解了。</b></p>
+  </div>
+
+  <!-- ================= s2 相关变化率 ================= -->
+  <h2 id="s2"><span class="idx">二</span>相关变化率：三步法（本章唯一的方法论）</h2>
+
+  <div class="key"><span class="tag">必记 · 书上「方法总结」原话（基础30讲 p.188）</span>
+    <p>涉及相关变化率问题：<b>①建立相关变量方程；②求导找出相关变化率</b>，进而通过已知变化率求未知变化率。</p>
+    <p>展开成可执行的三步：</p>
+    <div class="steps3">
+      <div><b>第 1 步　写关系式</b>把题里的<b>几何/物理关系</b>写成一个含两个（或多个）变量的方程。<span style="color:var(--red)">这一步定生死</span>：$l=\sqrt{x^2+y^2}$、$V=\pi r^2h$、$\theta=\arctan\frac h{10}$……</div>
+      <div><b>第 2 步　两边对 $t$ 求导</b>把每个变量都当成 $t$ 的函数（复合函数求导），每个变量的导数都带一条 $\frac{\mathrm d\,\cdot}{\mathrm dt}$ 的尾巴。<b>先求导，后代数值。</b></div>
+      <div><b>第 3 步　代入当前时刻的数值</b>把当前时刻的<b>位置量</b>（$x,y,r,h$）和<b>已知变化率</b>一起代进去，解出未知变化率。</div>
+    </div>
+    <p><b>⚠️ 第 2、3 步的顺序不能反</b>——<span class="dock">最常见的扣分点</span>：先把 $x=9$ 代进关系式（关系式变成一个常数），再求导，结果永远是 0。<b>数值只能在求导<u>之后</u>代。</b></p>
+  </div>
+
+  <div class="zy"><span class="tag">强化题型 · 18 讲的两条支线（三向解题法，p.72）</span>
+    <p><b>O（盯住目标）= 变化率。</b>然后分两条支线走：</p>
+    <div class="gridwrap"><table class="dense">
+      <tr><th>支线</th><th>做什么</th><th>解题编码</th><th>本页题目</th></tr>
+      <tr><td><b>一</b></td><td><b>寻找、建立相关变化率等式并求解</b>（就是上面的三步法）</td><td>$D_1$ 常规操作 + $D_2$ 脱胎换骨</td><td><a href="#s3">§三</a>–<a href="#s6">§六</a>，共 10 题</td></tr>
+      <tr><td><b>二</b></td><td><b>根据题设写出物理量微元（微段常量化），建立等式并求解</b>：「$A$ 对 $t$ 的变化率与 $B$ 成正比」⇒ $\dfrac{\mathrm dA}{\mathrm dt}=kB\ (k\ne0)$，<b>建立微分方程并求解</b></td><td>$D_1$ + $D_2$ + $D_{22}$ 转换等价表述 + $D_{42}$ 引入符号</td><td><a href="#s7">§七</a>（牛顿冷却）</td></tr>
+    </table></div>
+    <p><b>两条支线的分界线非常清楚</b>：题目问的是<b>某一瞬间</b>的变化率 → 支线一，纯代数；题目问的是<b>过一段时间之后</b>会怎样 → 支线二，必须解微分方程。<b>「30 分钟后降到 30℃」这种带时间跨度的句子，就是支线二的信号灯。</b></p>
+    <p><span class="chip c-b">$D_{42}$ 引入符号</span>是本章出镜率最高的编码：题目里那个要求的量<b>常常没有名字</b>（"质点与原点的距离"、"两车间的距离"），<b>你得自己设 $L$、设 $s$</b>。18 讲在 <a href="#eg71q">强 7.1</a> 的解答旁专门标了这个编码——<b>设符号这个动作本身就是解题的第一步，不是草稿纸上的小事。</b></p>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 三个能省一半计算量的小手法（本章通用）</span>
+    <ul>
+      <li><b>★ 带根号就先平方</b>：$l=\sqrt{x^2+y^2}$ 直接求导要处理 $\frac1{2\sqrt{\cdot}}$，而写成 $l^2=x^2+y^2$ 再求导得 $2l\frac{\mathrm dl}{\mathrm dt}=2x\frac{\mathrm dx}{\mathrm dt}+2y\frac{\mathrm dy}{\mathrm dt}$，<b>全程无根号，只在最后代 $l$ 的数值时开一次方</b>。<a href="#eg71q">强 7.1</a>、<a href="#egx73">习 7.3</a> 用的都是这招。</li>
+      <li><b>能消元就消元，消不掉就联立</b>：<a href="#eg71">基 7.1</a> 把 $y=x^3$ 代进去化成一元（$l=\sqrt{x^2+x^6}$）；<a href="#egq71">千基 7.1</a> 保留 $y$，<b>把曲线方程 $9y=4x^2$ 也对 $t$ 求导</b>，两式联立。<b>后者更通用</b>——曲线是隐式给的（$F(x,y)=0$ 解不出 $y$）时只能走这条。</li>
+      <li><b>先看单位</b>：问"距离的变化率"答案单位是 cm/s，问"面积的变化率"是 cm²/s。<b>代完数值先扫一眼单位对不对</b>，能抓出"把 $\frac{\mathrm dS}{\mathrm dt}$ 写成 $\frac{\mathrm dr}{\mathrm dt}$"这类张冠李戴。</li>
+    </ul>
+  </div>
+
+  <!-- ================= s2b 沙盘 ================= -->
+  <h2 id="s2b"><span class="idx">工具</span>🎛️ 相关变化率沙盘</h2>
+
+  <div class="tool">
+    <h4>🎛️ 五个经典场景 · 滑动看链式法则的每一环</h4>
+    <div class="hint">本章的 12 道题只有 <b>5 类关系式</b>。这个沙盘把每一类做成一个可拖动的场景：左边滑当前状态，右边的表格实时显示<b>①已知变化率 ②关系式求导得到的桥梁 ③解出的未知变化率</b>，并且每个未知变化率都同时给出<b>解析值</b>与<b>中心差分数值微分值</b>（$\frac{q(\tau_0+h)-q(\tau_0-h)}{2h},\ h=10^{-5}$）——<b>两列对不上就说明公式推错了</b>，这就是把"程序对拍"搬到了页面里。<br>
+    每个场景都标了它对应本页的哪道题，拖到题目给的数值上，表格里应该出现书上的答案。</div>
+
+    <div class="ctl" id="scnBtns"></div>
+
+    <div class="scene" id="scnBox"></div>
+
+    <div class="ctl" id="scnCtl"></div>
+
+    <div class="say" id="scnSay"></div>
+
+    <div class="gridwrap"><table class="dq" id="scnTab"></table></div>
+
+    <div id="scnVerdict"></div>
+
+    <div class="legend2">
+      <span class="chip c-b">蓝行</span>题目<b>给定</b>的变化率（沙盘里由滑块直接控制）
+      <span class="chip c-p">紫行</span>由关系式<b>求导得到</b>的桥梁量
+      <span class="chip c-g">绿行</span>要求的<b>未知变化率</b>——最后两列必须一致。<br>
+      <b>看法建议</b>：先别看表，自己在纸上把关系式两边对 $t$ 求导写出来，再拖滑块对答案。<b>沙盘是用来验证你的式子的，不是用来代替你写式子的。</b>
+    </div>
+  </div>
+
+  <!-- ================= s3 题型一 ================= -->
+  <h2 id="s3"><span class="idx">三</span>题型一 · 动点沿曲线：距离的变化率（4 题）</h2>
+
+  <div class="key"><span class="tag">必记 · 这一类的关系式模板</span>
+    <p>动点 $P(x,y)$ 沿曲线 $C:\ y=f(x)$（或 $F(x,y)=0$）运动，求某段距离 $l$ 对时间的变化率。关系式永远是<b>勾股定理</b>：</p>
+    <div class="fml">$l^2=x^2+y^2\quad\text{（到原点）}\qquad\text{或}\qquad l^2=(x-x_0)^2+(y-y_0)^2\quad\text{（到定点）}$</div>
+    <p>两条走法，视曲线能否显式解出而定：</p>
+    <div class="chain">
+      <b>走法甲（消元）</b>：把 $y=f(x)$ 代入 <span class="ar">→</span> $l=l(x)$ 一元 <span class="ar">→</span> <span class="hi">$\dfrac{\mathrm dl}{\mathrm dt}=\dfrac{\mathrm dl}{\mathrm dx}\cdot\dfrac{\mathrm dx}{\mathrm dt}$</span>　<span style="color:var(--muted)">（曲线简单时最快）</span><br>
+      <b>走法乙（联立）</b>：$l^2=x^2+y^2$ 与曲线方程<b>都</b>对 $t$ 求导 <span class="ar">→</span> 得两个等式 <span class="ar">→</span> 先从曲线式解出 <span class="hi">$\dfrac{\mathrm dy}{\mathrm dt}$</span> <span class="ar">→</span> 再代入距离式　<span style="color:var(--muted)">（曲线是隐式时唯一可行）</span>
+    </div>
+  </div>
+
+  <!-- 基 7.1 -->
+  <div class="eg" id="eg71">
+    <div class="q"><span class="no">基 7.1</span><b>（填空 · 本章唯一的教材例题）</b>已知动点 $P$ 在曲线 $y=x^3$ 上运动，记坐标原点与点 $P$ 间的距离为 $l$。若点 $P$ 的横坐标对时间的变化率为常数 $v_0$，则当点 $P$ 运动到点 $(1,1)$ 时，$l$ 对时间的变化率是______。</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$2\sqrt2\,v_0$</span>　<span class="exam">✔ 已复算（sympy 符号）</span></p>
+
+      <p><span class="lab">分析</span>走<b>走法甲</b>：曲线能显式解出，直接代掉 $y$。由题设知</p>
+      <div class="fml">$l=\sqrt{x^2+y^2}=\sqrt{x^2+x^6}$</div>
+      <p>则（链式法则，把 $l$ 看成 $x$ 的函数、$x$ 看成 $t$ 的函数）</p>
+      <div class="fml">$\dfrac{\mathrm dl}{\mathrm dt}=\boxed{\dfrac{\mathrm dl}{\mathrm dx}}\cdot\boxed{\dfrac{\mathrm dx}{\mathrm dt}}=\dfrac{2x+6x^5}{2\sqrt{x^2+x^6}}\cdot v_0$</div>
+      <div class="fml">$\left.\dfrac{\mathrm dl}{\mathrm dt}\right|_{x=1}=\dfrac{8}{2\sqrt2}v_0=2\sqrt2\,v_0$</div>
+
+      <div class="trap"><span class="tag">陷阱 · 三个一秒钟的自检</span>
+        <ul>
+          <li><b>别忘了乘 $v_0$。</b>题目问的是"对<b>时间</b>的变化率"，$\frac{\mathrm dl}{\mathrm dx}$ 只是半成品。<b>凡是问"对时间"，答案里必然带着已知的那个 $\frac{\mathrm dx}{\mathrm dt}$</b>，答案里不含 $v_0$ 就一定漏了一环。</li>
+          <li><b>$x=1$ 要在求导之后代。</b>先代 $x=1$ 得 $l=\sqrt2$ 是个常数，求导就是 0。</li>
+          <li><b>数感核对</b>：$P(1,1)$ 处曲线切线斜率 $y'=3$，方向向量 $\propto(1,3)$；位置向量 $(1,1)/\sqrt2$。距离变化率 = 速度在<b>径向</b>的投影 $=\frac{(1,3)\cdot(1,1)}{\sqrt2}v_0=\frac4{\sqrt2}v_0=2\sqrt2v_0$ ✓。<b>这个"投影"视角对所有距离型题都成立</b>，可以当秒杀法用。</li>
+        </ul>
+      </div>
+
+      <div class="mine"><span class="tag">补讲 · 「$\frac{\mathrm dl}{\mathrm dt}$ = 速度的径向投影」这条秒杀法</span>
+        <p>对任意动点 $P(t)$ 和定点 $O$，记 $\vec r=\overrightarrow{OP}$，$l=|\vec r|$，则</p>
+        <div class="fml">$\dfrac{\mathrm dl}{\mathrm dt}=\dfrac{\vec r\cdot\vec v}{|\vec r|}\qquad(\vec v=\dot{\vec r}\ \text{为速度向量})$</div>
+        <p>推导就一行：$l^2=\vec r\cdot\vec r\Rightarrow 2l\dot l=2\vec r\cdot\vec v$。<b>它把"距离型"题全部秒掉</b>：<a href="#egq71">千基 7.1</a> 是 $\frac{(3,4)\cdot(30,80)}{5}=\frac{410}5=82$，<b>心算 3 秒</b>。填空题用它，解答题还是老老实实写三步法（<span class="dock">阅卷按步给分，跳步会丢过程分</span>）。</p>
+        <p><span class="chip c-a">跨章</span>这条式子第 9 章（多元微分）会以「方向导数 = 梯度的投影」的面目再来一次，<b>本质是同一件事：变化率 = 内积。</b></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 习 7.1 / 千强 7.1 -->
+  <div class="eg" id="egx71">
+    <div class="q"><span class="no">习 7.1</span><span class="no" style="margin-left:4px">＝千强 7.1</span><b>（填空 · 两本书里的同一道题）</b>质点 $P$ 沿抛物线 $x=y^2\ (y\gt0)$ 移动，$P$ 的横坐标 $x$ 对时间的变化率为 $5\ \mathrm{cm/s}$。当 $x=9$ 时，点 $P$ 到原点 $O$ 的距离对时间的变化率为______。</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\dfrac{95}{6\sqrt{10}}=\dfrac{19\sqrt{10}}{12}\approx5.007\ \mathrm{cm/s}$</span>　<span class="exam">✔ 已复算（两个写法 sympy 验证恒等）</span></p>
+
+      <p><span class="lab">分析</span>注意抛物线是 <b>$x=y^2$</b>（开口朝右），所以 $y^2=x$，直接代进距离式：</p>
+      <div class="fml">$s=\sqrt{x^2+y^2}=\sqrt{x^2+x}$</div>
+      <p>于是</p>
+      <div class="fml">$\dfrac{\mathrm ds}{\mathrm dt}=\dfrac{\mathrm d}{\mathrm dx}\sqrt{x^2+x}\cdot\dfrac{\mathrm dx}{\mathrm dt}=\dfrac{5(2x+1)}{2\sqrt{x^2+x}},\qquad\left.\dfrac{\mathrm ds}{\mathrm dt}\right|_{x=9}=\dfrac{5\times19}{2\sqrt{90}}=\dfrac{95}{6\sqrt{10}}$</div>
+
+      <div class="trap"><span class="tag">陷阱 · ⚠️ 两本书给了两个"长得不一样"的答案，别以为有一本印错</span>
+        <p><b>基础30讲习题解答写 $\dfrac{95}{6\sqrt{10}}$，1000 题强化篇解析写 $\dfrac{19\sqrt{10}}{12}$。</b>这是<b>同一个数</b>：</p>
+        <div class="fml">$\dfrac{95}{6\sqrt{10}}=\dfrac{95\sqrt{10}}{60}=\dfrac{19\sqrt{10}}{12}\approx5.0069$</div>
+        <p>（分子分母同除 5。前者未有理化，后者有理化了。）<b>我第一遍对答案时也愣了一下，程序验完确认恒等。</b>考场上填空题<b>两种写法都给分</b>，但<u>习惯上交卷前把根号有理化</u>，写 $\frac{19\sqrt{10}}{12}$ 更稳。</p>
+      </div>
+
+      <div class="mine"><span class="tag">补讲 · $y\gt0$ 这个条件在干什么</span>
+        <p>$x=y^2$ 对应 $y=\pm\sqrt x$ 两支。<b>题目补 $y\gt0$ 是为了让点唯一</b>（取上支）。本题因为距离式里只出现 $y^2$，加不加这个条件答案都一样——<b>但如果问的是"$y$ 的变化率"，符号就至关重要了</b>：$\frac{\mathrm dy}{\mathrm dt}=\frac1{2y}\frac{\mathrm dx}{\mathrm dt}$，上支为正、下支为负。<b>见到"$y\gt0$"这种限定，先想清楚它是不是在定符号。</b></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 千基 7.1 -->
+  <div class="eg" id="egq71">
+    <div class="q"><span class="no">千基 7.1</span><b>（填空 · 走法乙的样板）</b>一动点 $P$ 在曲线 $9y=4x^2$ 上运动，设坐标轴的单位长度是 $1\ \mathrm{cm}$，若点 $P$ 横坐标的变化率是 $30\ \mathrm{cm/s}$，则当点 $P$ 经过点 $(3,4)$ 时，点 $P$ 到原点距离的变化率为______。</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$82\ \mathrm{cm/s}$</span>　<span class="exam">✔ 已复算（并验证 $(3,4)$ 确在曲线上：$9\times4=36=4\times3^2$）</span></p>
+
+      <p><span class="lab">分析</span>解析走的是<b>走法乙</b>——设 $P(x,y)$，则 $l=\sqrt{x^2+y^2}$，且 $9y=4x^2$，<b>两个等式均对 $t$ 求导</b>：</p>
+      <div class="fml">$\dfrac{\mathrm dl}{\mathrm dt}=\dfrac{x\frac{\mathrm dx}{\mathrm dt}+y\frac{\mathrm dy}{\mathrm dt}}{\sqrt{x^2+y^2}},\qquad 9\dfrac{\mathrm dy}{\mathrm dt}=8x\dfrac{\mathrm dx}{\mathrm dt}$</div>
+      <p>由题设 $x=3,\ y=4,\ \dfrac{\mathrm dx}{\mathrm dt}=30$，则 $\dfrac{\mathrm dy}{\mathrm dt}=\dfrac{8\times3\times30}{9}=80\ \mathrm{cm/s}$，$\sqrt{x^2+y^2}=5$，故</p>
+      <div class="fml">$\dfrac{\mathrm dl}{\mathrm dt}=\dfrac{3\times30+4\times80}{5}=\dfrac{410}{5}=82\ (\mathrm{cm/s})$</div>
+
+      <div class="key"><span class="tag">必记 · 走法甲 vs 走法乙，本题两条都通</span>
+        <p><b>走法甲（消元）</b>：$y=\frac49x^2\Rightarrow l=\sqrt{x^2+\frac{16}{81}x^4}$，求导代 $x=3$ 同样得 82，但要处理四次项，<b>慢一倍</b>。</p>
+        <p><b>结论</b>：曲线给成 <b>$F(x,y)=0$ 的形式且两个变量都容易求导</b>时，<b>走法乙更快</b>——因为它把"解出 $y$"这一步省了，代价只是多解一个一元一次方程 $9\frac{\mathrm dy}{\mathrm dt}=8x\frac{\mathrm dx}{\mathrm dt}$。<a href="#eg71">基 7.1</a>（$y=x^3$，代入后只是六次项）用甲，本题（代入后出四次项）用乙。</p>
+      </div>
+
+      <div class="mine"><span class="tag">补讲 · 用秒杀法 3 秒口算</span>
+        <p>先算 $\frac{\mathrm dy}{\mathrm dt}=80$（这步跑不掉），然后径向投影：$\dfrac{\vec r\cdot\vec v}{|\vec r|}=\dfrac{(3,4)\cdot(30,80)}{5}=\dfrac{90+320}5=82$。<b>$(3,4,5)$ 勾股数是出题人故意配的</b>——见到 $(3,4)$ 这种点，直接写 $|\vec r|=5$。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 强 7.1 -->
+  <div class="eg" id="eg71q">
+    <div class="q"><span class="no">强 7.1</span><b>（填空 · 反着问：已知距离变化率，求速度）</b>质点在第一象限沿曲线 $y=x^{\frac32}$ 远离原点，已知质点与原点的距离以 $11\ \mathrm{cm/s}$ 的变化率增加，则当质点运动到 $x=3\ \mathrm{cm}$ 时的<b>水平速度</b>为______。</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$4\ \mathrm{cm/s}$</span>　<span class="exam">✔ 已复算</span></p>
+
+      <p><span class="lab">分析</span>18 讲在解答旁标了编码 <span class="chip c-b">$D_{42}$ 引入符号</span>——<b>"质点与原点的距离"题目没给它名字，第一个动作就是设 $L$</b>。由条件可得</p>
+      <div class="fml">$L^2=x^2+y^2=x^2+x^3$</div>
+      <p>等式两边同时对时间 $t$ 求导可得</p>
+      <div class="fml">$2L\dfrac{\mathrm dL}{\mathrm dt}=2x\dfrac{\mathrm dx}{\mathrm dt}+3x^2\dfrac{\mathrm dx}{\mathrm dt}$</div>
+      <p>由于 $\dfrac{\mathrm dL}{\mathrm dt}=11$，当 $x=3\ \mathrm{cm}$ 时 $L=\sqrt{3^2+3^3}=6\ (\mathrm{cm})$，因此所求的水平速度为</p>
+      <div class="fml">$\left.\dfrac{\mathrm dx}{\mathrm dt}\right|_{x=3}=\dfrac{2\times6\times11}{2\times3+3\times3^2}=\dfrac{132}{33}=4\ (\mathrm{cm/s})$</div>
+
+      <div class="key"><span class="tag">必记 · ★ 本题的两个技术点，是这一类题的通用省力法</span>
+        <ul>
+          <li><b>① 对 $L^2$ 求导，不对 $L$ 求导。</b>若写 $L=\sqrt{x^2+x^3}$ 再求导，要处理 $\frac{2x+3x^2}{2\sqrt{x^2+x^3}}$；写成 $L^2$ 则得到干净的 $2L\dot L=(2x+3x^2)\dot x$，<b>$L$ 的数值最后单独算一次即可</b>。$3^2+3^3=9+27=36$ 开出整数 6，<b>出题人就是这么配数的</b>——见到 $x=3$ 与 $x^{3/2}$ 应当预感到会开出整数。</li>
+          <li><b>② 已知与未知可以互换。</b>三步法列出的是一个<b>等式</b>，等式里哪个是已知哪个是未知无所谓：<a href="#eg71">基 7.1</a> 已知 $\dot x$ 求 $\dot L$，本题已知 $\dot L$ 求 $\dot x$，<b>用的是同一个式子，只是解的未知量不同</b>。<span class="dock">所以看到"反着问"不要慌，不需要新方法。</span></li>
+        </ul>
+      </div>
+
+      <div class="trap"><span class="tag">陷阱 · "水平速度"问的是什么</span>
+        <p><b>水平速度 = $\dfrac{\mathrm dx}{\mathrm dt}$</b>（横坐标的变化率），不是速度大小 $|\vec v|=\sqrt{\dot x^2+\dot y^2}$，也不是 $\dot L$。<b>本题三个数正好都不一样</b>：$\dot x=4$，$\dot y=\frac32x^{1/2}\dot x=\frac32\sqrt3\cdot4\approx10.39$，$|\vec v|=\sqrt{16+108}=\sqrt{124}\approx11.14$，$\dot L=11$。<b>注意 $|\vec v|\gt\dot L$——因为速度还有一部分用在"绕着原点转"上，只有径向分量才贡献给距离增长。</b></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= s4 题型二 ================= -->
+  <h2 id="s4"><span class="idx">四</span>题型二 · 几何体膨胀：体积与表面积（3 题）</h2>
+
+  <div class="key"><span class="tag">必记 · 这一类要背的三组公式（考场上不给）</span>
+    <div class="gridwrap"><table class="dense">
+      <tr><th>几何体</th><th>体积 $V$</th><th>表面积 $S$</th><th>求导后</th></tr>
+      <tr><td><b>球</b>（半径 $r$）</td><td>$\frac43\pi r^3$</td><td>$4\pi r^2$</td><td>$\dot V=4\pi r^2\dot r$，$\dot S=8\pi r\dot r$</td></tr>
+      <tr><td><b>圆柱</b>（$r,h$ 两个变量）</td><td>$\pi r^2h$</td><td>$2\pi rh+2\pi r^2$（含两底）</td><td>$\dot V=2\pi rh\dot r+\pi r^2\dot h$；$\dot S=(2\pi h+4\pi r)\dot r+2\pi r\dot h$</td></tr>
+      <tr><td><b>容器注水</b></td><td>题目直接给 $V=V(y)$</td><td>—</td><td>$\dot V=V'(y)\dot y$</td></tr>
+    </table></div>
+    <p><b>★ 一条免算的几何直觉</b>：<b>球的 $\dot V=S\cdot\dot r$</b>——每秒长出的体积 = 表面积 × 径向增厚。<b>凡是"各向同性膨胀"的立体都成立</b>（$\frac{\mathrm dV}{\mathrm dr}=S$ 是球/柱/正方体共有的性质）。<a href="#egq72q">千强 7.2</a> 可以靠它口算。</p>
+  </div>
+
+  <!-- 千强 7.2 -->
+  <div class="eg" id="egq72q">
+    <div class="q"><span class="no">千强 7.2</span><b>（解答 · 最基础的一道，先拿它熟悉卷面格式）</b>球的半径以 $5\ \mathrm{cm/s}$ 的速度匀速增长，当球的半径为 $50\ \mathrm{cm}$ 时，球的表面积和体积的增长速度各是多少？</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\dfrac{\mathrm dS}{\mathrm dt}=2\,000\pi\ \mathrm{cm^2/s}$，$\dfrac{\mathrm dV}{\mathrm dt}=50\,000\pi\ \mathrm{cm^3/s}$</span>　<span class="exam">✔ 已复算</span></p>
+
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>信号</b>：给了 $\dfrac{\mathrm dr}{\mathrm dt}$，问 $\dfrac{\mathrm dS}{\mathrm dt}$ 和 $\dfrac{\mathrm dV}{\mathrm dt}$——<b>标准的相关变化率，三步法直上</b>，没有任何转弯。</li>
+          <li>关系式不用自己"想"，是<b>课本公式</b>：$S=4\pi r^2$、$V=\frac43\pi r^3$。<b>这一类题的第 1 步（写关系式）退化成"背公式"，所以真正的风险是把球和圆的公式记混</b>（$4\pi r^2$ vs $\pi r^2$）。</li>
+          <li>第 2 步对 $t$ 求导，注意 $r$ 是 $t$ 的函数：$\frac{\mathrm d}{\mathrm dt}r^2=2r\frac{\mathrm dr}{\mathrm dt}$，<b>那条 $\frac{\mathrm dr}{\mathrm dt}$ 的尾巴不能丢</b>。</li>
+          <li>第 3 步代 $r=50,\ \dot r=5$。<b>数字很大（$50^2=2500$），用 $\pi$ 保留形式写，别去乘 3.14。</b></li>
+          <li>写完瞄一眼<b>单位</b>：面积速度是 $\mathrm{cm^2/s}$，体积速度是 $\mathrm{cm^3/s}$，<b>单位写错要扣分</b>。</li>
+        </ol>
+      </div>
+
+      <div class="paper"><span class="phead">✍️ 考场卷面（可照抄）<span class="score">参考 10 分</span></span>
+        <div class="step"><b>解</b>　设 $t$ 时刻球的半径为 $r=r(t)$，由题设 $\dfrac{\mathrm dr}{\mathrm dt}=5\ (\mathrm{cm/s})$。<span class="pt">⛳ 2 分</span></div>
+        <div class="step">(i) 球的表面积 $S=4\pi r^2$，两边对 $t$ 求导得
+        $$\frac{\mathrm dS}{\mathrm dt}=8\pi r\frac{\mathrm dr}{\mathrm dt}\tag{1}$$<span class="pt">⛳ 2 分</span></div>
+        <div class="step">将 $r=50,\ \dfrac{\mathrm dr}{\mathrm dt}=5$ 代入 (1) 式，得
+        $$\frac{\mathrm dS}{\mathrm dt}=8\pi\times50\times5=2\,000\pi\ (\mathrm{cm^2/s})$$<span class="pt">⛳ 3 分</span></div>
+        <div class="step">(ii) 球的体积 $V=\dfrac43\pi r^3$，两边对 $t$ 求导得
+        $$\frac{\mathrm dV}{\mathrm dt}=4\pi r^2\frac{\mathrm dr}{\mathrm dt}\tag{2}$$
+        将 $r=50,\ \dfrac{\mathrm dr}{\mathrm dt}=5$ 代入 (2) 式，得
+        $$\frac{\mathrm dV}{\mathrm dt}=4\pi\times50^2\times5=50\,000\pi\ (\mathrm{cm^3/s})$$<span class="pt">⛳ 3 分</span></div>
+        <div class="fin">故当球的半径为 $50\ \mathrm{cm}$ 时，<b>表面积的增长速度为 $2\,000\pi\ \mathrm{cm^2/s}$，体积的增长速度为 $50\,000\pi\ \mathrm{cm^3/s}$</b>。</div>
+      </div>
+
+      <div class="notekeep"><span class="nh">📌 批注（对照完校对）</span>
+        <ul>
+          <li><span class="dock">扣分点 1</span>：<b>「设 $t$ 时刻球的半径为 $r=r(t)$」这句话要写。</b>整个求导过程的合法性建立在"$r$ 是 $t$ 的函数"之上，不声明就直接写 $\frac{\mathrm dS}{\mathrm dt}=8\pi r\frac{\mathrm dr}{\mathrm dt}$，逻辑上是跳步。<b>一行字换 2 分，性价比极高。</b></li>
+          <li><span class="dock">扣分点 2</span>：<b>单位必须带。</b>物理应用题的答案<u>不带单位视为未完成</u>，本章所有题都一样。</li>
+          <li><b>★ 免算法（草稿纸上验一遍，别写卷面）</b>：$\dfrac{\mathrm dV}{\mathrm dt}=S\cdot\dfrac{\mathrm dr}{\mathrm dt}=4\pi\cdot50^2\cdot5$——<b>一秒长出的体积就是"表面积 × 长厚 5 cm 的一层皮"</b>。同理 $\dfrac{\mathrm dS}{\mathrm dt}=\dfrac{2S}r\dot r$。用它<b>秒验</b>：$50\,000\pi\div(2\,000\pi)=25=\frac r2$，与 $\frac{V'}{S'}=\frac{4\pi r^2}{8\pi r}=\frac r2$ 一致 ✓。</li>
+          <li><b>跨章</b>：$\frac{\mathrm dV}{\mathrm dr}=S$ 这条关系在第 10 章（积分几何应用）会以"体积 = $\int S\,\mathrm dr$"的面目出现，<b>是同一件事的两个方向</b>。</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 千基 7.3 -->
+  <div class="eg" id="egq73">
+    <div class="q"><span class="no">千基 7.3</span><b>（解答 · 容器注水）</b>已知一容器中水增加的速率为 $1\ \mathrm{m^3/min}$，且水的体积 $V$ 与水面高度 $y$ 满足 $V=\dfrac\pi2y^2$，当水面上升到高为 $1\ \mathrm m$ 时，求水面高度上升的速率。</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\dfrac1\pi\ \mathrm{m/min}\approx0.318\ \mathrm{m/min}$</span>　<span class="exam">✔ 已复算</span></p>
+
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>信号</b>："水增加的<b>速率</b>"＝ $\dfrac{\mathrm dV}{\mathrm dt}=1$；问"水面高度上升的<b>速率</b>"＝ $\dfrac{\mathrm dy}{\mathrm dt}$。<b>两个变化率，一个关系式，$V=\frac\pi2y^2$ 题目已经替你写好了</b>——这题连第 1 步都省了，是本章最简单的一道。</li>
+          <li><b>这题真正想让你注意的是"倒着解"</b>：链式法则给出的是 $\dot V=\pi y\cdot\dot y$，而你要的是 $\dot y$，所以要<b>除过去</b>：$\dot y=\dot V\big/(\pi y)$。这正是书上 p.187 讲的「通过已知求未知」$\dfrac{\mathrm dA}{\mathrm dC}=\dfrac{\mathrm dA/\mathrm dB}{\mathrm dC/\mathrm dB}$。</li>
+          <li><b>物理直觉先估一把</b>：$V=\frac\pi2y^2$ 意味着水面截面积 $A(y)=\frac{\mathrm dV}{\mathrm dy}=\pi y$，$y=1$ 时截面积 $=\pi\approx3.14\ \mathrm{m^2}$。每分钟灌 $1\ \mathrm{m^3}$ 进一个 $3.14\ \mathrm{m^2}$ 的面，<b>当然是升高 $\frac1\pi\approx0.32$ 米</b>。<b>算出来若不是这个量级，一定错了。</b></li>
+          <li>顺带看懂容器形状：截面积 $\propto y$ 说明它<b>越往上越粗</b>（不是圆柱），所以水面上升会<b>越来越慢</b>——$\dot y=\frac1{\pi y}$ 确实随 $y$ 递减 ✓。</li>
+        </ol>
+      </div>
+
+      <div class="paper"><span class="phead">✍️ 考场卷面（可照抄）<span class="score">参考 10 分</span></span>
+        <div class="step"><b>解</b>　设 $t$ 时刻容器中水的体积为 $V=V(t)$、水面高度为 $y=y(t)$。由题意，
+        $$\frac{\mathrm dV}{\mathrm dt}=1\ (\mathrm{m^3/min})\tag{1}$$<span class="pt">⛳ 2 分</span></div>
+        <div class="step">又 $V=\dfrac\pi2y^2$，两边对 $t$ 求导，得
+        $$\frac{\mathrm dV}{\mathrm dt}=\pi y\frac{\mathrm dy}{\mathrm dt}\tag{2}$$<span class="pt">⛳ 3 分</span></div>
+        <div class="step">由 (1)(2) 两式得 $\dfrac{\mathrm dy}{\mathrm dt}=\dfrac1{\pi y}$。<span class="pt">⛳ 3 分</span></div>
+        <div class="fin">将 $y=1$ 代入，得 $\left.\dfrac{\mathrm dy}{\mathrm dt}\right|_{y=1}=\dfrac1\pi\ (\mathrm{m/min})$，<b>即当水面上升到高为 $1\ \mathrm m$ 时，水面高度上升的速率为 $\dfrac1\pi\ \mathrm{m/min}$</b>。<span class="pt">⛳ 2 分</span></div>
+      </div>
+
+      <div class="notekeep"><span class="nh">📌 批注（对照完校对）</span>
+        <ul>
+          <li><span class="dock">扣分点</span>：<b>$y=1$ 必须在得到 $\dfrac{\mathrm dy}{\mathrm dt}=\dfrac1{\pi y}$ <u>之后</u>才代。</b>若一开始就把 $y=1$ 代进 $V=\frac\pi2y^2$，得 $V=\frac\pi2$ 是常数，求导为 0，答案就成了 $\dot y$ 无解。<b>本章所有题的通病，这题最容易犯——因为 $y=1$ 看起来"早代晚代都一样"。</b></li>
+          <li><b>先写出通式再代值，还有一个附加好处</b>：$\dot y=\frac1{\pi y}$ 这个通式本身能回答"水面越高上升越慢"，<b>如果第二问追问"$y=2$ 时呢"，通式在手，直接写 $\frac1{2\pi}$。</b></li>
+          <li><b>$V'(y)$ 就是水面的截面积</b>——这是第 10 章"平行截面已知的立体体积 $V=\int A(y)\mathrm dy$"的逆运算。<b>本题的 $A(y)=\pi y$ 对应一个旋转抛物面型（或圆锥型）的容器。</b><span class="chip c-a">跨章</span></li>
+          <li><b>题面里没有"容器是什么形状"，也不需要知道</b>——$V$ 与 $y$ 的关系式已经把形状信息全部编码进去了。<b>这一点值得体会：相关变化率题只关心关系式，不关心图形。</b></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- 千基 7.4 -->
+  <div class="eg" id="egq74">
+    <div class="q"><span class="no">千基 7.4</span><b>（选择 · 本章最难的选择题：两个变量、两个方程反解）</b>已知某圆柱体底面半径与高随时间变化的速率分别为 $2\ \mathrm{cm/s},\ -3\ \mathrm{cm/s}$，且圆柱体的体积与表面积随时间变化的速率分别为 $-100\pi\ \mathrm{cm^3/s},\ 40\pi\ \mathrm{cm^2/s}$，则圆柱体的底面半径与高分别为（　）。<br>
+    (A) $5\ \mathrm{cm},5\ \mathrm{cm}$　(B) $10\ \mathrm{cm},5\ \mathrm{cm}$　(C) $5\ \mathrm{cm},10\ \mathrm{cm}$　(D) $10\ \mathrm{cm},10\ \mathrm{cm}$</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">(B) $r=10\ \mathrm{cm},\ h=5\ \mathrm{cm}$</span>　<span class="exam">✔ 已复算（sympy 联立求解，唯一正解 $\{r=10,h=5\}$）</span></p>
+
+      <p><span class="lab">分析</span>设圆柱体的底面半径为 $r\ \mathrm{cm}$，高为 $h\ \mathrm{cm}$，体积为 $V\ \mathrm{cm^3}$，表面积为 $S\ \mathrm{cm^2}$，时间为 $t\ \mathrm s$，则 $V=\pi r^2h$，$S=2\pi rh+2\pi r^2$，所以</p>
+      <div class="fml">$\dfrac{\mathrm dV}{\mathrm dt}=2\pi rh\dfrac{\mathrm dr}{\mathrm dt}+\pi r^2\dfrac{\mathrm dh}{\mathrm dt},\qquad
+      \dfrac{\mathrm dS}{\mathrm dt}=2\pi h\dfrac{\mathrm dr}{\mathrm dt}+2\pi r\dfrac{\mathrm dh}{\mathrm dt}+4\pi r\dfrac{\mathrm dr}{\mathrm dt}$</div>
+      <p>由题设 $\dfrac{\mathrm dr}{\mathrm dt}=2,\ \dfrac{\mathrm dh}{\mathrm dt}=-3,\ \dfrac{\mathrm dV}{\mathrm dt}=-100\pi,\ \dfrac{\mathrm dS}{\mathrm dt}=40\pi$ 代入上式，舍去负值，得 $r=10,\ h=5$。</p>
+
+      <div class="mine"><span class="tag">补讲 · 书上把联立过程省了，这里补全（考场上你得会算）</span>
+        <p><b>$V$ 式</b>：$2\pi rh\cdot2+\pi r^2\cdot(-3)=-100\pi$，两边除以 $\pi$：</p>
+        <div class="fml">$4rh-3r^2=-100\tag{1}$</div>
+        <p><b>$S$ 式</b>：$2\pi h\cdot2+2\pi r\cdot(-3)+4\pi r\cdot2=40\pi$，除以 $\pi$：$4h-6r+8r=40$，即</p>
+        <div class="fml">$4h+2r=40\ \Longrightarrow\ h=\dfrac{20-r}2\tag{2}$</div>
+        <p>把 (2) 代入 (1)：$4r\cdot\dfrac{20-r}2-3r^2=-100\Rightarrow 40r-2r^2-3r^2=-100\Rightarrow r^2-8r-20=0$，即</p>
+        <div class="fml">$(r-10)(r+2)=0\ \Longrightarrow\ r=10\ (\text{舍去 }r=-2),\qquad h=\dfrac{20-10}2=5$</div>
+        <p><b>⚠️ 注意 $S$ 式的求导</b>：$S=2\pi rh+2\pi r^2$ 里<b>第二项 $2\pi r^2$ 对 $t$ 求导给出 $4\pi r\dot r$</b>，这是最容易漏的一项（漏了就解出 (C)）。<b>圆柱表面积记不牢的话，考场上现推：侧面积 = 底周长 × 高 = $2\pi rh$，加两个底 $2\times\pi r^2$。</b></p>
+      </div>
+
+      <div class="trap"><span class="tag">陷阱 · 选择题能不能直接代选项？能，而且更快</span>
+        <p>四个选项只有 $(5,5),(10,5),(5,10),(10,10)$ 四组。<b>用 (2) 式 $4h+2r=40$ 一筛就只剩 (B)</b>：$(5,5)\to30$ ✗、$(10,5)\to40$ ✓、$(5,10)\to50$ ✗、$(10,10)\to60$ ✗。<b>一个方程直接秒杀，根本不用碰体积那条。</b></p>
+        <p><b>教训</b>：<b>选择题里"求两个未知量"，先挑<u>最简单的那个方程</u>去筛选项</b>——本题 $S$ 式是线性的、$V$ 式是二次的，当然挑线性那条。<span class="dock">在解答题里这样做不给分，但选择题这就是标准答案。</span></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= s5 题型三 ================= -->
+  <h2 id="s5"><span class="idx">五</span>题型三 · 角度与相对运动（2 题）</h2>
+
+  <!-- 千基 7.5 -->
+  <div class="eg" id="egq75">
+    <div class="q"><span class="no">千基 7.5</span><b>（选择 · 唯一的"仰角"题，关系式带反三角）</b>一物体在距离同一水平面上的地面观测器 $10\ \mathrm m$ 处离地匀速垂直上升，其速度为 $a\ \mathrm{m/s}$。若该物体上升到离地 $20\ \mathrm m$ 时，观测器视线倾角的变化率为 $\dfrac1{10}$，则 $a=$（　）。<br>
+    (A) 1　(B) 2　(C) 3　(D) 5</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">(D) 5</span>　<span class="exam">✔ 已复算</span></p>
+
+      <p><span class="lab">分析</span>设时间为 $t\ \mathrm s$ 时，物体离地面的距离为 $h(t)\ \mathrm m$，观测器视线的倾角为 $\theta(t)$，则由直角三角形（底边 $10$，对边 $h$）得</p>
+      <div class="fml">$\theta(t)=\arctan\dfrac{h(t)}{10}$</div>
+      <p>故</p>
+      <div class="fml">$\dfrac{\mathrm d\theta}{\mathrm dt}=\dfrac{\frac1{10}}{1+\left[\frac{h(t)}{10}\right]^2}\cdot\dfrac{\mathrm dh}{\mathrm dt}$</div>
+      <p>当 $h(t)=20$ 时 $\dfrac{\mathrm dh}{\mathrm dt}=a$，得 $\dfrac{\mathrm d\theta}{\mathrm dt}=\dfrac{\frac1{10}}{1+4}\,a=\dfrac a{50}=\dfrac1{10}$，即 $a=5$。</p>
+
+      <div class="key"><span class="tag">必记 · 角度型的两条关系式，选哪条看"已知哪条边"</span>
+        <div class="gridwrap"><table class="dense">
+          <tr><th>写法</th><th>求导后</th><th>适用</th></tr>
+          <tr><td>$\theta=\arctan\dfrac h b$（$b$ 为定值）</td><td>$\dot\theta=\dfrac{b\,\dot h}{b^2+h^2}$</td><td><b>本题</b>：底边固定，对边在动。<b>直接得显式，最省事</b></td></tr>
+          <tr><td>$\tan\theta=\dfrac hb$</td><td>$\sec^2\theta\cdot\dot\theta=\dfrac{\dot h}b$</td><td>题目给的是 $\theta$ 的值（如 $\theta=\frac\pi4$）而不是 $h$ 的值时更快</td></tr>
+        </table></div>
+        <p><b>两条是同一个式子</b>：$\sec^2\theta=1+\tan^2\theta=1+\frac{h^2}{b^2}$，代进去立刻互推。<b>考场上选哪条的判据：题目给了 $h$ 就用 $\arctan$，给了 $\theta$ 就用 $\tan$</b>，避免多算一次反三角。</p>
+      </div>
+
+      <div class="mine"><span class="tag">补讲 · 一个值得记住的物理事实</span>
+        <p>$\dot\theta=\dfrac{b\dot h}{b^2+h^2}$ 关于 $h$ <b>先增后减，在 $h=b$ 处取最大值 $\dfrac{\dot h}{2b}$</b>（均值不等式：$b^2+h^2\ge2bh$）。翻译过来：<b>匀速上升的物体，在仰角 $45^\circ$ 时"看起来跑得最快"，再往上反而变慢。</b></p>
+        <p>本题 $h=20=2b$ 已经过了那个峰值，所以 $\dot\theta=\frac{a}{50}$ 比峰值 $\frac a{20}$ 小 ✓。<b>这个"角速度先增后减"的结论在物理题和 <a href="#s2b">沙盘场景 D</a> 里都能直接看到，也是第 5 章"最值"的一次应用。</b></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 习 7.3 -->
+  <div class="eg" id="egx73">
+    <div class="q"><span class="no">习 7.3</span><b>（解答 · 相对运动，本章最像真题的一道）</b>甲车以 $24\ \mathrm{km/h}$ 的速度向北行驶，同时正东 $10\ \mathrm{km}$ 处乙车以 $20\ \mathrm{km/h}$ 的速度向东行驶。从这一时刻起经过 1 小时后，求两车间的距离对时间的变化率。</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\dfrac{196}{\sqrt{41}}\approx30.6\ \mathrm{km/h}$</span>　<span class="exam">✔ 已复算</span></p>
+
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>信号</b>：两个动点、问它们之间距离的变化率——<b>先画图、先建坐标系</b>。这是本章唯一一道"不画图基本做不对"的题。</li>
+          <li><b>坐标系怎么建最省事</b>：把<b>甲车的初始位置设为原点 $O$</b>，$x$ 轴向东、$y$ 轴向北。于是甲车沿 $y$ 轴走，乙车沿 $x$ 轴走，<b>两条路径正好垂直</b>——这就是能用勾股定理的原因。</li>
+          <li><b>⚠️ 关键的一步：乙车不是从原点出发的。</b>乙车初始在 $(10,0)$，$t$ 小时后在 $(10+20t,\,0)$。<b>所以两车的水平间距是 $y+10$ 而不是 $y$</b>（书上用 $y$ 表示乙车<u>自己走过的</u>距离 $CB$）。<span style="color:var(--red)"><b>这个 $+10$ 是本题唯一的坑，漏了答案就成 $\frac{24\cdot24+20\cdot20}{\sqrt{576+400}}=31.3$。</b></span></li>
+          <li>关系式：$s^2=x^2+(y+10)^2$。<b>写成平方形式，别写根号</b>（见 §二的手法一）。</li>
+          <li>求导 → 代 $t=1$ 时的位置量（$x=24,y=20$）和速度（$\dot x=24,\dot y=20$）。<b>注意位置量和速度量数值上恰好相同（因为 $t=1$），别被这个巧合搞混了谁是谁。</b></li>
+        </ol>
+      </div>
+
+      <div class="paper"><span class="phead">✍️ 考场卷面（可照抄）<span class="score">参考 10 分</span></span>
+        <div class="step"><b>解</b>　设甲车最初在原点 $O$ 处，乙车在 $C$ 处，$OC=10\ \mathrm{km}$。在 $t$ 小时后，甲车在 $A$ 点，乙车在 $B$ 点，如图 7-1 所示。设 $AB=s,\ OA=x,\ CB=y$，则 $s=s(t),\ x=x(t),\ y=y(t)$ 都是 $t$ 的函数，且
+        $$s=\sqrt{x^2+(y+10)^2}\tag{1}$$<span class="pt">⛳ 3 分</span></div>
+        <div class="step">将 (1) 式写成 $s^2=x^2+(y+10)^2$，两边对 $t$ 求导，得
+        $$2s\frac{\mathrm ds}{\mathrm dt}=2x\frac{\mathrm dx}{\mathrm dt}+2(y+10)\frac{\mathrm dy}{\mathrm dt}$$
+        即
+        $$\frac{\mathrm ds}{\mathrm dt}=\frac{x\dfrac{\mathrm dx}{\mathrm dt}+(y+10)\dfrac{\mathrm dy}{\mathrm dt}}{\sqrt{x^2+(y+10)^2}}\tag{2}$$
+        <b>上式表达了三个变化率 $\dfrac{\mathrm ds}{\mathrm dt},\dfrac{\mathrm dx}{\mathrm dt},\dfrac{\mathrm dy}{\mathrm dt}$ 之间的关系。</b><span class="pt">⛳ 4 分</span></div>
+        <div class="step">已知 $\dfrac{\mathrm dx}{\mathrm dt}=24,\ \dfrac{\mathrm dy}{\mathrm dt}=20$；当 $t=1$ 时，$x=24,\ y=20$。将以上各值代入 (2) 式，得
+        $$\frac{\mathrm ds}{\mathrm dt}=\frac{24\times24+(20+10)\times20}{\sqrt{24^2+(20+10)^2}}=\frac{1176}{\sqrt{1476}}=\frac{196}{\sqrt{41}}$$<span class="pt">⛳ 2 分</span></div>
+        <div class="fin">故从这一时刻起经过 1 小时后，<b>两车间的距离对时间的变化率为 $\dfrac{196}{\sqrt{41}}\approx30.6\ (\mathrm{km/h})$</b>。<span class="pt">⛳ 1 分</span></div>
+      </div>
+
+      <figure class="fig">
+        <svg viewBox="0 0 320 190" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="图 7-1 两车相对运动">
+          <defs><marker id="ar1" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="currentColor"/></marker></defs>
+          <g stroke="currentColor" fill="none" stroke-width="1.2" color="var(--muted)">
+            <line x1="40" y1="160" x2="300" y2="160" marker-end="url(#ar1)"/>
+            <line x1="40" y1="160" x2="40" y2="20" marker-end="url(#ar1)"/>
+          </g>
+          <g stroke="var(--accent)" stroke-width="1.8" fill="none">
+            <line x1="40" y1="160" x2="230" y2="45"/>
+          </g>
+          <g stroke="var(--red)" stroke-width="2.2" fill="none" stroke-linecap="round">
+            <line x1="40" y1="160" x2="40" y2="45"/>
+          </g>
+          <g stroke="var(--green)" stroke-width="2.2" fill="none" stroke-linecap="round">
+            <line x1="120" y1="160" x2="230" y2="160"/>
+          </g>
+          <g fill="var(--ink)" font-size="11" font-family="Georgia,serif">
+            <text x="26" y="40">甲</text><text x="26" y="52">车</text>
+            <text x="46" y="18">y</text><text x="303" y="164">x</text>
+            <text x="28" y="175">O</text><text x="115" y="175">C</text><text x="226" y="175">B</text>
+            <text x="26" y="44" fill="none"></text>
+            <text x="44" y="42">A</text>
+            <text x="240" y="176">乙车</text>
+          </g>
+          <g fill="var(--muted)" font-size="10" font-family="Georgia,serif">
+            <text x="8" y="105" fill="var(--red)">x=24t</text>
+            <text x="70" y="152">10</text>
+            <text x="160" y="152" fill="var(--green)">y=20t</text>
+            <text x="140" y="95" fill="var(--accent)">s</text>
+          </g>
+          <g fill="var(--ink)">
+            <circle cx="40" cy="45" r="3"/><circle cx="230" cy="160" r="3"/>
+            <circle cx="40" cy="160" r="2.5" fill="var(--muted)"/><circle cx="120" cy="160" r="2.5" fill="var(--muted)"/>
+          </g>
+        </svg>
+        <figcaption><b>图 7-1</b>（照书上的图重绘）。甲车沿 $y$ 轴向北：$OA=x=24t$；乙车从 $C(10,0)$ 沿 $x$ 轴向东：$CB=y=20t$，<b>因此 $B$ 的横坐标是 $y+10$</b>。斜边 $AB=s$ 即两车间距。$t=1$ 时 $A(0,24)$、$B(30,0)$，$s=\sqrt{576+900}=\sqrt{1476}\approx38.42$。</figcaption>
+      </figure>
+
+      <div class="notekeep"><span class="nh">📌 批注（对照完校对）</span>
+        <ul>
+          <li><span class="dock">扣分点 1（本题的分水岭）</span>：<b>「设甲车最初在原点 $O$ 处，乙车在 $C$ 处，$OC=10$」这句设定必须写，并且要画图。</b>不建坐标系直接列式，阅卷人无法判断你的 $x,y$ 指的是位置还是路程，<b>后面全对也难拿满分</b>。</li>
+          <li><span class="dock">扣分点 2</span>：<b>$y+10$ 里的 $+10$。</b>写成 $s^2=x^2+y^2$ 是本题最高频错误。<b>自检法</b>：代 $t=0$，你的式子应给出 $s=10$（两车初始相距 10 km）。$\sqrt{0+(0+10)^2}=10$ ✓；若写成 $x^2+y^2$ 则得 $s(0)=0$，两车重合，<b>荒谬，立刻发现错误</b>。<b>「代 $t=0$ 验关系式」是这一类题的通用自检，5 秒钟。</b></li>
+          <li><b>为什么答案比 24 和 20 都大</b>：两车运动方向<u>互相垂直</u>，远离速度是两个分量的合成，$\sqrt{24^2+20^2}=31.2$ 是"若两车从同一点出发"的极限值。本题因为乙车有 10 km 领先量，<b>合成方向与连线方向不完全重合，投影后略小于 31.2，得 30.6</b> ✓。<b>算完做这个"上界估计"能抓住绝大多数计算错误。</b></li>
+          <li><b>数值化简</b>：$\sqrt{1476}=\sqrt{4\times369}=2\sqrt{369}=2\times3\sqrt{41}=6\sqrt{41}$，故 $\frac{1176}{6\sqrt{41}}=\frac{196}{\sqrt{41}}$。<b>$\sqrt{41}\approx6.403$，$196/6.403\approx30.61$。</b><span class="dock">卷面上化到 $\frac{196}{\sqrt{41}}$ 就够了，是否有理化成 $\frac{196\sqrt{41}}{41}$ 不影响给分。</span></li>
+          <li><b>★ 用秒杀法核对</b>：$\dot s=\dfrac{\vec r\cdot\vec v_{\text{rel}}}{|\vec r|}$，其中连线向量 $\vec r=B-A=(30,-24)$，相对速度 $\vec v_{\text{rel}}=\vec v_B-\vec v_A=(20,0)-(0,24)=(20,-24)$，故 $\dot s=\frac{600+576}{\sqrt{900+576}}=\frac{1176}{38.42}=30.61$ ✓ <b>一致。</b><span class="chip c-b">相对运动题用"相对速度在连线上的投影"最快</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= s6 题型四 ================= -->
+  <h2 id="s6"><span class="idx">六</span>题型四 · 从图像读变化率（1 题）</h2>
+
+  <!-- 千基 7.2 -->
+  <div class="eg" id="egq72">
+    <div class="q"><span class="no">千基 7.2</span><b>（选择 · 图像题，把"变化率"和"凹凸"接起来）</b>设二阶可导函数 $y=f(t)$ 表示某人在 10 分钟内心跳次数的变化曲线，如图所示。则关于此人心跳次数的<b>增长速度</b>，说法正确的是（　）。<br>
+    (A) 0~3 分钟增速变小；7~10 分钟增速变大　(B) 0~3 分钟增速变大；7~10 分钟增速变小<br>
+    (C) 0~3 分钟增速变大；7~10 分钟增速变大　(D) 0~3 分钟增速变小；7~10 分钟增速变小</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">(A)</span>　<span class="exam">✔ 已复算（按图形凹凸判定）</span></p>
+
+      <figure class="fig">
+        <svg viewBox="0 0 340 190" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="心跳次数曲线">
+          <defs><marker id="ar2" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 z" fill="currentColor"/></marker></defs>
+          <g stroke="currentColor" fill="none" stroke-width="1.2" color="var(--muted)">
+            <line x1="40" y1="165" x2="320" y2="165" marker-end="url(#ar2)"/>
+            <line x1="40" y1="165" x2="40" y2="18" marker-end="url(#ar2)"/>
+          </g>
+          <path d="M40,150 C70,95 95,58 120,55 C150,52 165,105 190,118 C215,130 232,120 250,95 C272,64 285,35 300,22"
+                stroke="var(--accent)" stroke-width="2.2" fill="none"/>
+          <g stroke="var(--muted)" stroke-width="1" stroke-dasharray="3,3">
+            <line x1="120" y1="55" x2="120" y2="165"/>
+            <line x1="190" y1="118" x2="190" y2="165"/>
+            <line x1="300" y1="22" x2="300" y2="165"/>
+          </g>
+          <g fill="var(--ink)" font-size="11" font-family="Georgia,serif">
+            <text x="46" y="18">y（次数）</text><text x="300" y="182">t（分钟）</text>
+            <text x="28" y="180">O</text><text x="116" y="180">3</text><text x="186" y="180">7</text><text x="294" y="180">10</text>
+          </g>
+          <g font-size="10" font-family="-apple-system,sans-serif">
+            <text x="55" y="86" fill="var(--red)">凸：f″&lt;0</text>
+            <text x="228" y="150" fill="var(--green)">凹：f″&gt;0</text>
+          </g>
+        </svg>
+        <figcaption>照原题图重绘：$[0,3]$ 上升且<b>上凸</b>（增速在放缓）→ $[3,7]$ 回落到低谷 → $[7,10]$ 上升且<b>下凹</b>（增速在加快）。<b>注意题目问的是"增长速度"即 $f'(t)$，而选项在比较 $f'$ 的增减，考的其实是 $f''$ 的符号 = 曲线的凹凸。</b></figcaption>
+      </figure>
+
+      <p><span class="lab">分析</span>$t\in(0,3)$ 时，$f(t)$ 为<b>凸</b>曲线，故 $f''(t)\lt0$，于是有 $f'(t)$ <b>单调递减</b>；$t\in(7,10)$ 时，$f(t)$ 为<b>凹</b>曲线，故 $f''(t)\gt0$，于是有 $f'(t)$ <b>单调递增</b>。而 $f'(t)$ 即为心跳次数对时间 $t$ 的变化率，即<b>心跳次数增长速度</b>。故选 (A)。</p>
+
+      <div class="key"><span class="tag">必记 · ★「速度」与「增速」差一阶，这题就考这一件事</span>
+        <div class="gridwrap"><table class="dense">
+          <tr><th>题面说法</th><th>数学对象</th><th>图上看什么</th></tr>
+          <tr><td>心跳次数</td><td>$f(t)$</td><td>曲线的<b>高度</b></td></tr>
+          <tr><td>增长<b>速度</b>／变化率</td><td>$f'(t)$</td><td>曲线的<b>斜率</b></td></tr>
+          <tr><td>增速<b>变大/变小</b></td><td>$f''(t)$ 的符号</td><td>曲线的<b>凹凸</b></td></tr>
+        </table></div>
+        <p><b>"增长速度变小"≠"在减少"</b>——$[0,3]$ 上 $f$ 一直在<b>增加</b>（$f'\gt0$），只是增得越来越慢（$f''\lt0$）。<span class="dock">把这两件事混为一谈是本题的主要错因，(D) 就是给这种误读准备的。</span></p>
+        <p><b>记忆锚点</b>：<b>凸（上凸、$\cap$ 形）⇒ $f''\lt0$ ⇒ 斜率递减</b>；<b>凹（下凹、$\cup$ 形）⇒ $f''\gt0$ ⇒ 斜率递增</b>。这是<a href="第05章_一元函数微分学的应用一_几何应用.html">第 5 章</a>的定义（见该页「极值判别 vs 拐点判别」对照表），本章只是换了个物理外衣。<b>⚠️ 国内教材"凹凸"的叫法与部分英文教材相反，认准 $f''$ 的符号最保险。</b></p>
+      </div>
+
+      <div class="mine"><span class="tag">补讲 · 这道题为什么值得单独设一个题型</span>
+        <p>本章其余 11 题都是"给公式算数字"，只有这题是<b>"给图形读性质"</b>。<b>而真题里的变化率考点，恰恰更爱这种形式</b>（近年出现过用图像考 $f,f',f''$ 关系的选择题）。<b>练法</b>：拿到任何一条曲线，习惯性地在心里标出三层信息——<b>正负（在轴上下）、升降（$f'$ 符号）、快慢变化（$f''$ 符号）</b>。三层都读得出来，这一类题就不会错。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= s7 题型五 ================= -->
+  <h2 id="s7"><span class="idx">七</span>题型五 · 写微元建微分方程（1 题，本章的重头戏）</h2>
+
+  <div class="zy"><span class="tag">强化题型 · 支线二的翻译表（18 讲 p.72–73）</span>
+    <p>这一类题的题面永远是一句<b>中文的比例关系</b>，你要做的是把它翻译成微分方程。<b>翻译表就三行</b>：</p>
+    <div class="gridwrap"><table class="dense">
+      <tr><th>题面说法</th><th>微分方程</th><th>解</th></tr>
+      <tr><td>$A$ 对 $t$ 的变化率与 <b>$A$ 本身</b>成正比</td><td>$\dfrac{\mathrm dA}{\mathrm dt}=kA$</td><td>$A=C\mathrm e^{kt}$（指数增长／衰减）</td></tr>
+      <tr><td>$A$ 对 $t$ 的变化率与 <b>$A$ 和某常数 $A_0$ 之差</b>成正比</td><td>$\dfrac{\mathrm dA}{\mathrm dt}=-k(A-A_0)$</td><td>$A=C\mathrm e^{-kt}+A_0$（<b>趋于平衡</b>）</td></tr>
+      <tr><td>$A$ 对 $t$ 的变化率与 <b>另一个量 $B$</b> 成正比</td><td>$\dfrac{\mathrm dA}{\mathrm dt}=kB$</td><td>视 $B$ 而定</td></tr>
+    </table></div>
+    <p><b>第二行就是牛顿冷却定律</b>，也是考得最多的一条。<b>符号约定</b>：写 $-k$ 并声明 $k\gt0$（物体在<b>降</b>温），比写 $k$ 然后解出负数清楚得多——<span class="dock">卷面上一句"其中 $k$ 为比例常数，$k\gt0$"是采分点。</span></p>
+  </div>
+
+  <!-- 强 7.2 -->
+  <div class="eg" id="eg72q">
+    <div class="q"><span class="no">强 7.2</span><b>（解答 · 牛顿冷却定律，第 15 讲综合题的最小样本）</b>已知高温物体置于低温介质中，任一时刻该物体温度对时间的变化率与该时刻物体和介质的温差成正比。现将一初始温度为 $120\ ℃$ 的物体在 $20\ ℃$ 恒温介质中冷却，$30\ \mathrm{min}$ 后该物体温度降至 $30\ ℃$，若要将该物体的温度<b>继续降至 $21\ ℃$，还需冷却多长时间</b>？</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">还需 $30\ \mathrm{min}$</span>　<span class="exam">✔ 已复算（sympy dsolve + 初值，$k=\frac{\ln10}{30}$，$t=60$，$60-30=30$）</span></p>
+
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>信号</b>：题面出现「<b>……的变化率与……成正比</b>」+「30 分钟<b>后</b>」这种<b>跨时间段</b>的描述 ⇒ 走<b>支线二</b>，必须列微分方程解出 $T(t)$ 的显式表达式，不能只写一个瞬时关系。</li>
+          <li><b>翻译</b>：「温度对时间的变化率」＝ $\dfrac{\mathrm dT}{\mathrm dt}$；「物体和介质的温差」＝ $T-20$；「成正比」＝ 乘一个常数。物体在<b>降温</b>，$\frac{\mathrm dT}{\mathrm dt}\lt0$ 而 $T-20\gt0$，<b>所以比例系数取 $-k$ 并声明 $k\gt0$</b>。</li>
+          <li><b>解方程</b>：$\frac{\mathrm dT}{\mathrm dt}=-k(T-20)$ 是<b>可分离变量</b>的（第 15 讲的最基础型）：$\frac{\mathrm dT}{T-20}=-k\,\mathrm dt$，两边积分得 $\ln|T-20|=-kt+C_1$，即 $T=C\mathrm e^{-kt}+20$。<b>记住这个"衰减 + 平衡值"的形状，以后可以直接写。</b></li>
+          <li><b>两个条件定两个常数</b>：$T(0)=120$ 定 $C=100$；$T(30)=30$ 定 $k$。<b>数一定要有两个条件，缺一个就做不完——检查题面是不是漏读了。</b></li>
+          <li><b>⚠️ 最后一步是本题唯一的坑</b>：解 $T=21$ 得到的 $t=60$ 是<b>从头算起</b>的总时长，而问题问的是「<b>还需</b>多长时间」，答案是 $60-30=30$。<b>读题时把"还需"两个字圈出来。</b></li>
+          <li><b>算之前先估</b>：温差从 $100\to10$（降 10 倍）用了 30 min；再从 $10\to1$（又降 10 倍）由于是指数衰减，<b>必然还是 30 min</b>。<b>估完再算，算出别的数就知道错了。</b></li>
+        </ol>
+      </div>
+
+      <div class="paper"><span class="phead">✍️ 考场卷面（可照抄）<span class="score">参考 10 分</span></span>
+        <div class="step"><b>解</b>　设该物体在 $t$ 时刻的温度为 $T(t)\ ℃$。由题意得
+        $$\frac{\mathrm dT}{\mathrm dt}=-k(T-20)\tag{1}$$
+        其中 $k$ 为比例常数，$k\gt0$。<span class="pt">⛳ 3 分</span></div>
+        <div class="step">分离变量得 $\dfrac{\mathrm dT}{T-20}=-k\,\mathrm dt$，两端积分，解得
+        $$T=C\mathrm e^{-kt}+20\tag{2}$$<span class="pt">⛳ 2 分</span></div>
+        <div class="step">将初始条件 $T(0)=120$ 代入 (2) 式，解得 $C=100$，故
+        $$T=100\mathrm e^{-kt}+20\tag{3}$$<span class="pt">⛳ 2 分</span></div>
+        <div class="step">将 $t=30,\ T=30$ 代入 (3) 式，得 $100\mathrm e^{-30k}=10$，即 $k=\dfrac{\ln10}{30}$，所以
+        $$T=100\mathrm e^{-\frac{\ln10}{30}t}+20\tag{4}$$<span class="pt">⛳ 2 分</span></div>
+        <div class="fin">令 $T=21$，由 (4) 式得 $100\mathrm e^{-\frac{\ln10}{30}t}=1$，解得 $t=60$。<b>因此要降至 $21\ ℃$，还需冷却 $60-30=30\ (\mathrm{min})$。</b><span class="pt">⛳ 1 分</span></div>
+      </div>
+
+      <div class="notekeep"><span class="nh">📌 批注（对照完校对）</span>
+        <ul>
+          <li><span class="dock">扣分点 1</span>：<b>「其中 $k$ 为比例常数，$k\gt0$」这句要写。</b>不声明符号，(2) 式里 $\mathrm e^{-kt}$ 是增是减就没有依据，后面"温度递减"的物理意义也无从谈起。</li>
+          <li><span class="dock">扣分点 2（真正丢分的地方）</span>：<b>「还需」= $60-30$。</b>这不是数学错误，是<b>读题错误</b>——而阅卷只看最后那个数。<b>做题时把问句中的时间基准（"从现在起"/"还需"/"总共"）用笔圈出来。</b></li>
+          <li><b>不必解出 $k$ 的数值</b>：保留 $k=\frac{\ln10}{30}$ 的<u>符号形式</u>代进去，最后一步 $\mathrm e^{-kt}=0.01\Rightarrow kt=\ln100=2\ln10\Rightarrow t=\frac{2\ln10}{\ln10/30}=60$，<b>$\ln10$ 整体约掉，全程不碰小数</b>。若早早算成 $k\approx0.0768$，最后除出来是 $59.99\ldots$，还要判断该不该取整，自找麻烦。<b>「能约的量先别算成小数」是本章通用的提速技巧。</b></li>
+          <li><b>★ 指数衰减的"半衰期思维"（可以口算全题）</b>：令温差 $u=T-20$，则 $u$ 满足 $\dot u=-ku$，即 $u=100\mathrm e^{-kt}$。<b>$u$ 每缩小到原来的 $\frac1{10}$ 所需时间是常数（本题 30 min）</b>。$120℃\Rightarrow u=100$；$30℃\Rightarrow u=10$（用 30 min）；$21℃\Rightarrow u=1$（<b>再用 30 min</b>）。<b>题目把数字配成整十倍，就是在暗示这条路。</b><span class="chip c-a">填空题直接口算</span></li>
+          <li><b>为什么终点是 $21℃$ 而不是 $20℃$</b>：$T\to20$ 是 $t\to+\infty$ 的<b>渐近线</b>（介质温度），<b>永远达不到</b>。所以这类题一定问"降到比环境温度<u>略高</u>的某个值"。<span style="color:var(--red)"><b>若题目问"降到 $20℃$ 需要多久"，正确回答是"不可能"。</b></span></li>
+          <li><span class="chip c-a">第 15 讲预告</span>本题的方程 $\frac{\mathrm dT}{\mathrm dt}+kT=20k$ 也是<b>一阶线性方程</b>，用通解公式 $T=\mathrm e^{-\int k\mathrm dt}\left(\int 20k\,\mathrm e^{\int k\mathrm dt}\mathrm dt+C\right)$ 同样能做。<b>可分离变量更快，但第 15 讲会要求你两条都会。</b></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= s7b 冷却台 ================= -->
+  <h2 id="s7b"><span class="idx">工具</span>🌡️ 牛顿冷却实验台</h2>
+
+  <div class="tool">
+    <h4>🌡️ $\dfrac{\mathrm dT}{\mathrm dt}=-k(T-20)$ · 把"每降 10 倍温差用同样时间"看出来</h4>
+    <div class="hint">拖动三个参数，实时画出 $T(t)=(T_0-T_\infty)\mathrm e^{-kt}+T_\infty$。虚线是<b>永远达不到的渐近线</b> $T=T_\infty$；竖直标尺按<b>温差每缩小到 $\frac1{10}$</b> 打点——<b>你会看到这些点在时间轴上是等间距的</b>，这就是 <a href="#eg72q">强 7.2</a> 能口算的原因。点「装载强 7.2 的数据」可复现原题（$T_0=120,T_\infty=20$，30 min 到 $30℃$）。</div>
+
+    <div class="ctl">
+      <button id="nc_load" class="on">装载强 7.2 的数据</button>
+      <button id="nc_mark">显示/隐藏 10 倍标尺</button>
+    </div>
+    <div class="ctl">
+      <label>初始温度 $T_0$</label><input type="range" id="nc_T0" min="30" max="200" step="1" value="120"><span class="val" id="nc_T0v"></span>
+    </div>
+    <div class="ctl">
+      <label>介质温度 $T_\infty$</label><input type="range" id="nc_Ti" min="0" max="40" step="1" value="20"><span class="val" id="nc_Tiv"></span>
+    </div>
+    <div class="ctl">
+      <label>衰减系数 $k$</label><input type="range" id="nc_k" min="100" max="3000" step="0.01" value="767.53"><span class="val" id="nc_kv"></span>
+    </div>
+    <div class="ctl">
+      <label>查询温度 $T^\ast$</label><input type="range" id="nc_q" min="205" max="1990" step="5" value="300"><span class="val" id="nc_qv"></span>
+    </div>
+
+    <div class="scene"><svg id="nc_svg" viewBox="0 0 620 300" xmlns="http://www.w3.org/2000/svg"></svg></div>
+    <div class="say" id="nc_say"></div>
+    <div id="nc_verdict"></div>
+    <div class="legend2">$k$ 与"降 10 倍温差所需时间" $\tau$ 的换算：$\tau=\dfrac{\ln10}k$。强 7.2 里 $\tau=30$ min ⇒ $k=\dfrac{\ln10}{30}\approx0.0768$。<b>滑动 $k$ 时注意 $\tau$ 是怎么反着变的。</b></div>
+  </div>
+
+  <!-- ================= s8 题型六 ================= -->
+  <h2 id="s8"><span class="idx">八</span>题型六 · 积分 + 变化率综合（1 题，本章天花板）</h2>
+
+  <!-- 千强 7.3 -->
+  <div class="eg" id="egq73q">
+    <div class="q"><span class="no">千强 7.3</span><b>（解答 · 本章最难，也是最像大题的一道）</b>已知曲线 $L:y=\ln\sqrt x\ (2\le x\le4)$，在 $L$ 上的任意点 $P(x,y)$ 作切线，记切线与曲线 $L$ 在 $2\le x\le4$ 时所围成的有界区域的面积为 $S$。<br>
+    (1) 求一点 $P_0$，使上述面积 $S$ 关于 $x$ 的变化率为零；<br>
+    (2) 当点 $P(x,y)$ 在曲线上移动至 $\left(\mathrm e,\dfrac12\right)$ 时，横坐标关于时间的变化率为 $1$，求此时面积关于时间的变化率 $\dfrac{\mathrm dS}{\mathrm dt}$。</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">(1) $P_0\left(3,\dfrac12\ln3\right)$；(2) $\dfrac{\mathrm e-3}{\mathrm e^2}\approx-0.0381$（<b>负值</b>）</span>　<span class="exam">✔ 已复算（sympy 符号积分 + scipy 数值积分 6 点对拍，全部一致到 $10^{-9}$）</span></p>
+
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>先看清"谁是变量"</b>：这题有<b>两个 $x$</b>——一个是<u>切点的横坐标</u>（题目里的参数，$S$ 就是它的函数），一个是<u>积分变量</u>（在 $[2,4]$ 上跑）。<b>动笔第一件事：把积分变量改写成 $X$（大写），切点坐标保持 $x$。</b><span style="color:var(--red)"><b>不分开这两个字母，这题必错。</b></span></li>
+          <li><b>面积怎么算</b>：$y=\frac12\ln x$ 的 $y''=-\frac1{2x^2}\lt0$，曲线是<b>凸的</b>，所以<b>切线恒在曲线上方</b>（第 5 章结论）。故 $S=\displaystyle\int_2^4(\text{切线}-\text{曲线})\mathrm dX$，<b>被积函数恒非负，不用讨论上下位置</b>。</li>
+          <li><b>切线方程</b>：$y'=\frac1{2x}$，过点 $\left(x,\frac12\ln x\right)$ 的切线是 $Y=\frac12\ln x+\frac1{2x}(X-x)$。<b>把它按 $X$ 的幂次拆开写成 $\frac{X}{2x}+\left(\frac12\ln x-\frac12\right)$，积分时对 $X$ 是一次函数，非常好积。</b></li>
+          <li>算出 $S(x)=\dfrac3x+\ln x-3\ln2$，<b>第 (1) 问就是求 $S'(x)=0$</b>——"面积关于 $x$ 的变化率为零"就是导数为零，<b>题面这句话是在用变化率的语言问驻点</b>。</li>
+          <li><b>第 (2) 问才是本章内容</b>：$\dfrac{\mathrm dS}{\mathrm dt}=\dfrac{\mathrm dS}{\mathrm dx}\cdot\dfrac{\mathrm dx}{\mathrm dt}$，一步链式法则。<b>整道题里"相关变化率"只占最后这一行</b>，前面全是第 4、10 章的活。</li>
+          <li><b>算出负数别慌</b>：$x_0=3$ 是 $S$ 的<b>极小值点</b>，而 $\mathrm e\approx2.718\lt3$ 落在<b>递减区间</b>上，所以 $\frac{\mathrm dS}{\mathrm dt}\lt0$ <b>理应为负</b>——切点往右移，面积还在缩小。<b>这个符号自检必须做。</b></li>
+        </ol>
+      </div>
+
+      <div class="paper"><span class="phead">✍️ 考场卷面（可照抄）<span class="score">参考 12 分</span></span>
+        <div class="phead" style="background:none;padding-left:0">(1)</div>
+        <div class="step"><b>解</b>　由 $y=\ln\sqrt x=\dfrac12\ln x$ 得 $y'=\dfrac1{2x}$，故曲线 $L$ 在点 $P(x,y)$ 处的切线方程为
+        $$Y-\frac12\ln x=\frac1{2x}(X-x)\tag{1}$$
+        其中 $X$ 为切线上点的横坐标，$x$ 为切点横坐标。<span class="pt">⛳ 2 分</span></div>
+        <div class="step">因 $y''=-\dfrac1{2x^2}\lt0$，曲线 $L$ 是凸的，切线位于曲线上方，故所围有界区域的面积为
+        $$S=\int_2^4\left(\frac12\ln x+\frac1{2x}X-\frac12-\frac12\ln X\right)\mathrm dX\tag{2}$$<span class="pt">⛳ 3 分</span></div>
+        <div class="step">计算 (2) 式：
+        $$S=\frac12\ln x\cdot(4-2)+\left.\frac1{4x}X^2\right|_2^4-\frac12(4-2)-\frac12\left.(X\ln X-X)\right|_2^4$$
+        $$=\ln x+\frac3x-1-\frac12(4\ln4-4-2\ln2+2)=\frac3x+\ln x-3\ln2\tag{3}$$<span class="pt">⛳ 3 分</span></div>
+        <div class="fin">则由 $\dfrac{\mathrm dS}{\mathrm dx}=-\dfrac3{x^2}+\dfrac1x=0$，得 $x_0=3$，<b>故所求的点为 $P_0\left(3,\dfrac12\ln3\right)$</b>。<span class="pt">⛳ 2 分</span></div>
+        <div class="phead" style="background:none;padding-left:0;margin-top:10px">(2)</div>
+        <div class="fin">由 (3) 式及复合函数求导法则，
+        $$\left.\frac{\mathrm dS}{\mathrm dt}\right|_{x=\mathrm e}=\left.\frac{\mathrm dS}{\mathrm dx}\right|_{x=\mathrm e}\cdot\left.\frac{\mathrm dx}{\mathrm dt}\right|_{x=\mathrm e}=\left(-\frac3{\mathrm e^2}+\frac1{\mathrm e}\right)\cdot1=\frac{\mathrm e-3}{\mathrm e^2}$$
+        <b>即此时面积关于时间的变化率为 $\dfrac{\mathrm e-3}{\mathrm e^2}$</b>。<span class="pt">⛳ 2 分</span></div>
+      </div>
+
+      <div class="notekeep"><span class="nh">📌 批注（对照完校对）</span>
+        <ul>
+          <li><span class="dock">扣分点 1（本题最贵的一分）</span>：<b>积分变量与参数必须用不同字母，并且在卷面上声明一句</b>（"其中 $X$ 为切线上点的横坐标，$x$ 为切点横坐标"）。同一张卷子上 $\int_2^4(\cdots x\cdots)\mathrm dx$ 里的 $x$ 既当上下限又当参数，<b>阅卷人会判为概念错误</b>，即使数字碰巧对。</li>
+          <li><span class="dock">扣分点 2</span>：<b>"切线在曲线上方"要给理由</b>（$y''\lt0$ 凸函数）。不写理由直接写 $\int(\text{切}-\text{曲})$，等于默认了一个没证的事实。<b>一句话的事。</b></li>
+          <li><b>$\int\ln X\,\mathrm dX=X\ln X-X$ 要背熟</b>（分部积分）。本题 $\frac12(X\ln X-X)\big|_2^4=\frac12(4\ln4-4-2\ln2+2)=\frac12(8\ln2-2\ln2-2)=3\ln2-1$。<b>$4\ln4=8\ln2$ 这一步别漏。</b></li>
+          <li><b>为什么 $S$ 里会出现 $-3\ln2$ 这个常数</b>：它来自曲线那部分的积分（与切点无关），<b>所以求导时直接消失</b>——<span class="chip c-b">提速</span><b>第 (1) 问只要 $S'(x)$，那些不含 $x$ 的常数项可以边算边扔</b>，$S$ 中真正有用的只有 $\frac3x+\ln x$ 两项。考场上时间紧就这么干。</li>
+          <li><b>$x_0=3$ 是极小值点</b>：$S''=\dfrac6{x^3}-\dfrac1{x^2}$，$S''(3)=\dfrac29-\dfrac19=\dfrac19\gt0$。<b>题目只问"变化率为零"没要求判别，但顺手验一下能确认没算错</b>——切线在 $[2,4]$ 中部时围出的面积最小，符合几何直觉（切点越靠边，切线越"斜"，围出的月牙越大）。<a href="#s8b">📐 工具</a>里可以直接拖出来看。</li>
+          <li><b>数值核对</b>：$S(2)=0.1137$、$S(3)=0.01917$（最小）、$S(4)=0.05685$、$S(\mathrm e)=0.02420$，$\frac{\mathrm dS}{\mathrm dx}\big|_{\mathrm e}=-0.0381$。<b>面积量级只有 0.02–0.11，是个很扁的月牙</b>——若你算出 $S$ 是几个单位那么大，一定错了。</li>
+          <li><span class="chip c-a">跨章</span>本题把<b>第 4 章（切线方程）+ 第 5 章（凹凸、极值）+ 第 10 章（面积积分）+ 第 7 章（相关变化率）</b>缝在一起，<b>这正是"物理应用"在真题里的真实形态</b>：变化率只是最后一步，前面全是别的章。<b>所以本章不需要单独刷题，把这道吃透即可。</b></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= s8b 面积台 ================= -->
+  <h2 id="s8b"><span class="idx">工具</span>📐 切线面积变化率台</h2>
+
+  <div class="tool">
+    <h4>📐 拖切点看 $S(x)$ 与 $\dfrac{\mathrm dS}{\mathrm dx}$ 同步变化（千强 7.3 的可视化）</h4>
+    <div class="hint">左图：曲线 $y=\frac12\ln x$（<span style="color:var(--accent)">蓝</span>）与切点处的切线（<span style="color:var(--red)">红</span>），中间的月牙就是 $S$。右图：$S(x)$ 在 $x\in[2,4]$ 上的图像，红点是当前切点。<b>拖到 $x=3$，右图的红点正好落在最低处、切线斜率为 0</b>——这就是第 (1) 问；拖到 $x=\mathrm e\approx2.718$，读数条给出 $\frac{\mathrm dS}{\mathrm dx}=-0.0381$，<b>负号意味着继续往右拖面积还会变小</b>——这就是第 (2) 问。</div>
+
+    <div class="ctl">
+      <label>切点横坐标 $x$</label><input type="range" id="ta_x" min="200" max="400" step="0.001" value="271.828"><span class="val" id="ta_xv"></span>
+    </div>
+    <div class="ctl">
+      <button id="ta_e">跳到 $x=\mathrm e$（第 2 问）</button>
+      <button id="ta_3">跳到 $x=3$（第 1 问）</button>
+    </div>
+    <div class="scene"><svg id="ta_svg" viewBox="0 0 620 280" xmlns="http://www.w3.org/2000/svg"></svg></div>
+    <div class="say" id="ta_say"></div>
+    <div class="gridwrap"><table class="dq" id="ta_tab"></table></div>
+    <div class="legend2">表中 <b>解析</b> 列用 $S(x)=\frac3x+\ln x-3\ln2$ 与 $S'(x)=-\frac3{x^2}+\frac1x$ 计算；<b>数值</b> 列用 Simpson 法对 $\int_2^4(\text{切}-\text{曲})\mathrm dX$ 积分、并用中心差分求导。<b>两列一致 = 卷面上那个 $S(x)$ 推对了。</b></div>
+  </div>
+
+  <!-- ================= 收官 ================= -->
+  <h2 id="end"><span class="idx">收官</span>全章 12 题落位索引 + 下一章</h2>
+
+  <div class="key"><span class="tag">必记 · 五类关系式，把本章压缩成一张表</span>
+    <div class="gridwrap"><table class="dense">
+      <tr><th>类型</th><th>关系式</th><th>求导后的桥梁</th><th>本页题目</th></tr>
+      <tr><td><b>距离</b></td><td>$l^2=x^2+y^2$</td><td>$l\dot l=x\dot x+y\dot y$</td><td><a href="#eg71">基7.1</a>、<a href="#egx71">习7.1</a>、<a href="#egq71">千基7.1</a>、<a href="#eg71q">强7.1</a></td></tr>
+      <tr><td><b>体积/表面积</b></td><td>$V=\pi r^2h$，$S=4\pi r^2$，$V=V(y)$</td><td>$\dot V=V_r\dot r+V_h\dot h$</td><td><a href="#egq72q">千强7.2</a>、<a href="#egq73">千基7.3</a>、<a href="#egq74">千基7.4</a></td></tr>
+      <tr><td><b>角度</b></td><td>$\theta=\arctan\frac hb$</td><td>$\dot\theta=\frac{b\dot h}{b^2+h^2}$</td><td><a href="#egq75">千基7.5</a></td></tr>
+      <tr><td><b>相对运动</b></td><td>$s^2=x^2+(y+c)^2$</td><td>$s\dot s=x\dot x+(y+c)\dot y$</td><td><a href="#egx73">习7.3</a></td></tr>
+      <tr><td><b>图像</b></td><td>—（读凹凸）</td><td>$f'$ 增减 $\Leftrightarrow f''$ 符号</td><td><a href="#egq72">千基7.2</a></td></tr>
+      <tr><td><b>微分方程</b></td><td>$\dot A=-k(A-A_0)$</td><td>$A=C\mathrm e^{-kt}+A_0$</td><td><a href="#eg72q">强7.2</a></td></tr>
+      <tr><td><b>综合</b></td><td>$S=\int(\cdots x\cdots)\mathrm dX$</td><td>$\dot S=S'(x)\dot x$</td><td><a href="#egq73q">千强7.3</a></td></tr>
+    </table></div>
+  </div>
+
+  <div class="outro">
+    <p><b>本页共收 12 题</b>：基础30讲 1 例 + 2 习题（数一部分全收，数三的例 7.2–7.5、习 7.2/7.4 已明确跳过）· 高数18讲 2 例（第一部分全收，第二部分数三跳过）· 1000 题第 7 章 8 题（基础篇 5 + 强化篇 3，<b>数一题全收</b>）。
+    其中<b>三层大题卡 5 张</b>（<a href="#egq72q">千强7.2</a>、<a href="#egq73">千基7.3</a>、<a href="#egx73">习7.3</a>、<a href="#eg72q">强7.2</a>、<a href="#egq73q">千强7.3</a>，共 <b>31 个 ⛳ 采分点</b>），<b>选填教学卡 7 张</b>。答案全部经 sympy 符号复算 / scipy 数值对拍，与书一致，<b>唯一一处"看似矛盾"已查明</b>（<a href="#egx71">习 7.1</a> 与千强 7.1 的两个答案写法恒等）。</p>
+    <p><b>这一章的复习建议（它值得的时间比你想象的少）</b>：本章的知识点半小时能看完，<b>剩下的价值全在"别的章的题借这个壳出现"</b>。所以：① <a href="#s2">§二的三步法</a>和 <a href="#end">上面那张五类关系式表</a>背下来；② <a href="#eg72q">强 7.2</a> 与 <a href="#egq73q">千强 7.3</a> 两道综合题各做一遍；③ 其余 10 道当作口算练习，<b>每道不超过 2 分钟</b>。做完就可以走了，不要在这一章刷题。</p>
+    <p><b>⚠️ 一条要带走的话</b>：本章所有的错，本质都是<b>同一个错</b>——<u>在求导之前就把数值代进了关系式</u>。养成"<b>先写通式、全部求导完、最后一步才代数</b>"的手序，这一章就没有失分点了。</p>
+    <p><b>下一章 → 第 8 章　一元函数积分学的概念与性质</b>——微分学到此收官（第 3–7 章：概念 → 计算 → 几何应用 → 中值定理 → 物理应用），从第 8 章起进入积分学。<b>第 8 章会把本章 <a href="#s7">§七</a> 埋的"变上限积分"和第 6 章的中值定理接上（积分中值定理），是从"微"跨到"积"的枢纽章。</b></p>
+  </div>
+
+  <div class="pg">精读版 · 高数第 7 章　|　源：张宇《基础30讲·高数分册》第 7 讲（p.186–194）+《高数18讲》第 7 讲（p.72–77）+《1000题》第 7 章　|　12 题全收 · 5 张三层卡 / 31 ⛳ · 3 个交互模块</div>
+</div>
+
+<script>
+/* ==================== 通用小工具 ==================== */
+const $=id=>document.getElementById(id);
+const fmt=(v,d)=>{ if(!isFinite(v))return '—'; const s=v.toFixed(d===undefined?4:d); return (s==='-0.0000'||s==='-0.000'||s==='-0.00')?s.slice(1):s; };
+const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+/* ==================== 🎛️ 相关变化率沙盘 ==================== */
+/* 每个场景：st(p,τ) 给出 τ 时刻（τ=0 为当前）的各量；
+   rows 描述表格；target 列出要做"解析 vs 数值微分"对拍的量。 */
+const SCN=[
+{
+  key:'A', lab:'A · 动点沿曲线 y=x³（基 7.1）',
+  ctl:[{k:'x',t:'当前横坐标 x',min:20,max:200,step:1,v:100,sc:100,u:''},
+       {k:'v0',t:'横坐标变化率 dx/dt = v₀',min:5,max:30,step:1,v:10,sc:10,u:''}],
+  st:(p,τ)=>{const x=p.x+p.v0*τ, y=x*x*x; return {x:x,y:y,l:Math.sqrt(x*x+y*y)};},
+  ana:p=>({l:(2*p.x+6*Math.pow(p.x,5))/(2*Math.sqrt(p.x*p.x+Math.pow(p.x,6)))*p.v0}),
+  rows:p=>{const s=SCN[0].st(p,0);return [
+    ['given','dx/dt（给定）',p.v0],['pos','当前 x',s.x],['pos','当前 y = x³',s.y],
+    ['pos','距离 l = √(x²+y²)',s.l],['bridge','dl/dx = (2x+6x⁵)/(2l)',(2*p.x+6*Math.pow(p.x,5))/(2*s.l)]];},
+  tgt:[{k:'l',t:'dl/dt = (dl/dx)·(dx/dt)'}],
+  chk:p=>Math.abs(p.x-1)<1e-9?('取 x=1、v₀=1 正是书上的点 (1,1)：dl/dt = 2√2·v₀ ≈ '+fmt(2*Math.SQRT2*p.v0,4)+'，与答案 2√2v₀ 一致。'):null,
+  draw:p=>{const s=SCN[0].st(p,0);
+    const xm=Math.max(1.25,s.x*1.25), ym=Math.max(1.25,s.y*1.25);   // 自适应缩放，点始终在框内
+    const X=v=>60+v/xm*500, Y=v=>200-v/ym*170;
+    let d='';for(let i=0;i<=120;i++){const x=i/120*xm,y=x*x*x;if(y>ym)break;d+=(i?'L':'M')+X(x).toFixed(1)+','+Y(y).toFixed(1);}
+    return `<svg viewBox="0 0 620 240"><g stroke="var(--muted)" stroke-width="1">
+      <line x1="60" y1="200" x2="600" y2="200"/><line x1="60" y1="215" x2="60" y2="20"/></g>
+      <path d="${d}" stroke="var(--accent)" stroke-width="2" fill="none"/>
+      <line x1="${X(0)}" y1="${Y(0)}" x2="${X(s.x)}" y2="${Y(s.y)}" stroke="var(--purple)" stroke-width="1.8" stroke-dasharray="4,3"/>
+      <circle cx="${X(s.x)}" cy="${Y(s.y)}" r="5" fill="var(--red)"/>
+      <text x="${X(s.x)+9}" y="${Y(s.y)-6}" font-size="11" fill="var(--red)">P(${fmt(s.x,2)}, ${fmt(s.y,2)})</text>
+      <text x="${(X(0)+X(s.x))/2-24}" y="${(Y(0)+Y(s.y))/2-6}" font-size="11" fill="var(--purple)">l=${fmt(s.l,3)}</text>
+      <text x="590" y="216" font-size="11" fill="var(--muted)">x</text><text x="44" y="30" font-size="11" fill="var(--muted)">y</text></svg>`;}
+},
+{
+  key:'B', lab:'B · 圆柱体膨胀（千基 7.4）',
+  ctl:[{k:'r',t:'当前半径 r (cm)',min:20,max:150,step:1,v:100,sc:10,u:' cm'},
+       {k:'h',t:'当前高 h (cm)',min:10,max:150,step:1,v:50,sc:10,u:' cm'}],
+  st:(p,τ)=>{const r=p.r+2*τ,h=p.h-3*τ;return {r:r,h:h,V:Math.PI*r*r*h,S:2*Math.PI*r*h+2*Math.PI*r*r};},
+  ana:p=>({V:2*Math.PI*p.r*p.h*2+Math.PI*p.r*p.r*(-3),
+           S:2*Math.PI*p.h*2+2*Math.PI*p.r*(-3)+4*Math.PI*p.r*2}),
+  rows:p=>{const s=SCN[1].st(p,0);return [
+    ['given','dr/dt（给定）',2],['given','dh/dt（给定）',-3],
+    ['pos','当前 r',s.r],['pos','当前 h',s.h],
+    ['pos','V = πr²h',s.V],['pos','S = 2πrh+2πr²',s.S]];},
+  tgt:[{k:'V',t:'dV/dt = 2πrh·ṙ + πr²·ḣ'},{k:'S',t:'dS/dt = (2πh+4πr)·ṙ + 2πr·ḣ'}],
+  chk:p=>{const a=SCN[1].ana(p);const dv=a.V/Math.PI,ds=a.S/Math.PI;
+    if(Math.abs(dv+100)<0.05&&Math.abs(ds-40)<0.05) return '★ 命中千基 7.4 的答案：r=10, h=5 时 dV/dt = −100π、dS/dt = 40π，正是选项 (B)。';
+    return '目标：把两个滑块拖到 dV/dt = −100π 且 dS/dt = 40π（现在 '+fmt(dv,2)+'π 与 '+fmt(ds,2)+'π）。提示：先用线性的那条 4h+2r=40 定位。';},
+  draw:p=>{const s=SCN[1].st(p,0);const cx=310;
+    const sc=Math.min(8, 130/Math.max(s.r,1), 130/Math.max(s.h,1));   // 等比自适应，r 与 h 共用同一比例尺
+    const rw=s.r*sc, hh=s.h*sc, by=Math.min(212,138+hh/2), ty=by-hh, ry=Math.max(5,rw*0.28);
+    return `<svg viewBox="0 0 620 240">
+      <ellipse cx="${cx}" cy="${ty}" rx="${rw}" ry="${ry}" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.8"/>
+      <path d="M${cx-rw},${ty} L${cx-rw},${by} A${rw},${ry} 0 0 0 ${cx+rw},${by} L${cx+rw},${ty}" fill="var(--accent-soft)" opacity=".55" stroke="var(--accent)" stroke-width="1.8"/>
+      <line x1="${cx}" y1="${ty}" x2="${cx+rw}" y2="${ty}" stroke="var(--red)" stroke-width="2"/>
+      <text x="${cx+rw/2-14}" y="${ty-7}" font-size="11" fill="var(--red)">r=${fmt(s.r,1)}</text>
+      <line x1="${cx+rw+16}" y1="${ty}" x2="${cx+rw+16}" y2="${by}" stroke="var(--green)" stroke-width="2"/>
+      <text x="${cx+rw+22}" y="${(ty+by)/2}" font-size="11" fill="var(--green)">h=${fmt(s.h,1)}</text>
+      <text x="30" y="30" font-size="11" fill="var(--muted)">半径以 2 cm/s 增长（红），高以 3 cm/s 缩短（绿）</text>
+      <text x="30" y="48" font-size="11" fill="var(--accent)">V=${fmt(s.V/Math.PI,1)}π cm³　S=${fmt(s.S/Math.PI,1)}π cm²</text></svg>`;}
+},
+{
+  key:'C', lab:'C · 球膨胀（千强 7.2）',
+  ctl:[{k:'r',t:'当前半径 r (cm)',min:50,max:800,step:5,v:500,sc:10,u:' cm'},
+       {k:'dr',t:'径向速度 dr/dt (cm/s)',min:5,max:100,step:5,v:50,sc:10,u:' cm/s'}],
+  st:(p,τ)=>{const r=p.r+p.dr*τ;return {r:r,S:4*Math.PI*r*r,V:4/3*Math.PI*r*r*r};},
+  ana:p=>({S:8*Math.PI*p.r*p.dr, V:4*Math.PI*p.r*p.r*p.dr}),
+  rows:p=>{const s=SCN[2].st(p,0);return [
+    ['given','dr/dt（给定）',p.dr],['pos','当前 r',s.r],
+    ['pos','S = 4πr²',s.S],['pos','V = (4/3)πr³',s.V],
+    ['bridge','S·(dr/dt)　← 应等于 dV/dt',s.S*p.dr]];},
+  tgt:[{k:'S',t:'dS/dt = 8πr·ṙ'},{k:'V',t:'dV/dt = 4πr²·ṙ'}],
+  chk:p=>(Math.abs(p.r-50)<1e-9&&Math.abs(p.dr-5)<1e-9)?'★ 命中千强 7.2：dS/dt = 2000π cm²/s，dV/dt = 50000π cm³/s。注意表里「S·ṙ」那一行与 dV/dt 完全相同——这就是"体积增量 = 表面积 × 增厚"。':'注意「S·(dr/dt)」这一行永远等于 dV/dt——几何直觉：每秒长出一层厚 '+fmt(p.dr,1)+' cm 的皮。',
+  draw:p=>{const s=SCN[2].st(p,0);const cx=310,cy=120;
+    const sc=Math.min(1.1, 88/Math.max(s.r,1));                       // 等比：球与"一层皮"共用比例尺
+    const R=Math.max(18,s.r*sc), dR=Math.max(3,Math.min(34,p.dr*sc));
+    return `<svg viewBox="0 0 620 240">
+      <circle cx="${cx}" cy="${cy}" r="${R+dR}" fill="var(--green-soft)" stroke="var(--green)" stroke-dasharray="4,3" stroke-width="1.5"/>
+      <circle cx="${cx}" cy="${cy}" r="${R}" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2"/>
+      <line x1="${cx}" y1="${cy}" x2="${cx+R}" y2="${cy}" stroke="var(--red)" stroke-width="2"/>
+      <line x1="${cx+R}" y1="${cy}" x2="${cx+R+dR}" y2="${cy}" stroke="var(--green)" stroke-width="3"/>
+      <text x="${cx+R/2-16}" y="${cy-8}" font-size="11" fill="var(--red)">r=${fmt(s.r,0)}</text>
+      <text x="${cx+R+dR+6}" y="${cy+4}" font-size="11" fill="var(--green)">1 秒长出的一层</text>
+      <text x="30" y="28" font-size="11" fill="var(--muted)">虚线圈 = 1 秒后的球面</text>
+      <text x="30" y="46" font-size="11" fill="var(--accent)">S=${fmt(s.S/Math.PI,0)}π cm²　V=${fmt(s.V/Math.PI,0)}π cm³</text></svg>`;}
+},
+{
+  key:'D', lab:'D · 观测仰角（千基 7.5）',
+  ctl:[{k:'h',t:'物体离地高度 h (m)',min:10,max:600,step:5,v:200,sc:10,u:' m'},
+       {k:'a',t:'上升速度 a (m/s)',min:5,max:120,step:5,v:50,sc:10,u:' m/s'}],
+  st:(p,τ)=>{const h=p.h+p.a*τ;return {h:h,th:Math.atan(h/10)};},
+  ana:p=>({th:(1/10)/(1+p.h*p.h/100)*p.a}),
+  rows:p=>{const s=SCN[3].st(p,0);return [
+    ['given','dh/dt = a（给定）',p.a],['pos','当前 h',s.h],
+    ['pos','θ = arctan(h/10)  [rad]',s.th],['pos','θ  [度]',s.th*180/Math.PI],
+    ['bridge','dθ/dh = (1/10)/(1+(h/10)²)',(1/10)/(1+p.h*p.h/100)]];},
+  tgt:[{k:'th',t:'dθ/dt = dθ/dh · a'}],
+  chk:p=>{const v=SCN[3].ana(p).th;
+    if(Math.abs(p.h-20)<1e-9&&Math.abs(v-0.1)<1e-9) return '★ 命中千基 7.5：h=20 时 dθ/dt = a/50 = 1/10 ⇒ a=5，选 (D)。';
+    let s='当前 dθ/dt = '+fmt(v,5)+' rad/s。';
+    if(Math.abs(p.h-10)<3) s+=' ⚠️ 此刻 h≈10=底边，正是"角速度最大"的位置（仰角 45°），再往上角速度反而下降。';
+    return s;},
+  draw:p=>{const s=SCN[3].st(p,0);const ox=120,oy=200;
+    const sc=Math.min(14, 165/Math.max(s.h,1));   // 等比，保证图上的 θ 与真实仰角一致
+    const b=10*sc, H=s.h*sc, tx=ox+b, ty=oy-H;
+    return `<svg viewBox="0 0 620 240">
+      <line x1="${ox}" y1="${oy}" x2="${ox+320}" y2="${oy}" stroke="var(--muted)" stroke-width="1.4"/>
+      <line x1="${ox}" y1="${oy}" x2="${tx}" y2="${oy}" stroke="var(--muted)" stroke-width="2.4"/>
+      <line x1="${tx}" y1="${oy}" x2="${tx}" y2="${ty}" stroke="var(--red)" stroke-width="2.4"/>
+      <line x1="${ox}" y1="${oy}" x2="${tx}" y2="${ty}" stroke="var(--accent)" stroke-width="2"/>
+      <path d="M${ox+38},${oy} A38,38 0 0 0 ${ox+38*Math.cos(s.th)},${oy-38*Math.sin(s.th)}" fill="none" stroke="var(--purple)" stroke-width="1.6"/>
+      <text x="${ox+44}" y="${oy-8}" font-size="11" fill="var(--purple)">θ=${fmt(s.th*180/Math.PI,1)}°</text>
+      <text x="${ox+b/2-10}" y="${oy+16}" font-size="11" fill="var(--muted)">10 m</text>
+      <text x="${tx+8}" y="${(oy+ty)/2}" font-size="11" fill="var(--red)">h=${fmt(s.h,0)} m</text>
+      <circle cx="${tx}" cy="${ty}" r="5" fill="var(--red)"/>
+      <text x="${ox-84}" y="${oy+4}" font-size="11" fill="var(--muted)">观测器 →</text></svg>`;}
+},
+{
+  key:'E', lab:'E · 两车相对运动（习 7.3）',
+  ctl:[{k:'t',t:'经过时间 t (小时)',min:0,max:250,step:1,v:100,sc:100,u:' h'},
+       {k:'c',t:'乙车初始东移量 c (km)',min:0,max:300,step:5,v:100,sc:10,u:' km'}],
+  st:(p,τ)=>{const t=p.t+τ, x=24*t, y=20*t;return {t:t,x:x,y:y,s:Math.sqrt(x*x+(y+p.c)*(y+p.c))};},
+  ana:p=>{const x=24*p.t,y=20*p.t,s=Math.sqrt(x*x+(y+p.c)*(y+p.c));
+    return {s:s===0?0:(x*24+(y+p.c)*20)/s};},
+  rows:p=>{const s=SCN[4].st(p,0);return [
+    ['given','甲车速度 dx/dt（北）',24],['given','乙车速度 dy/dt（东）',20],
+    ['pos','甲车已走 x = 24t',s.x],['pos','乙车已走 y = 20t',s.y],
+    ['pos','两车水平间距 y + c',s.y+p.c],['pos','间距 s = √(x²+(y+c)²)',s.s]];},
+  tgt:[{k:'s',t:'ds/dt = [x·ẋ + (y+c)·ẏ]/s'}],
+  chk:p=>{if(Math.abs(p.t-1)<1e-9&&Math.abs(p.c-10)<1e-9)
+      return '★ 命中习 7.3：t=1、c=10 时 ds/dt = 196/√41 ≈ '+fmt(196/Math.sqrt(41),4)+' km/h。';
+    if(Math.abs(p.c)<1e-9) return '把 c 拖到 0（两车同点出发）时，ds/dt 恒为 √(24²+20²) ≈ 31.24 —— 这就是本题答案的上界，真实答案 30.6 必须小于它。';
+    return '当前 ds/dt = '+fmt(SCN[4].ana(p).s,4)+' km/h（上界 √(24²+20²) ≈ 31.24，t→∞ 时趋近它）。';},
+  draw:p=>{const s=SCN[4].st(p,0);const ox=90,oy=205,sc=Math.min(3.0,150/Math.max(30,Math.max(s.x,s.y+p.c)));
+    const ax=ox, ay=oy-s.x*sc, bx=ox+(s.y+p.c)*sc, by=oy, cx2=ox+p.c*sc;
+    return `<svg viewBox="0 0 620 240">
+      <line x1="${ox}" y1="${oy}" x2="${ox+420}" y2="${oy}" stroke="var(--muted)" stroke-width="1.2"/>
+      <line x1="${ox}" y1="${oy}" x2="${ox}" y2="30" stroke="var(--muted)" stroke-width="1.2"/>
+      <line x1="${ox}" y1="${oy}" x2="${ax}" y2="${ay}" stroke="var(--red)" stroke-width="2.6"/>
+      <line x1="${cx2}" y1="${oy}" x2="${bx}" y2="${by}" stroke="var(--green)" stroke-width="2.6"/>
+      <line x1="${ax}" y1="${ay}" x2="${bx}" y2="${by}" stroke="var(--accent)" stroke-width="2" stroke-dasharray="5,3"/>
+      <circle cx="${ax}" cy="${ay}" r="5" fill="var(--red)"/><circle cx="${bx}" cy="${by}" r="5" fill="var(--green)"/>
+      <circle cx="${cx2}" cy="${oy}" r="3" fill="var(--muted)"/><circle cx="${ox}" cy="${oy}" r="3" fill="var(--muted)"/>
+      <text x="${ax-40}" y="${ay+4}" font-size="11" fill="var(--red)">甲 ${fmt(s.x,0)}km</text>
+      <text x="${bx-10}" y="${by+18}" font-size="11" fill="var(--green)">乙 ${fmt(s.y,0)}km</text>
+      <text x="${ox-14}" y="${oy+18}" font-size="11" fill="var(--muted)">O</text>
+      <text x="${cx2-6}" y="${oy+18}" font-size="11" fill="var(--muted)">C</text>
+      <text x="${(ax+bx)/2-16}" y="${(ay+by)/2-8}" font-size="11" fill="var(--accent)">s=${fmt(s.s,1)}</text>
+      <text x="470" y="46" font-size="11" fill="var(--muted)">北 ↑　东 →</text></svg>`;}
+}];
+
+let scnIdx=0, scnP={};
+function scnBuild(){
+  $('scnBtns').innerHTML=SCN.map((s,i)=>`<button data-i="${i}" class="${i===scnIdx?'on':''}">${esc(s.lab)}</button>`).join('');
+  $('scnBtns').querySelectorAll('button').forEach(b=>b.onclick=()=>{scnIdx=+b.dataset.i;scnInit();});
+  scnInit();
+}
+function scnInit(){
+  const S=SCN[scnIdx]; scnP={};
+  $('scnBtns').querySelectorAll('button').forEach((b,i)=>b.classList.toggle('on',i===scnIdx));
+  $('scnCtl').innerHTML=S.ctl.map(c=>
+    `<label>${esc(c.t)}</label><input type="range" id="sc_${c.k}" min="${c.min}" max="${c.max}" step="${c.step}" value="${c.v}"><span class="val" id="scv_${c.k}"></span>`).join('');
+  S.ctl.forEach(c=>{ scnP[c.k]=c.v/c.sc; $('sc_'+c.k).oninput=e=>{scnP[c.k]=(+e.target.value)/c.sc;scnDraw();}; });
+  scnDraw();
+}
+function scnDraw(){
+  const S=SCN[scnIdx], p=scnP;
+  S.ctl.forEach(c=>$('scv_'+c.k).textContent=fmt(p[c.k],c.sc>=100?2:(c.sc>=10?1:2))+c.u);
+  $('scnBox').innerHTML=S.draw(p);
+  const ana=S.ana(p), h=1e-5;
+  let rows=S.rows(p).map(r=>{
+    const cls=r[0]==='given'?'givn':'';
+    const col=r[0]==='bridge'?'style="color:var(--purple)"':'';
+    return `<tr class="${cls}"><td ${col}>${esc(r[1])}</td><td ${col} colspan="2">${fmt(r[2],4)}</td></tr>`;
+  });
+  let allok=true;
+  S.tgt.forEach(t=>{
+    const num=(S.st(p,h)[t.k]-S.st(p,-h)[t.k])/(2*h);
+    const av=ana[t.k];
+    const ok=Math.abs(num-av)<=1e-4*Math.max(1,Math.abs(av)); if(!ok)allok=false;
+    rows.push(`<tr><td style="color:var(--green);font-weight:700">${esc(t.t)}</td>
+      <td class="${ok?'hit':'miss'}">${fmt(av,5)}</td><td class="${ok?'hit':'miss'}">${fmt(num,5)}</td></tr>`);
+  });
+  $('scnTab').innerHTML=`<tr><th>量</th><th>解析式</th><th>数值微分</th></tr>`+rows.join('');
+  const msg=S.chk(p);
+  $('scnSay').innerHTML=msg?esc(msg).replace(/★/g,'<b>★</b>'):'';
+  $('scnVerdict').innerHTML=allok
+    ?`<span class="verdict v-ok">✔ 解析式与中心差分数值微分一致（相对误差 &lt; 1e-4）——公式推导正确</span>`
+    :`<span class="verdict v-no">✘ 两列不一致：解析式有误</span>`;
+}
+
+/* ==================== 🌡️ 牛顿冷却实验台 ==================== */
+let ncMark=true;
+function ncDraw(){
+  const T0=+$('nc_T0').value, Ti=+$('nc_Ti').value, k=(+$('nc_k').value)/10000, Tq=(+$('nc_q').value)/10;
+  $('nc_T0v').textContent=T0+' ℃'; $('nc_Tiv').textContent=Ti+' ℃';
+  $('nc_kv').textContent=fmt(k,4)+' /min';
+  const A=T0-Ti;
+  $('nc_q').min=Math.round((Ti+0.5)*10); $('nc_q').max=Math.round((T0-0.5)*10);
+  const Tqc=Math.min(Math.max(Tq,Ti+0.5),T0-0.5);
+  $('nc_qv').textContent=fmt(Tqc,1)+' ℃';
+  const tau=Math.log(10)/k;               // 温差降 10 倍所需时间
+  const tmax=Math.max(20,Math.min(400,3.2*tau));
+  const X=t=>60+t/tmax*530, Y=T=>265-(T-0)/(Math.max(T0,1)*1.12)*230;
+  let d='';
+  for(let i=0;i<=300;i++){const t=i/300*tmax, T=A*Math.exp(-k*t)+Ti; d+=(i?'L':'M')+X(t).toFixed(1)+','+Y(T).toFixed(1);}
+  let marks='';
+  if(ncMark&&A>0){
+    for(let n=1;n<=4;n++){ const t=n*tau; if(t>tmax)break; const T=A*Math.pow(10,-n)+Ti;
+      marks+=`<line x1="${X(t)}" y1="${Y(T)}" x2="${X(t)}" y2="265" stroke="var(--amber)" stroke-width="1" stroke-dasharray="3,3"/>
+      <circle cx="${X(t)}" cy="${Y(T)}" r="4" fill="var(--amber)"/>
+      <text x="${X(t)-14}" y="${Y(T)-8}" font-size="10" fill="var(--amber)">Δ/10^${n}</text>
+      <text x="${X(t)-12}" y="278" font-size="10" fill="var(--amber)">${fmt(t,0)}</text>`;}
+  }
+  const tq=(A>0&&Tqc>Ti)?Math.log(A/(Tqc-Ti))/k:NaN;
+  const qm=isFinite(tq)&&tq<=tmax?`<line x1="${X(tq)}" y1="${Y(Tqc)}" x2="${X(tq)}" y2="265" stroke="var(--red)" stroke-width="1.4"/>
+    <circle cx="${X(tq)}" cy="${Y(Tqc)}" r="5" fill="var(--red)"/>`:'';
+  $('nc_svg').innerHTML=`
+    <line x1="60" y1="265" x2="600" y2="265" stroke="var(--muted)" stroke-width="1.2"/>
+    <line x1="60" y1="275" x2="60" y2="20" stroke="var(--muted)" stroke-width="1.2"/>
+    <line x1="60" y1="${Y(Ti)}" x2="600" y2="${Y(Ti)}" stroke="var(--green)" stroke-width="1.4" stroke-dasharray="6,4"/>
+    <text x="604" y="${Y(Ti)+4}" font-size="10" fill="var(--green)" text-anchor="end" transform="translate(-8,0)">T∞=${Ti}</text>
+    <path d="${d}" stroke="var(--accent)" stroke-width="2.2" fill="none"/>
+    ${marks}${qm}
+    <text x="30" y="${Y(T0)+4}" font-size="10" fill="var(--muted)">${T0}</text>
+    <text x="560" y="288" font-size="10" fill="var(--muted)">t (min)</text>
+    <text x="40" y="18" font-size="10" fill="var(--muted)">T (℃)</text>`;
+  $('nc_say').innerHTML=`温差 $\\Delta=T-T_\\infty$ 满足 $\\Delta=${fmt(A,1)}\\mathrm e^{-${fmt(k,4)}t}$。<b>温差每缩小到 $\\frac1{10}$ 所需时间 $\\tau=\\frac{\\ln10}{k}=${fmt(tau,2)}$ min，与当前温度无关</b>（琥珀色点在时间轴上等距）。`
+    +(isFinite(tq)?`　降到 ${fmt(Tqc,1)}℃ 需 <b>${fmt(tq,2)} min</b>。`:'');
+  const isEg=Math.abs(T0-120)<.5&&Math.abs(Ti-20)<.5&&Math.abs(tau-30)<0.6;
+  $('nc_verdict').innerHTML=isEg
+    ?`<span class="verdict v-ok">✔ 这就是强 7.2 的设定：120℃→30℃（温差 100→10）用 ${fmt(tau,1)} min；30℃→21℃（温差 10→1）<b>再用 ${fmt(tau,1)} min</b>，答案「还需 30 min」</span>`
+    :`<span class="verdict v-inf">当前 τ = ${fmt(tau,2)} min（强 7.2 对应 τ=30，即 k≈0.0768）</span>`;
+  if(window.renderMathInElement) renderMathInElement($('nc_say'),{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});
+}
+['nc_T0','nc_Ti','nc_k','nc_q'].forEach(id=>$(id).oninput=ncDraw);
+$('nc_load').onclick=()=>{$('nc_T0').value=120;$('nc_Ti').value=20;$('nc_k').value=(Math.log(10)/30*10000).toFixed(2);$('nc_q').value=300;ncDraw();};
+$('nc_mark').onclick=()=>{ncMark=!ncMark;ncDraw();};
+
+/* ==================== 📐 切线面积变化率台 ==================== */
+function taS(x){return 3/x+Math.log(x)-3*Math.log(2);}      // 解析
+function taDS(x){return -3/(x*x)+1/x;}
+function taNum(x){                                           // Simpson 数值积分
+  const f=X=>(0.5*Math.log(x)+(X-x)/(2*x))-0.5*Math.log(X);
+  const n=2000,a=2,b=4,hh=(b-a)/n; let s=f(a)+f(b);
+  for(let i=1;i<n;i++) s+=f(a+i*hh)*(i%2?4:2);
+  return s*hh/3;
+}
+function taDraw(){
+  const x=(+$('ta_x').value)/100;
+  $('ta_xv').textContent=fmt(x,3);
+  const tl=v=>0.5*Math.log(x)+(v-x)/(2*x);
+  // y 轴自适应到"曲线 + 切线"在 [2,4] 上的实际范围，否则月牙（S≈0.02）会被压成一条线
+  const ys=[0.5*Math.log(2),0.5*Math.log(4),tl(2),tl(4)];
+  const ylo=Math.min(...ys), yhi=Math.max(...ys), pad=(yhi-ylo)*0.15;
+  const X=v=>45+(v-1.93)/2.2*300, Y=v=>192-(v-(ylo-pad))/((yhi-ylo)+2*pad)*152;
+  let cur='';
+  for(let i=0;i<=200;i++){const v=1.95+i/200*2.1; cur+=(i?'L':'M')+X(v).toFixed(1)+','+Y(0.5*Math.log(v)).toFixed(1);}
+  const tline=`M${X(2)},${Y(tl(2))} L${X(4)},${Y(tl(4))}`;
+  let area='M'+X(2)+','+Y(tl(2));
+  for(let i=0;i<=60;i++){const v=2+i/60*2; area+='L'+X(v).toFixed(1)+','+Y(tl(v)).toFixed(1);}
+  for(let i=60;i>=0;i--){const v=2+i/60*2; area+='L'+X(v).toFixed(1)+','+Y(0.5*Math.log(v)).toFixed(1);}
+  area+='Z';
+  // 右图 S(x)
+  const PX=v=>380+(v-2)/2*200, PY=v=>195-(v-0.012)/0.108*150;
+  let sc='';
+  for(let i=0;i<=200;i++){const v=2+i/200*2; sc+=(i?'L':'M')+PX(v).toFixed(1)+','+PY(taS(v)).toFixed(1);}
+  const S0=taS(x), D0=taDS(x);
+  $('ta_svg').innerHTML=`
+    <path d="${area}" fill="var(--purple)" opacity=".26"/>
+    <path d="${cur}" stroke="var(--accent)" stroke-width="2.2" fill="none"/>
+    <path d="${tline}" stroke="var(--red)" stroke-width="2" fill="none"/>
+    <circle cx="${X(x)}" cy="${Y(0.5*Math.log(x))}" r="5" fill="var(--red)"/>
+    <line x1="${X(2)}" y1="20" x2="${X(2)}" y2="200" stroke="var(--muted)" stroke-width="1" stroke-dasharray="3,3"/>
+    <line x1="${X(4)}" y1="20" x2="${X(4)}" y2="200" stroke="var(--muted)" stroke-width="1" stroke-dasharray="3,3"/>
+    <text x="${X(2)-6}" y="214" font-size="10" fill="var(--muted)">2</text>
+    <text x="${X(4)-6}" y="214" font-size="10" fill="var(--muted)">4</text>
+    <text x="45" y="30" font-size="11" fill="var(--accent)">y = ½ln x（蓝）与切线（红），紫色即 S</text>
+    <text x="45" y="44" font-size="9.5" fill="var(--muted)">⚠️ 纵轴已放大：真实的月牙比这更扁（S≈${fmt(taS(x),3)}）</text>
+    <text x="${X(x)+8}" y="${Y(0.5*Math.log(x))-8}" font-size="10" fill="var(--red)">P(${fmt(x,3)})</text>
+
+    <line x1="380" y1="195" x2="592" y2="195" stroke="var(--muted)" stroke-width="1.2"/>
+    <line x1="380" y1="200" x2="380" y2="30" stroke="var(--muted)" stroke-width="1.2"/>
+    <path d="${sc}" stroke="var(--purple)" stroke-width="2.2" fill="none"/>
+    <line x1="${PX(3)}" y1="${PY(taS(3))}" x2="${PX(3)}" y2="195" stroke="var(--green)" stroke-width="1" stroke-dasharray="3,3"/>
+    <circle cx="${PX(3)}" cy="${PY(taS(3))}" r="4" fill="var(--green)"/>
+    <text x="${PX(3)-24}" y="${PY(taS(3))+18}" font-size="10" fill="var(--green)">x₀=3 极小</text>
+    <circle cx="${PX(x)}" cy="${PY(S0)}" r="5" fill="var(--red)"/>
+    <text x="392" y="46" font-size="11" fill="var(--purple)">S(x) = 3/x + ln x − 3ln2</text>
+    <text x="${PX(2)-6}" y="209" font-size="10" fill="var(--muted)">2</text>
+    <text x="${PX(4)-6}" y="209" font-size="10" fill="var(--muted)">4</text>`;
+  const num=taNum(x), hh=1e-6, dnum=(taNum(x+hh)-taNum(x-hh))/(2*hh);
+  const ok1=Math.abs(num-S0)<1e-7, ok2=Math.abs(dnum-D0)<1e-4;
+  $('ta_tab').innerHTML=`<tr><th>量</th><th>解析</th><th>数值</th></tr>
+    <tr><td>面积 S(x)</td><td class="${ok1?'hit':'miss'}">${fmt(S0,7)}</td><td class="${ok1?'hit':'miss'}">${fmt(num,7)}</td></tr>
+    <tr><td>变化率 dS/dx</td><td class="${ok2?'hit':'miss'}">${fmt(D0,6)}</td><td class="${ok2?'hit':'miss'}">${fmt(dnum,6)}</td></tr>
+    <tr><td>dS/dt（题设 dx/dt = 1）</td><td colspan="2" style="color:${D0<0?'var(--red)':'var(--green)'}">${fmt(D0,6)}</td></tr>`;
+  let say='';
+  if(Math.abs(x-Math.E)<0.006) say='★ 第 (2) 问的位置：x = e ≈ 2.718，dS/dt = (e−3)/e² = '+fmt((Math.E-3)/(Math.E*Math.E),6)+'，<b>为负</b>——因为 e &lt; 3，还在 S 的递减段上。';
+  else if(Math.abs(x-3)<0.006) say='★ 第 (1) 问的位置：x₀ = 3，dS/dx = 0，S 取极小值 '+fmt(taS(3),6)+'。此处右图曲线的切线是水平的。';
+  else say=(D0<0?'当前 dS/dx &lt; 0：切点右移，围出的面积还在<b>缩小</b>（尚未到 x₀=3）。':'当前 dS/dx &gt; 0：切点右移，面积在<b>增大</b>（已越过 x₀=3）。');
+  $('ta_say').innerHTML=say;
+}
+$('ta_x').oninput=taDraw;
+$('ta_e').onclick=()=>{$('ta_x').value=(Math.E*100).toFixed(3);taDraw();};
+$('ta_3').onclick=()=>{$('ta_x').value=300;taDraw();};
+
+/* ==================== 启动 ==================== */
+scnBuild(); ncDraw(); taDraw();
+</script>
+</body>
+</html>
