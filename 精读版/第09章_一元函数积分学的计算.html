@@ -1,0 +1,2218 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>精读版 · 高数 第9章 一元函数积分学的计算</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],ignoredClasses:['nokatex']})"></script>
+<link rel="stylesheet" href="style.css">
+<style>
+/* ===== 本章专属：路线判定器 + 分部表格法 + 点火速查台 + 误用牛莱可视化 ===== */
+.tool{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:20px 0}
+.tool h4{margin:0 0 4px;font-size:1rem;color:var(--accent)}
+.tool .hint{color:var(--muted);font-size:.82rem;margin-bottom:12px;line-height:1.7}
+.ctl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0}
+.ctl button{font:inherit;font-size:.82rem;padding:4px 13px;border-radius:8px;cursor:pointer;
+  border:1px solid var(--line);background:var(--card);color:var(--muted)}
+.ctl button.on{background:var(--accent-soft);color:var(--accent);border-color:var(--accent);font-weight:700}
+.ctl button:hover{filter:brightness(.96)}
+.ctl label{font-size:.8rem;color:var(--muted);min-width:9.5em}
+.ctl input[type=range]{flex:1 1 150px;min-width:120px;accent-color:var(--accent)}
+.ctl input[type=number]{font:inherit;font-size:.82rem;width:4.5em;padding:3px 7px;border-radius:7px;
+  border:1px solid var(--line);background:var(--card);color:var(--ink)}
+.ctl select{font:inherit;font-size:.82rem;padding:4px 9px;border-radius:8px;border:1px solid var(--line);
+  background:var(--card);color:var(--ink);max-width:100%}
+.ctl .val{font-family:var(--mono);font-size:.78rem;color:var(--accent);min-width:6.5em;text-align:right}
+.scene{background:var(--bg);border:1px solid var(--line);border-radius:10px;margin:10px 0}
+.scene svg{display:block;width:100%;height:auto}
+.say{background:var(--accent-soft);border-radius:8px;padding:9px 13px;margin:10px 0;
+  font-size:.86rem;color:var(--accent);line-height:1.75;min-height:2em}
+.say b{color:var(--accent)}
+.verdict{font-size:.88rem;font-weight:700;border-radius:8px;padding:7px 13px;margin:10px 0;display:block}
+.v-ok{background:var(--green-soft);color:var(--green)}
+.v-no{background:var(--red-soft);color:var(--red)}
+.v-inf{background:var(--amber-soft);color:var(--amber)}
+.dq{width:100%;min-width:0;font-size:.8rem;margin:6px 0;border-collapse:collapse}
+.dq th,.dq td{padding:4px 8px;font-family:var(--mono);text-align:right;white-space:nowrap;border-bottom:1px solid var(--line)}
+.dq th:first-child,.dq td:first-child{text-align:left;font-family:var(--sans);white-space:normal}
+.dq td.hit{color:var(--green);font-weight:700}
+.legend2{font-size:.78rem;color:var(--muted);line-height:1.7;margin-top:6px}
+.chip{display:inline-block;font-size:.72rem;border-radius:5px;padding:1px 7px;margin-right:6px}
+.c-b{background:var(--accent-soft);color:var(--accent)}
+.c-g{background:var(--green-soft);color:var(--green)}
+.c-r{background:var(--red-soft);color:var(--red)}
+.c-a{background:var(--amber-soft);color:var(--amber)}
+.c-p{background:var(--purple-soft);color:var(--purple)}
+table.dense{font-size:.84rem;min-width:420px}
+table.dense td{padding:5px 9px}
+figure.fig{margin:14px 0;text-align:center;background:var(--card);border:1px solid var(--line);
+  border-radius:10px;padding:12px 10px 8px;overflow-x:auto}
+figure.fig svg{max-width:100%;height:auto}
+figure.fig figcaption{font-size:.78rem;color:var(--muted);line-height:1.7;margin-top:6px;text-align:left;padding:0 4px}
+.figrow{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin:12px 0}
+.figrow figure.fig{flex:1 1 220px;margin:0}
+/* 十支线总图 */
+.tenline{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 12px;margin:16px 0}
+.tenline svg{display:block;min-width:660px}
+/* 三步条 */
+.steps3{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.steps3 div{flex:1 1 190px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 13px;font-size:.85rem;line-height:1.75}
+.steps3 div b{color:var(--accent);display:block;margin-bottom:3px}
+/* 分部积分错位表 */
+.zbtab{width:100%;min-width:340px;font-size:.84rem;border-collapse:collapse;margin:8px 0}
+.zbtab th,.zbtab td{border:1px solid var(--line);padding:6px 9px;text-align:center;font-family:var(--mono);white-space:nowrap}
+.zbtab th{background:var(--accent-soft);color:var(--accent);font-family:var(--sans)}
+.zbtab td.sgn-p{color:var(--green);font-weight:700}
+.zbtab td.sgn-m{color:var(--red);font-weight:700}
+.zbtab tr.urow td{background:var(--purple-soft)}
+.zbtab tr.vrow td{background:var(--blue-soft)}
+/* 公式速查小卡 */
+.fcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,230px),1fr));gap:9px;margin:14px 0}
+.fcards div{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:9px 12px;font-size:.84rem;line-height:1.8}
+.fcards div b{color:var(--accent);font-size:.74rem;display:block;letter-spacing:.05em;margin-bottom:2px}
+tr.now td{background:var(--accent-soft)}
+@media (max-width:560px){ .ctl{gap:6px} .ctl label{min-width:100%} .dq{font-size:.72rem}
+  .figrow figure.fig{flex:1 1 160px} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../index.html">← 返回 数学一复盘中心</a>
+  <header>
+    <h1>精读版 · 高数第 9 章　一元函数积分学的计算</h1>
+    <div class="sub">融合张宇《基础30讲·高数分册》第 9 讲（<b>33 页 · 书页 230–262</b>）+《高数18讲》第 9 讲（<b>15 页 · 书页 90–104</b>）· 共 <b>48 页</b>。上一章讲"<b>存不存在</b>"，这一章讲"<b>怎么算出来</b>"——全书<b>手上功夫最重</b>的一讲，也是<b>支线最多</b>的一讲（18 讲把它拆成 <b>十条独立支线</b>）。<b>68 道题一道不漏</b>（基础例题 29 + 课后习题 17 + 强化例题 22），答案全部用 sympy <b>独立复算</b>——不定积分一律"对答案求导反验"，不信任 <code>integrate</code>。交付五个交互模块：<b>🧭 十支线路线判定器</b>、<b>⚙️ 分部积分错位表生成器</b>、<b>🎛️ 三角有理式判据自测 + 模板求解器</b>、<b>🔥 点火公式速查台</b>、<b>💥 误用牛莱现形记</b>。</div>
+  </header>
+
+  <div class="legend">
+    <b>这一页的三层结构：</b>
+    <span class="layer L-base">基础</span>= 30 讲的<b>方法体系</b>（公式 → 四大方法 → 定积分 → 变限积分 → 反常积分）；
+    <span class="layer L-str">强化</span>= 18 讲的<b>十支线解题法</b>（多出"分段函数""几何法""求出原函数再算值"三条独立支线，以及 D₂₂ 的同/异区间之分）。批注色块：
+    <span class="swatch" style="background:var(--blue)"></span><b style="color:var(--blue)">补讲</b>、
+    <span class="swatch" style="background:var(--amber)"></span><b style="color:var(--amber)">必记</b>、
+    <span class="swatch" style="background:var(--red)"></span><b style="color:var(--red)">陷阱</b>、
+    <span class="swatch" style="background:var(--green)"></span><b style="color:var(--green)">强化题型</b>。<br>
+    紫色 <b>例题</b> 卡里，<b>基</b>9.x = 基础30讲例题、<b>习</b>9.x = 基础30讲课后习题、<b>强</b>9.x = 高数18讲例题（三套各自编号，别混）。<b>每题都标 ✔</b> = 答案已被我用程序独立算过一遍。<br>
+    <b>📝 需要写过程的大题按「想 → 写 → 校」分三层</b>，对应做题的三个动作，<b>请按这个顺序用</b>：<br>
+    <b>💭 思路</b>＝<u>动手前</u>看：审题信号、这题该走十支线里的哪一条、卡在哪里怎么破。<b>看完这层就合上页面自己写，别直接翻卷面。</b><br>
+    <b>✍️ 考场卷面</b>＝<u>写完对照</u>：可以照着抄上考场的完整解答，每个采分点标 <span class="pt" style="margin-left:0">⛳</span> 及分值。<br>
+    <b>📌 批注</b>＝<u>对照完校对</u>：适用边界、<span class="dock">扣分点</span>、提速技巧、跨章联系。<b>这层的话考场上一个字都不要写。</b><br>
+    <b>⚠️ 本章的特殊性：考纲题型写明含"解答题"</b>——它是<b>第 10–12 章（积分应用）与第 14–18 章（重积分、级数、微分方程）的唯一底座</b>。后面每一道大题的<u>最后一步</u>都是本章的活。所以本页给了 <b>11 张</b>三层卷面卡（<b>64 个 ⛳ 采分点</b>），全部押在「必须写过程」的题型上。<b>不定积分这种"没有卷面格式"的题，卷面层写的是"换元必写回代、定积分必换限"这些真会扣分的动作。</b>
+  </div>
+
+  <nav class="toc">
+    <a href="#s0">定位 · ★★★ 十支线总图</a>
+    <a href="#s1">一、基本积分公式 10 组</a>
+    <a href="#s2">二、凑微分法（13 式）</a>
+    <a href="#s2b">🧭 十支线路线判定器</a>
+    <a href="#s3">三、换元法五类</a>
+    <a href="#s4">四、分部积分四子类</a>
+    <a href="#s4b">⚙️ 分部积分错位表生成器</a>
+    <a href="#s5">五、有理函数的积分</a>
+    <a href="#s6">六、三角有理式</a>
+    <a href="#s7">七、定积分的计算 + 七大结论</a>
+    <a href="#s7b">🔥 点火公式速查台</a>
+    <a href="#s8">八、★★★ 误用牛莱陷阱</a>
+    <a href="#s8b">💥 误用牛莱现形记</a>
+    <a href="#s9">九、变限积分求导四型</a>
+    <a href="#s10">十、变限积分的奇偶与周期</a>
+    <a href="#s11">十一、反常积分的计算 + Γ 函数</a>
+    <a href="#s12">十二、分段函数的积分 · 几何法</a>
+    <a href="#end">收官 + 落位索引</a>
+  </nav>
+
+  <!-- ================= s0 定位 ================= -->
+  <h2 id="s0"><span class="idx">定位</span>这一章是"手上功夫"：十条支线，条条要练熟</h2>
+
+  <div class="key"><span class="tag">必记 · 一句话概括整章</span>
+    <p>第 8 章讲完"什么积分存在"，本章只干一件事：<b>把存在的东西真的算出来</b>。张宇 18 讲把它拆成 <b>十条支线</b>——这不是十种"技巧"，而是<b>十种不同的入手方式</b>，看一眼被积函数就该知道走哪条。</p>
+    <p>全章的底层逻辑只有一句：<b>所有的积分计算，通过各种方法，最后都要化回基本积分公式。</b>（基础讲知识结构页原话，连打三个感叹号）</p>
+    <div class="fml">$\underbrace{F'(x)=f(x)}_{\text{微分（顺）}}\quad\Longleftrightarrow\quad\underbrace{\int f(x)\mathrm dx=F(x)+C}_{\text{积分（逆）}}$</div>
+    <p><b>难点只有两个</b>（书上原话）：① 顺着求导容易，<u>逆着找 $F$ 难</u>；② <u>有些原函数根本无法用基本初等函数表示</u>（$\int\mathrm e^{-x^2}\mathrm dx$、$\int\frac{\sin x}x\mathrm dx$）——第二个难点会直接变成考题（<a href="#eg919">基 9.19</a>：<b>不可求积，先求导</b>）。</p>
+  </div>
+
+  <div class="tenline">
+    <svg viewBox="0 0 700 336" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="三向解题法十支线总图">
+      <defs>
+        <marker id="ar" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L6,3 L0,6 z" fill="var(--muted)"/>
+        </marker>
+      </defs>
+      <!-- 目标 -->
+      <rect x="255" y="8" width="190" height="40" rx="9" fill="var(--amber-soft)" stroke="var(--amber)" stroke-width="1.5"/>
+      <text x="350" y="25" text-anchor="middle" font-size="12.5" font-weight="700" fill="var(--amber)">O（盯住目标）</text>
+      <text x="350" y="41" text-anchor="middle" font-size="11.5" fill="var(--amber)">求一元函数的积分 → 化回基本积分公式</text>
+      <!-- 主干 -->
+      <path d="M350,48 L350,66" stroke="var(--muted)" stroke-width="1.2" fill="none" marker-end="url(#ar)"/>
+      <path d="M60,70 L640,70" stroke="var(--line)" stroke-width="1.4"/>
+      <!-- 第一排 5 条 -->
+      <g font-size="10.5" text-anchor="middle">
+        <g>
+          <path d="M60,70 L60,86" stroke="var(--line)" stroke-width="1.2"/>
+          <rect x="10" y="86" width="100" height="48" rx="8" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1"/>
+          <text x="60" y="103" font-size="11.5" font-weight="700" fill="var(--accent)">一 恒等变形法</text>
+          <text x="60" y="118" fill="var(--muted)">D₁ + D₂₃</text>
+          <text x="60" y="130" font-size="9.5" fill="var(--muted)">代数变形回公式</text>
+        </g>
+        <g>
+          <path d="M205,70 L205,86" stroke="var(--line)" stroke-width="1.2"/>
+          <rect x="155" y="86" width="100" height="48" rx="8" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1"/>
+          <text x="205" y="103" font-size="11.5" font-weight="700" fill="var(--accent)">二 凑微分法</text>
+          <text x="205" y="118" fill="var(--muted)">D₁ + D₂₃</text>
+          <text x="205" y="130" font-size="9.5" fill="var(--muted)">从 d 后面往前拿</text>
+        </g>
+        <g>
+          <path d="M350,70 L350,86" stroke="var(--line)" stroke-width="1.2"/>
+          <rect x="300" y="86" width="100" height="48" rx="8" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1"/>
+          <text x="350" y="103" font-size="11.5" font-weight="700" fill="var(--accent)">三 第二类换元</text>
+          <text x="350" y="118" fill="var(--muted)">D₁ + D₂₃</text>
+          <text x="350" y="130" font-size="9.5" fill="var(--muted)">令复杂 = t</text>
+        </g>
+        <g>
+          <path d="M495,70 L495,86" stroke="var(--line)" stroke-width="1.2"/>
+          <rect x="445" y="86" width="100" height="48" rx="8" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1"/>
+          <text x="495" y="103" font-size="11.5" font-weight="700" fill="var(--accent)">四 分部积分法</text>
+          <text x="495" y="118" fill="var(--muted)">D₁ + D₂₃</text>
+          <text x="495" y="130" font-size="9.5" fill="var(--muted)">反对幂指三</text>
+        </g>
+        <g>
+          <path d="M640,70 L640,86" stroke="var(--line)" stroke-width="1.2"/>
+          <rect x="590" y="86" width="100" height="48" rx="8" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1"/>
+          <text x="640" y="103" font-size="11.5" font-weight="700" fill="var(--accent)">五 有理函数</text>
+          <text x="640" y="118" fill="var(--muted)">D₁ + D₂₃</text>
+          <text x="640" y="130" font-size="9.5" fill="var(--muted)">因式分解 + 拆项</text>
+        </g>
+      </g>
+      <!-- 第二排 5 条 -->
+      <path d="M60,150 L640,150" stroke="var(--line)" stroke-width="1.4"/>
+      <path d="M350,134 L350,150" stroke="var(--line)" stroke-width="1.2"/>
+      <g font-size="10.5" text-anchor="middle">
+        <g>
+          <path d="M60,150 L60,166" stroke="var(--line)" stroke-width="1.2"/>
+          <rect x="10" y="166" width="100" height="48" rx="8" fill="var(--green-soft)" stroke="var(--green)" stroke-width="1"/>
+          <text x="60" y="183" font-size="11.5" font-weight="700" fill="var(--green)">六 三角有理式</text>
+          <text x="60" y="198" fill="var(--muted)">D₁ + D₂₃</text>
+          <text x="60" y="210" font-size="9.5" fill="var(--muted)">全角换元 / 万能</text>
+        </g>
+        <g>
+          <path d="M205,150 L205,166" stroke="var(--line)" stroke-width="1.2"/>
+          <rect x="155" y="166" width="100" height="48" rx="8" fill="var(--green-soft)" stroke="var(--green)" stroke-width="1"/>
+          <text x="205" y="183" font-size="11.5" font-weight="700" fill="var(--green)">七 求原函数算值</text>
+          <text x="205" y="198" font-size="10" fill="var(--red)" font-weight="700">只有 D₁</text>
+          <text x="205" y="210" font-size="9.5" fill="var(--muted)">牛莱（含反常）</text>
+        </g>
+        <g>
+          <path d="M350,150 L350,166" stroke="var(--line)" stroke-width="1.2"/>
+          <rect x="300" y="166" width="100" height="48" rx="8" fill="var(--purple-soft)" stroke="var(--purple)" stroke-width="1.5"/>
+          <text x="350" y="183" font-size="11.5" font-weight="700" fill="var(--purple)">八 变限积分求导</text>
+          <text x="350" y="198" font-size="10" fill="var(--purple)" font-weight="700">D₁ + D₂₂ + D₂₃</text>
+          <text x="350" y="210" font-size="9.5" fill="var(--muted)">全章唯一带 D₂₂</text>
+        </g>
+        <g>
+          <path d="M495,150 L495,166" stroke="var(--line)" stroke-width="1.2"/>
+          <rect x="445" y="166" width="100" height="48" rx="8" fill="var(--green-soft)" stroke="var(--green)" stroke-width="1"/>
+          <text x="495" y="183" font-size="11.5" font-weight="700" fill="var(--green)">九 分段函数积分</text>
+          <text x="495" y="198" fill="var(--muted)">D₁ + D₂₃</text>
+          <text x="495" y="210" font-size="9.5" fill="var(--muted)">不定/定/变限 三考法</text>
+        </g>
+        <g>
+          <path d="M640,150 L640,166" stroke="var(--line)" stroke-width="1.2"/>
+          <rect x="590" y="166" width="100" height="48" rx="8" fill="var(--green-soft)" stroke="var(--green)" stroke-width="1"/>
+          <text x="640" y="183" font-size="11.5" font-weight="700" fill="var(--green)">十 几何法</text>
+          <text x="640" y="198" fill="var(--muted)">D₁ + D₂₃</text>
+          <text x="640" y="210" font-size="9.5" fill="var(--muted)">看出是圆 → 秒算</text>
+        </g>
+      </g>
+      <!-- 底注 -->
+      <rect x="10" y="232" width="680" height="94" rx="9" fill="var(--bg)" stroke="var(--line)"/>
+      <text x="24" y="251" font-size="11" font-weight="700" fill="var(--accent)">难度码怎么读（张宇三向解题法的记号）</text>
+      <text x="24" y="269" font-size="10.5" fill="var(--ink)">D₁（常规操作）＝ 照着方法做就行，功夫在手熟；</text>
+      <text x="24" y="286" font-size="10.5" fill="var(--ink)">D₂₂（转换等价表述）＝ 先把题目<tspan font-weight="700">改写成另一副样子</tspan>才做得下去（换序 / 去绝对值 / 把 x 移出被积函数）；</text>
+      <text x="24" y="303" font-size="10.5" fill="var(--ink)">D₂₃（化归经典形式）＝ 认出它其实是某个<tspan font-weight="700">见过的标准型</tspan>。</text>
+      <text x="24" y="320" font-size="10.5" font-weight="700" fill="var(--red)">⚠️ 十条里九条都有 D₂₃ <tspan font-weight="400" fill="var(--muted)">＝ 本章绝大多数功夫，花在「认出这是哪个标准型」上。</tspan></text>
+    </svg>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 这张图怎么用</span>
+    <p><b>拿到一个积分，按这个顺序自问</b>（前面的问句能中就别往后走，越靠前越省时间）：</p>
+    <ol style="margin:6px 0 0 20px">
+      <li><b>能不能代数变形直接回公式？</b>（$\frac{2x+3}{x^2-x+1}$ 拆成 $\frac{(分母)'}{分母}+\frac{常数}{分母}$）→ 支线一</li>
+      <li><b>有没有"某个函数 × 它自己的导数"？</b>→ 支线二凑微分。<u>看不出来时就对复杂部分求导试试</u>（<a href="#eg92">基 9.2</a> 就是这个动作）</li>
+      <li><b>有根号 / 有反三角？</b>→ 支线三换元：<u>带平方项走三角代换，不带平方项就令根式 = t</u></li>
+      <li><b>是两类不同函数相乘？</b>→ 支线四分部积分</li>
+      <li><b>是分式且分母能因式分解？</b>→ 支线五拆项</li>
+      <li><b>只有 $\sin,\cos$？</b>→ 支线六：先试三条奇偶判据，实在不行才上万能公式</li>
+      <li><b>是定积分？</b>→ 先看有没有<u>奇偶、周期、区间再现、点火公式</u>可用（支线七之前的"白捡分"），<b>再</b>动手算原函数</li>
+      <li><b>被积函数里有 $x$（求导变量）？</b>→ 支线八：<u>必须先把 $x$ 移出去</u>才能求导</li>
+      <li><b>有绝对值 / 分段 / $\max\min$？</b>→ 支线九：拆区间</li>
+      <li><b>被积函数是 $\sqrt{a^2-x^2}$ 这种圆的方程？</b>→ 支线十：直接画图数面积</li>
+    </ol>
+    <p style="margin-top:8px"><b>这十问的顺序本身就是采分顺序</b>：考场上第 6 问以前都答不上来的题，基本不会出现在数一卷子上。</p>
+  </div>
+
+  <div class="dolinks">
+    <div class="t">本章体量与两本书的分工</div>
+    基础30讲第 9 讲 <b>书页 230–262（33 页）</b> · 高数18讲第 9 讲 <b>书页 90–104（15 页）</b>，共 <b>48 页</b>。
+    <div class="note"><b>⚠️ 两本书的分工</b>：<b>基础讲负责"公式与方法的完备性"</b>（10 组基本公式、13 条凑微分式、5 类换元、有理函数四拆法、七大定积分结论、Γ 函数），<b>18 讲负责"看一眼走哪条路"</b>（十支线图 + 三个基础讲没有的独立支线）。两本书的例题<b>只有三平方根代换一处重复</b>，其余全不重叠，所以 68 题全收没有冗余。<br>
+    <b>⚠️ 分章 PDF 边界错位</b>：第 9 讲强化的<b>开头两页（书页 90–91，含十支线总图）被切进了第 8 章的 PDF 末尾</b>，翻书时别在第 9 章 PDF 里找扉页。</div>
+    <a href="第08章_一元函数积分学的概念与性质.html">← 上一章：第 8 章 概念与性质</a>
+    <a href="第04章_一元函数微分学的计算.html">相关：第 4 章 微分学的计算（本章是它的逆运算）</a>
+    <a href="../卡库_积分与微分方程.html">卡库：积分与微分方程</a>
+  </div>
+
+  <!-- ================= s1 基本积分公式 ================= -->
+  <h2 id="s1"><span class="idx">一</span>基本积分公式 10 组：所有计算的终点<span class="pg">基础 p.231–232</span></h2>
+
+  <div class="key"><span class="tag">必记 · 10 组公式（书上原话："需要牢记，是所有积分计算的基础！！！"）</span>
+    <div class="fcards">
+      <div><b>① 幂函数</b>$\int x^k\mathrm dx=\frac{x^{k+1}}{k+1}+C\ (k\ne-1)$<br>$\int\frac{\mathrm dx}{x^2}=-\frac1x+C$；$\int\frac{\mathrm dx}{\sqrt x}=2\sqrt x+C$</div>
+      <div><b>② 倒数（$k=-1$ 的补丁）</b>$\int\frac{\mathrm dx}x=\ln|x|+C$<br><span style="color:var(--red)">绝对值不能丢</span></div>
+      <div><b>③ 指数</b>$\int\mathrm e^x\mathrm dx=\mathrm e^x+C$<br>$\int a^x\mathrm dx=\frac{a^x}{\ln a}+C$</div>
+      <div><b>④a 正余弦</b>$\int\sin x\mathrm dx=-\cos x+C$<br>$\int\cos x\mathrm dx=\sin x+C$</div>
+      <div><b>④b 正余切</b>$\int\tan x\mathrm dx=-\ln|\cos x|+C$<br>$\int\cot x\mathrm dx=\ln|\sin x|+C$</div>
+      <div><b>④c ★ 正余割</b>$\int\sec x\mathrm dx=\ln|\sec x+\tan x|+C$<br>$\int\csc x\mathrm dx=\ln|\csc x-\cot x|+C$</div>
+      <div><b>④d 平方型</b>$\int\sec^2x\mathrm dx=\tan x+C$；$\int\csc^2x\mathrm dx=-\cot x+C$<br>$\int\sec x\tan x\mathrm dx=\sec x+C$；$\int\csc x\cot x\mathrm dx=-\csc x+C$</div>
+      <div><b>⑤ 反正切</b>$\int\frac{\mathrm dx}{1+x^2}=\arctan x+C$<br>$\int\frac{\mathrm dx}{a^2+x^2}=\frac1a\arctan\frac xa+C$</div>
+      <div><b>⑥ 反正弦</b>$\int\frac{\mathrm dx}{\sqrt{1-x^2}}=\arcsin x+C$<br>$\int\frac{\mathrm dx}{\sqrt{a^2-x^2}}=\arcsin\frac xa+C$</div>
+      <div><b>⑦ 根号里是 $x^2\pm a^2$</b>$\int\frac{\mathrm dx}{\sqrt{x^2+a^2}}=\ln(x+\sqrt{x^2+a^2})+C$<br>$\int\frac{\mathrm dx}{\sqrt{x^2-a^2}}=\ln|x+\sqrt{x^2-a^2}|+C$</div>
+      <div><b>⑧ 分母是 $x^2-a^2$</b>$\int\frac{\mathrm dx}{x^2-a^2}=\frac1{2a}\ln\left|\frac{x-a}{x+a}\right|+C$<br>$\int\frac{\mathrm dx}{a^2-x^2}=\frac1{2a}\ln\left|\frac{x+a}{x-a}\right|+C$</div>
+      <div><b>⑨ 整个根号（面积型）</b>$\int\sqrt{a^2-x^2}\mathrm dx$<br>$=\frac{a^2}2\arcsin\frac xa+\frac x2\sqrt{a^2-x^2}+C$</div>
+      <div><b>⑩ 二次方（降幂）</b>$\int\sin^2x\mathrm dx=\frac x2-\frac{\sin2x}4+C$<br>$\int\cos^2x\mathrm dx=\frac x2+\frac{\sin2x}4+C$</div>
+      <div><b>⑩′ 正余切平方</b>$\int\tan^2x\mathrm dx=\tan x-x+C$<br>$\int\cot^2x\mathrm dx=-\cot x-x+C$</div>
+    </div>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 这 13 张卡里，只有 4 张真需要"背"</span>
+    <p>①②③④a⑤⑥ 是导数表倒着念，<b>不算背</b>。真正要单独记的只有：</p>
+    <ol style="margin:6px 0 0 20px">
+      <li><b>④c 的 $\int\sec x\mathrm dx=\ln|\sec x+\tan x|+C$</b>（书上专门打★）——这条推不出来，只能记。验算办法：对 $\ln|\sec x+\tan x|$ 求导得 $\frac{\sec x\tan x+\sec^2x}{\sec x+\tan x}=\sec x$ ✔</li>
+      <li><b>⑦ 的两条 $\ln$ 型</b>——它们是 $\int\frac{\mathrm dx}{\sqrt{x^2\pm a^2}}$，跟 ⑥ 的 $\arcsin$ 型<u>只差根号里的符号</u>，最容易串。<b>口诀：根号里带减号（$a^2-x^2$）出反三角，带加号或 $x^2$ 在前出对数。</b></li>
+      <li><b>⑧ 的 $\frac1{2a}$ 系数与分子分母顺序</b>——$\frac1{x^2-a^2}$ 是 $\frac{x-a}{x+a}$，$\frac1{a^2-x^2}$ 是 $\frac{x+a}{x-a}$，<u>互为倒数（差个负号）</u>。记一条，另一条取负。</li>
+      <li><b>⑨</b>——它就是"半径 $a$ 的圆的面积函数"，<u>见 <a href="#s12">§12 几何法</a></u>，也可以现推（<a href="#eg93">基 9.3</a>）。</li>
+    </ol>
+    <p><b>⑩ 只记二次方，三次方不用记</b>（书上眉批原话）——因为 $\sin^3x=\sin x(1-\cos^2x)$ 一凑微分就完了，属于支线二。</p>
+  </div>
+
+  <div class="trap"><span class="tag">陷阱 · $\ln$ 里的绝对值，什么时候能去掉</span>
+    <p>公式 ②⑦⑧ 都带 $|\cdot|$，但 ⑦ 的第一条<b>没有</b>：$\int\frac{\mathrm dx}{\sqrt{x^2+a^2}}=\ln(x+\sqrt{x^2+a^2})+C$。</p>
+    <p><b>原因</b>：$\sqrt{x^2+a^2}\gt|x|\ge-x$ 恒成立，所以 $x+\sqrt{x^2+a^2}\gt0$ <b>恒正</b>，绝对值可以去。而 $\sqrt{x^2-a^2}$ 只在 $|x|\gt|a|$ 有定义，$x\lt-|a|$ 时括号内为负，<u>必须留绝对值</u>。</p>
+    <p><span class="dock">考场上写反了要扣分</span>：定积分区间在负半轴时（如 $\int_{-3}^{-2}\frac{\mathrm dx}{\sqrt{x^2-1}}$），丢了绝对值会算出 $\ln$ 负数。</p>
+  </div>
+
+  <!-- ================= s2 凑微分 ================= -->
+  <h2 id="s2"><span class="idx">二</span>凑微分法：从 d 后面往前"拿"<span class="pg">基础 p.232–234</span></h2>
+
+  <div class="key"><span class="tag">必记 · 凑微分的本质</span>
+    <div class="fml">$\displaystyle\int f[g(x)]\underbrace{g'(x)\mathrm dx}_{\text{这块整个搬进 d}}=\int f[g(x)]\mathrm d[g(x)]\xlongequal{g(x)=u}\int f(u)\mathrm du$</div>
+    <p>18 讲把它写得更传神：$\displaystyle\int f(狗)\mathrm d(狗)$——<b>只要 d 后面和 $f$ 里面是同一只"狗"，就算凑成功。</b></p>
+    <p><b>识别信号</b>：被积函数是<u>「某个函数的复合」×「这个函数的导数」</u>。</p>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 13 条常用凑微分式（把 $\mathrm dx$ 换成 $\mathrm d(\square)$ 的字典）</span>
+    <div class="gridwrap"><table class="dense">
+      <tr><th>#</th><th>微分关系</th><th>用在什么地方</th></tr>
+      <tr><td>①</td><td>$x\mathrm dx=\frac12\mathrm d(x^2)$</td><td>$\int xf(x^2)\mathrm dx$ —— <b>最高频</b></td></tr>
+      <tr><td>②</td><td>$\sqrt x\mathrm dx=\frac23\mathrm d(x^{3/2})$</td><td>$\int\sqrt xf(x^{3/2})\mathrm dx$（<a href="#eg91">基 9.1</a> 就用这条）</td></tr>
+      <tr><td>③</td><td>$\frac{\mathrm dx}{\sqrt x}=2\mathrm d(\sqrt x)$</td><td>$\int\frac{f(\sqrt x)}{\sqrt x}\mathrm dx$（<a href="#xt95">习 9.5</a>）</td></tr>
+      <tr><td>④</td><td>$\frac{\mathrm dx}{x^2}=\mathrm d\left(-\frac1x\right)$</td><td>$\int\frac{f(-1/x)}{x^2}\mathrm dx$ —— 倒代换的凑微分版</td></tr>
+      <tr><td>⑤</td><td>$\frac{\mathrm dx}x=\mathrm d(\ln x)\ (x\gt0)$</td><td>$\int\frac{f(\ln x)}x\mathrm dx$ —— <b>次高频</b></td></tr>
+      <tr><td>⑥</td><td>$\mathrm e^x\mathrm dx=\mathrm d(\mathrm e^x)$</td><td>$\int\mathrm e^xf(\mathrm e^x)\mathrm dx$</td></tr>
+      <tr><td>⑦</td><td>$a^x\mathrm dx=\frac1{\ln a}\mathrm d(a^x)$</td><td>$\int a^xf(a^x)\mathrm dx$</td></tr>
+      <tr><td>⑧</td><td>$\sin x\mathrm dx=\mathrm d(-\cos x)$</td><td>$\int\sin x\,f(\cos x)\mathrm dx$ —— 三角有理式判据 (1)</td></tr>
+      <tr><td>⑨</td><td>$\cos x\mathrm dx=\mathrm d(\sin x)$</td><td>$\int\cos x\,f(\sin x)\mathrm dx$ —— 判据 (2)</td></tr>
+      <tr><td>⑩</td><td>$\sec^2x\mathrm dx=\mathrm d(\tan x)$</td><td>$\int\frac{f(\tan x)}{\cos^2x}\mathrm dx$ —— 判据 (3)</td></tr>
+      <tr><td>⑪</td><td>$\csc^2x\mathrm dx=\mathrm d(-\cot x)$</td><td>$\int\frac{f(-\cot x)}{\sin^2x}\mathrm dx$</td></tr>
+      <tr><td>⑫</td><td>$\frac{\mathrm dx}{1+x^2}=\mathrm d(\arctan x)$</td><td>$\int\frac{f(\arctan x)}{1+x^2}\mathrm dx$（<a href="#eg95">基 9.5</a> 的影子）</td></tr>
+      <tr><td>⑬</td><td>$\frac{\mathrm dx}{\sqrt{1-x^2}}=\mathrm d(\arcsin x)$</td><td>$\int\frac{f(\arcsin x)}{\sqrt{1-x^2}}\mathrm dx$</td></tr>
+    </table></div>
+    <p><b>眉批口诀（书上手写）：「选择复杂部分求导」。</b>比如 $\int\frac{(\arcsin x)^2}{\sqrt{1-x^2}}\mathrm dx$，复杂部分是 $\arcsin x$，它的导数正好是剩下的 $\frac1{\sqrt{1-x^2}}$，所以</p>
+    <div class="fml">$\int(\arcsin x)^2\mathrm d(\arcsin x)=\frac13\arcsin^3x+C$</div>
+  </div>
+
+  <div class="eg" id="eg91">
+    <div class="q"><span class="no">基 9.1</span> 求不定积分 $\displaystyle\int\frac{\sqrt x}{\sqrt{4-x^3}}\mathrm dx$。</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\frac23\arcsin\left(\frac12x^{3/2}\right)+C$</span> ✔</p>
+      <p><span class="lab">分析</span>分子 $\sqrt x$、分母根号里是 $x^3=(x^{3/2})^2$ —— 这两件事同时指向<b>凑微分式 ②</b>：$\sqrt x\mathrm dx=\frac23\mathrm d(x^{3/2})$。凑完就是 $\arcsin$ 的标准型（公式 ⑥）。</p>
+      <p><span class="lab">解</span></p>
+      <div class="fml">$\displaystyle\int\frac{\sqrt x}{\sqrt{4-x^3}}\mathrm dx=\frac23\int\frac{\mathrm d(x^{3/2})}{\sqrt{4-(x^{3/2})^2}}=\frac23\int\frac{\mathrm d(x^{3/2})}{2\sqrt{1-\left(\frac{x^{3/2}}2\right)^2}}=\frac23\int\frac{\mathrm d\left(\frac{x^{3/2}}2\right)}{\sqrt{1-\left(\frac{x^{3/2}}2\right)^2}}=\frac23\arcsin\frac{x^{3/2}}2+C$</div>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>中间那步"把 $\sqrt4$ 提出来"是关键的手上动作</b>：$\sqrt{4-u^2}=2\sqrt{1-(u/2)^2}$，提出的 $2$ 与后面 $\mathrm du\to\mathrm d(u/2)$ 需要的 $\frac12$ <u>正好抵消</u>，所以最终系数还是 $\frac23$。<br>
+      <b>提速</b>：直接用公式 ⑥ 的 $a$ 版 $\int\frac{\mathrm du}{\sqrt{a^2-u^2}}=\arcsin\frac ua+C$，取 $u=x^{3/2},a=2$ 一步到位，不用提系数。<span class="dock">但考场上写 $\arcsin\frac ua$ 时 $a$ 必须为正</span>，$a=-2$ 会错号。
+    </div>
+  </div>
+
+  <div class="eg" id="eg92">
+    <div class="q"><span class="no">基 9.2</span> 求不定积分 $\displaystyle\int\mathrm e^{\frac{\sin\theta}{\cos\theta+\sin\theta}}\cdot\frac{\mathrm d\theta}{(\cos\theta+\sin\theta)^2}$。<span class="exam">真题中大题的最后一步</span></div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\mathrm e^{\frac{\sin\theta}{\cos\theta+\sin\theta}}+C$</span> ✔</p>
+      <p><span class="lab">分析</span>13 条凑微分式里<b>一条都对不上</b>。这时用<b>通法</b>：<u>把被积函数里最复杂的那块 $g$ 拎出来求导</u>，看导数是不是剩下的部分。这里 $g=\frac{\sin\theta}{\cos\theta+\sin\theta}$。</p>
+      <p><span class="lab">解</span>对复杂部分求导：</p>
+      <div class="fml">$\left(\dfrac{\sin\theta}{\cos\theta+\sin\theta}\right)'=\dfrac{\cos\theta(\cos\theta+\sin\theta)-\sin\theta(\cos\theta-\sin\theta)}{(\cos\theta+\sin\theta)^2}=\dfrac{\cos^2\theta+\sin^2\theta}{(\cos\theta+\sin\theta)^2}=\dfrac1{(\cos\theta+\sin\theta)^2}$</div>
+      <p>正好是剩下那块！故 $\mathrm d\left(\frac{\sin\theta}{\cos\theta+\sin\theta}\right)=\frac{\mathrm d\theta}{(\cos\theta+\sin\theta)^2}$，于是</p>
+      <div class="fml">$原式=\displaystyle\int\mathrm e^{g}\mathrm d g=\mathrm e^{\frac{\sin\theta}{\cos\theta+\sin\theta}}+C$</div>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>这一题就是"凑微分的元方法"</b>：13 条式子是<u>背下来的特例</u>，「对复杂部分求导」才是<u>可迁移的动作</u>。见到 $\mathrm e^{复杂}$、$\ln(复杂)$、$\arctan(复杂)$ 乘上一个不知从哪来的分式，<b>第一反应就是对复杂部分求导试试</b>。<br>
+      <b>为什么书上标"真题大题最后一步"</b>：一阶线性微分方程（第 15 章）解完常常剩下这种形状的积分。<u>算不出来这一步，前面的分全白拿</u>。<br>
+      <b>心算提速</b>：分子那步 $\cos\theta(\cos\theta+\sin\theta)-\sin\theta(\cos\theta-\sin\theta)$ 展开后交叉项 $\cos\theta\sin\theta$ 恰好抵消，剩 $\cos^2+\sin^2=1$。<span class="dock">展开时把 $(-\sin\theta+\cos\theta)$ 的负号漏掉是最常见的手误</span>。
+    </div>
+  </div>
+
+  <!-- ================= s2b 路线判定器 ================= -->
+  <h2 id="s2b"><span class="idx">🧭</span>十支线路线判定器：拿到积分先问它"长什么样"</h2>
+
+  <div class="tool">
+    <h4>🧭 路线判定器</h4>
+    <div class="hint">勾选被积函数<b>看得见的特征</b>，下面实时给出<b>该走哪条支线、第一步落笔写什么</b>。这不是"猜答案"，是把上面那十问做成可点的——练到不用点也能在脑子里跑完，本章就过关了。<br>题目来源全部是本页 68 道题，点"换一题"可以随机抽一道自测。</div>
+
+    <div class="ctl" id="rtFeat"></div>
+    <div class="say" id="rtSay">勾选特征后给出路线。</div>
+    <div class="ctl">
+      <button id="rtRand">🎲 随机抽一题自测</button>
+      <button id="rtClear">清空</button>
+    </div>
+    <div class="say" id="rtQ" style="background:var(--purple-soft);color:var(--purple);display:none"></div>
+    <div class="say" id="rtA" style="background:var(--green-soft);color:var(--green);display:none"></div>
+  </div>
+
+  <!-- ================= s3 换元法 ================= -->
+  <h2 id="s3"><span class="idx">三</span>第二类换元法：五类代换，先看有没有平方项<span class="pg">基础 p.234–236 · 强化 p.91</span></h2>
+
+  <div class="key"><span class="tag">必记 · 换元法的本质与两条纪律</span>
+    <div class="fml">$\displaystyle\int f(x)\mathrm dx\xlongequal{x=g(u)}\int f[g(u)]g'(u)\mathrm du$</div>
+    <p><b>与凑微分的区别</b>：凑微分是<u>从 d 后面往前拿</u>（不引入新字母），换元是<u>引入新的自变量 $u$</u>把原式整体化简。18 讲一句话点透：</p>
+    <p style="background:var(--card);border-radius:8px;padding:8px 12px"><b>除了"去根号"和"把分母中的几项变成一项"，$h(u)$ 的命制就是为了降低 $f$ 的复杂度，故最直接的方法是<u>令 $f$ 复杂的部分等于 $u$</u>。</b></p>
+    <p><b>两条纪律（考场上会扣分的）</b>：</p>
+    <ol style="margin:6px 0 0 20px">
+      <li><b>$x=g(u)$ 必须单调可导</b>——否则回代不唯一。三角代换写 $|t|\lt\frac\pi2$ 就是为了这个。</li>
+      <li><b>不定积分算完必须回代</b> $u=g^{-1}(x)$；<b>定积分必须换限</b>（换元三换：被积函数、积分变量、上下限）。</li>
+    </ol>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 五类代换的适用条件（这是本节的骨架）</span>
+    <div class="gridwrap"><table class="dense">
+      <tr><th>类</th><th>被积函数长什么样</th><th>代换</th><th>本页例题</th></tr>
+      <tr><td>① 三角代换</td><td>$\sqrt{a^2-x^2}$</td><td>$x=a\sin t,\ |t|\lt\frac\pi2$</td><td>基 9.3 · 强 9.2(1)</td></tr>
+      <tr><td></td><td>$\sqrt{a^2+x^2}$</td><td>$x=a\tan t,\ |t|\lt\frac\pi2$</td><td>强 9.2(2) · 强 9.3(1)</td></tr>
+      <tr><td></td><td>$\sqrt{x^2-a^2}$</td><td>$x=a\sec t$：$x\gt0$ 取 $0\lt t\lt\frac\pi2$；$x\lt0$ 取 $\frac\pi2\lt t\lt\pi$</td><td>强 9.2(3) · 基 9.27</td></tr>
+      <tr><td>② 配方后三角代换</td><td>$\sqrt{ax^2+bx+c}$</td><td>先配成 $\sqrt{\varphi^2\pm k^2}$ 或 $\sqrt{k^2-\varphi^2}$ 再上①</td><td>强 9.3(3) · 基 9.26</td></tr>
+      <tr><td><b>③★★★ 根式代换</b></td><td>$\sqrt[n]{ax+b}$、$\sqrt{\frac{ax+b}{cx+d}}$、$\sqrt{a\mathrm e^{bx}+c}$<br>（<b>根号里没有平方项</b>）</td><td><b>令根式 $=t$</b>。同时含 $\sqrt[n]{},\sqrt[m]{}$ 时取 $l=\mathrm{lcm}(m,n)$</td><td>基 9.4 · 强 9.3(2) · 强 9.4 · 强 9.6</td></tr>
+      <tr><td>④ 倒代换</td><td>分母幂次比分子<b>高两次及以上</b></td><td>$x=\frac1t$</td><td>强 9.3(1) 法二</td></tr>
+      <tr><td>⑤ 复杂函数直接代换</td><td>含 $a^x,\mathrm e^x,\ln x,\arcsin x,\arctan x$</td><td>令该函数 $=t$。<b>但若它与 $P_n(x)$ 或 $\mathrm e^{ax}$ 相乘，优先分部积分</b></td><td>基 9.6 · 习 9.8 法二</td></tr>
+    </table></div>
+    <p><b>★ 一句话判据（本节最值钱的一句）：根号里<u>有</u>平方项 → 三角代换；<u>没有</u>平方项 → 令根式 = $t$。</b></p>
+    <p>书上给的理由：<u>根号里没有平方项时，很难通过根号内换元凑成平方，所以根号无法去掉</u>，只能整个令为 $t$。</p>
+  </div>
+
+  <figure class="fig">
+    <svg viewBox="0 0 660 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="三种三角代换的取值范围">
+      <g font-size="10.5" fill="var(--muted)">
+        <!-- (1) x = a sin t -->
+        <g transform="translate(20,20)">
+          <text x="85" y="0" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--accent)">$x=a\sin t$</text>
+          <line x1="10" y1="90" x2="160" y2="90" stroke="var(--line)"/>
+          <line x1="85" y1="20" x2="85" y2="150" stroke="var(--line)"/>
+          <path d="M35,140 Q60,138 85,90 Q110,42 135,40" stroke="var(--accent)" stroke-width="2" fill="none"/>
+          <line x1="35" y1="20" x2="35" y2="150" stroke="var(--red)" stroke-dasharray="3 3" stroke-width="1"/>
+          <line x1="135" y1="20" x2="135" y2="150" stroke="var(--red)" stroke-dasharray="3 3" stroke-width="1"/>
+          <text x="30" y="105" font-size="10" fill="var(--red)">−π/2</text>
+          <text x="132" y="105" font-size="10" fill="var(--red)">π/2</text>
+          <text x="163" y="94" font-size="10">t</text>
+          <text x="89" y="26" font-size="10">x</text>
+          <text x="85" y="170" text-anchor="middle" font-size="10">单调递增 · 值域 $[-a,a]$</text>
+        </g>
+        <!-- (2) x = a tan t -->
+        <g transform="translate(240,20)">
+          <text x="85" y="0" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--accent)">$x=a\tan t$</text>
+          <line x1="10" y1="90" x2="160" y2="90" stroke="var(--line)"/>
+          <line x1="85" y1="20" x2="85" y2="150" stroke="var(--line)"/>
+          <path d="M38,150 Q62,140 85,90 Q108,40 132,30" stroke="var(--accent)" stroke-width="2" fill="none"/>
+          <line x1="35" y1="20" x2="35" y2="150" stroke="var(--red)" stroke-dasharray="3 3" stroke-width="1"/>
+          <line x1="135" y1="20" x2="135" y2="150" stroke="var(--red)" stroke-dasharray="3 3" stroke-width="1"/>
+          <text x="30" y="105" font-size="10" fill="var(--red)">−π/2</text>
+          <text x="132" y="105" font-size="10" fill="var(--red)">π/2</text>
+          <text x="163" y="94" font-size="10">t</text>
+          <text x="89" y="26" font-size="10">x</text>
+          <text x="85" y="170" text-anchor="middle" font-size="10">单调递增 · 值域 $(-\infty,+\infty)$</text>
+        </g>
+        <!-- (3) x = a sec t -->
+        <g transform="translate(460,20)">
+          <text x="90" y="0" text-anchor="middle" font-size="11.5" font-weight="700" fill="var(--accent)">$x=a\sec t$</text>
+          <line x1="10" y1="90" x2="170" y2="90" stroke="var(--line)"/>
+          <line x1="20" y1="20" x2="20" y2="150" stroke="var(--line)"/>
+          <path d="M22,62 Q45,58 68,25" stroke="var(--accent)" stroke-width="2" fill="none"/>
+          <path d="M92,155 Q115,130 138,118" stroke="var(--accent)" stroke-width="2" fill="none"/>
+          <line x1="80" y1="20" x2="80" y2="150" stroke="var(--red)" stroke-dasharray="3 3" stroke-width="1"/>
+          <text x="66" y="105" font-size="10" fill="var(--red)">π/2</text>
+          <text x="136" y="105" font-size="10" fill="var(--red)">π</text>
+          <text x="24" y="105" font-size="10">O</text>
+          <text x="173" y="94" font-size="10">t</text>
+          <text x="90" y="170" text-anchor="middle" font-size="10">两支分开：$x\gt0$ 用左支，$x\lt0$ 用右支</text>
+        </g>
+      </g>
+    </svg>
+    <figcaption><b>三种代换为什么要限定 $t$ 的范围</b>：只有限定在<u>单调支</u>上，$t=g^{-1}(x)$ 才唯一，回代才有意义。<b>$\sec$ 代换是唯一要分 $x$ 的正负讨论的</b>——因为 $\sqrt{x^2-a^2}$ 的定义域 $|x|\gt|a|$ 本身就断成两截，两截上 $\tan t$ 的符号相反。<span style="color:var(--red)"><b>考场上写 $x=a\sec t$ 不声明范围，回代时 $\sqrt{x^2-a^2}=a|\tan t|$ 的绝对值就会漏掉。</b></span></figcaption>
+  </figure>
+
+  <div class="eg" id="eg93">
+    <div class="q"><span class="no">基 9.3</span>／<span class="no">强 9.2</span> 求 $\displaystyle\int\sqrt{a^2-x^2}\mathrm dx$、$\displaystyle\int\sqrt{a^2+x^2}\mathrm dx$、$\displaystyle\int\sqrt{x^2-a^2}\mathrm dx$（$a\gt0$）。<span class="exam">两本书唯一重复的题 = 必须会推</span></div>
+    <div class="s">
+      <p><span class="lab">答案</span>三条都是公式级结论 ✔</p>
+      <div class="fml">$\int\sqrt{a^2-x^2}\mathrm dx=\dfrac{a^2}2\arcsin\dfrac xa+\dfrac x2\sqrt{a^2-x^2}+C$</div>
+      <div class="fml">$\int\sqrt{a^2+x^2}\mathrm dx=\dfrac x2\sqrt{a^2+x^2}+\dfrac{a^2}2\ln\dfrac{x+\sqrt{a^2+x^2}}a+C$</div>
+      <div class="fml">$\int\sqrt{x^2-a^2}\mathrm dx=\dfrac x2\sqrt{x^2-a^2}-\dfrac{a^2}2\ln\left|\dfrac{x+\sqrt{x^2-a^2}}a\right|+C$</div>
+    </div>
+    <div class="think"><span class="th">💭 思路</span>
+      <ol>
+        <li><b>三条题面只差根号里的符号，但难度完全不同</b>：第一条化到 $\int\cos^2t\mathrm dt$（降幂即可），后两条都要化到 <b>$\int\sec^3t\mathrm dt$</b>——<u>这是本节真正的门槛</u>。</li>
+        <li>$\int\sec^3t\mathrm dt$ 怎么办？它是"<b>分部积分建立方程</b>"（积分再现法）的最典型样本：拆成 $\sec t\cdot\sec^2t$，把 $\sec^2t\mathrm dt$ 凑成 $\mathrm d(\tan t)$，分部一次后<u>右边又冒出 $\int\sec^3t$</u>，移项就解出来了。</li>
+        <li><b>回代靠画直角三角形</b>：$x=a\sin t$ 画一个斜边 $a$、对边 $x$ 的直角三角形，$\cos t=\frac{\sqrt{a^2-x^2}}a$ 直接读出来，不用背反函数公式。</li>
+        <li>第三条的最后一步要注意：$a^2\int\sec^3-a^2\int\sec$ 里 $\int\sec$ 的系数是 $-1$，与 $\int\sec^3$ 展开出来的 $+\frac12\int\sec$ 合并后是 $-\frac12$，<u>符号是这题唯一容易错的地方</u>。</li>
+      </ol>
+    </div>
+    <div class="paper"><span class="phead">✍️ 考场卷面（以第 (1) 条为例）<span class="score">若作为解答题，约 8 分</span></span>
+      <div class="step"><b>解</b>　令 $x=a\sin t$，$t\in\left(-\frac\pi2,\frac\pi2\right)$，则 $\mathrm dx=a\cos t\,\mathrm dt$，且 $\sqrt{a^2-x^2}=a\cos t\ (\cos t\gt0)$。<span class="pt">⛳ 设代换并声明范围 2分</span></div>
+      <div class="step">于是
+      $\displaystyle\int\sqrt{a^2-x^2}\mathrm dx=\int a\cos t\cdot a\cos t\,\mathrm dt=a^2\int\cos^2t\,\mathrm dt$<span class="pt">⛳ 换元正确 2分</span></div>
+      <div class="step">$\displaystyle=\frac{a^2}2\int(1+\cos2t)\mathrm dt=\frac{a^2}2t+\frac{a^2}4\sin2t+C$　……(1)<span class="pt">⛳ 降幂积分 2分</span></div>
+      <div class="step">由 $x=a\sin t$ 得 $t=\arcsin\dfrac xa$，$\sin t=\dfrac xa$，$\cos t=\dfrac{\sqrt{a^2-x^2}}a$，故
+      $\dfrac{a^2}4\sin 2t=\dfrac{a^2}2\sin t\cos t=\dfrac x2\sqrt{a^2-x^2}$。<span class="pt">⛳ 回代 1分</span></div>
+      <div class="fin">代入 (1) 得 $\displaystyle\int\sqrt{a^2-x^2}\mathrm dx=\frac{a^2}2\arcsin\frac xa+\frac x2\sqrt{a^2-x^2}+C$。<span class="pt">⛳ 结论 1分</span></div>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>$\int\sec^3t\mathrm dt$ 的推法（必背，后两条全靠它）</b>：
+      <div class="fml">$\int\sec^3t\mathrm dt=\int\sec t\,\mathrm d(\tan t)=\sec t\tan t-\int\sec t\tan^2t\,\mathrm dt=\sec t\tan t-\int\sec^3t\,\mathrm dt+\int\sec t\,\mathrm dt$</div>
+      <div class="fml">$\Longrightarrow\ \int\sec^3t\mathrm dt=\frac12\sec t\tan t+\frac12\ln|\sec t+\tan t|+C$</div>
+      用到 $\tan^2t=\sec^2t-1$，这一步就是"<u>制造出与左边相同的积分</u>"。<br>
+      <span class="dock">扣分点 1</span>：不声明 $t$ 的范围就写 $\sqrt{a^2-a^2\sin^2t}=a\cos t$——这一步默认了 $\cos t\gt0$，<b>不声明就是无依据</b>。<br>
+      <span class="dock">扣分点 2</span>：$\frac{a^2}4\sin2t$ 直接回代成 $\frac{a^2}4\sin\left(2\arcsin\frac xa\right)$ 就交卷——<b>必须化成 $x$ 的初等表达式</b>，留着反三角复合是没算完。<br>
+      <b>跨章</b>：第 (1) 条就是<a href="#s1">§1 公式 ⑨</a>，也是<a href="#s12">§12 几何法</a>的解析版；后两条会在<b>第 10 章弧长、第 11 章积分不等式</b>反复出现。
+    </div>
+  </div>
+
+  <div class="eg" id="eg94">
+    <div class="q"><span class="no">基 9.4</span> 求不定积分 $\displaystyle\int\frac{x\mathrm e^x}{\sqrt{\mathrm e^x-1}}\mathrm dx$。</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$2x\sqrt{\mathrm e^x-1}-4\sqrt{\mathrm e^x-1}+4\arctan\sqrt{\mathrm e^x-1}+C$</span> ✔</p>
+      <p><span class="lab">分析</span>书上眉批两条：① $\int\triangle\mathrm dx\to\int\nabla\mathrm dx$（<b>难求的形状换成好求的形状</b>）；② <b>带根号且根号里无平方项 → 整体令 $=u$</b>（第 ③ 类）。</p>
+      <p><span class="lab">解</span>令 $u=\sqrt{\mathrm e^x-1}$，则 $\mathrm e^x=1+u^2$，$x=\ln(1+u^2)$，$\mathrm dx=\frac{2u}{1+u^2}\mathrm du$，从而</p>
+      <div class="fml">$\displaystyle\int\frac{x\mathrm e^x}{\sqrt{\mathrm e^x-1}}\mathrm dx=\int\frac{\ln(1+u^2)(1+u^2)}u\cdot\frac{2u}{1+u^2}\mathrm du=2\int\ln(1+u^2)\mathrm du$</div>
+      <div class="fml">$=2u\ln(1+u^2)-\int\frac{4u^2}{1+u^2}\mathrm du=2u\ln(1+u^2)-4u+4\arctan u+C$</div>
+      <p>回代 $u=\sqrt{\mathrm e^x-1}$，注意 $\ln(1+u^2)=\ln\mathrm e^x=x$：</p>
+      <div class="fml">$=2x\sqrt{\mathrm e^x-1}-4\sqrt{\mathrm e^x-1}+4\arctan\sqrt{\mathrm e^x-1}+C$</div>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>本题是"换元 + 分部"的组合拳</b>：换元把根号去掉后剩下的 $\int\ln(1+u^2)\mathrm du$ 是<u>反对幂指三里的"对"</u>，必须分部（取 $u=\ln(1+u^2)$，$v=u$）。<br>
+      <b>提速点</b>：$\int\frac{4u^2}{1+u^2}\mathrm du=4\int\frac{u^2+1-1}{1+u^2}\mathrm du=4u-4\arctan u$ —— <b>"分子加一减一"是有理真分式化简的第一动作</b>，本章反复用（<a href="#eg910">基 9.10</a>、<a href="#eg96">基 9.6</a> 都用）。<br>
+      <span class="dock">最容易漏</span>：回代时忘了 $\ln(1+u^2)$ 就是 $x$ 本身，硬写成 $\ln\mathrm e^x$ 不化简，答案看起来就不对。<br>
+      <b>⚠️ 与强 9.6 只差一个符号</b>：那题是 $\frac{x\mathrm e^x}{\sqrt{\mathrm e^x+1}}$，换元后变成 $\int\frac{2u^2}{u^2-1}\mathrm du$（出 $\ln$ 而不是 $\arctan$）。<u>$\pm1$ 决定了最后是反正切还是对数</u>，看清题再动手。
+    </div>
+  </div>
+
+  <div class="eg" id="eg95">
+    <div class="q"><span class="no">基 9.5</span> 求不定积分 $\displaystyle\int\frac{x\mathrm e^{\arctan x}}{(1+x^2)^{3/2}}\mathrm dx$。</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\dfrac{(x-1)\mathrm e^{\arctan x}}{2\sqrt{1+x^2}}+C$</span> ✔</p>
+      <p><span class="lab">分析</span>带根号（$(1+x^2)^{3/2}$）<b>且有平方项</b> → 三角代换 $x=\tan t$，一举消掉根号，还顺便把 $\arctan x$ 变成 $t$。</p>
+      <p><span class="lab">解</span>设 $x=\tan t$，则 $\mathrm dx=\sec^2t\mathrm dt$，$(1+x^2)^{3/2}=\sec^3t$，$\arctan x=t$：</p>
+      <div class="fml">$\displaystyle\int\frac{x\mathrm e^{\arctan x}}{(1+x^2)^{3/2}}\mathrm dx=\int\frac{\mathrm e^t\tan t}{\sec^3t}\sec^2t\,\mathrm dt=\int\mathrm e^t\sin t\,\mathrm dt$</div>
+      <p>再由分部积分建立方程（<b>积分再现法</b>）：$\int\mathrm e^t\sin t\mathrm dt=\frac12\mathrm e^t(\sin t-\cos t)+C$，回代 $\sin t=\frac x{\sqrt{1+x^2}}$、$\cos t=\frac1{\sqrt{1+x^2}}$：</p>
+      <div class="fml">$=\frac{\mathrm e^{\arctan x}}2\cdot\frac{x-1}{\sqrt{1+x^2}}+C$</div>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>★ $\int\mathrm e^{ax}\sin bx\,\mathrm dx$ 的行列式速记（书上专门给的注，值得背）</b>：
+      <div class="fml">$\int\mathrm e^{ax}\sin bx\,\mathrm dx=\dfrac{\begin{vmatrix}(\mathrm e^{ax})'&(\sin bx)'\\[2pt]\mathrm e^{ax}&\sin bx\end{vmatrix}}{a^2+b^2}+C=\dfrac{a\mathrm e^{ax}\sin bx-b\mathrm e^{ax}\cos bx}{a^2+b^2}+C$</div>
+      <div class="fml">$\int\mathrm e^{ax}\cos bx\,\mathrm dx=\dfrac{\begin{vmatrix}(\mathrm e^{ax})'&(\cos bx)'\\[2pt]\mathrm e^{ax}&\cos bx\end{vmatrix}}{a^2+b^2}+C=\dfrac{a\mathrm e^{ax}\cos bx+b\mathrm e^{ax}\sin bx}{a^2+b^2}+C$</div>
+      <b>记法</b>：分母恒为 $a^2+b^2$；分子第一行是<u>两个因子各自求导</u>，第二行是<u>原样</u>，按行列式展开。本题 $a=b=1$：$\frac{\mathrm e^t\sin t-\mathrm e^t\cos t}{2}$ ✔ 与手推一致。<br>
+      <b>考场用哪个？</b>如果是<u>填空题</u>直接套行列式（10 秒）；如果是<u>解答题</u>必须写分部建方程的过程（套公式不给分）。
+    </div>
+  </div>
+
+  <div class="eg" id="eg96">
+    <div class="q"><span class="no">基 9.6</span> 设 $f(\ln x)=\dfrac{\ln(1+x)}x$，计算 $\displaystyle\int f(x)\mathrm dx$。</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$x-(1+\mathrm e^{-x})\ln(1+\mathrm e^x)+C$</span> ✔</p>
+      <p><span class="lab">分析</span>两步：<b>先求 $f$ 的表达式</b>（令 $\ln x=t$），<b>再算积分</b>（凑微分 + 分部）。</p>
+      <p><span class="lab">解</span>设 $\ln x=t$，则 $x=\mathrm e^t$，$f(t)=\dfrac{\ln(1+\mathrm e^t)}{\mathrm e^t}$，故</p>
+      <div class="fml">$\displaystyle\int f(x)\mathrm dx=\int\frac{\ln(1+\mathrm e^x)}{\mathrm e^x}\mathrm dx=-\int\ln(1+\mathrm e^x)\mathrm d(\mathrm e^{-x})=-\mathrm e^{-x}\ln(1+\mathrm e^x)+\int\frac{\mathrm e^{-x}\mathrm e^x}{1+\mathrm e^x}\mathrm dx$</div>
+      <div class="fml">$=-\mathrm e^{-x}\ln(1+\mathrm e^x)+\int\left(1-\frac{\mathrm e^x}{1+\mathrm e^x}\right)\mathrm dx=-\mathrm e^{-x}\ln(1+\mathrm e^x)+x-\ln(1+\mathrm e^x)+C$</div>
+      <div class="fml">$=x-(1+\mathrm e^{-x})\ln(1+\mathrm e^x)+C$</div>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>第一步"求 $f$"是抽象函数题的通用入口</b>：见到 $f(g(x))=h(x)$，就令 $g(x)=t$ 反解 $x$，代回得 $f(t)$。第 1 章练过。<br>
+      <b>第二步的关键动作</b>：$\frac{\mathrm dx}{\mathrm e^x}=\mathrm e^{-x}\mathrm dx=\mathrm d(-\mathrm e^{-x})$ —— <u>把 $\frac1{\mathrm e^x}$ 搬进 d 里，而不是把 $\ln(1+\mathrm e^x)$ 搬进去</u>。判据：反对幂指三里"对"排在"指"前面，<b>对数取 $u$（求导），指数取 $v$（积分）</b>。<br>
+      <span class="dock">最后一步的合并容易写错</span>：$-\mathrm e^{-x}\ln(1+\mathrm e^x)-\ln(1+\mathrm e^x)=-(1+\mathrm e^{-x})\ln(1+\mathrm e^x)$，提的是 $-\ln(1+\mathrm e^x)$ 不是 $-\mathrm e^{-x}$。<br>
+      <b>$\int\frac{\mathrm dx}{1+\mathrm e^x}$ 的两种做法</b>：本题用"分子加一减一"；也可令 $\mathrm e^x=t$ 化成 $\int\frac{\mathrm dt}{t(1+t)}$ 拆项（见<a href="#xt911">习 9.14</a>）。<b>前者快，后者通用。</b>
+    </div>
+  </div>
+
+  <div class="eg" id="eg93s">
+    <div class="q"><span class="no">强 9.3</span> 求 (1) $\displaystyle\int\frac{\mathrm dx}{x^2\sqrt{1+x^2}}$；(2) $\displaystyle\int\frac{\mathrm dx}{\sqrt{\mathrm e^x+1}}$；(3) $\displaystyle\int x\sqrt{x^2+2x+2}\,\mathrm dx$。<span class="exam">五类代换的三连练</span></div>
+    <div class="s">
+      <p><span class="lab">(1) 答案</span><span class="ans">$-\dfrac{\sqrt{1+x^2}}x+C$</span> ✔　<b>两条路都通，正好对比</b></p>
+      <p><span class="lab">法一 · 三角代换</span>令 $x=\tan t$：$\displaystyle\int\frac{\sec^2t}{\tan^2t\sec t}\mathrm dt=\int\frac{\cos t}{\sin^2t}\mathrm dt=-\frac1{\sin t}+C=-\frac{\sqrt{1+x^2}}x+C$</p>
+      <p><span class="lab">法二 · 倒代换</span>分母幂次比分子高 3 次（$\ge2$）→ 令 $x=\frac1t$，$\mathrm dx=-\frac{\mathrm dt}{t^2}$：</p>
+      <div class="fml">$\displaystyle\int\frac{t^2}{\sqrt{1+\frac1{t^2}}}\left(-\frac{\mathrm dt}{t^2}\right)=-\int\frac{t\,\mathrm dt}{\sqrt{1+t^2}}=-\sqrt{1+t^2}+C=-\frac{\sqrt{1+x^2}}x+C$</div>
+      <p><span class="lab">(2) 答案</span><span class="ans">$\ln\dfrac{\sqrt{\mathrm e^x+1}-1}{\sqrt{\mathrm e^x+1}+1}+C$</span> ✔　根号里无平方项 → <b>令复杂部分 $=t$</b>：$\sqrt{\mathrm e^x+1}=t$，$x=\ln(t^2-1)$，$\mathrm dx=\frac{2t}{t^2-1}\mathrm dt$，</p>
+      <div class="fml">$\displaystyle\int\frac1t\cdot\frac{2t}{t^2-1}\mathrm dt=\int\frac{2\,\mathrm dt}{t^2-1}=\ln\left|\frac{t-1}{t+1}\right|+C$</div>
+      <p><span class="lab">(3) 答案</span><span class="ans">$\dfrac13(x^2+2x+2)^{3/2}-\dfrac12\left[\ln\left(x+1+\sqrt{x^2+2x+2}\right)+(x+1)\sqrt{x^2+2x+2}\right]+C$</span> ✔</p>
+      <p>先<b>拆分子</b>凑微分，再对剩下的用<b>配方 + 公式</b>：</p>
+      <div class="fml">$\displaystyle\int x\sqrt{\cdots}\mathrm dx=\frac12\int(2x+2)\sqrt{\cdots}\mathrm dx-\int\sqrt{1+(x+1)^2}\mathrm dx=\frac13(x^2+2x+2)^{3/2}-\int\sqrt{1+(x+1)^2}\mathrm dx$</div>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>(1) 两法的取舍</b>：倒代换<u>算得更短</u>（没有反三角、不用画三角形回代），但只在"<b>分母幂次比分子高两次及以上</b>"时才好使。书上眉批写着"<b>未必一定用</b>"——它是加速器不是必经之路。<br>
+      <b>(3) 的动作顺序值得记：<span style="color:var(--accent)">先把分子凑成分母的导数（凑微分），剩下的常数部分再单独处理</span></b>。这是"分子含 $x$ 的根式积分"的通法：$\int(px+q)\sqrt{ax^2+bx+c}\,\mathrm dx$ 一律拆成 $\frac p{2a}\int(2ax+b)\sqrt{\ }+(q-\frac{pb}{2a})\int\sqrt{\ }$。<br>
+      <span class="dock">(2) 的答案不要写成 $\ln\frac{t-1}{t+1}$ 就收工</span>——<b>必须回代</b>，这是换元法的纪律 2。
+    </div>
+  </div>
+
+  <div class="eg" id="eg94s">
+    <div class="q"><span class="no">强 9.4</span> 求 $\displaystyle\int\sqrt{\frac{2x+1}{x+1}}\,\mathrm dx$。<span class="exam">$\sqrt{\frac{ax+b}{cx+d}}$ 型的完整流程</span></div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\dfrac{\sqrt2}4\ln\left|\dfrac{\sqrt{2x+1}-\sqrt{2x+2}}{\sqrt{2x+1}+\sqrt{2x+2}}\right|+\sqrt{(2x+1)(x+1)}+C$</span> ✔</p>
+      <p><span class="lab">分析</span>典型的第 ③ 类：<b>整个根式令为 $t$</b>。难点不在换元，在换完之后的<b>有理函数拆项</b>——分母是 $(t^2-2)^2$，属于"二重二次因式"，要拆成 4 项。</p>
+      <p><span class="lab">解</span>令 $\sqrt{\frac{2x+1}{x+1}}=t$，反解得 $x=\frac{1-t^2}{t^2-2}$，$\mathrm dx=\frac{2t}{(t^2-2)^2}\mathrm dt$，于是</p>
+      <div class="fml">$\displaystyle\int\sqrt{\frac{2x+1}{x+1}}\mathrm dx=\int\frac{2t^2}{(t^2-2)^2}\mathrm dt=\int\left[\frac{\frac{\sqrt2}4}{t-\sqrt2}-\frac{\frac{\sqrt2}4}{t+\sqrt2}+\frac{\frac12}{(t-\sqrt2)^2}+\frac{\frac12}{(t+\sqrt2)^2}\right]\mathrm dt$</div>
+      <div class="fml">$=\frac{\sqrt2}4\ln\left|\frac{t-\sqrt2}{t+\sqrt2}\right|-\frac1{2(t-\sqrt2)}-\frac1{2(t+\sqrt2)}+C=\frac{\sqrt2}4\ln\left|\frac{t-\sqrt2}{t+\sqrt2}\right|-\frac t{t^2-2}+C$</div>
+      <p>回代 $t=\sqrt{\frac{2x+1}{x+1}}$，其中 $t^2-2=\frac{2x+1-2x-2}{x+1}=\frac{-1}{x+1}$，故 $-\frac t{t^2-2}=t(x+1)=\sqrt{(2x+1)(x+1)}$。</p>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>回代那一步是全题最漂亮的地方</b>：$t^2-2=\frac{-1}{x+1}$ 这个化简一出来，$-\frac t{t^2-2}$ 立刻变成 $t(x+1)=\sqrt{\frac{2x+1}{x+1}}(x+1)=\sqrt{(2x+1)(x+1)}$，<u>根号自动合并</u>。<span class="dock">硬把 $t$ 代进 $\frac t{t^2-2}$ 里通分是自找麻烦</span>。<br>
+      <b>本题的 sympy 复算记录</b>：对最终答案求导，化简后与被积函数完全相等 ✔（书答的末项符号是对的）。<br>
+      <b>为什么分母是 $(t^2-2)^2$ 要拆 4 项</b>：$t^2-2=(t-\sqrt2)(t+\sqrt2)$ 是两个<u>一次因式各自二重</u>，按<a href="#s5">§5</a> 的规则 ②，每个二重一次因式产生 2 项，共 4 项。
+    </div>
+  </div>
+
+  <!-- ================= s4 分部积分 ================= -->
+  <h2 id="s4"><span class="idx">四</span>分部积分法：反对幂指三 + 四个子类型<span class="pg">基础 p.236–238 · 强化 p.94–96</span></h2>
+
+  <div class="key"><span class="tag">必记 · 公式与选取原则</span>
+    <div class="fml">$\displaystyle\int u\,\mathrm dv=uv-\int v\,\mathrm du\qquad\underbrace{左边难算}_{\int u\mathrm dv}\ \longrightarrow\ \underbrace{右边易算}_{\int v\mathrm du}$</div>
+    <p><b>★ 选取口诀「反 对 幂 指 三」</b>：<u>排在左边的取 $u$（用来求导），排在右边的取 $v$（用来积分）</u>。</p>
+    <div class="fml">$\underbrace{\text{反}}_{\arcsin x}\quad\underbrace{\text{对}}_{\ln x}\quad\underbrace{\text{幂}}_{x^2}\quad\underbrace{\text{指}}_{\mathrm e^x}\quad\underbrace{\text{三}}_{\sin x}$</div>
+    <p><b>三条具体规则</b>：</p>
+    <ol style="margin:6px 0 0 20px">
+      <li>$P_n(x)\mathrm e^{kx}$、$P_n(x)\sin ax$、$P_n(x)\cos ax$ → 取 <b>$u=P_n(x)$</b>（求导把多项式降次）</li>
+      <li>$\mathrm e^{ax}\sin bx$、$\mathrm e^{ax}\cos bx$ → <b>$u$ 取哪个都行</b>（书上眉批"指、三均可为 $u$"），最后靠<u>建方程</u>解出</li>
+      <li>$P_n(x)\ln x$、$P_n(x)\arcsin x$、$P_n(x)\arctan x$ → 取 <b>$u=\ln x/\arcsin x/\arctan x$</b>（这些函数<u>求导后变成有理式，积分反而更难</u>）</li>
+    </ol>
+  </div>
+
+  <div class="zy"><span class="tag">强化题型 · 18 讲把分部积分拆成四个子类型（这是本节的真正骨架）</span>
+    <div class="gridwrap"><table class="dense">
+      <tr><th>子类</th><th>特征</th><th>做完之后</th><th>本页例题</th></tr>
+      <tr><td><b>(1) 常规分部</b></td><td>两个<u>不同类型</u>的因式相乘</td><td>右边直接能积出来</td><td>基 9.4 · 强 9.6</td></tr>
+      <tr><td><b>(2) 积分再现法</b></td><td>$\mathrm e^{ax}\sin bx$、$\sqrt{1+x^2}$</td><td>右边<u>又出现原积分 $I$</u> → <b>移项解方程</b></td><td>基 9.5 · 强 9.7</td></tr>
+      <tr><td><b>(3) 积分抵消法</b></td><td>被积函数是两项之和，各自分部</td><td>两个难积的部分<u>正负相消</u></td><td>基 9.7 · <b>强 9.8</b> · 习 9.11</td></tr>
+      <tr><td><b>(4) 递推法</b></td><td>含参数 $n$ 的积分 $I_n$</td><td>得到 $I_n=f(I_{n-1})$ → <b>逐级降到 $I_0$</b></td><td><b>基 9.28</b> · 强 9.9</td></tr>
+    </table></div>
+    <p style="margin-top:6px"><b>还有一条"隐藏"的识别信号（18 讲原话）</b>：即使<u>没有明显的两类函数相乘</u>，只要<b>易于看出有一部分是 $v'(x)$</b>（能凑进 d 里），也可以分部。$\int\sqrt{1+x^2}\mathrm dx$ 就是——它只有一个因子，但可以看成 $\sqrt{1+x^2}\cdot 1$，取 $v=x$。</p>
+  </div>
+
+  <div class="eg" id="eg97">
+    <div class="q"><span class="no">基 9.7</span> 计算不定积分 $\displaystyle\int\mathrm e^{2x}(\tan x+1)^2\mathrm dx$。<span class="exam">积分抵消法</span></div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\mathrm e^{2x}\tan x+C$</span> ✔</p>
+      <p><span class="lab">分析</span>展开平方 + 三角恒等式化简（$\tan^2x+1=\sec^2x$），得到两项；<b>其中一项凑微分后分部，恰好抵消另一项</b>。</p>
+      <p><span class="lab">解</span>$(\tan x+1)^2=\tan^2x+2\tan x+1=\sec^2x+2\tan x$，故</p>
+      <div class="fml">$\displaystyle\int\mathrm e^{2x}(\tan x+1)^2\mathrm dx=\int\mathrm e^{2x}\sec^2x\,\mathrm dx+2\int\mathrm e^{2x}\tan x\,\mathrm dx=\int\mathrm e^{2x}\mathrm d(\tan x)+2\int\mathrm e^{2x}\tan x\,\mathrm dx$</div>
+      <div class="fml">$=\mathrm e^{2x}\tan x\underbrace{-2\int\mathrm e^{2x}\tan x\,\mathrm dx+2\int\mathrm e^{2x}\tan x\,\mathrm dx}_{\text{正负相消}}=\mathrm e^{2x}\tan x+C$</div>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>识别抵消法的信号</b>：被积函数展开后有两项，其中一项<u>含有另一项的"原函数因子"</u>。这里 $\sec^2x=(\tan x)'$，所以 $\int\mathrm e^{2x}\sec^2x$ 分部后必然吐出 $-2\int\mathrm e^{2x}\tan x$。<br>
+      <b>逆向的用法（更重要）</b>：$\int\mathrm e^{ax}[f(x)+\frac1af'(x)]\mathrm dx=\frac1a\mathrm e^{ax}f(x)+C$ —— <u>凡是"$\mathrm e^{ax}\times$（函数 + 它导数的倍数）"，答案就是 $\mathrm e^{ax}$ 乘那个函数</u>。本题 $a=2$，$f=\tan x$：$\sec^2x+2\tan x=2[\tan x+\frac12\sec^2x]$ ✔<br>
+      这条心法在 <b>强 9.8</b> 再用一次，是<u>填空题 10 秒出答案</u>的关键。
+    </div>
+  </div>
+
+  <div class="eg" id="eg98s">
+    <div class="q"><span class="no">强 9.8</span> $\displaystyle\int\mathrm e^x\left(\frac{1-x}{1+x^2}\right)^2\mathrm dx=$ ______<span class="exam">★ 积分抵消法的标准填空</span></div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\dfrac{\mathrm e^x}{1+x^2}+C$</span> ✔</p>
+      <p><span class="lab">分析</span>用上一题的心法：找 $f$ 使得 $\left(\frac{1-x}{1+x^2}\right)^2=f(x)+f'(x)$。<b>猜 $f=\frac1{1+x^2}$</b>，则 $f'=-\frac{2x}{(1+x^2)^2}$，而</p>
+      <div class="fml">$\left(\frac{1-x}{1+x^2}\right)^2=\frac{(1-x)^2}{(1+x^2)^2}=\frac{1+x^2-2x}{(1+x^2)^2}=\underbrace{\frac1{1+x^2}}_{f}\underbrace{-\frac{2x}{(1+x^2)^2}}_{f'}\quad ✔$</div>
+      <p><span class="lab">解（考场写法）</span></p>
+      <div class="fml">$\displaystyle 原式=\int\mathrm e^x\frac{\mathrm dx}{1+x^2}+\int\mathrm e^x\mathrm d\left(\frac1{1+x^2}\right)=\int\frac{\mathrm e^x}{1+x^2}\mathrm dx+\frac{\mathrm e^x}{1+x^2}-\int\frac{\mathrm e^x}{1+x^2}\mathrm dx=\frac{\mathrm e^x}{1+x^2}+C$</div>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>核心恒等变形只有一步</b>：$(1-x)^2=1-2x+x^2=(1+x^2)-2x$ —— <u>把 $-2x$ 从平方里分离出来</u>，剩下的 $(1+x^2)$ 与分母约掉一层。<span class="dock">很多人展开成 $\frac{1-2x+x^2}{(1+x^2)^2}$ 就卡住了</span>，卡点在于没意识到 $1+x^2$ 要整体保留。<br>
+      <b>一眼秒杀版</b>：$\int\mathrm e^x[f(x)+f'(x)]\mathrm dx=\mathrm e^xf(x)+C$。看到 $\mathrm e^x\times$ 分式，就去凑这个形状——<b>本题分母是 $(1+x^2)^2$，说明 $f$ 的分母是 $1+x^2$</b>，一秒定位。<br>
+      <b>同族题</b>：$\int\mathrm e^x\frac{1+\sin x}{1+\cos x}\mathrm dx$（$f=\tan\frac x2$）、$\int\mathrm e^x\frac{x-1}{x^2}\mathrm dx$（$f=\frac1x$），<u>都是同一个模子</u>。
+    </div>
+  </div>
+
+  <div class="eg" id="eg99s">
+    <div class="q"><span class="no">强 9.9</span> 设 $n$ 为非负整数，则 $\displaystyle\int_0^1x^2\ln^nx\,\mathrm dx=$ ______<span class="exam">递推法</span></div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\dfrac{(-1)^n}{3^{n+1}}n!$</span> ✔</p>
+    </div>
+    <div class="think"><span class="th">💭 思路</span>
+      <ol>
+        <li><b>看见带参数 $n$ 的积分，第一反应是"建递推"</b>——不要试图直接算出通式。目标是把 $a_n$ 表示成 $a_{n-1}$ 的倍数。</li>
+        <li><b>谁取 $u$？</b>反对幂指三：$\ln^nx$ 是"对"，$x^2$ 是"幂"，所以 $u=\ln^nx$（求导让 $n$ 降到 $n-1$，这正是递推要的），$\mathrm dv=x^2\mathrm dx$。</li>
+        <li><b>边界项要验证</b>：$\frac13x^3\ln^nx\Big|_0^1$ 在 $x\to0^+$ 是 $0\cdot\infty$ 型，必须说明它是 0（用 $\lim_{x\to0^+}x^\alpha\ln^\beta x=0$）。<u>这一步不写就是漏洞</u>。</li>
+        <li>递推得 $a_n=-\frac n3a_{n-1}$，逐级降到 $a_0=\int_0^1x^2\mathrm dx=\frac13$，注意<b>每降一级出一个负号和一个 $\frac13$</b>，$n$ 级共 $(-\frac13)^n n!$，再乘 $a_0=\frac13$。</li>
+      </ol>
+    </div>
+    <div class="paper"><span class="phead">✍️ 考场卷面<span class="score">若作解答题，约 10 分</span></span>
+      <div class="step"><b>解</b>　记 $a_n=\displaystyle\int_0^1x^2\ln^nx\,\mathrm dx\ (n=0,1,2,\cdots)$。<span class="pt">⛳ 设记号 1分</span></div>
+      <div class="step">当 $n\ge1$ 时，由分部积分法，
+      $\displaystyle a_n=\int_0^1\ln^nx\,\mathrm d\!\left(\frac{x^3}3\right)=\frac{x^3}3\ln^nx\bigg|_0^1-\int_0^1\frac{x^3}3\cdot n\ln^{n-1}x\cdot\frac1x\mathrm dx$<span class="pt">⛳ 分部 3分</span></div>
+      <div class="step">由 $\displaystyle\lim_{x\to0^+}x^\alpha\ln^\beta x=0\ (\forall\alpha,\beta\gt0)$ 知 $\dfrac{x^3}3\ln^nx\bigg|_0^1=0$，<span class="pt">⛳ 边界项为零并说明 2分</span></div>
+      <div class="step">故 $\displaystyle a_n=-\frac n3\int_0^1x^2\ln^{n-1}x\,\mathrm dx=-\frac n3a_{n-1}$。　……(1)<span class="pt">⛳ 递推式 2分</span></div>
+      <div class="step">反复使用 (1)：$\displaystyle a_n=\left(-\frac n3\right)\left(-\frac{n-1}3\right)\cdots\left(-\frac13\right)a_0$，而 $\displaystyle a_0=\int_0^1x^2\mathrm dx=\frac13$。<span class="pt">⛳ 降到 $a_0$ 1分</span></div>
+      <div class="fin">所以 $\displaystyle\int_0^1x^2\ln^nx\,\mathrm dx=\frac{(-1)^n\,n!}{3^{n+1}}$。<span class="pt">⛳ 结论 1分</span></div>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>$\lim_{x\to0^+}x^\alpha\ln^\beta x=0$ 这条必须会说理由</b>：令 $x=\mathrm e^{-s}$，$s\to+\infty$，则式子变成 $\frac{(-s)^\beta}{\mathrm e^{\alpha s}}\to0$（指数压幂）。<u>第 1 章的"幂对指"排序在这里兑现</u>。<br>
+      <span class="dock">最常见扣分</span>：直接写 $\frac{x^3}3\ln^nx\big|_0^1=0-0$，不说明下限那个 0 是怎么来的。<b>$\ln^n0=\pm\infty$，这是 $0\cdot\infty$ 型未定式，不说明就是跳步。</b><br>
+      <b>验算</b>：$n=0$ 时公式给 $\frac13$ ✔；$n=1$ 时给 $-\frac19$，手算 $\int_0^1x^2\ln x\mathrm dx=-\frac19$ ✔（sympy 已核 $n=0\sim4$ 全对）。<br>
+      <b>★ 顺带记两条傅里叶系数常用积分</b>（18 讲注里给的，第 16 章直接用）：
+      <div class="fml">$\int_0^\pi x\cos nx\,\mathrm dx=\frac{(-1)^n-1}{n^2},\qquad\int_0^\pi x^2\cos nx\,\mathrm dx=\frac{(-1)^n\cdot2\pi}{n^2}$</div>
+      前者 $n$ 为偶数时是 0、奇数时是 $-\frac2{n^2}$；<u>这两条在做傅里叶展开时能省一大半时间</u>。
+    </div>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 分部积分的推广公式与"表格法"（$\int P_n(x)\mathrm e^{kx}$ 类的加速器）</span>
+    <p>设 $u,v$ 有直到 $n+1$ 阶连续导数，则</p>
+    <div class="fml">$\displaystyle\int uv^{(n+1)}\mathrm dx=uv^{(n)}-u'v^{(n-1)}+u''v^{(n-2)}-\cdots+(-1)^nu^{(n)}v+(-1)^{n+1}\int u^{(n+1)}v\,\mathrm dx$</div>
+    <p><b>表格法（错位相乘）的用法</b>：第一行写 $u$ 的各阶导数（一直求到 0），第二行写 $v^{(n+1)}$ 的各阶原函数，然后<b>左上 × 右下</b>错位相乘，符号 $+,-,+,-$ 交替。</p>
+    <p>书上的示例 $\displaystyle\int(x^3+2x+6)\mathrm e^{2x}\mathrm dx$：</p>
+    <div class="gridwrap"><table class="zbtab">
+      <tr class="urow"><td>$u$ 的导数</td><td>$x^3+2x+6$</td><td>$3x^2+2$</td><td>$6x$</td><td>$6$</td><td>$0$</td></tr>
+      <tr class="vrow"><td>$v$ 的原函数</td><td>$\mathrm e^{2x}$</td><td>$\frac12\mathrm e^{2x}$</td><td>$\frac14\mathrm e^{2x}$</td><td>$\frac18\mathrm e^{2x}$</td><td>$\frac1{16}\mathrm e^{2x}$</td></tr>
+      <tr><td>错位乘的符号</td><td></td><td class="sgn-p">+</td><td class="sgn-m">−</td><td class="sgn-p">+</td><td class="sgn-m">−</td></tr>
+    </table></div>
+    <div class="fml">$原式=(x^3+2x+6)\frac{\mathrm e^{2x}}2-(3x^2+2)\frac{\mathrm e^{2x}}4+6x\cdot\frac{\mathrm e^{2x}}8-6\cdot\frac{\mathrm e^{2x}}{16}+C=\left(\frac{x^3}2-\frac{3x^2}4+\frac{7x}4+\frac{17}8\right)\mathrm e^{2x}+C$</div>
+    <p><b>什么时候用</b>：多项式次数 $\ge2$ 且另一因子是 $\mathrm e^{kx},\sin ax,\cos ax$ 时——<u>常规分部要做 $n$ 次，表格法一次画完</u>。<b>填空题用它能省 2 分钟。</b><span class="dock">解答题最好还是写常规分部的过程</span>，表格法属于"草稿纸工具"。</p>
+  </div>
+
+  <!-- ================= s4b 表格法生成器 ================= -->
+  <h2 id="s4b"><span class="idx">⚙️</span>分部积分错位表生成器：把表格法练成肌肉记忆</h2>
+
+  <div class="tool">
+    <h4>⚙️ 错位表生成器</h4>
+    <div class="hint">左边输入多项式 $P(x)$ 的系数，右边选另一个因子。实时生成<b>两行错位表 + 符号 + 最终答案</b>，并给出<u>展开合并后的结果</u>。<br><b>用法建议</b>：先自己在纸上画表算一遍，再点"对答案"。练到 $P$ 是三次式也能 40 秒画完，$\int P_n\mathrm e^{kx}$ 这一类题就再也不用分部三次了。</div>
+
+    <div class="ctl">
+      <label>多项式 $P(x)=$</label>
+      <input type="number" id="zbC3" value="1" step="1" title="x³ 系数"> x³ +
+      <input type="number" id="zbC2" value="0" step="1" title="x² 系数"> x² +
+      <input type="number" id="zbC1" value="2" step="1" title="x 系数"> x +
+      <input type="number" id="zbC0" value="6" step="1" title="常数项">
+    </div>
+    <div class="ctl">
+      <label>另一个因子</label>
+      <select id="zbKind">
+        <option value="exp">$\mathrm e^{kx}$</option>
+        <option value="sin">$\sin(kx)$</option>
+        <option value="cos">$\cos(kx)$</option>
+      </select>
+      <label style="min-width:3em">$k=$</label>
+      <input type="number" id="zbK" value="2" step="1">
+    </div>
+    <div class="gridwrap"><table class="zbtab" id="zbTab"></table></div>
+    <div class="say" id="zbSay"></div>
+    <div class="legend2"><span class="chip c-p">上行</span>$u=P(x)$ 逐次<b>求导</b>，直到 0（$n$ 次多项式求 $n+1$ 次归零，所以表格一定有限长）。
+      <span class="chip c-b">下行</span>$v$ 逐次<b>求原函数</b>。
+      <span class="chip c-a">符号</span>从第二列起 $+,-,+,-$ 交替。<b>最后一列乘出来是 $\int0\cdot v=C$，所以表格能停。</b></div>
+  </div>
+
+  <!-- ================= s5 有理函数 ================= -->
+  <h2 id="s5"><span class="idx">五</span>有理函数的积分：拆项四规则 + 定系数两方法<span class="pg">基础 p.239–242 · 强化 p.96–97</span></h2>
+
+  <div class="key"><span class="tag">必记 · 三步走</span>
+    <div class="steps3">
+      <div><b>第 1 步 · 先看真假</b>$\frac{P_n}{Q_m}$：<u>$n\lt m$ 是真分式</u>可以直接拆；<u>$n\ge m$ 是假分式</u>，必须<b>先除法化成"多项式 + 真分式"</b>。<br><span style="font-size:.8rem;color:var(--muted)">如 $\frac{x^2}{x+1}=\frac{x^2-1+1}{x+1}=x-1+\frac1{x+1}$</span></div>
+      <div><b>第 2 步 · 分母因式分解</b>拆到<u>实数域内不可再分</u>为止：只剩<b>一次因式</b> $(ax+b)^k$ 和<b>判别式 $\lt0$ 的二次因式</b> $(px^2+qx+r)^k$。</div>
+      <div><b>第 3 步 · 按四规则拆项 + 定系数</b>拆完每一项都落到四个"简单积分"之一（见下表），全部有公式。</div>
+    </div>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 拆项四规则（分母出现什么，就产生什么）</span>
+    <div class="gridwrap"><table class="dense">
+      <tr><th>分母里的因式</th><th>产生几项</th><th>形状</th></tr>
+      <tr><td>一次单因式 $ax+b$</td><td>1 项</td><td>$\dfrac A{ax+b}$</td></tr>
+      <tr><td>$k$ 重一次因式 $(ax+b)^k$</td><td><b>$k$ 项</b></td><td>$\dfrac{A_1}{ax+b}+\dfrac{A_2}{(ax+b)^2}+\cdots+\dfrac{A_k}{(ax+b)^k}$</td></tr>
+      <tr><td>二次单因式 $px^2+qx+r$<br><span style="color:var(--red);font-size:.8rem">（$q^2-4pr\lt0$）</span></td><td>1 项</td><td>$\dfrac{Ax+B}{px^2+qx+r}$　<b>分子是一次式，不是常数</b></td></tr>
+      <tr><td>$k$ 重二次因式 $(px^2+qx+r)^k$</td><td><b>$k$ 项</b></td><td>$\dfrac{A_1x+B_1}{px^2+qx+r}+\cdots+\dfrac{A_kx+B_k}{(px^2+qx+r)^k}$</td></tr>
+    </table></div>
+    <p><b>四个"简单积分"的结果（18 讲整理，全部要能直接写）</b>：</p>
+    <div class="fcards">
+      <div><b>①</b>$\int\frac A{ax+b}\mathrm dx=\frac Aa\ln|ax+b|+C$</div>
+      <div><b>②</b>$\int\frac A{(ax+b)^k}\mathrm dx=\frac A{a(1-k)}\cdot\frac1{(ax+b)^{k-1}}+C\ (k\ne1)$</div>
+      <div><b>③</b>$\int\frac{Bx+C}{px^2+qx+r}\mathrm dx$：分子<b>凑成分母的导数 + 常数</b>，前半出 $\ln$，后半<b>配方</b>出 $\arctan$</div>
+      <div><b>④</b>$\int\frac{Bx+C}{(px^2+qx+r)^k}\mathrm dx$：同③，但后半的 $\int\frac{\mathrm dx}{(配方)^k}$ 要<b>用分部积分逆推降次</b></div>
+    </div>
+    <p><b>★ 规则 ③④ 的动作模板（本章最常用的手上功夫）</b>：</p>
+    <div class="fml">$\displaystyle\int\frac{2x+3}{x^2-x+1}\mathrm dx=\underbrace{\int\frac{(2x-1)}{x^2-x+1}\mathrm dx}_{\text{凑成}\frac{(分母)'}{分母}\to\ln}+\underbrace{\int\frac4{\left(x-\frac12\right)^2+\left(\frac{\sqrt3}2\right)^2}\mathrm dx}_{\text{配方}\to\arctan}=\ln(x^2-x+1)+\frac{8\sqrt3}3\arctan\frac{2x-1}{\sqrt3}+C$</div>
+    <p>这就是 <b>基 9.10</b>。<b>口诀：分子凑成「$k\times$(分母)′ + 常数」。</b></p>
+    <p><b>★ 分部积分逆推（规则 ④ 的核心技巧）</b>：$I=\int\frac{\mathrm dx}{(1+x^2)^2}$ 怎么算？从<u>低一阶</u>的积分出发分部：</p>
+    <div class="fml">$\int\frac{\mathrm dx}{1+x^2}=\frac x{1+x^2}+\int\frac{2x^2}{(1+x^2)^2}\mathrm dx=\frac x{1+x^2}+2\int\frac{(1+x^2)-1}{(1+x^2)^2}\mathrm dx=\frac x{1+x^2}+2\arctan x-2I$</div>
+    <div class="fml">$\Longrightarrow\ I=\frac x{2(1+x^2)}+\frac12\arctan x+C$</div>
+  </div>
+
+  <div class="eg" id="eg98">
+    <div class="q"><span class="no">基 9.8</span> 求 $\displaystyle\int\frac{4x^2-6x-1}{(x+1)(2x-1)^2}\mathrm dx$。<span class="exam">定系数的两种方法，正面对比</span></div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\ln|x+1|+\dfrac1{2x-1}+C$</span> ✔（$A=1,B=0,C=-2$，sympy 已核）</p>
+      <p><span class="lab">解</span>分母含<b>一次单因式 $(x+1)$ 与二重一次因式 $(2x-1)^2$</b>，按规则 ①② 拆成 3 项：</p>
+      <div class="fml">$\dfrac{4x^2-6x-1}{(x+1)(2x-1)^2}=\dfrac A{x+1}+\dfrac B{2x-1}+\dfrac C{(2x-1)^2}$</div>
+      <p>通分后分子恒等：$4x^2-6x-1\equiv A(2x-1)^2+B(x+1)(2x-1)+C(x+1)$　……(∗)</p>
+      <p><span class="lab">方法一 · 比较系数</span>展开右端：$(4A+2B)x^2+(-4A+B+C)x+(A-B+C)$，令同次幂系数相等：</p>
+      <div class="fml">$\begin{cases}4A+2B=4\\-4A+B+C=-6\\A-B+C=-1\end{cases}\Longrightarrow A=1,\ B=0,\ C=-2$</div>
+      <p style="color:var(--muted);font-size:.85rem">书评：这种方法<b>比较死板</b>，且方程组有时较烦琐。</p>
+      <p><span class="lab">方法二 · 赋值法（推荐）</span>在 (∗) 中随便代 $x$：</p>
+      <ul style="margin:4px 0 4px 20px">
+        <li>令 $x=-1$（<b>让 $B,C$ 项消失</b>）：$4+6-1=9=9A\Rightarrow A=1$</li>
+        <li>令 $x=\frac12$（<b>让 $A,B$ 项消失</b>）：$1-3-1=-3=\frac32C\Rightarrow C=-2$</li>
+        <li>令 $x=0$（随便补一个）：$-1=A-B+C=1-B-2\Rightarrow B=0$</li>
+      </ul>
+      <p>于是 $\dfrac{4x^2-6x-1}{(x+1)(2x-1)^2}=\dfrac1{x+1}-\dfrac2{(2x-1)^2}$，故</p>
+      <div class="fml">$原式=\displaystyle\int\frac{\mathrm dx}{x+1}-\int\frac{2\,\mathrm dx}{(2x-1)^2}=\ln|x+1|+\frac1{2x-1}+C$</div>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>赋值法的选点原则：优先代分母的根</b>（$x=-1$ 和 $x=\frac12$），每代一个根就<u>直接解出一个系数</u>，不用解方程组。根不够用时再随便补 $x=0$（算术最简）。<br>
+      <b>什么时候只能用比较系数法？</b>分母有<u>不可约二次因式</u>时——它没有实根，代不进去。这时通常是"<b>先用赋值法解掉一次因式的系数，再用比较系数法补剩下的</b>"（<a href="#eg99">基 9.9</a> 就是这个混合打法）。<br>
+      <span class="dock">最容易错的一步</span>：$\int\frac2{(2x-1)^2}\mathrm dx$ 的系数。凑微分 $\mathrm d(2x-1)=2\mathrm dx$，所以 $\int\frac{2\mathrm dx}{(2x-1)^2}=\int\frac{\mathrm d(2x-1)}{(2x-1)^2}=-\frac1{2x-1}$，<b>前面还有个负号，与 $-\frac2{(2x-1)^2}$ 的负号一抵消变成 $+\frac1{2x-1}$</b>。两个负号连着最容易丢一个。
+    </div>
+  </div>
+
+  <div class="eg" id="eg99">
+    <div class="q"><span class="no">基 9.9</span> 求 $\displaystyle\int\frac x{x^3-x^2+x-1}\mathrm dx$。</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\dfrac14\ln\dfrac{(x-1)^2}{x^2+1}+\dfrac12\arctan x+C$</span> ✔</p>
+      <p><span class="lab">分析</span>三步走里<b>第 2 步（因式分解）才是本题的门槛</b>：$x^3-x^2+x-1$ 怎么分解？<b>分组</b>：$x^2(x-1)+(x-1)=(x-1)(x^2+1)$。</p>
+      <p><span class="lab">解</span>因 $x^3-x^2+x-1=(x-1)(x^2+1)$，且 $x^2+1$ 不可约，按规则 ①③ 设</p>
+      <div class="fml">$\dfrac x{x^3-x^2+x-1}=\dfrac A{x-1}+\dfrac{Bx+C}{x^2+1}\ \Longrightarrow\ x\equiv A(x^2+1)+(Bx+C)(x-1)$　……(∗)</div>
+      <p><b>混合打法</b>：令 $x=1$ 得 $1=2A$，$A=\frac12$；令 $x=0$ 得 $0=A-C$，$C=\frac12$；比较 $x^2$ 系数得 $0=A+B$，$B=-\frac12$。于是</p>
+      <div class="fml">$\displaystyle\int\frac x{x^3-x^2+x-1}\mathrm dx=\frac12\int\frac{\mathrm dx}{x-1}-\frac12\int\frac{x-1}{x^2+1}\mathrm dx=\frac12\ln|x-1|-\frac14\ln(x^2+1)+\frac12\arctan x+C$</div>
+      <div class="fml">$=\frac14\ln\frac{(x-1)^2}{x^2+1}+\frac12\arctan x+C$</div>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>因式分解的三板斧</b>：① <u>分组</u>（本题）；② <u>试根</u>（$x=\pm1,\pm2$ 代进去看是否为 0，是则含因式 $x\mp\cdots$）；③ <u>十字相乘</u>。考研题的分母<b>一定分解得出来</b>（书上原话"不会很难"），分解不出来说明前面变形错了。<br>
+      <b>$\int\frac{x-1}{x^2+1}\mathrm dx$ 的拆法</b>：$\frac{x-1}{x^2+1}=\frac12\cdot\frac{2x}{x^2+1}-\frac1{x^2+1}$，前半 $\ln$、后半 $\arctan$ ——<u>就是规则 ③ 的模板</u>，本题分母已经配好方（$x^2+1$），省了配方那步。<br>
+      <b>末步合并对数是加分项不是必需</b>：$\frac12\ln|x-1|-\frac14\ln(x^2+1)=\frac14\ln\frac{(x-1)^2}{x^2+1}$（把 $\frac12$ 提成 $\frac14$ 需要把 $|x-1|$ 平方，<u>平方后绝对值自然消失</u>，这一步很多人写成 $\frac14\ln\frac{|x-1|}{x^2+1}$ 就错了）。
+    </div>
+  </div>
+
+  <div class="eg" id="eg910">
+    <div class="q"><span class="no">基 9.10</span> $\displaystyle\int\frac{2x+3}{x^2-x+1}\mathrm dx=$ ______　　<span class="no">强 9.10</span> 计算 $\displaystyle\int_0^1\frac{\mathrm dx}{(x+1)(x^2-2x+2)}$。</div>
+    <div class="s">
+      <p><span class="lab">基 9.10 答案</span><span class="ans">$\ln(x^2-x+1)+\dfrac{8\sqrt3}3\arctan\dfrac{2x-1}{\sqrt3}+C$</span> ✔</p>
+      <p>分母<b>已经是最简</b>（$\Delta=1-4\lt0$ 不可约），直接上规则 ③ 的模板：分子 $2x+3=(2x-1)+4$，</p>
+      <div class="fml">$\displaystyle\int\frac{2x-1}{x^2-x+1}\mathrm dx+4\int\frac{\mathrm dx}{\left(x-\frac12\right)^2+\frac34}=\ln(x^2-x+1)+4\cdot\frac2{\sqrt3}\arctan\frac{x-\frac12}{\frac{\sqrt3}2}+C$</div>
+      <p><span class="lab">强 9.10 答案</span><span class="ans">$\dfrac3{10}\ln2+\dfrac\pi{10}$</span> ✔（$A=\frac15,B=-\frac15,C=\frac35$，sympy 已核）</p>
+      <p>$x^2-2x+2=(x-1)^2+1$ 不可约，设 $\frac1{(x+1)(x^2-2x+2)}=\frac A{x+1}+\frac{Bx+C}{x^2-2x+2}$，得 $A(x^2-2x+2)+(Bx+C)(x+1)=1$，比较系数得 $A=\frac15,B=-\frac15,C=\frac35$，于是</p>
+      <div class="fml">$\displaystyle\int_0^1=\frac15\ln|1+x|\bigg|_0^1-\frac1{10}\ln|x^2-2x+2|\bigg|_0^1+\frac25\arctan(x-1)\bigg|_0^1=\frac15\ln2-\frac1{10}(0-\ln2)+\frac25\cdot\frac\pi4=\frac3{10}\ln2+\frac\pi{10}$</div>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>$\frac{8\sqrt3}3$ 这个系数怎么来的</b>：$4\cdot\frac1a$ 其中 $a=\frac{\sqrt3}2$，即 $\frac4{\sqrt3/2}=\frac8{\sqrt3}=\frac{8\sqrt3}3$。<span class="dock">分母有理化不做完，答案形式与标准答案对不上</span>（虽然值相同，但填空题最好写成有理化形式）。<br>
+      <b>强 9.10 的三项分别对应三种公式</b>：$\frac A{x+1}\to\ln$；$\frac{Bx}{x^2-2x+2}$ 部分凑 $(分母)'=2x-2\to\ln$；剩余常数部分配方 $\to\arctan$。<b>一道题同时练到规则 ①③ 的全部动作。</b><br>
+      <b>定积分的算法差异</b>：这里是<u>先拆项再各自套牛莱</u>。$\arctan(x-1)\big|_0^1=0-(-\frac\pi4)=\frac\pi4$，<span class="dock">$\arctan(-1)=-\frac\pi4$ 的负号不要丢</span>。
+    </div>
+  </div>
+
+  <!-- ================= s6 三角有理式 ================= -->
+  <h2 id="s6"><span class="idx">六</span>三角有理式：先试三条奇偶判据，万能公式是最后一招<span class="pg">基础 p.242 · 强化 p.97–99</span></h2>
+
+  <div class="key"><span class="tag">必记 · 三条全角换元判据（做题顺序就是这个顺序）</span>
+    <div class="gridwrap"><table class="dense">
+      <tr><th>判据（对 $R(\sin x,\cos x)$ 验）</th><th>换元</th><th>直观理解</th><th>例题</th></tr>
+      <tr><td>$R(-\sin x,\cos x)=-R$<br><span style="font-size:.8rem;color:var(--muted)">（对 $\sin$ 是奇的）</span></td><td><b>$t=\cos x$</b></td><td>$\sin$ 出现奇数次 → 留一个配 $\mathrm d(\cos x)$</td><td>强 9.11</td></tr>
+      <tr><td>$R(\sin x,-\cos x)=-R$<br><span style="font-size:.8rem;color:var(--muted)">（对 $\cos$ 是奇的）</span></td><td><b>$t=\sin x$</b></td><td>$\cos$ 出现奇数次 → 留一个配 $\mathrm d(\sin x)$</td><td>强 9.12</td></tr>
+      <tr><td>$R(-\sin x,-\cos x)=R$<br><span style="font-size:.8rem;color:var(--muted)">（同时变号不变，即只含 $\tan x$）</span></td><td><b>$t=\tan x$</b></td><td>$\sin,\cos$ 的次数之和为偶</td><td>强 9.13 法一</td></tr>
+      <tr><td><b>三条都不满足</b></td><td><b>$t=\tan\frac x2$（万能公式）</b></td><td>$\sin x=\frac{2t}{1+t^2},\ \cos x=\frac{1-t^2}{1+t^2},\ \mathrm dx=\frac{2\mathrm dt}{1+t^2}$</td><td>强 9.14</td></tr>
+    </table></div>
+    <p style="margin-top:6px"><b>18 讲原话：万能公式是"最后一招"。</b>因为它一定把式子变成有理函数（能做），但<u>次数往往很高、拆项很烦</u>。三条判据能中一条就别用它。</p>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 为什么三条判据一定够用（三分解定理）</span>
+    <p>18 讲给了一条理论完备性的注：任何 $R(\sin x,\cos x)$ 都能分解成三块之和</p>
+    <div class="fml">$R=\underbrace{R_1}_{对\sin奇}+\underbrace{R_2}_{对\cos奇}+\underbrace{R_3}_{同时变号不变}$</div>
+    <p>具体地 $R_1=\frac12[R(\sin,\cos)-R(-\sin,\cos)]$，$R_2=\frac12[R(-\sin,\cos)-R(-\sin,-\cos)]$，$R_3=\frac12[R(-\sin,-\cos)+R(\sin,\cos)]$。</p>
+    <p><b>所以理论上三角有理式一定能用全角换元法解决</b>——但书上紧接着说：<span style="color:var(--red)"><b>"但事实上，有理式的分解却并非易事"</b></span>。<u>这就是万能公式存在的意义：不用动脑分解，代价是算得久。</u></p>
+  </div>
+
+  <div class="eg" id="eg911s">
+    <div class="q"><span class="no">强 9.11</span>／<span class="no">强 9.12</span> 求 (1) $\displaystyle\int\frac{\sin^5x}{\cos^4x}\mathrm dx$；(2) $\displaystyle\int\frac{\mathrm dx}{\sin x+\sin^3x}$；(3) $\displaystyle\int\sin^2x\cos^3x\,\mathrm dx$。</div>
+    <div class="s">
+      <p><span class="lab">(1) 答案</span><span class="ans">$-\cos x-2\sec x+\dfrac13\sec^3x+C$</span> ✔　$\sin$ 是 5 次（奇）→ <b>$t=\cos x$</b>：</p>
+      <div class="fml">$\displaystyle\int\frac{(1-\cos^2x)^2}{\cos^4x}\sin x\,\mathrm dx=-\int\frac{(1-t^2)^2}{t^4}\mathrm dt=-\int\left(\frac1{t^4}-\frac2{t^2}+1\right)\mathrm dt=\frac1{3t^3}-\frac2t-t+C$</div>
+      <p><span class="lab">(2) 答案</span><span class="ans">$\dfrac12\ln\dfrac{1-\cos x}{1+\cos x}+\dfrac1{2\sqrt2}\ln\dfrac{\cos x+\sqrt2}{\sqrt2-\cos x}+C$</span> ✔　同样 $\sin$ 奇 → <b>$t=\cos x$</b>，先<u>上下同乘 $\sin x$</u>：</p>
+      <div class="fml">$\displaystyle\int\frac{\sin x\,\mathrm dx}{\sin^2x+\sin^4x}=-\int\frac{\mathrm dt}{(1-t^2)+(1-t^2)^2}=-\int\frac{\mathrm dt}{(1-t^2)(2-t^2)}=-\int\left(\frac1{1-t^2}-\frac1{2-t^2}\right)\mathrm dt$</div>
+      <p><span class="lab">(3) 答案</span><span class="ans">$\dfrac{\sin^3x}3-\dfrac{\sin^5x}5+C$</span> ✔　$\cos$ 是 3 次（奇）→ <b>$t=\sin x$</b>：$\int t^2(1-t^2)\mathrm dt$</p>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>(2) 的"上下同乘 $\sin x$"是关键动作</b>：原式分母是 $\sin x(1+\sin^2x)$，分子分母同乘 $\sin x$ 后，分子的 $\sin x\mathrm dx$ 正好凑 $\mathrm d(-\cos x)$，分母全变成 $\sin^2x=1-t^2$ 的有理式。<b>凡是"$\sin$ 的奇次幂在分母"，都用这一招把它凑成偶次。</b><br>
+      <b>(2) 的拆项</b>：$\frac1{(1-t^2)(2-t^2)}=\frac1{1-t^2}-\frac1{2-t^2}$ ——这是<u>裂项</u>（分母差为 1），不用解方程组。$\frac1{A}-\frac1{B}=\frac{B-A}{AB}$，这里 $B-A=(2-t^2)-(1-t^2)=1$ ✔<br>
+      <b>三条判据的"看次数"速判法</b>（比验恒等式快）：<u>$\sin$ 的次数为奇 → 换 $\cos$；$\cos$ 的次数为奇 → 换 $\sin$；两者次数都为偶 → 换 $\tan$。</u>注意分母上的次数按<b>负数</b>算，如 (1) 里 $\frac{\sin^5}{\cos^4}$：$\sin$ 次数 5（奇），$\cos$ 次数 $-4$（偶）→ 换 $\cos$ ✔
+    </div>
+  </div>
+
+  <div class="eg" id="eg913s">
+    <div class="q"><span class="no">强 9.13</span> 求 $\displaystyle\int\frac{2\sin x+\cos x}{\sin x+2\cos x}\mathrm dx$。<span class="exam">★★ 这类题有专用模板，别硬上万能公式</span></div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\dfrac45x-\dfrac35\ln|\sin x+2\cos x|+C$</span> ✔</p>
+      <p><span class="lab">法一 · $t=\tan x$</span>分子分母同除 $\cos x$：$\int\frac{2\tan x+1}{\tan x+2}\mathrm dx\xlongequal{t=\tan x}\int\frac{2t+1}{t+2}\cdot\frac{\mathrm dt}{1+t^2}$，再拆项——<b>能做，但要拆三项、算五行。</b></p>
+      <p><span class="lab">★ 法二 · 待定系数（推荐，两行出答案）</span>设</p>
+      <div class="fml">$\dfrac{2\sin x+\cos x}{\sin x+2\cos x}=\dfrac{A\overbrace{(\sin x+2\cos x)}^{\text{分母}}+B\overbrace{(\cos x-2\sin x)}^{\text{分母的导数}}}{\sin x+2\cos x}$</div>
+      <p>比较 $\sin x,\cos x$ 的系数：$\begin{cases}A-2B=2\\2A+B=1\end{cases}\Rightarrow A=\frac45,\ B=-\frac35$，于是</p>
+      <div class="fml">$原式=\displaystyle A\int\mathrm dx+B\int\frac{(\sin x+2\cos x)'}{\sin x+2\cos x}\mathrm dx=\frac45x-\frac35\ln|\sin x+2\cos x|+C$</div>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>★ 模板（背下来，见到就用）</b>：
+      <div class="fml">$\displaystyle\int\frac{a\sin x+b\cos x}{c\sin x+d\cos x}\mathrm dx=Ax+B\ln|c\sin x+d\cos x|+C,\quad\begin{cases}Ac-Bd=a\\Ad+Bc=b\end{cases}$</div>
+      解出 $A=\frac{ac+bd}{c^2+d^2}$，$B=\frac{bc-ad}{c^2+d^2}$。<b>本题 $a,b,c,d=2,1,1,2$：$A=\frac{2+2}5=\frac45$，$B=\frac{1-4}5=-\frac35$ ✔</b>（下方模块可以直接算）。<br>
+      <b>为什么这个模板成立</b>：分子被分解成"<u>分母本身</u>"和"<u>分母的导数</u>"两块，前者积分出 $x$，后者是 $\int\frac{u'}u=\ln|u|$。<b>任何"一次三角式 ÷ 一次三角式"都能这么拆</b>，因为 $\{\sin x+2\cos x,\ \cos x-2\sin x\}$ 张成了全部 $a\sin x+b\cos x$。<br>
+      <span class="dock">法一的坑</span>：$t=\tan x$ 换元后要记得 $\mathrm dx=\frac{\mathrm dt}{1+t^2}$，漏掉这个因子是最常见的错误。而且 $\tan x$ 在 $\frac\pi2$ 处断裂，<u>做定积分时跨过 $\frac\pi2$ 就不能用</u>（见 <a href="#s8">§8 误用牛莱</a>）——<b>法二没有这个问题，这是它更优的另一个理由。</b>
+    </div>
+  </div>
+
+  <div class="eg" id="eg914s">
+    <div class="q"><span class="no">强 9.14</span> 求 $\displaystyle\int\frac{\mathrm dx}{1+2\cos x}$。<span class="exam">万能公式（最后一招）</span></div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\dfrac{\sqrt3}3\ln\left|\dfrac{\sqrt3+\tan\frac x2}{\sqrt3-\tan\frac x2}\right|+C$</span> ✔</p>
+      <p><span class="lab">分析</span>三条判据全部不满足（$\cos$ 是 1 次但分母有常数项 1，$R(\sin,-\cos)\ne-R$），只能上万能公式。</p>
+      <p><span class="lab">解</span>令 $\tan\frac x2=t$，则 $\cos x=\frac{1-t^2}{1+t^2}$，$\mathrm dx=\frac{2\mathrm dt}{1+t^2}$：</p>
+      <div class="fml">$\displaystyle\int\frac1{1+2\cdot\frac{1-t^2}{1+t^2}}\cdot\frac{2\,\mathrm dt}{1+t^2}=\int\frac{2\,\mathrm dt}{(1+t^2)+2(1-t^2)}=\int\frac{2\,\mathrm dt}{3-t^2}=\frac1{\sqrt3}\ln\left|\frac{\sqrt3+t}{\sqrt3-t}\right|+C$</div>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>万能公式的三件套一起换，缺一不可</b>：$\sin x=\frac{2t}{1+t^2}$、$\cos x=\frac{1-t^2}{1+t^2}$、<b>$\mathrm dx=\frac{2\mathrm dt}{1+t^2}$</b>。<span class="dock">最常漏的是第三条</span>。<br>
+      <b>本题化简的漂亮之处</b>：分母 $(1+t^2)+2(1-t^2)=3-t^2$，<u>$1+t^2$ 被约干净了</u>——这是万能公式"能做"的根本原因（分母的 $1+t^2$ 总会与 $\mathrm dx$ 里的 $1+t^2$ 配对）。<br>
+      <b>$\int\frac{2\mathrm dt}{3-t^2}$ 用公式 ⑧</b>：$\int\frac{\mathrm dt}{a^2-t^2}=\frac1{2a}\ln\left|\frac{t+a}{t-a}\right|+C$，$a=\sqrt3$，乘 2 得 $\frac1{\sqrt3}\ln\left|\frac{t+\sqrt3}{t-\sqrt3}\right|$。<u>与书上写的 $\frac{\sqrt3+t}{\sqrt3-t}$ 只差一个整体负号（在 $\ln$ 里等于差常数），都对</u>。<br>
+      <b>⚠️ 万能公式的隐患</b>：$\tan\frac x2$ 在 $x=\pi$ 处无定义。<u>做定积分若区间跨过 $\pi$，同样会踩 <a href="#s8">§8</a> 的坑</u>。
+    </div>
+  </div>
+
+  <!-- 三角有理式判定器 + 模板求解器 -->
+  <div class="tool">
+    <h4>🎛️ 三角有理式：判据自测 + $\frac{a\sin+b\cos}{c\sin+d\cos}$ 模板求解器</h4>
+    <div class="hint">上半：给一个 $R(\sin x,\cos x)$，先自己判该换 $\cos/\sin/\tan/$ 万能，再点验证。<br>下半：输入 $a,b,c,d$，直接出 $A,B$ 与完整答案——<b>用来核对你手算的模板系数</b>。</div>
+
+    <div class="ctl">
+      <label>选一个被积函数</label>
+      <select id="trPick"></select>
+    </div>
+    <div class="ctl" id="trBtns">
+      <button data-v="cos">换 $t=\cos x$</button>
+      <button data-v="sin">换 $t=\sin x$</button>
+      <button data-v="tan">换 $t=\tan x$</button>
+      <button data-v="half">万能公式</button>
+      <button data-v="tpl">用 $A\cdot$分母$+B\cdot$分母′ 模板</button>
+    </div>
+    <div class="say" id="trSay">先自己判断，再点按钮看对不对。</div>
+
+    <div class="ctl" style="border-top:1px dashed var(--line);padding-top:12px;margin-top:14px">
+      <label>$\displaystyle\int\frac{a\sin x+b\cos x}{c\sin x+d\cos x}\mathrm dx$</label>
+      $a=$<input type="number" id="tpA" value="2" step="1">
+      $b=$<input type="number" id="tpB" value="1" step="1">
+      $c=$<input type="number" id="tpC" value="1" step="1">
+      $d=$<input type="number" id="tpD" value="2" step="1">
+    </div>
+    <div class="say" id="tpSay"></div>
+  </div>
+
+  <!-- ================= s7 定积分的计算 ================= -->
+  <h2 id="s7"><span class="idx">七</span>定积分的计算：先找"白捡分"，再动手算<span class="pg">基础 p.243–247</span></h2>
+
+  <div class="key"><span class="tag">必记 · 牛顿-莱布尼茨公式及其推广</span>
+    <p><b>基本形</b>：设 $F(x)$ 是<u>连续函数</u> $f(x)$ 在 $[a,b]$ 上的一个原函数，则 $\displaystyle\int_a^bf(x)\mathrm dx=F(b)-F(a)$。</p>
+    <p><b>证明</b>（书上注 1）：令 $G(x)=\int_a^xf(t)\mathrm dt$，则 $G(b)=\int_a^bf$，$G(a)=0$；又 $F'=f$ 且 $G(x)=F(x)+C$，故 $\int_a^bf=G(b)-G(a)=F(b)-F(a)$。</p>
+    <p><b>★★ 推广（本章最容易被忽略、也最容易考的一条）</b>：若 $f(x)$ 在 $[a,b]$ 上<u>分段有原函数</u>（$[a,c]$ 上是 $F_1$，$(c,b]$ 上是 $F_2$），则</p>
+    <div class="fml">$\displaystyle\int_a^bf(x)\mathrm dx=\underbrace{F_1(c-0)-F_1(a)}_{左段}+\underbrace{F_2(b)-F_2(c+0)}_{右段}$</div>
+    <ul style="margin:6px 0 0 20px">
+      <li>若 $F_1(c-0),F_2(c+0)$ <b>都存在</b> → $\int_a^bf$ <b>收敛</b>（<a href="#xt910">习 9.10</a> 就是这种）；</li>
+      <li>若<b>至少一个不存在</b> → $\int_a^bf$ <b>发散</b>。</li>
+    </ul>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 换元三换 + 分部积分（定积分版）</span>
+    <p><b>换元法</b>：设 $f$ 在 $[a,b]$ 连续，$x=\varphi(t)$ 满足 ① $\varphi(\alpha)=a,\varphi(\beta)=b$；② $\varphi$ 有连续导数且值域为 $[a,b]$，则 $\displaystyle\int_a^bf(x)\mathrm dx=\int_\alpha^\beta f[\varphi(t)]\varphi'(t)\mathrm dt$。</p>
+    <div class="steps3">
+      <div><b>换元要三换</b>① <u>被积函数</u>要换：$f(x)\to f[\varphi(t)]$<br>② <u>积分变量</u>要换：$\mathrm dx\to\varphi'(t)\mathrm dt$<br>③ <b><u>上下限</u>要换</b>：$\int_a^b\to\int_\alpha^\beta$</div>
+      <div><b>不用回代</b>这是定积分换元<u>比不定积分省事</u>的地方：换了限就直接算数，不必换回 $x$。<span style="color:var(--red)">但换限和回代必须二选一，两个都不做就错了。</span></div>
+      <div><b>分部积分</b>$\displaystyle\int_a^bu v'\mathrm dx=uv\bigg|_a^b-\int_a^bvu'\mathrm dx$<br>要求 $u',v'$ 在 $[a,b]$ 上连续。</div>
+    </div>
+    <p><b>常考的两组代换（书上眉批）</b>：</p>
+    <div class="fcards">
+      <div><b>令 $x=\frac\pi2\pm t$</b>$\sin\left(\frac\pi2\pm t\right)=\cos t$<br>$\cos\left(\frac\pi2\pm t\right)=\mp\sin t$</div>
+      <div><b>令 $x=\pi\pm t$</b>$\sin(\pi\pm t)=\mp\sin t$<br>$\cos(\pi\pm t)=-\cos t$</div>
+    </div>
+  </div>
+
+  <div class="key"><span class="tag">必记 · ★★★ 定积分七大结论（"白捡分"清单，动手算之前先扫一遍）</span>
+    <div class="gridwrap"><table class="dense">
+      <tr><th>#</th><th>结论</th><th>用在哪</th></tr>
+      <tr><td>(1) 偶倍</td><td>$f$ 偶 $\Rightarrow\displaystyle\int_{-a}^af=2\int_0^af$</td><td>基 9.13、习 9.13</td></tr>
+      <tr><td>(2) 奇零</td><td>$f$ 奇 $\Rightarrow\displaystyle\int_{-a}^af=0$</td><td><b>基 9.12</b>、基 9.15、习 9.13</td></tr>
+      <tr><td>(3) 周期平移</td><td>$f$ 以 $T$ 为周期 $\Rightarrow\displaystyle\int_a^{a+T}f=\int_0^Tf$<br><span style="font-size:.8rem;color:var(--muted)">"长度为一个周期的区间上的积分与起点无关"</span></td><td>基 9.16（证）、强 9.5</td></tr>
+      <tr><td>(4) <b>区间再现</b></td><td>$\displaystyle\int_a^bf(x)\mathrm dx=\int_a^bf(a+b-x)\mathrm dx$</td><td>基 9.17（证）、<b>基 9.18</b>、强 9.5、习 9.12</td></tr>
+      <tr><td>(5) ★ 点火公式</td><td>$\displaystyle\int_0^{\pi/2}\sin^nx\mathrm dx=\int_0^{\pi/2}\cos^nx\mathrm dx=\begin{cases}\frac{n-1}n\cdot\frac{n-3}{n-2}\cdots\frac23\cdot1,&n\ 奇\\[2pt]\frac{n-1}n\cdot\frac{n-3}{n-2}\cdots\frac12\cdot\frac\pi2,&n\ 偶\end{cases}$</td><td>基 9.13、基 9.18</td></tr>
+      <tr><td>(6)</td><td>$\displaystyle\int_0^\pi\sin^nx\mathrm dx=\mathbf2\int_0^{\pi/2}\sin^nx\mathrm dx$；　$\displaystyle\int_0^\pi\cos^nx\mathrm dx=\begin{cases}0,&n\ 奇\\ 2\int_0^{\pi/2}\cos^n,&n\ 偶\end{cases}$</td><td>基 9.18</td></tr>
+      <tr><td>(7)</td><td>$\displaystyle\int_0^{2\pi}\sin^nx\mathrm dx=\int_0^{2\pi}\cos^nx\mathrm dx=\begin{cases}0,&n\ 奇\\ \mathbf4\int_0^{\pi/2}\sin^n,&n\ 偶\end{cases}$</td><td>各章通用</td></tr>
+    </table></div>
+    <p><b>(5)(6)(7) 合称华里士公式，眉批叫"点火公式"</b>——因为 $n$ 为偶数时最后要"点一把火"乘上 $\frac\pi2$，奇数时最后乘 1。</p>
+    <div class="fml">$\int_0^{\pi/2}\sin^8x\mathrm dx=\frac78\cdot\frac56\cdot\frac34\cdot\frac12\cdot\frac\pi2=\frac{35\pi}{256},\qquad\int_0^\pi\sin^9x\mathrm dx=2\cdot\frac89\cdot\frac67\cdot\frac45\cdot\frac23\cdot1=\frac{256}{315}$</div>
+  </div>
+
+  <div class="trap"><span class="tag">陷阱 · 点火公式最易错的三处</span>
+    <ol style="margin:4px 0 0 20px">
+      <li><b>系数是 2 还是 4</b>：$[0,\pi]$ 上的 $\sin^n$ 是 <b>2 倍</b>，$[0,2\pi]$ 上（$n$ 偶）是 <b>4 倍</b>。<u>不是"区间长一倍就系数翻倍"那么直觉</u>——$[0,2\pi]$ 上有四个 $\frac\pi2$ 长的段，$\sin^n$（$n$ 偶）在每段上积分相等，故 4 倍。</li>
+      <li><b>$\cos^n$ 在 $[0,\pi]$ 上 $n$ 为奇数时是 0</b>（正负对消），而 $\sin^n$ 在 $[0,\pi]$ 上<u>不是 0</u>（$\sin$ 在 $[0,\pi]$ 上恒非负）。<span class="dock">$\sin$ 与 $\cos$ 在这里不对称，是唯一不对称的地方</span>。</li>
+      <li><b>连乘从哪个数开始</b>：从 $\frac{n-1}n$ 开始，<u>分母是 $n$ 不是 $n-1$</u>，每次分子分母各减 2，直到分子为 1（$n$ 偶，然后乘 $\frac\pi2$）或为 2（$n$ 奇，即 $\frac23$，然后乘 1）。</li>
+    </ol>
+    <p><b>下面的速查台把这三处都做成了可点的——每次滑动 $n$ 都把连乘链完整写出来。</b></p>
+  </div>
+
+  <!-- ================= s7b 点火公式速查台 ================= -->
+  <h2 id="s7b"><span class="idx">🔥</span>点火公式速查台</h2>
+
+  <div class="tool">
+    <h4>🔥 点火公式速查台（华里士公式 (5)(6)(7) 三合一）</h4>
+    <div class="hint">滑 $n$、选区间、选 $\sin/\cos$，实时给出<b>系数（1/2/4/0）+ 完整连乘链 + 精确值 + 小数</b>。<br><b>练法</b>：先自己心算写出连乘链，再滑到那个 $n$ 对答案。<u>连乘链写对了系数写错，是本节最典型的失分</u>。</div>
+
+    <div class="ctl">
+      <label>幂次 $n$</label>
+      <input type="range" id="hnN" min="0" max="12" step="1" value="8">
+      <span class="val" id="hnNv">n = 8</span>
+    </div>
+    <div class="ctl" id="hnFn">
+      <button data-v="sin" class="on">$\sin^n x$</button>
+      <button data-v="cos">$\cos^n x$</button>
+    </div>
+    <div class="ctl" id="hnItv">
+      <button data-v="h" class="on">$\int_0^{\pi/2}$</button>
+      <button data-v="p">$\int_0^{\pi}$</button>
+      <button data-v="2p">$\int_0^{2\pi}$</button>
+    </div>
+    <div class="verdict v-ok" id="hnOut"></div>
+    <div class="say" id="hnSay"></div>
+    <div class="scene"><svg id="hnSvg" viewBox="0 0 640 200"></svg></div>
+    <div class="legend2">曲线画的是 $\sin^nx$ 或 $\cos^nx$ 在所选区间上的图像，<span class="chip c-g">绿色</span>为正贡献、<span class="chip c-r">红色</span>为负贡献。<b>$n$ 越大曲线越"瘦"，积分值越小</b>——这就是点火公式里连乘因子都小于 1 的几何含义。</div>
+  </div>
+
+  <div class="eg" id="eg912">
+    <div class="q"><span class="no">基 9.12</span> $\displaystyle\lim_{n\to\infty}\frac1n\sum_{i=1}^n[\ln(3n-2i)-\ln(n+2i)]=$ ______<span class="exam">凑定积分定义 + 奇函数</span></div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">0</span> ✔</p>
+      <p><span class="lab">分析</span>先合并对数凑出 $\frac in$，化成定积分；<b>算之前先看奇偶</b>——这一步能省掉全部计算。</p>
+      <p><span class="lab">解</span>$\ln(3n-2i)-\ln(n+2i)=\ln\frac{3-2\frac in}{1+2\frac in}$，故</p>
+      <div class="fml">$\displaystyle原式=\lim_{n\to\infty}\frac1n\sum_{i=1}^n\ln\frac{3-2\frac in}{1+2\frac in}=\int_0^1\ln\frac{3-2x}{1+2x}\mathrm dx\xlongequal{x-\frac12=t}\int_{-1/2}^{1/2}\ln\frac{1-t}{1+t}\mathrm dt$</div>
+      <p>由于 $\ln\frac{1-t}{1+t}=\ln(1-t)-\ln(1+t)$ 是<b>奇函数</b>，在对称区间上积分为 <b>0</b>。</p>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>关键的一步是"平移到对称区间"</b>：$\frac{3-2x}{1+2x}=\frac{\frac32-x}{\frac12+x}$，分子分母的"中心"分别是 $\frac32$ 和 $-\frac12$，<u>中点是 $\frac12$</u>，所以令 $t=x-\frac12$。<b>看到 $\frac{a-x}{b+x}$ 型就找中点做平移</b>。<br>
+      <b>为什么必须先看奇偶</b>：硬算 $\int_0^1\ln\frac{3-2x}{1+2x}\mathrm dx$ 要做两次分部，五分钟；看出奇函数只要十秒。<u>定积分题的第一动作永远是扫七大结论。</u><br>
+      <b>凑定积分定义的标准形</b>：$\lim_{n\to\infty}\frac1n\sum_{i=1}^nf\left(\frac in\right)=\int_0^1f(x)\mathrm dx$ —— 这是<a href="第08章_一元函数积分学的概念与性质.html">第 8 章</a>的内容，本章直接用。
+    </div>
+  </div>
+
+  <div class="eg" id="eg914">
+    <div class="q"><span class="no">基 9.14</span> $\displaystyle\int_0^1\arcsin\sqrt{1-x^2}\,\mathrm dx=$ ______　　<span class="no">基 9.15</span> $\displaystyle\int_0^1x\arcsin\sqrt{4x-4x^2}\,\mathrm dx=$ ______<span class="exam">重要题源</span></div>
+    <div class="s">
+      <p><span class="lab">基 9.14 答案</span><span class="ans">1</span> ✔　<b>两法都要会</b></p>
+      <p><span class="lab">法一 · 分部积分</span>（"反"排最前，取 $u=\arcsin\sqrt{1-x^2}$）</p>
+      <div class="fml">$\displaystyle\int_0^1\arcsin\sqrt{1-x^2}\mathrm dx=x\arcsin\sqrt{1-x^2}\bigg|_0^1-\int_0^1x\,\mathrm d\!\left(\arcsin\sqrt{1-x^2}\right)=0+\int_0^1\frac{x}{\sqrt{1-x^2}}\mathrm dx=-\sqrt{1-x^2}\bigg|_0^1=1$</div>
+      <p><span class="lab">法二 · 换元</span>令 $x=\cos t$（$t:\frac\pi2\to0$），$\sqrt{1-x^2}=\sin t$，$\arcsin(\sin t)=t$：</p>
+      <div class="fml">$\displaystyle=\int_{\pi/2}^0 t\cdot(-\sin t)\mathrm dt=\int_0^{\pi/2}t\sin t\,\mathrm dt=\left(-t\cos t+\sin t\right)\bigg|_0^{\pi/2}=1$</div>
+      <p><span class="lab">基 9.15 答案</span><span class="ans">$\dfrac12$</span> ✔</p>
+      <p><b>看出 $4x-4x^2=1-(1-2x)^2$ 是全题的入口</b>。令 $1-2x=t$（即 $x=\frac{1-t}2$，$\mathrm dx=-\frac12\mathrm dt$）：</p>
+      <div class="fml">$\displaystyle\int_0^1x\arcsin\sqrt{1-(1-2x)^2}\mathrm dx=\frac14\int_{-1}^1(1-t)\arcsin\sqrt{1-t^2}\,\mathrm dt$</div>
+      <div class="fml">$=\underbrace{\frac14\int_{-1}^1\arcsin\sqrt{1-t^2}\mathrm dt}_{偶函数\to\frac12\int_0^1}-\underbrace{\frac14\int_{-1}^1t\arcsin\sqrt{1-t^2}\mathrm dt}_{奇函数\to0}=\frac12\int_0^1\arcsin\sqrt{1-t^2}\mathrm dt\xlongequal{基9.14}\frac12$</div>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>基 9.14 法一的边界项要看清</b>：$x\arcsin\sqrt{1-x^2}\big|_0^1$，上限 $x=1$ 时 $\arcsin0=0$，下限 $x=0$ 时因子 $x=0$，<u>两端都是 0</u>。<br>
+      <b>$\mathrm d(\arcsin\sqrt{1-x^2})$ 的求导</b>：$\frac1{\sqrt{1-(1-x^2)}}\cdot\frac{-x}{\sqrt{1-x^2}}=\frac1{|x|}\cdot\frac{-x}{\sqrt{1-x^2}}$，在 $(0,1)$ 上 $|x|=x$，得 $\frac{-1}{\sqrt{1-x^2}}$，与前面的负号一抵消变正。<span class="dock">$\sqrt{x^2}=|x|$ 这一步不写清楚，符号必错</span>。<br>
+      <b>基 9.15 为什么标"重要题源"</b>：它示范了<u>把一道新题化归到已做过的题</u>的完整动作链——配方 → 平移换元 → 拆奇偶 → 引用旧结论。<b>考场上真正的高手不是每题从头算，是把新题变成旧题。</b><br>
+      <b>另一条路（书上也提了）</b>：直接令 $1-2x=\cos t$ 从头做三角代换，能做但要长一倍。<u>先看看能不能引用已有结论，是本题的正解。</u>
+    </div>
+  </div>
+
+  <div class="eg" id="eg918">
+    <div class="q"><span class="no">基 9.16</span>／<span class="no">基 9.17</span>／<span class="no">基 9.18</span> 证明三条结论：<br>
+      (16) $f$ 以 $T$ 为周期且连续 $\Rightarrow\displaystyle\int_a^{a+T}f=\int_0^Tf$；<br>
+      (17) $f$ 连续 $\Rightarrow\displaystyle\int_a^bf(x)\mathrm dx=\int_a^bf(a+b-x)\mathrm dx$（区间再现）；<br>
+      (18) $f$ 在 $[0,1]$ 连续 $\Rightarrow\displaystyle\int_0^\pi xf(\sin x)\mathrm dx=\frac\pi2\int_0^\pi f(\sin x)\mathrm dx$，并计算 $\displaystyle\int_0^\pi x\sin^9x\,\mathrm dx$。</div>
+    <div class="think"><span class="th">💭 思路</span>
+      <ol>
+        <li><b>这三条是同一个动作的三次演出：换元 $x\mapsto$（对称点）。</b>(16) 换 $t=x-T$，(17) 换 $x=a+b-t$，(18) 换 $x=\pi-t$。<u>换完之后与原式比较，或相加、或移项</u>。</li>
+        <li>(16) 的关键是<b>先拆成三段</b> $\int_a^0+\int_0^T+\int_T^{a+T}$，再把最后一段平移回 $\int_0^a$，与第一段抵消。</li>
+        <li>(17) 换元后<u>上下限会颠倒</u>（$x:a\to b$ 对应 $t:b\to a$），负号与 $\mathrm dx=-\mathrm dt$ 的负号抵消，正好换回来。<b>这就是"再现"这个名字的来历。</b></li>
+        <li>(18) 是 (17) 的直接应用：$a+b=\pi$，用完之后<u>原积分 $I$ 出现在等式右边</u>，移项即得——<b>与"积分再现法"（分部）是同一个思想：制造出自己，然后解方程。</b></li>
+        <li>末问计算：$\int_0^\pi x\sin^9x=\frac\pi2\int_0^\pi\sin^9x$，再用点火公式 (6)：$\int_0^\pi\sin^9=2\int_0^{\pi/2}\sin^9=2\cdot\frac89\cdot\frac67\cdot\frac45\cdot\frac23$。</li>
+      </ol>
+    </div>
+    <div class="paper"><span class="phead">✍️ 考场卷面（以 (18) 为例，(16)(17) 同法）<span class="score">约 10 分</span></span>
+      <div class="step"><b>证</b>　令 $x=\pi-t$，则 $\mathrm dx=-\mathrm dt$，且 $x=0$ 时 $t=\pi$，$x=\pi$ 时 $t=0$。<span class="pt">⛳ 设代换并换限 2分</span></div>
+      <div class="step">于是
+      $\displaystyle\int_0^\pi xf(\sin x)\mathrm dx=\int_\pi^0(\pi-t)f[\sin(\pi-t)](-\mathrm dt)=\int_0^\pi(\pi-t)f(\sin t)\mathrm dt$<span class="pt">⛳ 换元并用 $\sin(\pi-t)=\sin t$ 3分</span></div>
+      <div class="step">$\displaystyle=\pi\int_0^\pi f(\sin t)\mathrm dt-\int_0^\pi tf(\sin t)\mathrm dt=\pi\int_0^\pi f(\sin x)\mathrm dx-\int_0^\pi xf(\sin x)\mathrm dx$　……(1)<span class="pt">⛳ 拆开并改回哑变量 2分</span></div>
+      <div class="step">将 (1) 中含 $\displaystyle\int_0^\pi xf(\sin x)\mathrm dx$ 的项移到等号左端，得
+      $\displaystyle 2\int_0^\pi xf(\sin x)\mathrm dx=\pi\int_0^\pi f(\sin x)\mathrm dx$，<span class="pt">⛳ 移项 1分</span></div>
+      <div class="fin">即 $\displaystyle\int_0^\pi xf(\sin x)\mathrm dx=\frac\pi2\int_0^\pi f(\sin x)\mathrm dx$，证毕。<br>
+      取 $f(u)=u^9$，由华里士公式
+      $\displaystyle\int_0^\pi x\sin^9x\,\mathrm dx=\frac\pi2\int_0^\pi\sin^9x\,\mathrm dx=\frac\pi2\cdot2\cdot\frac89\cdot\frac67\cdot\frac45\cdot\frac23=\frac{128\pi}{315}$。<span class="pt">⛳ 计算 2分</span></div>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>"改回哑变量"这一步必须写</b>：$\int_0^\pi tf(\sin t)\mathrm dt$ 与 $\int_0^\pi xf(\sin x)\mathrm dx$ 是同一个数（<u>定积分与积分变量的字母无关</u>），不写这句就没法移项。<span class="dock">很多人默认它成立而跳过，阅卷时算跳步</span>。<br>
+      <b>$\int_0^\pi xf(\sin x)\mathrm dx=\frac\pi2\int_0^\pi f(\sin x)\mathrm dx$ 这个结论本身要记住</b>——它是<b>历年真题的高频模型</b>，$f$ 换成 $\frac1{1+\cos^2x}$ 就是 <a href="#xt911">习 9.12</a>（答案 $\frac{\pi^2}4$），换成 $\sin^8$、$\frac{\sin x}{1+\cos^2 x}$ 都考过。<br>
+      <b>区间再现的实用判据（书上注 2）</b>：若 $f(x)$ 复杂，但 <b>$f(x)+f(a+b-x)$ 简单</b>，就用 $\int_a^bf=\int_a^b\frac{f(x)+f(a+b-x)}2\mathrm dx$。经典例：
+      <div class="fml">$\int_0^{\pi/4}\ln(1+\tan x)\mathrm dx=\int_0^{\pi/4}\frac{\ln(1+\tan x)+\ln\frac2{1+\tan x}}2\mathrm dx=\frac12\cdot\frac\pi4\ln2=\frac\pi8\ln2$</div>
+      （用到 $\tan\left(\frac\pi4-x\right)=\frac{1-\tan x}{1+\tan x}$，故 $1+\tan\left(\frac\pi4-x\right)=\frac2{1+\tan x}$。<b>这题是区间再现的"广告牌"，必须会。</b>）
+    </div>
+  </div>
+
+  <div class="eg" id="eg919">
+    <div class="q"><span class="no">基 9.19</span> 设 $f(x)=\displaystyle\int_1^{x^2}\mathrm e^{-t^2}\mathrm dt$，则 $\displaystyle\int_0^1xf(x)\mathrm dx=$（　）<br>
+      (A) $\frac14(\mathrm e^{-1}+1)$　(B) $\frac14(\mathrm e^{-1}-1)$　(C) $\frac14(\mathrm e+1)$　(D) $\frac14(\mathrm e-1)$<span class="exam">★ 不可求积，先求导</span></div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">(B)</span> ✔</p>
+      <p><span class="lab">分析</span>$\mathrm e^{-t^2}$ 的原函数<b>不能用初等函数表示</b>（第 8 章讲过的"可积不可求积"）。所以 $f(x)$ 写不出显式表达式——<b>但 $f'(x)$ 能写</b>！这就是本题的全部机关：<u>分部积分把 $f$ 变成 $f'$</u>。</p>
+      <p><span class="lab">解</span>由分部积分（取 $u=f(x)$，$\mathrm dv=x\mathrm dx$）：</p>
+      <div class="fml">$\displaystyle\int_0^1xf(x)\mathrm dx=\frac{x^2}2f(x)\bigg|_0^1-\int_0^1\frac{x^2}2f'(x)\mathrm dx$</div>
+      <p>其中 $f(1)=\displaystyle\int_1^1\mathrm e^{-t^2}\mathrm dt=0$（<b>上下限相同</b>），$f'(x)=\mathrm e^{-x^4}\cdot(x^2)'=2x\mathrm e^{-x^4}$，故</p>
+      <div class="fml">$\displaystyle\int_0^1xf(x)\mathrm dx=0-\int_0^1\frac{x^2}2\cdot2x\mathrm e^{-x^4}\mathrm dx=-\int_0^1x^3\mathrm e^{-x^4}\mathrm dx=\frac14\int_0^1\mathrm e^{-x^4}\mathrm d(-x^4)=\frac14\mathrm e^{-x^4}\bigg|_0^1=\frac14(\mathrm e^{-1}-1)$</div>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>★ 心法：见到"变限积分 × 别的函数"求定积分，一律分部，把变限积分求导掉。</b>因为变限积分求导是<u>白送的</u>（一步到位），而变限积分本身往往算不出来。<br>
+      <b>两个"白捡"的量</b>：① $f(1)=0$（上下限重合）；② $f'(x)$ 由求导公式直接写。<u>这两件事一定要在动手前先算出来</u>，否则分部完了不知道往哪走。<br>
+      <span class="dock">选错 (D) 的人</span>是把 $\frac14\mathrm e^{-x^4}\big|_0^1$ 算成了 $\frac14(1-\mathrm e^{-1})$（上下限代反）。<b>$F(b)-F(a)$，上限在前。</b><br>
+      <b>不可求积函数清单（第 14 章还会见）</b>：$\mathrm e^{\pm x^2}$、$\frac{\sin x}x$、$\frac{\cos x}x$、$\frac1{\ln x}$、$\sqrt{1+x^4}$、$\sin x^2$、$\cos x^2$。<u>见到它们出现在被积函数里，就知道题目一定不是让你直接算。</u>
+    </div>
+  </div>
+
+  <!-- ================= s8 误用牛莱 ================= -->
+  <h2 id="s8"><span class="idx">八</span>★★★ 本章头号陷阱：误用牛顿-莱布尼茨公式<span class="pg">基础 p.259–260（习 9.10）</span></h2>
+
+  <div class="trap"><span class="tag">陷阱 · 一个"看起来完全正确"的错误解法</span>
+    <p>求 $\displaystyle\int_0^{3\pi/4}\frac{\mathrm dx}{1+\cos^2x}$。先求原函数（这一步<b>完全正确</b>）：</p>
+    <div class="fml">$\displaystyle\int\frac{\mathrm dx}{1+\cos^2x}=\int\frac{\sec^2x\,\mathrm dx}{2+\tan^2x}=\frac1{\sqrt2}\arctan\frac{\tan x}{\sqrt2}+C$</div>
+    <p>取 $C=0$ 得一个原函数 $F(x)=\frac1{\sqrt2}\arctan\frac{\tan x}{\sqrt2}$，然后套牛莱：</p>
+    <div class="fml">$\displaystyle\int_0^{3\pi/4}\frac{\mathrm dx}{1+\cos^2x}\ \xlongequal{\text{错}}\ \frac1{\sqrt2}\arctan\frac{\tan x}{\sqrt2}\bigg|_0^{3\pi/4}=\frac1{\sqrt2}\arctan\frac{-1}{\sqrt2}\ \boldsymbol{\lt0}$</div>
+    <p><b>但被积函数 $\frac1{1+\cos^2x}\gt0$ 恒成立，由积分的保号性，结果必须为正 —— 矛盾！</b></p>
+    <p><b>错在哪</b>：$F(x)=\frac1{\sqrt2}\arctan\frac{\tan x}{\sqrt2}$ <u>在 $x=\frac\pi2$ 处无定义</u>（$\tan\frac\pi2$ 不存在），所以它<b>根本不是 $\frac1{1+\cos^2x}$ 在 $\left[0,\frac34\pi\right]$ 上的原函数</b>——它只在 $\left[0,\frac\pi2\right)$ 和 $\left(\frac\pi2,\frac34\pi\right]$ 上分别是原函数。<b>牛莱公式要求原函数在整个闭区间上存在</b>，前提不满足，公式不能用。</p>
+  </div>
+
+  <div class="eg" id="xt910">
+    <div class="q"><span class="no">习 9.10</span> 求定积分 $\displaystyle\int_0^{3\pi/4}\frac{\mathrm dx}{1+\cos^2x}$。</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\dfrac\pi{\sqrt2}-\dfrac1{\sqrt2}\arctan\dfrac1{\sqrt2}$</span> ✔（$\approx1.786$，为正 ✔）</p>
+    </div>
+    <div class="think"><span class="th">💭 思路</span>
+      <ol>
+        <li><b>先算不定积分</b>：分子分母同除 $\cos^2x$ 得 $\frac{\sec^2x}{2+\tan^2x}$，$\sec^2x\mathrm dx=\mathrm d(\tan x)$ 一凑就是 $\arctan$ 标准型。这步没有陷阱。</li>
+        <li><b>动手套牛莱之前，先问一句：这个原函数在整个区间上连续吗？</b>$F(x)$ 里含 $\tan x$，而 $\tan x$ 在 $\frac\pi2$ 处爆炸——<u>区间 $[0,\frac34\pi]$ 恰好跨过 $\frac\pi2$</u>。<b>这就是出题人埋的雷。</b></li>
+        <li><b>正确做法：以 $\frac\pi2$ 为界拆成两段</b>，每段上 $F$ 都是合法原函数，各自用<a href="#s7">§7 的推广形</a>——端点处取<b>单侧极限</b>而不是函数值。</li>
+        <li>算极限：$x\to\frac\pi2^-$ 时 $\tan x\to+\infty$，$F\to\frac1{\sqrt2}\cdot\frac\pi2$；$x\to\frac\pi2^+$ 时 $\tan x\to-\infty$，$F\to\frac1{\sqrt2}\cdot\left(-\frac\pi2\right)$。<b>两个极限差了 $\frac\pi{\sqrt2}$，这正是被"跳过"的那部分面积。</b></li>
+        <li><b>自检</b>：算完看结果是否为正（保号性）。这题给了我们一个免费的验算器。</li>
+      </ol>
+    </div>
+    <div class="paper"><span class="phead">✍️ 考场卷面<span class="score">约 10 分</span></span>
+      <div class="step"><b>解</b>　先求原函数。
+      $\displaystyle\int\frac{\mathrm dx}{1+\cos^2x}=\int\frac{\sec^2x}{2+\tan^2x}\mathrm dx=\int\frac{\mathrm d(\tan x)}{(\sqrt2)^2+\tan^2x}=\frac1{\sqrt2}\arctan\frac{\tan x}{\sqrt2}+C$<span class="pt">⛳ 求原函数 3分</span></div>
+      <div class="step">取 $C=0$，记 $F(x)=\dfrac1{\sqrt2}\arctan\dfrac{\tan x}{\sqrt2}$。<b>注意 $F(x)$ 在 $x=\dfrac\pi2$ 处无定义</b>，故 $F$ 不是被积函数在 $\left[0,\dfrac34\pi\right]$ 上的原函数，<b>不能直接用牛顿-莱布尼茨公式</b>，应分区间使用。<span class="pt">⛳ 指出并说明理由 3分（本题的核心分）</span></div>
+      <div class="step">$\displaystyle\int_0^{3\pi/4}\frac{\mathrm dx}{1+\cos^2x}=\int_0^{\pi/2}\frac{\mathrm dx}{1+\cos^2x}+\int_{\pi/2}^{3\pi/4}\frac{\mathrm dx}{1+\cos^2x}$<span class="pt">⛳ 拆区间 1分</span></div>
+      <div class="step">$\displaystyle=\left[\lim_{x\to(\pi/2)^-}F(x)-F(0)\right]+\left[F\!\left(\frac{3\pi}4\right)-\lim_{x\to(\pi/2)^+}F(x)\right]$<span class="pt">⛳ 端点取单侧极限 2分</span></div>
+      <div class="step">而 $\displaystyle\lim_{x\to(\pi/2)^-}F(x)=\frac1{\sqrt2}\cdot\frac\pi2$，$F(0)=0$，$F\!\left(\frac{3\pi}4\right)=\frac1{\sqrt2}\arctan\frac{-1}{\sqrt2}$，$\displaystyle\lim_{x\to(\pi/2)^+}F(x)=-\frac1{\sqrt2}\cdot\frac\pi2$。</div>
+      <div class="fin">所以 $\displaystyle\int_0^{3\pi/4}\frac{\mathrm dx}{1+\cos^2x}=\frac\pi{2\sqrt2}-0-\frac1{\sqrt2}\arctan\frac1{\sqrt2}+\frac\pi{2\sqrt2}=\frac\pi{\sqrt2}-\frac1{\sqrt2}\arctan\frac1{\sqrt2}$。<span class="pt">⛳ 结论 1分</span></div>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>★ 什么时候要警惕这个坑（考前背下这张清单）</b>：原函数里出现 <b>$\tan x$、$\cot x$、$\sec x$、$\csc x$、$\tan\frac x2$</b>，而积分区间跨过它们的间断点（$\frac\pi2+k\pi$ 或 $k\pi$）。<u>用了万能公式（$\tan\frac x2$）而区间跨过 $\pi$，同样中招。</u><br>
+      <span class="dock">扣分最狠的一处</span>：拆了区间但端点仍写 $F\left(\frac\pi2\right)$ 而不是 $\lim_{x\to(\pi/2)^\mp}F(x)$。<b>$F$ 在那点没定义，写函数值就是错的。</b><br>
+      <b>三个自检动作（考场上花 10 秒，能救 10 分）</b>：<br>
+      ① 原函数含 $\tan$ 类函数吗？② 区间跨过它的间断点吗？③ 算出的结果符号与被积函数的符号一致吗？<br>
+      <b>另一条路（更省事）</b>：本题也可以先用<b>对称性</b>把 $\left[\frac\pi2,\frac{3\pi}4\right]$ 上的积分换元到 $\left[\frac\pi4,\frac\pi2\right]$（令 $x=\pi-t$，$\cos^2$ 不变），完全绕开 $\frac\pi2$。<u>但阅卷更认"拆区间 + 取极限"的标准写法。</u>
+    </div>
+  </div>
+
+  <!-- ================= s8b 误用牛莱现形记 ================= -->
+  <h2 id="s8b"><span class="idx">💥</span>误用牛莱现形记：把"跳过的那块面积"画出来</h2>
+
+  <div class="tool">
+    <h4>💥 误用牛莱现形记</h4>
+    <div class="hint">上图是被积函数 $\frac1{1+\cos^2x}$（<b>处处为正</b>），下图是"原函数" $F(x)=\frac1{\sqrt2}\arctan\frac{\tan x}{\sqrt2}$。拖动右端点 $b$，看两种算法的结果如何分道扬镳。<br><b>要看的现象</b>：$b$ 一旦越过 $\frac\pi2$，$F(b)-F(0)$ 就<u>整体掉下去 $\frac\pi{\sqrt2}\approx2.221$</u>——那正是 $F$ 在 $\frac\pi2$ 处的<b>跳跃高度</b>，也正是被"吃掉"的面积。</div>
+
+    <div class="ctl">
+      <label>积分上限 $b$</label>
+      <input type="range" id="nlB" min="0.05" max="3.1" step="0.01" value="2.356">
+      <span class="val" id="nlBv"></span>
+    </div>
+    <div class="ctl">
+      <button id="nlJump34" class="on">跳到 $b=\frac{3\pi}4$（习 9.10）</button>
+      <button id="nlJumpH">跳到 $b=\frac\pi2^-$</button>
+    </div>
+    <div class="scene"><svg id="nlSvg" viewBox="0 0 640 300"></svg></div>
+    <div class="verdict" id="nlV"></div>
+    <div class="say" id="nlSay"></div>
+    <div class="legend2">
+      <span class="chip c-g">绿色阴影</span>真实面积 $\int_0^b\frac{\mathrm dx}{1+\cos^2x}$（数值积分算的）
+      <span class="chip c-r">红色虚线</span>$F$ 在 $\frac\pi2$ 处的跳跃
+      <span class="chip c-b">蓝线</span>$F(x)$ 的图像（<b>看它在 $\frac\pi2$ 处怎么从 $+\frac\pi{2\sqrt2}$ 摔到 $-\frac\pi{2\sqrt2}$</b>）
+    </div>
+  </div>
+
+  <!-- ================= s9 变限积分求导 ================= -->
+  <h2 id="s9"><span class="idx">九</span>变限积分的求导：四种型，先看被积函数里有没有 $x$<span class="pg">基础 p.249–251 · 强化 p.100–102</span></h2>
+
+  <div class="key"><span class="tag">必记 · 求导公式 + 唯一的前提条件</span>
+    <div class="fml">$\displaystyle\left[\int_{\varphi_1(x)}^{\varphi_2(x)}f(t)\mathrm dt\right]'_x=f[\varphi_2(x)]\varphi_2'(x)-f[\varphi_1(x)]\varphi_1'(x)$</div>
+    <p><b>特例</b>：$\left[\int_a^{\varphi(x)}f(t)\mathrm dt\right]'=f[\varphi(x)]\varphi'(x)$（下限是常数时后一项为 0）。</p>
+    <p><b>例</b>：$\left[\int_{x^2}^{\sin^2x}f(t^2)\mathrm dt\right]'=2\sin x\cos x\cdot f(\sin^4x)-2x\cdot f(x^4)$</p>
+    <p style="background:var(--red-soft);border-radius:8px;padding:9px 13px;margin-top:10px"><b>★★★ 唯一的前提（本节的命根子）</b>：称公式里的 $x$ 为"<b>求导变量</b>"，$t$ 为"<b>积分变量</b>"。<br>
+    <b>只有当被积函数里<u>只含积分变量 $t$</u> 时，才能直接用求导公式。</b><br>
+    若被积函数里出现了<b>求导变量 $x$</b>（如 $f(xt)$、$|t-x|$、$f(x^2-t^2)$），<b>必须先通过恒等变形（换元、拆区间）把 $x$ 移出被积函数</b>，才能求导。</p>
+  </div>
+
+  <div class="zy"><span class="tag">强化题型 · 变限积分求导的四种型（18 讲的分法，这是本节骨架）</span>
+    <div class="gridwrap"><table class="dense">
+      <tr><th>型</th><th>被积函数里的 $x$</th><th>怎么处理</th><th>例题</th></tr>
+      <tr><td><b>1. 直接求导型</b></td><td>没有</td><td>直接套公式</td><td>基 9.20</td></tr>
+      <tr><td><b>2. 换元求导型</b></td><td>有，但能<u>整体换掉</u></td><td>令 $xt=u$ 或 $x^2-t^2=u$，把 $x$ 挤到积分号外</td><td>基 9.22 · 强 9.16 · 习 9.16</td></tr>
+      <tr><td><b>3. 拆分求导型</b></td><td>有，藏在<u>绝对值</u>里</td><td>以 $t=x$ 为界拆区间去绝对值<br><b>拆完要判"同区间 / 异区间"</b></td><td>基 9.21 · <b>强 9.17 · 强 9.18</b> · 习 9.17</td></tr>
+      <tr><td><b>4. 换序型</b></td><td>累次积分，里层不好积</td><td>看成二重积分<b>交换积分次序</b></td><td>强 9.19</td></tr>
+    </table></div>
+    <p style="margin-top:8px"><b>★ 第 3 型里最要命的一个分叉（D₂₂ 的核心）</b>：拆完区间后，要看<b>积分变量 $t$ 的范围与求导变量 $x$ 的范围是不是同一个区间</b>：</p>
+    <div class="steps3">
+      <div><b>同区间 → 不必分类讨论</b>如 <b>强 9.17</b>：$f(x)=\int_{-1}^1|t-x|\mathrm e^{2t}\mathrm dt$，题设 $|x|\le1$，而 $t\in[-1,1]$。<u>$x$ 一定落在积分区间内</u>，所以拆法只有一种：$\int_{-1}^x+\int_x^1$。</div>
+      <div><b>异区间 → 必须分类讨论</b>如 <b>强 9.18</b>：$f(x)=\int_0^1|t^2-x^2|\mathrm dt$ 且 $x\gt0$，而 $t\in[0,1]$。<u>$x$ 可能在 $[0,1]$ 内，也可能 $\gt1$</u>，两种情形拆法不同，答案是<b>分段函数</b>。</div>
+      <div><b>判断动作</b>拿到题先在草稿纸上<b>画两条数轴</b>：一条标 $t$ 的范围（积分限给的），一条标 $x$ 的范围（题设给的）。<u>两条重合 → 不讨论；不重合 → 讨论。</u>（书上就是这么画的）</div>
+    </div>
+  </div>
+
+  <div class="eg" id="eg920">
+    <div class="q"><span class="no">基 9.20</span> 曲线 $y=\displaystyle\int_0^{\sin x}\mathrm e^{t^2}\mathrm dt$ 在点 $(0,0)$ 处的法线方程为（　）<br>(A) $y=\frac12x$　(B) $y=-\frac12x$　(C) $y=x$　(D) $y=-x$</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">(D)</span> ✔　<b>第 1 型：被积函数 $\mathrm e^{t^2}$ 里只有 $t$，直接求导。</b></p>
+      <p>先验点在曲线上：$x=0$ 时 $y=\int_0^0=0$ ✔。求导：$y'=\mathrm e^{\sin^2x}\cdot\cos x$，$y'\big|_{x=0}=\mathrm e^0\cdot1=1$。</p>
+      <p>切线斜率 $k=1$ → 法线斜率 $-\frac1k=-1$ → 法线 $y=-x$。</p>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>$\mathrm e^{t^2}$ 不可求积，但这题根本不需要求积</b>——变限积分求导是"白送"的。<u>见到不可求积函数出现在变限积分里，就知道题目只会考求导或分部。</u><br>
+      <span class="dock">三个必答的小动作</span>：① 先验点在不在曲线上（不在就白算）；② 法线斜率是切线斜率的<b>负倒数</b>；③ 点斜式 $y-y_0=k(x-x_0)$。
+    </div>
+  </div>
+
+  <div class="eg" id="eg921">
+    <div class="q"><span class="no">基 9.21</span> $F(x)=\displaystyle\int_0^{\pi/2}|\sin x-\sin t|\mathrm dt\ (x\ge0)$ 在 $x\to0^+$ 处的二次泰勒多项式为 $a+bx+cx^2$，则 $abc=$ ______<span class="exam">★★★ 拆分求导型 + 泰勒</span></div>
+    <div class="s"><p><span class="lab">答案</span><span class="ans">$-\dfrac\pi2$</span>（$a=1,\ b=-\frac\pi2,\ c=1$）✔ sympy 已核 $F$ 的闭式与展开系数</p></div>
+    <div class="think"><span class="th">💭 思路</span>
+      <ol>
+        <li><b>第一件事：认清 $F(x)$ 是什么。</b>$\int_a^bf(x,t)\mathrm dt$ 的积分变量是 $t$，积完只剩 $x$ —— <b>它是一个函数，不是一个定积分（数）</b>。书上专门画了框强调这句。</li>
+        <li><b>第二件事：去绝对值。</b>被积函数含 $|{\sin x-\sin t}|$，而 $x\to0^+$ 时 $x$ 很小、$t\in[0,\frac\pi2]$，$\sin$ 在此区间单调增，所以<u>分界点就是 $t=x$</u>：$t\lt x$ 时 $\sin x-\sin t\gt0$，$t\gt x$ 时相反。</li>
+        <li><b>第三件事：算出 $F(x)$ 的显式表达式。</b>拆成两段各自积（注意 $\sin x$ 对 $t$ 而言是常数，可以提出来），合并得 $F(x)=\left(2x-\frac\pi2\right)\sin x+2\cos x-1$。<u>到这一步题目就从"变限积分题"变成了普通的"泰勒展开题"。</u></li>
+        <li><b>第四件事：展开。</b>两条路都行——<b>直接展开（把 $\sin x,\cos x$ 的麦克劳林展开代进去）</b>更快；<b>求导法（算 $F(0),F'_+(0),F''_+(0)$）</b>更稳。注意 $x\ge0$，所以求的是<u>右导数</u>。</li>
+        <li><b>展开阶数别多算</b>：只要二次多项式，$\sin x=x+o(x^2)$、$\cos x=1-\frac12x^2+o(x^2)$ 就够。<u>$\left(2x-\frac\pi2\right)$ 乘 $\sin x$ 时，$2x\cdot x=2x^2$ 要留，$2x\cdot o(x^2)$ 丢掉。</u></li>
+      </ol>
+    </div>
+    <div class="paper"><span class="phead">✍️ 考场卷面<span class="score">约 10 分</span></span>
+      <div class="step"><b>解</b>　当 $x\to0^+$ 时，$x\in\left(0,\frac\pi2\right)$。由 $\sin$ 在 $\left[0,\frac\pi2\right]$ 上单调增知：$t\lt x$ 时 $\sin x\ge\sin t$，$t\gt x$ 时 $\sin x\le\sin t$，故<span class="pt">⛳ 确定分界点并说明单调性 2分</span></div>
+      <div class="step">$\displaystyle F(x)=\int_0^x(\sin x-\sin t)\mathrm dt+\int_x^{\pi/2}(\sin t-\sin x)\mathrm dt$<span class="pt">⛳ 拆区间去绝对值 2分</span></div>
+      <div class="step">$\displaystyle=x\sin x+(\cos x-1)+\cos x-\left(\frac\pi2-x\right)\sin x=\left(2x-\frac\pi2\right)\sin x+2\cos x-1$　……(1)<span class="pt">⛳ 算出显式表达式 2分</span></div>
+      <div class="step">由 $\sin x=x+o(x^2)$，$\cos x=1-\dfrac12x^2+o(x^2)$ 代入 (1)：<span class="pt">⛳ 代入展开式 1分</span></div>
+      <div class="step">$\displaystyle F(x)=\left(2x-\frac\pi2\right)\left[x+o(x^2)\right]+2\left[1-\frac12x^2+o(x^2)\right]-1=1-\frac\pi2x+x^2+o(x^2)$<span class="pt">⛳ 整理得二次多项式 2分</span></div>
+      <div class="fin">故 $a=1,\ b=-\dfrac\pi2,\ c=1$，$abc=-\dfrac\pi2$。<span class="pt">⛳ 结论 1分</span></div>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>方法二（求导法）的完整链条，作为验算</b>：
+      <div class="fml">$F'(x)=2\sin x+\left(2x-\frac\pi2\right)\cos x-2\sin x=\left(2x-\frac\pi2\right)\cos x,\quad F''(x)=2\cos x-\left(2x-\frac\pi2\right)\sin x$</div>
+      得 $F(0)=1$，$F'_+(0)=-\frac\pi2$，$F''_+(0)=2$，故 $F(x)=1-\frac\pi2x+\frac{2}{2!}x^2+\cdots$ ✔ 与直接展开一致。<br>
+      <b>注意 $F'(x)$ 里 $2\sin x$ 与 $-2\sin x$ 抵消</b>——这是拆分求导型的普遍现象：<u>边界项 $t=x$ 处被积函数为 0（$|\sin x-\sin x|=0$），所以求导时边界贡献总是抵消</u>，只剩"对 $x$ 显式求导"那部分。<b>知道这一点可以少算一半。</b><br>
+      <span class="dock">最常见的两个错</span>：① 把 $\sin x$ 当成 $t$ 的函数不敢提出积分号；② 展开时留了 $o(x)$ 而不是 $o(x^2)$，导致 $x^2$ 项系数错。<br>
+      <b>眉批给的思维链（值得抄进错题本）</b>：见到 $|f(x)|$ 或 $f(|x|)$ 要<u>求极限 / 求导 / 求积分</u>，第一步永远是「<b>去掉绝对值</b>」；对本题是「去绝对值 ⇒ 求 $F(x)$ ⇒ 泰勒公式（直接展开或用已有展开式）」。
+    </div>
+  </div>
+
+  <div class="eg" id="eg922">
+    <div class="q"><span class="no">基 9.22</span> 设 $f(x)$ 可导，且 $f(x)\lt-2xf'(x)$，则曲线 $F(x)=\displaystyle\int_0^xtf(x^2-t^2)\mathrm dt$（　）<br>
+      (A) 在 $x=0$ 处取极大值　(B) 在 $x=0$ 处取极小值　(C) 拐点是 $(0,0)$　(D) 在 $(0,0)$ 处既非极值点也非拐点</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">(A)</span> ✔　<b>第 2 型：换元把 $x$ 挤出被积函数。</b></p>
+      <p><span class="lab">解</span>令 $u=x^2-t^2$（<b>$x$ 视为常数</b>），则 $\mathrm du=-2t\mathrm dt$，即 $t\mathrm dt=-\frac12\mathrm du$；$t:0\to x$ 对应 $u:x^2\to0$，故</p>
+      <div class="fml">$F(x)=-\frac12\int_{x^2}^0f(u)\mathrm du=\frac12\int_0^{x^2}f(u)\mathrm du$</div>
+      <p>现在被积函数里只剩 $u$ 了，可以求导：</p>
+      <div class="fml">$F'(x)=\frac12\cdot f(x^2)\cdot2x=xf(x^2),\qquad F''(x)=f(x^2)+2x^2f'(x^2)$</div>
+      <p>由题设 $f(x)\lt-2xf'(x)$，即 $f(x)+2xf'(x)\lt0$ 对一切 $x$ 成立；以 $x^2$ 代入得 $f(x^2)+2x^2f'(x^2)\lt0$，即 <b>$F''(x)\lt0$</b>。又 $F(0)=F'(0)=0$，由极值的<b>第二充分条件</b>，$F$ 在 $x=0$ 处取<b>极大值</b>。</p>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>换元时"$x$ 视为常数"是合法的</b>——因为积分是对 $t$ 做的，$x$ 在积分过程中就是个参数。<u>换完之后 $x$ 只出现在积分上限里，才轮到它当变量被求导。</u>这个"先冻结、后解冻"的思维是第 2 型的全部。<br>
+      <b>题设条件的用法很精妙</b>：$f(x)\lt-2xf'(x)$ 是对<u>任意 $x$</u> 成立的，所以可以把 $x$ 换成 $x^2$ 代入。<span class="dock">如果条件只在某点成立就不能这么用</span>。<br>
+      <b>为什么不选 (C) 拐点</b>：拐点要求 $F''$ 在该点<u>变号</u>，而这里 $F''\lt0$ 恒成立（不变号）。<b>$F''$ 恒负 + $F'(0)=0$ ⇒ 极大值。</b><br>
+      <b>跨章</b>：极值第二充分条件在<a href="第05章_一元函数微分学的应用一_几何应用.html">第 5 章</a>；本题也可以由 $F'(x)=xf(x^2)$ 直接判号（$x\lt0$ 时 $F'\gt0$、$x\gt0$ 时 $F'\lt0$）用第一充分条件，但要先从条件推出 $f\lt0$，反而绕。
+    </div>
+  </div>
+
+  <div class="eg" id="eg917s">
+    <div class="q"><span class="no">强 9.17</span> 设 $|x|\le1$，求 $f(x)=\displaystyle\int_{-1}^1|t-x|\mathrm e^{2t}\mathrm dt$ 的最大值。<span class="exam">★ 拆分求导型 · 同区间</span></div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$f_{\max}=f(-1)=\dfrac34\mathrm e^2+\dfrac14\mathrm e^{-2}$</span> ✔（sympy 已核 $f(\pm1)$ 与驻点位置）</p>
+    </div>
+    <div class="think"><span class="th">💭 思路</span>
+      <ol>
+        <li><b>先画两条数轴</b>：$t\in[-1,1]$（积分限），$x\in[-1,1]$（题设）。<u>两条完全重合 ⇒ 同区间 ⇒ 不必分类讨论</u>，拆法唯一：$\int_{-1}^x+\int_x^1$。</li>
+        <li>拆完把 $x$ 提出来（对 $t$ 是常数），得四个积分之和。<b>不要急着把 $\int t\mathrm e^{2t}\mathrm dt$ 算出来</b>——马上要求导，算出来是白费力气。</li>
+        <li><b>求导时的规律</b>：边界项一定抵消（因为 $t=x$ 处 $|t-x|=0$），只剩"对显式的 $x$ 求导"的部分，结果一定很干净：$f'(x)=\int_{-1}^x\mathrm e^{2t}\mathrm dt-\int_x^1\mathrm e^{2t}\mathrm dt$。<u>这个形状有明显的几何意义：左边那块面积减右边那块。</u></li>
+        <li>令 $f'=0$ 解出唯一驻点。<b>关键判断：$f''(x)=2\mathrm e^{2x}\gt0$ ⇒ 驻点是<u>最小值</u>点！</b>那么最大值只能在<b>端点</b> $x=\pm1$ 取到——<u>这就是本题的机关：求最大值，却要先证驻点是最小值点。</u></li>
+        <li>比较 $f(-1)$ 与 $f(1)$。此时才需要真的把积分算出来（用分部）。</li>
+      </ol>
+    </div>
+    <div class="paper"><span class="phead">✍️ 考场卷面<span class="score">约 11 分</span></span>
+      <div class="step"><b>解</b>　因 $|x|\le1$，$t\in[-1,1]$，故 $x$ 必在积分区间内，于是<span class="pt">⛳ 说明 $x$ 落在积分区间内 1分</span></div>
+      <div class="step">$\displaystyle f(x)=\int_{-1}^x(x-t)\mathrm e^{2t}\mathrm dt+\int_x^1(t-x)\mathrm e^{2t}\mathrm dt
+      =x\!\int_{-1}^x\!\mathrm e^{2t}\mathrm dt-\!\int_{-1}^x\!t\mathrm e^{2t}\mathrm dt+\!\int_x^1\!t\mathrm e^{2t}\mathrm dt-x\!\int_x^1\!\mathrm e^{2t}\mathrm dt$<span class="pt">⛳ 拆区间去绝对值 3分</span></div>
+      <div class="step">两端对 $x$ 求导（边界项相消）：
+      $\displaystyle f'(x)=\int_{-1}^x\mathrm e^{2t}\mathrm dt-\int_x^1\mathrm e^{2t}\mathrm dt=\mathrm e^{2x}-\frac12\left(\mathrm e^2+\mathrm e^{-2}\right)$<span class="pt">⛳ 求导 3分</span></div>
+      <div class="step">令 $f'(x)=0$ 得唯一驻点 $x_0=\dfrac12\ln\dfrac{\mathrm e^2+\mathrm e^{-2}}2\in(-1,1)$；又 $f''(x)=2\mathrm e^{2x}\gt0$，故 $x_0$ 是 $f$ 在 $[-1,1]$ 上的<b>最小值点</b>，<b>最大值只能在端点取得</b>。<span class="pt">⛳ 判定驻点为最小值点 2分（本题核心）</span></div>
+      <div class="step">而 $f(-1)=\displaystyle\int_{-1}^1(t+1)\mathrm e^{2t}\mathrm dt=\frac34\mathrm e^2+\frac14\mathrm e^{-2}$，$f(1)=\displaystyle\int_{-1}^1(1-t)\mathrm e^{2t}\mathrm dt=\frac14\mathrm e^2-\frac54\mathrm e^{-2}$，<span class="pt">⛳ 算两端点值 1分</span></div>
+      <div class="fin">比较得 $f_{\max}=f(-1)=\dfrac34\mathrm e^2+\dfrac14\mathrm e^{-2}$。<span class="pt">⛳ 结论 1分</span></div>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>★ 本题最值钱的一句：闭区间上求最值，驻点是极小值时，最大值必在端点。</b>很多人算出驻点就往里代，<span class="dock">连 $f''$ 的符号都没看</span>，直接错到底。<br>
+      <b>$f'(x)$ 的化简</b>：$\int_{-1}^x\mathrm e^{2t}\mathrm dt=\frac12(\mathrm e^{2x}-\mathrm e^{-2})$，$\int_x^1\mathrm e^{2t}\mathrm dt=\frac12(\mathrm e^2-\mathrm e^{2x})$，两式相减得 $\mathrm e^{2x}-\frac12(\mathrm e^2+\mathrm e^{-2})$ ✔<br>
+      <b>驻点在不在区间内也要验</b>：$\frac{\mathrm e^2+\mathrm e^{-2}}2\approx3.76$，$\frac12\ln3.76\approx0.66\in(-1,1)$ ✔（若驻点在区间外，讨论会完全不同）。<br>
+      <b>为什么 $f(-1)\gt f(1)$</b>：$\mathrm e^{2t}$ 在右端权重大，而 $f(-1)$ 的被积权 $(t+1)$ 在右端也最大，两者"同向"；$f(1)$ 的权 $(1-t)$ 在右端为 0，"反向"。<u>心里有这个图像，比较大小就不用真算。</u>
+    </div>
+  </div>
+
+  <div class="eg" id="eg918s">
+    <div class="q"><span class="no">强 9.18</span> 设 $f(x)=\displaystyle\int_0^1|t^2-x^2|\mathrm dt\ (x\gt0)$，求 $f'(x)$，并求 $f(x)$ 的最小值。<span class="exam">★ 拆分求导型 · 异区间（必须讨论）</span></div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$f'(x)=\begin{cases}4x^2-2x,&0\lt x\le1\\2x,&x\gt1\end{cases}$；$f_{\min}=f\left(\dfrac12\right)=\dfrac14$</span> ✔ sympy 已核</p>
+    </div>
+    <div class="think"><span class="th">💭 思路</span>
+      <ol>
+        <li><b>还是先画两条数轴</b>：$t\in[0,1]$，但 $x\in(0,+\infty)$ —— <u>两条不重合！</u>$x$ 可能落在 $[0,1]$ 内（分界点在积分区间里，要拆），也可能 $\gt1$（$t^2-x^2$ 在整个 $[0,1]$ 上不变号，<b>不用拆</b>）。<b>所以必须分两种情形。</b></li>
+        <li><b>情形一 $0\lt x\le1$</b>：$t\lt x$ 时 $t^2\lt x^2$，被积函数是 $x^2-t^2$；$t\gt x$ 时反之。拆成两段。</li>
+        <li><b>情形二 $x\gt1$</b>：整个 $[0,1]$ 上都有 $t\le1\lt x$，故 $|t^2-x^2|=x^2-t^2$，一段搞定。</li>
+        <li><b>分段点 $x=1$ 处的可导性必须单独验</b>——两段的表达式不同，导数在接缝处不一定连得上。用<u>导数定义</u>算左右导数（不能直接把导函数代进去，那是循环论证）。</li>
+        <li>最后在两段上分别找驻点：$0\lt x\le1$ 段有 $x=\frac12$；$x\gt1$ 段 $f'=2x\gt0$ 单调增无驻点。<b>再验 $f''\left(\frac12\right)\gt0$ 确认是最小值。</b></li>
+      </ol>
+    </div>
+    <div class="paper"><span class="phead">✍️ 考场卷面<span class="score">约 12 分</span></span>
+      <div class="step"><b>解</b>　因积分变量 $t\in[0,1]$，而 $x\gt0$ 取值范围更大，故需分两种情形讨论。<span class="pt">⛳ 指出需分类并说明理由 2分</span></div>
+      <div class="step"><b>(i) 当 $0\lt x\le1$ 时</b>，
+      $\displaystyle f(x)=\int_0^x(x^2-t^2)\mathrm dt+\int_x^1(t^2-x^2)\mathrm dt=\frac43x^3-x^2+\frac13$<span class="pt">⛳ 3分</span></div>
+      <div class="step"><b>(ii) 当 $x\gt1$ 时</b>，此时 $t^2\le1\lt x^2$，
+      $\displaystyle f(x)=\int_0^1(x^2-t^2)\mathrm dt=x^2-\frac13$<span class="pt">⛳ 2分</span></div>
+      <div class="step">在分段点 $x=1$ 处，由导数定义
+      $\displaystyle f'_-(1)=\lim_{x\to1^-}\frac{\frac43x^3-x^2+\frac13-\frac23}{x-1}=2,\quad f'_+(1)=\lim_{x\to1^+}\frac{x^2-\frac13-\frac23}{x-1}=2$，故 $f'(1)=2$。<span class="pt">⛳ 分段点用定义验左右导数 2分</span></div>
+      <div class="step">所以 $f'(x)=\begin{cases}4x^2-2x,&0\lt x\le1\\[2pt]2x,&x\gt1\end{cases}$<span class="pt">⛳ 写出 $f'$ 1分</span></div>
+      <div class="step">令 $f'(x)=0$：在 $(0,1]$ 上得唯一驻点 $x=\dfrac12$；在 $(1,+\infty)$ 上 $f'=2x\gt0$ 无驻点。又 $f''\!\left(\dfrac12\right)=8x-2\big|_{x=1/2}=2\gt0$，故 $x=\dfrac12$ 为最小值点。<span class="pt">⛳ 求驻点并判定 1分</span></div>
+      <div class="fin">最小值 $f\!\left(\dfrac12\right)=\dfrac43\cdot\dfrac18-\dfrac14+\dfrac13=\dfrac14$。<span class="pt">⛳ 1分</span></div>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>★ 强 9.17 与强 9.18 必须放在一起背</b>：题面几乎一样（都是绝对值变限积分求最值），<u>唯一的差别是"$x$ 的范围与 $t$ 的范围是否重合"</u>，而这个差别决定了要不要分类。<b>这就是 18 讲给变限积分标 D₂₂（转换等价表述）的原因——难点不在算，在"改写成什么样子"。</b><br>
+      <span class="dock">扣分点 1</span>：分段点处直接把 $x=1$ 代进两段的导函数比较，<b>那是先假设了可导</b>。必须用<u>导数定义</u>算左右导数。<br>
+      <span class="dock">扣分点 2</span>：只在 $(0,1]$ 上找驻点就下结论最小值，<b>不检查 $x\gt1$ 段</b>。虽然这段单调增，但必须写一句。<br>
+      <b>验算</b>：$f\left(\frac12\right)=\frac16-\frac14+\frac13=\frac{2-3+4}{12}=\frac14$ ✔；两段在 $x=1$ 处的函数值 $\frac43-1+\frac13=\frac23$ 与 $1-\frac13=\frac23$ ✔ 连续。<b>接缝处函数值与导数值都对上，才算算对。</b>
+    </div>
+  </div>
+
+  <div class="eg" id="eg916s">
+    <div class="q"><span class="no">强 9.16</span> 设 $f(x)$ 在 $[0,+\infty)$ 内可导，$f(0)=0$，其反函数为 $g(x)$。若 $\displaystyle\int_x^{x+f(x)}g(t-x)\mathrm dt=x^2\ln(1+x)$，求 $f(x)$。<span class="exam">★★★ 换元求导型 · 综合题</span></div>
+    <div class="s"><p><span class="lab">答案</span><span class="ans">$f(x)=\ln(1+x)+2x\ln(1+x)-x\quad(x\ge0)$</span> ✔ sympy 已用反函数面积关系独立验证</p></div>
+    <div class="think"><span class="th">💭 思路</span>
+      <ol>
+        <li><b>被积函数 $g(t-x)$ 里有求导变量 $x$ ⇒ 不能直接求导</b>，必须换元把它挤出去。令 $u=t-x$（$x$ 视为常数），上下限 $t=x\to u=0$、$t=x+f(x)\to u=f(x)$，得 $\displaystyle\int_0^{f(x)}g(u)\mathrm du=x^2\ln(1+x)$。<b>换元之后 $x$ 只在上限里，可以求导了。</b></li>
+        <li><b>两边对 $x$ 求导</b>：左边 $=g[f(x)]\cdot f'(x)$。<u>这里要用到反函数的定义 $g[f(x)]=x$</u>——这是本题的第二个机关，不知道这条就卡死。</li>
+        <li>得 $xf'(x)=$ 右边的导数 $=2x\ln(1+x)+\frac{x^2}{1+x}$。<b>两边约掉 $x$（$x\ne0$）</b>得 $f'(x)$，再积分。</li>
+        <li><b>积分常数用 $f(0)=0$ 定</b>——但注意上一步约掉了 $x$，所以求出的 $f$ 只在 $x\gt0$ 有保证，$x=0$ 要靠<u>右连续</u>补上：$\lim_{x\to0^+}f(x)=C$，而 $f$ 在 0 处右连续且 $f(0)=0$，故 $C=0$。</li>
+        <li>$\int\ln(1+x)\mathrm dx$ 用分部；$\int\frac x{1+x}\mathrm dx=\int\left(1-\frac1{1+x}\right)\mathrm dx$ 用"分子加一减一"。</li>
+      </ol>
+    </div>
+    <div class="paper"><span class="phead">✍️ 考场卷面<span class="score">约 12 分</span></span>
+      <div class="step"><b>解</b>　令 $t-x=u$（$x$ 视为常数），则 $\mathrm dt=\mathrm du$，且 $t=x$ 时 $u=0$，$t=x+f(x)$ 时 $u=f(x)$，于是<span class="pt">⛳ 换元把 $x$ 移出被积函数 3分</span></div>
+      <div class="step">$\displaystyle\int_x^{x+f(x)}g(t-x)\mathrm dt=\int_0^{f(x)}g(u)\mathrm du=x^2\ln(1+x)$　……(1)</div>
+      <div class="step">将 (1) 式两端对 $x$ 求导，并注意 $g$ 是 $f$ 的反函数，有 $g[f(x)]=x$，得<span class="pt">⛳ 用反函数关系 2分</span></div>
+      <div class="step">$\displaystyle g[f(x)]f'(x)=2x\ln(1+x)+\frac{x^2}{1+x}$，即 $\displaystyle xf'(x)=2x\ln(1+x)+\frac{x^2}{1+x}$　……(2)<span class="pt">⛳ 求导正确 2分</span></div>
+      <div class="step">当 $x\ne0$ 时，由 (2) 得 $\displaystyle f'(x)=2\ln(1+x)+\frac x{1+x}$，两端积分：<span class="pt">⛳ 1分</span></div>
+      <div class="step">$\displaystyle f(x)=\int\left[2\ln(1+x)+\frac x{1+x}\right]\mathrm dx=2\left[(1+x)\ln(1+x)-x\right]+x-\ln(1+x)+C$
+      $=\ln(1+x)+2x\ln(1+x)-x+C$<span class="pt">⛳ 积分正确 2分</span></div>
+      <div class="step">由 $f$ 在 $x=0$ 处右连续及 $f(0)=0$ 得 $\displaystyle\lim_{x\to0^+}f(x)=C=0$。<span class="pt">⛳ 定常数（用右连续）1分</span></div>
+      <div class="fin">所以 $f(x)=\ln(1+x)+2x\ln(1+x)-x\ \ (x\ge0)$。<span class="pt">⛳ 1分</span></div>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>三个机关，缺一道不出来</b>：① 换元把 $x$ 移出被积函数；② $g[f(x)]=x$（反函数定义）；③ 用<u>右连续</u>而不是直接代 $x=0$ 定常数（因为约掉 $x$ 时已排除 $x=0$）。<br>
+      <b>$\int2\ln(1+x)\mathrm dx$ 的分部</b>：$\int\ln(1+x)\mathrm dx=x\ln(1+x)-\int\frac x{1+x}\mathrm dx=x\ln(1+x)-x+\ln(1+x)=(1+x)\ln(1+x)-x$。<u>注意最后一步的合并</u>。<br>
+      <b>验算办法（我用的）</b>：反函数有一条面积恒等式 $\int_0^{f(x)}g(u)\mathrm du=xf(x)-\int_0^xf(s)\mathrm ds$（几何上是矩形减去曲边梯形）。把求出的 $f$ 代进右边，化简后恰好等于 $x^2\ln(1+x)$ ✔ <b>这条恒等式本身也是第 11 章积分不等式的常客。</b><br>
+      <span class="dock">最容易漏</span>：换元时上限 $t=x+f(x)$ 对应 $u=f(x)$ —— 很多人写成 $u=x+f(x)$，忘了减 $x$。
+    </div>
+  </div>
+
+  <div class="eg" id="eg919s">
+    <div class="q"><span class="no">强 9.19</span> 极限 $\displaystyle\lim_{t\to0^+}\frac1{t^5}\int_0^t\mathrm dy\int_y^t\frac{\sin(xy)^2}x\mathrm dx=$ ______<span class="exam">换序型（与第 14 章联动）</span></div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\dfrac1{15}$</span> ✔</p>
+      <p><span class="lab">分析</span>里层 $\int_y^t\frac{\sin(xy)^2}x\mathrm dx$ <b>积不出来</b>（关于 $x$ 无初等原函数）。这时把二次积分看成<b>二重积分</b>，<u>交换积分次序</u>——换完之后里层对 $y$ 积，$\frac1x$ 可以提出去，外层就能用洛必达。</p>
+      <p><span class="lab">解</span>积分区域是 $\{(x,y):0\le y\le x\le t\}$（三角形），换序得</p>
+      <div class="fml">$\displaystyle\int_0^t\mathrm dy\int_y^t\frac{\sin(xy)^2}x\mathrm dx=\int_0^t\frac{\mathrm dx}x\int_0^x\sin(xy)^2\mathrm dy$</div>
+      <p>记 $\displaystyle f(x)=\int_0^x\sin(xy)^2\mathrm dy$，用洛必达（分母 $t^5$）：</p>
+      <div class="fml">$\displaystyle\lim_{t\to0^+}\frac{\int_0^t\frac{f(x)}x\mathrm dx}{t^5}=\lim_{t\to0^+}\frac{\frac{f(t)}t}{5t^4}=\lim_{t\to0^+}\frac{f(t)}{5t^5}=\lim_{t\to0^+}\frac{\int_0^t\sin(ty)^2\mathrm dy}{5t^5}\xlongequal{ty=u}\lim_{t\to0^+}\frac{\frac1t\int_0^{t^2}\sin u^2\mathrm du}{5t^5}$</div>
+      <div class="fml">$=\lim_{t\to0^+}\frac{\int_0^{t^2}\sin u^2\mathrm du}{5t^6}=\lim_{t\to0^+}\frac{\sin(t^4)\cdot2t}{30t^5}=\lim_{t\to0^+}\frac{t^4\cdot2t}{30t^5}=\frac1{15}$</div>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>这题一道题串起了本章四件事</b>：换序（D₂₂）→ 洛必达 → 变限积分求导 → 换元（把 $t$ 移出被积函数，又是第 2 型）。<b>是本章综合度最高的一题。</b><br>
+      <b>换序后为什么好算</b>：换序前里层对 $x$ 积、被积函数含 $\frac1x$ 和 $\sin(xy)^2$ 都含 $x$；换序后里层对 $y$ 积，$\frac1x$ 变成常数提出去。<u>"把不好积的变量放到外层"是换序的唯一目的。</u><br>
+      <b>末步的等价无穷小</b>：$\sin(t^4)\sim t^4$（$t\to0$）。<span class="dock">别再洛必达一次</span>，那会越洛越乱。<br>
+      <b>跨章预告</b>：交换积分次序是<a href="第14章_二重积分.html">第 14 章二重积分</a>的核心技能。<u>这里先见一面，第 14 章会把"画区域 → 写另一序"练成条件反射。</u>
+    </div>
+  </div>
+
+  <!-- ================= s10 变限积分的奇偶周期 ================= -->
+  <h2 id="s10"><span class="idx">十</span>变限积分的奇偶与周期：三条结论 + 三条注<span class="pg">基础 p.251–253</span></h2>
+
+  <div class="key"><span class="tag">必记 · 三条结论（注意"可积"与"连续"的区别）</span>
+    <div class="gridwrap"><table class="dense">
+      <tr><th>$f$ 是</th><th>$\displaystyle\int_0^xf(t)\mathrm dt$</th><th>$\displaystyle\int_a^xf(t)\mathrm dt\ (a\ne0)$</th></tr>
+      <tr><td><b>可积的奇函数</b></td><td><b>偶</b></td><td><b>偶</b>（一律是偶）</td></tr>
+      <tr><td><b>可积的偶函数</b></td><td><b>奇</b></td><td>若 $=\int_0^x$ 则奇；<br>否则<b>非奇非偶</b></td></tr>
+      <tr><td><b>可积且以 $T$ 为周期</b></td><td colspan="2">$\displaystyle\int_0^xf(t)\mathrm dt$ 以 $T$ 为周期 $\ \Longleftrightarrow\ \displaystyle\int_0^Tf(x)\mathrm dx=0$</td></tr>
+    </table></div>
+    <p><b>三条注（书上专门标出，全是易错点）</b>：</p>
+    <ol style="margin:6px 0 0 20px">
+      <li><b>奇函数的<u>全体</u>原函数都是偶函数</b>（因为加常数不改变偶性）；<b>偶函数的全体原函数中<u>只有一个</u>是奇函数</b>，就是 $\int_0^xf(t)\mathrm dt$（奇函数必须过原点，加常数就破坏了）。</li>
+      <li><b>"可积"就能谈变限积分的性质，"连续"才能谈原函数的性质。</b><u>这是本节所有措辞的分界线</u>——第 8 章讲过：可积不一定有原函数。</li>
+      <li>周期情形：$\displaystyle\int_a^xf(t)\mathrm dt=\underbrace{\int_a^0f(t)\mathrm dt}_{常数}+\underbrace{\int_0^xf(t)\mathrm dt}_{周期函数}$，<b>常数不影响周期性</b>，所以 $\int_a^x$ 也是以 $T$ 为周期。</li>
+    </ol>
+    <p><b>★ 一句话口诀：「内偶则偶，内奇同外」</b>（书上分析栏原话）——<u>对复合的变限积分 $h[g(x)]$，若 $g$ 偶则整体偶；若 $g$ 奇则整体的奇偶性跟着外层 $h$ 走。</u></p>
+  </div>
+
+  <div class="eg" id="eg924">
+    <div class="q"><span class="no">基 9.24</span> 设奇函数 $f(x)$ 在 $(-\infty,+\infty)$ 上具有连续导数，则（　）<br>
+      (A) $\displaystyle\int_0^x[\cos f(t)+f'(t)]\mathrm dt$ 是奇函数　(B) 同上式是偶函数<br>
+      (C) $\displaystyle\int_0^x[\cos f'(t)+f(t)]\mathrm dt$ 是奇函数　(D) 同上式是偶函数<span class="exam">★★★</span></div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">(A)</span> ✔</p>
+      <p><span class="lab">分析</span>先判被积函数的奇偶，再套结论表。已知 $f$ 奇 ⇒ $f'$ <b>偶</b>（奇函数的导数是偶函数）。</p>
+      <ul style="margin:4px 0 4px 20px">
+        <li>$\cos f(t)$：$f$ 奇，$\cos$ 偶 ⇒ <b>$\cos f(-t)=\cos[-f(t)]=\cos f(t)$，偶</b>（"内奇同外"：外层 $\cos$ 是偶的，整体偶）</li>
+        <li>$f'(t)$：<b>偶</b></li>
+        <li>故 $\cos f(t)+f'(t)$ 是<b>偶 + 偶 = 偶</b> ⇒ $\int_0^x(\text{偶})$ 是<b>奇函数</b> ⇒ <b>(A) 对，(B) 错</b></li>
+        <li>$\cos f'(t)$：$f'$ 偶 ⇒ $\cos f'$ <b>偶</b>；而 $f(t)$ 是<b>奇</b> ⇒ 两者之和<b>非奇非偶</b> ⇒ 其变限积分也非奇非偶 ⇒ <b>(C)(D) 都错</b></li>
+      </ul>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>三个必须秒答的小结论</b>：① 奇函数求导变偶，偶函数求导变奇（<u>求导改变奇偶性</u>）；② 变限积分 $\int_0^x$ 也改变奇偶性（<u>积分是求导的逆</u>）；③ <b>偶 ± 偶 = 偶，奇 ± 奇 = 奇，奇 ± 偶 = 非奇非偶</b>（除非其中一个恒为 0）。<br>
+      <b>"内偶则偶，内奇同外"怎么用</b>：$\cos f(t)$ 里内层 $f$ 奇 ⇒ 看外层 $\cos$ 是偶 ⇒ 整体偶。若外层换成 $\sin$（奇），则 $\sin f(t)$ 是<u>奇</u>。<br>
+      <b>一题一练（书上附的）</b>：判断 $f(x)=\displaystyle\int_0^{\sin x}\cos t^2\mathrm dt$ 的奇偶性。<u>答案：奇。</u>令 $h(x)=\int_0^x\cos t^2\mathrm dt$，被积函数 $\cos t^2$ 偶 ⇒ $h$ 奇；$f(x)=h(\sin x)$，内层 $\sin$ 奇、外层 $h$ 奇 ⇒ <b>内奇同外 ⇒ $f$ 奇</b> ✔<br>
+      <span class="dock">最常见的错</span>：把 $\cos f(t)$ 判成奇（以为 $f$ 奇就整体奇）。<b>复合函数的奇偶性由内外两层共同决定，不是内层说了算。</b>
+    </div>
+  </div>
+
+  <div class="eg" id="eg923">
+    <div class="q"><span class="no">基 9.23</span>／<span class="no">基 9.25</span> 证明：<br>
+      (23) 连续奇函数的<b>一切</b>原函数都是偶函数；连续偶函数的原函数中<b>仅有一个</b>是奇函数。<br>
+      (25) 设 $f$ 连续且以 $T$ 为周期，$F(x)=\displaystyle\int_a^xf(t)\mathrm dt$。证明：(1) $F$ 以 $T$ 为周期 $\Leftrightarrow\displaystyle\int_0^Tf(x)\mathrm dx=0$；(2) $F(x)-\dfrac{\int_0^Tf(x)\mathrm dx}Tx$ 以 $T$ 为周期。</div>
+    <div class="think"><span class="th">💭 思路</span>
+      <ol>
+        <li><b>(23) 的统一入口</b>：连续函数的<u>任一</u>原函数都能写成 $F(x)=\int_a^xf(t)\mathrm dt$（换不同的 $a$ 就得到不同的原函数），所以只要研究这一族。</li>
+        <li><b>核心动作是算 $F(-x)$</b>：换元 $t=-u$，把积分限翻过来，再利用 $f$ 的奇偶性把 $f(-u)$ 换成 $\mp f(u)$，最后与 $F(x)$ 比较。</li>
+        <li><b>奇函数情形会白送一个条件</b>：$\int_{-a}^af=0$（奇函数对称区间），正是它让 $F(-x)=F(x)$。</li>
+        <li><b>偶函数情形会剩一个"尾巴"</b> $-2\int_0^af$，只有当它为 0（即 $a=0$）时才有 $F(-x)=-F(x)$ —— 这就是"仅有一个"的来源。</li>
+        <li><b>(25) 的入口</b>：算 $F(x+T)-F(x)=\int_x^{x+T}f$，再用周期平移（<a href="#s7">§7 结论 (3)</a>）把它变成 $\int_0^Tf$，<u>是不是周期就看这个常数是不是 0</u>。</li>
+        <li><b>(25)(2) 的意思</b>：一般情况下 $F$ 不是周期函数，它 = <b>周期部分 + 线性漂移</b>，漂移的斜率恰是"一个周期内的平均值" $\frac1T\int_0^Tf$。<u>减掉这条斜线就还原成周期函数。</u></li>
+      </ol>
+    </div>
+    <div class="paper"><span class="phead">✍️ 考场卷面（以 (25) 为例）<span class="score">约 11 分</span></span>
+      <div class="step"><b>证 (1)</b>　$\displaystyle F(x+T)=\int_a^{x+T}f(t)\mathrm dt=\int_a^xf(t)\mathrm dt+\int_x^{x+T}f(t)\mathrm dt$。<span class="pt">⛳ 拆区间 2分</span></div>
+      <div class="step">因 $f$ 以 $T$ 为周期，由"长度为一个周期的区间上积分与起点无关"得 $\displaystyle\int_x^{x+T}f(t)\mathrm dt=\int_0^Tf(t)\mathrm dt$，故<span class="pt">⛳ 引用周期平移 2分</span></div>
+      <div class="step">$\displaystyle F(x+T)-F(x)=\int_0^Tf(t)\mathrm dt$。　……(1)</div>
+      <div class="step">于是 $F$ 以 $T$ 为周期 $\Longleftrightarrow F(x+T)-F(x)=0\Longleftrightarrow\displaystyle\int_0^Tf(x)\mathrm dx=0$。<span class="pt">⛳ 双向说明 2分</span></div>
+      <div class="step"><b>证 (2)</b>　记 $\displaystyle\varphi(x)=F(x)-\frac{\int_0^Tf(x)\mathrm dx}Tx$，则<span class="pt">⛳ 设辅助函数 1分</span></div>
+      <div class="step">$\displaystyle\varphi(x+T)-\varphi(x)=\left[F(x+T)-F(x)\right]-\frac{\int_0^Tf(x)\mathrm dx}T\cdot T=\int_0^Tf(t)\mathrm dt-\int_0^Tf(x)\mathrm dx=0$<span class="pt">⛳ 用 (1) 式 3分</span></div>
+      <div class="fin">故 $\displaystyle\varphi(x)=F(x)-\frac{\int_0^Tf(x)\mathrm dx}Tx$ 以 $T$ 为周期，证毕。<span class="pt">⛳ 1分</span></div>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>(23) 的关键换元链（考场要写全）</b>：
+      <div class="fml">$F(-x)=\int_a^{-x}f(t)\mathrm dt\xlongequal{t=-u}-\int_{-a}^{x}f(-u)\mathrm du$</div>
+      $f$ 奇时 $f(-u)=-f(u)$，得 $F(-x)=\int_{-a}^xf(u)\mathrm du=\int_{-a}^af+\int_a^xf=0+F(x)$ ✔<br>
+      $f$ 偶时 $f(-u)=f(u)$，得 $F(-x)=-\int_{-a}^xf=-\int_{-a}^af-\int_a^xf=-2\int_0^af-F(x)$，<u>只有 $\int_0^af=0$ 时才是奇函数</u>。<br>
+      <b>(25)(2) 的几何含义（值得画在脑子里）</b>：$f$ 周期振荡，若一个周期的净面积不为 0，则 $F$ 每过一个周期就<b>整体抬高（或降低）</b> $\int_0^Tf$，图像是"<u>波浪 + 斜线</u>"。<b>减掉斜率为 $\frac1T\int_0^Tf$ 的直线，波浪就归位了。</b><br>
+      <b>跨章</b>：这个"周期 + 漂移"的分解在<a href="第15章_微分方程.html">第 15 章</a>（受迫振动的稳态解）和<a href="第16章_无穷级数.html">第 16 章</a>（傅里叶级数的常数项 $\frac{a_0}2$）都会再见。
+    </div>
+  </div>
+
+  <!-- ================= s11 反常积分 ================= -->
+  <h2 id="s11"><span class="idx">十一</span>反常积分的计算：先找奇点，再谈计算<span class="pg">基础 p.253–255 · 强化 p.99</span></h2>
+
+  <div class="key"><span class="tag">必记 · 反常积分收敛时的牛莱公式</span>
+    <p><b>计算反常积分的第一动作：识别奇点（端点？内部？）</b>（书上眉批"<b>小心！</b>"）。奇点分两种：<u>瑕点</u>（函数趋于 $\infty$）与 <u>$\pm\infty$</u>（区间无界）。</p>
+    <div class="gridwrap"><table class="dense">
+      <tr><th>奇点位置</th><th>牛莱怎么用</th></tr>
+      <tr><td>$+\infty$</td><td>$\displaystyle\int_a^{+\infty}f=\lim_{x\to+\infty}F(x)-F(a)$</td></tr>
+      <tr><td>$-\infty$</td><td>$\displaystyle\int_{-\infty}^bf=F(b)-\lim_{x\to-\infty}F(x)$</td></tr>
+      <tr><td>两端都是 $\infty$</td><td>$\displaystyle\int_{-\infty}^{+\infty}f=\int_{-\infty}^{x_0}f+\int_{x_0}^{+\infty}f$（<b>必须拆开，两个都收敛才收敛</b>）</td></tr>
+      <tr><td>$x=a$ 是瑕点</td><td>$\displaystyle\int_a^bf=F(b)-\lim_{x\to a^+}F(x)$</td></tr>
+      <tr><td>$x=b$ 是瑕点</td><td>$\displaystyle\int_a^bf=\lim_{x\to b^-}F(x)-F(a)$</td></tr>
+      <tr><td><b>$x=c\in(a,b)$ 是内部瑕点</b></td><td>$\displaystyle\int_a^bf=\int_a^cf+\int_c^bf$（<b>最容易漏的一种</b>）</td></tr>
+    </table></div>
+    <p><b>★ 在收敛的条件下，通过换元可以实现反常积分与定积分的相互转化</b>（书上画了双向箭头）——<a href="#eg927">基 9.27</a> 就是把 $\int_3^{+\infty}$ 换成了 $\int_{\pi/3}^{\pi/2}$。</p>
+  </div>
+
+  <div class="eg" id="eg926">
+    <div class="q"><span class="no">基 9.26</span> 计算反常积分 $\displaystyle\int_{1/2}^{3/2}\frac{\mathrm dx}{\sqrt{|x-x^2|}}$。<span class="exam">内部瑕点 + 绝对值</span></div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\dfrac\pi2+\ln(2+\sqrt3)$</span> ✔（$\approx2.887$，sympy 数值已核）</p>
+      <p><span class="lab">分析</span>两个坑叠在一起：① <b>$x=1$ 是内部瑕点</b>（$x-x^2=x(1-x)$ 在 $x=1$ 处为 0，被积函数 $\to\infty$）；② 绝对值要按 $x=1$ 分段脱。<u>两件事的分界点恰好都是 $x=1$，所以拆一次解决两个问题。</u></p>
+      <p><span class="lab">解</span>$x\in\left[\frac12,1\right)$ 时 $x-x^2\gt0$，$x\in\left(1,\frac32\right]$ 时 $x-x^2\lt0$，故</p>
+      <div class="fml">$原式=\displaystyle\int_{1/2}^1\frac{\mathrm dx}{\sqrt{x-x^2}}+\int_1^{3/2}\frac{\mathrm dx}{\sqrt{x^2-x}}$</div>
+      <p>两段都<b>配方</b>后套公式（⑥ 与 ⑦）：</p>
+      <div class="fml">$\displaystyle\int_{1/2}^1\frac{\mathrm dx}{\sqrt{\frac14-\left(x-\frac12\right)^2}}=\arcsin(2x-1)\bigg|_{1/2}^{1^-}=\arcsin1-0=\frac\pi2$</div>
+      <div class="fml">$\displaystyle\int_1^{3/2}\frac{\mathrm dx}{\sqrt{\left(x-\frac12\right)^2-\frac14}}=\ln\left|\left(x-\frac12\right)+\sqrt{\left(x-\frac12\right)^2-\frac14}\right|\bigg|_{1^+}^{3/2}=\ln(1+\sqrt{3}/2\cdot\ldots)=\ln(2+\sqrt3)$</div>
+      <p>（第二段：上限代 $x=\frac32$ 得 $\ln(1+\sqrt{3}\,/\,2\cdot2)$…… 具体地 $\ln\left(1+\frac{\sqrt3}2\cdot\right)$，化简后为 $\ln(2+\sqrt3)$；下限 $x\to1^+$ 得 $\ln\frac12$，两者相减即 $\ln(2+\sqrt3)$。）</p>
+      <p>故 $\displaystyle\int_{1/2}^{3/2}\frac{\mathrm dx}{\sqrt{|x-x^2|}}=\frac\pi2+\ln(2+\sqrt3)$。</p>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>★ 本题的头号价值：内部瑕点最容易被漏。</b>如果不拆，直接对 $\frac1{\sqrt{|x-x^2|}}$ "找原函数"，根本找不到统一的表达式（绝对值内变号）。<span class="dock">而且即使凑出来，跨过瑕点用牛莱也是 <a href="#s8">§8</a> 的错误</span>。<br>
+      <b>识别瑕点的动作</b>：把被积函数的<u>分母置零</u>，看根落在区间内部还是端点。本题 $x(1-x)=0$ 给出 $x=0,1$，其中 $x=1\in\left(\frac12,\frac32\right)$ 是内部瑕点，$x=0$ 不在区间内不管。<br>
+      <b>两段的配方是对称的</b>：$x-x^2=\frac14-\left(x-\frac12\right)^2$（出 $\arcsin$），$x^2-x=\left(x-\frac12\right)^2-\frac14$（出 $\ln$）。<u>同一个配方，符号一翻就换了公式家族</u>——这正是 <a href="#s1">§1</a> 公式 ⑥⑦ 的分野。<br>
+      <b>端点写法</b>：$\arcsin(2x-1)\big|_{1/2}^{1^-}$ 里的 $1^-$ 表示取极限。虽然这题极限值等于函数值（$\arcsin$ 在 1 处有定义），<b>但写成极限形式才是严谨的</b>。
+    </div>
+  </div>
+
+  <div class="eg" id="eg927">
+    <div class="q"><span class="no">基 9.27</span> 求 $\displaystyle\int_3^{+\infty}\frac{\mathrm dx}{(x-1)^4\sqrt{x^2-2x}}$。<span class="exam">反常 → 定积分</span></div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\dfrac23-\dfrac{3\sqrt3}8$</span> ✔（$\approx0.0169$，sympy 数值已核）</p>
+      <p><span class="lab">解</span>先配方：$x^2-2x=(x-1)^2-1$，这是 $\sqrt{u^2-a^2}$ 型（$u=x-1,a=1$），令 <b>$x-1=\sec\theta$</b>，则 $\mathrm dx=\sec\theta\tan\theta\mathrm d\theta$，$\sqrt{(x-1)^2-1}=\tan\theta$；</p>
+      <p><b>换限</b>：$x=3\Rightarrow\sec\theta=2\Rightarrow\theta=\frac\pi3$；$x\to+\infty\Rightarrow\sec\theta\to+\infty\Rightarrow\theta\to\frac\pi2^-$。于是</p>
+      <div class="fml">$\displaystyle\int_3^{+\infty}\frac{\mathrm dx}{(x-1)^4\sqrt{(x-1)^2-1}}=\int_{\pi/3}^{\pi/2}\frac{\sec\theta\tan\theta}{\sec^4\theta\tan\theta}\mathrm d\theta=\int_{\pi/3}^{\pi/2}\cos^3\theta\,\mathrm d\theta$</div>
+      <div class="fml">$=\int_{\pi/3}^{\pi/2}(1-\sin^2\theta)\mathrm d(\sin\theta)=\left(\sin\theta-\frac{\sin^3\theta}3\right)\bigg|_{\pi/3}^{\pi/2}=\left(1-\frac13\right)-\left(\frac{\sqrt3}2-\frac{3\sqrt3}{24}\right)=\frac23-\frac{3\sqrt3}8$</div>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>★ 这题最漂亮的地方：换元把"反常"变成了"正常"。</b>换元后区间 $\left[\frac\pi3,\frac\pi2\right]$ 是<u>有限闭区间</u>，被积函数 $\cos^3\theta$ 在其上<u>连续有界</u>——反常性完全消失了。<b>书上专门给了注：在收敛的条件下，换元可实现反常积分与定积分的相互转化。</b><br>
+      <b>为什么反常性会消失</b>：因为 $x\to+\infty$ 对应 $\theta\to\frac\pi2$，而 $\cos^3\theta\to0$ 足够快，把"无穷长的区间"压缩成了有限长。<u>这也解释了为什么这个积分收敛。</u><br>
+      <span class="dock">换限是本题唯一的技术难点</span>：$x=3$ 时 $x-1=2=\sec\theta$，即 $\cos\theta=\frac12$，$\theta=\frac\pi3$ ✔。<b>做定积分换元时，先在草稿纸上把两个限算清楚再动手，别算到一半回头补。</b><br>
+      <b>验算</b>：$\frac23\approx0.667$，$\frac{3\sqrt3}8\approx0.6495$，差 $\approx0.0169\gt0$ ✔ 与被积函数为正相符。
+    </div>
+  </div>
+
+  <div class="eg" id="eg928">
+    <div class="q"><span class="no">基 9.28</span> 计算 $I_n=\displaystyle\int_0^{+\infty}x^n\mathrm e^{-x}\mathrm dx$（$n$ 为非负整数）。<span class="exam">★★★ 递推法 + Γ 函数入口</span></div>
+    <div class="s"><p><span class="lab">答案</span><span class="ans">$I_n=n!$</span> ✔（sympy 已核 $n=0,1,3,5$）</p></div>
+    <div class="think"><span class="th">💭 思路</span>
+      <ol>
+        <li><b>带参数 $n$ ⇒ 建递推</b>（与强 9.9 同一个套路）。取 $u=x^n$（求导降次），$\mathrm dv=\mathrm e^{-x}\mathrm dx$。</li>
+        <li><b>反常积分的分部积分，边界项要取极限</b>：$-x^n\mathrm e^{-x}\big|_0^{+\infty}$，上限处是 $\frac\infty\infty$ 型，要说明 $\lim_{x\to+\infty}x^n\mathrm e^{-x}=0$（指数压幂，第 1 章结论）。</li>
+        <li>得 $I_n=nI_{n-1}$，降到 $I_0=\int_0^{+\infty}\mathrm e^{-x}\mathrm dx=1$，故 $I_n=n!$。</li>
+        <li><b>这个结果的地位</b>：它就是 $\Gamma(n+1)=n!$，是 Γ 函数的入口。<u>考场上遇到 $\int_0^{+\infty}x^\alpha\mathrm e^{-x^\beta}\mathrm dx$ 型的积分，换元后套 Γ 比硬算快 5 倍。</u></li>
+      </ol>
+    </div>
+    <div class="paper"><span class="phead">✍️ 考场卷面<span class="score">约 10 分</span></span>
+      <div class="step"><b>解</b>　当 $n\ge1$ 时，由分部积分法，
+      $\displaystyle I_n=-\int_0^{+\infty}x^n\mathrm d(\mathrm e^{-x})=\left(-x^n\mathrm e^{-x}\right)\bigg|_0^{+\infty}+n\int_0^{+\infty}x^{n-1}\mathrm e^{-x}\mathrm dx$<span class="pt">⛳ 分部 3分</span></div>
+      <div class="step">其中 $\displaystyle\lim_{x\to+\infty}x^n\mathrm e^{-x}=0$（指数增长快于幂函数），故边界项为 0，<span class="pt">⛳ 边界项取极限并说明 2分</span></div>
+      <div class="step">得递推式 $I_n=nI_{n-1}\ (n=1,2,\cdots)$。　……(1)<span class="pt">⛳ 递推式 2分</span></div>
+      <div class="step">又 $\displaystyle I_0=\int_0^{+\infty}\mathrm e^{-x}\mathrm dx=-\mathrm e^{-x}\bigg|_0^{+\infty}=1$。<span class="pt">⛳ 初值 1分</span></div>
+      <div class="fin">反复使用 (1)：$I_n=nI_{n-1}=n(n-1)I_{n-2}=\cdots=n(n-1)\cdots1\cdot I_0=n!$。<span class="pt">⛳ 结论 2分</span></div>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>★★ Γ 函数（书上作为"注"给出，但值得当公式记）</b>：
+      <div class="fml">$\Gamma(\alpha)=\int_0^{+\infty}x^{\alpha-1}\mathrm e^{-x}\mathrm dx\xlongequal{x=t^2}2\int_0^{+\infty}t^{2\alpha-1}\mathrm e^{-t^2}\mathrm dt\quad(\alpha\gt0)$</div>
+      <b>三条必背性质</b>：① 递推 $\Gamma(\alpha+1)=\alpha\Gamma(\alpha)$（证法与本题完全相同）；② $\Gamma(1)=1$，故 $\boldsymbol{\Gamma(n+1)=n!}$；③ <b>$\Gamma\left(\frac12\right)=\sqrt\pi$</b>（由此 $\Gamma\left(\frac52\right)=\frac32\cdot\frac12\cdot\sqrt\pi=\frac34\sqrt\pi$）。<br>
+      <b>$\Gamma\left(\frac12\right)=\sqrt\pi$ 等价于泊松积分 $\int_0^{+\infty}\mathrm e^{-t^2}\mathrm dt=\frac{\sqrt\pi}2$</b> —— <u>它要到第 14 章（用极坐标算二重积分）才能证明</u>，本章直接用结论。<br>
+      <b>Γ(α) 何时收敛（书上给了完整论证）</b>：拆成 $\int_0^1+\int_1^{+\infty}$。$\int_1^{+\infty}$ 部分对一切 $\alpha$ 都收敛（与 $\frac1{x^2}$ 比较）；$\int_0^1$ 部分等价于 $\int_0^1\frac{\mathrm dx}{x^{1-\alpha}}$，需 $1-\alpha\lt1$ 即 <b>$\alpha\gt0$</b>。<br>
+      <b>📖 费曼的题外话（书上手写长眉批，考研不做研究但很有意思）</b>：费曼最爱"<b>在积分号下求导</b>"这种被数学家认为不严谨的方法。由 $\int_0^{+\infty}\mathrm e^{-ax}\mathrm dx=\frac1a$ 两边对参数 $a$ 反复求导，可得 $\int_0^{+\infty}x^n\mathrm e^{-ax}\mathrm dx=\frac{n!}{a^{n+1}}$，令 $a=1$ 即本题。费曼说：<u>"无论用什么方法，即使是猜法，只有答案对了，才是唯一重要的。"</u>
+    </div>
+  </div>
+
+  <div class="eg" id="eg929">
+    <div class="q"><span class="no">基 9.29</span> 设 $f(x)=\begin{cases}\dfrac{4x^2}{a^3\sqrt\pi}\mathrm e^{-x^2/a^2},&x\gt0\\0,&x\le0\end{cases}$（$a$ 为正常数），则 $\displaystyle\int_0^{+\infty}x^2f(x)\mathrm dx=$ ______<span class="exam">Γ 函数的应用（麦克斯韦速率分布）</span></div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\dfrac32a^2$</span> ✔ sympy 已核</p>
+      <p><span class="lab">解</span>凑 Γ 的第二形式 $\Gamma(\alpha)=2\int_0^{+\infty}t^{2\alpha-1}\mathrm e^{-t^2}\mathrm dt$。令 $t=\frac xa$：</p>
+      <div class="fml">$\displaystyle\int_0^{+\infty}x^2f(x)\mathrm dx=\frac{2a^2}{\sqrt\pi}\cdot2\int_0^{+\infty}\left(\frac xa\right)^{2\cdot\frac52-1}\mathrm e^{-(x/a)^2}\mathrm d\!\left(\frac xa\right)=\frac{2a^2}{\sqrt\pi}\Gamma\!\left(\frac52\right)=\frac{2a^2}{\sqrt\pi}\cdot\frac32\cdot\frac12\cdot\sqrt\pi=\frac32a^2$</div>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>凑 Γ 的动作</b>：看到 $\mathrm e^{-x^2/a^2}$ 就令 $t=\frac xa$，把指数变成 $-t^2$，然后数 $t$ 的幂次：这里被积函数含 $x^2\cdot x^2=x^4$，即 $t^4$，令 $2\alpha-1=4$ 得 $\alpha=\frac52$ ✔<br>
+      <b>$\Gamma\left(\frac52\right)$ 的算法</b>：反复用递推 $\Gamma(\alpha+1)=\alpha\Gamma(\alpha)$ 降到 $\Gamma\left(\frac12\right)=\sqrt\pi$：$\Gamma\left(\frac52\right)=\frac32\Gamma\left(\frac32\right)=\frac32\cdot\frac12\Gamma\left(\frac12\right)=\frac34\sqrt\pi$。<u>再乘上前面的 $\frac{2a^2}{\sqrt\pi}$，$\sqrt\pi$ 恰好约掉</u> —— <b>这就是 Γ 型积分的答案总是干净的原因。</b><br>
+      <b>这个 $f$ 是什么</b>：它是<u>麦克斯韦速率分布密度</u>（物理），$\int_0^{+\infty}f=1$（归一化，我算过 ✔），而 $\int_0^{+\infty}x^2f$ 是<u>速率平方的期望</u>。<b>第 20–22 章（概率论）会以"随机变量的数字特征"的名义再考一遍同样的积分。</b>
+    </div>
+  </div>
+
+  <!-- ================= s12 分段 + 几何法 ================= -->
+  <h2 id="s12"><span class="idx">十二</span>分段函数的积分 · 几何法：两条"不用硬算"的支线<span class="pg">强化 p.102–104</span></h2>
+
+  <div class="zy"><span class="tag">强化题型 · 分段函数积分的三种考法</span>
+    <div class="steps3">
+      <div><b>① 分段函数的<u>不定积分</u></b>分段求原函数，<b>再用连续性把各段的常数粘起来</b>（原函数必可导 ⇒ 必连续）。<br><span style="font-size:.8rem;color:var(--muted)">习 9.9 · 强 9.20</span></div>
+      <div><b>② 分段函数的<u>定积分</u></b>按分段点拆开，各段分别积再相加。<br><span style="font-size:.8rem;color:var(--muted)">习 9.14 · 强 9.21</span></div>
+      <div><b>③ 分段函数的<u>变限积分</u></b>按 $x$ 落在哪一段<b>分情况讨论</b>，注意 $F(x)=\int_a^xf$ 是<u>累加</u>函数（前面各段的积分要累计进来）。<br><span style="font-size:.8rem;color:var(--muted)">习 9.15 · 习 9.17</span></div>
+    </div>
+  </div>
+
+  <div class="eg" id="xt99">
+    <div class="q"><span class="no">习 9.9</span> 求 $\displaystyle\int\max\{1,|x|\}\mathrm dx$。<span class="exam">分段函数的不定积分（★ 调常数保连续）</span></div>
+    <div class="s"><p><span class="lab">答案</span><span class="ans">$\begin{cases}-\frac{x^2}2+C,&x\lt-1\\ x+\frac12+C,&-1\le x\le1\\ \frac{x^2}2+1+C,&x\gt1\end{cases}$</span> ✔</p></div>
+    <div class="think"><span class="th">💭 思路</span>
+      <ol>
+        <li><b>先脱 $\max$</b>：$\max\{1,|x|\}$ 在 $|x|\le1$ 时取 1，$|x|\gt1$ 时取 $|x|$。再脱绝对值得三段。</li>
+        <li><b>判断有没有原函数</b>：$f$ 三段拼起来<u>处处连续</u>（在 $x=\pm1$ 处两侧都等于 1），由第 8 章"连续必有原函数"，$F$ 存在。<b>这句要写，它是后面"调常数"的依据。</b></li>
+        <li><b>分段积分，每段一个待定常数</b> $C_1,C_2,C_3$。</li>
+        <li><b>核心动作：用 $F$ 的连续性把三个常数串起来。</b>在 $x=-1$ 和 $x=1$ 处令左右极限相等，得两个方程，三个常数只剩一个自由度——<u>这正好对应"不定积分只差一个常数"</u>。</li>
+        <li><b>令 $C_1=C$</b>（哪一段设为基准都行），解出 $C_2,C_3$。</li>
+      </ol>
+    </div>
+    <div class="paper"><span class="phead">✍️ 考场卷面<span class="score">约 10 分</span></span>
+      <div class="step"><b>解</b>　设 $f(x)=\max\{1,|x|\}$，则 $f(x)=\begin{cases}-x,&x\lt-1\\1,&-1\le x\le1\\x,&x\gt1\end{cases}$<span class="pt">⛳ 脱 max 与绝对值 2分</span></div>
+      <div class="step">由于 $f$ 在 $(-\infty,+\infty)$ 上连续，故必存在原函数 $F(x)$，且<span class="pt">⛳ 说明原函数存在 1分</span></div>
+      <div class="step">$F(x)=\begin{cases}-\frac{x^2}2+C_1,&x\lt-1\\[2pt] x+C_2,&-1\le x\le1\\[2pt] \frac{x^2}2+C_3,&x\gt1\end{cases}$<span class="pt">⛳ 分段积分 2分</span></div>
+      <div class="step">又 $F$ 在 $(-\infty,+\infty)$ 上处处连续（原函数可导必连续），在 $x=-1$ 与 $x=1$ 处分别有<span class="pt">⛳ 用连续性列方程 2分</span></div>
+      <div class="step">$\begin{cases}-\frac12+C_1=-1+C_2\\[2pt] 1+C_2=\frac12+C_3\end{cases}$　令 $C_1=C$，则 $C_2=\frac12+C$，$C_3=1+C$。<span class="pt">⛳ 解出常数关系 2分</span></div>
+      <div class="fin">故 $\displaystyle\int\max\{1,|x|\}\mathrm dx=\begin{cases}-\frac{x^2}2+C,&x\lt-1\\[2pt] x+\frac12+C,&-1\le x\le1\\[2pt] \frac{x^2}2+1+C,&x\gt1\end{cases}$<span class="pt">⛳ 1分</span></div>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>★ 书上原话（本题的全部要义）：这类问题的关键是分段求出每段上的原函数后，<u>适当调整每一段上的常数使其原函数在分段点处连续</u>。</b><br>
+      <span class="dock">最常见的错（几乎人人踩过一次）</span>：三段各写一个 "$+C$"，以为都是同一个 $C$ 就交卷。<b>那样得到的函数在 $x=\pm1$ 处是断的，根本不是原函数。</b><br>
+      <b>怎么验算</b>：把最终答案在分段点代值：$x=-1$ 处左段给 $-\frac12+C$、中段给 $-1+\frac12+C=-\frac12+C$ ✔；$x=1$ 处中段给 $1+\frac12+C=\frac32+C$、右段给 $\frac12+1+C=\frac32+C$ ✔ 连上了。<br>
+      <b>为什么最后只剩一个 $C$</b>：因为 $f$ 定义在<u>一个区间</u>（整个实轴）上，其原函数族只差一个常数。<b>若 $f$ 的定义域是断开的（如 $\frac1x$），各连通分支上的常数才是独立的</b>——这是第 8 章反复强调的"谈原函数必须指明区间"。
+    </div>
+  </div>
+
+  <div class="eg" id="eg920s">
+    <div class="q"><span class="no">强 9.20</span> 函数 $f(x)=\begin{cases}\frac1{\sqrt{1+x^2}},&x\le0\\(x+1)\cos x,&x\gt0\end{cases}$ 的一个原函数为（　）<br>
+      (A) $\begin{cases}\ln(\sqrt{1+x^2}-x),&x\le0\\(x+1)\cos x-\sin x,&x\gt0\end{cases}$　(B) $\begin{cases}\ln(\sqrt{1+x^2}-x)+1,&x\le0\\(x+1)\cos x-\sin x,&x\gt0\end{cases}$<br>
+      (C) $\begin{cases}\ln(\sqrt{1+x^2}+x),&x\le0\\(x+1)\sin x+\cos x,&x\gt0\end{cases}$　(D) $\begin{cases}\ln(\sqrt{1+x^2}+x)+1,&x\le0\\(x+1)\sin x+\cos x,&x\gt0\end{cases}$</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">(D)</span> ✔（sympy 已在 $x=\pm2,\pm0.5$ 四点验证求导与连续性）</p>
+      <p><span class="lab">解</span><b>正着做（比逐个验选项快）</b>：</p>
+      <p>$x\gt0$：$\displaystyle\int(x+1)\cos x\mathrm dx=(x+1)\sin x-\int\sin x\mathrm dx=(x+1)\sin x+\cos x+C_1$ ⇒ <b>排除 (A)(B)</b></p>
+      <p>$x\le0$：$\displaystyle\int\frac{\mathrm dx}{\sqrt{1+x^2}}=\ln(\sqrt{1+x^2}+x)+C_2$</p>
+      <p>连续性：$\displaystyle\lim_{x\to0^+}F=0+1+C_1=1+C_1$，$\displaystyle\lim_{x\to0^-}F=\ln1+C_2=C_2$，令相等得 $C_2=1+C_1$。取 $C_1=0$ 则 $C_2=1$ ⇒ <b>选 (D)</b>。</p>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>与第 8 章基 8.2 是同一道题</b>（两本书都收了），但<u>这里的做法不同</u>：第 8 章用"先筛连续再验求导"（选择题的技巧），本章用"正着积出来"（计算题的功夫）。<b>两种都要会：填空/选择用筛，解答题用算。</b><br>
+      <b>$\int\frac{\mathrm dx}{\sqrt{1+x^2}}=\ln(x+\sqrt{1+x^2})+C$ 是<a href="#s1">§1 公式 ⑦</a></b>，不是 $\ln(\sqrt{1+x^2}-x)$。<u>(A)(B) 就是拿这个错项来骗人的</u>——注意 $\ln(\sqrt{1+x^2}-x)=-\ln(\sqrt{1+x^2}+x)$（分子有理化可得），<b>差一个负号，求导后符号就反了。</b><br>
+      <span class="dock">选 (C) 的人</span>是漏了调常数：$F$ 在 $x=0$ 处不连续。<b>本题的四个选项恰好把"求导错""常数错"两类错误各配了一对，是道好题。</b>
+    </div>
+  </div>
+
+  <div class="eg" id="eg921s">
+    <div class="q"><span class="no">强 9.21</span> 设 $f(x)=\begin{cases}\mathrm e^{-x},&x\ge0\\1+x^2,&x\lt0\end{cases}$，则 $\displaystyle\int_{-2}^2f(x-1)\mathrm dx=$ ______</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$13-\mathrm e^{-1}$</span> ✔ sympy 已核</p>
+      <p><span class="lab">解</span><b>先平移换元，把分段点归位</b>：令 $x-1=t$，则 $x:-2\to2$ 对应 $t:-3\to1$，</p>
+      <div class="fml">$\displaystyle\int_{-2}^2f(x-1)\mathrm dx=\int_{-3}^1f(t)\mathrm dt=\int_{-3}^0(1+t^2)\mathrm dt+\int_0^1\mathrm e^{-t}\mathrm dt=\left(t+\frac{t^3}3\right)\bigg|_{-3}^0+\left(-\mathrm e^{-t}\right)\bigg|_0^1$</div>
+      <div class="fml">$=0-(-3-9)+(-\mathrm e^{-1}+1)=12+1-\mathrm e^{-1}=13-\mathrm e^{-1}$</div>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>★ 见到 $f(x-a)$、$f(2x)$ 这类"变量被动过"的分段函数积分，第一动作永远是换元把它还原成 $f(t)$。</b>直接按 $x$ 分段（判断 $x-1\ge0$ 即 $x\ge1$）也能做，但<u>容易把分段点算错</u>。<br>
+      <b>换元后分段点自动归到 $t=0$</b>，与 $f$ 的定义完全对齐，不用再动脑。<br>
+      <span class="dock">算术上最容易错的一步</span>：$\left(t+\frac{t^3}3\right)\big|_{-3}^0=0-\left(-3+\frac{-27}3\right)=0-(-3-9)=12$。<b>$(-3)^3=-27$ 的负号 + 减号，两个负号连着。</b>
+    </div>
+  </div>
+
+  <div class="key"><span class="tag">必记 · 十、几何法：两个"看图就能写答案"的式子</span>
+    <div class="fml">$\text{(1)}\ \int_{-a}^a\sqrt{a^2-x^2}\mathrm dx=\frac{\pi a^2}2\qquad\text{(半径 }a\text{ 的上半圆面积)}$</div>
+    <div class="fml">$\text{(2)}\ \int_0^a\sqrt{x(2a-x)}\mathrm dx=\int_0^a\sqrt{a^2-(x-a)^2}\mathrm dx=\frac{\pi a^2}4\qquad\text{(四分之一圆)}$</div>
+    <p>同理 $\displaystyle\int_0^{2a}\sqrt{x(2a-x)}\mathrm dx=\frac{\pi a^2}2$，$\displaystyle\int_a^{2a}\sqrt{x(2a-x)}\mathrm dx=\frac{\pi a^2}4$。（全部 sympy 已核 ✔）</p>
+  </div>
+
+  <figure class="fig">
+    <svg viewBox="0 0 460 190" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="几何法的圆">
+      <line x1="30" y1="150" x2="430" y2="150" stroke="var(--line)" stroke-width="1.2"/>
+      <line x1="60" y1="20" x2="60" y2="170" stroke="var(--line)" stroke-width="1.2"/>
+      <path d="M60,150 A115,115 0 0 1 290,150" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="2"/>
+      <line x1="175" y1="150" x2="175" y2="35" stroke="var(--red)" stroke-dasharray="4 3" stroke-width="1.3"/>
+      <circle cx="175" cy="150" r="2.6" fill="var(--red)"/>
+      <text x="171" y="166" font-size="11" fill="var(--red)">a</text>
+      <text x="284" y="166" font-size="11" fill="var(--ink)">2a</text>
+      <text x="54" y="166" font-size="11" fill="var(--muted)">O</text>
+      <text x="115" y="120" font-size="11" fill="var(--accent)" font-weight="700">πa²/4</text>
+      <text x="215" y="120" font-size="11" fill="var(--accent)" font-weight="700">πa²/4</text>
+      <text x="300" y="60" font-size="11.5" fill="var(--ink)">$y=\sqrt{x(2a-x)}$</text>
+      <text x="300" y="82" font-size="10.5" fill="var(--muted)">$\Leftrightarrow(x-a)^2+y^2=a^2,\ y\ge0$</text>
+      <text x="300" y="104" font-size="10.5" fill="var(--muted)">圆心 $(a,0)$，半径 $a$ 的上半圆</text>
+    </svg>
+    <figcaption><b>看出"它其实是个圆"是本支线的全部功夫</b>：$y=\sqrt{x(2a-x)}$ 两边平方移项即 $(x-a)^2+y^2=a^2$。<u>被积函数只要是 $\sqrt{二次式}$ 且开口向下（$x^2$ 系数为负），就是半圆或半椭圆</u>，直接数面积。</figcaption>
+  </figure>
+
+  <div class="eg" id="eg922s">
+    <div class="q"><span class="no">强 9.22</span> $\displaystyle\int_0^1\sqrt{2x-x^2}\,\mathrm dx=$ ______</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\dfrac\pi4$</span> ✔</p>
+      <p>$2x-x^2=x(2-x)$，即上式的 $a=1$ 情形，积分区间恰是 $[0,a]$，故 $=\frac{\pi\cdot1^2}4=\frac\pi4$。</p>
+      <p><b>对比硬算</b>：配方 $\sqrt{1-(x-1)^2}$ → 令 $x-1=\sin t$ → 换限 $t:-\frac\pi2\to0$ → $\int_{-\pi/2}^0\cos^2t\mathrm dt=\frac\pi4$。<u>三步 vs 一眼。</u></p>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>几何法的适用范围比想象的窄</b>：只有<u>被积函数是圆/椭圆的上半支</u>且<u>积分区间是完整的四分之一或一半</u>时才能秒杀。区间不完整（如 $\int_0^{1/2}\sqrt{2x-x^2}$）就只能老实算。<br>
+      <b>但它的"验算价值"很高</b>：算完一个 $\sqrt{二次式}$ 的定积分，心里估一下对应圆的面积，<u>量级不对就说明算错了</u>。<br>
+      <b>同族的白捡分</b>：$\int_{-1}^1\sqrt{1-x^2}\mathrm dx=\frac\pi2$、$\int_0^1\sqrt{1-x^2}\mathrm dx=\frac\pi4$（<a href="#eg93">强 9.2</a> 的眉批例题②）、$\int_{-a}^a\frac{b}a\sqrt{a^2-x^2}\mathrm dx=\frac{\pi ab}2$（半椭圆）。<b>最后一条在第 10 章求椭圆面积时直接用。</b>
+    </div>
+  </div>
+
+  <!-- ================= s13 剩余题目一网打尽 ================= -->
+  <h2 id="s13"><span class="idx">十三</span>零遗漏收尾：剩下的 22 道题<span class="pg">基础习题 p.256–262 · 强化 p.91–99</span></h2>
+
+  <div class="mine"><span class="tag">补讲 · 这一节的作用</span>
+    <p>前面十二节按<b>方法</b>组织，把 46 道有"新东西"的题讲透了。剩下这 22 道是<b>同类型的再练</b>——放在这里集中给出<u>题面 + 答案 + 一句话要点</u>，保证 68 题零遗漏。<b>做题时应该先自己做，再看这里的要点核对思路。</b></p>
+  </div>
+
+  <h3>A · 基础30讲例题（补 2 道）</h3>
+
+  <div class="eg" id="eg911">
+    <div class="q"><span class="no">基 9.11</span> 设 $f\left(x+\dfrac1x\right)=\dfrac{x+x^3}{1+x^4}$，则 $\displaystyle\int_2^{2\sqrt2}f(x)\mathrm dx=$ ______</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\dfrac12\ln3$</span> ✔</p>
+      <p><span class="lab">要点</span>先求 $f$：$\dfrac{x+x^3}{1+x^4}=\dfrac{x(1+x^2)}{1+x^4}$，分子分母同除 $x^2$ 得 $\dfrac{\frac1x+x}{\frac1{x^2}+x^2}=\dfrac{u}{u^2-2}$（其中 $u=x+\frac1x$，用了 $x^2+\frac1{x^2}=u^2-2$）。故当 $x\ge2$ 时 $f(x)=\dfrac x{x^2-2}$，</p>
+      <div class="fml">$\displaystyle\int_2^{2\sqrt2}\frac x{x^2-2}\mathrm dx=\frac12\ln(x^2-2)\bigg|_2^{2\sqrt2}=\frac12(\ln6-\ln2)=\frac12\ln3$</div>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>"凑 $x+\frac1x$"的标准动作</b>：分子分母同除 $x^{\text{中间次数}}$，然后用 $x^2+\frac1{x^2}=\left(x+\frac1x\right)^2-2$。<u>这是第 1 章例 1.1 的老题，本章直接引用</u>（书上写"由例 1.1 知"）。<br>
+      <b>为什么要写"当 $x\ge2$ 时"</b>：因为 $u=x+\frac1x$ 的值域是 $|u|\ge2$，<u>$f$ 的定义域本来就只有 $|x|\ge2$</u>。积分区间 $[2,2\sqrt2]$ 恰在其中 ✔ <span class="dock">不交代定义域是丢分点</span>。
+    </div>
+  </div>
+
+  <div class="eg" id="eg913">
+    <div class="q"><span class="no">基 9.13</span> 求 $\displaystyle\int_{-1}^1x^2\sqrt{1-x^2}\,\mathrm dx$。</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\dfrac\pi8$</span> ✔</p>
+      <p><span class="lab">要点</span>三个结论连用：<b>① 偶倍</b> → $2\int_0^1$；<b>② 三角代换</b> $x=\sin t$ → $2\int_0^{\pi/2}\sin^2t\cos^2t\mathrm dt$；<b>③ 点火公式</b>（把 $\cos^2=1-\sin^2$ 拆开）：</p>
+      <div class="fml">$2\left(\int_0^{\pi/2}\sin^2t\mathrm dt-\int_0^{\pi/2}\sin^4t\mathrm dt\right)=2\left(\frac12\cdot\frac\pi2-\frac34\cdot\frac12\cdot\frac\pi2\right)=2\cdot\frac\pi2\left(\frac12-\frac38\right)=\frac\pi8$</div>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>换元时上下限的选取有讲究（书上专门写了注）</b>：$x=\sin t$ 时，$x=0$ 可取 $t=0,\pm\pi,\pm2\pi,\cdots$，$x=1$ 可取 $t=\frac\pi2,\frac\pi2\pm2\pi,\cdots$，<u>多种组合都满足定理条件</u>。但 $\sqrt{1-x^2}=|\cos t|$，<b>不同组合中绝对值的处理有简有繁</b>——取 $t\in\left[0,\frac\pi2\right]$ 时 $\cos t\ge0$，绝对值直接去掉，最省事。<b>书上原话："不要自找麻烦。"</b><br>
+      <b>$\sin^2t\cos^2t$ 的两种处理</b>：① 拆成 $\sin^2-\sin^4$ 用点火（本题）；② 用倍角 $=\frac14\sin^22t$ 再降幂。<u>前者更快，因为点火公式是现成的。</u>
+    </div>
+  </div>
+
+  <h3>B · 基础30讲课后习题（补 15 道）</h3>
+
+  <div class="eg" id="xt91">
+    <div class="q"><span class="no">习 9.1</span> 若 $\displaystyle\int xf(x)\mathrm dx=\arcsin x+C$，则 $\displaystyle\int\frac{\mathrm dx}{f(x)}=$ ______<br>
+      <span class="no">习 9.2</span> 若 $f(x)=\dfrac1{1+x^2}+x^3\displaystyle\int_0^1f(x)\mathrm dx$，则 $\displaystyle\int_0^1f(x)\mathrm dx=$ ______<br>
+      <span class="no">习 9.3</span> $\displaystyle\lim_{x\to+\infty}\frac{\int_\mathrm e^x\left(1-\frac1t\right)^t\mathrm e^{\alpha t}\mathrm dt}{\mathrm e^{\alpha x}}=$ ______<br>
+      <span class="no">习 9.4</span> 设 $f(x)$ 的一个原函数为 $\ln^2x$，则 $\displaystyle\int xf'(x)\mathrm dx=$ ______</div>
+    <div class="s">
+      <p><span class="lab">9.1</span><span class="ans">$-\dfrac13(1-x^2)^{3/2}+C$</span> ✔　<b>两端求导</b>得 $xf(x)=\frac1{\sqrt{1-x^2}}$，故 $\frac1{f(x)}=x\sqrt{1-x^2}$，凑微分即得。</p>
+      <p><span class="lab">9.2</span><span class="ans">$\dfrac\pi3$</span> ✔　<b>$\int_0^1f(x)\mathrm dx$ 是一个常数</b>，记作 $A$。两端在 $[0,1]$ 上积分：$A=\frac\pi4+A\int_0^1x^3\mathrm dx=\frac\pi4+\frac A4$，解得 $A=\frac\pi3$。</p>
+      <p><span class="lab">9.3</span><span class="ans">$\dfrac1{\mathrm e^2}$</span> ✔　$\frac\infty\infty$ 用洛必达：分子求导得 $\left(1-\frac1x\right)^x\mathrm e^{\alpha x}$，分母得 $\alpha\mathrm e^{\alpha x}$，约掉 $\mathrm e^{\alpha x}$ 后极限为 $\frac{\mathrm e^{-1}}{\mathrm e}\cdot\frac1\alpha$……<u>书上直接给出 $\frac{\mathrm e^{-1}}{\mathrm e}=\mathrm e^{-2}$</u>（对应 $\alpha=1$ 的写法）。关键是 $\lim\left(1-\frac1x\right)^x=\mathrm e^{-1}$。</p>
+      <p><span class="lab">9.4</span><span class="ans">$2\ln x-\ln^2x+C$</span> ✔　被积函数含 $f'$ → 分部：$\int x\mathrm d[f(x)]=xf(x)-\int f=xf(x)-\ln^2x$，其中 $f(x)=(\ln^2x)'=\frac{2\ln x}x$，代入即得。</p>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>习 9.1 / 9.4 是同一类："已知积分（或原函数），求另一个积分"，入口都是<u>两端求导</u>。</b>$\int f=F+C\Rightarrow f=F'$。<br>
+      <b>习 9.2 的心法（考过很多次）</b>：<u>定积分 $\int_a^bf$ 是一个数，不是函数</u>。见到 $f$ 的表达式里含 $\int_0^1f$，就<b>设它为 $A$，两端积分解方程</b>。<span class="dock">把 $\int_0^1f(x)\mathrm dx$ 当成 $x$ 的函数是根本性错误</span>。<br>
+      <b>习 9.3 的坑</b>：$\left(1-\frac1x\right)^x\to\mathrm e^{-1}$ 而不是 $\mathrm e$。<u>$\left(1+\frac ax\right)^x\to\mathrm e^a$，这里 $a=-1$。</u>
+    </div>
+  </div>
+
+  <div class="eg" id="xt95">
+    <div class="q"><span class="no">习 9.5</span> $\displaystyle\int\frac{\arcsin\sqrt x}{\sqrt x}\mathrm dx=$ ______　　<span class="no">习 9.6</span> $\displaystyle\int_2^{+\infty}\frac{\mathrm dx}{(x+7)\sqrt{x-2}}=$ ______<br>
+      <span class="no">习 9.7</span> 计算 $\displaystyle\int\arcsin\sqrt{\frac x{a+x}}\mathrm dx$（$a\gt0$）　　<span class="no">习 9.8</span> 求 $\displaystyle\int\frac{\arctan\mathrm e^x}{\mathrm e^x}\mathrm dx$</div>
+    <div class="s">
+      <p><span class="lab">9.5</span><span class="ans">$2\sqrt x\arcsin\sqrt x+2\sqrt{1-x}+C$</span> ✔　令 $\sqrt x=t$（去根号），化为 $2\int\arcsin t\,\mathrm dt=2\left(t\arcsin t+\sqrt{1-t^2}\right)+C$。</p>
+      <p><span class="lab">9.6</span><span class="ans">$\dfrac\pi3$</span> ✔　令 $t=\sqrt{x-2}$（根式代换），$x=t^2+2$，$\mathrm dx=2t\mathrm dt$，换限 $t:0\to+\infty$：$\displaystyle\int_0^{+\infty}\frac{2t\mathrm dt}{(t^2+9)t}=\frac23\arctan\frac t3\bigg|_0^{+\infty}=\frac23\cdot\frac\pi2=\frac\pi3$。</p>
+      <p><span class="lab">9.7</span><span class="ans">$(a+x)\arcsin\sqrt{\dfrac x{a+x}}-\sqrt{ax}+C$</span> ✔　令 $\arcsin\sqrt{\frac x{a+x}}=t$，则 $\frac x{a+x}=\sin^2t$，反解 $x=\frac{a\sin^2t}{1-\sin^2t}=a\tan^2t$，于是 $\int t\,\mathrm d(a\tan^2t)=at\tan^2t-a\int\tan^2t\mathrm dt=at\tan^2t+at-a\tan t+C$。</p>
+      <p><span class="lab">9.8</span><span class="ans">$-\mathrm e^{-x}\arctan\mathrm e^x+x-\dfrac12\ln(1+\mathrm e^{2x})+C$</span> ✔　<b>两法</b>：法一直接分部（$\frac{\mathrm dx}{\mathrm e^x}=\mathrm d(-\mathrm e^{-x})$）；法二令 $\mathrm e^x=t$ 化为 $\int\frac{\arctan t}{t^2}\mathrm dt$ 再分部。</p>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>习 9.7 是"复杂反三角"的标准打法：<u>把整个反三角函数令为 $t$</u></b>（第 ⑤ 类代换），反解出 $x=a\tan^2t$ 后，$\mathrm dx$ 自动配好。<u>这比先换 $\sqrt{\frac x{a+x}}=s$ 再换 $\arcsin$ 快一倍。</u><br>
+      <b>末步回代</b>：$\tan^2t=\frac xa$，$\tan t=\sqrt{\frac xa}$，故 $at\tan^2t+at=at(\tan^2t+1)=at\sec^2t$……更直接的是 $a\tan^2t\cdot t+at=t(a\tan^2t+a)=t(x+a)$ ✔，$a\tan t=a\sqrt{x/a}=\sqrt{ax}$ ✔<br>
+      <b>习 9.8 两法的取舍</b>：法一少一次换元，但要看出 $\mathrm e^{-x}\mathrm dx=\mathrm d(-\mathrm e^{-x})$；法二思路直白但多一步回代。<u>考场上哪个先想到用哪个，答案一样。</u><br>
+      <b>习 9.6 的换限要写全</b>：$x=2\Rightarrow t=0$；$x\to+\infty\Rightarrow t\to+\infty$。<b>反常积分换元后仍是反常积分，上限处要取极限</b>（$\arctan\frac t3\to\frac\pi2$）。
+    </div>
+  </div>
+
+  <div class="eg" id="xt911">
+    <div class="q"><span class="no">习 9.11</span> 计算 $\displaystyle\int_{-\pi/4}^{\pi/4}\mathrm e^{x/2}\frac{\cos x-\sin x}{\sqrt{\cos x}}\mathrm dx$　　<span class="no">习 9.12</span> 计算 $I=\displaystyle\int_0^\pi\frac{x\sin x}{1+\cos^2x}\mathrm dx$<br>
+      <span class="no">习 9.13</span> 求 $\displaystyle\int_{-1}^1\frac{x+1}{1+\sqrt[3]{x^2}}\mathrm dx$　　<span class="no">习 9.14</span> 设 $f(x)=\begin{cases}\frac1{1+\sin x},&x\ge0\\\frac1{1+\mathrm e^x},&x\lt0\end{cases}$，求 $\displaystyle\int_{-1}^{\pi/4}f(x)\mathrm dx$</div>
+    <div class="s">
+      <p><span class="lab">9.11</span><span class="ans">$\sqrt[4]8\left(\mathrm e^{\pi/8}-\mathrm e^{-\pi/8}\right)$</span> ✔　<b>积分抵消法</b>：拆成两项，第二项 $-\int\mathrm e^{x/2}\frac{\sin x}{\sqrt{\cos x}}\mathrm dx=2\int\mathrm e^{x/2}\mathrm d(\sqrt{\cos x})$ 分部后<u>吐出的 $-\int\mathrm e^{x/2}\sqrt{\cos x}\mathrm dx$ 与第一项相消</u>，只剩边界项 $2\mathrm e^{x/2}\sqrt{\cos x}\Big|_{-\pi/4}^{\pi/4}$。</p>
+      <p><span class="lab">9.12</span><span class="ans">$\dfrac{\pi^2}4$</span> ✔　<b>区间再现</b>（$x=\pi-t$）得 $I=\frac\pi2\int_0^\pi\frac{\sin t}{1+\cos^2t}\mathrm dt=-\frac\pi2\arctan(\cos t)\Big|_0^\pi=-\frac\pi2\left(-\frac\pi4-\frac\pi4\right)=\frac{\pi^2}4$。</p>
+      <p><span class="lab">9.13</span><span class="ans">$6-\dfrac32\pi$</span> ✔　<b>先拆奇偶</b>：$\frac x{1+\sqrt[3]{x^2}}$ 奇 → 积分为 0；$\frac1{1+\sqrt[3]{x^2}}$ 偶 → $2\int_0^1$。再令 $\sqrt[3]{x^2}=t$（即 $x=t^{3/2}$，$\mathrm dx=\frac32\sqrt t\mathrm dt$），得 $3\int_0^1\frac{\sqrt t}{1+t}\mathrm dt\xlongequal{\sqrt t=u}6\int_0^1\frac{u^2}{1+u^2}\mathrm du=6(1-\arctan1)=6-\frac{3\pi}2$。</p>
+      <p><span class="lab">9.14</span><span class="ans">$-\ln2+\ln(1+\mathrm e)+2-\sqrt2$</span> ✔　按 $x=0$ 拆两段：左段令 $\mathrm e^x=t$ 化为 $\int\left(\frac1t-\frac1{1+t}\right)\mathrm dt$；右段用 $\frac1{1+\sin x}=\frac{1-\sin x}{\cos^2x}=\sec^2x-\frac{\sin x}{\cos^2x}$。</p>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>习 9.12 是 <a href="#eg918">基 9.18</a> 模型的直接应用</b>（$f(u)=\frac u{1+(1-u^2)}$…… 实际上是 $\int_0^\pi xf(\sin x)$ 的变体），<u>但更快的路是直接区间再现</u>。<b>$\int_0^\pi\frac{x\sin x}{1+\cos^2x}\mathrm dx=\frac{\pi^2}4$ 这个结果本身要记住，是真题原题。</b><br>
+      <b>习 9.13 的教训（书上专门写了注）</b>：<span style="color:var(--red)"><b>"可见仔细审题，利用积分性质，会给解题带来方便。"</b></span>不审题直接换元 $\sqrt[3]{x^2}=t$，会因为 $x=\pm\sqrt{t^3}$ <u>在 $[-1,0]$ 和 $[0,1]$ 上取不同分支</u>而被迫分两段做；先拆奇偶就绕开了。<br>
+      <b>习 9.11 的"抵消"要看清是哪两项</b>：$\int\mathrm e^{x/2}\sqrt{\cos x}\mathrm dx$ 出现两次且符号相反。<u>它本身是算不出来的（$\sqrt{\cos x}$ 无初等原函数），题目的全部设计就是让它消失。</u><b>见到"算不出来的东西"，就该想到它会被消掉。</b><br>
+      <b>习 9.14 的 $\frac1{1+\sin x}$ 处理</b>：分子分母同乘 $1-\sin x$（<u>三角有理式的"共轭有理化"</u>），分母变 $\cos^2x$。这一招在 $\frac1{1\pm\sin x}$、$\frac1{1\pm\cos x}$ 上通用。
+    </div>
+  </div>
+
+  <div class="eg" id="xt915">
+    <div class="q"><span class="no">习 9.15</span> 设 $x\ge-1$，求 $\displaystyle\int_{-1}^x(1-|t|)\mathrm dt$　　<span class="no">习 9.16</span> 求连续函数 $f(x)$，使它满足 $\displaystyle\int_0^1f(tx)\mathrm dt=f(x)+x\sin x$<br>
+      <span class="no">习 9.17</span> 设 $f(x)=\displaystyle\int_0^1t|t-x|\mathrm dt$，求 $f'(x)$</div>
+    <div class="s">
+      <p><span class="lab">9.15</span><span class="ans">$\begin{cases}\frac12(1+x)^2,&-1\le x\lt0\\1-\frac12(1-x)^2,&x\ge0\end{cases}$</span> ✔　<b>分段函数的变限积分</b>：$x\lt0$ 时全在 $t\lt0$ 段（$1-|t|=1+t$）；$x\ge0$ 时要<u>累加</u>前一段：$\int_{-1}^0(1+t)\mathrm dt+\int_0^x(1-t)\mathrm dt$。</p>
+      <p><span class="lab">9.16</span><span class="ans">$f(x)=\cos x-x\sin x+C$</span> ✔　<b>被积函数含 $x$ → 必须换元</b>：令 $tx=u$（$x\ne0$ 视为常数），得 $\frac1x\int_0^xf(u)\mathrm du=f(x)+x\sin x$，即 $\int_0^xf(u)\mathrm du=xf(x)+x^2\sin x$。两端求导得 $f=f+xf'+2x\sin x+x^2\cos x$，即 $f'(x)=-2\sin x-x\cos x$，积分即得。</p>
+      <p><span class="lab">9.17</span><span class="ans">$f'(x)=\begin{cases}-\frac12,&x\lt0\\x^2-\frac12,&0\le x\lt1\\\frac12,&x\ge1\end{cases}$</span> ✔　<b>拆分求导型 · 异区间</b>（$t\in[0,1]$，$x\in\mathbb R$）：分 $x\le0$、$0\lt x\le1$、$x\gt1$ 三段，分段点 $x=0,1$ 处用<u>导数定义</u>验左右导数（都相等）。</p>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>习 9.16 的书上注：<span style="color:var(--red)">"不要把 $\int_0^1f(tx)\mathrm dt$ 误认为定积分。"</span></b>——它的<u>积分变量是 $t$，$x$ 是参数</u>，积完是 $x$ 的函数。<b>这正是 <a href="#s9">§9</a> 那条"求导变量 vs 积分变量"的铁律。</b><br>
+      <b>习 9.16 的收尾</b>：约掉 $x$ 时排除了 $x=0$，最后要补一句"当 $x=0$ 时上式 $f(0)$ 仍满足题干"。<u>与强 9.16 用右连续定常数是同一个动作。</u><br>
+      <b>习 9.17 与强 9.18 同型</b>（都是 $|t-\square|$ 型的异区间），但这题的 $x$ 可以取负，<b>要分三段而不是两段</b>。<u>算完务必验分段点处 $f$ 连续、$f'$ 左右相等。</u><br>
+      <b>习 9.15 的"累加"含义</b>：$F(x)=\int_a^xf$ 是从 $a$ 一路积到 $x$ 的<u>累计量</u>，$x$ 跨过分段点后，<b>前面各段的贡献要全部带上</b>。写成 $\int_{-1}^0+\int_0^x$ 而不是只写 $\int_0^x$。这是分段变限积分最常见的漏项。
+    </div>
+  </div>
+
+  <h3>C · 高数18讲例题（补 5 道）</h3>
+
+  <div class="eg" id="eg91s">
+    <div class="q"><span class="no">强 9.1</span> 求 $\displaystyle\int\frac x{x^2+2x+2}\mathrm dx$　　<span class="no">强 9.5</span> 设 $a_n=\displaystyle\int_0^{n\pi}x|\sin x|\mathrm dx$，求 $a_n$<br>
+      <span class="no">强 9.6</span> 求 $\displaystyle\int\frac{x\mathrm e^x}{\sqrt{\mathrm e^x+1}}\mathrm dx$　　<span class="no">强 9.7</span> 求 $\displaystyle\int\mathrm e^x\sin x\,\mathrm dx$ 与 $\displaystyle\int\sqrt{1+x^2}\,\mathrm dx$<br>
+      <span class="no">强 9.15</span> 设 $\displaystyle\int_1^{+\infty}\frac a{x(2x+a)}\mathrm dx=\ln2$，则 $a=$ ______</div>
+    <div class="s">
+      <p><span class="lab">强 9.1</span><span class="ans">$\dfrac12\ln(x^2+2x+2)-\arctan(x+1)+C$</span> ✔　<b>恒等变形 + 凑微分</b>：$x=\frac12(2x+2)-1$，前半凑 $\mathrm d(x^2+2x+2)$，后半配方 $\frac1{1+(x+1)^2}$。<u>这是 §5 规则 ③ 模板的最简形态。</u></p>
+      <p><span class="lab">强 9.5</span><span class="ans">$a_n=n^2\pi$</span> ✔（sympy 已核 $n=1,2,3,4$）　<b>区间再现 + 周期</b>两连击：<br>
+      ① 令 $x=n\pi-t$（区间再现）得 $\displaystyle\int_0^{n\pi}x|\sin x|\mathrm dx=\frac{n\pi}2\int_0^{n\pi}|\sin x|\mathrm dx$；<br>
+      ② $|\sin x|$ 以 $\pi$ 为周期，故 $\displaystyle\int_0^{n\pi}|\sin x|\mathrm dx=n\int_0^\pi\sin x\mathrm dx=2n$；<br>
+      ③ 合得 $a_n=\frac{n\pi}2\cdot2n=n^2\pi$。</p>
+      <p><span class="lab">强 9.6</span><span class="ans">$2x\sqrt{\mathrm e^x+1}-4\sqrt{\mathrm e^x+1}-2\ln\dfrac{\sqrt{\mathrm e^x+1}-1}{\sqrt{\mathrm e^x+1}+1}+C$</span> ✔　先分部（$\frac{\mathrm e^x\mathrm dx}{\sqrt{\mathrm e^x+1}}=\mathrm d(2\sqrt{\mathrm e^x+1})$），再对 $\int\sqrt{\mathrm e^x+1}\mathrm dx$ 用根式代换。</p>
+      <p><span class="lab">强 9.7</span><span class="ans">$\dfrac12\mathrm e^x(\sin x-\cos x)+C$；$\dfrac x2\sqrt{1+x^2}+\dfrac12\ln(x+\sqrt{x^2+1})+C$</span> ✔　<b>两题都是积分再现法</b>：分部两次（或一次）后右端<u>重新出现原积分 $I$</u>，移项解出。</p>
+      <p><span class="lab">强 9.15</span><span class="ans">$a=2$</span> ✔　拆项 $\frac a{x(2x+a)}=\frac1x-\frac2{2x+a}$，得 $\ln\left|\frac x{2x+a}\right|\Big|_1^{+\infty}=-\ln2+\ln|2+a|=\ln2$，解出 $a=2$ 或 $a=-6$。<b>$a=-6$ 时被积函数在 $x=3$ 处有瑕点，原积分发散，故舍去。</b></p>
+    </div>
+    <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>★ 强 9.15 的"验根"是本题唯一的采分点</b>：解出两个 $a$ 后<b>必须回代验证积分是否真的收敛</b>。$a=-6$ 时 $\frac{-6}{x(2x-6)}$ 在 $x=3$ 处爆炸，而 $3\in(1,+\infty)$ —— <u>积分区间内有瑕点，发散</u>。<span class="dock">直接写"$a=2$ 或 $-6$"就是错答案</span>。<br>
+      <b>这类"算出来还要验"的题的通用清单</b>：① 反常积分定参数 → 验收敛；② 换元定参数 → 验值域；③ 分段函数定参数 → 验连续。<br>
+      <b>强 9.6 vs 基 9.4 的对照（放一起记）</b>：$\sqrt{\mathrm e^x\boldsymbol{+}1}$ 换元后是 $\int\frac{2t^2}{t^2-1}\mathrm dt$ → 出 <b>$\ln$</b>；$\sqrt{\mathrm e^x\boldsymbol{-}1}$ 换元后是 $\int\frac{2u^2}{1+u^2}\mathrm du$ → 出 <b>$\arctan$</b>。<u>题面只差一个符号，答案换了个函数族。</u><br>
+      <b>强 9.5 的第 ② 步细节</b>：$\int_0^\pi|\sin x|\mathrm dx=\int_0^\pi\sin x\mathrm dx=2$（$[0,\pi]$ 上 $\sin\ge0$，绝对值可去）。<u>$n$ 个周期就是 $2n$。</u>
+    </div>
+  </div>
+
+  <!-- ================= 收官 ================= -->
+  <h2 id="end"><span class="idx">收官</span>这一章练完，手上要留下什么</h2>
+
+  <div class="key"><span class="tag">必记 · 一页纸总结</span>
+    <ol style="margin:6px 0 0 20px">
+      <li><b>十支线的顺序就是解题顺序</b>：恒等变形 → 凑微分 → 换元 → 分部 → 有理函数 → 三角有理式 → 牛莱算值 → 变限求导 → 分段 → 几何。<u>越靠前越该先试。</u></li>
+      <li><b>换元的一句话判据</b>：根号里<u>有</u>平方项走三角代换，<u>没有</u>平方项令根式 $=t$。</li>
+      <li><b>分部的四个子类</b>：常规 / 再现（建方程）/ 抵消（相消）/ 递推（降 $n$）。<u>后三个都是"制造出自己"。</u></li>
+      <li><b>定积分动手前必扫七大结论</b>：奇零偶倍、周期平移、区间再现、点火公式。<u>能白捡就别硬算。</u></li>
+      <li><b>变限积分求导的铁律</b>：被积函数里<u>不许有求导变量 $x$</u>，有就先换元或拆区间把它请出去。</li>
+      <li><b>拆分求导型要先画两条数轴</b>：$t$ 的范围与 $x$ 的范围重合 → 不讨论；不重合 → 必须分段。</li>
+      <li><b>牛莱公式的前提是"原函数在整个闭区间上存在"</b>。原函数里有 $\tan/\cot/\sec/\csc/\tan\frac x2$ 而区间跨过其间断点时，<u>必须拆区间 + 取单侧极限</u>。</li>
+      <li><b>分段函数求不定积分，末了要调常数保连续</b>；分段函数求变限积分，别忘<u>累加</u>前面各段。</li>
+      <li><b>反常积分先找奇点</b>（端点？内部？），内部瑕点必须拆；定参数题<u>算完要验收敛</u>。</li>
+      <li><b>$\Gamma(n+1)=n!$、$\Gamma\left(\frac12\right)=\sqrt\pi$</b> 能省大量时间，概率论还会再用。</li>
+    </ol>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 本章在整本书里的位置</span>
+    <p>这一章是<b>后面九章的地基</b>：</p>
+    <div class="gridwrap"><table class="dense">
+      <tr><th>后续章节</th><th>用到本章的什么</th></tr>
+      <tr><td>第 10 章 积分的几何应用</td><td>面积、弧长、旋转体体积的每一道题<u>最后一步都是本章的积分</u>；几何法在这里反过来用</td></tr>
+      <tr><td>第 11 章 积分等式与不等式</td><td>区间再现、周期平移、变限积分求导（构造辅助函数）</td></tr>
+      <tr><td>第 12 章 积分的物理应用</td><td>变力做功、压力、形心 —— 全是定积分计算</td></tr>
+      <tr><td>第 14 章 二重积分</td><td><b>换序型</b>（强 9.19 已经见过）、极坐标下的 $\int_0^{\pi/2}\sin^n$ 点火</td></tr>
+      <tr><td>第 15 章 微分方程</td><td>一阶线性方程 $y=\mathrm e^{-\int P}\left(\int Q\mathrm e^{\int P}\mathrm dx+C\right)$ —— <u>两层积分都要算</u>（基 9.2 就是这么来的）</td></tr>
+      <tr><td>第 16 章 无穷级数</td><td>傅里叶系数 $\int_{-\pi}^\pi f\cos nx\,\mathrm dx$（强 9.9 的注给了两条现成公式）</td></tr>
+      <tr><td>第 18 章 曲线曲面积分</td><td>参数化之后全部化为定积分</td></tr>
+      <tr><td>概率论 第 20–22 章</td><td>Γ 函数（正态、指数、卡方分布的归一化与数字特征）</td></tr>
+    </table></div>
+    <p><b>所以本章的练习量应该是全书最大的。</b>如果只能刷一章的题，刷这章。</p>
+  </div>
+
+  <div class="dolinks">
+    <div class="t">去做题（分章 PDF）</div>
+    <a href="../../../张宇系列_分章易识别版/高等数学/09_一元函数积分学的计算/高数_第09章_1000题_基础_题目.pdf">1000题 · 基础篇（题目）</a>
+    <a href="../../../张宇系列_分章易识别版/高等数学/09_一元函数积分学的计算/高数_第09章_1000题_基础_解析.pdf">基础篇解析</a>
+    <a href="../../../张宇系列_分章易识别版/高等数学/09_一元函数积分学的计算/高数_第09章_1000题_强化_题目.pdf">1000题 · 强化篇（题目）</a>
+    <a href="../../../张宇系列_分章易识别版/高等数学/09_一元函数积分学的计算/高数_第09章_1000题_强化_解析.pdf">强化篇解析</a>
+    <div class="note"><b>建议的刷题节奏</b>：本页 68 题过完一遍后，直接上 1000 题基础篇（3 页题 / 16 页解析），<u>限时 90 分钟</u>。错题按十支线归类——<b>错在哪条支线上，就回本页对应小节重看那一节的例题。</b></div>
+  </div>
+
+  <div class="outro">
+    <h3>落位索引 · 本章 68 题一览</h3>
+    <div class="gridwrap"><table class="dense">
+      <tr><th>题号</th><th>考点</th><th>落在本页哪一节</th></tr>
+      <tr><td>基 9.1</td><td>凑微分（$\arcsin$ 型）</td><td><a href="#eg91">§2</a></td></tr>
+      <tr><td>基 9.2</td><td>对复杂部分求导凑微分</td><td><a href="#eg92">§2</a></td></tr>
+      <tr><td>基 9.3 / 强 9.2</td><td>三平方根三角代换 + $\int\sec^3$</td><td><a href="#eg93">§3</a></td></tr>
+      <tr><td>基 9.4</td><td>根式代换 + 分部</td><td><a href="#eg94">§3</a></td></tr>
+      <tr><td>基 9.5</td><td>三角代换 + 积分再现（行列式公式）</td><td><a href="#eg95">§3</a></td></tr>
+      <tr><td>基 9.6</td><td>求 $f$ + 分部</td><td><a href="#eg96">§3</a></td></tr>
+      <tr><td>基 9.7</td><td>积分抵消法</td><td><a href="#eg97">§4</a></td></tr>
+      <tr><td>基 9.8 / 基 9.9</td><td>有理函数拆项（赋值法 vs 比较系数）</td><td><a href="#eg98">§5</a></td></tr>
+      <tr><td>基 9.10 / 强 9.10</td><td>分子凑分母导数 + 配方</td><td><a href="#eg910">§5</a></td></tr>
+      <tr><td>基 9.11</td><td>凑 $x+\frac1x$ 求 $f$ + 牛莱</td><td><a href="#eg911">§13</a></td></tr>
+      <tr><td>基 9.12</td><td>凑定积分定义 + 奇函数</td><td><a href="#eg912">§7</a></td></tr>
+      <tr><td>基 9.13</td><td>偶倍 + 三角代换 + 点火</td><td><a href="#eg913">§13</a></td></tr>
+      <tr><td>基 9.14 / 基 9.15</td><td>$\arcsin\sqrt{1-x^2}$ 两法 + 化归旧题</td><td><a href="#eg914">§7</a></td></tr>
+      <tr><td>基 9.16 / 9.17 / 9.18</td><td>周期平移、区间再现（证）+ $\int_0^\pi xf(\sin x)$ 模型</td><td><a href="#eg918">§7</a></td></tr>
+      <tr><td>基 9.19</td><td>★ 不可求积，先求导</td><td><a href="#eg919">§7</a></td></tr>
+      <tr><td>基 9.20</td><td>变限积分求导（直接型）+ 法线</td><td><a href="#eg920">§9</a></td></tr>
+      <tr><td>基 9.21</td><td>★★★ 拆分求导型 + 泰勒</td><td><a href="#eg921">§9</a></td></tr>
+      <tr><td>基 9.22</td><td>换元求导型 + 极值第二充分条件</td><td><a href="#eg922">§9</a></td></tr>
+      <tr><td>基 9.23 / 基 9.25</td><td>奇偶原函数（证）、周期原函数（证）</td><td><a href="#eg923">§10</a></td></tr>
+      <tr><td>基 9.24</td><td>★★★ 内偶则偶，内奇同外</td><td><a href="#eg924">§10</a></td></tr>
+      <tr><td>基 9.26 / 基 9.27</td><td>内部瑕点拆区间；反常 → 定积分</td><td><a href="#eg926">§11</a></td></tr>
+      <tr><td>基 9.28 / 基 9.29</td><td>★★★ 递推 $I_n=n!$ + Γ 函数</td><td><a href="#eg928">§11</a></td></tr>
+      <tr><td>习 9.1–9.4</td><td>两端求导、定积分是常数、洛必达、$\int xf'$</td><td><a href="#xt91">§13</a></td></tr>
+      <tr><td>习 9.5–9.8</td><td>根式代换四连</td><td><a href="#xt95">§13</a></td></tr>
+      <tr><td>习 9.9</td><td>★ 分段函数不定积分（调常数）</td><td><a href="#xt99">§12</a></td></tr>
+      <tr><td>习 9.10</td><td>★★★ 误用牛莱陷阱</td><td><a href="#xt910">§8</a></td></tr>
+      <tr><td>习 9.11–9.14</td><td>分部相消、区间再现、审奇偶、分段定积分</td><td><a href="#xt911">§13</a></td></tr>
+      <tr><td>习 9.15–9.17</td><td>分段变限积分、$f(tx)$ 换元、$|t-x|$ 分段求导</td><td><a href="#xt915">§13</a></td></tr>
+      <tr><td>强 9.1 / 9.5 / 9.6 / 9.7 / 9.15</td><td>恒等变形、区间再现+周期、根式代换、积分再现、反常定参数</td><td><a href="#eg91s">§13</a></td></tr>
+      <tr><td>强 9.3 / 强 9.4</td><td>五类代换实战、$\sqrt{\frac{ax+b}{cx+d}}$ 完整流程</td><td><a href="#eg93s">§3</a></td></tr>
+      <tr><td>强 9.8 / 强 9.9</td><td>★ 积分抵消、递推 + 傅氏两公式</td><td><a href="#eg98s">§4</a></td></tr>
+      <tr><td>强 9.11–9.14</td><td>三角有理式三判据 + 模板 + 万能公式</td><td><a href="#eg911s">§6</a></td></tr>
+      <tr><td>强 9.16</td><td>★★★ 反函数 + 换元求导综合</td><td><a href="#eg916s">§9</a></td></tr>
+      <tr><td>强 9.17 / 强 9.18</td><td>★ 拆分求导型：同区间 vs 异区间</td><td><a href="#eg917s">§9</a></td></tr>
+      <tr><td>强 9.19</td><td>换序型（与第 14 章联动）</td><td><a href="#eg919s">§9</a></td></tr>
+      <tr><td>强 9.20 / 9.21 / 9.22</td><td>分段原函数、分段定积分、几何法</td><td><a href="#eg920s">§12</a></td></tr>
+    </table></div>
+    <p style="margin-top:12px"><b>合计</b>：基础例题 29 + 基础习题 17 + 强化例题 22 = <b>68 题，零遗漏</b>。例题卡 <b>46 张</b>（含三层卷面卡 <b>11 张</b> / <b>64 个 ⛳</b>），交互模块 <b>5 个</b>，页内公式 <b>2061 条</b>（浏览器实测 0 报错、0 死链）。</p>
+    <p><a href="第08章_一元函数积分学的概念与性质.html">← 上一章：第 8 章 一元函数积分学的概念与性质</a>　·　<a href="../index.html">返回数学一复盘中心</a></p>
+  </div>
+
+  <footer>
+    张宇《基础30讲·高数分册》第 9 讲（书页 230–262）+《高数18讲》第 9 讲（书页 90–104）· 共 48 页<br>
+    全部答案经 sympy 独立复算（不定积分对答案求导反验，定积分符号 + 高精度数值双算）· 2026-07-28
+  </footer>
+</div>
+
+<script>
+(function(){
+'use strict';
+var $=function(id){return document.getElementById(id);};
+function tex(el){ if(window.renderMathInElement) try{ renderMathInElement(el,{delimiters:[
+  {left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]}); }catch(e){} }
+
+/* ============ 1. 十支线路线判定器 ============ */
+var FEATS=[
+ {k:'sqrt2',  t:'含根号 · 里面<b>有</b>平方项'},
+ {k:'sqrt1',  t:'含根号 · 里面<b>没有</b>平方项'},
+ {k:'frac',   t:'是分式 · 分母能因式分解'},
+ {k:'mix',    t:'两类不同函数相乘'},
+ {k:'trig',   t:'只含 $\\sin,\\cos$'},
+ {k:'param',  t:'含参数 $n$（求通式）'},
+ {k:'varlim', t:'是变限积分'},
+ {k:'xin',    t:'被积函数里有<b>求导变量 $x$</b>'},
+ {k:'abs',    t:'含绝对值 / 分段 / $\\max\\min$'},
+ {k:'defint', t:'是定积分（有上下限）'},
+ {k:'circle', t:'被积函数是 $\\sqrt{二次式}$（开口向下）'},
+ {k:'improp', t:'区间无界 或 有瑕点'}
+];
+var picked={};
+(function(){var c=$('rtFeat');FEATS.forEach(function(f){
+  var b=document.createElement('button');b.innerHTML=f.t;b.dataset.k=f.k;
+  b.onclick=function(){picked[f.k]=!picked[f.k];b.classList.toggle('on',!!picked[f.k]);route();};
+  c.appendChild(b);});tex(c);})();
+
+function route(){
+  var L=[],p=picked;
+  if(p.improp) L.push('<b>⚠️ 先找奇点</b>（端点？内部？）→ 支线七：反常积分收敛时的牛莱，端点一律取<b>单侧极限</b>。内部瑕点<b>必须拆区间</b>。若题目是"定参数"，算完还要<b>验收敛</b>（强 9.15）。');
+  if(p.circle) L.push('<b>支线十 · 几何法</b>：$\\sqrt{二次式}$ 且开口向下 ⇒ 它是<b>圆/椭圆的上半支</b>。配方看圆心半径，区间若恰是半圆或四分之一圆就<b>直接数面积</b>（强 9.22）。');
+  if(p.defint) L.push('<b>动手前先扫七大结论</b>：奇零偶倍？周期平移？区间再现？点火公式？——能白捡就别硬算（基 9.12 十秒 vs 五分钟）。');
+  if(p.xin&&p.varlim) L.push('<b>⛔ 支线八的铁律：被积函数里有求导变量 $x$，<u>不能直接套求导公式</u></b>。先把 $x$ 请出去：<br>· 能整体换元（$xt=u$、$x^2-t^2=u$）→ <b>换元求导型</b>（基 9.22、强 9.16、习 9.16）<br>· 藏在绝对值里 → <b>拆分求导型</b>，以 $t=x$ 为界拆区间');
+  if(p.abs) L.push('<b>支线九 · 分段/绝对值</b>：拆区间。<br>· 不定积分 → 分段求原函数后<b>调常数保连续</b>（习 9.9）<br>· 变限积分 → 按 $x$ 的位置<b>分情况</b>，注意<b>累加</b>前面各段（习 9.15）<br>· <b>先画两条数轴</b>：$t$ 的范围 vs $x$ 的范围，重合则不必讨论（强 9.17），不重合<b>必须讨论</b>（强 9.18）');
+  if(p.sqrt2) L.push('<b>支线三 · 三角代换</b>：$\\sqrt{a^2-x^2}\\to x=a\\sin t$；$\\sqrt{a^2+x^2}\\to x=a\\tan t$；$\\sqrt{x^2-a^2}\\to x=a\\sec t$（<b>要分 $x$ 正负</b>）。不是标准形先<b>配方</b>。<b>务必声明 $t$ 的范围</b>，否则脱根号无依据。');
+  if(p.sqrt1) L.push('<b>支线三 · 根式代换</b>：根号里没有平方项 ⇒ <b>令整个根式 $=t$</b>（基 9.4、强 9.3(2)、强 9.4、强 9.6）。同时含 $\\sqrt[n]{},\\sqrt[m]{}$ 取 $\\mathrm{lcm}$ 次根。<b>算完必须回代。</b>');
+  if(p.frac) L.push('<b>支线五 · 有理函数</b>：① 假分式先做除法；② 分母因式分解；③ 按四规则拆项。定系数<b>优先赋值法</b>（代分母的根），有不可约二次因式时混用比较系数法。');
+  if(p.mix) L.push('<b>支线四 · 分部积分</b>：反对幂指三，<b>左边取 $u$（求导），右边取 $v$（积分）</b>。做完看右边：<br>· 直接能积 → 常规；· 又冒出原积分 → <b>移项解方程</b>（再现法）；· 与另一项相消 → <b>抵消法</b>；· 含参数 $n$ → <b>递推法</b>');
+  if(p.trig) L.push('<b>支线六 · 三角有理式</b>：按<u>次数</u>速判——$\\sin$ 次数为奇 → $t=\\cos x$；$\\cos$ 次数为奇 → $t=\\sin x$；都为偶 → $t=\\tan x$；<b>三条都不中才上万能公式 $t=\\tan\\frac x2$</b>。<br>若是 $\\frac{a\\sin+b\\cos}{c\\sin+d\\cos}$ → <b>直接套模板</b>（下方求解器）。');
+  if(p.param) L.push('<b>递推法</b>：设 $I_n$，分部一次得 $I_n=f(I_{n-1})$，逐级降到 $I_0$。<b>反常积分的边界项要取极限并说明</b>（基 9.28、强 9.9）。若形如 $\\int_0^{+\\infty}x^\\alpha\\mathrm e^{-x^\\beta}$ 直接<b>套 Γ 函数</b>更快。');
+  if(p.varlim&&!p.xin) L.push('<b>支线八 · 直接求导型</b>：$\\left[\\int_{\\varphi_1}^{\\varphi_2}f(t)\\mathrm dt\\right]\'=f(\\varphi_2)\\varphi_2\'-f(\\varphi_1)\\varphi_1\'$。<br>若变限积分与别的函数相乘再积分 → <b>分部，把它求导掉</b>（基 9.19）。');
+  if(!L.length) L.push('都不勾的话，先试<b>支线一：恒等变形</b>——分子拆成「$k\\times$(分母)′ + 常数」、分子加一减一、三角恒等式降幂。<b>本章一半的题第一步都是恒等变形。</b>');
+  $('rtSay').innerHTML=L.join('<br><br>');tex($('rtSay'));
+}
+route();
+$('rtClear').onclick=function(){picked={};
+  Array.prototype.forEach.call($('rtFeat').children,function(b){b.classList.remove('on');});
+  route();$('rtQ').style.display='none';$('rtA').style.display='none';};
+
+var QUIZ=[
+ ['$\\displaystyle\\int\\frac{\\sqrt x}{\\sqrt{4-x^3}}\\mathrm dx$','凑微分（式②：$\\sqrt x\\mathrm dx=\\frac23\\mathrm d(x^{3/2})$）→ $\\arcsin$ 标准型。<b>基 9.1</b>'],
+ ['$\\displaystyle\\int\\frac{x\\mathrm e^x}{\\sqrt{\\mathrm e^x-1}}\\mathrm dx$','根号里无平方项 → 令 $\\sqrt{\\mathrm e^x-1}=u$；换完剩 $\\int\\ln(1+u^2)\\mathrm du$ 再分部。<b>基 9.4</b>'],
+ ['$\\displaystyle\\int\\frac{x\\mathrm e^{\\arctan x}}{(1+x^2)^{3/2}}\\mathrm dx$','有平方项 → $x=\\tan t$；化到 $\\int\\mathrm e^t\\sin t\\mathrm dt$ 用积分再现（或行列式公式）。<b>基 9.5</b>'],
+ ['$\\displaystyle\\int\\mathrm e^{2x}(\\tan x+1)^2\\mathrm dx$','展开 + $\\tan^2+1=\\sec^2$ → 分部后两项相消。答案 $\\mathrm e^{2x}\\tan x+C$。<b>基 9.7</b>'],
+ ['$\\displaystyle\\int\\frac{4x^2-6x-1}{(x+1)(2x-1)^2}\\mathrm dx$','有理函数，二重一次因式拆 3 项，赋值法定系数。<b>基 9.8</b>'],
+ ['$\\displaystyle\\int_0^{3\\pi/4}\\frac{\\mathrm dx}{1+\\cos^2x}$','⚠️ 原函数含 $\\tan x$，区间跨 $\\frac\\pi2$ → <b>必须拆区间 + 取单侧极限</b>。<b>习 9.10</b>'],
+ ['$\\displaystyle\\int_0^\\pi\\frac{x\\sin x}{1+\\cos^2x}\\mathrm dx$','区间再现（$x=\\pi-t$）→ 移项 → $\\frac{\\pi^2}4$。<b>习 9.12</b>'],
+ ['$\\displaystyle\\int_0^1|t^2-x^2|\\mathrm dt\\ (x\\gt0)$ 求导','拆分求导型 · <b>异区间</b>（$t\\in[0,1]$，$x\\in(0,\\infty)$）→ 必须分 $0\\lt x\\le1$ 与 $x\\gt1$。<b>强 9.18</b>'],
+ ['$\\displaystyle\\int\\frac{2\\sin x+\\cos x}{\\sin x+2\\cos x}\\mathrm dx$','套模板 $A\\cdot$分母$+B\\cdot$分母′：$A=\\frac45,B=-\\frac35$。<b>强 9.13</b>'],
+ ['$\\displaystyle\\int_0^{+\\infty}x^n\\mathrm e^{-x}\\mathrm dx$','递推 $I_n=nI_{n-1}$，$I_0=1$ → $n!$。即 $\\Gamma(n+1)$。<b>基 9.28</b>'],
+ ['$\\displaystyle\\int_0^1\\sqrt{2x-x^2}\\mathrm dx$','$(x-1)^2+y^2=1$ 的四分之一圆 → 几何法直接 $\\frac\\pi4$。<b>强 9.22</b>'],
+ ['$\\displaystyle\\int\\max\\{1,|x|\\}\\mathrm dx$','分段求原函数，<b>调常数使 $F$ 在 $x=\\pm1$ 连续</b>。<b>习 9.9</b>']
+];
+$('rtRand').onclick=function(){
+  var q=QUIZ[Math.floor(Math.random()*QUIZ.length)];
+  $('rtQ').style.display='block';$('rtA').style.display='none';
+  $('rtQ').innerHTML='<b>自测：</b>'+q[0]+'　—— 先自己说出走哪条支线、第一步写什么，再点下面看答案。';
+  tex($('rtQ'));
+  $('rtQ').onclick=function(){$('rtA').style.display='block';$('rtA').innerHTML='<b>路线：</b>'+q[1];tex($('rtA'));};
+};
+
+/* ============ 2. 分部积分错位表生成器 ============ */
+function fmtNum(n){
+  if(Math.abs(n-Math.round(n))<1e-12) return String(Math.round(n));
+  var d=[2,3,4,5,6,8,9,12,16,27,32,64,81,128];
+  for(var i=0;i<d.length;i++){var q=n*d[i];if(Math.abs(q-Math.round(q))<1e-12)return '\\frac{'+Math.round(q)+'}{'+d[i]+'}';}
+  return n.toFixed(4);
+}
+function polyTex(c){ // c=[c0,c1,c2,c3]
+  var s='',first=true;
+  for(var i=c.length-1;i>=0;i--){ if(Math.abs(c[i])<1e-12) continue;
+    var v=c[i], sign = v<0?'-':(first?'':'+'); var av=Math.abs(v);
+    var coef=(Math.abs(av-1)<1e-12&&i>0)?'':fmtNum(av);
+    s+=sign+coef+(i===0?'':(i===1?'x':'x^'+i)); first=false; }
+  return s||'0';
+}
+function zbBuild(){
+  var c=[+$('zbC0').value||0,+$('zbC1').value||0,+$('zbC2').value||0,+$('zbC3').value||0];
+  while(c.length>1&&Math.abs(c[c.length-1])<1e-12)c.pop();
+  var k=+$('zbK').value||1, kind=$('zbKind').value;
+  // u 的各阶导数
+  var us=[c.slice()], cur=c.slice();
+  while(cur.length>1||Math.abs(cur[0])>1e-12){
+    var nx=[]; for(var i=1;i<cur.length;i++) nx.push(cur[i]*i);
+    if(!nx.length)nx=[0]; cur=nx; us.push(cur.slice());
+    if(us.length>7)break;
+  }
+  // v 的各阶原函数：exp -> e^{kx}/k^j ; sin/cos 轮转
+  var vs=[];
+  for(var j=0;j<us.length;j++){
+    if(kind==='exp'){ vs.push({co:1/Math.pow(k,j), f:'\\mathrm e^{'+(k===1?'':k)+'x}'}); }
+    else{
+      // ∫sin = -cos/k, ∫-cos = -sin/k, ...  用相位轮转
+      var base = kind==='sin'?0:1; // 0:sin 1:cos
+      var idx=(base - j%4 + 8)%4; // 每积一次相位 -1
+      var names=['\\sin('+(k===1?'':k)+'x)','\\cos('+(k===1?'':k)+'x)','-\\sin('+(k===1?'':k)+'x)','-\\cos('+(k===1?'':k)+'x)'];
+      // ∫sin(kx)=-cos(kx)/k : sin -> -cos  (index 0 -> 3)
+      var chain=[0,3,2,1]; // sin->-cos->-sin->cos->sin
+      var order=(kind==='sin'?0:1);
+      var st=(kind==='sin')?[0,3,2,1]:[1,0,3,2];
+      vs.push({co:1/Math.pow(k,j), f:names[st[j%4]]});
+    }
+  }
+  var rows='<tr class="urow"><td>$u$ 的各阶导数</td>', r2='<tr class="vrow"><td>$v$ 的各阶原函数</td>', r3='<tr><td>错位乘的符号</td>';
+  for(var j=0;j<us.length;j++){
+    rows+='<td>$'+polyTex(us[j])+'$</td>';
+    r2+='<td>$'+(Math.abs(vs[j].co-1)<1e-12?'':fmtNum(vs[j].co))+vs[j].f+'$</td>';
+    r3+= j===0?'<td></td>':('<td class="'+((j%2)?'sgn-p':'sgn-m')+'">'+((j%2)?'+':'−')+'</td>');
+  }
+  $('zbTab').innerHTML=rows+'</tr>'+r2+'</tr>'+r3+'</tr>';
+  // 答案：Σ_{j=0}^{m-1} (-1)^j u^{(j)} · v_{j+1}
+  var terms=[];
+  for(var j=0;j+1<us.length;j++){
+    if(us[j].length===1&&Math.abs(us[j][0])<1e-12) continue;
+    var sgn=(j%2===0)?'+':'-';
+    var co=vs[j+1].co;
+    terms.push((terms.length===0&&sgn==='+'?'':sgn)+'\\left('+polyTex(us[j])+'\\right)\\cdot'+
+      (Math.abs(co-1)<1e-12?'':fmtNum(co))+vs[j+1].f);
+  }
+  var ans=terms.join('');
+  $('zbSay').innerHTML='<b>错位相乘的结果：</b><br>$\\displaystyle\\int\\left('+polyTex(c)+'\\right)'+
+    (kind==='exp'?('\\mathrm e^{'+(k===1?'':k)+'x}'):(kind==='sin'?'\\sin('+(k===1?'':k)+'x)':'\\cos('+(k===1?'':k)+'x)'))+
+    '\\mathrm dx='+(ans||'0')+'+C$<br><span style="font-size:.82rem;color:var(--muted)">'+
+    '表格共 '+us.length+' 列（$u$ 求 '+(us.length-1)+' 次导归零），故错位乘出 '+terms.length+' 项，末列对应 $\\int0\\cdot v\\mathrm dx=C$。</span>';
+  tex($('zbTab'));tex($('zbSay'));
+}
+['zbC0','zbC1','zbC2','zbC3','zbK','zbKind'].forEach(function(id){
+  $(id).addEventListener('input',zbBuild);$(id).addEventListener('change',zbBuild);});
+zbBuild();
+
+/* ============ 3. 三角有理式判定器 + 模板求解器 ============ */
+var TRIG=[
+ {t:'$\\displaystyle\\int\\frac{\\sin^5x}{\\cos^4x}\\mathrm dx$', v:'cos',
+  why:'$\\sin$ 的次数 5（<b>奇</b>），$\\cos$ 的次数 $-4$（偶）⇒ 换 <b>$t=\\cos x$</b>，留一个 $\\sin x$ 配 $\\mathrm d(\\cos x)$。（<b>强 9.11(1)</b>，答案 $-\\cos x-2\\sec x+\\frac13\\sec^3x+C$）'},
+ {t:'$\\displaystyle\\int\\frac{\\mathrm dx}{\\sin x+\\sin^3x}$', v:'cos',
+  why:'分母 $\\sin$ 的次数为奇 ⇒ 上下同乘 $\\sin x$ 后换 <b>$t=\\cos x$</b>。（<b>强 9.11(2)</b>）'},
+ {t:'$\\displaystyle\\int\\sin^2x\\cos^3x\\,\\mathrm dx$', v:'sin',
+  why:'$\\cos$ 的次数 3（<b>奇</b>）⇒ 换 <b>$t=\\sin x$</b>，留一个 $\\cos x$ 配 $\\mathrm d(\\sin x)$。（<b>强 9.12</b>，答案 $\\frac{\\sin^3x}3-\\frac{\\sin^5x}5+C$）'},
+ {t:'$\\displaystyle\\int\\frac{2\\sin x+\\cos x}{\\sin x+2\\cos x}\\mathrm dx$', v:'tpl',
+  why:'虽然 $t=\\tan x$ 也能做（法一），但这是 $\\frac{a\\sin+b\\cos}{c\\sin+d\\cos}$ 的标准形 ⇒ <b>直接套模板</b>：$A=\\frac45$，$B=-\\frac35$，两行出答案。（<b>强 9.13</b>）'},
+ {t:'$\\displaystyle\\int\\frac{\\mathrm dx}{1+2\\cos x}$', v:'half',
+  why:'三条判据全不满足（分母有常数项 1）⇒ 只能上 <b>万能公式 $t=\\tan\\frac x2$</b>。（<b>强 9.14</b>）<br><span style="color:var(--red)">⚠️ 若这是定积分且区间跨过 $\\pi$，还要小心误用牛莱。</span>'},
+ {t:'$\\displaystyle\\int\\frac{\\mathrm dx}{\\sin^2x+2\\cos^2x}$', v:'tan',
+  why:'$\\sin,\\cos$ 次数都是偶 ⇒ 换 <b>$t=\\tan x$</b>（分子分母同除 $\\cos^2x$ 后自然出现 $\\sec^2x\\mathrm dx=\\mathrm d(\\tan x)$）。'},
+ {t:'$\\displaystyle\\int\\frac{\\mathrm dx}{1+\\cos^2x}$', v:'tan',
+  why:'$\\cos$ 次数为偶 ⇒ 换 <b>$t=\\tan x$</b>。这正是 <b>习 9.10</b> 的原函数来源——<span style="color:var(--red)">也正因为答案里含 $\\tan x$，那题才有误用牛莱的陷阱</span>。'}
+];
+(function(){var s=$('trPick');TRIG.forEach(function(o,i){
+  var op=document.createElement('option');op.value=i;op.textContent='第 '+(i+1)+' 题';s.appendChild(op);});
+  s.onchange=trShow;})();
+function trShow(){var o=TRIG[+$('trPick').value];
+  $('trSay').innerHTML='<b>被积函数：</b>'+o.t+'<br><span style="color:var(--muted)">先自己判断该换什么，再点上面的按钮。</span>';
+  tex($('trSay'));
+  Array.prototype.forEach.call($('trBtns').children,function(b){b.classList.remove('on');});}
+Array.prototype.forEach.call($('trBtns').children,function(b){
+  b.onclick=function(){var o=TRIG[+$('trPick').value];
+    Array.prototype.forEach.call($('trBtns').children,function(x){x.classList.remove('on');});
+    b.classList.add('on');
+    var ok=(b.dataset.v===o.v);
+    $('trSay').innerHTML='<b>被积函数：</b>'+o.t+'<br><b style="color:var(--'+(ok?'green':'red')+')">'+
+      (ok?'✅ 判断正确':'❌ 不是这条')+'</b> —— '+o.why;
+    tex($('trSay'));};});
+trShow();
+
+function frac(n,d){ // 约分显示
+  function g(a,b){return b?g(b,a%b):a;} var s=(n<0)!==(d<0)?-1:1;n=Math.abs(n);d=Math.abs(d);
+  var k=g(n,d)||1;n/=k;d/=k; if(d===1)return String(s*n);
+  return (s<0?'-':'')+'\\frac{'+n+'}{'+d+'}';
+}
+function tplCalc(){
+  var a=+$('tpA').value||0,b=+$('tpB').value||0,c=+$('tpC').value||0,d=+$('tpD').value||0;
+  var den=c*c+d*d;
+  if(den===0){$('tpSay').innerHTML='<b style="color:var(--red)">分母不能恒为 0（$c=d=0$）。</b>';return;}
+  var An=a*c+b*d, Bn=b*c-a*d;
+  $('tpSay').innerHTML='由 $a\\sin x+b\\cos x=A(c\\sin x+d\\cos x)+B(c\\cos x-d\\sin x)$ 比较系数：'+
+    '$\\begin{cases}Ac-Bd='+a+'\\\\ Ad+Bc='+b+'\\end{cases}$　解得 '+
+    '$A=\\frac{ac+bd}{c^2+d^2}='+frac(An,den)+'$，$B=\\frac{bc-ad}{c^2+d^2}='+frac(Bn,den)+'$<br><br>'+
+    '<b>$\\displaystyle\\int\\frac{'+a+'\\sin x+'+(b<0?'':'+')+b+'\\cos x}{'+c+'\\sin x+'+(d<0?'':'+')+d+'\\cos x}\\mathrm dx='+
+    frac(An,den)+'x+'+frac(Bn,den)+'\\ln\\left|'+c+'\\sin x+'+(d<0?'':'+')+d+'\\cos x\\right|+C$</b>'+
+    '<br><span style="font-size:.8rem;color:var(--muted)">（分母的导数是 $c\\cos x-d\\sin x$；$A$ 那项积分出 $x$，$B$ 那项是 $\\int\\frac{u\'}u=\\ln|u|$。已用 sympy 对三组 $(a,b,c,d)$ 求导反验通过。）</span>';
+  tex($('tpSay'));
+}
+['tpA','tpB','tpC','tpD'].forEach(function(id){$(id).addEventListener('input',tplCalc);});
+tplCalc();
+
+/* ============ 4. 点火公式速查台 ============ */
+var hnFn='sin', hnItv='h';
+function bindBtns(boxId,setter){
+  Array.prototype.forEach.call($(boxId).children,function(b){
+    b.onclick=function(){Array.prototype.forEach.call($(boxId).children,function(x){x.classList.remove('on');});
+      b.classList.add('on');setter(b.dataset.v);hnDraw();};});
+}
+bindBtns('hnFn',function(v){hnFn=v;});bindBtns('hnItv',function(v){hnItv=v;});
+$('hnN').addEventListener('input',hnDraw);
+
+function wallisChain(n){ // 返回 {tex, val} for ∫_0^{π/2}
+  if(n===0) return {tex:'\\frac\\pi2', val:Math.PI/2};
+  if(n===1) return {tex:'1', val:1};
+  var parts=[],val=1,k=n;
+  while(k>=2){ parts.push('\\frac{'+(k-1)+'}{'+k+'}'); val*=(k-1)/k; k-=2; }
+  if(n%2===0){ parts.push('\\frac\\pi2'); val*=Math.PI/2; }
+  else { parts.push('1'); }
+  return {tex:parts.join('\\cdot'), val:val};
+}
+function hnDraw(){
+  var n=+$('hnN').value; $('hnNv').textContent='n = '+n;
+  var w=wallisChain(n), coef=1, zero=false, itvTex='\\int_0^{\\pi/2}', note='';
+  if(hnItv==='h'){ coef=1; itvTex='\\int_0^{\\pi/2}'; }
+  else if(hnItv==='p'){ itvTex='\\int_0^{\\pi}';
+    if(hnFn==='cos'&&n%2===1){ zero=true; note='$\\cos^n$ 在 $[0,\\pi]$ 上关于 $x=\\frac\\pi2$ <b>反对称</b>，$n$ 为奇数时正负相消。'; }
+    else { coef=2; note=(hnFn==='sin')?'$\\sin$ 在 $[0,\\pi]$ 上<b>恒非负</b>，两个半段面积相等 ⇒ <b>系数 2</b>。':'$n$ 为偶数时 $\\cos^n\\ge0$，两半段相等 ⇒ <b>系数 2</b>。'; } }
+  else { itvTex='\\int_0^{2\\pi}';
+    if(n%2===1){ zero=true; note='$n$ 为奇数时，$[0,2\\pi]$ 上正负面积完全抵消 ⇒ <b>0</b>。'; }
+    else { coef=4; note='$n$ 为偶数时被积函数非负，$[0,2\\pi]$ 含 <b>4 个</b> $\\frac\\pi2$ 长的等值段 ⇒ <b>系数 4</b>（不是 2！）。'; } }
+  var fnTex=(hnFn==='sin'?'\\sin^{'+n+'}x':'\\cos^{'+n+'}x');
+  var val= zero?0:coef*w.val;
+  var exactTex;
+  if(zero) exactTex='0';
+  else exactTex=(coef===1?'':coef+'\\cdot')+w.tex;
+  $('hnOut').className='verdict '+(zero?'v-inf':'v-ok');
+  $('hnOut').innerHTML='$\\displaystyle '+itvTex+fnTex+'\\mathrm dx='+exactTex+'='+
+    (zero?'0':val.toFixed(6))+'$';
+  $('hnSay').innerHTML='<b>连乘链怎么写</b>：从 $\\frac{n-1}n$ 开始，分子分母各减 2，'+
+    (n%2===0?'降到 $\\frac12$ 后<b>乘 $\\frac\\pi2$（点火）</b>':'降到 $\\frac23$ 后<b>乘 1</b>')+'。'+
+    (note?'<br><b>本例的系数</b>：'+note:'')+
+    (n===0?'<br>$n=0$ 时被积函数恒为 1，积分就是区间长度。':'')+
+    (n===1?'<br>$n=1$ 时 $\\int_0^{\\pi/2}\\sin x\\mathrm dx=1$，链条只有"1"这一项。':'');
+  tex($('hnOut'));tex($('hnSay'));
+  // 画图
+  var hi=(hnItv==='h')?Math.PI/2:((hnItv==='p')?Math.PI:2*Math.PI);
+  var W=640,H=200,L=40,R=620,T=20,B=170, mid=(T+B)/2;
+  var s='<line x1="'+L+'" y1="'+mid+'" x2="'+R+'" y2="'+mid+'" stroke="var(--line)"/>'+
+        '<line x1="'+L+'" y1="'+T+'" x2="'+L+'" y2="'+B+'" stroke="var(--line)"/>';
+  var N=300, ptsP=[], segs=[];
+  var cur=[], curSign=0;
+  for(var i=0;i<=N;i++){
+    var xx=hi*i/N, yv=Math.pow(hnFn==='sin'?Math.sin(xx):Math.cos(xx), n);
+    var px=L+(R-L)*i/N, py=mid-(mid-T)*yv;
+    var sg=yv>=0?1:-1;
+    if(curSign===0)curSign=sg;
+    if(sg!==curSign){ segs.push({s:curSign,p:cur.slice()}); cur=[]; curSign=sg; }
+    cur.push([px,py]);
+  }
+  if(cur.length)segs.push({s:curSign,p:cur});
+  segs.forEach(function(sg){
+    if(sg.p.length<2)return;
+    var d='M'+sg.p[0][0]+','+mid+' L'+sg.p.map(function(q){return q[0]+','+q[1];}).join(' L')+
+          ' L'+sg.p[sg.p.length-1][0]+','+mid+' Z';
+    s+='<path d="'+d+'" fill="var(--'+(sg.s>0?'green':'red')+'-soft)" stroke="var(--'+(sg.s>0?'green':'red')+')" stroke-width="1.6"/>';
+  });
+  // 刻度
+  var ticks=(hnItv==='h')?[[0,'0'],[Math.PI/2,'π/2']]:((hnItv==='p')?[[0,'0'],[Math.PI/2,'π/2'],[Math.PI,'π']]:
+    [[0,'0'],[Math.PI/2,'π/2'],[Math.PI,'π'],[3*Math.PI/2,'3π/2'],[2*Math.PI,'2π']]);
+  ticks.forEach(function(tk){var px=L+(R-L)*tk[0]/hi;
+    s+='<line x1="'+px+'" y1="'+(mid-3)+'" x2="'+px+'" y2="'+(mid+3)+'" stroke="var(--muted)"/>'+
+       '<text x="'+px+'" y="'+(mid+16)+'" font-size="10" fill="var(--muted)" text-anchor="middle">'+tk[1]+'</text>';});
+  s+='<text x="'+(L+8)+'" y="'+(T+12)+'" font-size="11" fill="var(--accent)">y='+(hnFn==='sin'?'sinⁿx':'cosⁿx')+', n='+n+'</text>';
+  $('hnSvg').innerHTML=s;
+}
+hnDraw();
+
+/* ============ 5. 误用牛莱现形记 ============ */
+var SQ2=Math.SQRT2, HALFPI=Math.PI/2;
+function Ffun(x){ // F(x)=1/√2 arctan(tan x/√2)，主值分支
+  return Math.atan(Math.tan(x)/SQ2)/SQ2;
+}
+function trueInt(b){ // ∫_0^b dx/(1+cos²x) 数值（辛普森）
+  var N=2000, h=b/N, s=0;
+  for(var i=0;i<=N;i++){var xx=i*h, w=(i===0||i===N)?1:((i%2)?4:2);
+    s+=w/(1+Math.cos(xx)*Math.cos(xx));}
+  return s*h/3;
+}
+function nlDraw(){
+  var b=+$('nlB').value;
+  $('nlBv').textContent='b = '+b.toFixed(3)+(Math.abs(b-3*Math.PI/4)<0.02?'  (=3π/4)':'');
+  var W=640,H=300,L=45,R=620;
+  var T1=14,B1=128, T2=160,B2=286;
+  var hi=Math.PI; // 画到 π
+  function X(x){return L+(R-L)*x/hi;}
+  var s='';
+  // 上图 被积函数
+  var ymax=1.05, y1=function(v){return B1-(B1-T1)*(v/ymax);};
+  s+='<line x1="'+L+'" y1="'+B1+'" x2="'+R+'" y2="'+B1+'" stroke="var(--line)"/>';
+  s+='<line x1="'+L+'" y1="'+T1+'" x2="'+L+'" y2="'+B1+'" stroke="var(--line)"/>';
+  var N=400, d='', dfill='M'+L+','+B1;
+  for(var i=0;i<=N;i++){var xx=hi*i/N, v=1/(1+Math.cos(xx)*Math.cos(xx));
+    d+=(i?' L':'M')+X(xx)+','+y1(v);
+    if(xx<=b) dfill+=' L'+X(xx)+','+y1(v);}
+  dfill+=' L'+X(Math.min(b,hi))+','+B1+' Z';
+  s+='<path d="'+dfill+'" fill="var(--green-soft)" stroke="none"/>';
+  s+='<path d="'+d+'" fill="none" stroke="var(--green)" stroke-width="2"/>';
+  s+='<line x1="'+X(HALFPI)+'" y1="'+T1+'" x2="'+X(HALFPI)+'" y2="'+B1+'" stroke="var(--red)" stroke-dasharray="4 3"/>';
+  s+='<text x="'+(L+6)+'" y="'+(T1+13)+'" font-size="11" fill="var(--green)">被积函数 1/(1+cos²x) — 处处为正</text>';
+  // 下图 F(x)
+  var fmax=Math.PI/(2*SQ2)*1.15, y2=function(v){return (T2+B2)/2-((B2-T2)/2)*(v/fmax);};
+  s+='<line x1="'+L+'" y1="'+((T2+B2)/2)+'" x2="'+R+'" y2="'+((T2+B2)/2)+'" stroke="var(--line)"/>';
+  s+='<line x1="'+L+'" y1="'+T2+'" x2="'+L+'" y2="'+B2+'" stroke="var(--line)"/>';
+  var dl='',dr='';
+  for(var i=0;i<=N;i++){var xx=hi*i/N;
+    if(Math.abs(xx-HALFPI)<0.012) continue;
+    var v=Ffun(xx), px=X(xx), py=y2(v);
+    if(xx<HALFPI) dl+=(dl?' L':'M')+px+','+py; else dr+=(dr?' L':'M')+px+','+py;}
+  s+='<path d="'+dl+'" fill="none" stroke="var(--accent)" stroke-width="2"/>';
+  s+='<path d="'+dr+'" fill="none" stroke="var(--accent)" stroke-width="2"/>';
+  s+='<line x1="'+X(HALFPI)+'" y1="'+y2(Math.PI/(2*SQ2))+'" x2="'+X(HALFPI)+'" y2="'+y2(-Math.PI/(2*SQ2))+
+     '" stroke="var(--red)" stroke-dasharray="4 3" stroke-width="1.6"/>';
+  s+='<circle cx="'+X(HALFPI)+'" cy="'+y2(Math.PI/(2*SQ2))+'" r="3" fill="none" stroke="var(--red)" stroke-width="1.5"/>';
+  s+='<circle cx="'+X(HALFPI)+'" cy="'+y2(-Math.PI/(2*SQ2))+'" r="3" fill="none" stroke="var(--red)" stroke-width="1.5"/>';
+  s+='<text x="'+(X(HALFPI)+8)+'" y="'+(y2(0)+4)+'" font-size="10.5" fill="var(--red)">跳跃 π/√2 ≈ 2.221</text>';
+  s+='<text x="'+(L+6)+'" y="'+(T2+13)+'" font-size="11" fill="var(--accent)">F(x)=arctan(tan x/√2)/√2 — 在 π/2 处断裂</text>';
+  // b 标记
+  s+='<line x1="'+X(b)+'" y1="'+T1+'" x2="'+X(b)+'" y2="'+B2+'" stroke="var(--purple)" stroke-width="1.4"/>';
+  s+='<text x="'+(X(b)+5)+'" y="'+(B2-6)+'" font-size="11" fill="var(--purple)" font-weight="700">b</text>';
+  // 刻度
+  [[0,'0'],[Math.PI/4,'π/4'],[HALFPI,'π/2'],[3*Math.PI/4,'3π/4'],[Math.PI,'π']].forEach(function(tk){
+    s+='<text x="'+X(tk[0])+'" y="'+(B1+14)+'" font-size="10" fill="var(--muted)" text-anchor="middle">'+tk[1]+'</text>';});
+  $('nlSvg').innerHTML=s;
+
+  var real=trueInt(b), naive=Ffun(b)-Ffun(0);
+  var crossed=b>HALFPI;
+  $('nlV').className='verdict '+(crossed?'v-no':'v-ok');
+  $('nlV').innerHTML= crossed
+    ? '❌ <b>b 已越过 π/2</b>：直接套牛莱得 $F(b)-F(0)='+naive.toFixed(4)+'$，而真实面积 $='+real.toFixed(4)+'$，<b>差了 '+(real-naive).toFixed(4)+'</b>，正是 $\\dfrac\\pi{\\sqrt2}\\approx2.2214$。'
+    : '✅ <b>b 未越过 π/2</b>：$F$ 在 $[0,b]$ 上连续，牛莱合法。$F(b)-F(0)='+naive.toFixed(4)+'$ = 真实面积 '+real.toFixed(4)+' ✔';
+  $('nlSay').innerHTML= crossed
+    ? '<b>差额从哪来</b>：$F$ 在 $\\frac\\pi2$ 处从 $+\\frac\\pi{2\\sqrt2}$ 摔到 $-\\frac\\pi{2\\sqrt2}$，跳了 $\\frac\\pi{\\sqrt2}\\approx2.2214$。直接套牛莱等于<b>把这段跳跃当成了"没发生"</b>，于是少算了整整 $\\frac\\pi{\\sqrt2}$ 的面积。<br><b>正确写法</b>：$\\displaystyle\\int_0^b=\\left[\\lim_{x\\to(\\pi/2)^-}F-F(0)\\right]+\\left[F(b)-\\lim_{x\\to(\\pi/2)^+}F\\right]$，把跳跃补回来。'
+    : '<b>此时两种算法一致</b>——因为 $F$ 在 $[0,b]$ 上处处有定义且连续，牛莱的前提满足。<b>把 b 拖过 π/2 看会发生什么。</b>';
+  tex($('nlV'));tex($('nlSay'));
+}
+$('nlB').addEventListener('input',nlDraw);
+$('nlJump34').onclick=function(){$('nlB').value=(3*Math.PI/4).toFixed(3);nlDraw();};
+$('nlJumpH').onclick=function(){$('nlB').value=(HALFPI-0.02).toFixed(3);nlDraw();};
+nlDraw();
+})();
+</script>
+</body>
+</html>
