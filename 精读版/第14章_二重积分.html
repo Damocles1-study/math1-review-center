@@ -74,15 +74,20 @@ table.dense td{padding:5px 9px}
 .mantra small{display:block;font-family:var(--sans);font-size:.76rem;opacity:.86;letter-spacing:0;margin-top:4px}
 /* 可积不可求积清单 */
 .nolist{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,150px),1fr));gap:7px;margin:12px 0}
-.nolist span{background:var(--red-soft);color:var(--red);border-radius:8px;padding:6px 4px;text-align:center;font-size:.86rem;overflow-x:auto}
-.nolist span.wide{grid-column:1/-1}
+/* ⚠️⚠️ 必须写 `> span`（直接子元素）！KaTeX 的输出是成百上千个嵌套 <span>，*/
+/*    写成后代选择器 `.nolist span` 会把 background/padding/font-size 套到每一个字符盒上，公式当场碎成散落的字符。*/
+/*    同理这里也不能加 display:flex 或 overflow-x:auto（前者 blockify .katex，后者连带把 overflow-y 变 auto 截断分式）。*/
+.nolist > span{background:var(--red-soft);color:var(--red);border-radius:8px;padding:9px 4px;text-align:center;font-size:.86rem}
+.nolist > span.wide{grid-column:1/-1}
 /* 判定色 */
 td.bad{color:var(--red);font-weight:700}
 td.good{color:var(--green);font-weight:700}
 /* 表格横滚 */
 .tw{overflow-x:auto;margin:14px 0}
 .tw table{min-width:520px}
-@media (max-width:560px){ .ctl{gap:6px} .ctl label{min-width:100%} .dq{font-size:.72rem} .mantra{font-size:.94rem} }
+@media (max-width:560px){ .ctl{gap:6px} .ctl label{min-width:100%} .dq{font-size:.72rem} .mantra{font-size:.94rem}
+  .nolist{grid-template-columns:repeat(auto-fill,minmax(min(100%,118px),1fr))}
+  .nolist > span{font-size:.76rem} .nolist > span.wide{font-size:.7rem} }
 </style>
 </head>
 <body>
