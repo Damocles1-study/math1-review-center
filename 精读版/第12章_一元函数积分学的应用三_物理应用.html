@@ -1,0 +1,1435 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>精读版 · 高数 第12章 一元函数积分学的应用（三）物理应用</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],ignoredClasses:['nokatex']})"></script>
+<link rel="stylesheet" href="style.css">
+<style>
+/* ===== 本章专属：微元法建系沙盘 / 形心秒杀器 / 位移方向对拍台 ===== */
+.tool{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:20px 0}
+.tool h4{margin:0 0 4px;font-size:1rem;color:var(--accent)}
+.tool .hint{color:var(--muted);font-size:.82rem;margin-bottom:12px;line-height:1.7}
+.ctl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0}
+.ctl button{font:inherit;font-size:.82rem;padding:4px 13px;border-radius:8px;cursor:pointer;
+  border:1px solid var(--line);background:var(--card);color:var(--muted)}
+.ctl button.on{background:var(--accent-soft);color:var(--accent);border-color:var(--accent);font-weight:700}
+.ctl button:hover{filter:brightness(.96)}
+.ctl label{font-size:.8rem;color:var(--muted);min-width:9.5em}
+.ctl input[type=range]{flex:1 1 150px;min-width:120px;accent-color:var(--accent)}
+.ctl .val{font-family:var(--mono);font-size:.78rem;color:var(--accent);min-width:6.5em;text-align:right}
+.scene{background:var(--bg);border:1px solid var(--line);border-radius:10px;margin:10px 0}
+.scene svg{display:block;width:100%;height:auto}
+.say{background:var(--accent-soft);border-radius:8px;padding:9px 13px;margin:10px 0;
+  font-size:.86rem;color:var(--accent);line-height:1.75;min-height:2em}
+.say b{color:var(--accent)}
+.verdict{font-size:.88rem;font-weight:700;border-radius:8px;padding:7px 13px;margin:10px 0;display:block}
+.v-ok{background:var(--green-soft);color:var(--green)}
+.v-no{background:var(--red-soft);color:var(--red)}
+.v-inf{background:var(--amber-soft);color:var(--amber)}
+.dq{width:100%;min-width:0;font-size:.8rem;margin:6px 0;border-collapse:collapse}
+.dq th,.dq td{padding:4px 8px;font-family:var(--mono);text-align:right;white-space:nowrap;border-bottom:1px solid var(--line)}
+.dq th:first-child,.dq td:first-child{text-align:left;font-family:var(--sans);white-space:normal}
+.dq td.hit{color:var(--green);font-weight:700}
+.dq td.miss{color:var(--red)}
+.legend2{font-size:.78rem;color:var(--muted);line-height:1.7;margin-top:6px}
+.chip{display:inline-block;font-size:.72rem;border-radius:5px;padding:1px 7px;margin-right:6px}
+.c-b{background:var(--accent-soft);color:var(--accent)}
+.c-g{background:var(--green-soft);color:var(--green)}
+.c-r{background:var(--red-soft);color:var(--red)}
+.c-a{background:var(--amber-soft);color:var(--amber)}
+.c-p{background:var(--purple-soft);color:var(--purple)}
+table.dense{font-size:.84rem;min-width:420px}
+table.dense td{padding:5px 9px}
+/* 总图 */
+.tenline{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 12px;margin:16px 0}
+.tenline svg{display:block;min-width:660px}
+/* 三步条 */
+.steps3{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.steps3 div{flex:1 1 190px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 13px;font-size:.85rem;line-height:1.75}
+.steps3 div b{color:var(--accent);display:block;margin-bottom:3px}
+/* 公式速查小卡 */
+.fcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,230px),1fr));gap:9px;margin:14px 0}
+.fcards div{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:9px 12px;font-size:.84rem;line-height:1.8}
+.fcards div b{color:var(--accent);font-size:.74rem;display:block;letter-spacing:.05em;margin-bottom:2px}
+/* 两栏对照 */
+.duo{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:10px;margin:14px 0}
+.duo > div{border-radius:10px;padding:11px 14px;font-size:.86rem;line-height:1.8}
+.duo .dA{background:var(--accent-soft);border:1px solid var(--accent)}
+.duo .dB{background:var(--green-soft);border:1px solid var(--green)}
+.duo b.h{display:block;font-size:.76rem;letter-spacing:.06em;margin-bottom:4px}
+.duo .dA b.h{color:var(--accent)} .duo .dB b.h{color:var(--green)}
+@media (max-width:560px){ .ctl{gap:6px} .ctl label{min-width:100%} .dq{font-size:.72rem} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <a class="back" href="../index.html">← 返回数学复盘中心</a>
+
+  <header>
+    <h1>第 12 章 · 一元函数积分学的应用（三）——物理应用</h1>
+    <div class="sub">
+      张宇《基础30讲》第 12 讲（书页 <b>294–303</b>，10 页）＋《高数18讲》第 12 讲（书页 <b>138–144</b>，7 页），共 <b>17 页</b>逐页转录。<br>
+      <b>⚠️ 本讲全称是「物理应用<u>与经济应用</u>」，其中经济应用（基础第三节、强化第二部分）是数学三专属，本页逐条点名跳过。</b>
+      两本讲义的<b>数一实占只有 12 题</b>，撑不起一章 —— 因此本章与第 7 讲一样<b>动用《张宇1000题》补 12 题</b>，去重后 <b>共 23 题一道不漏</b>。<br>
+      全部结论经 <b>sympy 符号独立复算（47 项断言）</b>，<b>书一处没错</b>。
+    </div>
+  </header>
+
+  <div class="legend">
+    <b>怎么读这一页</b>（大题一律「想 → 写 → 校」三层，<b>顺序固定，别跳着看</b>）：<br>
+    <span class="swatch" style="background:var(--purple)"></span><b>💭 思路</b>：动手<b>前</b>看／卡壳时看。只讲"为什么这样建系、微元怎么取"，不含结果。<b>看完就合上页面自己写，别直接翻卷面。</b><br>
+    <span class="swatch" style="background:var(--accent)"></span><b>✍️ 考场卷面</b>：写完<b>对照</b>。只有考场上真要落笔的字，<span style="color:var(--green);font-weight:700">⛳</span> 标采分点。<br>
+    <span class="swatch" style="background:var(--muted)"></span><b>📌 批注</b>：对照完<b>校对</b>。建系为什么这么建、扣分点、检验器、跨章联系——这些考场上<b>不要</b>落笔。<br>
+    <span class="swatch" style="background:var(--amber)"></span><b>必记</b>　<span class="swatch" style="background:var(--red)"></span><b>陷阱</b>　<span class="swatch" style="background:var(--blue)"></span><b>补讲</b>（书上没写但该知道的）　<span class="swatch" style="background:var(--green)"></span><b>强化专属</b>（18 讲有、基础讲没有）<br>
+    <span class="layer L-base">基</span>＝基础30讲　<span class="layer L-str">强</span>＝高数18讲　<span class="layer" style="background:var(--purple-soft);color:var(--purple)">千</span>＝1000题　右上角 <span class="pg" style="float:none">P.295</span> 是书页码。<br>
+    <b>选择填空题不写卷面层</b>——考场上本就不写过程。<b>本章 23 题里 17 题是选填，只有 6 道解答题写三层。</b>
+  </div>
+
+  <nav class="toc">
+    <a href="#s0">定位：全章只有一个方法</a>
+    <a href="#s1">一、变力沿直线做功</a>
+    <a href="#s2">二、变速直线运动的位移</a>
+    <a href="#s3">三、抽水做功 🎛️</a>
+    <a href="#s4">四、静水压力 ⚖️</a>
+    <a href="#s5">五、引力</a>
+    <a href="#s6">六、微元法自建表达式</a>
+    <a href="#s7">七、★浮力抵消：取球 🔃</a>
+    <a href="#s8">八、三心与古鲁金定理</a>
+    <a href="#end">收官 + 落位索引</a>
+  </nav>
+
+  <!-- ================= s0 定位 ================= -->
+  <h2 id="s0"><span class="idx">定位</span>全章只有一个方法：<u>微元法</u>；变的只是"微元里乘什么"</h2>
+
+  <div class="key"><span class="tag">必记 · 先把这一章的地图看懂，再往下读</span>
+    <p>一元函数积分学的三章应用（第 10、11、12 讲）里，<b>本讲是最模板化的一讲</b>——因为所有题的骨架完全相同：</p>
+    <div class="steps3">
+      <div><b>① 建系</b>让待求的那个"随位置变化的量"成为积分变量。<b>建系错了后面全错，这一步占分最多。</b></div>
+      <div><b>② 取微元</b>写出 $\mathrm d(\text{目标})=(\text{强度})\times(\text{几何})\times\mathrm dx$，只保留 $\mathrm dx$ 的一次项。</div>
+      <div><b>③ 积分</b>定上下限（就是那个量的<b>真实变化范围</b>），算出来。</div>
+    </div>
+    <p>基础30讲把这三步印在每道例题的「分析」栏里，<b>一字不改地重复了四遍</b>——这不是偷懒，是在告诉你：<u>物理应用题的难度不在积分，在第 ① 步。</u></p>
+  </div>
+
+  <div class="tenline">
+    <svg viewBox="0 0 700 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="第12讲六条支线总图">
+      <defs><marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+        <path d="M0,1 L7,4 L0,7 z" fill="currentColor"/></marker></defs>
+      <g style="color:var(--accent)" fill="none" stroke="currentColor" stroke-width="1.4">
+        <rect x="250" y="10" width="200" height="34" rx="9" fill="var(--accent-soft)"/>
+        <path d="M350,44 L350,66" marker-end="url(#ar)"/>
+        <path d="M60,66 L640,66"/>
+        <path d="M60,66 L60,88" marker-end="url(#ar)"/><path d="M176,66 L176,88" marker-end="url(#ar)"/>
+        <path d="M292,66 L292,88" marker-end="url(#ar)"/><path d="M408,66 L408,88" marker-end="url(#ar)"/>
+        <path d="M524,66 L524,88" marker-end="url(#ar)"/><path d="M640,66 L640,88" marker-end="url(#ar)"/>
+      </g>
+      <g font-family="var(--sans)" text-anchor="middle">
+        <text x="350" y="32" font-size="14" font-weight="700" fill="var(--accent)">微元法 · 目标 = ∫（强度 × 几何）</text>
+        <g font-size="11.5" fill="var(--ink)">
+          <rect x="12" y="88" width="96" height="52" rx="8" fill="var(--card)" stroke="var(--line)"/>
+          <text x="60" y="106" font-weight="700">变力做功</text><text x="60" y="124" font-size="10.5" fill="var(--muted)">∫F(x)dx</text>
+          <rect x="128" y="88" width="96" height="52" rx="8" fill="var(--card)" stroke="var(--line)"/>
+          <text x="176" y="106" font-weight="700">变速位移</text><text x="176" y="124" font-size="10.5" fill="var(--muted)">∫v(t)dt</text>
+          <rect x="244" y="88" width="96" height="52" rx="8" fill="var(--card)" stroke="var(--line)"/>
+          <text x="292" y="106" font-weight="700">抽水做功</text><text x="292" y="124" font-size="10.5" fill="var(--muted)">ρg∫x·A(x)dx</text>
+          <rect x="360" y="88" width="96" height="52" rx="8" fill="var(--card)" stroke="var(--line)"/>
+          <text x="408" y="106" font-weight="700">静水压力</text><text x="408" y="124" font-size="10.5" fill="var(--muted)">ρg∫x·b(x)dx</text>
+          <rect x="476" y="88" width="96" height="52" rx="8" fill="var(--card)" stroke="var(--line)"/>
+          <text x="524" y="106" font-weight="700">引力</text><text x="524" y="124" font-size="10.5" fill="var(--muted)">G∫m·dμ/r²</text>
+          <rect x="592" y="88" width="96" height="52" rx="8" fill="var(--card)" stroke="var(--line)"/>
+          <text x="640" y="106" font-weight="700">自建表达式</text><text x="640" y="124" font-size="10.5" fill="var(--muted)">流量/质量/…</text>
+        </g>
+        <g font-size="10.5" fill="var(--green)">
+          <text x="60" y="164">背公式</text><text x="176" y="164">背公式</text>
+          <text x="292" y="164">难在 A(x)</text><text x="408" y="164">难在 b(x)</text>
+          <text x="524" y="164">难在方向分解</text><text x="640" y="164">难在"怎么切"</text>
+        </g>
+        <g font-size="11" fill="var(--muted)">
+          <text x="350" y="196">前五支线是 D₁（常规操作）＝ 套模板；第六支线要 D₂₂（转换等价表述）＝ 把物理话翻译成"微元 × 累加"</text>
+          <text x="350" y="220" fill="var(--red)" font-weight="700">★ 六条支线的差别只有一处：微元里乘的那个"几何量"是面积、宽度、还是距离平方分之一</text>
+          <text x="350" y="240" fill="var(--accent)">加餐（基础讲独有）：三心 · 质心公式 · 古鲁金第一定理 A = 2πl·r̄</text>
+        </g>
+      </g>
+    </svg>
+  </div>
+
+  <div class="duo">
+    <div class="dA"><b class="h">基础30讲给了什么</b>
+      四条公式：<b>变力做功 / 抽水做功 / 静水压力 / 引力</b>；外加强化讲<b>完全没有</b>的<b>「三心」概念 + 质心力矩公式 + 古鲁金第一定理</b>。<br>
+      题的风格：<b>正着套公式</b>（给几何求物理量）。
+    </div>
+    <div class="dB"><b class="h">高数18讲给了什么</b>
+      多出两条支线：<b>变速直线运动的位移</b>、<b>用微元法自行建立表达式</b>；<b>没有</b>古鲁金。<br>
+      题的风格：<b>反着求参数</b>——强 12.1 反求井深、强 12.3 反求半径、强 12.4 反求高度，<b>三道反求题才是真实考法</b>。
+    </div>
+  </div>
+
+  <div class="trap"><span class="tag">陷阱 · 本讲的"数三区"必须精确识别，别浪费时间</span>
+    本讲标题是<b>「物理应用与经济应用」</b>，两本书都有<b>近一半篇幅是数学三专属</b>：<br>
+    <b>基础30讲</b>：第三大节「经济应用（仅数学三）」<b>整节</b>（书页 301）＋ <b>例 12.4</b>（需求弹性求最大利润）＋ <b>习 12.2</b>（平均单位收入）＋ <b>习 12.4</b>（需求函数与边际收益）；<br>
+    <b>高数18讲</b>：<b>第二部分「求解经济应用题（仅数学三）」整块</b>（书页 143–144）＋ <b>例 12.7</b>。<br>
+    <b>以上七处本页全部跳过</b>，只保留数一实占的 12 题（基础 6 ＋ 强化 6）。<br>
+    <b style="color:var(--red)">⚠️ 唯一的例外</b>：经济应用里的<b>平均值公式</b> $\bar y=\dfrac1{b-a}\displaystyle\int_a^bf(x)\mathrm dx$ <b>数一也要会</b>（它就是积分中值定理的几何含义，第 11 讲已讲透）。
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 为什么"12 题"太少，以及补题补出了什么</span>
+    12 题连一章的篇幅都填不满，与第 7 讲（微分学物理应用，数一实占仅 5 题）是<b>同一个原因</b>：张宇把数一数二数三的物理/经济应用<b>合并成一讲</b>，数一只能分到一半。<br>
+    本页<b>动用《张宇1000题（数一）》第 12 章</b>补足：基础篇 7 题 ＋ 强化篇 5 题 ＝ 12 题（其中千基 12.1 与强 12.5 是<b>同一道题</b>，去重后全章 <b>23 题</b>）。<br>
+    <b>★ 补题补得极对路</b>：强化篇 5 题里有 <b>2 道形心／重心题</b>（千强 12.4、千强 12.5），
+    正好填上基础30讲「三心 + 古鲁金第一定理」<u>只有理论、一道题都没有</u>的空缺；
+    另外补进了本章唯一的<b>反常积分题</b>（千基 12.3 摆脱地球引力）、唯一的<b>最优化题</b>（千基 12.7）、
+    唯一的<b>相关变化率 × 做功复合题</b>（千基 12.5）与<b>浮力抵消题</b>（千强 12.3）。
+  </div>
+
+  <div class="dolinks">
+    <div class="t">本章体量与两本书的分工</div>
+    基础30讲第 12 讲 <b>书页 294–303（10 页）</b> · 高数18讲第 12 讲 <b>书页 138–144（7 页）</b>，共 <b>17 页</b>；
+    1000题第 12 章 <b>基础篇 7 题（试题册 P.29）· 强化篇 5 题（P.108）</b>。
+    <a href="../../张宇系列_分章易识别版/高等数学/12_一元函数积分学的应用（三）_物理应用/高数_第12章_基础30讲.pdf">基础30讲 第12讲 PDF</a>
+    <a href="../../张宇系列_分章易识别版/高等数学/12_一元函数积分学的应用（三）_物理应用/高数_第12章_强化18讲.pdf">高数18讲 第12讲 PDF</a>
+    <a href="../../张宇系列_分章易识别版/高等数学/12_一元函数积分学的应用（三）_物理应用/高数_第12章_1000题_基础_题目.pdf">1000题 基础篇 题目</a>
+    <a href="../../张宇系列_分章易识别版/高等数学/12_一元函数积分学的应用（三）_物理应用/高数_第12章_1000题_强化_题目.pdf">1000题 强化篇 题目</a>
+    <div class="note">
+      ⚠️ 索引 md 的页码两本都不准：<b>基础偏 6 页、强化偏 13 页</b>（与第 5、6、8、9、10、11 讲完全一致，已成定式），本页页码<b>以渲染页首实际印刷页码为准</b>。<br>
+      ⚠️ <b>分章切出的 1000 题「解析」整体偏到了上一章</b>（第 7 讲踩过同一个坑）：正确位置在解析册全本
+      <b>0-based index 85–87（基础篇，书页 80–82）</b> 与 <b>index 299–300（强化篇，书页 294–295）</b>。<b>分章解析一律不要信。</b>
+    </div>
+  </div>
+
+  <!-- ================= s1 变力做功 ================= -->
+  <h2 id="s1"><span class="idx">一</span>变力沿直线做功——<u>找出"哪一部分随位置变"</u></h2>
+
+  <div class="key"><span class="tag">必记 · 公式与它的两种读法</span>
+    <span class="pg">P.295 · P.139</span>
+    <div class="fml">$$W=\int_a^bF(x)\mathrm dx,\qquad \mathrm dW=F(x)\mathrm dx.$$</div>
+    <p>设方向沿 $x$ 轴正向的力函数为 $F(x)\ (a\le x\le b)$，物体沿 $x$ 轴从点 $a$ 移动到点 $b$ 时变力 $F$ 所做的功。</p>
+    <div class="duo">
+      <div class="dA"><b class="h">几何上</b>它是曲边梯形的面积。</div>
+      <div class="dB"><b class="h">物理上</b>它是变力沿直线做的功。</div>
+    </div>
+    <p><b>18 讲的眉批点出了微元法的合法性</b>：<u>在 $[x,x+\Delta x]$ 上，把 $F(x)$ 近似看成<b>常力</b></u>——常力做功 = 力 × 位移，这才有 $\mathrm dW=F\mathrm dx$。</p>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">基 12.1</span><span class="pg">P.295</span>
+    用铁锤将一铁钉击入木板，设木板对铁钉的阻力与铁钉击入木板的深度成正比，在击第一次时，将铁钉击入木板 1 cm。如果铁锤每次击打做功相等，则第二锤可将铁钉又击入 ______。</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$(\sqrt2-1)\ \text{cm}$</span></p>
+      <p><span class="lab">书上的分析栏（值得抄的模板）</span>把审题写成了一张翻译表：</p>
+      <div class="gridwrap"><table class="dense">
+        <tr><th>题目的话</th><th>数学语言</th><th>引入的记号</th></tr>
+        <tr><td>阻力与深度<b>成正比</b></td><td>$f=kx$</td><td>阻力 $f$，深度 $x$</td></tr>
+        <tr><td>每次击打<b>做功相等</b></td><td>$W_1=W_2$</td><td>第 $n$ 锤做的功 $W_n$</td></tr>
+      </table></div>
+      <p><span class="lab">解</span>设第 $n$ 次击打后铁钉的深度为 $x_n$ cm。阻力 $f=kx$，故</p>
+      $$W_1=\int_0^{x_1}kx\,\mathrm dx=\frac k2x_1^2\ \ (x_1=1),\qquad W_2=\int_{x_1}^{x_2}kx\,\mathrm dx=\frac k2x_2^2-\frac k2x_1^2.$$
+      <p>由 $W_2=W_1$ 得 $\dfrac k2x_2^2=2W_1=k$，于是 $x_2=\sqrt2$，故第二锤又击入 $(\sqrt2-1)$ cm。</p>
+      <div class="notekeep"><span class="nh">📌 要害</span>
+        <b>① <span class="dock">问的是"<u>又</u>击入"（增量），不是总深度</b></span>。算出 $x_2=\sqrt2$ 就填 $\sqrt2$ 是本题最常见的失分。<br>
+        <b>② 一般结论（值得记）</b>：由 $\frac k2x_n^2=nW_1=\frac k2n$ 得 <b>$x_n=\sqrt n$</b>，第 $n$ 锤的增量 $=\sqrt n-\sqrt{n-1}=\dfrac1{\sqrt n+\sqrt{n-1}}\to0$。
+        <b>锤子越敲越"不划算"</b>，这就是钉子最后钉不动的数学原因。<br>
+        <b>③ $k$ 自始至终没被求出来，也不需要求</b>——它在等式两端约掉了。<b>凡是"成正比"的题，比例系数通常是过路财神</b>，别浪费时间试图定它。<br>
+        <b>④ 积分下限是 0 不是 $x_1$</b>：第一锤是从"完全没入木板"开始的。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">强 12.1</span><span class="pg">P.139</span>
+    如图，井深 $a$ 米，每米绳子的重量是 5 N，挂斗重 400 N，污泥重 1500 N，将挂斗从井底提到井口所做的功为 59250 J，则 $a=$ ______。</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$a=30$</span></p>
+      <p><span class="lab">解</span>$$W=\int_0^a\big[400+1500+5(a-x)\big]\mathrm dx=59250\ (\text J),$$
+      解得 $a=30$（$a$ 为井深、大于 0，负值舍去）。</p>
+      <div class="notekeep"><span class="nh">📌 要害</span>
+        <b>① ★ 建系：$x$ ＝ <u>已经提升的高度</u>（从井底往上量，$0\to a$）</b>。此时<b>尚未收起的绳长为 $a-x$</b>，绳重 $5(a-x)$ N。
+        若把 $x$ 设成"离井口的距离"，绳重就写成 $5x$，积分同样对——<b>但两种设法不能混用</b>。<br>
+        <b>② 三段力的分工</b>：挂斗 400 与污泥 1500 是<b>常力</b>（全程不变），只有绳重是<b>变力</b>。
+        <span class="chip c-r">★ 变力做功题的题眼永远是"哪一部分随位置变"</span>——把它单独拎出来写成 $x$ 的函数，其余的直接乘长度。<br>
+        <b>③ 反求参数是 18 讲的招牌</b>：$W=1900a+\frac52a^2=59250\Rightarrow a^2+760a-23700=0\Rightarrow a=\frac{-760+820}2=30$。
+        <b>判别式 $\sqrt{577600+94800}=\sqrt{672400}=820$ 是整数</b>，说明题目是凑好的，算出无理数就该回头查算术。<br>
+        <b>④ 若再问"提到一半时做了多少功"</b>：$\int_0^{15}[1900+5(30-x)]\mathrm dx=28500+5(450-112.5)=30187.5$ J，
+        <b>超过总功的一半</b>（因为前半程绳子更重）。这类追问很容易考。
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= s2 变速位移 ================= -->
+  <h2 id="s2"><span class="idx">二</span>变速直线运动的位移<span class="layer L-str">强化专属</span></h2>
+
+  <div class="key"><span class="tag">必记 · 一行公式，但书上的写法有个小坑</span>
+    <span class="pg">P.139</span>
+    <div class="fml">$$s=\int_{t_1}^{t_2}v(t)\mathrm dt$$</div>
+    <p><b style="color:var(--red)">⚠️ 书这里写的是"路程"，但公式给的其实是<u>位移</u></b>（$v$ 没取绝对值）。<b>真路程要写 $\displaystyle\int_{t_1}^{t_2}|v(t)|\mathrm dt$。</b>
+    本讲例题里 $v$ 不变号，两者一致；<b>但考场上一旦 $v$ 会变号（比如简谐运动），必须分段加绝对值</b>，这是第 10 讲弧长/面积"绝对值"传统的延续。</p>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">强 12.2</span><span class="pg">P.139</span>
+    设某物体运动的路程 $s$ 和加速度 $a$ 与时间 $t$ 的关系分别为 $s=s(t)$，$a=a(t)$。已知该物体从 $t=0$ 时刻至 $t=1$ 时刻运动的路程是 2，在 $t=1$ 时刻的速度为 2，则 $\displaystyle\int_0^1ta(t)\mathrm dt=(\ \ )$。<br>
+    (A) 0　(B) 1　(C) 2　(D) 3</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">(A) 0</span></p>
+      <p><span class="lab">解</span>由 $s'(t)=v(t)$、$v'(t)=a(t)$，</p>
+      $$\int_0^1ta(t)\mathrm dt=\int_0^1t\,\mathrm d[v(t)]=tv(t)\Big|_0^1-\int_0^1v(t)\mathrm dt=v(1)-[s(1)-s(0)]=2-2=0.$$
+      <div class="notekeep"><span class="nh">📌 要害</span>
+        <b>① ★ 这是一道<u>物理外衣下的分部积分题</u></b>，与"做功""位移"其实没关系。<br>
+        <b>题给的两个条件恰好对上分部积分后的两块</b>：端点项 $tv\big|_0^1=v(1)$ 用<b>末速度</b>，积分项 $\int_0^1v\mathrm dt$ 用<b>总路程</b>。<b>一个条件也没浪费，这是命题人精心配的。</b><br>
+        <b>② 审题信号（可迁移）</b>：<span class="chip c-r">被积函数里出现 $t\cdot(\text{某个量的导数})$，而条件只给端点值和积分值 → 一定是分部积分</span>。
+        本题里 $a(t)$ 就是 $v$ 的导数，$\mathrm d[v(t)]$ 是自然的凑法。<br>
+        <b>③ 千万别去"求 $a(t)$"</b>：题目根本没给 $s(t)$ 的表达式，$a(t)$ 求不出来也不需要。<b>只要目标是定积分的值，就永远考虑"能不能整体处理"。</b><br>
+        <b>④ 一般化</b>：$\displaystyle\int_0^Tta(t)\mathrm dt=Tv(T)-[s(T)-s(0)]$。本题 $T=1$、$v(1)=2$、路程 2，答案为 0 纯属数值巧合。
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= s3 抽水做功 ================= -->
+  <h2 id="s3"><span class="idx">三</span>抽水做功——<u>关键是水平截面面积 $A(x)$</u></h2>
+
+  <div class="key"><span class="tag">必记 · 公式 + 两本书都强调的那一句</span>
+    <span class="pg">P.296 · P.140</span>
+    <div class="fml">$$W=\rho g\int_a^b x\,A(x)\,\mathrm dx,\qquad
+    \mathrm dW=\underbrace{\rho gA(x)\mathrm dx}_{\text{力（这层水的重量）}}\cdot\underbrace{x}_{\text{位移（提升路程）}}$$</div>
+    <p><b>$\mathrm dW$ 是"位于 $x$ 处、厚 $\mathrm dx$、水平截面面积为 $A(x)$ 的<u>一层水</u>被抽出（路程为 $x$）所做的功"。</b></p>
+    <p style="color:var(--red);font-weight:700">★ 两本书用同一句话点题：求解这类问题的关键是确定 $x$ 处的水平截面面积 $A(x)$，其余的量都是固定的。</p>
+    <div class="fcards">
+      <div><b>圆锥（基例12.2）</b>半径线性缩放<br>$A=\pi\left[\frac{b(a-x)}a\right]^2$</div>
+      <div><b>半球（强12.3 / 基习12.3）</b>勾股<br>$A=\pi(a^2-h^2)$</div>
+      <div><b>旋转抛物面（千基12.4）</b>由方程直读<br>$A=\pi x^2=\pi ay$</div>
+      <div><b>横放圆柱（千基12.5）</b>弦长 × 长度<br>$A=2\sqrt{r^2-y^2}\cdot L$</div>
+    </div>
+  </div>
+
+  <div class="trap"><span class="tag">陷阱 · 本节最大的分歧点：坐标轴朝哪、原点在哪</span>
+    <b>四道抽水题用了三种不同的建系，位移项的写法各不相同</b>——这正是本节唯一会失分的地方：
+    <div class="gridwrap"><table class="dense">
+      <tr><th>题</th><th>轴向</th><th>原点</th><th>提升距离</th></tr>
+      <tr><td>基例 12.2 倒圆锥</td><td>$x$ 向<b>下</b></td><td>锥口中心（＝抽出口）</td><td>$x$（就是坐标本身）</td></tr>
+      <tr><td>强 12.3 半球</td><td>$h$ 向<b>下</b></td><td>池面（＝抽出口）</td><td>$h$（就是坐标本身）</td></tr>
+      <tr><td>基习 12.3 半球 + 高水箱</td><td>$y$ 向<b>上</b></td><td>原水面</td><td>$6-y$（还要再抬 6 m）</td></tr>
+      <tr><td>千基 12.4 抛物面缸</td><td>$y$ 向<b>上</b></td><td>缸底</td><td>$a-y$（抽到缸口）</td></tr>
+    </table></div>
+    <b style="color:var(--red)">★ 一条判据管全部</b>：<b>提升距离 = |目标高度 − 当前高度|</b>。
+    <u>把坐标轴指向"抽出口"、原点放在抽出口上，位移项就退化成坐标本身</u>（前两题）；否则老老实实写差（后两题）。
+    <b>不确定时先在草稿上画一根竖线标出"水面 / 出口 / 池底"三个位置，再定原点。</b>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">基 12.2</span><span class="pg">P.296</span>
+    有一倒圆锥形容器，高为 $a$，上底半径为 $b$，装满水。记水的密度为 $\rho$，重力加速度为 $g$，则将容器中的水全部从容器顶部抽出所做的功为 ______。</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\dfrac1{12}\rho ga^2b^2\pi$</span></p>
+      <p><span class="lab">解</span>建系：<b>原点在锥口中心，$x$ 轴铅直向下指向锥尖</b>。$x$ 处水平截面半径 $r$ 满足 $\dfrac rb=\dfrac{a-x}a$，即 $r=\dfrac{b(a-x)}a$，故</p>
+      $$A(x)=\pi r^2=\frac{b^2(a-x)^2\pi}{a^2},\qquad
+      W=\rho g\int_0^ax\cdot\frac{b^2(a-x)^2\pi}{a^2}\mathrm dx=\frac1{12}\rho ga^2b^2\pi.$$
+      <div class="notekeep"><span class="nh">📌 要害</span>
+        <b>① 相似三角形是圆锥类的唯一技术</b>：$\frac rb=\frac{a-x}a$——<b>分子是"到锥尖的距离"</b>。写成 $\frac xa$ 就上下颠倒了，画个图立刻能查出来。<br>
+        <b>② 核心积分值得记</b>：$\displaystyle\int_0^ax(a-x)^2\mathrm dx=\frac{a^4}{12}$。<b>展开成 $a^2x-2ax^2+x^3$ 逐项积分</b>即可：$\frac{a^4}2-\frac{2a^4}3+\frac{a^4}4=\frac{6-8+3}{12}a^4=\frac{a^4}{12}$。<br>
+        <b>③ 量纲自检</b>：$\rho g\cdot a^2b^2$ 里 $a^2b^2$ 是四次长度 ✔（体积 × 长度 = 功/$\rho g$）。<b>物理题算完先扫一眼量纲，能挡掉一多半的低级错误。</b><br>
+        <b>④ 与"圆锥体积 $\frac13\pi b^2a$"对照</b>：若把全部水的重量集中在<b>形心</b>（离锥口 $\frac a4$ 处，实心圆锥形心在 $\frac14$ 高度）来算，$W=\rho g\cdot\frac13\pi b^2a\cdot\frac a4=\frac1{12}\rho g\pi a^2b^2$ ✅
+        <span class="chip c-g">★ 抽水做功也有形心秒杀法：$W=\rho gV\bar x$</span>（$\bar x$ 为水体形心到出口的距离）。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">强 12.3</span><span class="pg">P.140</span>
+    半径为 $a$ 的半球形水池蓄满了水，<b>水的比重为 1</b>（眉批：$\rho g=1$），现将水抽干，至少做功 $\dfrac\pi2$，则 $a=$ ______。</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$a=2^{\frac14}$</span></p>
+      <p><span class="lab">解</span>把水看作一层一层抽出来的。任取一个与池面距离为 $h$ 的小薄层，厚 $\mathrm dh$，其重量为 $\pi(a^2-h^2)\mathrm dh$，抽到池面所做的功为 $\mathrm dW=\pi(a^2-h^2)h\,\mathrm dh$，故</p>
+      $$W=\int_0^a\pi(a^2-h^2)h\,\mathrm dh=\pi\left(\frac{a^2}2h^2-\frac{h^4}4\right)\bigg|_0^a=\frac\pi4a^4=\frac\pi2\ \Longrightarrow\ a=2^{\frac14}.$$
+      <div class="notekeep"><span class="nh">📌 要害</span>
+        <b>① ⚠️「比重为 1」＝ $\rho g=1$ 已被打包</b>，所以重量微元直接写 $\pi(a^2-h^2)\mathrm dh$，<b>不要再乘 $g$</b>。
+        <span class="chip c-r">本章第 1 次出现的"$\rho g$ 打包"陷阱</span>，后面还会遇到<b>容重 $r$</b>（基习 12.1）和<b>"1 m³ 液体重 1 N"</b>（千基 12.5）——<b>三种说法，同一个坑。</b><br>
+        <b>② 半球截面用勾股</b>：距池面 $h$ 处半径 $\sqrt{a^2-h^2}$。<b>这是本章唯一需要"想一下"的 $A$</b>（圆锥线性、抛物面直读、圆柱弦长都更简单）。<br>
+        <b>③ "至少做功"</b>＝ 恰好把水提到池口、末速度为零的理想功（无摩擦、不多抬高）。<b>物理题里的"至少/最少"通常就是去掉损耗的意思，不是最优化。</b><br>
+        <b>④ 半球公式记住</b>：$W=\frac\pi4\rho ga^4$。用形心秒杀验：半球体积 $\frac23\pi a^3$，半球形心离池面 $\frac38a$，$W=\rho g\cdot\frac23\pi a^3\cdot\frac38a=\frac14\pi\rho ga^4$ ✅ <b>两条路对上了。</b>
+      </div>
+    </div>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">基习 12.3</span><span class="pg">P.302</span>
+    有一半径为 4 m 的半球形水池蓄满了水，现在要将水全部抽到<b>距水池原水面 6 m 高</b>的水箱中，求需做多少功。（水的密度 $\rho=1000\ \text{kg/m}^3$，重力加速度 $g=9.8\ \text{m/s}^2$，$\pi=3.14$）</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>先认出这是"抽水做功"的标准题</b>：给了容器形状 + 抽出目标高度，要功。三步走：建系 → 微元 → 积分。</li>
+          <li><b>建系的选择</b>：抽出口<u>不在容器上</u>（在水面上方 6 m），所以"把原点放在出口"会让容器方程变丑。
+            <b>这时应该让原点落在容器的对称中心（原水面），让容器方程最简</b>，位移项写成差。</li>
+          <li><b>取 $y$ 轴向上、原点在原水面</b>：池底在 $y=-4$，水占 $y\in[-4,0]$。$y$ 处的水平截面是圆，半径由勾股得 $\sqrt{16-y^2}$。</li>
+          <li><b>位移项</b>：这一层水要抬到 $y=6$，所以提升距离是 $6-y$。<b>注意 $y$ 为负 ⇒ 距离大于 6，符合直觉（池底的水走得最远）。</b></li>
+          <li><b>最后代数据</b>：题目把 $\rho,g,\pi$ 都给了具体值，说明<b>要一个数值答案</b>，别停在符号式子上。</li>
+        </ol>
+      </div>
+      <div class="paper"><div class="phead">✍️ 考场卷面<span class="score">参考 10 分</span></div>
+        <div class="step"><span class="k">解</span>如图建立坐标系：<b>取 $y$ 轴铅直向上，原点在原水面中心</b>，则半球形水池的池底位于 $y=-4$，水体占 $-4\le y\le0$。<span class="pt">⛳ 2分</span></div>
+        <div class="step">在 $y$ 处的水面（水平截面）面积为
+          $$A(y)=\pi\left(4^2-y^2\right)=\pi\left(16-y^2\right),$$
+          故在 $[y,y+\mathrm dy]$ 上的体积微元为 $\pi(16-y^2)\mathrm dy$，其重量（力）的微元为 $\rho g\pi(16-y^2)\mathrm dy$。<span class="pt">⛳ 3分</span></div>
+        <div class="step">提升到距原水面 6 m 高处，等于提升距离为 $(6-y)$ m，从而做功的微元为
+          $$\mathrm dW=(6-y)\,\rho g\pi\left(16-y^2\right)\mathrm dy.\tag{1}$$<span class="pt">⛳ 2分</span></div>
+        <div class="step">将 (1) 式在 $[-4,0]$ 上积分，得
+          $$W=\int_{-4}^0(6-y)\rho g\pi\left(16-y^2\right)\mathrm dy=\rho g\pi\int_{-4}^0\left(96-16y-6y^2+y^3\right)\mathrm dy=320\pi\rho g.$$<span class="pt">⛳ 2分</span></div>
+        <div class="fin">代入 $\rho=1000$，$g=9.8$，$\pi=3.14$，得 $W=320\times3.14\times1000\times9.8\approx9847\ (\text{kJ})$，即需做功约 $9847$ kJ。<span class="pt">⛳ 1分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（对照完再看）</span>
+        <b>① ★ 与强 12.3（同样是半球）建系相反，是因为"出口位置"不同</b>：强 12.3 抽到池口，把原点放池口最省事；本题抽到池口上方 6 m，<b>原点仍放池口（原水面）但轴反向朝上</b>，位移写成 $6-y$。
+        <span class="chip c-b">判据：原点跟着"容器的对称中心"走，轴向跟着"哪边算正"走，位移永远是"目标高度 − 当前高度"。</span><br>
+        <b>② 展开逐项积分（考场手算路线）</b>：$(6-y)(16-y^2)=96-16y-6y^2+y^3$，
+        $$\int_{-4}^096\mathrm dy=384,\quad\int_{-4}^0(-16y)\mathrm dy=128,\quad\int_{-4}^0(-6y^2)\mathrm dy=-128,\quad\int_{-4}^0y^3\mathrm dy=-64,$$
+        合计 $384+128-128-64=\boxed{320}$。<b><span class="dock">中间两项恰好抵消</span>，这是本题手算最容易写错符号的地方</b>——负区间上 $\int y\,\mathrm dy>0$、$\int y^3\mathrm dy<0$，逐项写清楚别跳步。<br>
+        <b>③ 拆成"两块功"验算更快</b>：$W=\underbrace{\rho g\pi\int_{-4}^0(-y)(16-y^2)\mathrm dy}_{\text{提到水面：}64\pi\rho g}+\underbrace{6\rho g\pi\int_{-4}^0(16-y^2)\mathrm dy}_{6\times\text{总重}=6\cdot\frac{128}3\pi\rho g=256\pi\rho g}=320\pi\rho g$ ✅
+        <span class="chip c-g">★ 这个拆法就是"形心秒杀 + 整体抬升"：半球水体积 $\frac{128}3\pi$，形心在水面下 $\frac{3\cdot4}8=1.5$ m，故 $W=\rho g\cdot\frac{128}3\pi\cdot(1.5+6)=320\pi\rho g$ ✅</span><br>
+        <b>④ <span class="dock">单位别丢</b></span>：$320\pi\rho g$ 的单位是 J，$\approx9\,847\,040$ J；题目量级大，<b>答案写 kJ 更规范</b>。<br>
+        <b>⑤ 若题目改成"抽到池口"</b>（即 6 改成 0），答案退化为 $64\pi\rho g\approx1969$ kJ。<b>可见"再抬 6 m"贡献了总功的 80%</b>——这个比例感能帮你判断算错没有。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">千基 12.4</span><span class="pg">1000题 P.29</span>
+    有一内表面为旋转抛物面的水缸，其深为 $a$（米），缸口直径为 $2a$（米），缸内盛满了水，设水的密度为 $\rho$（千克/立方米）。若以每秒 $Q$ 立方米的速率将缸中的水全部抽出，问：<b>(1)</b> 共需多少时间？<b>(2)</b> 需做多少功？</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>两问的量纲完全不同</b>：(1) 只要<b>体积</b>（与 $\rho,g$ 无关），(2) 才要<b>功</b>。<u>别把 (1) 也乘上 $\rho g$</u>，这是本题最容易犯的糊涂。</li>
+          <li><b>"旋转抛物面"要先把方程定出来</b>：设轴截面上的抛物线为 $y=kx^2$，用"深 $a$、口半径 $a$"这一个条件定 $k$。<b>题目给的是<u>直径</u> $2a$，先除以 2。</b></li>
+          <li><b>建系选缸底为原点、$y$ 轴向上</b>：这样抛物线过原点、方程最简（$y=kx^2$ 没有常数项），而且提升距离写成 $a-y$ 很自然。</li>
+          <li><b>抛物面的便利</b>：截面面积 $A=\pi x^2$，而方程直接给出 $x^2=ay$——<b>$A$ 是 $y$ 的一次函数</b>，比圆锥（二次）还简单。<u>看到"抛物面"就该想到"$x^2$ 能直读"。</u></li>
+          <li><b>(1) 的时间 = 体积 ÷ 速率</b>，是道送分的量纲题。</li>
+        </ol>
+      </div>
+      <div class="paper"><div class="phead">✍️ 考场卷面<span class="score">参考 11 分</span></div>
+        <div class="step"><span class="k">(1) 解</span>以缸底中心为原点、对称轴为 $y$ 轴，在轴截面上建立平面直角坐标系，则缸内表面（旋转抛物面）由抛物线 $y=kx^2$ 绕 $y$ 轴旋转而成。<span class="pt">⛳ 2分</span></div>
+        <div class="step">由题设缸深为 $a$、缸口半径为 $a$，即抛物线过点 $(a,a)$，故 $a=ka^2$，得 $k=\dfrac1a$，即
+          $$y=\frac1ax^2,\qquad\text{亦即}\qquad x^2=ay.\tag{1}$$<span class="pt">⛳ 2分</span></div>
+        <div class="step">于是缸的容积为
+          $$V=\pi\int_0^ax^2\mathrm dy\xlongequal{(1)}\pi\int_0^aay\,\mathrm dy=\frac{\pi a^3}2\ (\text{立方米}).$$<span class="pt">⛳ 2分</span></div>
+        <div class="fin">故以每秒 $Q$ 立方米的速率抽完所需时间为 $t=\dfrac VQ=\dfrac{\pi a^3}{2Q}$（秒）。<span class="pt">⛳ 1分</span></div>
+        <div class="step" style="margin-top:12px"><span class="k">(2) 解</span>取 $y$ 为积分变量，其取值范围为 $[0,a]$。在 $[0,a]$ 内任取一个典型小区间 $[y,y+\mathrm dy]$，该层水的体积为 $\pi x^2\mathrm dy=\pi ay\,\mathrm dy$，<b>需提升的距离为 $a-y$</b>（抽到缸口），故做功的微元为
+          $$\mathrm dW=\rho g\pi x^2\mathrm dy\cdot(a-y)=\rho g\pi a\left(ay-y^2\right)\mathrm dy.\tag{2}$$<span class="pt">⛳ 3分</span></div>
+        <div class="fin">将 (2) 式在 $[0,a]$ 上积分，得
+          $$W=\int_0^a\rho g\pi a\left(ay-y^2\right)\mathrm dy=\rho g\pi a\left(\frac12ay^2-\frac13y^3\right)\bigg|_0^a=\frac16\rho g\pi a^4\ (\text{焦耳}).$$<span class="pt">⛳ 1分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（对照完再看）</span>
+        <b>① ★ 抛物面 $A(y)=\pi ay$ 是<u>一次</u>函数</b>，与圆锥的 $\propto(a-y)^2$、半球的 $\propto a^2-y^2$ 并列记忆：
+        <span class="chip c-b">圆锥：线性缩放半径</span><span class="chip c-b">半球：勾股</span><span class="chip c-b">抛物面：方程直读 $x^2$</span><br>
+        <b>② <span class="dock">缸口"直径" $2a$ 要先减半</b></span>：写成 $y=kx^2$ 过 $(2a,a)$ 就全错了。<b>凡是给"直径"的题，读题时立刻在草稿上改写成半径。</b><br>
+        <b>③ 形心秒杀验算</b>：抛物面水体积 $\frac{\pi a^3}2$，其形心到缸口的距离 $=a-\bar y$，其中
+        $\bar y=\frac{\int_0^ay\cdot\pi ay\,\mathrm dy}{\pi a^3/2}=\frac{\pi a\cdot a^3/3}{\pi a^3/2}=\frac{2a}3$，故 $W=\rho g\cdot\frac{\pi a^3}2\cdot\frac a3=\frac16\rho g\pi a^4$ ✅<br>
+        <b>④ 与旋转体体积（第 10 讲）的接口</b>：这里的 $V=\pi\int x^2\mathrm dy$ <b>就是绕 $y$ 轴的圆盘法</b>。<b>第 12 讲的每一个 $A(x)$ 都是第 10 讲的截面公式</b>，两讲共用同一套几何。<br>
+        <b>⑤ 若追问"抽了一半体积时用了多少功"</b>：抽的是<b>上半部分</b>（先抽上层），体积一半对应 $y_0$ 满足 $\int_{y_0}^a\pi ay\mathrm dy=\frac{\pi a^3}4\Rightarrow a^2-y_0^2=\frac{a^2}2\Rightarrow y_0=\frac a{\sqrt2}$，
+        $W_{\text{上半}}=\rho g\pi a\int_{a/\sqrt2}^a(ay-y^2)\mathrm dy\approx0.0447\rho g\pi a^4$，<b>只占总功的 27%</b>——上层的水又少走又轻松。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">千基 12.5</span><span class="pg">1000题 P.29</span>
+    在一个高为 1 m 的圆柱形容器内储存某种液体，并将容器<b>横放</b>。底面圆的方程为 $x^2+y^2=1$（单位：m）。如果容器内装满了液体后，以 $0.2\ \text{m}^3/\text{min}$ 的速率将液体从<b>容器顶端</b>抽出。<br>
+    <b>(1)</b> 当液面在 $y=0$ 时，求液面下降的速率；<br>
+    <b>(2)</b> 如果 $1\ \text{m}^3$ 液体所受重力为 1 N，求抽完全部液体需做多少功？</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>两问考的是两章</b>：(1) 是<b>第 7 讲的相关变化率</b>（体积速率 ↔ 液面速率），(2) 是本讲的抽水做功。<u>这是全章最"像真题"的一道。</u></li>
+          <li><b>(1) 的链式法则该怎么搭</b>：已知 $\frac{\mathrm dV}{\mathrm dt}$，要 $\frac{\mathrm dy}{\mathrm dt}$，中间桥梁是 $\frac{\mathrm dV}{\mathrm dy}$。
+            <b>所以真正要算的是"液面高度每升高一点，体积增加多少"——那就是液面处的<u>水平截面面积</u>。</b></li>
+          <li><b>体积怎么写？</b>横放圆柱的液体是<b>弓形柱</b>，弓形面积是个 arcsin 的丑式子。
+            <b>★ 但我们不需要它：把体积写成变限积分 $V=2\int_{-1}^y\sqrt{1-u^2}\,\mathrm du$，求导时变限积分求导直接给出 $\frac{\mathrm dV}{\mathrm dy}$，把丑式子绕过去了。</b></li>
+          <li><b>(2) 的"重力已打包"</b>：题目说"1 m³ 液体所受重力为 1 N"，<b>所以重力微元就是体积微元的数值</b>，不要再乘 $\rho g$。</li>
+          <li><b>(2) 的位移</b>：从<b>顶端</b>（$y=1$）抽出，位于 $y$ 处的那一层要走 $1-y$。</li>
+          <li><b>算积分前先看奇偶</b>：拆开后有一项是奇函数在对称区间上的积分，直接为 0。</li>
+        </ol>
+      </div>
+      <div class="paper"><div class="phead">✍️ 考场卷面<span class="score">参考 12 分</span></div>
+        <div class="step"><span class="k">(1) 解</span>如图，当液面在 $y\ (-1\le y\le1)$ 处时，容器内液体的体积为
+          $$V=2\int_{-1}^y\sqrt{1-u^2}\,\mathrm du\tag{1}$$
+          （底面弓形的面积乘以容器高 1）。<span class="pt">⛳ 2分</span></div>
+        <div class="step">设 $t$ 时刻液体的体积为 $V=V(t)$，由复合函数求导法则及对 (1) 式用变限积分求导，得
+          $$\frac{\mathrm dV}{\mathrm dt}=\frac{\mathrm dV}{\mathrm dy}\cdot\frac{\mathrm dy}{\mathrm dt}=2\sqrt{1-y^2}\cdot\frac{\mathrm dy}{\mathrm dt}.\tag{2}$$<span class="pt">⛳ 3分</span></div>
+        <div class="fin">在 (2) 式中令 $y=0$，并由题设 $\left|\dfrac{\mathrm dV}{\mathrm dt}\right|=0.2$，得 $\left|\dfrac{\mathrm dy}{\mathrm dt}\right|=0.1$。
+          故液面在 $y=0$ 时，<b>液面下降的速率为 $0.1$ m/min</b>。<span class="pt">⛳ 1分</span></div>
+        <div class="step" style="margin-top:12px"><span class="k">(2) 解</span>取 $y$ 为积分变量，$y\in[-1,1]$。位于 $[y,y+\mathrm dy]$ 的一层液体，其体积为 $2\sqrt{1-y^2}\,\mathrm dy$，由题设"$1\ \text{m}^3$ 液体所受重力为 1 N"知其重力即为 $2\sqrt{1-y^2}\,\mathrm dy$ (N)；
+          又从容器顶端（$y=1$）抽出，故提升距离为 $1-y$，做功的微元为
+          $$\mathrm dW=2\sqrt{1-y^2}\,(1-y)\,\mathrm dy.\tag{3}$$<span class="pt">⛳ 3分</span></div>
+        <div class="step">将 (3) 式在 $[-1,1]$ 上积分，并注意 $2y\sqrt{1-y^2}$ 为<b>奇函数</b>，故
+          $$W=\int_{-1}^12\sqrt{1-y^2}(1-y)\mathrm dy=\int_{-1}^12\sqrt{1-y^2}\,\mathrm dy-\underbrace{\int_{-1}^12y\sqrt{1-y^2}\,\mathrm dy}_{=\,0}=4\int_0^1\sqrt{1-y^2}\,\mathrm dy.$$<span class="pt">⛳ 2分</span></div>
+        <div class="fin">令 $y=\sin t$，则 $W=4\displaystyle\int_0^{\frac\pi2}\cos^2t\,\mathrm dt=4\times\frac\pi4=\pi\ (\text J)$，即抽完全部液体需做功 $\pi$ 焦耳。<span class="pt">⛳ 1分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（对照完再看）</span>
+        <b>① ★★ (1) 的精髓：用变限积分求导绕开弓形面积。</b>
+        弓形面积的显式表达是 $\arcsin y+y\sqrt{1-y^2}+\frac\pi2$，求导后仍是 $2\sqrt{1-y^2}$——<b>但把它写出来再求导纯属浪费时间且容易错。</b>
+        <span class="chip c-r">★ 凡是"只需要导数、不需要函数本身"的场合，就把函数写成变限积分。</span>这是第 8 讲变限积分求导的最实用兑现。<br>
+        <b>② $\frac{\mathrm dV}{\mathrm dy}$ 的物理解读</b>：它就是液面处的水平截面面积 = 弦长 $2\sqrt{1-y^2}$ × 容器长 1。
+        <b>$y=0$ 时截面最大（=2），所以这一刻液面下降<u>最慢</u></b>；接近 $y=\pm1$ 时截面趋于 0，液面下降速率趋于 $\infty$。<b>这个"最慢"很容易被出成选择题。</b><br>
+        <b>③ <span class="dock">"1 m³ 重 1 N"是第三种 $\rho g$ 打包写法</b></span>（前两种是"比重"和"容重"）。<b>读到任何"单位体积的重量/重力"，就直接把它当成 $\rho g$ 用，不要再乘 $g$。</b><br>
+        <b>④ 答案 $\pi$ 的来源全在 $\int_{-1}^1\sqrt{1-y^2}\mathrm dy=\frac\pi2$（半圆面积）</b>——<b>考场上应该直接用几何意义写 $\frac\pi2$，不必换元</b>（第 8 讲的定积分几何意义）。书上换元是为了展示步骤。<br>
+        <b>⑤ 为什么"下半部分的水走得远"却没让答案变大</b>：因为奇函数项积掉了，$W$ 恰好等于"全部液体的重量 × 从<u>圆心</u>到顶端的距离" $=\pi\cdot1$。
+        <span class="chip c-g">★ 又是形心秒杀：横放圆柱的液体形心就在圆心 $y=0$，到顶端距离 1，总重 $\pi$ N（截面积 $\pi$ × 高 1 × 1 N/m³）⇒ $W=\pi$ J ✅</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="tool" id="t1">
+    <h4>🎛️ 微元法建系沙盘 —— 五种容器 / 板形，看 $A(x)$ 与位移项怎么随建系变</h4>
+    <div class="hint">
+      本章唯一的失分点是<b>第 ① 步建系</b>。这个沙盘把五道抽水/压力题放在同一个坐标里：拖动滑块选一层微元，
+      看它的<b>截面（或宽度）</b>、<b>提升距离（或水深）</b>与<b>该层的贡献</b>；右侧实时把"逐层累加（数值积分）"与"书上的解析答案"对拍。
+      <b>切换建系方式</b>，可以看到同一道题在"轴向上/向下""原点在出口/在容器中心"下位移项写法如何改变，而<u>总量恒定不变</u>。
+    </div>
+    <div class="ctl" id="t1-scene">
+      <button data-s="cone" class="on">基例12.2 倒圆锥</button>
+      <button data-s="hemi">强12.3 半球</button>
+      <button data-s="hemi6">基习12.3 半球+6m</button>
+      <button data-s="para">千基12.4 抛物面缸</button>
+      <button data-s="cyl">千基12.5 横放圆柱</button>
+    </div>
+    <div class="ctl">
+      <label>当前微元位置</label>
+      <input type="range" id="t1-pos" min="1" max="99" value="50">
+      <span class="val" id="t1-posv">—</span>
+    </div>
+    <div class="ctl">
+      <label>累加进度（已抽到）</label>
+      <input type="range" id="t1-cut" min="0" max="100" value="100">
+      <span class="val" id="t1-cutv">100%</span>
+    </div>
+    <div class="scene"><svg id="t1-svg" viewBox="0 0 660 300" xmlns="http://www.w3.org/2000/svg"></svg></div>
+    <div class="say" id="t1-say">—</div>
+    <div class="gridwrap"><table class="dq" id="t1-tab"></table></div>
+    <div class="legend2">
+      <span class="chip c-b">蓝</span>容器/板的轮廓　<span class="chip c-a">琥珀</span>当前微元那一层　<span class="chip c-g">绿</span>已累加的部分
+      <span class="chip c-r">红</span>该层的提升距离（箭头长度 ∝ 走的路）<br>
+      <b>纵向比例已按各题量纲自适应缩放</b>，同一场景内所有长度共用一个比例因子，形状不会失真。
+    </div>
+  </div>
+
+  <!-- ================= s4 静水压力 ================= -->
+  <h2 id="s4"><span class="idx">四</span>静水压力——<u>关键是水深 $x$ 处平板的宽度</u><span class="layer L-base">重难点</span></h2>
+
+  <div class="key"><span class="tag">必记 · 公式 + 两本书共同的注</span>
+    <span class="pg">P.297 · P.140</span>
+    <div class="fml">$$P=\rho g\int_a^b x\,[f(x)-h(x)]\,\mathrm dx,\qquad
+    \mathrm dP=\rho g\underbrace{x}_{\text{水深}}\cdot\underbrace{[f(x)-h(x)]}_{\text{矩形条的宽度}}\cdot\underbrace{\mathrm dx}_{\text{矩形条的高度}}$$</div>
+    <p style="color:var(--red);font-weight:700">注：水压力问题的特点是<u>压强随水的深度改变而改变</u>。求解这类问题的关键是确定水深 $x$ 处平板的宽度 $f(x)-h(x)$。</p>
+    <div class="duo">
+      <div class="dA"><b class="h">抽水做功的关键量</b>水平截面<b>面积</b> $A(x)$（三维的量）</div>
+      <div class="dB"><b class="h">静水压力的关键量</b>该深度处的<b>宽度</b> $b(x)$（二维的量）</div>
+    </div>
+    <p><b>两者建系完全一样（都让坐标 = 铅直深度），只是微元里乘的几何量差一个维度。</b>这也是基础30讲把「重难点」定在静水压力的原因：<b>宽度函数常常要分段</b>（千基 12.2），而截面面积一般不会。</p>
+  </div>
+
+  <div class="key"><span class="tag">必记 · ★★★ 形心秒杀器（书上没写，但填空题必用）</span>
+    <p>把压力公式改写一下：</p>
+    $$P=\rho g\int_a^bx\,b(x)\mathrm dx=\rho g\cdot\underbrace{\frac{\int_a^bx\,b(x)\mathrm dx}{\int_a^bb(x)\mathrm dx}}_{\text{形心深度 }\bar x}\cdot\underbrace{\int_a^bb(x)\mathrm dx}_{\text{板的面积 }S}
+    \ \Longrightarrow\ \boxed{P=\rho g\,\bar x\,S}$$
+    <p><b>「平板一侧所受的静水压力 = 形心处的压强 × 面积」</b>——这是流体静力学的标准结论，用它可以<b>不算积分直接出答案</b>：</p>
+    <div class="gridwrap"><table class="dense">
+      <tr><th>题</th><th>形心深度 $\bar x$</th><th>面积 $S$</th><th>$P=\rho g\bar xS$</th><th>与积分结果</th></tr>
+      <tr><td>基例 12.3 等腰直角三角形</td><td>$\frac a3$</td><td>$a^2$</td><td>$\frac13\rho ga^3$</td><td class="hit">✅ 一致</td></tr>
+      <tr><td>千基 12.2 正方形（对角线铅垂）</td><td>$\frac a{\sqrt2}$</td><td>$a^2$</td><td>$\frac{\sqrt2}2\rho ga^3$</td><td class="hit">✅ 一致</td></tr>
+      <tr><td>千强 12.1 三角形（边在水面）</td><td>$\frac h3$</td><td>$\frac{ah}2$</td><td>$\frac16\rho gah^2$</td><td class="hit">✅ 一致</td></tr>
+      <tr><td>千强 12.1 三角形（尖在水面）</td><td>$\frac{2h}3$</td><td>$\frac{ah}2$</td><td>$\frac13\rho gah^2$</td><td class="hit">✅ 一致</td></tr>
+      <tr><td>千强 12.2 等边三角形（边在水面）</td><td>$\frac{\sqrt3}3$</td><td>$\sqrt3$</td><td>$\rho g$</td><td class="hit">✅ 一致</td></tr>
+    </table></div>
+    <p><b style="color:var(--red)">⚠️ 使用纪律</b>：<b>填空/选择题直接用，解答题必须老实写微元和积分</b>（这条公式不在考纲里，阅卷不认，写了拿不到过程分）。
+    <u>正确用法是：解答题用它<b>验算</b>，选择题用它<b>秒杀</b>。</u><br>
+    <b>常用形心速查</b>：三角形形心在<b>距底边 $\frac13$ 高</b>处；矩形/平行四边形/圆在中心；半圆（均质）在距直径 $\frac{4r}{3\pi}$ 处。</p>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">基 12.3</span><span class="pg">P.297</span>
+    斜边长为 $2a$ 的等腰直角三角形平板铅直地沉没在水中，且斜边与水面相齐。记重力加速度为 $g$，水的密度为 $\rho$，则该平板一侧所受的水压力为 ______。</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\dfrac13a^3\rho g$</span></p>
+      <p><span class="lab">解</span>建系：<b>斜边在水面上、$x$ 轴水平沿水面、$y$ 轴铅直向下</b>，直角顶点在 $(0,a)$，右半边界为直线 $y=a-x$，即水深 $y$ 处的半宽为 $a-y$、全宽为 $2(a-y)$。故</p>
+      $$P=\int_0^a2\rho g(a-y)\,y\,\mathrm dy=2\rho g\int_0^a\left(ay-y^2\right)\mathrm dy=2\rho g\left(\frac{a^3}2-\frac{a^3}3\right)=\frac13a^3\rho g.$$
+      <div class="notekeep"><span class="nh">📌 要害</span>
+        <b>① ⚠️ 书这里把积分变量写成 $y$，公式里却是 $x$</b>——<b>记公式别记字母，记"<u>深度 × 宽度 × d深度</u>"这三件事。</b>本章公式里的 $x$ 一律指"铅直深度"，与平时的横坐标无关。<br>
+        <b>② 等腰直角三角形的几何</b>：斜边 $2a$ ⇒ 斜边上的高 $=a$，两直角边各 $\sqrt2a$，面积 $=\frac12\cdot2a\cdot a=a^2$。<b>形心深度 $\frac a3$，秒杀 $P=\rho g\cdot\frac a3\cdot a^2=\frac13\rho ga^3$ ✅</b><br>
+        <b>③ <span class="dock">"沉没在水中"＋"斜边与水面相齐"＝ 板的顶边恰在水面</span></b>，所以积分下限是 0。若题目改成"顶边在水下 $d$ 处"，宽度函数不变，只需把深度换成 $y+d$，$P$ 增加 $\rho gd\cdot a^2$。<br>
+        <b>④ 核心积分</b>：$\int_0^a(ay-y^2)\mathrm dy=\frac{a^3}6$，与基例 12.2 的 $\int_0^ax(a-x)^2\mathrm dx=\frac{a^4}{12}$ 同属"三角形/圆锥族"的两个常数，<b>记住 $\frac16$ 与 $\frac1{12}$ 能省很多算术。</b>
+      </div>
+    </div>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">基习 12.1</span><span class="pg">P.302</span>
+    由曲线 $y=f_1(x)$，$y=f_2(x)$ 及直线 $x=a$，$x=b\ (a\lt b)$ 所围成的平面板铅直地没入容重为 $r\ (r=\rho g$，表示单位体积液体的重力）的液体中，$x$ 轴铅直向下，液面与 $y$ 轴重合，如图，平面板所受液压力为（　）。<br>
+    (A) $\displaystyle\int_a^bx[f_2(x)-f_1(x)]\mathrm dx$　(B) $\displaystyle\int_a^brx[f_1(x)-f_2(x)]\mathrm dx$<br>
+    (C) $\displaystyle\int_a^br[f_2(x)-f_1(x)]\mathrm dx$　(D) $\displaystyle\int_a^brx[f_2(x)-f_1(x)]\mathrm dx$</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">(D)</span></p>
+      <p><span class="lab">解</span>在 $[x,x+\mathrm dx]$ 上，液体对阴影部分的压力微元为 $rx[f_2(x)-f_1(x)]\mathrm dx$，故 $F=\displaystyle\int_a^brx[f_2(x)-f_1(x)]\mathrm dx$。</p>
+      <div class="notekeep"><span class="nh">📌 要害</span>
+        <b>★ 四个选项就是三个典型错误，一个都别放过：</b>
+        <div class="gridwrap"><table class="dense">
+          <tr><th>选项</th><th>错在哪</th><th>它其实算的是什么</th></tr>
+          <tr><td>(A)</td><td>丢了容重 $r$</td><td>压力 $\div\ \rho g$，量纲不对</td></tr>
+          <tr><td>(B)</td><td>宽度写反（$f_1-f_2\lt0$）</td><td>压力的相反数</td></tr>
+          <tr><td>(C)</td><td>丢了深度 $x$</td><td>$\rho g\times$ 板的<b>面积</b>，即"整块板都在水面处"时的压力</td></tr>
+          <tr><td><b>(D)</b></td><td>—</td><td class="hit">正确</td></tr>
+        </table></div>
+        <b>① <span class="dock">容重 $r=\rho g$ 是"单位体积液体的<u>重力</u>"，$g$ 已经打包进去了</b></span>——<b>看到 $r$ 就绝对不能再乘 $g$</b>。
+        <span class="chip c-r">本章第 2 次出现的"$\rho g$ 打包"陷阱</span>（强 12.3 的"比重"是第 1 次，千基 12.5 的"1 m³ 重 1 N"是第 3 次）。<br>
+        <b>② 题干把建系直接告诉你了</b>："$x$ 轴铅直向下，液面与 $y$ 轴重合"——<b>这等于说"$x$ 就是水深"，所以微元里的深度因子直接写 $x$。</b>
+        考场上遇到没说建系的题，<u>第一句话就要自己把这句写出来</u>。<br>
+        <b>③ 为什么是 $f_2-f_1$</b>：图中 $y=f_2(x)$ 在右（$y$ 大）、$y=f_1(x)$ 在左，宽度 = 右 − 左 > 0。<b>宽度永远取正</b>，与第 10 讲面积公式"上 − 下"是同一个规矩。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">强 12.4</span><span class="pg">P.141</span>
+    如图，一闸门的上部是一个宽为 2 m、高为 $H$ m 的矩形，下部由 $y=x^2$ 与 $y=1$ 围成。当闸门上边缘与水面在一个平面时，其上部所受水压力与下部所受水压力之比为 $\dfrac54$，求上部的高度 $H$。</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>题目已经把图给全了，先决定"用谁的坐标系"</b>：图里有一条抛物线 $y=x^2$，<u>它自己的坐标系最简洁</u>（顶点在原点）。
+            <b>如果非要把原点挪到水面，抛物线就变成 $y=x^2-(H+1)$，白白多一个常数。</b>★ 让曲线保持最简形式，这是本题最值得学的决策。</li>
+          <li><b>那么"水深"怎么写？</b>上边缘与水面齐平 ⇒ 水面高度 $=H+1$ ⇒ 位于 $y$ 处的水深 $=H+1-y$。<b>深度不再是坐标本身，而是"水面高 − 当前高"。</b></li>
+          <li><b>上下两部分的宽度是两个函数 ⇒ 必须分两个积分</b>：上部矩形宽恒为 2（$y$ 从 1 到 $H+1$）；下部由 $y=x^2$ 得 $x=\pm\sqrt y$，宽 $2\sqrt y$（$y$ 从 0 到 1）。</li>
+          <li><b>最后列比例方程解 $H$</b>——注意这是个<b>二次方程</b>，会解出一个负根，要按"$H$ 是高度"舍去。</li>
+        </ol>
+      </div>
+      <div class="paper"><div class="phead">✍️ 考场卷面<span class="score">参考 11 分</span></div>
+        <div class="step"><span class="k">解</span>如图建立坐标系（以抛物线 $y=x^2$ 的顶点为原点），则闸门上边缘的高度为 $y=H+1$。由题设该边缘与水面在同一平面，故<b>水面高度为 $H+1$，位于高度 $y$ 处的水深为 $H+1-y$</b>。<span class="pt">⛳ 2分</span></div>
+        <div class="step">闸门<b>上部</b>为宽 2 的矩形（$1\le y\le H+1$），压力微元 $\mathrm dP_1=\rho g(H+1-y)\cdot2\,\mathrm dy$，故
+          $$P_1=\int_1^{H+1}\rho g(H+1-y)\cdot2\,\mathrm dy=\rho gH^2,\tag{1}$$
+          其中 $\rho$ 为水的密度，$g$ 为重力加速度。<span class="pt">⛳ 3分</span></div>
+        <div class="step">闸门<b>下部</b>由 $y=x^2$ 与 $y=1$ 围成（$0\le y\le1$），此时宽度为 $2\sqrt y$，压力微元 $\mathrm dP_2=\rho g(H+1-y)\cdot2\sqrt y\,\mathrm dy$，故
+          $$P_2=\int_0^1\rho g(H+1-y)\cdot2\sqrt y\,\mathrm dy=\frac43\rho g\left(H+\frac25\right).\tag{2}$$<span class="pt">⛳ 3分</span></div>
+        <div class="step">由题设 $\dfrac{P_1}{P_2}=\dfrac54$，将 (1)(2) 代入得
+          $$\frac{H^2}{\frac43\left(H+\frac25\right)}=\frac54\ \Longrightarrow\ 12H^2=20H+8\ \Longrightarrow\ 3H^2-5H-2=0.$$<span class="pt">⛳ 2分</span></div>
+        <div class="fin">解得 $H=-\dfrac13$（舍去，因 $H$ 为高度）或 $H=2$，故上部的高度 $H=2$ m。<span class="pt">⛳ 1分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（对照完再看）</span>
+        <b>① ★★ 本题的建系是全章最值得抄的一处</b>：<u>没有把原点放在水面</u>，而是沿用抛物线自己的坐标系。
+        <span class="chip c-r">★ 判据：谁的方程最复杂，就把原点让给谁。</span>本章其他题的容器都是"圆锥/半球/圆柱"这类中心对称形状，原点放哪都简单，所以才总把原点放在出口；本题多了一条抛物线，规则就反过来了。<br>
+        <b>② $P_1$ 的换元技巧</b>：令 $u=H+1-y$，$\int_1^{H+1}(H+1-y)\mathrm dy=\int_0^Hu\,\mathrm du=\frac{H^2}2$，乘 $2\rho g$ 得 $\rho gH^2$。
+        <b>比展开成 $(H+1)y-\frac{y^2}2$ 再代两个端点快得多，也不容易错。</b><br>
+        <b>③ $P_2$ 的化简要盯住</b>：$2\rho g\left[(H+1)\cdot\frac23-\frac25\right]=\frac43\rho g(H+1)-\frac45\rho g=\frac43\rho g\left(H+\frac8{15}\cdot\frac34\cdot\frac43\right)$……
+        <b>直接提 $\frac43$：$\frac43(H+1)-\frac45=\frac43H+\frac43-\frac45=\frac43H+\frac8{15}=\frac43\left(H+\frac25\right)$</b> ✅
+        <span class="dock">这一步是本题唯一的算术坑</span>，$\frac8{15}\div\frac43=\frac25$ 要算准。<br>
+        <b>④ 形心秒杀验算</b>：上部矩形面积 $2H$、形心水深 $\frac H2$ ⇒ $P_1=\rho g\cdot\frac H2\cdot2H=\rho gH^2$ ✅
+        下部抛物线弓形面积 $\int_0^12\sqrt y\mathrm dy=\frac43$、形心高度 $\bar y=\frac{\int_0^1y\cdot2\sqrt y\mathrm dy}{4/3}=\frac{4/5}{4/3}=\frac35$ ⇒ 水深 $H+1-\frac35=H+\frac25$ ⇒ $P_2=\rho g\left(H+\frac25\right)\cdot\frac43$ ✅
+        <b>两处都对上了，而且秒杀路线还顺手解释了 $\frac25$ 是怎么来的（$1-\frac35$）。</b><br>
+        <b>⑤ 若追问"水面再上涨 $d$ 时的比值"</b>：$P_1\to\rho g(H^2+2Hd)$、$P_2\to\frac43\rho g(H+\frac25+d)$，<b>比值随 $d$ 增大而增大</b>（上部面积大、增量多）。
+        水面涨得很高时比值趋于 $\frac{2H}{4/3}=\frac{3H}2$。<b>这个"整体下沉"的追问方式，正是千强 12.2 第 (2) 问考的事。</b>
+      </div>
+    </div>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">千基 12.2</span><span class="pg">1000题 P.29</span>
+    边长为 $a$ 的正方形平板置于水面下，且一个顶点与水面相齐，其中一条对角线与水面垂直，如图。记水的密度为 $\rho$，重力加速度为 $g$，则其一侧所受的静水压力为 ______。</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\dfrac{\sqrt2}2\rho ga^3$</span></p>
+      <p><span class="lab">解</span>建系：<b>原点在正方形中心，$y$ 轴铅直向上</b>。最高顶点在 $y=\frac a{\sqrt2}$（即水面），左右两顶点在 $y=0$，最低顶点在 $y=-\frac a{\sqrt2}$。上两边为 $x\pm y=\frac a{\sqrt2}$。</p>
+      <p><b>当 $y\gt0$ 时</b>（水深 $\frac a{\sqrt2}-y$，宽 $2\left(\frac a{\sqrt2}-y\right)$）：</p>
+      $$P_1=\int_0^{\frac a{\sqrt2}}2\rho g\left(\frac a{\sqrt2}-y\right)^2\mathrm dy=-\frac23\rho g\left(\frac a{\sqrt2}-y\right)^3\bigg|_0^{\frac a{\sqrt2}}=\frac{\sqrt2}6\rho ga^3.$$
+      <p><b>当 $y\lt0$ 时</b>（水深仍是 $\frac a{\sqrt2}-y$，但宽变成 $2\left(\frac a{\sqrt2}+y\right)$）：</p>
+      $$P_2=\int_{-\frac a{\sqrt2}}^02\rho g\left(\frac{a^2}2-y^2\right)\mathrm dy=2\rho g\left(\frac{a^2}2\cdot\frac a{\sqrt2}-\frac13\cdot\frac{a^3}{2\sqrt2}\right)=\frac{\sqrt2}3\rho ga^3.$$
+      <p>故 $P=P_1+P_2=\left(\dfrac{\sqrt2}6+\dfrac{\sqrt2}3\right)\rho ga^3=\dfrac{\sqrt2}2\rho ga^3$。</p>
+      <div class="notekeep"><span class="nh">📌 要害</span>
+        <b>① ★★ 本题最值得记的一步：<u>深度与宽度是两个不同的表达式</u>。</b>
+        深度恒为 $\frac a{\sqrt2}-y$（$y$ 越负越深），宽度却在 $y=0$ 处换公式（上半随 $y$ 增而收窄，下半随 $y$ 减而收窄）。
+        <span class="chip c-r">★ 只要板的宽度函数在某处折了，就必须分段积分</span>，一口气写成一个式子必错。<br>
+        <b>② 平方差的巧劲</b>：下半段 $\left(\frac a{\sqrt2}-y\right)\left(\frac a{\sqrt2}+y\right)=\frac{a^2}2-y^2$，被积函数自动化简成偶次多项式。<b>看到"深度 × 宽度"能配成平方差，先乘开再积分。</b><br>
+        <b>③ 上下两半的压力比是 $1:2$</b>——下半虽然窄，但深度大得多。<b>与千强 12.1 的 $F_1:F_2=1:2$ 是同一个物理机制</b>（三角形的"尖朝下"与"尖朝上"）。<b>其实本题就是两个三角形拼起来的。</b><br>
+        <b>④ <span class="dock">形心秒杀（本题应该直接这么做）</span></b>：正方形形心在中心，水深恰为半对角线 $\frac a{\sqrt2}$，面积 $a^2$，
+        $$P=\rho g\cdot\frac a{\sqrt2}\cdot a^2=\frac{\sqrt2}2\rho ga^3\ ✅$$
+        <b>填空题 5 秒出答案，还完全绕开了分段。</b>这是本章形心秒杀器价值最大的一题。<br>
+        <b>⑤ 与旋转 45° 无关的直觉</b>：把正方形转成"边水平"（顶边在水面），形心深度变成 $\frac a2\lt\frac a{\sqrt2}$，压力反而<b>更小</b>。
+        <b>同一块板，形心越深压力越大——这就是千强 12.1 的全部内容。</b>
+      </div>
+    </div>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">千基 12.7</span><span class="pg">1000题 P.29</span>
+    直角三角板的斜边长度为 1，将该直角三角板竖直插入水中，并使其中一个直角边与水面对齐，当三角板受到水的压力最大时，其水平直角边的长度为（　）。<br>
+    (A) $\dfrac{\sqrt3}3$　(B) $\dfrac{\sqrt5}5$　(C) $\dfrac{\sqrt6}3$　(D) $\dfrac{\sqrt2}2$</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">(A) $\dfrac{\sqrt3}3$</span></p>
+      <p><span class="lab">解</span>设三角形<b>斜边与水面的夹角为 $\theta$</b>，则两直角边分别为水平的 $\cos\theta$ 与竖直的 $\sin\theta$，斜边所在直线为 $y=\cos\theta-x\cot\theta$（$x$ 轴铅直向下、$y$ 轴沿水面）。于是</p>
+      $$P=\rho g\int_0^{\sin\theta}x(\cos\theta-x\cot\theta)\mathrm dx
+      =\rho g\left(\cos\theta\cdot\frac{\sin^2\theta}2-\cot\theta\cdot\frac{\sin^3\theta}3\right)=\frac16\rho g\cos\theta\sin^2\theta.$$
+      <p>令 $P'(\theta)=\frac16\rho g\left(2\sin\theta\cos^2\theta-\sin^3\theta\right)=0$，得唯一驻点 $\theta=\arccos\frac1{\sqrt3}$，此时水平直角边长 $\cos\theta=\frac1{\sqrt3}=\frac{\sqrt3}3$。</p>
+      <div class="notekeep"><span class="nh">📌 要害</span>
+        <b>① ★★★ 建系的巧思：<u>不设边长，设角度</u>。</b>斜边长为 1 是一个约束，若设两直角边为 $p,q$，还要带着 $p^2+q^2=1$ 做条件极值；
+        <b>设夹角 $\theta$ 后两边自动写成 $\cos\theta,\sin\theta$，约束被自动满足，一元化完成。</b>
+        <span class="chip c-r">★ 凡是"有一条边/半径固定"的最优化题，优先用角度参数化。</span><br>
+        <b>② 目标函数化到最简</b>：$\cos\theta\frac{\sin^2\theta}2-\frac{\cos\theta}{\sin\theta}\cdot\frac{\sin^3\theta}3=\cos\theta\sin^2\theta\left(\frac12-\frac13\right)=\frac16\cos\theta\sin^2\theta$。<b>两项同底，直接提公因式，别硬展开。</b><br>
+        <b>③ $c(1-c^2)$ 的驻点 $c=\frac1{\sqrt3}$ 是高频结论</b>（$c=\cos\theta$）。$f'=1-3c^2$，$f''=-6c\lt0$ ⇒ 极大。<b>第 5 讲已经见过多次，直接背。</b><br>
+        <b>④ 两条直角边的分工要分清</b>：水平边 $\cos\theta$ 决定<b>宽度基准</b>（水面处的宽度），竖直边 $\sin\theta$ 决定<b>积分上限</b>（最大水深）。
+        <span class="dock">问的是"水平直角边"，答案是 $\cos\theta$ 不是 $\sin\theta$</span>——如果算成 $\sin\theta=\sqrt{1-\frac13}=\frac{\sqrt6}3$，恰好落进陷阱选项 (C)。<br>
+        <b>⑤ 形心秒杀在这题<u>行不通</u></b>：形心深度 $\frac{\sin\theta}3$、面积 $\frac12\sin\theta\cos\theta$ ⇒ $P=\rho g\cdot\frac{\sin\theta}3\cdot\frac{\sin\theta\cos\theta}2=\frac16\rho g\sin^2\theta\cos\theta$
+        ——<b>结果一样，但还是得对 $\theta$ 求导。</b><b>秒杀器只省"算积分"，不省"最优化"。</b>
+      </div>
+    </div>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">千强 12.1</span><span class="pg">1000题 P.108</span>
+    一三角形平面薄板铅直地浸没于水中，设当该薄板的<b>一条边与水面相平齐</b>时薄板一侧所受的水压力的大小为 $F_1$，当倒转薄板使原来与水面相平齐的那条边与水面平行、而<b>该边相对的顶点与水面相齐</b>时薄板一侧所受的水压力的大小为 $F_2$，则（　）。<br>
+    (A) $F_2=\frac32F_1$　(B) $F_2=\frac43F_1$　(C) $F_2=2F_1$　(D) $F_2=3F_1$</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">(C) $F_2=2F_1$</span></p>
+      <p><span class="lab">解</span>以水面上某一点为原点、铅直向下为 $x$ 轴正向。设与水面平齐的那条边长为 $a$、对应的高为 $h$，则</p>
+      $$F_1=\int_0^h\rho gx\cdot\frac ah(h-x)\mathrm dx=\frac{\rho ga}h\int_0^h\left(hx-x^2\right)\mathrm dx=\frac16\rho gah^2,$$
+      $$F_2=\int_0^h\rho gx\cdot\frac ahx\,\mathrm dx=\frac{\rho ga}h\int_0^hx^2\mathrm dx=\frac13\rho gah^2.$$
+      <p>故 $F_2=2F_1$。</p>
+      <div class="notekeep"><span class="nh">📌 要害</span>
+        <b>① ★★★ 这是"宽度函数决定一切"最纯粹的呈现。</b>面积相同、深度范围相同，唯一的差别是宽度怎么分布：
+        <div class="duo">
+          <div class="dA"><b class="h">姿势甲：边在水面、尖朝下</b>$b(x)=\frac ah(h-x)$<br><b>浅处宽、深处窄</b> ⇒ 压力小</div>
+          <div class="dB"><b class="h">姿势乙：尖在水面、边在下</b>$b(x)=\frac ahx$<br><b>浅处窄、深处宽</b> ⇒ 压力大</div>
+        </div>
+        <b>物理直觉：深处的宽度被 $x$ 加权，"把重的部分放深处"压力更大。</b><u>这个直觉能让你不算就断定 $F_2\gt F_1$，直接排除半数选项。</u><br>
+        <b>② 两个积分值得成对记</b>：$\displaystyle\int_0^h(hx-x^2)\mathrm dx=\frac{h^3}6$ 与 $\displaystyle\int_0^hx^2\mathrm dx=\frac{h^3}3$，<b>恰好差 2 倍</b>。<br>
+        <b>③ <span class="dock">形心秒杀（5 秒）</span></b>：三角形形心在距底边 $\frac13$ 高处。
+        姿势甲形心深 $\frac h3$，姿势乙形心深 $\frac{2h}3$，面积同为 $\frac{ah}2$ ⇒ $\dfrac{F_2}{F_1}=\dfrac{2h/3}{h/3}=2$ ✅
+        <b>连积分都不用列。</b><br>
+        <b>④ 一般化</b>：<b>任何薄板做"上下翻转"（水深范围不变）时，压力比 = 两种姿势的形心深度比</b>。对梯形、半圆等都成立。<br>
+        <b>⑤ 干扰项的来源</b>：$\frac32$ 是"形心从 $\frac h3$ 到 $\frac h2$"（矩形化）的比，$\frac43$、$3$ 则是随手编的。<b>只要形心公式在手，四个选项一眼分辨。</b>
+      </div>
+    </div>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">千强 12.2</span><span class="pg">1000题 P.108</span>
+    边长为 2 的等边三角形薄平板铅直沉没在水中，且一条边与水面相齐。记重力加速度为 $g$，水的密度为 $\rho$。<br>
+    <b>(1)</b> 求该平板一侧所受的水压力；<br>
+    <b>(2)</b> 当水面开始以 0.1 的速度上涨时，求平板一侧所受水压力的变化率。</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>(1) 是标准题</b>：边长 2 的等边三角形，高 $\sqrt3$。一条边在水面、尖朝下 ⇒ 宽度从 2 线性减到 0。</li>
+          <li><b>(2) 才是本题的价值所在</b>：水面上涨了，<u>板没动、板的形状没变</u>，变的只是"每一点的水深都加了一个相同的量"。
+            <b>所以不必重新建系，只要在原来的深度上加一个参数。</b></li>
+          <li><b>参数怎么设</b>：书设"0～$t$ 时刻水面增加的高度为 $-h$"（即 $h\lt0$），于是深度从 $y$ 变成 $y-h$。
+            <u>符号有点绕，但好处是最终式子里不用带负号。</u><b>自己写时设"上涨量为 $d\gt0$、深度为 $y+d$"更直观，结论一样。</b></li>
+          <li><b>关键的观察</b>：$F(h)=\int(\text{宽})\cdot\rho g\cdot(y-h)\mathrm dy$ 对 $h$ 是<b>线性的</b>，$h$ 前面的系数正是 $\rho g\times$ 板的面积。
+            <b>所以 $\frac{\mathrm dF}{\mathrm dh}$ 是个常数，与水面涨到哪儿无关。</b></li>
+          <li><b>最后一步是链式法则</b>（第 7 讲相关变化率）：$\frac{\mathrm dF}{\mathrm dt}=\frac{\mathrm dF}{\mathrm dh}\cdot\frac{\mathrm dh}{\mathrm dt}$。<b>结果必须为正</b>（水涨压力增大），符号反了就自查。</li>
+        </ol>
+      </div>
+      <div class="paper"><div class="phead">✍️ 考场卷面<span class="score">参考 12 分</span></div>
+        <div class="step"><span class="k">(1) 解</span>如图建立坐标系：<b>$y$ 轴铅直向下、原点在水面</b>。边长为 2 的等边三角形的高为 $\sqrt3$，与水面相齐的边长为 2、对顶点位于 $y=\sqrt3$，故水深 $y$ 处平板的宽度为
+          $$b(y)=2\left(1-\frac{\sqrt3}3y\right),\qquad 0\le y\le\sqrt3.\tag{1}$$<span class="pt">⛳ 3分</span></div>
+        <div class="step">于是水深 $y$ 处的压力微元为 $\mathrm dF=\rho gy\cdot b(y)\mathrm dy$，故平板一侧所受的水压力为
+          $$F=\int_0^{\sqrt3}\rho gy\cdot2\left(1-\frac{\sqrt3}3y\right)\mathrm dy=2\rho g\int_0^{\sqrt3}\left(y-\frac{\sqrt3}3y^2\right)\mathrm dy=2\rho g\left(\frac32-1\right)=\rho g.$$<span class="pt">⛳ 3分</span></div>
+        <div class="fin">即该平板一侧所受的水压力为 $\rho g$。<span class="pt">⛳ 1分</span></div>
+        <div class="step" style="margin-top:12px"><span class="k">(2) 解</span>如图，设 $0\sim t$ 时刻水面增加的高度为 $-h$，$h=h(t)\lt0$，则原坐标下高度 $y$ 处的水深变为 $y-h$，故此时平板一侧所受的水压力为
+          $$F=\int_0^{\sqrt3}2\rho g\left(1-\frac{\sqrt3}3y\right)(y-h)\mathrm dy
+          =\rho g-2\rho g\,h\int_0^{\sqrt3}\left(1-\frac{\sqrt3}3y\right)\mathrm dy=\rho g-\sqrt3\rho g\,h.\tag{2}$$<span class="pt">⛳ 4分</span></div>
+        <div class="fin">由题设水面以 0.1 的速度上涨，即 $\dfrac{\mathrm dh}{\mathrm dt}=-\dfrac1{10}$，对 (2) 式两端关于 $t$ 求导得
+          $$\frac{\mathrm dF}{\mathrm dt}=-\sqrt3\rho g\cdot\frac{\mathrm dh}{\mathrm dt}=\frac{\sqrt3}{10}\rho g,$$
+          即平板一侧所受水压力的变化率为 $\dfrac{\sqrt3}{10}\rho g$。<span class="pt">⛳ 1分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（对照完再看）</span>
+        <b>① ★★★ (2) 问背后的一般结论（值得单独背下来）：</b>
+        $$\boxed{\text{水面整体上涨 }\Delta\ \Longrightarrow\ \Delta P=\rho g\,\Delta\cdot S}\quad(S=\text{板的面积})$$
+        因为 $P=\rho g\bar xS$，深度整体平移 $\Delta$ 时形心深度也平移 $\Delta$。<b>本题 $S=\sqrt3$，故 $\frac{\mathrm dF}{\mathrm dt}=\rho g\cdot\sqrt3\cdot0.1=\frac{\sqrt3}{10}\rho g$ ✅ 一行出答案。</b>
+        <span class="chip c-g">★ 这是"形心秒杀器"的微分形式，比重新积分快十倍。</span><br>
+        <b>② 等边三角形的两个数要熟</b>：边长 2 ⇒ 高 $\sqrt3$、面积 $\frac{\sqrt3}4\cdot2^2=\sqrt3$。
+        卷面里的 $\int_0^{\sqrt3}2\left(1-\frac{\sqrt3}3y\right)\mathrm dy=\sqrt3$ <b>就是面积</b>，算出来能顺手验证宽度函数写对没有。<br>
+        <b>③ 宽度函数怎么写不容易错</b>：<b>用两个端点定线性函数</b>——$y=0$ 时宽 2，$y=\sqrt3$ 时宽 0，故 $b=2\left(1-\frac y{\sqrt3}\right)=2\left(1-\frac{\sqrt3}3y\right)$。
+        <span class="dock">$\frac1{\sqrt3}=\frac{\sqrt3}3$ 要及时有理化</span>，否则后面积分容易抄错。<br>
+        <b>④ 符号自查</b>：书用 $-h$ 表示上涨量（$h\lt0$），所以 $\frac{\mathrm dh}{\mathrm dt}=-0.1$，最终 $\frac{\mathrm dF}{\mathrm dt}=+\frac{\sqrt3}{10}\rho g\gt0$。
+        <b>物理上水涨压力必增，答案为负就是符号搞反了。</b><br>
+        <b>⑤ 形心检验 (1)</b>：形心深 $\frac{\sqrt3}3$、面积 $\sqrt3$ ⇒ $P=\rho g\cdot\frac{\sqrt3}3\cdot\sqrt3=\rho g$ ✅
+        <b>答案恰好等于 $\rho g$（数值为 1 个单位），这种"干净的答案"通常说明题目是凑好的，也说明你没算错。</b>
+      </div>
+    </div>
+  </div>
+
+  <div class="tool" id="t2">
+    <h4>⚖️ 形心秒杀器 —— 亲手验证 $P=\rho g\,\bar x\,S$，并看"整体下沉"如何线性抬高压力</h4>
+    <div class="hint">
+      选一种板形，拖动<b>下沉深度</b>（板顶到水面的距离）。左侧画板与水压强分布（三角形箭头），右侧同时给出两条路线的结果：
+      <b>逐层数值积分</b>（$\rho g\sum x_ib(x_i)\Delta x$）与<b>形心公式</b>（$\rho g\bar xS$）。两者必须始终相等。<br>
+      拖动下沉深度还能看到<b>千强 12.2 第 (2) 问的结论</b>：$P$ 随下沉深度 <b>严格线性</b>增长，斜率恒为 $\rho gS$（与板形无关）。
+    </div>
+    <div class="ctl" id="t2-shape">
+      <button data-s="tri_top" class="on">三角形·边在上</button>
+      <button data-s="tri_bot">三角形·尖在上</button>
+      <button data-s="square45">正方形·对角线铅垂</button>
+      <button data-s="eqtri">等边三角形</button>
+      <button data-s="rect">矩形</button>
+      <button data-s="semi">半圆·直径在上</button>
+    </div>
+    <div class="ctl">
+      <label>板顶下沉深度 $d$</label>
+      <input type="range" id="t2-d" min="0" max="200" value="0">
+      <span class="val" id="t2-dv">0.00</span>
+    </div>
+    <div class="scene"><svg id="t2-svg" viewBox="0 0 660 300" xmlns="http://www.w3.org/2000/svg"></svg></div>
+    <div class="say" id="t2-say">—</div>
+    <div class="gridwrap"><table class="dq" id="t2-tab"></table></div>
+    <div class="verdict" id="t2-verdict">—</div>
+    <div class="legend2">
+      数值积分用 <b>20 万等分中点法</b>，与解析形心公式的相对误差应恒 $\lt10^{-6}$。（半圆等在端点有竖直切线的板形，中点法收敛较慢，分点少了会出现 $10^{-6}$ 量级的<b>假不一致</b>——这是数值噪声，不是公式错。）
+      <b>斜率一栏</b>直接读 $\mathrm dP/\mathrm dd$（数值差商），它应当恒等于 $\rho gS$ —— 这就是"水面上涨 $\Delta$ 则压力增加 $\rho g\Delta S$"。
+    </div>
+  </div>
+
+  <!-- ================= s5 引力 ================= -->
+  <h2 id="s5"><span class="idx">五</span>引力——<u>共线可直接积，不共线必须分解方向</u></h2>
+
+  <div class="key"><span class="tag">必记 · 书上的模板（共线情形）</span>
+    <span class="pg">P.297 · P.141</span>
+    <p>设有一长度为 $l$、线密度为常数 $\mu$ 的细棒，在与细棒右端的距离为 $a$ 处有一质量为 $m$ 的质点 $M$，引力常量为 $G$，则质点与细棒之间的引力大小为</p>
+    <div class="fml">$$F=\int_{-l}^0\frac{Gm\mu}{(a-x)^2}\mathrm dx,\qquad \mathrm dF=\frac{G\mu\,\mathrm dx\cdot m}{(a-x)^2}$$</div>
+    <p>（建系：棒右端在原点，棒占 $[-l,0]$，质点在 $x=a$；位于 $x$ 处长 $\mathrm dx$ 的小段质量为 $\mu\mathrm dx$，与质点距离 $a-x$。）</p>
+    <p><b>算出来是个漂亮的闭式</b>：
+    $$F=Gm\mu\left[\frac1{a-x}\right]_{-l}^0=Gm\mu\left(\frac1a-\frac1{a+l}\right)=\frac{Gm\mu l}{a(a+l)}.$$
+    <b>物理解读：等价于把棒的全部质量 $\mu l$ 集中在距离 $\sqrt{a(a+l)}$（两端距离的<u>几何平均</u>）处。</b>不是算术平均，别记错。</p>
+  </div>
+
+  <div class="trap"><span class="tag">陷阱 · 共线是特例，不共线才是数一的考法</span>
+    书上的模板题里，所有微元的引力<b>方向相同</b>（都沿棒的延长线），所以可以直接把大小相加。<br>
+    <b style="color:var(--red)">一旦质点不在棒的延长线上，各微元的引力方向就各不相同，"直接积分"是错的——必须先投影到坐标轴，再分别积分。</b>
+    $$\mathrm dF_x=\cos\alpha\cdot\mathrm dF,\qquad \mathrm dF_y=\sin\alpha\cdot\mathrm dF,$$
+    其中 $\alpha$ 是"从质点指向微元"的方向角。<b>强 12.5 就是这个升级版，也是本节唯一一道真正要动脑的题。</b>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">强 12.5</span><span class="pg">P.142</span>
+    <span class="chip c-p">＝ 千基 12.1（同一道题）</span><br>
+    设沿 $y$ 轴上的区间 $[0,1]$ 放置一长度为 1 且线密度为 $\rho$ 的均匀细杆，在 $x$ 轴上 $x=1$ 处有一单位质点，则该细杆对此质点的引力（$G$ 为引力常量）<b>沿 $x$ 轴正向的分力</b>为 ______。</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$-\dfrac{\sqrt2}2G\rho$</span></p>
+      <p><span class="lab">解</span>用微元法，取 $y$ 轴上的 $[y,y+\mathrm dy]\subset[0,1]$，此微段细杆对质点的引力大小为</p>
+      $$\mathrm dF=G\cdot\frac{\rho\,\mathrm dy}{1+y^2}$$
+      <p>（质点在 $(1,0)$，微元在 $(0,y)$，距离平方 $=1+y^2$）。其在 $x$ 轴正向的分力为</p>
+      $$\mathrm dF_x=\frac{-1}{\sqrt{1+y^2}}\,\mathrm dF=-\frac{G\rho\,\mathrm dy}{\left(1+y^2\right)^{\frac32}},$$
+      $$F_x=\int_0^1\left[-\frac{G\rho}{\left(1+y^2\right)^{\frac32}}\right]\mathrm dy\xlongequal{\ y=\tan t\ }-G\rho\int_0^{\frac\pi4}\cos t\,\mathrm dt=-\frac{\sqrt2}2G\rho.$$
+      <div class="notekeep"><span class="nh">📌 要害</span>
+        <b>① ★★★ 方向余弦从哪来</b>：从质点 $(1,0)$ 指向微元 $(0,y)$ 的方向向量是 $(-1,y)$，模长 $\sqrt{1+y^2}$，
+        故 $x$ 方向的分量系数为 $\dfrac{-1}{\sqrt{1+y^2}}$。<b>"引力沿两点连线、指向另一个物体"是唯一需要的物理。</b><br>
+        <b>② <span class="dock">答案是负数，负号必须留着</span></b>：引力把质点往 $-x$ 方向（向杆）拉。题问的是"沿 $x$ 轴<b>正向</b>的分力"，这是个<b>有向量</b>，
+        <b>算出负数不是错，写成正数才是错。</b><br>
+        <b>③ $(1+y^2)^{3/2}$ 见到就换 $y=\tan t$</b>：$\mathrm dy=\sec^2t\,\mathrm dt$，$(1+y^2)^{3/2}=\sec^3t$，整体化为 $\cos t$——<b>第 9 讲三角换元的直接复用</b>，$y:0\to1$ 对应 $t:0\to\frac\pi4$。<br>
+        <b>④ 顺手把另一个分力也算了（可能追问）</b>：$\mathrm dF_y=\dfrac y{\sqrt{1+y^2}}\mathrm dF$ ⇒
+        $F_y=G\rho\displaystyle\int_0^1\frac{y\,\mathrm dy}{(1+y^2)^{3/2}}=G\rho\left(1-\frac1{\sqrt2}\right)\approx0.293G\rho\gt0$（把质点往上拉）。
+        <b>合力大小 $\sqrt{F_x^2+F_y^2}\approx0.765G\rho$，方向指向杆的中部偏下。</b><br>
+        <b>⑤ 数量级检验</b>：若把整根杆的质量 $\rho$ 集中在中点 $(0,\frac12)$，距离 $\sqrt{1.25}$，则 $F\approx\frac{G\rho}{1.25}=0.8G\rho$，
+        $x$ 分量 $\approx0.8\times\frac1{\sqrt{1.25}}\approx0.716G\rho$。<b>与精确值 $0.707G\rho$ 只差 1%</b>——<b>"集中在中点"是引力题极好的粗查手段。</b>
+      </div>
+    </div>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">千基 12.3</span><span class="pg">1000题 P.29</span>
+    将地面上质量为 1 的物体铅直向上举高，记地球半径为 $R$，质量为 $M$，引力常数为 $G$，则物体<b>摆脱地球引力</b>所做的功至少为 ______。</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\dfrac{GM}R$</span></p>
+      <p><span class="lab">解</span>设举高至 $a$，则 $W(a)=\displaystyle\int_R^{R+a}\frac{GM}{x^2}\mathrm dx$（$x$ 为到<b>地心</b>的距离），故</p>
+      $$W=\lim_{a\to+\infty}W(a)=\int_R^{+\infty}\frac{GM}{x^2}\mathrm dx=-\frac{GM}x\bigg|_R^{+\infty}=\frac{GM}R.$$
+      <div class="notekeep"><span class="nh">📌 要害</span>
+        <b>① ★ 本章唯一一道<u>反常积分</u>题</b>，第 8 讲的 $p$ 判据在这里兑现：$\int_R^{+\infty}x^{-p}\mathrm dx$ 在 $p=2\gt1$ 时收敛。
+        <b>"摆脱引力"= 举到无穷远，所以上限必须写 $+\infty$。</b><br>
+        <b>② <span class="dock">积分变量是"到地心的距离"，下限是 $R$ 不是 0</span></b>。写成 $\int_0^{+\infty}$ 会发散——<b>这个发散本身就在提醒你下限设错了</b>（物体不可能从地心出发）。<br>
+        <b>③ "至少"的含义</b>：忽略空气阻力与地球自转，且末速度为 0（恰好逃逸）。<b>与强 12.3 的"至少做功"是同一种理想化措辞。</b><br>
+        <b>④ 物理接口</b>：这就是<b>第二宇宙速度</b>的能量来源。$\frac12v^2=\frac{GM}R\Rightarrow v=\sqrt{\frac{2GM}R}\approx11.2$ km/s。
+        <b>另外注意 $\frac{GM}{R^2}=g$，所以答案也可写成 $gR$</b>（$9.8\times6.37\times10^6\approx6.2\times10^7$ J/kg），<b>这个换写法在选择题里常作为另一个选项出现。</b><br>
+        <b>⑤ 与变力做功的关系</b>：本题就是 $W=\int F(x)\mathrm dx$，只是 $F$ 是引力、区间无界。<b>"变力做功 + 反常积分"是这一节最自然的复合。</b>
+      </div>
+    </div>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">千基 12.6</span><span class="pg">1000题 P.29</span>
+    设一单位质量细杆的长为 1，$G$ 为引力常数。当质量为 $a$ 的质点在细杆<b>延长线</b>上距杆右端点的 $\frac12$ 处移至 $\frac13$ 处时，引力做功大小为（　）。<br>
+    (A) $Ga\ln\frac43$　(B) $Ga\ln\frac53$　(C) $Ga\ln2$　(D) $Ga\ln3$</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">(A) $Ga\ln\dfrac43$</span></p>
+      <p><span class="lab">解</span>建系使杆占 $[0,1]$（质量 1、线密度 1）。设质点距杆左端（原点）的距离为 $x_0\ (x_0\gt1)$，则</p>
+      $$\mathrm dF=G\cdot\frac{1\cdot\mathrm dx\cdot a}{(x_0-x)^2},\qquad
+      F(x_0)=Ga\int_0^1\frac{\mathrm dx}{(x_0-x)^2}=Ga\left(\frac1{x_0-1}-\frac1{x_0}\right).$$
+      <p>质点从距右端 $\frac12$ 处（即 $x_0=\frac32$）移到 $\frac13$ 处（即 $x_0=\frac43$），故</p>
+      $$W=\left|\int_{\frac32}^{\frac43}Ga\left(\frac1{x_0-1}-\frac1{x_0}\right)\mathrm dx_0\right|
+      =\left|Ga\ln\frac{x_0-1}{x_0}\bigg|_{\frac32}^{\frac43}\right|=\left|Ga\ln\frac34\right|=Ga\ln\frac43.$$
+      <div class="notekeep"><span class="nh">📌 要害</span>
+        <b>① ★★ 本题是<u>两层积分</u>结构</b>：内层对<b>杆</b>积分得到瞬时引力 $F(x_0)$，外层对<b>位移 $x_0$</b> 积分得到功。
+        <span class="chip c-r">★ 审题信号：题目同时出现"引力"和"做功"，就一定是两层。</span><br>
+        <b>② <span class="dock">距离的换算别搞错</span></b>：杆右端在 $x=1$，"距右端 $\frac12$" ⇒ $x_0=1+\frac12=\frac32$；"距右端 $\frac13$" ⇒ $x_0=\frac43$。
+        <b>质点是在<u>靠近</u>杆，$x_0$ 从 $\frac32$ 减到 $\frac43$。</b><br>
+        <b>③ 为什么要取绝对值</b>：题问"做功<b>大小</b>"。引力方向（指向杆）与位移方向（靠近杆）一致，功本为正；
+        直接积出负号只是因为积分限是从大到小写的。<b>写 $W=\int_{4/3}^{3/2}F\mathrm dx_0$ 就直接是正的。</b><br>
+        <b>④ 原函数要看出来</b>：$\dfrac1{x_0-1}-\dfrac1{x_0}$ 的原函数是 $\ln\dfrac{x_0-1}{x_0}=\ln\left(1-\dfrac1{x_0}\right)$。
+        代入：$x_0=\frac43$ 得 $\ln\frac14$，$x_0=\frac32$ 得 $\ln\frac13$，差为 $\ln\frac34$。<b>干扰项 $\ln2$、$\ln3$ 正是"只代一个端点"的产物。</b><br>
+        <b>⑤ 势能视角（更快）</b>：势能 $U(x_0)=-Ga\ln\frac{x_0-1}{x_0}$（就是 $F$ 的原函数取负），
+        $W=U(\frac32)-U(\frac43)=Ga\left(\ln\frac14-\ln\frac13\right)$ 取绝对值 $=Ga\ln\frac43$。<b>"功 = 势能差"能省掉符号纠结。</b>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= s6 微元法自建 ================= -->
+  <h2 id="s6"><span class="idx">六</span>用微元法自行建立表达式<span class="layer L-str">强化专属</span>——<u>切法要跟着"谁是常数"走</u></h2>
+
+  <div class="key"><span class="tag">必记 · 这条支线为什么单列（三向解题法里唯一标 D₂₂ 的）</span>
+    <span class="pg">P.142</span>
+    <p>前五条支线都有现成公式（$\text{D}_1$ 常规操作）；<b>这一条没有公式，需要 $\text{D}_{22}$（转换等价表述）</b>——
+    即把题目里的物理描述<b>翻译成"微元 × 累加"</b>：</p>
+    <div class="steps3">
+      <div><b>问自己 ①</b>要求的量能写成"很多小份之和"吗？</div>
+      <div><b>问自己 ②</b>怎么切，才能让每一小份内部<b>某个量近似为常数</b>？</div>
+      <div><b>问自己 ③</b>每一小份的贡献 = 什么 × 什么？</div>
+    </div>
+    <p><b style="color:var(--red)">★ 第 ② 问是全部难点</b>：<u>分割方式必须跟着"哪个量是常数"走</u>。
+    速度只依赖到中心的距离 ⇒ 按<b>同心圆环</b>切；密度只依赖深度 ⇒ 按<b>水平薄层</b>切；这就是全部秘诀。</p>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">强 12.6</span><span class="pg">P.142</span>
+    水从一根底面半径为 1 cm 的圆柱形管道中流出。因为水有黏性，在流动过程中受到管道壁的阻滞，所以流动的速度是随着到管道中心的距离而变化的，距管道中心越远，水流速度越小。在距离管道中心 $r$ cm 处的水的流动速度为 $10(1-r^2)$ cm/s。问水是以多大流量（以 cm³/s 为单位）流过管道的？</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>题目没给公式，先把"流量"翻译成数学语言</b>：流量 = 单位时间流过截面的<b>体积</b> = $\sum(\text{速度}\times\text{面积})$。
+            <u>若速度处处相同，流量 = $v\cdot S$；现在速度不同，就得切开累加。</u></li>
+          <li><b>怎么切？看速度依赖谁</b>——速度只依赖 $r$（到中心的距离）。
+            <b>所以要让每一小片内部 $r$ 近似不变 ⇒ 必须按<u>同心圆环</u>切，不能按直角条切。</b>这是本题唯一的决策点。</li>
+          <li><b>圆环的面积</b>：外圆减内圆 $\pi(r+\mathrm dr)^2-\pi r^2=2\pi r\mathrm dr+\pi(\mathrm dr)^2$，
+            <b>$(\mathrm dr)^2$ 是高阶无穷小，扔掉</b> ⇒ $\mathrm dS=2\pi r\mathrm dr$。（书的眉批专门写了这一步。）</li>
+          <li><b>拼装并定限</b>：$\mathrm dQ=v(r)\cdot2\pi r\mathrm dr$，$r$ 从 0 到 1。</li>
+        </ol>
+      </div>
+      <div class="paper"><div class="phead">✍️ 考场卷面<span class="score">参考 10 分</span></div>
+        <div class="step"><span class="k">解</span>由于水的流速只与到管道中心的距离 $r$ 有关，故<b>取同心圆环为微元</b>：任取 $[r,r+\mathrm dr]\subset[0,1]$，此圆环中的水流速度为 $10(1-r^2)$ cm/s。<span class="pt">⛳ 3分</span></div>
+        <div class="step">该圆环的截面积约等于
+          $$\pi(r+\mathrm dr)^2-\pi r^2=2\pi r\mathrm dr+\pi(\mathrm dr)^2\approx2\pi r\,\mathrm dr$$
+          （略去 $\mathrm dr$ 的高阶项），于是单位时间内通过该圆环的水量为
+          $$\mathrm dQ=10\left(1-r^2\right)\cdot2\pi r\,\mathrm dr.\tag{1}$$<span class="pt">⛳ 4分</span></div>
+        <div class="step">将 (1) 式在 $[0,1]$ 上积分，得单位时间内通过整个圆柱形管道的水量
+          $$Q=\int_0^120\pi r\left(1-r^2\right)\mathrm dr=\pi\left(10r^2-5r^4\right)\bigg|_0^1=5\pi\ (\text{cm}^3).$$<span class="pt">⛳ 2分</span></div>
+        <div class="fin">故水流过管道的流量为 $5\pi\ \text{cm}^3/\text{s}$。<span class="pt">⛳ 1分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（对照完再看）</span>
+        <b>① ★ 书的眉批 $\pi(r+\mathrm dr)^2-\pi r^2=2\pi r\mathrm dr+\pi(\mathrm dr)^2$（后一项忽略）<u>是整个微元法的合法性说明</u></b>：
+        微元里<b>只保留 $\mathrm dr$ 的一次项</b>，$(\mathrm dr)^2$ 是高阶无穷小。<b>这与第 8 讲"微元法要求 $\Delta A-f(x)\Delta x=o(\Delta x)$"是同一件事</b>，
+        只是这里第一次把"扔掉的是什么"明明白白写出来了。<br>
+        <b>② <span class="dock">切法错了就全错</span></b>：如果按平行直条切（宽 $\mathrm dx$、长 $2\sqrt{1-x^2}$），每条内部 $r$ 从 $|x|$ 变到 1，速度不是常数，<b>微元根本写不出来</b>。
+        <span class="chip c-r">★ 分割方式跟着"哪个量是常数"走 —— 这是 D₂₂ 的全部内容。</span>
+        （第 14 讲二重积分选极坐标还是直角坐标，用的是同一条判据。）<br>
+        <b>③ 结果的物理检验</b>：平均流速 $=\dfrac{Q}{S}=\dfrac{5\pi}{\pi\cdot1^2}=5$ cm/s，<b>恰是中心最大流速 10 的一半</b>。
+        这是<b>泊肃叶流</b>的经典结论（抛物型速度剖面的平均值 = 峰值的一半），<b>可以当作验算直觉：算出来不是 $\frac{v_{\max}}2$ 就说明错了。</b><br>
+        <b>④ 同类题的家族</b>：把 $v(r)$ 换成密度 $\rho(r)$ 就是"求圆盘质量"，换成温度就是"求平均温度"，换成人口密度就是"求总人口"。
+        <b>凡是"某个量只依赖到中心的距离"，一律 $\int_0^R f(r)\cdot2\pi r\,\mathrm dr$。</b>这个模板在第 14 讲会天天用。
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= s7 取球 ================= -->
+  <h2 id="s7"><span class="idx">七</span>★ 全章最大的思维坑：<u>位移方向反了</u>——从液体中取球</h2>
+
+  <div class="trap"><span class="tag">陷阱 · "抽水做功"与"取球做功"的位移项<u>方向相反</u></span>
+    这一节只有一道题，但它值得单列一节，因为它推翻了前面所有抽水题养成的肌肉记忆：
+    <div class="duo">
+      <div class="dA"><b class="h">抽水做功（本章前四题）</b>
+        把<b>深处的水</b>搬到<b>固定的出口</b>。<br>
+        <b>越深的层，走得越远</b> ⇒ 位移 $\propto x$（深度）。
+      </div>
+      <div class="dB"><b class="h">取球做功（千强 12.3）</b>
+        把<b>整个球</b>搬出水面，球是一个整体。<br>
+        <b>越深的层，反而走得越近</b> ⇒ 位移 $=2a-x$。
+      </div>
+    </div>
+    <b style="color:var(--red)">为什么？</b>因为球是刚体、整体上移同一距离；<b>但在水中的那一段不做功（浮力抵消重力）</b>，
+    所以每一层<u>只有"出水之后"的那段路程才耗功</u>。位于深度 $x$ 的薄层，在球上升了 $x$ 之后才露出水面，此后还要再走 $2a-x$。
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">千强 12.3</span><span class="pg">1000题 P.108</span>
+    半径为 $a$ 的球浸没在与其密度 $\rho$ <b>相同</b>的某液体中，球与水面相切，$g$ 为重力加速度。若将球取出，所做的功至少为 ______。</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\dfrac43\rho g\pi a^4$</span></p>
+      <p><span class="lab">解</span>建系：<b>$x$ 轴铅直向下、原点在水面</b>，球占 $x\in[0,2a]$，球面方程 $(x-a)^2+y^2=a^2$，故深度 $x$ 处的截面半径平方为 $y^2=a^2-(x-a)^2$。</p>
+      <p>重力微元为 $\rho g\pi y^2\mathrm dx$，其需向上移动 $2a$，<b>但在水中不做功</b>，故做功的位移为 $2a-x$，于是</p>
+      $$\mathrm dW=\rho g\pi y^2\mathrm dx\cdot(2a-x),\qquad
+      W=\int_0^{2a}(2a-x)\,\rho g\pi\left[a^2-(x-a)^2\right]\mathrm dx=\frac43\rho g\pi a^4.$$
+      <div class="notekeep"><span class="nh">📌 要害</span>
+        <b>① ★★★ "与球密度相同"是全题的机关</b>：同密度 ⇒ <b>浮力恰好等于重力</b> ⇒ 只要还完全浸在液体里，提升它<u>一点功都不费</u>。
+        <b>题目里每一个看似多余的条件都是机关</b>，"密度相同"这四个字如果读漏，本题必错。<br>
+        <b>② 位移 $2a-x$ 的两种理解（选一个你顺的）</b>：
+        <ul>
+          <li><b>终态视角</b>：取出后球最低点与水面相切，原来深度 $x$ 的薄层最终位于水面上方 $2a-x$ 处，故净上升的"有效高度"是 $2a-x$。</li>
+          <li><b>过程视角</b>：球整体上升 $2a$；薄层在球上升了 $x$ 时才出水，之后剩下的 $2a-x$ 才开始耗功。</li>
+        </ul>
+        <b>③ <span class="dock">与抽水题的判据对照（务必记住）</span></b>：
+        <span class="chip c-b">抽水：出口固定，深的走得远 → 位移 = 深度</span>
+        <span class="chip c-r">取球：物体整体移动，深的走得近 → 位移 = 总行程 − 深度</span><br>
+        <b>④ 积分的算法（换元最省事）</b>：令 $u=x-a$，
+        $$\int_{-a}^a(a-u)\left(a^2-u^2\right)\mathrm du=a\int_{-a}^a\left(a^2-u^2\right)\mathrm du-\underbrace{\int_{-a}^au\left(a^2-u^2\right)\mathrm du}_{\text{奇函数}=0}=a\cdot\frac43a^3=\frac43a^4.$$
+        <b>$\int_{-a}^a(a^2-u^2)\mathrm du=\frac43a^3$ 恰好是"球体积 $\div\pi$"</b>，所以答案也可写成 $W=\rho g\cdot\underbrace{\frac43\pi a^3}_{\text{球体积}}\cdot a$
+        ——<b>即"总重量 × 球心到最终位置的上升有效高度 $a$"。</b>
+        <span class="chip c-g">★ 形心秒杀在这里同样成立：球的形心在球心（深度 $a$），有效位移 $2a-a=a$ ✅</span><br>
+        <b>⑤ 若密度不同呢（常见追问）</b>：设球密度 $\rho_1$、液体密度 $\rho_2$。在水中每层受净力 $(\rho_1-\rho_2)g\pi y^2\mathrm dx$（走 $x$），出水后受 $\rho_1g\pi y^2\mathrm dx$（走 $2a-x$），
+        $$W=\int_0^{2a}\pi y^2\left[(\rho_1-\rho_2)gx+\rho_1g(2a-x)\right]\mathrm dx=\frac43\pi a^3g\left(2\rho_1a-\rho_2a\right)=\frac43\pi a^4g(2\rho_1-\rho_2).$$
+        <b>令 $\rho_1=\rho_2=\rho$ 即得 $\frac43\rho g\pi a^4$ ✅ 与本题一致。</b>
+      </div>
+    </div>
+  </div>
+
+  <div class="tool" id="t3">
+    <h4>🔃 位移方向对拍台 —— 同一个球，两种搬法，每层走的路完全不同</h4>
+    <div class="hint">
+      左边是<b>抽水做功</b>（把球形容器里的水抽到水面出口，深的走得远），右边是<b>取球做功</b>（把同密度的球整体提出水面，深的走得近）。
+      拖动<b>层的深度</b>，看两种情形下这一层的<b>位移箭头</b>长度如何朝相反方向变化；下方表格实时给出两者的总量与解析值对拍。<br>
+      <b>结论会自己跳出来</b>：两个积分的被积函数一个乘 $x$、一个乘 $2a-x$，加起来恰好是"常数 $2a$ × 体积"。
+    </div>
+    <div class="ctl">
+      <label>当前薄层的深度 $x$</label>
+      <input type="range" id="t3-x" min="1" max="199" value="60">
+      <span class="val" id="t3-xv">—</span>
+    </div>
+    <div class="ctl" id="t3-mode">
+      <button data-m="both" class="on">两种并排</button>
+      <button data-m="sum">看两者之和（恒为 2a·V）</button>
+    </div>
+    <div class="scene"><svg id="t3-svg" viewBox="0 0 660 320" xmlns="http://www.w3.org/2000/svg"></svg></div>
+    <div class="say" id="t3-say">—</div>
+    <div class="gridwrap"><table class="dq" id="t3-tab"></table></div>
+    <div class="verdict" id="t3-verdict">—</div>
+    <div class="legend2">
+      取 $a=1$、$\rho g=1$。数值积分用 <b>20 万等分中点法</b>。<b>「两者之和」一栏</b>验证恒等式
+      $\displaystyle\int_0^{2a}x\,A(x)\mathrm dx+\int_0^{2a}(2a-x)A(x)\mathrm dx=2a\int_0^{2a}A(x)\mathrm dx=2a\cdot V_{\text{球}}$。
+    </div>
+  </div>
+
+  <!-- ================= s8 三心 + 古鲁金 ================= -->
+  <h2 id="s8"><span class="idx">八</span>三心 · 质心公式 · 古鲁金第一定理<span class="layer L-base">基础讲独有</span></h2>
+
+  <div class="key"><span class="tag">必记 · "三心"的区别（考过概念辨析选择题）</span>
+    <span class="pg">P.298</span>
+    <div class="fcards">
+      <div><b>质心</b>物体的<b>质量分布</b>中心，是物体的<b>固有特性</b>（与外场无关）。</div>
+      <div><b>重心</b>物体所受<b>重力的分布</b>中心，<b>依赖于重力场</b>。均匀重力场下与质心重合，非均匀场下一般不是质心。</div>
+      <div><b>形心</b><b>几何图形</b>的分布中心，是固有<b>几何量</b>（与质量无关）。<b>密度为常数时，质心 = 形心。</b></div>
+    </div>
+    <p style="color:var(--red);font-weight:700">★ 故在"均匀重力场 + 均质"两个条件下，重心、质心、形心三心重合。</p>
+    <p><b>考法</b>：题目一旦说"密度与某个量成正比"（<b>非均质</b>），<u>就不能用形心公式</u>，必须老实算 $\frac{\int x\rho}{\int\rho}$——<b>千强 12.4 的陷阱选项 (C) 正是均质半圆的形心。</b></p>
+  </div>
+
+  <div class="key"><span class="tag">必记 · 质心与力矩：从两个质点推到连续体</span>
+    <span class="pg">P.298–P.300</span>
+    <p><b>两质点</b>（图 12-7(a)）：由<b>力矩相等</b> $(\bar x-x_1)m_1g=(x_2-\bar x)m_2g$ 得 $\bar x=\dfrac{x_1m_1+x_2m_2}{m_1+m_2}$。</p>
+    <p><b>平面 $n$ 个质点</b>：$\bar x=\dfrac{\sum x_im_i}{\sum m_i}$，$\bar y=\dfrac{\sum y_im_i}{\sum m_i}$。
+    其中 $M_y=\sum x_im_i$ 刻画系统<b>绕 $y$ 轴旋转的趋势</b>，称为<b>力矩</b>；$M_x$ 同理。</p>
+    <p><b>对任一直线 $L_0:ax+by+c=0$ 的力矩</b>：$M_{L_0}=\sum r_im_i=\sum\dfrac{|ax_i+by_i+c|}{\sqrt{a^2+b^2}}m_i$。</p>
+    <p><b>连续曲线段 $L:y=f(x)$（线密度 $\rho(x)$）</b>：$\Delta m_i=\rho\Delta s_i$，取极限得</p>
+    $$M_{L_0}=\int_a^b\frac{|ax+by+c|}{\sqrt{a^2+b^2}}\rho(x)\sqrt{1+[f'(x)]^2}\,\mathrm dx,\tag{12-1}$$
+    <p>$\rho=$ 常数时，<b>形心到直线 $L_0$ 的距离</b>为</p>
+    $$r(\bar x,\bar y)=\frac{M_{L_0}}M=\frac{\displaystyle\int_a^b\frac{|ax+by+c|}{\sqrt{a^2+b^2}}\sqrt{1+[f'(x)]^2}\,\mathrm dx}{\displaystyle\int_a^b\sqrt{1+[f'(x)]^2}\,\mathrm dx}.\tag{12-2}$$
+    <p><b>平面区域版</b>（图 12-10）：把 $\int\mathrm ds$ 换成 $\iint\mathrm d\sigma$ 即可：</p>
+    $$M_{L_0}=\iint_D\frac{|ax+by+c|}{\sqrt{a^2+b^2}}\rho(x,y)\,\mathrm d\sigma,\qquad
+    r(\bar x,\bar y)=\frac{\displaystyle\iint_D\frac{|ax+by+c|}{\sqrt{a^2+b^2}}\mathrm d\sigma}{\displaystyle\iint_D\mathrm d\sigma}.\tag{12-4,\ 12-5}$$
+    <p><b>📌 注意分母：曲线段用<u>弧长</u> $\int\mathrm ds$，平面区域用<u>面积</u> $\iint\mathrm d\sigma$。</b>用错了就是"把线当面"，答案量纲都不对。</p>
+  </div>
+
+  <div class="key"><span class="tag">必记 · ★ 古鲁金第一定理（旋转面面积）</span>
+    <span class="pg">P.299–P.300</span>
+    <p>把曲线段 $L$ 切成 $n$ 段，$\Delta s_i$ 绕直线 $L_0$ 旋转一周的侧面积为 $\Delta A_i=2\pi r_i\Delta s_i$，取极限得</p>
+    $$A=\int_a^b2\pi\cdot\frac{|ax+by+c|}{\sqrt{a^2+b^2}}\sqrt{1+[f'(x)]^2}\,\mathrm dx\tag{12-3}$$
+    <p>与 (12-2) 比较，得 $r(\bar x,\bar y)=\dfrac{M_{L_0}}M=\dfrac{2\pi M_{L_0}}{2\pi M}=\dfrac A{2\pi l}$，即</p>
+    <div class="fml">$$\boxed{A=2\pi\,l\cdot r(\bar x,\bar y)}\qquad\bigstar$$</div>
+    <div class="fcards">
+      <div><b>$A$</b>旋转所成的侧面积</div>
+      <div><b>$l$</b>曲线段 $L$ 的长度</div>
+      <div><b>$r(\bar x,\bar y)$</b>形心到旋转轴的距离</div>
+    </div>
+    <p style="font-weight:700">一句话记忆：<u>旋转面面积 = 曲线长 × 形心走过的圆周长</u>。</p>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">基·注例</span><span class="pg">P.300</span>
+    曲线 $x^2+y^2=1$ 绕直线 $x=2$ 旋转一周所成的旋转体的表面积为 ______。</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$8\pi^2$</span></p>
+      <p><span class="lab">解</span>由古鲁金第一定理，$A=2\pi\cdot l\cdot r(\bar x,\bar y)=2\pi\cdot2\pi\cdot2=8\pi^2$。</p>
+      <div class="notekeep"><span class="nh">📌 要害</span>
+        <b>① 三个量各是什么</b>：曲线是<b>整个单位圆周</b>，长 $l=2\pi$；形心即圆心 $(0,0)$；到旋转轴 $x=2$ 的距离 $r=2$。<br>
+        <b>② 这就是环面（甜甜圈）表面积公式 $4\pi^2Rr_0$ 的特例</b>（$R=2$ 为大半径、$r_0=1$ 为小半径）：$4\pi^2\cdot2\cdot1=8\pi^2$ ✅
+        <b>两条路对上了，说明定理用对了。</b><br>
+        <b>③ 若不用古鲁金要怎么做</b>：得把圆拆成左右两个半圆，分别写 $2\pi\int(2-x)\mathrm ds$ 与 $2\pi\int(2+x)\mathrm ds$，再相加——
+        <b>能做，但要写好几行，而且积分是 $\int\frac{\mathrm dx}{\sqrt{1-x^2}}$ 型（反常）。填空题用古鲁金 5 秒解决。</b><br>
+        <b>④ <span class="dock">使用纪律与形心秒杀器一样</span></b>：<b>古鲁金第一定理不在考纲，选择填空可以直接用，解答题必须写 $\int2\pi r\,\mathrm ds$ 的正规推导。</b><br>
+        <b>⑤ 顺带记住古鲁金<u>第二</u>定理（旋转体体积）</b>：$V=2\pi\bar r\cdot S$（$S$ 为平面图形面积、$\bar r$ 为其形心到轴的距离）。
+        本例对应的实心环体积 $=2\pi\cdot2\cdot\pi\cdot1^2=4\pi^2$。<b>第 10 讲算过的"绕远轴旋转"题，都能用它秒验。</b>
+      </div>
+    </div>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">千强 12.4</span><span class="pg">1000题 P.108</span>
+    设有半圆形板：$x^2+y^2\le a^2\ (y\ge0)$，它在点 $P(x,y)$ 的<b>密度与点 $P$ 到原点的距离成正比</b>，则半圆形板的<b>重心</b>坐标为（　）。<br>
+    (A) $\left(0,\frac{\pi a}3\right)$　(B) $\left(0,\frac{\pi a}2\right)$　(C) $\left(0,\frac{4a}{3\pi}\right)$　(D) $\left(0,\frac{3a}{2\pi}\right)$</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">(D) $\left(0,\dfrac{3a}{2\pi}\right)$</span></p>
+      <p><span class="lab">解</span>密度函数 $\rho(x,y)=k\sqrt{x^2+y^2}\ (k\gt0)$。由对称性 $\bar x=0$，而 $\bar y=\dfrac{M_x}M$，其中（极坐标）</p>
+      $$M_x=\iint_Dky\sqrt{x^2+y^2}\,\mathrm dx\mathrm dy=k\int_0^\pi\mathrm d\theta\int_0^ar\sin\theta\cdot r\cdot r\,\mathrm dr=\frac12ka^4,$$
+      $$M=\iint_Dk\sqrt{x^2+y^2}\,\mathrm dx\mathrm dy=k\int_0^\pi\mathrm d\theta\int_0^ar^2\,\mathrm dr=\frac13k\pi a^3,$$
+      <p>故 $\bar y=\dfrac{M_x}M=\dfrac{3a}{2\pi}$。</p>
+      <div class="notekeep"><span class="nh">📌 要害</span>
+        <b>① 本题用到二重积分（第 14 讲），但结构就是基础讲的 $\bar y=\frac{M_x}M$</b>，只是把 $\sum$ 换成 $\iint$。
+        <b>做到这一章时若还没学二重积分，先记住结构，学完第 14 讲回头再算一遍。</b><br>
+        <b>② ★★ 陷阱选项 (C) $\frac{4a}{3\pi}$ 是<u>均质</u>半圆板的形心</b>——这正是"三心"辨析的考点：
+        <span class="chip c-r">密度不均匀 ⇒ 形心 ≠ 重心，形心公式作废。</span><br>
+        <b>③ 方向自查（不算也能排除）</b>：密度随"离原点距离"增大 ⇒ 质量往<b>外缘</b>偏 ⇒ 重心应当比均质形心<b>更高</b>。
+        $\frac{3a}{2\pi}\approx0.477a\gt\frac{4a}{3\pi}\approx0.424a$ ✅ <b>方向对得上。</b>而 (A)(B) 的 $\frac{\pi a}3\approx1.05a$、$\frac{\pi a}2\approx1.57a$ <b>都超出了半圆的范围（$\le a$），一眼可弃。</b><br>
+        <b>④ 极坐标的两个小积分</b>：$\int_0^\pi\sin\theta\mathrm d\theta=2$、$\int_0^ar^3\mathrm dr=\frac{a^4}4$ ⇒ $M_x=2k\cdot\frac{a^4}4=\frac{ka^4}2$ ✅
+        <b>别忘了雅可比因子 $r$</b>：$M_x$ 的被积函数是 $ky\cdot\sqrt{x^2+y^2}\cdot r=k(r\sin\theta)(r)(r)=kr^3\sin\theta$。<br>
+        <b>⑤ $k$ 又是过路财神</b>（与基例 12.1 的 $k$ 一样，在比值里约掉）。<b>"成正比"型条件，比例系数永远不用求。</b>
+      </div>
+    </div>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">千强 12.5</span><span class="pg">1000题 P.108</span>
+    曲线 $y=\mathrm e^x$ 与直线 $x=1$，$x=-1$ 及 $x$ 轴所围平面有界区域 $D$ 的<b>形心</b>为 ______。</div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\left(\dfrac2{\mathrm e^2-1},\ \dfrac{\mathrm e^2+1}{4\mathrm e}\right)$</span></p>
+      <p><span class="lab">解</span></p>
+      $$\bar x=\frac{\displaystyle\int_{-1}^1\mathrm dx\int_0^{\mathrm e^x}x\,\mathrm dy}{\displaystyle\int_{-1}^1\mathrm dx\int_0^{\mathrm e^x}\mathrm dy}=\frac{\displaystyle\int_{-1}^1x\mathrm e^x\mathrm dx}{\displaystyle\int_{-1}^1\mathrm e^x\mathrm dx}=\frac2{\mathrm e^2-1},\qquad
+      \bar y=\frac{\displaystyle\int_{-1}^1\mathrm dx\int_0^{\mathrm e^x}y\,\mathrm dy}{\displaystyle\int_{-1}^1\mathrm dx\int_0^{\mathrm e^x}\mathrm dy}=\frac{\dfrac12\displaystyle\int_{-1}^1\mathrm e^{2x}\mathrm dx}{\displaystyle\int_{-1}^1\mathrm e^x\mathrm dx}=\frac{\mathrm e^2+1}{4\mathrm e}.$$
+      <div class="notekeep"><span class="nh">📌 要害</span>
+        <b>① ★★ 曲边梯形形心的<u>一元</u>公式（必背，比二重积分快得多）</b>：对 $0\le y\le f(x),\ a\le x\le b$，
+        $$\bar x=\frac{\displaystyle\int_a^bx f(x)\mathrm dx}{\displaystyle\int_a^bf(x)\mathrm dx},\qquad
+        \bar y=\frac{\dfrac12\displaystyle\int_a^bf^2(x)\mathrm dx}{\displaystyle\int_a^bf(x)\mathrm dx}.$$
+        <b>$\bar y$ 的分子多一个 $\frac12$ 和一个平方</b>——因为每根竖条自己的中点高度是 $\frac{f(x)}2$，$\mathrm dM_x=\frac{f(x)}2\cdot f(x)\mathrm dx$。
+        <span class="dock">忘了那个 $\frac12$ 是本题最常见的错。</span><br>
+        <b>② 三个积分（考场手算）</b>：分母 $\int_{-1}^1\mathrm e^x\mathrm dx=\mathrm e-\mathrm e^{-1}=\frac{\mathrm e^2-1}{\mathrm e}$；
+        $\int_{-1}^1x\mathrm e^x\mathrm dx=(x-1)\mathrm e^x\big|_{-1}^1=0-(-2\mathrm e^{-1})=\frac2{\mathrm e}$；
+        $\frac12\int_{-1}^1\mathrm e^{2x}\mathrm dx=\frac{\mathrm e^2-\mathrm e^{-2}}4$。
+        <b>$\int x\mathrm e^x=(x-1)\mathrm e^x$ 要能直接写出来（第 9 讲分部积分）。</b><br>
+        <b>③ 合理性检查（必做）</b>：区域在 $x\in[-1,1]$、$y\in[0,\mathrm e]$ 内。
+        $\bar x=\frac2{\mathrm e^2-1}\approx0.313\gt0$ ✅（右侧更"胖"，形心偏右）；
+        $\bar y=\frac{\mathrm e^2+1}{4\mathrm e}=\frac{\cosh1}2\approx0.772$ ✅（远低于 $\frac{\mathrm e}2\approx1.36$，因为大部分面积集中在低矮的左半）。
+        <b>形心必须落在区域内部，算出跑到区域外就是错了。</b><br>
+        <b>④ ★ 这道题 + 千强 12.4 正好把基础讲的古鲁金定理补完整</b>：有了形心，
+        $A=2\pi l\bar r$（第一定理，旋转面）与 $V=2\pi\bar rS$（第二定理，旋转体）就都能用了。
+        <b>例如本区域绕 $x=3$ 旋转的体积</b> $=2\pi\left(3-\frac2{\mathrm e^2-1}\right)\cdot\frac{\mathrm e^2-1}{\mathrm e}\approx2\pi\cdot2.687\cdot2.350\approx39.7$。
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= 收官 ================= -->
+  <h2 id="end"><span class="idx">收官</span>本章的四句话 + 23 题落位索引</h2>
+
+  <div class="key"><span class="tag">必记 · 走出这一章要带走的四句话</span>
+    <ol style="margin-left:20px;line-height:2">
+      <li><b>全章只有一个方法：微元法。</b>难度全在<b>第 ① 步建系</b>——<u>把坐标轴指向"出口"，位移项就退化成坐标本身</u>；
+        出口不在容器上（基习 12.3）或曲线方程更复杂（强 12.4）时，才让原点迁就容器/曲线，把位移写成差。</li>
+      <li><b>抽水看 $A(x)$，压力看 $b(x)$，引力看方向。</b>三条支线的差别只有"微元里乘的几何量"：
+        面积（三维）／宽度（二维）／方向余弦（矢量）。</li>
+      <li><b>$\rho g$ 常被打包，打包了就别再乘 $g$。</b>本章出现三种说法：<b>比重</b>（强 12.3）、<b>容重 $r$</b>（基习 12.1）、
+        <b>"1 m³ 液体重 1 N"</b>（千基 12.5）。<u>读到"单位体积的重量/重力"就直接当 $\rho g$ 用。</u></li>
+      <li><b>选择填空一律先试形心秒杀。</b>$P=\rho g\bar xS$（压力）、$W=\rho gV\bar x$（抽水功）、$A=2\pi l\bar r$（古鲁金）——
+        <u>三条都不在考纲，所以只用来秒杀选填与验算解答题，卷面上必须写微元与积分。</u></li>
+    </ol>
+  </div>
+
+  <div class="trap"><span class="tag">陷阱 · 本章五个最容易丢分的点，考前扫一眼</span>
+    <ol style="margin-left:20px;line-height:1.95">
+      <li><b>问"又击入多少"却填了总深度</b>（基例 12.1）——<b>增量 vs 总量</b>。</li>
+      <li><b>$\rho g$ 打包后又乘了一次 $g$</b>（三处）。</li>
+      <li><b>宽度函数分段处没换公式</b>（千基 12.2 的 $y\lt0$ 段）。</li>
+      <li><b>取球的位移写成 $x$ 而不是 $2a-x$</b>（千强 12.3）——<b>本章最大的思维坑</b>。</li>
+      <li><b>非均质却用了形心公式</b>（千强 12.4 的陷阱选项 C）；<b>问"$x$ 正向分力"却把负号丢了</b>（强 12.5）。</li>
+    </ol>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 本讲与前后各章的接口（一元函数积分学到此收尾）</span>
+    <b>第 12 讲是一元函数积分学（第 8–12 讲）的最后一讲，也是整个一元函数部分的终点。</b>它把前面的工具全用了一遍：
+    <div class="gridwrap"><table class="dense">
+      <tr><th>用到的旧内容</th><th>出现在哪</th></tr>
+      <tr><td><b>第 5 讲</b> 极值与最优化</td><td>千基 12.7（转角使压力最大，驻点 $\cos\theta=\frac1{\sqrt3}$）</td></tr>
+      <tr><td><b>第 7 讲</b> 相关变化率</td><td>千基 12.5(1)（液面下降速率）、千强 12.2(2)（压力变化率）</td></tr>
+      <tr><td><b>第 8 讲</b> 微元法的合法性、变限积分求导、反常积分 $p$ 判据</td><td>强 12.6 的眉批、千基 12.5(1)、千基 12.3</td></tr>
+      <tr><td><b>第 9 讲</b> 三角换元、分部积分</td><td>强 12.5（$y=\tan t$）、强 12.2（$\int t\,\mathrm dv$）</td></tr>
+      <tr><td><b>第 11 讲</b> 奇偶性省一半</td><td>千基 12.5(2)、千强 12.3（换元后奇函数项为 0）</td></tr>
+      <tr><td><b>第 10 讲</b> 截面法求体积 $V=\int A(x)\mathrm dx$</td><td><b>本讲每一个 $A(x)$ 都是第 10 讲的截面公式</b></td></tr>
+      <tr><td><b>第 14 讲</b>（尚未学）二重积分</td><td>千强 12.4 的重心；本讲的 (12-4)(12-5) 公式</td></tr>
+    </table></div>
+    <b>★ 往前看</b>：微元法在<b>第 18 讲（多元函数积分学）</b>会再次成为主角——那时"微元"从线段变成面片和体块，
+    但"<u>切成小份 → 每份内某量近似为常数 → 累加</u>"这三步一个字都不会变。<b>本讲是那一章最好的热身。</b>
+  </div>
+
+  <h3 style="margin-top:28px">23 题落位索引</h3>
+  <div class="gridwrap"><table class="dense">
+    <tr><th>#</th><th>题号</th><th>类型</th><th>主题</th><th>答案</th><th>所在节</th></tr>
+    <tr><td>1</td><td>基 12.1</td><td>填空</td><td>变力做功·铁锤击钉</td><td>$(\sqrt2-1)$ cm</td><td><a href="#s1">一</a></td></tr>
+    <tr><td>2</td><td>强 12.1</td><td>填空</td><td>变力做功·井绳（反求井深）</td><td>$a=30$</td><td><a href="#s1">一</a></td></tr>
+    <tr><td>3</td><td>强 12.2</td><td>选择</td><td>$\int_0^1ta(t)\mathrm dt$（分部积分伪装）</td><td>(A) 0</td><td><a href="#s2">二</a></td></tr>
+    <tr><td>4</td><td>基 12.2</td><td>填空</td><td>抽水做功·倒圆锥</td><td>$\frac1{12}\rho g\pi a^2b^2$</td><td><a href="#s3">三</a></td></tr>
+    <tr><td>5</td><td>强 12.3</td><td>填空</td><td>抽水做功·半球（反求半径）</td><td>$a=2^{1/4}$</td><td><a href="#s3">三</a></td></tr>
+    <tr><td>6</td><td>基习 12.3</td><td><b>解答</b></td><td>半球水池抽到 6 m 高处</td><td>$320\pi\rho g\approx9847$ kJ</td><td><a href="#s3">三</a></td></tr>
+    <tr><td>7</td><td>千基 12.4</td><td><b>解答</b></td><td>旋转抛物面水缸（时间 + 功）</td><td>$\frac{\pi a^3}{2Q}$；$\frac16\rho g\pi a^4$</td><td><a href="#s3">三</a></td></tr>
+    <tr><td>8</td><td>千基 12.5</td><td><b>解答</b></td><td>横放圆柱（变化率 + 功）</td><td>0.1 m/min；$\pi$ J</td><td><a href="#s3">三</a></td></tr>
+    <tr><td>9</td><td>基 12.3</td><td>填空</td><td>水压力·等腰直角三角形</td><td>$\frac13a^3\rho g$</td><td><a href="#s4">四</a></td></tr>
+    <tr><td>10</td><td>基习 12.1</td><td>选择</td><td>水压力公式辨析（容重）</td><td>(D)</td><td><a href="#s4">四</a></td></tr>
+    <tr><td>11</td><td>强 12.4</td><td><b>解答</b></td><td>闸门上下压力比 $\frac54$</td><td>$H=2$</td><td><a href="#s4">四</a></td></tr>
+    <tr><td>12</td><td>千基 12.2</td><td>填空</td><td>正方形板对角线铅垂（分段）</td><td>$\frac{\sqrt2}2\rho ga^3$</td><td><a href="#s4">四</a></td></tr>
+    <tr><td>13</td><td>千基 12.7</td><td>选择</td><td>直角三角板转角最优化</td><td>(A) $\frac{\sqrt3}3$</td><td><a href="#s4">四</a></td></tr>
+    <tr><td>14</td><td>千强 12.1</td><td>选择</td><td>三角板倒转的压力比</td><td>(C) $F_2=2F_1$</td><td><a href="#s4">四</a></td></tr>
+    <tr><td>15</td><td>千强 12.2</td><td><b>解答</b></td><td>等边三角形 + 水面上涨变化率</td><td>$\rho g$；$\frac{\sqrt3}{10}\rho g$</td><td><a href="#s4">四</a></td></tr>
+    <tr><td>16</td><td>强 12.5 <span class="chip c-p">＝千基 12.1</span></td><td>填空</td><td>引力·垂直细杆的 $x$ 向分力</td><td>$-\frac{\sqrt2}2G\rho$</td><td><a href="#s5">五</a></td></tr>
+    <tr><td>17</td><td>千基 12.3</td><td>填空</td><td>摆脱地球引力（反常积分）</td><td>$\frac{GM}R$</td><td><a href="#s5">五</a></td></tr>
+    <tr><td>18</td><td>千基 12.6</td><td>选择</td><td>引力做功（两层积分）</td><td>(A) $Ga\ln\frac43$</td><td><a href="#s5">五</a></td></tr>
+    <tr><td>19</td><td>强 12.6</td><td><b>解答</b></td><td>微元法自建·圆管流量</td><td>$5\pi$ cm³/s</td><td><a href="#s6">六</a></td></tr>
+    <tr><td>20</td><td>千强 12.3</td><td>填空</td><td>★ 从同密度液体中取球（浮力抵消）</td><td>$\frac43\rho g\pi a^4$</td><td><a href="#s7">七</a></td></tr>
+    <tr><td>21</td><td>基·注例</td><td>填空</td><td>古鲁金·圆绕 $x=2$ 的旋转面</td><td>$8\pi^2$</td><td><a href="#s8">八</a></td></tr>
+    <tr><td>22</td><td>千强 12.4</td><td>选择</td><td>非均质半圆板的重心</td><td>(D) $\left(0,\frac{3a}{2\pi}\right)$</td><td><a href="#s8">八</a></td></tr>
+    <tr><td>23</td><td>千强 12.5</td><td>填空</td><td>$y=\mathrm e^x$ 区域的形心</td><td>$\left(\frac2{\mathrm e^2-1},\frac{\mathrm e^2+1}{4\mathrm e}\right)$</td><td><a href="#s8">八</a></td></tr>
+  </table></div>
+  <p style="font-size:.85rem;color:var(--muted);line-height:1.9">
+    <b>统计</b>：基础30讲 6 题（例 3 ＋ 注例 1 ＋ 习题 2）＋ 高数18讲 6 题 ＋ 1000题 12 题 － 重复 1 题 ＝ <b>23 题</b>；
+    其中<b>解答题 6 道</b>（写「思路 → 卷面 → 批注」三层，共 <b>31 个 ⛳ 采分点、合计 66 分</b>），<b>选择填空 17 道</b>（保持"答案 → 解 → 要害"的教学式排版）。<br>
+    <b>数三专属的 7 处已逐条点名跳过</b>：基础第三节整节、基例 12.4、基习 12.2、基习 12.4、强化第二部分整块、强例 12.7（以及第二部分的三向解题法框图）。
+  </p>
+
+  <div class="outro">
+    <h3>一元函数部分到此收尾 🎉</h3>
+    <p>第 8–12 讲（积分学的概念与性质 → 计算 → 几何应用 → 积分等式与不等式 → 物理应用）已全部走完，
+    加上第 1–7 讲的极限与微分学，<b>一元函数的 12 讲全部上线</b>。</p>
+    <p><b>下一章</b>：<b>第 13 章 · 多元函数微分学</b>（尚未开工）——从这一讲起进入<b>多元</b>的世界，
+    但你会发现"极限 → 连续 → 偏导 → 全微分"的顺序与第 1、3 讲一模一样，<b>一元的骨架会原样重演一遍</b>。</p>
+    <p><a href="第11章_一元函数积分学的应用二_积分等式与不等式.html">← 上一章：第 11 章 积分等式与积分不等式</a>　·　
+    <a href="../index.html">返回数学复盘中心</a></p>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  "use strict";
+  const $ = s => document.querySelector(s);
+  const nf = (v,d=4) => (Math.abs(v)<1e-12?0:v).toFixed(d);
+  const CSS = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim() || '#888';
+  function svgEl(tag,attrs,text){
+    const e=document.createElementNS('http://www.w3.org/2000/svg',tag);
+    for(const k in attrs) e.setAttribute(k,attrs[k]);
+    if(text!==undefined) e.textContent=text;
+    return e;
+  }
+  /* 中点法数值积分 */
+  function mid(f,a,b,n){ let s=0,h=(b-a)/n; for(let i=0;i<n;i++) s+=f(a+(i+0.5)*h); return s*h; }
+
+  /* ============ 模块 1：微元法建系沙盘 ============ */
+  const SC = {
+    cone:{ name:'基例12.2 倒圆锥', a:1, note:'原点在锥口（＝出口），x 轴向下',
+      lo:0, hi:1, area:x=>Math.PI*(1-x)*(1-x), disp:x=>x, kind:'work',
+      exact:Math.PI/12, exactTxt:'ρgπa²b²/12 → 取 a=b=1、ρg=1 得 π/12',
+      half:(x)=>1-x, depthLabel:'提升距离' },
+    hemi:{ name:'强12.3 半球', a:1, note:'原点在池面（＝出口），h 轴向下',
+      lo:0, hi:1, area:x=>Math.PI*(1-x*x), disp:x=>x, kind:'work',
+      exact:Math.PI/4, exactTxt:'πa⁴/4 → 取 a=1、ρg=1 得 π/4',
+      half:(x)=>Math.sqrt(Math.max(0,1-x*x)), depthLabel:'提升距离' },
+    hemi6:{ name:'基习12.3 半球 + 抬高 6 m', a:4, note:'原点在原水面，y 轴向上；位移 = 6 − y',
+      lo:0, hi:4, area:x=>Math.PI*(16-x*x), disp:x=>6+x, kind:'work',
+      exact:320*Math.PI, exactTxt:'320πρg → 取 ρg=1 得 320π ≈ '+(320*Math.PI).toFixed(2),
+      half:(x)=>Math.sqrt(Math.max(0,16-x*x)), depthLabel:'提升距离（含 6 m）' },
+    para:{ name:'千基12.4 旋转抛物面缸', a:1, note:'原点在缸底，y 轴向上；位移 = a − y',
+      lo:0, hi:1, area:x=>Math.PI*(1-x), disp:x=>x, kind:'work',
+      exact:Math.PI/6, exactTxt:'ρgπa⁴/6 → 取 a=1、ρg=1 得 π/6',
+      half:(x)=>Math.sqrt(Math.max(0,1-x)), depthLabel:'提升距离' },
+    cyl:{ name:'千基12.5 横放圆柱', a:2, note:'原点在顶端，x 轴向下（x = 1 − y）；重力已打包',
+      lo:0, hi:2, area:x=>2*Math.sqrt(Math.max(0,1-(1-x)*(1-x))), disp:x=>x, kind:'work',
+      exact:Math.PI, exactTxt:'π J（重力 1 N/m³、r=1、L=1）',
+      half:(x)=>Math.sqrt(Math.max(0,1-(1-x)*(1-x))), depthLabel:'提升距离' }
+  };
+  /* 说明：为统一"位移 = 坐标"的展示，hemi6 用 x = 水面下深度、位移 = 6 + x；
+     para 用 x = 到缸口的距离、A = πa(a−x)|_{a=1} = π(1−x)；cyl 用 x = 到顶端的距离。
+     每个场景的 area/disp 都已在 exact 上验证过。 */
+  let t1key='cone';
+  function t1draw(){
+    const S=SC[t1key], svg=$('#t1-svg'); svg.innerHTML='';
+    const W=660,Hmax=300,padL=40,padR=250,padT=46,padB=30;
+    const pos=+$('#t1-pos').value/100, cut=+$('#t1-cut').value/100;
+    const xcur=S.lo+(S.hi-S.lo)*pos, xcut=S.lo+(S.hi-S.lo)*cut;
+    /* 自适应比例：同一场景内共用 */
+    let maxHalf=0; for(let i=0;i<=200;i++){ maxHalf=Math.max(maxHalf,S.half(S.lo+(S.hi-S.lo)*i/200)); }
+    const availH=Hmax-padT-padB, availW=(W-padL-padR)/2;
+    const sc=Math.min(availH/(S.hi-S.lo), availW/Math.max(maxHalf,1e-6));
+    const H=Math.round(padT+(S.hi-S.lo)*sc+padB);   /* 高度随场景自适应，不留大片空白 */
+    svg.setAttribute('viewBox','0 0 '+W+' '+H);
+    const cx=padL+availW, y0=padT;
+    const Y=x=>y0+(x-S.lo)*sc;
+    /* 容器轮廓 */
+    let dpath='';
+    for(let i=0;i<=120;i++){ const x=S.lo+(S.hi-S.lo)*i/120; dpath+=(i?'L':'M')+(cx+S.half(x)*sc)+','+Y(x)+' '; }
+    for(let i=120;i>=0;i--){ const x=S.lo+(S.hi-S.lo)*i/120; dpath+='L'+(cx-S.half(x)*sc)+','+Y(x)+' '; }
+    dpath+='Z';
+    /* 已累加区域 */
+    let cpath='';
+    for(let i=0;i<=120;i++){ const x=S.lo+(xcut-S.lo)*i/120; cpath+=(i?'L':'M')+(cx+S.half(x)*sc)+','+Y(x)+' '; }
+    for(let i=120;i>=0;i--){ const x=S.lo+(xcut-S.lo)*i/120; cpath+='L'+(cx-S.half(x)*sc)+','+Y(x)+' '; }
+    cpath+='Z';
+    svg.appendChild(svgEl('path',{d:cpath,fill:CSS('--green-soft'),stroke:'none'}));
+    svg.appendChild(svgEl('path',{d:dpath,fill:'none',stroke:CSS('--accent'),'stroke-width':1.8}));
+    /* 出口线（x = 位移的零点，对 hemi6 是 x = −6，画不下就标注） */
+    svg.appendChild(svgEl('line',{x1:padL-14,y1:y0,x2:cx+availW+8,y2:y0,stroke:CSS('--muted'),'stroke-width':1,'stroke-dasharray':'4 3'}));
+    svg.appendChild(svgEl('text',{x:padL-16,y:y0-6,'font-size':11,fill:CSS('--muted')},'x = 0'));
+    /* 当前微元 */
+    const hy=Y(xcur), hh=Math.max(3,(S.hi-S.lo)*sc*0.022), hw=S.half(xcur)*sc;
+    svg.appendChild(svgEl('rect',{x:cx-hw,y:hy-hh/2,width:2*hw,height:hh,fill:CSS('--amber'),opacity:.85}));
+    /* 位移箭头（红）：长度 ∝ disp(x) */
+    const dmax=Math.max(S.disp(S.lo),S.disp(S.hi));
+    const arrowLen=(S.disp(xcur)/dmax)*(padR-70);
+    const ax=cx+availW+18;
+    svg.appendChild(svgEl('line',{x1:ax,y1:hy,x2:ax+arrowLen,y2:hy,stroke:CSS('--red'),'stroke-width':2.4}));
+    svg.appendChild(svgEl('path',{d:`M${ax+arrowLen},${hy} l-7,-4 l0,8 z`,fill:CSS('--red')}));
+    svg.appendChild(svgEl('text',{x:ax,y:hy-7,'font-size':11,fill:CSS('--red')},S.depthLabel+' = '+nf(S.disp(xcur),3)));
+    /* 标题 */
+    svg.appendChild(svgEl('text',{x:12,y:16,'font-size':12.5,'font-weight':700,fill:CSS('--accent')},S.name));
+    svg.appendChild(svgEl('text',{x:12,y:H-8,'font-size':11,fill:CSS('--muted')},S.note));
+    /* 数值 */
+    const NQ=200000;
+    const total=mid(x=>S.area(x)*S.disp(x),S.lo,S.hi,NQ);
+    const part =xcut>S.lo?mid(x=>S.area(x)*S.disp(x),S.lo,xcut,NQ):0;
+    $('#t1-posv').textContent='x = '+nf(xcur,3);
+    $('#t1-cutv').textContent=(cut*100).toFixed(0)+'%';
+    $('#t1-say').innerHTML='当前这一层：截面积 <b>A = '+nf(S.area(xcur),4)+
+      '</b>，'+S.depthLabel+' <b>'+nf(S.disp(xcur),3)+'</b>，故该层贡献 <b>A·位移 = '+nf(S.area(xcur)*S.disp(xcur),4)+
+      '</b>（每单位厚度）。<br>已累加 '+(cut*100).toFixed(0)+'% 的层，累计 <b>'+nf(part,4)+'</b>；全部累加 <b>'+nf(total,4)+'</b>。';
+    const rel=Math.abs(total-S.exact)/Math.max(1e-12,Math.abs(S.exact));
+    $('#t1-tab').innerHTML=
+      '<tr><th>项</th><th>数值（取 ρg = 1）</th><th>说明</th></tr>'+
+      '<tr><td>逐层数值积分 ∫A(x)·位移 dx</td><td>'+nf(total,6)+'</td><td>'+NQ.toLocaleString()+' 等分中点法</td></tr>'+
+      '<tr><td>书上的解析答案</td><td>'+nf(S.exact,6)+'</td><td>'+S.exactTxt+'</td></tr>'+
+      '<tr><td>相对误差</td><td class="'+(rel<1e-6?'hit':'miss')+'">'+rel.toExponential(2)+'</td><td>'+(rel<1e-6?'✅ 一致':'⚠️ 不一致')+'</td></tr>';
+  }
+  document.querySelectorAll('#t1-scene button').forEach(b=>b.addEventListener('click',()=>{
+    document.querySelectorAll('#t1-scene button').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on'); t1key=b.dataset.s; t1draw();
+  }));
+  $('#t1-pos').addEventListener('input',t1draw);
+  $('#t1-cut').addEventListener('input',t1draw);
+
+  /* ============ 模块 2：形心秒杀器 ============ */
+  const SH = {
+    tri_top:{ name:'三角形·边在上（尖朝下）', h:1, w:x=>2*(1-x), S:1, xbar:1/3 },
+    tri_bot:{ name:'三角形·尖在上（边在下）', h:1, w:x=>2*x, S:1, xbar:2/3 },
+    square45:{ name:'正方形·对角线铅垂（边长 1）', h:Math.SQRT2, S:1, xbar:Math.SQRT1_2,
+      w:x=>(x<=Math.SQRT1_2? 2*x : 2*(Math.SQRT2-x)) },
+    eqtri:{ name:'等边三角形·边在上（边长 2）', h:Math.sqrt(3), S:Math.sqrt(3), xbar:Math.sqrt(3)/3,
+      w:x=>2*(1-x/Math.sqrt(3)) },
+    rect:{ name:'矩形（宽 1 × 高 1）', h:1, w:x=>1, S:1, xbar:0.5 },
+    semi:{ name:'半圆·直径在上（半径 1）', h:1, S:Math.PI/2, xbar:4/(3*Math.PI),
+      w:x=>2*Math.sqrt(Math.max(0,1-x*x)) }
+  };
+  let t2key='tri_top';
+  function t2draw(){
+    const S=SH[t2key], svg=$('#t2-svg'); svg.innerHTML='';
+    const W=660,Hmax=300,padT=56,padB=28,left=60,right=330;
+    const d=+$('#t2-d').value/100;               /* 板顶下沉深度 */
+    let maxW=0; for(let i=0;i<=200;i++) maxW=Math.max(maxW,S.w(S.h*i/200));
+    const availH=Hmax-padT-padB, availW=(right-left);
+    const sc=Math.min(availH/S.h, availW/Math.max(maxW,1e-6));
+    const H=Math.round(padT+S.h*sc+padB);
+    svg.setAttribute('viewBox','0 0 '+W+' '+H);
+    const cx=(left+right)/2, ytop=padT;
+    /* 水面 */
+    const ywater=ytop-Math.min(d*sc,padT-32);   /* 留出场景标题的行高，水面线不穿过标题 */
+    svg.appendChild(svgEl('line',{x1:16,y1:ywater,x2:W-16,y2:ywater,stroke:CSS('--blue'),'stroke-width':1.6}));
+    svg.appendChild(svgEl('text',{x:W-16,y:ywater-6,'font-size':11,fill:CSS('--blue'),'text-anchor':'end'},'水面（板顶下沉 d = '+nf(d,2)+'）'));
+    /* 板 */
+    let p='';
+    for(let i=0;i<=160;i++){ const x=S.h*i/160; p+=(i?'L':'M')+(cx+S.w(x)*sc/2)+','+(ytop+x*sc)+' '; }
+    for(let i=160;i>=0;i--){ const x=S.h*i/160; p+='L'+(cx-S.w(x)*sc/2)+','+(ytop+x*sc)+' '; }
+    p+='Z';
+    svg.appendChild(svgEl('path',{d:p,fill:CSS('--accent-soft'),stroke:CSS('--accent'),'stroke-width':1.6}));
+    /* 压强分布三角形（右侧） */
+    const px=right+34, pmax=(d+S.h);
+    svg.appendChild(svgEl('line',{x1:px,y1:ytop,x2:px,y2:ytop+S.h*sc,stroke:CSS('--muted'),'stroke-width':1}));
+    for(let i=0;i<=10;i++){
+      const x=S.h*i/10, yy=ytop+x*sc, L=((d+x)/pmax)*150;
+      svg.appendChild(svgEl('line',{x1:px,y1:yy,x2:px+L,y2:yy,stroke:CSS('--red'),'stroke-width':1.4,opacity:.75}));
+    }
+    svg.appendChild(svgEl('text',{x:px,y:ytop-8,'font-size':11,fill:CSS('--red')},'压强 ρg·(d+x) 随深度线性增长'));
+    /* 形心标记 */
+    const ybar=ytop+S.xbar*sc;
+    svg.appendChild(svgEl('circle',{cx:cx,cy:ybar,r:4.5,fill:CSS('--green')}));
+    svg.appendChild(svgEl('text',{x:cx+9,y:ybar+4,'font-size':11,fill:CSS('--green')},'形心 x̄ = '+nf(S.xbar,3)));
+    svg.appendChild(svgEl('text',{x:12,y:18,'font-size':12.5,'font-weight':700,fill:CSS('--accent')},S.name));
+    /* 数值：P = ∫(d+x)w(x)dx ；秒杀 = (d+x̄)·S */
+    const NQ2=200000;
+    const Pint=mid(x=>(d+x)*S.w(x),0,S.h,NQ2);
+    const Pfast=(d+S.xbar)*S.S;
+    const Pint2=mid(x=>(d+0.01+x)*S.w(x),0,S.h,NQ2);
+    const slope=(Pint2-Pint)/0.01;
+    const rel=Math.abs(Pint-Pfast)/Math.max(1e-12,Math.abs(Pfast));
+    $('#t2-dv').textContent=nf(d,2);
+    $('#t2-say').innerHTML='板的面积 <b>S = '+nf(S.S,4)+'</b>，形心到板顶的距离 <b>x̄ = '+nf(S.xbar,4)+
+      '</b>，故形心水深 <b>d + x̄ = '+nf(d+S.xbar,4)+'</b>。';
+    $('#t2-tab').innerHTML=
+      '<tr><th>路线</th><th>结果（取 ρg = 1）</th><th>说明</th></tr>'+
+      '<tr><td>逐层积分 ∫(d+x)·b(x) dx</td><td>'+nf(Pint,6)+'</td><td>'+NQ2.toLocaleString()+' 等分中点法</td></tr>'+
+      '<tr><td>形心秒杀 (d + x̄)·S</td><td>'+nf(Pfast,6)+'</td><td>P = ρg·x̄·S</td></tr>'+
+      '<tr><td>相对误差</td><td class="'+(rel<1e-6?'hit':'miss')+'">'+rel.toExponential(2)+'</td><td>'+(rel<1e-6?'✅ 两条路一致':'⚠️')+'</td></tr>'+
+      '<tr><td>斜率 dP/dd（数值差商）</td><td>'+nf(slope,6)+'</td><td>应恒 = ρg·S = '+nf(S.S,6)+'</td></tr>';
+    const v=$('#t2-verdict');
+    if(rel<1e-6 && Math.abs(slope-S.S)<1e-4){
+      v.className='verdict v-ok';
+      v.textContent='✅ P = ρg·x̄·S 成立；且 dP/dd = ρgS 与板形无关 —— 这正是千强 12.2 第 (2) 问「水面上涨 Δ ⇒ 压力增加 ρgΔS」。';
+    }else{ v.className='verdict v-no'; v.textContent='⚠️ 数值不一致，请检查。'; }
+  }
+  document.querySelectorAll('#t2-shape button').forEach(b=>b.addEventListener('click',()=>{
+    document.querySelectorAll('#t2-shape button').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on'); t2key=b.dataset.s; t2draw();
+  }));
+  $('#t2-d').addEventListener('input',t2draw);
+
+  /* ============ 模块 3：位移方向对拍台 ============ */
+  let t3mode='both';
+  function t3draw(){
+    const svg=$('#t3-svg'); svg.innerHTML='';
+    const W=660,H=320, a=1;
+    const x=+$('#t3-x').value/100;               /* 深度 0..2 */
+    const A=xx=>Math.PI*(a*a-(xx-a)*(xx-a));     /* 球在深度 xx 处的截面积 */
+    const sc=110;                                 /* 每单位长度像素 */
+    const drawBall=(cx,label,dispFn,color)=>{
+      const ytop=70;
+      svg.appendChild(svgEl('line',{x1:cx-120,y1:ytop,x2:cx+120,y2:ytop,stroke:CSS('--blue'),'stroke-width':1.6}));
+      svg.appendChild(svgEl('text',{x:cx-118,y:ytop-6,'font-size':11,fill:CSS('--blue')},'水面'));
+      svg.appendChild(svgEl('circle',{cx:cx,cy:ytop+a*sc,r:a*sc,fill:CSS('--accent-soft'),stroke:CSS('--accent'),'stroke-width':1.6}));
+      const hw=Math.sqrt(Math.max(0,a*a-(x-a)*(x-a)))*sc, yy=ytop+x*sc;
+      svg.appendChild(svgEl('rect',{x:cx-hw,y:yy-3,width:2*hw,height:6,fill:CSS('--amber'),opacity:.9}));
+      const dv=dispFn(x), L=(dv/(2*a))*95;
+      svg.appendChild(svgEl('line',{x1:cx+hw+12,y1:yy,x2:cx+hw+12,y2:yy-L,stroke:color,'stroke-width':2.4}));
+      svg.appendChild(svgEl('path',{d:`M${cx+hw+12},${yy-L} l-4,7 l8,0 z`,fill:color}));
+      svg.appendChild(svgEl('text',{x:cx+hw+18,y:yy-L-4,'font-size':11,fill:color},'位移 '+nf(dv,3)));
+      svg.appendChild(svgEl('text',{x:cx,y:ytop+2*a*sc+22,'font-size':12,'font-weight':700,fill:CSS('--accent'),'text-anchor':'middle'},label));
+    };
+    if(t3mode==='both'){
+      drawBall(165,'抽水做功：位移 = x（深的走得远）',xx=>xx,CSS('--red'));
+      drawBall(495,'取球做功：位移 = 2a − x（深的走得近）',xx=>2*a-xx,CSS('--green'));
+    }else{
+      drawBall(330,'两者之和：位移 = x + (2a − x) = 2a（恒定）',()=>2*a,CSS('--purple'));
+    }
+    const NQ3=200000;
+    const Wpump=mid(xx=>xx*A(xx),0,2*a,NQ3);
+    const Wball=mid(xx=>(2*a-xx)*A(xx),0,2*a,NQ3);
+    const V=mid(A,0,2*a,NQ3);
+    $('#t3-xv').textContent='x = '+nf(x,3);
+    $('#t3-say').innerHTML='深度 <b>x = '+nf(x,3)+'</b> 处的截面积 <b>A = '+nf(A(x),4)+
+      '</b>。抽水时这一层走 <b>'+nf(x,3)+'</b>，取球时它走 <b>'+nf(2*a-x,3)+
+      '</b>——<b>两者之和恒为 2a = 2</b>，与 x 无关。';
+    const eB=4*Math.PI/3, eV=4*Math.PI/3;
+    $('#t3-tab').innerHTML=
+      '<tr><th>量（取 a = 1、ρg = 1）</th><th>数值积分</th><th>解析值</th><th>核对</th></tr>'+
+      '<tr><td>抽水功 ∫₀²ᵃ x·A dx</td><td>'+nf(Wpump,6)+'</td><td>4π/3 = '+nf(4*Math.PI/3,6)+'</td><td class="'+(Math.abs(Wpump-4*Math.PI/3)<1e-6?'hit':'miss')+'">'+(Math.abs(Wpump-4*Math.PI/3)<1e-6?'✅':'⚠️')+'</td></tr>'+
+      '<tr><td><b>取球功</b> ∫₀²ᵃ (2a−x)·A dx</td><td>'+nf(Wball,6)+'</td><td>4πa⁴/3 = '+nf(eB,6)+'</td><td class="'+(Math.abs(Wball-eB)<1e-6?'hit':'miss')+'">'+(Math.abs(Wball-eB)<1e-6?'✅':'⚠️')+'</td></tr>'+
+      '<tr><td>球的体积 ∫₀²ᵃ A dx</td><td>'+nf(V,6)+'</td><td>4π/3 = '+nf(eV,6)+'</td><td class="'+(Math.abs(V-eV)<1e-6?'hit':'miss')+'">'+(Math.abs(V-eV)<1e-6?'✅':'⚠️')+'</td></tr>'+
+      '<tr><td>两者之和</td><td>'+nf(Wpump+Wball,6)+'</td><td>2a·V = '+nf(2*V,6)+'</td><td class="'+(Math.abs(Wpump+Wball-2*V)<1e-6?'hit':'miss')+'">'+(Math.abs(Wpump+Wball-2*V)<1e-6?'✅':'⚠️')+'</td></tr>';
+    const v=$('#t3-verdict');
+    v.className='verdict v-inf';
+    v.innerHTML='📌 球是上下对称的，所以两个积分数值恰好相等（都是 4π/3）——'+
+      '<b>但这纯属对称性的巧合，位移项的写法完全不同。</b>把球换成不对称的形状（如圆锥），两者就会分道扬镳。';
+  }
+  document.querySelectorAll('#t3-mode button').forEach(b=>b.addEventListener('click',()=>{
+    document.querySelectorAll('#t3-mode button').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on'); t3mode=b.dataset.m; t3draw();
+  }));
+  $('#t3-x').addEventListener('input',t3draw);
+
+  /* 初始化 + 主题切换时重绘 */
+  function drawAll(){ t1draw(); t2draw(); t3draw(); }
+  drawAll();
+  if(window.matchMedia){
+    const mq=window.matchMedia('(prefers-color-scheme: dark)');
+    if(mq.addEventListener) mq.addEventListener('change',drawAll);
+  }
+})();
+</script>
+</body>
+</html>
