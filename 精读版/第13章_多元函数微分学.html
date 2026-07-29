@@ -247,7 +247,9 @@ td.good{color:var(--green);font-weight:700}
     <h4>🧭 特殊路径法实验台</h4>
     <div class="hint">选一个函数，再选一条路径，看看沿这条路径趋于原点时函数值收敛到哪儿。
       <b>右侧的"路径谱"把 $k$（或路径的阶）从小扫到大</b>——谱线是<u>一条水平直线</u>说明沿这一族路径极限都一样（否定不了），
-      谱线<u>随参数变化</u>就当场否定了二重极限。<b>所有数值都是沿路径取 $t\to0$ 的 10 万点数值极限，不是解析代入。</b></div>
+      谱线<u>随参数变化</u>就当场否定了二重极限。<b>所有数值都是沿路径把 $t$ 从 $10^{-2}$ 一路取到 $10^{-8}$ 实算出来的（每条谱线 181 个参数 × 7 个 $t$），不是解析代入。</b><br>
+      <span style="color:var(--red)">⚠️ 注意"水平直线"只说明<u>这一族</u>路径否定不了，不等于极限存在</span>——
+      本台的 D、E 两题就是<b>沿直线全是水平线、换成抛物线／变阶路径立刻变脸</b>。</div>
     <div class="ctl" id="t1-fn">
       <button class="on" data-f="A">$\dfrac{x^2-y^2}{x^2+y^2}$（强13.1）</button>
       <button data-f="B">$\dfrac{xy}{x^2+y^2}$（强13.5/13.8）</button>
@@ -3463,6 +3465,293 @@ td.good{color:var(--green);font-weight:700}
   </div>
 
 <!--INSERT-->
+
+<script>
+/* ===== 模块 1：🧭 特殊路径法实验台　模块 2：🔬 可微性显微镜 ===== */
+(function(){
+  function el(id){return document.getElementById(id);}
+  function num(v,d){ if(!isFinite(v)) return (v>0?'+∞':(v<0?'−∞':'NaN'));
+    var a=Math.abs(v); if(a!==0&&(a<1e-4||a>=1e5)) return v.toExponential(2).replace('e','e');
+    return v.toFixed(d===undefined?4:d); }
+  function axes(bx,by,bw,bh,x0,x1,y0,y1,xlab,ylab){
+    var o='';
+    o+='<rect x="'+bx+'" y="'+by+'" width="'+bw+'" height="'+bh+'" fill="none" stroke="var(--line)" stroke-width="1"/>';
+    if(y0<0&&y1>0){ var yz=by+bh*(y1-0)/(y1-y0);
+      o+='<line x1="'+bx+'" y1="'+yz+'" x2="'+(bx+bw)+'" y2="'+yz+'" stroke="var(--line)" stroke-width="1" stroke-dasharray="3 3"/>'; }
+    o+='<text x="'+(bx+bw)+'" y="'+(by+bh+14)+'" font-size="10" fill="var(--muted)" text-anchor="end">'+xlab+'</text>';
+    o+='<text x="'+bx+'" y="'+(by-6)+'" font-size="10" fill="var(--muted)">'+ylab+'</text>';
+    o+='<text x="'+(bx-4)+'" y="'+(by+9)+'" font-size="9" fill="var(--muted)" text-anchor="end">'+num(y1,2)+'</text>';
+    o+='<text x="'+(bx-4)+'" y="'+(by+bh)+'" font-size="9" fill="var(--muted)" text-anchor="end">'+num(y0,2)+'</text>';
+    o+='<text x="'+bx+'" y="'+(by+bh+14)+'" font-size="9" fill="var(--muted)">'+num(x0,2)+'</text>';
+    return o;
+  }
+
+  /* ---------------- 模块 1 ---------------- */
+  var F1={
+    A:{n:'(x²−y²)/(x²+y²)',tag:'强 13.1',f:function(x,y,d){return (x*x-y*y)/(x*x+y*y);}},
+    B:{n:'xy/(x²+y²)',tag:'强 13.5 / 13.8',f:function(x,y,d){return x*y/(x*x+y*y);}},
+    C:{n:'x²y/(x²+y²)',tag:'习 13.1C / 强 13.10',f:function(x,y,d){return x*x*y/(x*x+y*y);}},
+    D:{n:'x²y/(x⁴+y²)',tag:'习 13.1D',f:function(x,y,d){return x*x*y/(x*x*x*x+y*y);}},
+    E:{n:'(x³+y³)/(x²+y)',tag:'强 13.2',f:function(x,y,d){var den=(d===undefined)?(x*x+y):d;return (x*x*x+y*y*y)/den;}}
+  };
+  /* d = x²+y 的“无抵消”精确值：变阶路径上 x²+y 会发生灾难性相消，必须解析给出 */
+  var P1={
+    lin:{lab:'路径参数 k',sym:'k',lo:-3,hi:3,dflt:1,
+         pt:function(t,k){return {x:t,y:k*t,d:t*t+k*t};},
+         curve:function(k){var a=[],i;for(i=-100;i<=100;i++){var x=i/100;a.push([x,k*x]);}return a;},
+         name:function(k){return 'y = '+num(k,2)+' x';}},
+    par:{lab:'路径参数 k',sym:'k',lo:-3,hi:3,dflt:1,
+         pt:function(t,k){return {x:t,y:k*t*t,d:(1+k)*t*t};},
+         curve:function(k){var a=[],i;for(i=-100;i<=100;i++){var x=i/100;a.push([x,k*x*x]);}return a;},
+         name:function(k){return 'y = '+num(k,2)+' x²';}},
+    varo:{lab:'路径的阶 m',sym:'m',lo:2.2,hi:6,dflt:3,
+         pt:function(t,m){return {x:t,y:-t*t+Math.pow(t,m),d:Math.pow(t,m)};},
+         curve:function(m){var a=[],i;for(i=1;i<=100;i++){var x=i/100;a.push([x,-x*x+Math.pow(x,m)]);}return a;},
+         name:function(m){return 'y = −x² + x^'+num(m,2);}}
+  };
+  var TS=[1e-2,1e-3,1e-4,1e-5,1e-6,1e-7,1e-8];
+  /* 三分类。⚠️ 不能用"末两项之差够小"当收敛判据：
+     像 D 沿 y=−x²+x^2.2 的余项是 O(x^0.2)，收敛极慢（−0.4989→−0.4996→−0.4998），
+     会被误判成发散；而 k=−1 时 y=−x² 使 x²+y≡0，那是路径落在无定义集上，也不是发散。 */
+  function lim1(F,P,par){
+    var vs=[],i;
+    for(i=0;i<TS.length;i++){var p=P.pt(TS[i],par);vs.push(F.f(p.x,p.y,p.d));}
+    var n=vs.length,a=vs[n-1],b=vs[n-2],c=vs[n-3];
+    if(vs.every(function(v){return !isFinite(v);})) return {kind:'undef',v:NaN,vs:vs};
+    if(!isFinite(a)||(Math.abs(a)>Math.abs(b)*2.5&&Math.abs(b)>Math.abs(c)*2.5&&Math.abs(a)>1e3))
+      return {kind:'div',v:a,vs:vs};
+    return {kind:'conv',v:a,vs:vs};
+  }
+  var S1={f:'A',p:'lin',k:1};
+  function key1(){return S1.p==='varo'?'varo':S1.p;}
+
+  function draw1(){
+    var F=F1[S1.f],P=P1[key1()],k=S1.k;
+    var spec=[],N=181,i;
+    for(i=0;i<N;i++){var pr=P.lo+(P.hi-P.lo)*i/(N-1);var L=lim1(F,P,pr);spec.push({p:pr,v:L.v,kind:L.kind});}
+    var conv=spec.filter(function(s){return s.kind==='conv';}).map(function(s){return s.v;});
+    var diverge=spec.some(function(s){return s.kind==='div';});
+    var nUndef=spec.filter(function(s){return s.kind==='undef';}).length;
+    if(!conv.length) conv=[0];
+    var lo=Math.min.apply(null,conv),hi=Math.max.apply(null,conv);
+    var rawLo=lo,rawHi=hi;                       /* 报数用真实极值，lo/hi 下面会被加上绘图留白 */
+    /* 慢收敛路径的末项还带着可见余项，判"水平"要留出这点余量 */
+    var flat=!diverge&&(hi-lo)<=1e-3*(1+Math.abs(hi));
+    if(hi-lo<1e-9){lo-=0.5;hi+=0.5;}
+    var pad=(hi-lo)*0.15;lo-=pad;hi+=pad;
+
+    var o='';
+    /* --- 左：xOy 平面符号场 + 路径 --- */
+    var BX=34,BY=28,BW=236,BH=236, M=40;
+    for(i=0;i<M;i++)for(var j=0;j<M;j++){
+      var xc=-1+2*(i+0.5)/M, yc=1-2*(j+0.5)/M, v=F.f(xc,yc);
+      var col=!isFinite(v)?'var(--red)':(Math.abs(v)<0.04?'var(--line)':(v>0?'var(--accent)':'var(--amber)'));
+      var op=!isFinite(v)?0.55:Math.min(0.55,0.12+Math.abs(v)*0.5);
+      o+='<rect x="'+(BX+BW*i/M).toFixed(1)+'" y="'+(BY+BH*j/M).toFixed(1)+'" width="'+(BW/M+0.6).toFixed(1)+'" height="'+(BH/M+0.6).toFixed(1)+'" fill="'+col+'" opacity="'+op.toFixed(2)+'"/>';
+    }
+    o+='<rect x="'+BX+'" y="'+BY+'" width="'+BW+'" height="'+BH+'" fill="none" stroke="var(--line)"/>';
+    o+='<line x1="'+BX+'" y1="'+(BY+BH/2)+'" x2="'+(BX+BW)+'" y2="'+(BY+BH/2)+'" stroke="var(--muted)" stroke-width="0.8" opacity="0.5"/>';
+    o+='<line x1="'+(BX+BW/2)+'" y1="'+BY+'" x2="'+(BX+BW/2)+'" y2="'+(BY+BH)+'" stroke="var(--muted)" stroke-width="0.8" opacity="0.5"/>';
+    var pts=P.curve(k).filter(function(q){return q[1]>=-1&&q[1]<=1;})
+      .map(function(q){return (BX+BW*(q[0]+1)/2).toFixed(1)+','+(BY+BH*(1-q[1])/2).toFixed(1);});
+    if(pts.length>1) o+='<polyline points="'+pts.join(' ')+'" fill="none" stroke="var(--red)" stroke-width="2.4"/>';
+    o+='<circle cx="'+(BX+BW/2)+'" cy="'+(BY+BH/2)+'" r="3.5" fill="var(--red)"/>';
+    o+='<text x="'+BX+'" y="'+(BY-8)+'" font-size="10" fill="var(--muted)">xOy 平面：蓝＝f&gt;0　橙＝f&lt;0　灰≈0　红线＝'+P.name(k)+'</text>';
+
+    /* --- 右：路径谱 --- */
+    var CX=330,CY=28,CW=300,CH=236;
+    o+=axes(CX,CY,CW,CH,P.lo,P.hi,lo,hi,P.sym,'沿路径的极限值');
+    var seg=[],cur=[];
+    for(i=0;i<spec.length;i++){
+      var s=spec[i];
+      if(!isFinite(s.v)||s.v<lo||s.v>hi){ if(cur.length>1)seg.push(cur); cur=[]; continue; }
+      cur.push((CX+CW*(s.p-P.lo)/(P.hi-P.lo)).toFixed(1)+','+(CY+CH*(hi-s.v)/(hi-lo)).toFixed(1));
+    }
+    if(cur.length>1)seg.push(cur);
+    for(i=0;i<seg.length;i++) o+='<polyline points="'+seg[i].join(' ')+'" fill="none" stroke="var(--accent)" stroke-width="2.4"/>';
+    var L=lim1(F,P,k), cx=CX+CW*(k-P.lo)/(P.hi-P.lo);
+    o+='<line x1="'+cx.toFixed(1)+'" y1="'+CY+'" x2="'+cx.toFixed(1)+'" y2="'+(CY+CH)+'" stroke="var(--red)" stroke-width="1.4" stroke-dasharray="4 3"/>';
+    if(isFinite(L.v)&&L.v>=lo&&L.v<=hi)
+      o+='<circle cx="'+cx.toFixed(1)+'" cy="'+(CY+CH*(hi-L.v)/(hi-lo)).toFixed(1)+'" r="5" fill="var(--red)" stroke="var(--bg)" stroke-width="1.5"/>';
+    el('t1-svg').innerHTML=o;
+
+    /* --- 数值表 --- */
+    var rows='<tr><th>沿路径取 t →</th>';
+    for(i=0;i<TS.length;i++) rows+='<th>'+TS[i].toExponential(0)+'</th>';
+    rows+='</tr><tr><td>f 的值</td>';
+    for(i=0;i<L.vs.length;i++) rows+='<td>'+num(L.vs[i],5)+'</td>';
+    rows+='</tr>';
+    el('t1-tab').innerHTML=rows;
+
+    var lt={conv:num(L.v,5),div:'发散（|f| 无界增大）',undef:'该路径落在 f 的无定义集上'}[L.kind];
+    el('t1-say').innerHTML='当前：<b>f = '+F.n+'</b>（'+F.tag+'），路径 <b>'+P.name(k)+'</b>　⇒　'+
+      '沿此路径的极限 ＝ <b>'+lt+'</b>';
+    var note=nUndef?'　<span style="opacity:.75">（另有 '+nUndef+' 个参数使路径整条落在 f 的无定义集上，已排除）</span>':'';
+    var V=el('t1-verdict');
+    if(diverge){ V.className='verdict v-ok';
+      V.innerHTML='谱线上存在<b>使 |f| 无界增大的路径</b> ⇒ <b>二重极限不存在，当场否定</b>'+note; }
+    else if(flat){ V.className='verdict v-inf';
+      V.innerHTML='路径谱是<b>一条水平直线</b>（恒等于 '+num(conv[0],5)+'）⇒ 沿这一族路径<b>否定不了</b>——'+
+        '<u>但这并不能说明极限存在</u>：换一族路径可能就得到别的值（本页 D、E 两题正是如此），'+
+        '真要肯定极限得用夹逼。'+note; }
+    else { V.className='verdict v-ok';
+      V.innerHTML='谱线<b>随参数变化</b>（极限值在 '+num(rawLo,4)+' 与 '+num(rawHi,4)+' 之间取遍）⇒ <b>二重极限不存在，当场否定</b>'+note; }
+  }
+  function sync1(){
+    var P=P1[key1()];
+    el('t1-plab').textContent=P.lab;
+    el('t1-kv').textContent=P.sym+' = '+num(S1.k,2);
+    draw1();
+  }
+  function bind1(){
+    [].forEach.call(el('t1-fn').children,function(b){
+      b.onclick=function(){[].forEach.call(el('t1-fn').children,function(e){e.className='';});b.className='on';
+        S1.f=b.getAttribute('data-f');sync1();};});
+    [].forEach.call(el('t1-path').children,function(b){
+      b.onclick=function(){[].forEach.call(el('t1-path').children,function(e){e.className='';});b.className='on';
+        var p=b.getAttribute('data-p'); S1.p=(p==='var')?'varo':p;
+        var P=P1[key1()]; S1.k=P.dflt;
+        var sl=el('t1-k'); sl.min=Math.round(P.lo*100); sl.max=Math.round(P.hi*100); sl.value=Math.round(P.dflt*100);
+        sync1();};});
+    el('t1-k').addEventListener('input',function(){ S1.k=parseFloat(this.value)/100; sync1(); });
+    sync1();
+  }
+
+  /* ---------------- 模块 2 ---------------- */
+  /* fx = f′ₓ 的解析式（NaN 表示该点偏导不存在）。
+     ⚠️ 不能用差商代替：ρ²sin(1/ρ²) 在 ρ 方向的振荡周期约 πρ³，
+     任何"看起来够小"的步长 h 都会把振荡平均掉，把发散的 f′ₓ 算成 0。 */
+  var F2={
+    cross:{n:'十字架',tag:'强 13.7',book:'单变量连续 ⇏ 连续',
+      f:function(x,y){return (x===0||y===0)?1:0;},
+      fx:function(x,y){return (x===0&&y!==0)?NaN:0;}},
+    saddle:{n:'xy/(x²+y²)',tag:'强 13.8',book:'偏导存在 ⇏ 连续',
+      f:function(x,y){var r=x*x+y*y;return r===0?0:x*y/r;},
+      fx:function(x,y){var r=x*x+y*y;return r===0?0:y*(y*y-x*x)/(r*r);}},
+    cone:{n:'√(x²+y²)',tag:'强 13.9',book:'连续 ⇏ 偏导存在',
+      f:function(x,y){return Math.sqrt(x*x+y*y);},
+      fx:function(x,y){var r=Math.sqrt(x*x+y*y);return r===0?NaN:x/r;}},
+    x2y:{n:'x²y/(x²+y²)',tag:'强 13.10',book:'连续 + 偏导存在 ⇏ 可微',
+      f:function(x,y){var r=x*x+y*y;return r===0?0:x*x*y/r;},
+      fx:function(x,y){var r=x*x+y*y;return r===0?0:2*x*y*y*y/(r*r);}},
+    osc:{n:'ρ²sin(1/ρ²)',tag:'强 13.12',book:'可微 ⇏ 偏导连续',
+      f:function(x,y){var u=x*x+y*y;return u===0?0:u*Math.sin(1/u);},
+      fx:function(x,y){var u=x*x+y*y;return u===0?0:2*x*(Math.sin(1/u)-Math.cos(1/u)/u);}},
+    absxy:{n:'|xy|',tag:'例 13.8',book:'可微，但 f′ₓ 在 y 轴上不存在',
+      f:function(x,y){return Math.abs(x*y);},
+      fx:function(x,y){return (x===0&&y!==0)?NaN:(x>0?1:(x<0?-1:0))*Math.abs(y);}},
+    sqrtabs:{n:'√|xy|',tag:'习 13.3',book:'偏导存在但不可微',
+      f:function(x,y){return Math.sqrt(Math.abs(x*y));},
+      fx:function(x,y){if(x===0)return y===0?0:NaN;
+        return (x>0?1:-1)*Math.sqrt(Math.abs(y))/(2*Math.sqrt(Math.abs(x)));}}
+  };
+  var S2={f:'cross',s:3};
+  function pd0(f,ax){
+    var h=1e-7,vp,vm;
+    if(ax==='x'){vp=(f(h,0)-f(0,0))/h; vm=(f(-h,0)-f(0,0))/(-h);}
+    else {vp=(f(0,h)-f(0,0))/h; vm=(f(0,-h)-f(0,0))/(-h);}
+    var ok=isFinite(vp)&&isFinite(vm)&&Math.abs(vp-vm)<=1e-4*(1+Math.abs(vp));
+    return {ok:ok,v:(vp+vm)/2,r:vp,l:vm};
+  }
+  /* ⚠️ 判定一律取「ρ ≤ r 的上确界」而不是「恰好在半径 r 的圆周上」——
+     否则 ρ²sin(1/ρ²) 这类振荡函数会因为 sin 恰好取到近 0 而被误判。
+     上确界对 r 单调不增，比大小才有意义。 */
+  function scan2(F,r,A,B){
+    var N=361,dir=[],dif=[],i,j,f0=F.f(0,0);
+    for(i=0;i<N;i++){
+      var th=2*Math.PI*i/N,x=r*Math.cos(th),y=r*Math.sin(th);
+      var v=F.f(x,y); dir.push(v); dif.push((v-f0-A*x-B*y)/r);
+    }
+    var amp=0,dev=0,M=48,K=72;
+    for(j=0;j<M;j++){
+      var rho=r*Math.pow(1e-3,j/(M-1));
+      for(i=0;i<K;i++){
+        var t2=2*Math.PI*i/K,xx=rho*Math.cos(t2),yy=rho*Math.sin(t2),vv=F.f(xx,yy);
+        if(!isFinite(vv))continue;
+        amp=Math.max(amp,Math.abs(vv-f0));
+        dev=Math.max(dev,Math.abs((vv-f0-A*xx-B*yy)/rho));
+      }
+    }
+    return {dir:dir,dif:dif,amp:amp,dev:dev};
+  }
+  /* 返回 ρ≤r 上 |f′ₓ−f′ₓ(0,0)| 的上确界；若途中遇到偏导不存在的点则 exists=false。
+     采样点里显式加入两条坐标轴上的精确点（那正是 |xy|、√|xy|、十字架出问题的地方）。 */
+  function pdxAmp(F,r){
+    var mx=0,i,j,A0=pd0(F.f,'x'),a0=A0.ok?A0.v:0,gap=false;
+    for(j=0;j<40;j++){
+      var rho=r*Math.pow(1e-3,j/39),pts=[[0,rho],[0,-rho],[rho,0],[-rho,0]];
+      for(i=0;i<48;i++){var th=2*Math.PI*(i+0.37)/48;pts.push([rho*Math.cos(th),rho*Math.sin(th)]);}
+      for(i=0;i<pts.length;i++){
+        var g=F.fx(pts[i][0],pts[i][1]);
+        if(!isFinite(g)){gap=true;continue;}
+        mx=Math.max(mx,Math.abs(g-a0));
+      }
+    }
+    return {amp:mx,exists:!gap};
+  }
+  function draw2(){
+    var F=F2[S2.f],r=Math.pow(10,-S2.s);
+    var A=pd0(F.f,'x'),B=pd0(F.f,'y');
+    var a=A.ok?A.v:0,b=B.ok?B.v:0;
+    var s1=scan2(F,r,a,b), s2=scan2(F,r/10,a,b);
+    var o='',i;
+    function curve(arr,BX,BY,BW,BH,col){
+      var lo=Math.min.apply(null,arr),hi=Math.max.apply(null,arr);
+      if(hi-lo<1e-12){lo-=0.5;hi+=0.5;} var pad=(hi-lo)*0.18;lo-=pad;hi+=pad;
+      var s=axes(BX,BY,BW,BH,0,2*Math.PI,lo,hi,'θ（0→2π）','');
+      var p=[];for(i=0;i<arr.length;i++){ if(!isFinite(arr[i]))continue;
+        p.push((BX+BW*i/(arr.length-1)).toFixed(1)+','+(BY+BH*(hi-arr[i])/(hi-lo)).toFixed(1));}
+      s+='<polyline points="'+p.join(' ')+'" fill="none" stroke="'+col+'" stroke-width="2.2"/>';
+      return s;
+    }
+    o+='<text x="34" y="20" font-size="11" fill="var(--muted)">① 方向谱　f(r cosθ, r sinθ)　（谱线是水平常数 ⇒ 极限存在）</text>';
+    o+=curve(s1.dir,44,34,260,250,'var(--accent)');
+    o+='<text x="374" y="20" font-size="11" fill="var(--muted)">③ 可微判别谱　(Δf − f′ₓΔx − f′_yΔy)/ρ　（贴着 0 ⇒ 可微）</text>';
+    o+=curve(s1.dif,384,34,250,250,'var(--purple)');
+    el('t2-svg').innerHTML=o;
+
+    function shrink(u,v){ return v<=u*0.5+1e-14; }          /* 上确界缩小 ⇒ 趋于 0 */
+    var contOK=shrink(s1.amp,s2.amp)||s1.amp<1e-12;
+    var diffOK=contOK&&(A.ok&&B.ok)&&(shrink(s1.dev,s2.dev)||s1.dev<1e-12);
+    var P1x=pdxAmp(F,r),P2x=pdxAmp(F,r/10);
+    var pa1=P1x.amp,pa2=P2x.amp;
+    /* f′ₓ 要在原点「连续」，前提是它在原点的某个邻域内处处存在 */
+    var pdcOK=A.ok&&P1x.exists&&(pa2<=pa1*0.5+1e-12||pa1<1e-12);
+    function cell(ok,t,f){return '<td class="'+(ok?'hit':'miss')+'">'+(ok?t:f)+'</td>';}
+    var rows='<tr><th>判定项（沿半径 r 的圆周实测）</th><th>r = '+r.toExponential(0)+'</th><th>r 缩小 10 倍</th><th>结论</th></tr>';
+    rows+='<tr><td>① 在原点<b>连续</b>？　max|f−f(0,0)|</td><td>'+num(s1.amp,6)+'</td><td>'+num(s2.amp,6)+'</td>'+cell(contOK,'✅ 连续','❌ 不连续')+'</tr>';
+    rows+='<tr><td>② <b>偏导存在</b>？　f′ₓ(0,0) / f′_y(0,0)</td><td>'+(A.ok?num(A.v,4):'左'+num(A.l,2)+' / 右'+num(A.r,2))+'</td><td>'+(B.ok?num(B.v,4):'左'+num(B.l,2)+' / 右'+num(B.r,2))+'</td>'+cell(A.ok&&B.ok,'✅ 都存在','❌ 不存在')+'</tr>';
+    rows+='<tr><td>③ <b>可微</b>？　max|判别商|</td><td>'+(A.ok&&B.ok?num(s1.dev,6):'—')+'</td><td>'+(A.ok&&B.ok?num(s2.dev,6):'—')+'</td>'+cell(diffOK,'✅ 可微','❌ 不可微')+'</tr>';
+    rows+='<tr><td>④ <b>f′ₓ 在原点连续</b>？　ρ≤r 上 sup|f′ₓ−f′ₓ(0,0)|</td>'+
+      '<td>'+(A.ok?num(pa1,4):'—')+'</td><td>'+(A.ok?num(pa2,4):'—')+'</td>'+
+      (!A.ok?'<td>—</td>':(!P1x.exists?'<td class="miss">❌ f′ₓ 在坐标轴上就不存在</td>':cell(pdcOK,'✅ 连续','❌ 不连续（sup 不降反升）')))+'</tr>';
+    el('t2-tab').innerHTML=rows;
+
+    el('t2-say').innerHTML='当前反例：<b>'+F.n+'</b>（'+F.tag+'）—— 书上用它演示 <b>'+F.book+'</b>。'+
+      (A.ok?'':'　<b>注意：f′ₓ(0,0) 的左右极限是 '+num(A.l,2)+' 与 '+num(A.r,2)+'，不相等 ⇒ 偏导不存在。</b>');
+    var V=el('t2-verdict'),txt,cls;
+    if(!contOK){txt='方向谱<b>随 θ 起伏且缩小 r 也不塌</b> ⇒ <b>在原点不连续</b>（自然也不可微）';cls='v-no';}
+    else if(!(A.ok&&B.ok)){txt='方向谱塌向水平线 ⇒ <b>连续</b>；但<b>偏导数不存在</b>（左右导数不等）⇒ 不可微';cls='v-inf';}
+    else if(!diffOK){txt='<b>连续 ✓、偏导存在 ✓，但判别谱不贴 0 ⇒ 不可微</b>——这正是关系图上那个最关键的 ⇏';cls='v-no';}
+    else if(!pdcOK){txt='<b>可微 ✓，但 f′ₓ 在原点不连续</b> ⇒ 可微 ⇏ 偏导连续（充分条件不必要）';cls='v-inf';}
+    else {txt='<b>连续 ✓ 偏导存在 ✓ 可微 ✓ 偏导连续 ✓</b> —— 四条全占，是关系图里最"乖"的一档';cls='v-ok';}
+    V.className='verdict '+cls; V.innerHTML=txt;
+  }
+  function bind2(){
+    [].forEach.call(el('t2-fn').children,function(b){
+      b.onclick=function(){[].forEach.call(el('t2-fn').children,function(e){e.className='';});b.className='on';
+        S2.f=b.getAttribute('data-f');draw2();};});
+    el('t2-s').addEventListener('input',function(){
+      S2.s=parseFloat(this.value)/10;
+      el('t2-sv').textContent='r = 1e-'+num(S2.s,1);
+      draw2();});
+    el('t2-sv').textContent='r = 1e-'+num(S2.s,1);
+    draw2();
+  }
+
+  bind1(); bind2();
+})();
+</script>
 </div>
 </body>
 </html>
