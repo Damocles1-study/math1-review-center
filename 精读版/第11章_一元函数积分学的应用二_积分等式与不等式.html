@@ -1,0 +1,1945 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>精读版 · 高数 第11章 一元函数积分学的应用（二）积分等式与积分不等式</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],ignoredClasses:['nokatex']})"></script>
+<link rel="stylesheet" href="style.css">
+<style>
+/* ===== 本章专属：狄拉克核实验台 / 区间再现配对器 / 下界探测器 ===== */
+.tool{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:20px 0}
+.tool h4{margin:0 0 4px;font-size:1rem;color:var(--accent)}
+.tool .hint{color:var(--muted);font-size:.82rem;margin-bottom:12px;line-height:1.7}
+.ctl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0}
+.ctl button{font:inherit;font-size:.82rem;padding:4px 13px;border-radius:8px;cursor:pointer;
+  border:1px solid var(--line);background:var(--card);color:var(--muted)}
+.ctl button.on{background:var(--accent-soft);color:var(--accent);border-color:var(--accent);font-weight:700}
+.ctl button:hover{filter:brightness(.96)}
+.ctl label{font-size:.8rem;color:var(--muted);min-width:9.5em}
+.ctl input[type=range]{flex:1 1 150px;min-width:120px;accent-color:var(--accent)}
+.ctl select{font:inherit;font-size:.82rem;padding:4px 9px;border-radius:8px;border:1px solid var(--line);
+  background:var(--card);color:var(--ink);max-width:100%}
+.ctl .val{font-family:var(--mono);font-size:.78rem;color:var(--accent);min-width:6.5em;text-align:right}
+.scene{background:var(--bg);border:1px solid var(--line);border-radius:10px;margin:10px 0}
+.scene svg{display:block;width:100%;height:auto}
+.say{background:var(--accent-soft);border-radius:8px;padding:9px 13px;margin:10px 0;
+  font-size:.86rem;color:var(--accent);line-height:1.75;min-height:2em}
+.say b{color:var(--accent)}
+.verdict{font-size:.88rem;font-weight:700;border-radius:8px;padding:7px 13px;margin:10px 0;display:block}
+.v-ok{background:var(--green-soft);color:var(--green)}
+.v-no{background:var(--red-soft);color:var(--red)}
+.v-inf{background:var(--amber-soft);color:var(--amber)}
+.dq{width:100%;min-width:0;font-size:.8rem;margin:6px 0;border-collapse:collapse}
+.dq th,.dq td{padding:4px 8px;font-family:var(--mono);text-align:right;white-space:nowrap;border-bottom:1px solid var(--line)}
+.dq th:first-child,.dq td:first-child{text-align:left;font-family:var(--sans);white-space:normal}
+.dq td.hit{color:var(--green);font-weight:700}
+.dq td.miss{color:var(--red)}
+.legend2{font-size:.78rem;color:var(--muted);line-height:1.7;margin-top:6px}
+.chip{display:inline-block;font-size:.72rem;border-radius:5px;padding:1px 7px;margin-right:6px}
+.c-b{background:var(--accent-soft);color:var(--accent)}
+.c-g{background:var(--green-soft);color:var(--green)}
+.c-r{background:var(--red-soft);color:var(--red)}
+.c-a{background:var(--amber-soft);color:var(--amber)}
+.c-p{background:var(--purple-soft);color:var(--purple)}
+table.dense{font-size:.84rem;min-width:420px}
+table.dense td{padding:5px 9px}
+/* 总图 */
+.tenline{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 12px;margin:16px 0}
+.tenline svg{display:block;min-width:660px}
+/* 三步条 */
+.steps3{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.steps3 div{flex:1 1 190px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 13px;font-size:.85rem;line-height:1.75}
+.steps3 div b{color:var(--accent);display:block;margin-bottom:3px}
+/* 公式速查小卡 */
+.fcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,230px),1fr));gap:9px;margin:14px 0}
+.fcards div{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:9px 12px;font-size:.84rem;line-height:1.8}
+.fcards div b{color:var(--accent);font-size:.74rem;display:block;letter-spacing:.05em;margin-bottom:2px}
+/* 两栏对照（算 vs 证） */
+.duo{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:10px;margin:14px 0}
+.duo > div{border-radius:10px;padding:11px 14px;font-size:.86rem;line-height:1.8}
+.duo .dA{background:var(--accent-soft);border:1px solid var(--accent)}
+.duo .dB{background:var(--green-soft);border:1px solid var(--green)}
+.duo b.h{display:block;font-size:.76rem;letter-spacing:.06em;margin-bottom:4px}
+.duo .dA b.h{color:var(--accent)} .duo .dB b.h{color:var(--green)}
+@media (max-width:560px){ .ctl{gap:6px} .ctl label{min-width:100%} .dq{font-size:.72rem} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <a class="back" href="../index.html">← 返回数学复盘中心</a>
+
+  <header>
+    <h1>第 11 章 · 一元函数积分学的应用（二）——积分等式与积分不等式</h1>
+    <div class="sub">
+      张宇《基础30讲》第 11 讲（书页 <b>282–293</b>，12 页）＋《高数18讲》第 11 讲（书页 <b>120–137</b>，18 页），共 <b>30 页</b>逐页转录。<br>
+      <b>⚠️ 本章是全书唯一一讲「强化比基础厚一半」的章</b>——因为两本书讲的<b>根本不是同一件事</b>：<b>18 讲教你「算」，基础讲教你「证」</b>。两本合起来才是完整的第 11 讲。<br>
+      <b>36 道题一道不漏</b>（基础例题 11 ＋ 课后习题 6 ＋ 强化例题 19），全部结论经 <b>mpmath 高精度独立复算（44 项）</b>，<b>书一处没错</b>。
+    </div>
+  </header>
+
+  <div class="legend">
+    <b>怎么读这一页</b>（大题一律「想 → 写 → 校」三层，<b>顺序固定，别跳着看</b>）：<br>
+    <span class="swatch" style="background:var(--purple)"></span><b>💭 思路</b>：动手<b>前</b>看／卡壳时看。只讲"为什么走这条路"，不含结果。<b>看完就合上页面自己写，别直接翻卷面。</b><br>
+    <span class="swatch" style="background:var(--accent)"></span><b>✍️ 考场卷面</b>：写完<b>对照</b>。只有考场上真要落笔的字，<span style="color:var(--green);font-weight:700">⛳</span> 标采分点。<br>
+    <span class="swatch" style="background:var(--muted)"></span><b>📌 批注</b>：对照完<b>校对</b>。定理边界、扣分点、心算技巧——这些考场上<b>不要</b>落笔。<br>
+    <span class="swatch" style="background:var(--amber)"></span><b>必记</b>　<span class="swatch" style="background:var(--red)"></span><b>陷阱</b>　<span class="swatch" style="background:var(--blue)"></span><b>补讲</b>（书上没写但该知道的）　<span class="swatch" style="background:var(--green)"></span><b>强化专属</b>（18 讲有、基础讲没有）<br>
+    <span class="layer L-base">基</span>＝基础30讲　<span class="layer L-str">强</span>＝高数18讲　右上角 <span class="pg" style="float:none">P.283</span> 是书页码。<br>
+    <b>选择填空题不写卷面层</b>——考场上本就不写过程，那类卡保持"答案 → 分析 → 要害"的教学式排版。<b>本章 36 题里有 17 题是选填，全在第一部分。</b>
+  </div>
+
+  <nav class="toc">
+    <a href="#s0">定位：算 vs 证</a>
+    <a href="#s1">一、性质 + 狄拉克核</a>
+    <a href="#s2">二、祖孙三代</a>
+    <a href="#s3">三、区间再现</a>
+    <a href="#s4">四、华里士</a>
+    <a href="#s5">五、平移 · 判正负 · 升降阶</a>
+    <a href="#s6">六、牛莱制造差值</a>
+    <a href="#s7">七、夹逼求积分极限</a>
+    <a href="#s8">八、积分中值定理</a>
+    <a href="#s9">九、积分法证等式</a>
+    <a href="#s10">十、不等式五法总纲</a>
+    <a href="#s11">十一、单调性法</a>
+    <a href="#s12">十二、拉格朗日 · 泰勒</a>
+    <a href="#s13">十三、积分法 · 牛莱</a>
+    <a href="#s14">十四、比较 · 绝对值</a>
+    <a href="#s15">十五、★黎曼思想（压轴）</a>
+    <a href="#end">收官 + 落位索引</a>
+  </nav>
+
+  <!-- ================= s0 定位 ================= -->
+  <h2 id="s0"><span class="idx">定位</span>同一讲，两本书讲的是两件事：一本教<u>算</u>，一本教<u>证</u></h2>
+
+  <div class="key"><span class="tag">必记 · 先把这一章的地图看懂，再往下读</span>
+    <p>翻开两本书的第 11 讲，你会以为拿错了书——<b>它们几乎没有重叠的例题类型</b>：</p>
+    <div class="duo">
+      <div class="dA"><b class="h">📗 高数18讲（18 页 · 19 例）＝ 算</b>
+        标题叫"定积分<b>等式</b>问题"，内容却是<b>定积分求值的性质与公式工具箱</b>：与字母无关性、线性性、方向性、可加性、"祖孙三代"的奇偶性与周期性、区间再现、华里士、换元、分部、牛莱。<br>
+        <b>19 道例题里 15 道是选择填空</b>，考的是"这个积分等于几"。</div>
+      <div class="dB"><b class="h">📕 基础30讲（12 页 · 17 题）＝ 证</b>
+        同样的标题，讲的却是<b>怎么证明一个积分等式／不等式</b>：积分中值定理、夹逼准则、积分法证等式；单调性、拉格朗日、泰勒、积分法、牛莱证不等式。<br>
+        <b>17 道题里 15 道是解答题</b>，考的是"请证明"。</div>
+    </div>
+    <p style="margin-top:10px"><b>所以本页把两本书拆开重排</b>：<b>第一部分（一~七节）＝算</b>，以 18 讲为骨架；<b>第二部分（八~十五节）＝证</b>，以基础讲为骨架。<b>两部分的交汇点是"积分中值定理"（第八节）</b>——它既是求值工具，也是证明工具，两本书都花了大篇幅。</p>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · ★★★ 全章最该先读的一段话（18 讲 P.128「十的注(2)」原文）</span>
+    <p>这段话解释了<b>本章为什么叫"积分等式"</b>，也给出了解题的第一个分岔口。原文照录要点：</p>
+    <blockquote style="border-left:3px solid var(--blue);padding-left:12px;margin:8px 0;color:var(--ink)">
+      有了不定积分的换元法和分部法，又有牛莱公式，那定积分的换元积分法和分部积分法是否多余？……但科学的数学体系中不会出现这种情形，故大家一定要知道：<b>定积分的换元积分法和分部积分法，主要不是用来求积分值的，而是用来讨论不同定积分之间的相互关系的。</b><br>
+      也就是说，能够求出积分大小的问题毕竟是少数，而一般的积分问题都是讨论<b>积分之间的相互关系</b>……<b>实际就是要把一个定积分想办法变成另外一个定积分</b>，这才是定积分换元法和分部法最主要的目的。<br>
+      以上两段话，<b>实在需要认真研读</b>，结合问题把它们想明白，解题的方向与思路便清晰了。
+    </blockquote>
+    <p><b>由此得到一条可以直接上手的判据</b>：</p>
+    <div class="steps3">
+      <div><b>区间变了 ⇒ 换元</b>只有当积分变量不同时，积分区间才可能发生变化。</div>
+      <div><b>区间没变 ⇒ 分部</b>变化前后区间相同，一般用分部积分法。</div>
+      <div><b>唯一的例外</b><b>区间再现</b>——它是<u>不改变积分区间的换元</u>，所以看着像分部的场合也可能是它。</div>
+    </div>
+    <p><b>「把一个定积分变成另一个定积分」就是本章所有技巧的共同目标</b>：区间再现是把 $I$ 变成它自己（得方程 $I=C-I$）、平移是把 $I$ 变成对称形式、升降阶是把 $\int f$ 变成 $\int f''$。<b>心里揣着这句话，第一部分七节全部串成一条线。</b></p>
+  </div>
+
+  <div class="tenline">
+    <svg viewBox="0 0 700 330" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="第11讲两部分三向解题法总图">
+      <defs><marker id="ar" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto">
+        <path d="M0,0 L6,3 L0,6 z" fill="var(--muted)"/></marker></defs>
+      <rect x="230" y="6" width="240" height="34" rx="9" fill="var(--amber-soft)" stroke="var(--amber)" stroke-width="1.5"/>
+      <text x="350" y="27" text-anchor="middle" font-size="12.5" font-weight="700" fill="var(--amber)">第 11 讲 · O（盯住目标）</text>
+      <path d="M350,40 L350,54" stroke="var(--muted)" stroke-width="1.2" fill="none" marker-end="url(#ar)"/>
+      <path d="M180,56 L520,56" stroke="var(--line)" stroke-width="1.4"/>
+      <path d="M180,56 L180,70" stroke="var(--line)" stroke-width="1.2"/>
+      <path d="M520,56 L520,70" stroke="var(--line)" stroke-width="1.2"/>
+      <!-- 左：等式 -->
+      <rect x="16" y="70" width="328" height="240" rx="10" fill="var(--accent-soft)" stroke="var(--accent)"/>
+      <text x="180" y="90" text-anchor="middle" font-size="12" font-weight="700" fill="var(--accent)">第一部分　定积分等式问题（算）</text>
+      <text x="30" y="112" font-size="10.5" font-weight="700" fill="var(--accent)">性质</text>
+      <text x="30" y="130" font-size="10.5" fill="var(--ink)">与字母无关性 · 线性性 · 方向性 · 可加性</text>
+      <text x="30" y="148" font-size="10.5" fill="var(--ink)">"祖孙三代"的奇偶性</text>
+      <text x="30" y="166" font-size="10.5" fill="var(--ink)">"祖孙三代"的周期性</text>
+      <text x="30" y="190" font-size="10.5" font-weight="700" fill="var(--accent)">公式定理</text>
+      <text x="30" y="208" font-size="10.5" fill="var(--ink)">华里士公式 · 积分中值定理</text>
+      <text x="30" y="226" font-size="10.5" fill="var(--ink)">定积分的换元积分法 · 分部积分法</text>
+      <text x="30" y="244" font-size="10.5" fill="var(--ink)">区间再现下的积分公式</text>
+      <text x="30" y="262" font-size="10.5" fill="var(--ink)">牛顿–莱布尼茨公式</text>
+      <text x="30" y="288" font-size="10" font-weight="700" fill="var(--red)">19 例中 15 例是选择填空 ⇒ 练手速</text>
+      <!-- 右：不等式 -->
+      <rect x="356" y="70" width="328" height="240" rx="10" fill="var(--green-soft)" stroke="var(--green)"/>
+      <text x="520" y="90" text-anchor="middle" font-size="12" font-weight="700" fill="var(--green)">第二部分　定积分不等式问题（证）</text>
+      <text x="370" y="112" font-size="10.5" font-weight="700" fill="var(--green)">四条通用武器（18 讲）</text>
+      <text x="370" y="130" font-size="10.5" fill="var(--ink)">比较定理（保号性）· 估值定理</text>
+      <text x="370" y="148" font-size="10.5" fill="var(--ink)">绝对值不等式</text>
+      <text x="370" y="166" font-size="10.5" font-weight="700" fill="var(--red)">★★★ 黎曼思想（大区间拆小区间）</text>
+      <text x="370" y="190" font-size="10.5" font-weight="700" fill="var(--green)">五条证明路线（基础讲）</text>
+      <text x="370" y="208" font-size="10.5" fill="var(--ink)">① 函数的单调性（构造 $F$，最常用）</text>
+      <text x="370" y="226" font-size="10.5" fill="var(--ink)">② 拉格朗日中值定理（条件含 $f'$）</text>
+      <text x="370" y="244" font-size="10.5" fill="var(--ink)">③ 泰勒公式（条件含 $f''$）</text>
+      <text x="370" y="262" font-size="10.5" fill="var(--ink)">④ 积分法（分部／换元）　⑤ 牛莱公式</text>
+      <text x="370" y="288" font-size="10" font-weight="700" fill="var(--red)">17 题中 15 题是解答题 ⇒ 练卷面</text>
+    </svg>
+  </div>
+
+  <div class="dolinks">
+    <div class="t">本章体量与两本书的分工</div>
+    基础30讲第 11 讲 <b>书页 282–293（12 页）</b> · 高数18讲第 11 讲 <b>书页 120–137（18 页）</b>，共 <b>30 页</b>。
+    <div class="note"><b>⚠️ 差集必须都吃</b>：<br>
+    <b>基础讲独有</b>：积分不等式的<b>五条证明路线</b>（单调性／拉格朗日／泰勒／积分法／牛莱，一题一法）、夹逼求积分极限的三道题、<b>★★习 11.5 的注（全章总纲：联系 $f$ 与 $f'$ 只有两条路）</b>。<br>
+    <b>18 讲独有</b>：<b>"祖孙三代"奇偶性与周期性</b>（基础讲完全没有）、<b>区间再现七公式</b>、华里士四式、<b>★还原对称性（平移换元）</b>、<b>★★★黎曼思想与例 11.19</b>、<b>换元法的方法论长注</b>。<br>
+    ⚠️ 索引 md 的页码两本都不准：基础偏 6 页、强化偏 13 页，本页所有页码<b>以渲染页首实际印刷页码为准</b>。</div>
+    <a href="第10章_一元函数积分学的应用一_几何应用.html">← 上一章：第 10 章 积分学几何应用</a>
+    <a href="../../张宇系列_分章易识别版/高等数学/11_一元函数积分学的应用（二）_积分等式与不等式/高数_第11章_基础30讲.pdf">📕 基础30讲 第11讲 PDF</a>
+    <a href="../../张宇系列_分章易识别版/高等数学/11_一元函数积分学的应用（二）_积分等式与不等式/高数_第11章_强化18讲.pdf">📗 高数18讲 第11讲 PDF</a>
+    <a href="../../张宇系列_分章易识别版/高等数学/11_一元函数积分学的应用（二）_积分等式与不等式/高数_第11章_1000题_强化_题目.pdf">📝 1000题强化篇</a>
+  </div>
+
+  <h2 style="border-top:3px double var(--accent);padding-top:14px;margin-top:34px">第一部分　算——定积分等式问题</h2>
+
+  <!-- ================= s1 性质 + 狄拉克核 ================= -->
+  <h2 id="s1"><span class="idx">一</span>四条基本性质，与一道靠"可加性"取胜的名题</h2>
+
+  <div class="key"><span class="tag">必记 · 四条性质（18 讲 P.121）</span>
+    <span class="pg">P.121</span>
+    <div class="fcards">
+      <div><b>① 与字母无关性</b>$\displaystyle\int_a^bf(x)\mathrm dx=\int_a^bf(y)\mathrm dy=\int_a^bf(t)\mathrm dt$<br><span style="color:var(--muted);font-size:.8rem">积分号里的字母是哑变量，可以随便换名</span></div>
+      <div><b>② 线性性</b>$\displaystyle\int_a^b[k_1f_1+k_2f_2]\mathrm dx=k_1\int_a^bf_1\mathrm dx+k_2\int_a^bf_2\mathrm dx$</div>
+      <div><b>③ 方向性</b>$\displaystyle\int_a^bf\mathrm dx=-\int_b^af\mathrm dx$<br><span style="color:var(--red);font-size:.8rem">⚠️ 所有不等式性质都要求 $b\gt a$，就是被它卡的</span></div>
+      <div><b>④ 可加（可拆）性</b>$\displaystyle\int_a^bf\mathrm dx=\int_a^cf\mathrm dx+\int_c^bf\mathrm dx$<br><span style="color:var(--green);font-size:.8rem">看着最平凡，却是本章威力最大的一条</span></div>
+    </div>
+    <p><b>①"与字母无关"不是废话</b>：区间再现 $\int_a^bf(x)\mathrm dx=\int_a^bf(a+b-x)\mathrm dx$、以及一切"换元后与原式相加"的套路，最后一步都靠它把 $t$ 改回 $x$ 才能合并。</p>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · ④ 可加性凭什么是最强的一条</span>
+    <p>因为它是<b>黎曼思想</b>（本讲第二部分的三星武器）的形式化身：<b>大区间上说不清的事，拆成小区间就说得清了。</b>本章至少五处靠它取胜：</p>
+    <ul>
+      <li><span class="chip c-b">强 11.1</span> 拆 $[-1,1]$ 为 $[-1,-\sqrt h],[-\sqrt h,\sqrt h],[\sqrt h,1]$——<b>把游荡的中值 $\xi$ 关进趋于 0 的小笼子</b>（本节）</li>
+      <li><span class="chip c-b">强 11.13</span> 拆 $[0,\frac{3\pi}2]$ 按 $\sin$ 的符号断开，再平移到同一区间逐点比大小（第五节）</li>
+      <li><span class="chip c-b">18 讲 P.128</span> 证 $\int_0^{2\pi}\frac{\sin x}x\mathrm dx\gt0$——"$(0,2\pi)$ 太大，故而可以拆分成小区间"（第五节）</li>
+      <li><span class="chip c-g">基 例 11.8</span> 把 $[0,1]$ 劈成 $[0,x]$ 与 $[x,1]$，两侧各用一次拉格朗日（第十二节）</li>
+      <li><span class="chip c-r">强 11.19</span> 拆 $[0,1]$ 为 $[0,x_0]$ 与 $[x_0,1]$——本章压轴（第十五节）</li>
+    </ul>
+    <p><b>眉批原话（P.128）</b>：<u>"通常在区间 $(0,\frac\pi4),(0,\frac\pi2),(0,\pi)$ 上容易保证符号不变，而 $(0,2\pi)$ 太大，故而可以拆分成小区间。"</u>——<b>拆的位置永远选在"符号变号处"或"对称中心处"，不是随便切。</b></p>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">强 11.1</span><span class="pg">P.121</span>
+    ★★★　求极限 $\displaystyle\lim_{h\to0^+}\int_{-1}^1\frac h{h^2+x^2}f(x)\mathrm dx$，其中函数 $f(x)$ 在 $[-1,1]$ 上连续。</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>先看题目给了什么</b>：$f$ 只知道"连续"，什么表达式都没有 ⇒ 答案必然只能用 $f$ 在<b>某一个具体点</b>的值表示。$[-1,1]$ 上唯一特殊的点是 $0$，所以答案八成含 $f(0)$。</li>
+          <li><b>最自然的一步先试一试</b>：直接对整个 $[-1,1]$ 用积分中值定理，得 $f(\xi)\int_{-1}^1\frac h{h^2+x^2}\mathrm dx$。<b>这一步走不通</b>——$\xi$ 只知道在 $(-1,1)$ 里，$h\to0$ 时它可能停在任何地方，$f(\xi)$ 没有极限。<span class="chip c-r">书的眉批专门写了这个错误示范</span></li>
+          <li><b>失败告诉我们要什么</b>：要让 $f(\xi)\to f(0)$，就必须<b>把 $\xi$ 关进一个趋于 0 的区间</b>。于是用可加性，在 $0$ 的两侧各切一刀，切点记作 $\pm\delta(h)$。</li>
+          <li><b>切点怎么选——两个互相拉扯的要求</b>：<br>
+            ① 要 $\delta\to0$（否则中间段的 $\xi$ 不趋于 0）；<br>
+            ② 又要 $\frac\delta h\to+\infty$（因为原函数是 $\arctan\frac xh$，只有 $\frac\delta h$ 冲到无穷，中间段才吃得满 $\pi$）。<br>
+            <b>即 $\delta$ 要"比 $h$ 慢地趋于 0"</b>。$\delta=\sqrt h$ 正好：$\sqrt h\to0$，而 $\frac{\sqrt h}h=\frac1{\sqrt h}\to+\infty$。</li>
+          <li><b>再看两侧段会不会捣乱</b>：两侧的 $f(\xi_1),f(\xi_3)$ 有界（连续函数在闭区间有界），只要它们配的那个 $\arctan$ 差趋于 0，整段就没了。</li>
+        </ol>
+      </div>
+      <div class="paper"><div class="phead">✍️ 考场卷面<span class="score">参考 10 分</span></div>
+        <div class="step"><span class="k">解</span>因为 $f(x)$ 在 $[-1,1]$ 上连续，由<b>推广的积分中值定理</b>，对任意 $h\gt0$，将积分区间拆为三段：
+          <span class="pt">⛳ 2分</span>
+          $$\int_{-1}^1\frac{h\,f(x)}{h^2+x^2}\mathrm dx=\int_{-1}^{-\sqrt h}+\int_{-\sqrt h}^{\sqrt h}+\int_{\sqrt h}^1,$$
+          存在 $\xi_1\in(-1,-\sqrt h)$，$\xi_2\in(-\sqrt h,\sqrt h)$，$\xi_3\in(\sqrt h,1)$，使
+          $$\text{原式}=f(\xi_1)\!\int_{-1}^{-\sqrt h}\!\frac{h\,\mathrm dx}{h^2+x^2}+f(\xi_2)\!\int_{-\sqrt h}^{\sqrt h}\!\frac{h\,\mathrm dx}{h^2+x^2}+f(\xi_3)\!\int_{\sqrt h}^1\!\frac{h\,\mathrm dx}{h^2+x^2}.\tag{1}$$</div>
+        <div class="step"><span class="k">(i)</span>由 $\displaystyle\int\frac{h\,\mathrm dx}{h^2+x^2}=\arctan\frac xh+C$ 得三段的值分别为
+          <span class="pt">⛳ 2分</span>
+          $$A_1=\arctan\frac{-1}{\sqrt h}-\arctan\frac{-1}h,\quad A_2=2\arctan\frac1{\sqrt h},\quad A_3=\arctan\frac1h-\arctan\frac1{\sqrt h}.$$</div>
+        <div class="step"><span class="k">(ii)</span>当 $h\to0^+$ 时 $\dfrac1{\sqrt h}\to+\infty$，$\dfrac1h\to+\infty$，故
+          <span class="pt">⛳ 2分</span>
+          $$A_1\to-\frac\pi2+\frac\pi2=0,\qquad A_2\to2\cdot\frac\pi2=\pi,\qquad A_3\to\frac\pi2-\frac\pi2=0.$$</div>
+        <div class="step"><span class="k">(iii)</span>$f$ 在 $[-1,1]$ 上连续，故 $f$ <b>有界</b>，设 $|f|\le M$；于是 (1) 式第一、三项满足 $|f(\xi_1)A_1|\le MA_1\to0$，$|f(\xi_3)A_3|\le MA_3\to0$。
+          <span class="pt">⛳ 2分</span></div>
+        <div class="step"><span class="k">(iv)</span>又 $-\sqrt h\lt\xi_2\lt\sqrt h$，$h\to0^+$ 时 $\xi_2\to0$，由 $f$ 在 $x=0$ 处<b>连续</b>得 $f(\xi_2)\to f(0)$。
+          <span class="pt">⛳ 1分</span></div>
+        <div class="fin">故 $\displaystyle\lim_{h\to0^+}\int_{-1}^1\frac h{h^2+x^2}f(x)\mathrm dx=0+f(0)\cdot\pi+0=\pi f(0)$。<span class="pt">⛳ 1分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（对照完再看）</span>
+        <b>① 分割点不唯一，但有一个"合法区间"。</b>取 $\delta=h^\alpha$，则需 $\alpha\gt0$（保证 $\delta\to0$）且 $\alpha\lt1$（保证 $\frac\delta h=h^{\alpha-1}\to\infty$）。<b>$\alpha\in(0,1)$ 全都对，$\sqrt h$（$\alpha=\frac12$）只是最好写的一个。</b>而 $\delta=h$（$\alpha=1$）中间段只得 $2\arctan1=\frac\pi2$，$\delta=$ 常数则 $\xi_2\not\to0$——<b>两端都错，下面的实验台可以亲手撞一次。</b><br>
+        <b>② <span class="dock">这里最容易丢分的是"有界"两个字</b></span>：第一、三段不能写成"$f(\xi_1)\to f(-1)$"（$\xi_1$ 并不趋于 $-1$），只能用<b>有界 × 无穷小</b>。这与基础讲例 11.1(2) 的注是同一个考点：<b>中值 $\xi$ 依赖参数时，唯一安全的用法就是把 $f(\xi)$ 当有界量。</b><br>
+        <b>③ 这道题的数学背景是<b>狄拉克核</b></b>：$\frac1\pi\cdot\frac h{h^2+x^2}$ 是柯西分布的密度，$h\to0$ 时它变成一根无限高无限细的针，积分把 $f$ 在 $0$ 处的值"挑"出来。$\pi$ 这个因子就是没归一化留下的。<br>
+        <b>④ 换元视角（更快的心算）</b>：令 $x=ht$，原式 $=\int_{-1/h}^{1/h}\frac{f(ht)}{1+t^2}\mathrm dt\to f(0)\int_{-\infty}^{+\infty}\frac{\mathrm dt}{1+t^2}=\pi f(0)$。<b>考场上可以用它 30 秒验一遍答案</b>，但严格论证仍按上面的三段法写。
+      </div>
+    </div>
+  </div>
+
+  <div class="tool" id="tk-dirac">
+    <h4>🎯 分割点实验台 —— 为什么偏偏是 $\sqrt h$</h4>
+    <div class="hint">同一道题，只改分割点 $\delta=h^\alpha$。左图是被积的"针" $\frac h{h^2+x^2}$（对数纵轴），右表是三段各自的 $\arctan$ 增量与最终答案。<b>拖 $\alpha$ 看极限从 $0$ 变到 $\pi f(0)$ 再变成"$\xi_2$ 不收敛"。</b></div>
+    <div class="ctl">
+      <label>分割点指数 $\alpha$（$\delta=h^\alpha$）</label>
+      <input type="range" id="dk-a" min="0" max="1.4" step="0.05" value="0.5">
+      <span class="val" id="dk-av">α = 0.50</span>
+    </div>
+    <div class="ctl">
+      <label>$h$（$\log_{10}h$）</label>
+      <input type="range" id="dk-h" min="-8" max="-1" step="0.25" value="-4">
+      <span class="val" id="dk-hv">h = 1e-4</span>
+    </div>
+    <div class="ctl">
+      <label>被积的 $f$</label>
+      <select id="dk-f">
+        <option value="0">f(x) = e^x + x²　（f(0)=1）</option>
+        <option value="1">f(x) = cos(3x)　（f(0)=1）</option>
+        <option value="2">f(x) = 2 + x　（f(0)=2）</option>
+        <option value="3">f(x) = |x| + 0.5　（f(0)=0.5）</option>
+      </select>
+    </div>
+    <div class="scene"><svg id="dk-svg" viewBox="0 0 700 220" xmlns="http://www.w3.org/2000/svg"></svg></div>
+    <div class="gridwrap"><table class="dq" id="dk-tab"></table></div>
+    <div class="say" id="dk-say"></div>
+    <div class="legend2"><span class="chip c-b">中间段</span>贡献 $f(\xi_2)\cdot2\arctan h^{\alpha-1}$　<span class="chip c-a">两侧段</span>贡献应趋于 0　<span class="chip c-r">红字</span>表示该条件已被破坏。<br>
+      <b>*</b> 该行按"$f(\xi_2)\to f(0)$、两侧归零"这条<u>证明路线</u>算出的答案；只有两个条件都 ✓ 时它才等于真值。<b>⚠️ 最后一行的积分真值当然不随分割点变——分割点只影响证明能不能走通，不影响积分本身。</b></div>
+  </div>
+
+  <!-- ================= s2 祖孙三代 ================= -->
+  <h2 id="s2"><span class="idx">二</span>"祖孙三代"——$\int_a^xf,\ f,\ f'$ 的奇偶性与周期性</h2>
+
+  <div class="key"><span class="tag">必记 · 奇偶性四条（18 讲 P.122，眉批「隐含条件体系块」）</span>
+    <span class="pg">P.122</span>
+    <div class="fcards">
+      <div><b>① 奇 ⇒ 导数偶</b>$f$ 可导且为奇函数 $\Rightarrow f'$ 为偶函数</div>
+      <div><b>② 偶 ⇒ 导数奇</b>$f$ 可导且为偶函数 $\Rightarrow f'$ 为奇函数</div>
+      <div><b>③ 奇 ⇒ 积分偶</b>$f$ 可积且为奇函数 $\Rightarrow\displaystyle\int_0^xf(t)\mathrm dt$ 为偶函数</div>
+      <div><b>④ 偶 ⇒ 积分奇</b>$f$ 可积且为偶函数 $\Rightarrow\displaystyle\int_0^xf(t)\mathrm dt$ 为奇函数</div>
+    </div>
+    <p><b>一句话记</b>：<b>求导翻转，积分（下限 0）也翻转。</b>三代排成一列 $\int_0^xf\ \to\ f\ \to\ f'$，<b>相邻两代奇偶性必相反</b>，隔一代则相同。</p>
+  </div>
+
+  <div class="trap"><span class="tag">陷阱 · ③④ 的下限必须是 0</span>
+    <p>书上给 ③④ 画了个括号，眉批只有五个字：<b>"注意下限为 0"</b>。原因一算就清楚：设 $f$ 为偶函数，$F_a(x)=\int_a^xf(t)\mathrm dt$，则
+    $$F_a(x)=\int_a^0f+\int_0^xf=\underbrace{\int_0^xf(t)\mathrm dt}_{\text{奇函数}}-\underbrace{\int_0^af(t)\mathrm dt}_{\text{常数}}.$$
+    <b>一个奇函数减去非零常数，既不奇也不偶。</b>所以下限一挪，性质立刻报废。<br>
+    <span class="dock">考场上见到 $\int_1^x$、$\int_a^x$ 就要先把它拆成 $\int_0^x-\int_0^a$ 再谈奇偶。</span></p>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">强 11.2</span><span class="pg">P.122</span>
+    已知函数 $f(x)=\mathrm e^{\sin x}+\mathrm e^{-\sin x}$，则 $f'''(2\pi)=\underline{\qquad}$。</div>
+    <div class="s">
+      <div><span class="lab">答案</span><span class="ans">$0$</span></div>
+      <div><span class="lab">分析</span>两把钥匙同时用：<b>奇偶性 + 周期性</b>。
+        <ul>
+          <li><b>奇偶</b>：$f(-x)=\mathrm e^{-\sin x}+\mathrm e^{\sin x}=f(x)$，$f$ 为<b>偶</b>函数 ⇒ 求导三次（偶→奇→偶→奇）⇒ $f'''$ 为<b>奇</b>函数 ⇒ $f'''(0)=0$。</li>
+          <li><b>周期</b>：$f$ 以 $2\pi$ 为周期 ⇒ $f'''$ 也以 $2\pi$ 为周期 ⇒ $f'''(2\pi)=f'''(0)=0$。</li>
+        </ul></div>
+      <div><span class="lab">要害</span><b>奇函数若在 $0$ 处有定义，必有 $g(0)=0$</b>（令 $x=0$ 于 $g(-x)=-g(x)$）。这是"奇偶性"能直接给出<u>具体数值</u>的唯一场合，考场上见到"求某点高阶导数值"且函数带明显奇偶性，先想它。<br>
+      <b>反面提醒</b>：如果问的是 $f''(2\pi)$ 呢？$f''$ 是偶函数，<b>偶函数在 0 处没有任何免费信息</b>，就得老实求导了。<span class="chip c-r">出题人挑三阶不挑二阶，正是为了用这个性质</span></div>
+    </div>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">强 11.3</span><span class="pg">P.122</span>
+    已知 $f(x)=\displaystyle\int_0^x\mathrm e^{\cos t}\mathrm dt$，$g(x)=\displaystyle\int_0^{\sin x}\mathrm e^{t^2}\mathrm dt$，则（　）<br>
+    (A) $f$ 奇，$g$ 偶　(B) $f$ 偶，$g$ 奇　(C) $f,g$ 均是奇函数　(D) $f,g$ 均是周期函数</div>
+    <div class="s">
+      <div><span class="lab">答案</span><span class="ans">(C)</span></div>
+      <div><span class="lab">分析</span><b>$f$</b>：$\mathrm e^{\cos t}$ 关于 $t$ 是偶函数，由性质 ④（偶 ⇒ 积分奇）得 $f$ 是<b>奇</b>函数。<br>
+        <b>$g$</b>（书上的老实做法）：$g(-x)=\int_0^{\sin(-x)}\mathrm e^{t^2}\mathrm dt=\int_0^{-\sin x}\mathrm e^{t^2}\mathrm dt$，令 $t=-u$ 得 $g(-x)=-\int_0^{\sin x}\mathrm e^{u^2}\mathrm du=-g(x)$，故 $g$ 是<b>奇</b>函数。</div>
+      <div><span class="lab">★口诀</span><b>内偶则偶，内奇同外</b>（书上注的原话）。把 $g$ 看成 $y(u)=\int_0^u\mathrm e^{t^2}\mathrm dt$ 与 $u(x)=\sin x$ 的复合：
+        <ul>
+          <li><b>内层 $u(x)$ 是偶函数</b> ⇒ $g(-x)=y(u(-x))=y(u(x))=g(x)$，<b>$g$ 直接就是偶函数</b>，与外层 $y$ 的奇偶性<u>完全无关</u>。</li>
+          <li><b>内层 $u(x)$ 是奇函数</b> ⇒ $g(-x)=y(-u(x))$，此时 $g$ 的奇偶性<b>与外层 $y$ 一致</b>。本题 $u=\sin x$ 奇、$y$ 奇（由性质 ④），故 $g$ 奇。</li>
+        </ul></div>
+      <div><span class="lab">(D) 怎么排除</span>$\mathrm e^{\cos t}\gt0$ 恒成立，故 $\int_0^{2\pi}\mathrm e^{\cos t}\mathrm dt\gt0\ne0$。<b>由下面周期性性质 ②（变限积分是周期函数 $\iff\int_0^Tf=0$）知 $f$ 不是周期函数。</b><br>
+      <span class="chip c-a">这个选项是特意为下一小节埋的伏笔</span>——$f$ 的被积函数明明是周期的，$f$ 却不周期，因为它<b>一路只增不减</b>（每个周期净增 $\int_0^{2\pi}\mathrm e^{\cos t}\mathrm dt$）。</div>
+    </div>
+  </div>
+
+  <div class="key"><span class="tag">必记 · ⑤⑥ 对称区间上的两个公式</span>
+    <div class="fcards">
+      <div><b>⑤ 偶倍奇零</b>$\displaystyle\int_{-a}^af\mathrm dx=\begin{cases}2\int_0^af\mathrm dx,&f\text{ 偶}\\0,&f\text{ 奇}\end{cases}$<br><span style="color:var(--red);font-size:.8rem">⚠️ 眉批：<b>常义积分下</b>成立（反常积分不行）</span></div>
+      <div><b>⑥ 对称区间的区间再现</b>$\displaystyle\int_{-a}^af\mathrm dx=\frac12\int_{-a}^a[f(x)+f(-x)]\mathrm dx=\int_0^a[f(x)+f(-x)]\mathrm dx$<br><span style="color:var(--green);font-size:.8rem">本身没奇偶性的函数，靠它处理成易积分的函数</span></div>
+    </div>
+    <p><b>⑥ 的适用信号</b>（书上点名）：$f(x)=\dfrac1{1+\mathrm e^x},\ \dfrac1{1+\mathrm e^{1/x}},\ \dfrac1{1+\mathrm e^{-x}}$ 这一类。<b>核心恒等式：</b>
+    $$\frac1{1+\mathrm e^{-x}}+\frac1{1+\mathrm e^{x}}=1.$$
+    见到分母里的 $1+\mathrm e^{\pm x}$、且积分区间对称，<b>条件反射写 $f(x)+f(-x)$</b>——分母会当场消失。</p>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">强 11.4</span><span class="pg">P.123</span>
+    $I=\displaystyle\int_{-1}^1\frac{\mathrm dx}{1+\mathrm e^{\frac1x}}=\underline{\qquad}$。</div>
+    <div class="s">
+      <div><span class="lab">答案</span><span class="ans">$1$</span></div>
+      <div><span class="lab">分析</span>设 $f(x)=\dfrac1{1+\mathrm e^{1/x}}$，则
+        $$f(x)+f(-x)=\frac1{1+\mathrm e^{1/x}}+\frac1{1+\mathrm e^{-1/x}}=1,$$
+        由公式 ⑥ 得 $I=\displaystyle\int_0^1 1\,\mathrm dx=1$。</div>
+      <div><span class="lab">要害</span><b>不要被 $\mathrm e^{1/x}$ 在 $x=0$ 处的间断吓住</b>：$x\to0^-$ 时 $\mathrm e^{1/x}\to0$、$f\to1$；$x\to0^+$ 时 $\mathrm e^{1/x}\to+\infty$、$f\to0$。<b>这是跳跃间断（有界），积分照常存在</b>，公式 ⑥ 可用。<br>
+      <span class="dock">若换成 $\frac1{1+\mathrm e^{1/x}}\cdot\frac1x$ 这类无界的，公式 ⑤⑥ 就都要重新审视——眉批"常义积分下"就是防这个。</span></div>
+    </div>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">强 11.5</span><span class="pg">P.123</span>
+    $I=\displaystyle\int_{-\frac\pi2}^{\frac\pi2}\frac{\sin^4x}{1+\mathrm e^{-x}}\mathrm dx=\underline{\qquad}$。</div>
+    <div class="s">
+      <div><span class="lab">答案</span><span class="ans">$\dfrac{3\pi}{16}$</span></div>
+      <div><span class="lab">分析</span>积分区间关于原点对称，由公式 ⑥：
+        $$I=\int_0^{\frac\pi2}\left[\frac{\sin^4x}{1+\mathrm e^{-x}}+\frac{\sin^4(-x)}{1+\mathrm e^{x}}\right]\mathrm dx=\int_0^{\frac\pi2}\sin^4x\underbrace{\left[\frac1{1+\mathrm e^{-x}}+\frac1{1+\mathrm e^{x}}\right]}_{=1}\mathrm dx=\int_0^{\frac\pi2}\sin^4x\,\mathrm dx,$$
+        再由<b>华里士公式</b>（本页第四节）$=\dfrac34\cdot\dfrac12\cdot\dfrac\pi2=\dfrac{3\pi}{16}$。</div>
+      <div><span class="lab">要害</span><b>分子 $\sin^4x$ 是偶函数，这是关键</b>：$\sin^4(-x)=\sin^4x$ 才能提出来当公因子。<br>
+      <b>通用结论（值得背）</b>：若 $\varphi$ 为<b>偶</b>函数，则 $\displaystyle\int_{-a}^a\frac{\varphi(x)}{1+\mathrm e^{\pm x}}\mathrm dx=\int_0^a\varphi(x)\mathrm dx$——<b>分母整个消失，区间砍半。</b><br>
+      若 $\varphi$ 为<b>奇</b>函数呢？配对后得 $\int_0^a\varphi\cdot0=0$，答案是 0。<span class="chip c-b">两种情形都秒杀</span></div>
+    </div>
+  </div>
+
+  <div class="key"><span class="tag">必记 · 周期性三条（18 讲 P.123，眉批「隐含条件体系块」）</span>
+    <span class="pg">P.123</span>
+    <p>设 $f(x)$ 以 $T$ 为周期：</p>
+    <div class="fcards">
+      <div><b>① 导数一定周期</b>$f$ 可导 $\Rightarrow f'$ 也以 $T$ 为周期</div>
+      <div><b>② 变限积分不一定</b>$\displaystyle\int_0^xf(t)\mathrm dt$ 以 $T$ 为周期 $\boxed{\iff\int_0^Tf(x)\mathrm dx=0}$<br><span style="color:var(--red);font-size:.8rem">全章唯一带充要条件的一条</span></div>
+      <div><b>③ 整周期上的积分与起点无关</b>$\displaystyle\int_0^Tf\mathrm dx=\int_a^{a+T}f\mathrm dx$（$a$ 任意）<br>更一般地 $\displaystyle\int_a^{a+nT}f\mathrm dx=n\int_0^Tf\mathrm dx$</div>
+    </div>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · ② 为什么会漏掉，以及它长什么样</span>
+    <p>把 $F(x)=\int_0^xf(t)\mathrm dt$ 往前推一个周期：
+    $$F(x+T)-F(x)=\int_x^{x+T}f(t)\mathrm dt\xlongequal{\text{③}}\int_0^Tf(t)\mathrm dt\ \ (\text{与 }x\text{ 无关，记作 }C).$$
+    <b>所以 $F$ 每走一个周期就整体抬高固定的 $C$</b>：$F(x)=\underbrace{(\text{真正周期的部分})}_{\text{振荡}}+\underbrace{\frac CTx}_{\text{线性漂移}}$。<br>
+    <b>$C=0$ ⟺ 不漂移 ⟺ $F$ 真周期。</b>这正是强 11.3 里 (D) 被排除的原因：$\mathrm e^{\cos t}\gt0$ ⇒ $C\gt0$ ⇒ 一路上漂。<br>
+    <b>一个熟悉的例子</b>：$f=\sin x$ ⇒ $\int_0^{2\pi}\sin=0$ ⇒ $\int_0^x\sin t\,\mathrm dt=1-\cos x$ 确实周期；$f=1+\sin x$ ⇒ $C=2\pi\ne0$ ⇒ $\int_0^x=x+1-\cos x$ 一路上漂。</p>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">强 11.6</span><span class="pg">P.123–124</span>
+    <b>(1)</b> 设 $I=\displaystyle\int_a^{a+\pi}|\sin nx|\mathrm dx$（$n=1,2,\cdots$，$a$ 为任意常数），则（　）<br>
+    (A) $I$ 只与 $a$ 有关　(B) $I$ 只与 $n$ 有关　(C) $I$ 与 $a,n$ 均有关　(D) $I$ 与 $a,n$ 均无关<br>
+    <b>(2)</b> 设 $I=\displaystyle\int_a^{a+\frac{k\pi}2}\sqrt{1-\sin^2x}\,\mathrm dx$（$k$ 为正整数，$a$ 为任意实数），则（　）<br>
+    (A) 只与 $a$ 有关　(B) 只与 $k$ 有关　(C) 与 $a,k$ 均有关　(D) 与 $a,k$ 均无关</div>
+    <div class="s">
+      <div><span class="lab">答案</span><span class="ans">(1) (D)　(2) (C)</span></div>
+      <div><span class="lab">(1) 分析</span>$|\sin nx|$ 以 $\dfrac\pi n$ 为周期，而积分区间长度 $\pi=n\cdot\dfrac\pi n$ <b>恰是周期的整数倍</b>，由性质 ③ 与起点 $a$ 无关：
+        $$I=\int_0^\pi|\sin nx|\mathrm dx\xlongequal{nx=t}\frac1n\int_0^{n\pi}|\sin t|\mathrm dt=\frac1n\cdot2n=2.$$
+        与 $n$ 也无关（$\frac1n$ 与 $2n$ 对消），故选 (D)。</div>
+      <div><span class="lab">(2) 分析</span>$\sqrt{1-\sin^2x}=\boxed{|\cos x|}$，<b>以 $\pi$ 为周期</b>（不是 $2\pi$！）。区间长度为 $\dfrac k2\pi$：
+        <ul>
+          <li><b>$k$ 取正偶数</b>：长度 $=\frac k2\pi$ 是 $\pi$ 的整数倍 ⇒ 与 $a$ 无关，$I=\frac k2\cdot2=k$，<b>只与 $k$ 有关</b>；</li>
+          <li><b>$k$ 取正奇数</b>：长度不是 $\pi$ 的整数倍 ⇒ <b>与 $a,k$ 均有关</b>。</li>
+        </ul>
+        题目说"$k$ 为正整数"（两种都可能），故整体答案是 <b>(C)</b>。</div>
+      <div><span class="lab">要害</span><b>两问的区别只在"整数倍"三个字</b>：(1) 中 $\pi$ 对<u>任意</u> $n$ 都是周期 $\frac\pi n$ 的整数倍；(2) 中 $\frac k2\pi$ 只对<u>偶</u> $k$ 是 $\pi$ 的整数倍。<br>
+      <span class="dock">扣分点：把 $\sqrt{1-\sin^2x}$ 写成 $\cos x$（丢绝对值）</span>——那样周期变成 $2\pi$ 且函数变号，两问全错。<b>开方必带绝对值，这是本章第一号低级失分。</b><br>
+      <b>答题技巧</b>：选项里出现"只与…有关"时，只要<u>找到一个反例</u>说明它也依赖另一个量，就能立刻排除。(2) 只需验 $k=1$：$\int_a^{a+\frac\pi2}|\cos x|\mathrm dx$ 在 $a=0$ 得 1、在 $a=\frac\pi4$ 得 $\sqrt2-1+\ldots$ 显然不等。</div>
+    </div>
+  </div>
+
+  <!-- ================= s3 区间再现 ================= -->
+  <h2 id="s3"><span class="idx">三</span>区间再现——本章使用频率最高的一招</h2>
+
+  <div class="key"><span class="tag">必记 · 区间再现七公式（18 讲 P.124–125）</span>
+    <span class="pg">P.124</span>
+    <div class="fcards">
+      <div><b>① 翻转</b>$\displaystyle\int_a^bf(x)\mathrm dx=\int_a^bf(a+b-x)\mathrm dx$<br><span style="color:var(--muted);font-size:.8rem">母公式，令 $t=a+b-x$ 即得</span></div>
+      <div><b>② 平均</b>$\displaystyle\int_a^bf\mathrm dx=\frac12\int_a^b[f(x)+f(a+b-x)]\mathrm dx$<br><span style="color:var(--green);font-size:.8rem">最常用：$f(x)+f(a+b-x)$ 常常是常数</span></div>
+      <div><b>③ 折半</b>$\displaystyle\int_a^bf\mathrm dx=\int_a^{\frac{a+b}2}[f(x)+f(a+b-x)]\mathrm dx$<br><span style="color:var(--muted);font-size:.8rem">因 $F(x)=f(x)+f(a+b-x)$ 关于 $x=\frac{a+b}2$ 对称</span></div>
+      <div><b>④ 吃掉 $x$</b>$\displaystyle\int_0^\pi xf(\sin x)\mathrm dx=\frac\pi2\int_0^\pi f(\sin x)\mathrm dx$</div>
+      <div><b>⑤ ★★最高频</b>$\displaystyle\int_0^\pi xf(\sin x)\mathrm dx=\pi\int_0^{\frac\pi2}f(\sin x)\mathrm dx$<br><span style="color:var(--red);font-size:.8rem">记："$x$ 被吃掉换成 $\pi$，区间砍半"</span></div>
+      <div><b>⑥ 正弦余弦互换</b>$\displaystyle\int_0^{\frac\pi2}f(\sin x)\mathrm dx=\int_0^{\frac\pi2}f(\cos x)\mathrm dx$<br><span style="color:var(--muted);font-size:.8rem">换元 $t=\frac\pi2-x$</span></div>
+      <div><b>⑦ 双元互换</b>$\displaystyle\int_0^{\frac\pi2}f(\sin x,\cos x)\mathrm dx=\int_0^{\frac\pi2}f(\cos x,\sin x)\mathrm dx$</div>
+      <div><b>换元表（P.128）</b>$\int_0^{\frac\pi4}\!\Rightarrow t=\frac\pi4-x$；$\int_0^{\frac\pi2}\!\Rightarrow t=\frac\pi2-x$；$\int_0^{\pi}\!\Rightarrow t=\pi-x$；$\int_0^{2\pi}\!\Rightarrow$ <b>先拆</b></div>
+    </div>
+    <p><b>④→⑤ 差一个 2 倍</b>：因为 $\int_0^\pi f(\sin x)\mathrm dx=2\int_0^{\frac\pi2}f(\sin x)\mathrm dx$（后半段令 $t=\pi-x$ 与前半段相等）。<b>考场上直接用 ⑤，别绕 ④。</b></p>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 一眼看出"该用区间再现"的三个信号</span>
+    <div class="steps3">
+      <div><b>信号 1：分母是两项之和，分子是其中一项</b>形如 $\dfrac{u(x)}{u(x)+v(x)}$ 且 $v(x)=u(a+b-x)$。<b>答案必是区间长度的一半。</b></div>
+      <div><b>信号 2：被积函数含 $x\cdot(\text{三角函数})$</b>那个孤零零的 $x$ 就是让你用 ④⑤ 吃掉的。</div>
+      <div><b>信号 3：换元后能与自身建立线性关系</b>得到 $I=C-I$ 型方程 ⇒ $I=\frac C2$。<b>不求原函数也能求出积分。</b></div>
+    </div>
+    <p><b>书上的示范计算（$\int_0^{\frac\pi2}\sqrt{\cot x}\,\mathrm dx$，用了信号 3 + 凑微分）</b>：
+    $$\int_0^{\frac\pi2}\sqrt{\cot x}\,\mathrm dx\xlongequal{\text{②}}\frac12\int_0^{\frac\pi2}(\sqrt{\cot x}+\sqrt{\tan x})\mathrm dx=\frac12\int_0^{\frac\pi2}\frac{1+\tan x}{\sqrt{\tan x}}\mathrm dx$$
+    $$\xlongequal[x=\arctan t^2]{\tan x=t^2}\int_0^{+\infty}\frac{1+t^2}{1+t^4}\mathrm dt=\int_0^{+\infty}\frac{\frac1{t^2}+1}{\frac1{t^2}+t^2}\mathrm dt=\int_0^{+\infty}\frac{\mathrm d\left(t-\frac1t\right)}{\left(t-\frac1t\right)^2+(\sqrt2)^2}=\frac1{\sqrt2}\arctan\frac{t-\frac1t}{\sqrt2}\bigg|_0^{+\infty}=\frac{\sqrt2}2\pi.$$
+    <b>三处值得单独记</b>：① 用 ⑥ 把 $\sqrt{\cot}$ 配上 $\sqrt{\tan}$；② <b>分子分母同除 $t^2$</b> 是 $\frac{1+t^2}{1+t^4}$ 型的标准手法；③ 凑出 $\mathrm d\left(t-\frac1t\right)$ 后成为 $\arctan$ 型，$t\to0^+$ 给 $-\frac\pi2$、$t\to+\infty$ 给 $\frac\pi2$，共 $\pi$。<span class="chip c-g">已数值复算：$\frac{\sqrt2}2\pi=2.2214414691$ ✓</span></p>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">强 11.7</span><span class="pg">P.125</span>
+    $I=\displaystyle\int_0^1\frac{\ln(1+x)}{1+x^2}\mathrm dx=\underline{\qquad}$。<br>
+    <span style="color:var(--muted);font-size:.85rem">眉批（方法论）：定积分换元法实现——将一个积分转化成另一个积分。① $I_1$ 化简成 $I_2$；② 将二者建立联系。</span></div>
+    <div class="s">
+      <div><span class="lab">答案</span><span class="ans">$\dfrac\pi8\ln2$</span></div>
+      <div><span class="lab">分析</span>令 $x=\tan t$（<b>先三角换元</b>，把 $\frac{\mathrm dx}{1+x^2}$ 变成 $\mathrm dt$），得 $I=\displaystyle\int_0^{\frac\pi4}\ln(1+\tan t)\mathrm dt$。<br>
+        再用<b>区间再现</b>（$[0,\frac\pi4]$ 上令 $u=\frac\pi4-t$）：
+        $$I=\int_0^{\frac\pi4}\ln\left[1+\tan\left(\frac\pi4-u\right)\right]\mathrm du=\int_0^{\frac\pi4}\ln\left(1+\frac{1-\tan u}{1+\tan u}\right)\mathrm du=\int_0^{\frac\pi4}\ln\frac2{1+\tan u}\mathrm du$$
+        $$=\int_0^{\frac\pi4}\ln2\,\mathrm du-\int_0^{\frac\pi4}\ln(1+\tan u)\mathrm du=\frac\pi4\ln2-I,$$
+        故 $2I=\dfrac\pi4\ln2$，$I=\dfrac\pi8\ln2$。</div>
+      <div><span class="lab">★要害</span><b>"自指方程"是区间再现最强的用法</b>：全程<u>没有求出任何原函数</u>，只是让 $I$ 和自己建立了一个一次方程。<br>
+        <b>关键恒等式</b>：$\tan\left(\dfrac\pi4-u\right)=\dfrac{1-\tan u}{1+\tan u}$ ⇒ $1+\tan\left(\dfrac\pi4-u\right)=\dfrac2{1+\tan u}$ ⇒ $\ln$ 拆成 $\ln2-\ln(1+\tan u)$。<b>这个"$1+$"能凑成 $\frac2{1+\tan u}$ 是全题的运气所在，也是命题人设计的入口。</b><br>
+        <b>顺序不能反</b>：先三角换元把区间变成 $[0,\frac\pi4]$，才有 $\frac\pi4-u$ 这个对称换元可用；直接对原式在 $[0,1]$ 上做 $x\to1-x$ 得不到任何简化。<span class="chip c-g">数值复算：$\frac\pi8\ln2=0.2721982613$ ✓</span></div>
+    </div>
+  </div>
+
+  <div class="key"><span class="tag">必记 · ★四道"常见区间再现"速查（18 讲 P.125 蓝框，全部已复算）</span>
+    <div class="gridwrap"><table class="dense">
+      <tr><th>积分</th><th>值</th><th>怎么看出来</th></tr>
+      <tr><td>$\displaystyle\int_0^1\frac x{\mathrm e^x+\mathrm e^{1-x}}\mathrm dx$</td><td>$\dfrac1{2\sqrt{\mathrm e}}\left(\arctan\sqrt{\mathrm e}-\arctan\dfrac1{\sqrt{\mathrm e}}\right)$</td><td>$a+b=1$，$f(x)+f(1-x)=\dfrac1{\mathrm e^x+\mathrm e^{1-x}}$（$x$ 被消掉）；再令 $u=\frac{\mathrm e^x}{\sqrt{\mathrm e}}$ 化 $\arctan$</td></tr>
+      <tr><td>$\displaystyle\int_0^{n\pi}x|\sin x|\mathrm dx$</td><td>$n^2\pi$</td><td>$|\sin x|$ 关于中点 $\frac{n\pi}2$ 对称 ⇒ $=\frac{n\pi}2\int_0^{n\pi}|\sin x|\mathrm dx=\frac{n\pi}2\cdot2n$</td></tr>
+      <tr><td>$\displaystyle\int_0^2\frac{\sqrt{4-x}}{\sqrt{4-x}+\sqrt{x+2}}\mathrm dx$</td><td>$1$</td><td><b>信号 1</b>：$a+b=2$，$f(x)+f(2-x)=1$ ⇒ 半个区间长</td></tr>
+      <tr><td>$\displaystyle\int_0^a\frac{\mathrm dx}{x+\sqrt{a^2-x^2}}$</td><td>$\dfrac\pi4$</td><td><b>先三角换元</b> $x=a\sin t$ 得 $\int_0^{\frac\pi2}\frac{\cos t}{\sin t+\cos t}\mathrm dt$，再用 ⑦ 配对得 $\frac12\cdot\frac\pi2$</td></tr>
+    </table></div>
+    <p><b>第 3、4 道是同一道题</b>——都是"分母两项之和、分子取其一"，答案都是区间长度的一半。<b>第 4 道多一层三角换元的伪装，眉批特意提示"先使用三角换元处理"。</b></p>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">强 11.8</span><span class="pg">P.125</span>
+    $\displaystyle\int_0^\pi x\sqrt{\cos^2x-\cos^4x}\,\mathrm dx=\underline{\qquad}$。</div>
+    <div class="s">
+      <div><span class="lab">答案</span><span class="ans">$\dfrac\pi2$</span></div>
+      <div><span class="lab">分析</span>先把根号里<b>整理成只含 $\sin x$</b>（为了套公式 ⑤）：
+        $$\cos^2x-\cos^4x=\cos^2x(1-\cos^2x)=(1-\sin^2x)\sin^2x,$$
+        $$\int_0^\pi x\sqrt{(1-\sin^2x)\sin^2x}\,\mathrm dx\xlongequal{\text{公式⑤}}\pi\int_0^{\frac\pi2}\sqrt{(1-\sin^2x)\sin^2x}\,\mathrm dx=\pi\int_0^{\frac\pi2}\cos x\sin x\,\mathrm dx=\pi\cdot\frac12\sin^2x\Big|_0^{\frac\pi2}=\frac\pi2.$$</div>
+      <div><span class="lab">★要害</span><b>两步顺序死死不能颠倒</b>：
+        <ol>
+          <li><b>先化成 $f(\sin x)$ 的形状</b>——公式 ⑤ 要求被积函数除那个 $x$ 外<u>只能是 $\sin x$ 的函数</u>。若留着 $\cos^2x$ 就不能用。</li>
+          <li><b>套 ⑤ 砍到 $[0,\frac\pi2]$ 之后，才敢去绝对值</b>：$\sqrt{\cos^2x}=|\cos x|$，在 $[0,\pi]$ 上 $\cos$ 变号，只有到了 $[0,\frac\pi2]$ 才有 $|\cos x|=\cos x$。<br>
+          <span class="dock">若在原区间上直接写 $\sqrt{\cos^2x}=\cos x$，会算出 $\int_0^\pi x\cos x\sin x\mathrm dx=-\frac\pi4$，符号和大小全错。</span></li>
+        </ol>
+        <span class="chip c-g">数值复算：$\frac\pi2=1.5707963268$ ✓</span></div>
+    </div>
+  </div>
+
+  <div class="tool" id="tk-pair">
+    <h4>🔁 区间再现配对器 —— 看 $f(x)$ 与 $f(a+b-x)$ 怎么"拼成常数"</h4>
+    <div class="hint">选一个被积函数，图上同时画 <span style="color:var(--accent)">$f(x)$</span>、<span style="color:var(--purple)">$f(a+b-x)$</span> 与它们的和 <span style="color:var(--green)">$F(x)$</span>。<b>当绿线变成水平直线时，配对成功，积分立刻＝常数×区间长÷2。</b>右侧给出数值对拍。</div>
+    <div class="ctl">
+      <label>被积函数</label>
+      <select id="pr-f">
+        <option value="0">√(4−x) / (√(4−x)+√(x+2))　区间 [0,2]　→ 速查 3</option>
+        <option value="1">1 / (1+e^(1/x))　区间 [−1,1]　→ 强 11.4</option>
+        <option value="2">sin⁴x / (1+e^(−x))　区间 [−π/2,π/2]　→ 强 11.5</option>
+        <option value="3">cos t / (sin t+cos t)　区间 [0,π/2]　→ 速查 4</option>
+        <option value="4">ln(1+tan t)　区间 [0,π/4]　→ 强 11.7（和为常数 ln2）</option>
+        <option value="5">x / (e^x+e^(1−x))　区间 [0,1]　→ 速查 1（和不是常数）</option>
+        <option value="6">x²　区间 [0,2]　→ 反例：和不是常数</option>
+      </select>
+    </div>
+    <div class="scene"><svg id="pr-svg" viewBox="0 0 700 250" xmlns="http://www.w3.org/2000/svg"></svg></div>
+    <span class="verdict" id="pr-vd"></span>
+    <div class="say" id="pr-say"></div>
+    <div class="legend2"><span class="chip c-b">蓝</span>$f(x)$　<span class="chip c-p">紫</span>$f(a+b-x)$（把蓝线左右翻转）　<span class="chip c-g">绿</span>两者之和 $F(x)$，<b>它必然关于区间中点对称</b>（公式 ③ 的图形含义）。</div>
+  </div>
+
+  <!-- ================= s4 华里士 ================= -->
+  <h2 id="s4"><span class="idx">四</span>华里士公式——四条，别记混那个 0</h2>
+
+  <div class="key"><span class="tag">必记 · 华里士四式（18 讲 P.126）</span>
+    <span class="pg">P.126</span>
+    <p>记 $W_n=\displaystyle\int_0^{\frac\pi2}\sin^nx\,\mathrm dx=\begin{cases}\dfrac{n-1}n\cdot\dfrac{n-3}{n-2}\cdots\dfrac23\cdot1,&n\ \text{为大于 1 的奇数},\\[6pt]\dfrac{n-1}n\cdot\dfrac{n-3}{n-2}\cdots\dfrac12\cdot\dfrac\pi2,&n\ \text{为正偶数}.\end{cases}$</p>
+    <div class="gridwrap"><table class="dense">
+      <tr><th>积分</th><th>$n$ 为正奇数</th><th>$n$ 为正偶数</th><th>倍数来源</th></tr>
+      <tr><td>① $\displaystyle\int_0^{\frac\pi2}\sin^nx=\int_0^{\frac\pi2}\cos^nx$</td><td>$W_n$</td><td>$W_n$</td><td>一个 $\frac\pi2$ 区间</td></tr>
+      <tr><td>② $\displaystyle\int_0^{\pi}\sin^nx$</td><td>$\mathbf{2}W_n$</td><td>$\mathbf2W_n$</td><td>两个区间，$\sin$ 关于 $\frac\pi2$ <b>对称</b></td></tr>
+      <tr><td>③ $\displaystyle\int_0^{\pi}\cos^nx$</td><td><b style="color:var(--red)">0</b></td><td>$\mathbf2W_n$</td><td>$\cos$ 关于 $\frac\pi2$ <b>反对称</b> ⇒ 奇次幂抵消</td></tr>
+      <tr><td>④ $\displaystyle\int_0^{2\pi}\cos^nx=\int_0^{2\pi}\sin^nx$</td><td><b style="color:var(--red)">0</b></td><td>$\mathbf4W_n$</td><td>四个区间；奇次幂在整周期上抵消</td></tr>
+    </table></div>
+    <p><b>只有一格要专门记</b>：<span style="color:var(--red);font-weight:700">③ 的奇数情形是 0，而 ② 不是</b></span>。原因：在 $[0,\pi]$ 上 $\sin(\pi-x)=\sin x$（<b>对称</b>，越加越多），$\cos(\pi-x)=-\cos x$（<b>反对称</b>，奇次幂正负抵消）。<b>把这句话记住，四条全能现推。</b></p>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">强 11.9</span><span class="pg">P.126</span>
+    设数列 $\{a_n\}$ 的通项 $a_n=\displaystyle\int_0^{+\infty}\frac{\mathrm dx}{(1+x^2)^n}$（$n=2,3,\cdots$），计算 $\displaystyle\lim_{n\to\infty}\left(\frac{a_{n+1}}{a_n}\right)^{\ln(1+\mathrm e^{2n})}$。</div>
+    <div class="s">
+      <div><span class="lab">答案</span><span class="ans">$\mathrm e^{-1}$</span></div>
+      <div><span class="lab">第一步：反常积分 → 华里士</span>令 $x=\tan t$，则 $(1+x^2)^n=\sec^{2n}t$、$\mathrm dx=\sec^2t\,\mathrm dt$、上限 $+\infty\mapsto\frac\pi2$：
+        $$a_n=\int_0^{\frac\pi2}\frac{\sec^2t}{\sec^{2n}t}\mathrm dt=\int_0^{\frac\pi2}\cos^{2n-2}t\,\mathrm dt=W_{2n-2}.$$</div>
+      <div><span class="lab">第二步：相邻两项之比</span>
+        $$\frac{a_{n+1}}{a_n}=\frac{\int_0^{\frac\pi2}\cos^{2n}t\,\mathrm dt}{\int_0^{\frac\pi2}\cos^{2n-2}t\,\mathrm dt}=\frac{(2n-1)!!}{(2n)!!}\cdot\frac\pi2\cdot\frac{(2n-2)!!}{(2n-3)!!}\cdot\frac2\pi=\boxed{\frac{2n-1}{2n}}=1-\frac1{2n}.$$
+        <b>双阶乘错开一位全部约掉，$\frac\pi2$ 与 $\frac2\pi$ 对消，只剩最前面一项。</b></div>
+      <div><span class="lab">第三步：$1^\infty$ 型</span>
+        $$\lim_{n\to\infty}\left(1-\frac1{2n}\right)^{\ln(1+\mathrm e^{2n})}=\mathrm e^{\lim\limits_{n\to\infty}\ln(1+\mathrm e^{2n})\cdot\left(-\frac1{2n}\right)}=\mathrm e^{\lim\limits_{n\to\infty}\frac{\ln(1+\mathrm e^{2n})}{\ln\mathrm e^{2n}}\cdot2n\cdot\left(-\frac1{2n}\right)}=\mathrm e^{-1}.$$</div>
+      <div><span class="lab">★要害</span><b>① 记住比值本身</b>：<b>华里士相邻两项之比恒为 $\dfrac{2n-1}{2n}$</b>（同奇偶相邻，即 $\frac{W_m}{W_{m-2}}=\frac{m-1}m$）。考场上不必展开双阶乘。<br>
+        <b>② $\ln(1+\mathrm e^{u})\sim u$（$u\to+\infty$）</b>是这类指数的标准处理：$1+\mathrm e^{2n}$ 里 $\mathrm e^{2n}$ 占绝对主导，取对数后就是 $2n$。书上多写一层 $\frac{\ln(1+\mathrm e^{2n})}{\ln\mathrm e^{2n}}\to1$ 是为了严格。<br>
+        <b>③ 别被 $n$ 的起点 2 迷惑</b>：$n=2$ 时 $a_2=\int_0^{\frac\pi2}\cos^2t\,\mathrm dt=\frac\pi4$。$n=1$ 时 $a_1=\int_0^{+\infty}\frac{\mathrm dx}{1+x^2}=\frac\pi2$ 也收敛，题目从 2 开始只是让 $2n-2\ge2$ 好套公式。<span class="chip c-g">已复算 $n=2,5,9$ 三组比值与极限 ✓</span></div>
+    </div>
+  </div>
+
+  <!-- ================= s5 平移·判正负·升降阶 ================= -->
+  <h2 id="s5"><span class="idx">五</span>换元与分部的三种"非求值"用法</h2>
+
+  <div class="mine"><span class="tag">补讲 · 承接第 0 节那句方法论</span>
+    <p>既然"换元与分部主要不是用来求值的"，那它们用来干什么？<b>18 讲给了三个具体答案</b>，正是本节三小节：</p>
+    <div class="steps3">
+      <div><b>① 还原对称性</b>命题人把 $[-1,1]$ 上的奇函数<u>平移</u>到 $[0,2]$，你把它<u>平移回去</u>。</div>
+      <div><b>② 判别定积分的正负</b>算不出值，但能把它<u>拆成同区间上的两块逐点比大小</u>。</div>
+      <div><b>③ 实现 $f$ 的阶数升降</b>$\int f\ \leftrightarrow\ f\ \leftrightarrow\ f'\ \leftrightarrow\ f''$，靠分部积分在这条链上走。</div>
+    </div>
+  </div>
+
+  <h3 style="margin:22px 0 6px;font-size:1.05rem;color:var(--accent)">★(1) 还原对称性——平移换元</h3>
+
+  <div class="key"><span class="tag">必记 · 三步还原法</span>
+    <div class="steps3">
+      <div><b>① 找中心</b>看积分区间 $[a,b]$，中心是 $c=\frac{a+b}2$。<b>见到 $\int_0^2$ 就想 $x-1$，见到 $\int_0^4$ 就想 $x-2$。</b></div>
+      <div><b>② 令 $t=x-c$</b>把区间搬成 $[-\frac{b-a}2,\frac{b-a}2]$，同时把被积函数里的一次因子拆成 <b>(奇函数)＋(常数)</b>。</div>
+      <div><b>③ 奇零偶倍</b>奇函数部分直接归零，剩下的常数×对称积分（常见是半圆面积）。</div>
+    </div>
+    <p><b>书上的原话（P.129 注 ⑤）</b>：<u>"平移换元是针对数学命题中经常将关于 $x=0$ 等标准对称的问题平移，使问题复杂化（事实上并非命题故意为难，而是要求考生掌握对称标准化的方法）。"</u></p>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">强 11.11</span><span class="pg">P.129–130</span>
+    计算：<b>(1)</b> $\displaystyle\int_0^2(x-1)\mathrm dx$；　<b>(2)</b> $\displaystyle\int_0^2x(x-1)(x-2)\mathrm dx$。</div>
+    <div class="s">
+      <div><span class="lab">答案</span><span class="ans">(1) $0$　(2) $0$</span></div>
+      <div><span class="lab">分析</span><b>(1)</b> 令 $x-1=t$：$\displaystyle\int_0^2(x-1)\mathrm dx=\int_{-1}^1t\,\mathrm dt=0$。<br>
+        <b>(2)</b> 令 $x-1=t$：$\displaystyle\int_0^2x(x-1)(x-2)\mathrm dx=\int_{-1}^1(t+1)t(t-1)\mathrm dt=\int_{-1}^1(t^2-1)t\,\mathrm dt=0$。</div>
+      <div><span class="lab">几何背景（书上 $D_{43}$ 数形结合，配了两组对照图）</span>
+        <ul>
+          <li><b>(1)</b>：$y=x-1$ 在 $[0,2]$ 上<b>关于点 $(1,0)$ 对称</b>——$0$ 到 $1$ 的负面积与 $1$ 到 $2$ 的正面积恰好抵消。换元后就是熟悉的 $y=t$ 在 $[-1,1]$ 上的奇函数。</li>
+          <li><b>(2)</b>：$y=x(x-1)(x-2)$ 在 $[0,2]$ 上<b>关于点 $(1,0)$ 对称</b>，它正是由 $[-1,1]$ 上关于原点对称的 $y=(t+1)t(t-1)$ 平移得到的。</li>
+        </ul>
+        <b>书上的原话</b>：<u>"将考生熟悉的定义在 $[-1,1]$ 上的奇函数 $y=t$，平移为不熟悉的 $[0,2]$ 上的 $y=x-1$，这是一种<b>可产生区分度的命题手法</b>。"</u></div>
+      <div><span class="lab">要害</span><b>"关于点 $(c,0)$ 对称"＝平移后是奇函数</b>。检验方法：算 $f(c+u)+f(c-u)$ 是否恒为 0。<br>
+        本题 (2)：$f(1+u)+f(1-u)=(1+u)u(u-1)+(1-u)(-u)(-u-1)=(u^2-1)u+(u^2-1)(-u)\cdot(-1)\cdot(-1)$——直接代入更快：$f(1+u)=(1+u)\cdot u\cdot(u-1)=u(u^2-1)$，$f(1-u)=(1-u)(-u)(-1-u)=-u(1-u)(1+u)=-u(1-u^2)=u(u^2-1)\cdot(-1)\cdot(-1)$……<b>老实做就是令 $t=x-1$，一行就完</b>，不用玩对称性检验。</div>
+    </div>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">强 11.12</span><span class="pg">P.130–131</span>
+    计算：<b>(1)</b> $\displaystyle\int_0^4x\sqrt{4x-x^2}\,\mathrm dx$；　<b>(2)</b> $\displaystyle\int_0^2(2x+1)\sqrt{2x-x^2}\,\mathrm dx$。</div>
+    <div class="s">
+      <div><span class="lab">答案</span><span class="ans">(1) $4\pi$　(2) $\dfrac32\pi$</span></div>
+      <div><span class="lab">(1) 分析</span><b>先配方定中心</b>：$4x-x^2=2^2-(x-2)^2$，中心是 $x=2$。同时把前面的 $x$ 拆成 $(x-2)+2$：
+        $$\int_0^4\bigl[(x-2)+2\bigr]\sqrt{2^2-(x-2)^2}\,\mathrm dx\xlongequal{x-2=t}\int_{-2}^2(t+2)\sqrt{2^2-t^2}\,\mathrm dt$$
+        $$=\underbrace{\int_{-2}^2t\sqrt{4-t^2}\,\mathrm dt}_{\text{奇函数}=0}+2\int_{-2}^2\sqrt{4-t^2}\,\mathrm dt\xlongequal{(*)}2\cdot\frac{\pi\cdot2^2}2=4\pi.$$
+        $(*)$ 处用 $\displaystyle\int_{-R}^R\sqrt{R^2-x^2}\,\mathrm dx=\frac{\pi R^2}2$（<b>上半圆面积</b>）。</div>
+      <div><span class="lab">(2) 分析</span>$2x-x^2=1-(x-1)^2$，中心 $x=1$；$2x+1=2(x-1)+3$：
+        $$\int_0^2[2(x-1)+3]\sqrt{1-(x-1)^2}\,\mathrm dx\xlongequal{x-1=t}2\underbrace{\int_{-1}^1t\sqrt{1-t^2}\mathrm dt}_{=0}+3\int_{-1}^1\sqrt{1-t^2}\mathrm dt=3\cdot\frac{\pi\cdot1^2}2=\frac32\pi.$$</div>
+      <div><span class="lab">★要害</span><b>① 配方中心＝平移中心，一步定生死。</b>书上注得很直白：<u>"见到从 0 到 4 的积分，便可想到写 $x-2$，这便有了对称的'机会'。"</u><br>
+        <b>② 一次因子必须拆成"奇＋常数"</b>：$x=(x-2)+2$、$2x+1=2(x-1)+3$。<b>拆错常数就前功尽弃</b>——检验：把 $t=0$（即 $x=c$）代回，常数项应等于原一次式在中心处的值（$x=2$ 时 $x=2$ ✓；$x=1$ 时 $2x+1=3$ ✓）。<br>
+        <b>③ 半圆面积公式要背</b>：$\int_{-R}^R\sqrt{R^2-x^2}\mathrm dx=\frac{\pi R^2}2$，$\int_0^R\sqrt{R^2-x^2}\mathrm dx=\frac{\pi R^2}4$。<b>硬做三角换元也行，但考场上直接写"上半圆面积"更快且不易错。</b><br>
+        <b>书对本小节的总评</b>：<u>"这一小节中讲清了一元函数积分学中<b>平移变换使得对称性标准化</b>的手法，考生需重视。"</u><span class="chip c-g">两问均已数值复算 ✓</span></div>
+    </div>
+  </div>
+
+  <h3 style="margin:22px 0 6px;font-size:1.05rem;color:var(--accent)">★★★(2) 判别定积分的正负</h3>
+
+  <div class="key"><span class="tag">必记 · 判正负三步（算不出值也能定符号）</span>
+    <div class="steps3">
+      <div><b>① 先化简，再拆</b>用换元把被积函数变成"简单易看"的形状（眉批原话）。<b>先化简再拆分区间，顺序别反。</b></div>
+      <div><b>② 按符号变号点拆</b>正的一段、负的一段各自成块。</div>
+      <div><b>③ 平移到同一区间逐点比</b>把负块换元搬到正块的区间上，两个被积函数<u>逐点</u>比大小。</div>
+    </div>
+    <p><b>书上的示范（P.128–129）：证明 $\displaystyle\int_0^{2\pi}\frac{\sin x}x\mathrm dx\gt0$。</b>因为
+    $$\int_\pi^{2\pi}\frac{\sin x}x\mathrm dx\xlongequal{x-\pi=t}\int_0^\pi\frac{\sin(t+\pi)}{t+\pi}\mathrm dt=\int_0^\pi\frac{-\sin t}{t+\pi}\mathrm dt,$$
+    所以
+    $$\int_0^{2\pi}\frac{\sin x}x\mathrm dx=\int_0^\pi\sin x\left(\frac1x-\frac1{x+\pi}\right)\mathrm dx\gt0$$
+    （书上进一步用<b>第一积分中值定理</b>写成 $2\left(\frac1{\xi_1}-\frac1{\xi_2+\pi}\right)\gt0$，$\xi_1,\xi_2\in(0,\pi)$）。<br>
+    <b>眉批点破了为什么要拆</b>：<u>"通常在区间 $(0,\frac\pi4),(0,\frac\pi2),(0,\pi)$ 上容易保证符号不变，而 $(0,2\pi)$ 太大，故而可以拆分成小区间。"</u></p>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">强 11.13</span><span class="pg">P.131</span>
+    ★★　设 $I=\displaystyle\int_0^{\frac{3\pi}2}\frac{\cos x}{2x-3\pi}\mathrm dx$，则 $I$（　）<br>
+    (A) 为正　(B) 为负　(C) 为零　(D) 发散</div>
+    <div class="s">
+      <div><span class="lab">答案</span><span class="ans">(A) 为正</span></div>
+      <div><span class="lab">第一步：选对换元</span>令 $t=\dfrac{3\pi}2-x$（<b>区间再现型</b>）。则 $\cos x=\cos\left(\frac{3\pi}2-t\right)=-\sin t$，$2x-3\pi=-2t$，负负得正：
+        $$I=\frac12\int_0^{\frac{3\pi}2}\frac{\sin t}t\mathrm dt.$$
+        <span class="chip c-r">眉批警告</span>若令 $t=2x-3\pi$（看着更"自然"的线性换元），分子会变成 $\cos\frac{t+3\pi}2$，<b>计算量反而变大</b>。<b>换元的目标是让形状变简单，不是让分母变漂亮。</b></div>
+      <div><span class="lab">第二步：按 $\sin$ 的符号拆</span>
+        $$I=\frac12\int_0^{\frac\pi2}\frac{\sin t}t\mathrm dt+\frac12\int_{\frac\pi2}^\pi\frac{\sin t}t\mathrm dt+\frac12\underbrace{\int_\pi^{\frac{3\pi}2}\frac{\sin t}t\mathrm dt}_{\text{这段 }\sin t\lt0}.$$</div>
+      <div><span class="lab">第三步：把负的那段搬回来</span>第三项令 $t=u+\pi$：$\displaystyle\int_\pi^{\frac{3\pi}2}\frac{\sin t}t\mathrm dt=-\int_0^{\frac\pi2}\frac{\sin u}{\pi+u}\mathrm du$，于是
+        $$I=\frac12\int_0^{\frac\pi2}\left(\frac1t-\frac1{\pi+t}\right)\sin t\,\mathrm dt+\frac12\int_{\frac\pi2}^\pi\frac{\sin t}t\mathrm dt\gt0,$$
+        因为 $[0,\frac\pi2]$ 上 $\frac1t\gt\frac1{\pi+t}$ 且 $\sin t\ge0$，$[\frac\pi2,\pi]$ 上 $\frac{\sin t}t\ge0$。故选 (A)。</div>
+      <div><span class="lab">★要害</span><b>① $\frac{\sin t}t$ 型判正负是考研经典</b>，与上面 $\int_0^{2\pi}\frac{\sin x}x\mathrm dx\gt0$ 是同一道题的变体。<b>核心永远是"正段的权重 $\frac1t$ 比负段的权重 $\frac1{t+\pi}$ 大"</b>——分母越小权重越大，正段离原点近，所以正的赢。<br>
+        <b>② (D) 怎么排除</b>：$x\to\frac{3\pi}2$ 时分母 $2x-3\pi\to0$，看着像瑕点，但分子 $\cos\frac{3\pi}2=0$ 同时趋于 0，$\frac{\cos x}{2x-3\pi}\to\frac{-\sin\frac{3\pi}2}2=\frac12$ <b>有界</b>，是<b>可去间断</b>，积分收敛。<span class="dock">不检查这一点直接选 (A) 是运气，考场上要扫一眼。</span><br>
+        <span class="chip c-g">数值复算：$I=0.804186376977$，与 $\frac12\int_0^{3\pi/2}\frac{\sin t}t\mathrm dt$ 完全一致 ✓</span></div>
+    </div>
+  </div>
+
+  <h3 style="margin:22px 0 6px;font-size:1.05rem;color:var(--accent)">(3) 实现 $f$ 的阶数升降</h3>
+
+  <div class="key"><span class="tag">必记 · 阶数链（眉批：常借助分部积分法）</span>
+    <div class="fml">$$\int f(x)\mathrm dx\ \longleftrightarrow\ f(x)\ \longleftrightarrow\ f'(x)\ \longleftrightarrow\ f''(x)$$
+    <span style="font-size:.84rem;color:var(--muted)">向右＝<b>升阶</b>（把 $f$ 变成 $f'$）　向左＝<b>降阶</b>（把 $f'$ 变成 $\int f$）</span></div>
+    <p><b>用法</b>：看<u>条件</u>给的是哪一阶、<u>结论</u>要的是哪一阶，中间的距离就用分部积分走。<b>每分部一次，走一格。</b><br>
+    基础讲例 11.6（$\int_0^1f=\frac12\int_0^1x(x-1)f''$，第九节）就是<b>连走两格</b>的典型。</p>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">强 11.14</span><span class="pg">P.132</span>
+    设 $f(x)=xg'(2x)$，且 $g(x)$ 的一个原函数为 $\ln(x+1)$，则 $\displaystyle\int_0^1f(x)\mathrm dx=\underline{\qquad}$。</div>
+    <div class="s">
+      <div><span class="lab">答案</span><span class="ans">$\dfrac16-\dfrac14\ln3$</span></div>
+      <div><span class="lab">分析（降阶：$g'\to g\to\int g$）</span>由题设 $g(x)=[\ln(x+1)]'=\dfrac1{1+x}$，$\displaystyle\int_0^2g\mathrm dx=\ln(x+1)\Big|_0^2=\ln3$。
+        $$\int_0^1xg'(2x)\mathrm dx\xlongequal{2x=t}\int_0^2\frac t2g'(t)\cdot\frac12\mathrm dt=\frac14\int_0^2t\,\mathrm d[g(t)]=\frac14\left[tg(t)\Big|_0^2-\int_0^2g(t)\mathrm dt\right]$$
+        $$=\frac14\left[\frac2{1+2}-\ln3\right]=\frac14\left(\frac23-\ln3\right)=\frac16-\frac14\ln3.$$</div>
+      <div><span class="lab">要害</span><b>"原函数为 $\ln(x+1)$"是在给 $g$，不是给 $\int g$ 的值</b>——要先<u>求导</u>得到 $g=\frac1{1+x}$，同时 $\int_0^2g$ 又可以直接用原函数算。<b>一个条件用两次，两次方向相反。</b><br>
+      <span class="dock">换元时 $\frac12\cdot\frac12=\frac14$ 这个系数最容易掉：$x=\frac t2$ 出一个 $\frac12$，$\mathrm dx=\frac12\mathrm dt$ 再出一个。</span><span class="chip c-g">数值复算 ✓</span></div>
+    </div>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">强 11.15</span><span class="pg">P.132</span>
+    设 $f(x)=\displaystyle\int_0^x\mathrm e^{-t^2+2t}\mathrm dt$，则 $\displaystyle\int_0^1(x-1)^2f(x)\mathrm dx=\underline{\qquad}$。</div>
+    <div class="s">
+      <div><span class="lab">答案</span><span class="ans">$\dfrac16(\mathrm e-2)$</span></div>
+      <div><span class="lab">分析（升阶：$f\to f'$）</span>由题设 $f(0)=0$，$f'(x)=\mathrm e^{-x^2+2x}$。把 $(x-1)^2$ 凑成 $\mathrm d\left[\frac{(x-1)^3}3\right]$ 去分部，<b>让 $f$ 挨那一下求导</b>：
+        $$\int_0^1(x-1)^2f(x)\mathrm dx=\underbrace{\frac13(x-1)^3f(x)\Big|_0^1}_{\text{两端都为}0}-\frac13\int_0^1(x-1)^3f'(x)\mathrm dx=-\frac13\int_0^1(x-1)^3\mathrm e^{1-(x-1)^2}\mathrm dx$$
+        $$=-\frac16\int_0^1(x-1)^2\mathrm e^{1-(x-1)^2}\mathrm d\left[(x-1)^2\right]\xlongequal{t=(x-1)^2}-\frac{\mathrm e}6\int_1^0t\mathrm e^{-t}\mathrm dt=\frac{\mathrm e}6\int_0^1t\mathrm e^{-t}\mathrm dt=\frac{\mathrm e}6\left(1-\frac2{\mathrm e}\right)=\frac{\mathrm e-2}6.$$</div>
+      <div><span class="lab">★要害</span><b>① 为什么必须升阶</b>：$f(x)=\int_0^x\mathrm e^{-t^2+2t}\mathrm dt$ <b>积不出初等原函数</b>（高斯型），但 $f'$ 是现成的初等式。<b>凡是"变限积分 × 多项式"的定积分，一律分部把变限积分求导掉。</b><br>
+        <b>② 两端边界项都归零</b>：$x=1$ 处靠 $(x-1)^3=0$，$x=0$ 处靠 $f(0)=0$。<b>题目给 $f(x)=\int_0^x\cdots$（下限 0）就是为了送这个 $f(0)=0$。</b><br>
+        <b>③ 配方 $-x^2+2x=1-(x-1)^2$</b> 是能继续走下去的关键——凑出与 $(x-1)$ 同源的形式，才能整体换元 $t=(x-1)^2$。<br>
+        <b>④ $\int_0^1t\mathrm e^{-t}\mathrm dt=1-\frac2{\mathrm e}$</b>（再分部一次）。<span class="chip c-g">数值复算：$\frac{\mathrm e-2}6=0.1197304$ ✓</span></div>
+    </div>
+  </div>
+
+  <!-- ================= s6 牛莱 ================= -->
+  <h2 id="s6"><span class="idx">六</span>牛顿–莱布尼茨公式——"制造函数差值"</h2>
+
+  <div class="key"><span class="tag">必记 · 本章要的不是 $F(b)-F(a)$，而是它的反读法</span>
+    <span class="pg">P.132–133</span>
+    <p>常考形式：$\displaystyle\int_a^bf'(x)\mathrm dx=f(b)-f(a)$，$\displaystyle\int_{x_0}^xf'(t)\mathrm dt=f(x)-f(x_0)$。<br>
+    <b>书上的行动指令</b>：<u>"要善于<b>制造函数差值形式</b>并用好 $f(x)-f(a)=\displaystyle\int_a^xf'(t)\mathrm dt$。"</u></p>
+    <p><b>为什么它是证不等式的利器</b>：把"函数值之差"变成"导数的积分"之后，<u>对导数的任何估计（有界、单调、正负）都能立刻转成对函数值的估计</u>。基础讲例 11.11、习 11.5 就是靠这一条（第十三节）。</p>
+  </div>
+
+  <div class="key"><span class="tag">必记 · ★四个用牛莱造出来的经典不等式（P.133 蓝框）</span>
+    <div class="gridwrap"><table class="dense">
+      <tr><th>#</th><th>结论</th><th>造法</th></tr>
+      <tr><td>①</td><td>$\ln\left(1+\dfrac1x\right)\gt\dfrac1{1+x}\ (x\gt0)$</td><td>$\ln(1+x)-\ln x=\displaystyle\int_x^{x+1}\frac1t\mathrm dt\gt\int_x^{x+1}\frac1{1+x}\mathrm dt$（用<b>右端点</b>把 $\frac1t$ 缩小）</td></tr>
+      <tr><td>②</td><td>$f(x)\lt1+\dfrac\pi4$，其中 $f'=\dfrac1{x^2+1},x\ge1,f(1)=1$</td><td>$f(x)=f(1)+\displaystyle\int_1^xf'\lt1+\int_1^{+\infty}\frac{\mathrm dt}{1+t^2}$（<b>把上限放大到 $+\infty$</b>）</td></tr>
+      <tr><td>③</td><td>$\ln(1+n)\lt1+\dfrac12+\cdots+\dfrac1n$</td><td>$\displaystyle\int_1^{n+1}\frac1x\mathrm dx=\sum_{k=1}^n\int_k^{k+1}\frac1x\mathrm dx\lt\sum_{k=1}^n\int_k^{k+1}\frac1k\mathrm dx$（每段用<b>左端点</b>放大）</td></tr>
+      <tr><td>④</td><td>$\ln n\gt\dfrac12+\cdots+\dfrac1n$</td><td>$\displaystyle\int_1^{n}\frac1x\mathrm dx=\sum_{k=1}^{n-1}\int_k^{k+1}\frac1x\mathrm dx\gt\sum_{k=1}^{n-1}\int_k^{k+1}\frac1{k+1}\mathrm dx$（每段用<b>右端点</b>缩小）</td></tr>
+    </table></div>
+    <p><b>③④ 合起来就是调和级数的经典夹逼</b>：
+    $$\ln(1+n)\lt1+\frac12+\cdots+\frac1n\lt1+\ln n.$$
+    <b>它是级数章"$\sum\frac1n$ 发散"的证明来源，也是欧拉常数 $\gamma=\lim(H_n-\ln n)$ 存在的根据。</b>③ 与 ④ 的唯一差别是<u>每段用左端点还是右端点估 $\frac1x$</u>——<b>把这句话记住，两个不等式当场能推。</b></p>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">强 11.16</span><span class="pg">P.133</span>
+    已知 $f'(\ln x)=\begin{cases}1,&x\in(0,1),\\x,&x\in(1,+\infty),\end{cases}$　$f(0)=0$，则 $f(1)=\underline{\qquad}$。</div>
+    <div class="s">
+      <div><span class="lab">答案</span><span class="ans">$\mathrm e-1$</span></div>
+      <div><span class="lab">分析</span>用牛莱制造差值，再换元把 $f'(t)$ 变回题目给的 $f'(\ln x)$：
+        $$f(1)=f(1)-f(0)=\int_0^1f'(t)\mathrm dt\xlongequal{t=\ln x}\int_1^{\mathrm e}f'(\ln x)\cdot\frac{\mathrm dx}x=\int_1^{\mathrm e}x\cdot\frac1x\mathrm dx=\int_1^{\mathrm e}\mathrm dx=\mathrm e-1.$$</div>
+      <div><span class="lab">要害</span><b>① 分段点要跟着换元一起搬</b>：$t\in(0,1)\Rightarrow x=\mathrm e^t\in(1,\mathrm e)$，<b>整段落在第二支 $f'(\ln x)=x$ 上</b>，第一支 $x\in(0,1)$ 对应 $t\lt0$，本题用不上。<span class="dock">不做这个对应就会误用第一支得 $f(1)=\int_1^{\mathrm e}\frac{\mathrm dx}x=1$，错。</span><br>
+        <b>② 换元后 $x\cdot\frac1x=1$</b>——这是题目设计好的：$f'(\ln x)=x$ 意味着 $f'(u)=\mathrm e^u$，所以 $f(u)=\mathrm e^u+C$，$f(0)=0$ 给 $C=-1$，$f(1)=\mathrm e-1$ ✓。<b>直接反解 $f'$ 也能做，且更快</b>：<u>见到 $f'(\varphi(x))=\psi(x)$，先试着解出 $f'(u)$。</u></div>
+    </div>
+  </div>
+
+  <!-- ================= s7 夹逼 ================= -->
+  <h2 id="s7"><span class="idx">七</span>夹逼准则求积分极限——本章计算题的最后一类</h2>
+
+  <div class="key"><span class="tag">必记 · ★★ 一般结论（基础讲 P.285–286 注，必背）</span>
+    <span class="pg">P.285</span>
+    <div class="fml">$$f(x)\ \text{在}\ [0,1]\ \text{上连续}\ \Longrightarrow\ \lim_{n\to\infty}\int_0^1x^nf(x)\mathrm dx=0.$$</div>
+    <p><b>证（标准写法，两行）</b>：$f$ 连续 ⇒ 有最大值 $M$、最小值 $m$，$m\le f\le M$ ⇒ $mx^n\le x^nf(x)\le Mx^n$，由积分保号性
+    $$\frac m{n+1}\le\int_0^1x^nf(x)\mathrm dx\le\frac M{n+1}\xrightarrow{\ n\to\infty\ }0.$$
+    <b>直观</b>：$x^n$ 在 $[0,1]$ 上"把全部质量挤到右端点"，而右端点是一个零测度的点，任何有界的 $f$ 都被压成 0。<br>
+    <b>用最值夹（$m,M$）是这类题的标准姿势</b>——不需要 $f$ 的任何具体信息，只要连续。</p>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">基 11.3</span><span class="pg">P.285</span>
+    $\displaystyle\lim_{n\to\infty}\int_0^1(n+1)x^n\ln(1+x)\mathrm dx=$（　）　(A) $\ln2$　(B) $1$　(C) $\mathrm e^2$　(D) $+\infty$</div>
+    <div class="s">
+      <div><span class="lab">答案</span><span class="ans">(A) $\ln2$</span></div>
+      <div><span class="lab">分析</span><b>$(n+1)x^n$ 正是 $\mathrm d(x^{n+1})$，先凑微分再分部</b>：
+        $$\int_0^1(n+1)x^n\ln(1+x)\mathrm dx=\int_0^1\ln(1+x)\mathrm d(x^{n+1})=x^{n+1}\ln(1+x)\Big|_0^1-\int_0^1\frac{x^{n+1}}{1+x}\mathrm dx=\ln2-\int_0^1\frac{x^{n+1}}{1+x}\mathrm dx.$$
+        对余下的积分放缩：$0\le\dfrac{x^{n+1}}{1+x}\le x^{n+1}$（$0\le x\le1$），故
+        $$0\le\int_0^1\frac{x^{n+1}}{1+x}\mathrm dx\le\int_0^1x^{n+1}\mathrm dx=\frac1{n+2}\to0,$$
+        由夹逼准则得该项趋于 0，原式 $=\ln2$。</div>
+      <div><span class="lab">要害</span><b>① 为什么不能直接把极限拿进积分号</b>：$\lim(n+1)x^n$ 在 $[0,1)$ 上是 0、在 $x=1$ 处是 $+\infty$，<u>逐点极限没有意义</u>。$\lim\int\ne\int\lim$ 是本章反复强调的红线。<br>
+        <b>② 秒杀视角</b>：$(n+1)x^n$ 是 $[0,1]$ 上"质量全集中到 $x=1$"的<b>逼近单位</b>，所以 $\int_0^1(n+1)x^ng(x)\mathrm dx\to g(1)$。本题 $g=\ln(1+x)$，$g(1)=\ln2$ ✓。<b>选择题可以这样 5 秒出答案</b>，但解答题要写分部+夹逼。<br>
+        <b>③ 与上面的一般结论对照</b>：那条说 $\int_0^1x^nf\to0$（没有 $(n+1)$），本题乘了 $(n+1)$ 后<b>刚好不趋于 0，而趋于端点值</b>——差别就在那个归一化因子。<span class="chip c-g">数值：$n=20000$ 时积分 $=0.69309$，$\ln2=0.69315$ ✓</span></div>
+    </div>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">基 11.4</span><span class="pg">P.285</span>
+    <b>(1)</b> 比较 $\displaystyle\int_0^1|\ln t|[\ln(1+t)]^n\mathrm dt$ 与 $\displaystyle\int_0^1t^n|\ln t|\mathrm dt$（$n=1,2,\cdots$）的大小，说明理由；<br>
+    <b>(2)</b> 记 $u_n=\displaystyle\int_0^1|\ln t|[\ln(1+t)]^n\mathrm dt$，求 $\displaystyle\lim_{n\to\infty}u_n$。<br>
+    <span style="color:var(--muted);font-size:.85rem">眉批：(1) 作为第 (2) 问的提示；这是<b>典型考研命题形式</b>。</span></div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>两问是一条线</b>：眉批已经点破——第 (1) 问算出来的那个"大小关系"，就是第 (2) 问夹逼的<b>上界</b>。<u>凡是"先比大小、再求极限"的两问题，第一问必是第二问的夹子。</u></li>
+          <li><b>(1) 怎么比</b>：两个积分的区别只在 $[\ln(1+t)]^n$ 与 $t^n$。在 $[0,1]$ 上有最基本的不等式 $\ln(1+t)\le t$ ⇒ 乘方保序 ⇒ 再乘非负的 $|\ln t|$ ⇒ 积分保号性。<b>三步都是"保序"，一步都不能跳。</b></li>
+          <li><b>(2) 的下界是什么</b>：$u_n\ge0$ 显然（被积函数非负）。所以夹逼的两边是 $0\le u_n\le\int_0^1t^n|\ln t|\mathrm dt$。</li>
+          <li><b>右边那个积分要算出来</b>：$|\ln t|=-\ln t$（$0\lt t\lt1$），分部积分即可，注意会遇到 $\lim\limits_{t\to0^+}t^{n+1}\ln t$ 型的边界项。</li>
+        </ol>
+      </div>
+      <div class="paper"><div class="phead">✍️ 考场卷面<span class="score">参考 10 分</span></div>
+        <div class="step"><span class="k">(1) 解</span>当 $0\le t\le1$ 时，$0\le\ln(1+t)\le t$，故 $0\le[\ln(1+t)]^n\le t^n$。<span class="pt">⛳ 2分</span></div>
+        <div class="step">两边同乘非负的 $|\ln t|$，得 $0\le|\ln t|[\ln(1+t)]^n\le t^n|\ln t|$。<span class="pt">⛳ 1分</span></div>
+        <div class="step">由<b>积分的保号性</b>得
+          $$\int_0^1|\ln t|[\ln(1+t)]^n\mathrm dt\le\int_0^1t^n|\ln t|\mathrm dt.\tag{1}$$<span class="pt">⛳ 1分</span></div>
+        <div class="step"><span class="k">(2) 解</span>由 (1) 及被积函数非负知 $0\le u_n\le\displaystyle\int_0^1t^n|\ln t|\mathrm dt$。<span class="pt">⛳ 1分</span></div>
+        <div class="step">当 $0\lt t\lt1$ 时 $|\ln t|=-\ln t$，故
+          $$\int_0^1t^n|\ln t|\mathrm dt=-\int_0^1t^n\ln t\,\mathrm dt=-\frac{t^{n+1}}{n+1}\ln t\bigg|_0^1+\frac1{n+1}\int_0^1t^n\mathrm dt.$$<span class="pt">⛳ 2分</span></div>
+        <div class="step">其中 $\displaystyle\lim_{t\to0^+}t^{n+1}\ln t=0$，故边界项为 0，于是
+          $$\int_0^1t^n|\ln t|\mathrm dt=\frac1{n+1}\cdot\frac{t^{n+1}}{n+1}\bigg|_0^1=\frac1{(n+1)^2}.\tag{2}$$<span class="pt">⛳ 2分</span></div>
+        <div class="fin">由 (2) 知 $\displaystyle\lim_{n\to\infty}\frac1{(n+1)^2}=0$，再由<b>夹逼准则</b>得 $\displaystyle\lim_{n\to\infty}u_n=0$。<span class="pt">⛳ 1分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（对照完再看）</span>
+        <b>① $\lim\limits_{t\to0^+}t^a\ln t=0\ (a\gt0)$ 是必背结论</b>（书上专门框了出来），本质是"幂函数打败对数"。写卷面时<b>要显式写这一句</b>，否则边界项的 0 是白来的。<br>
+        <b>② $|\ln t|$ 的绝对值必须先脱</b>：$0\lt t\lt1$ 时 $\ln t\lt0$，$|\ln t|=-\ln t$。<span class="dock">忘了变号会得到 $-\frac1{(n+1)^2}$ 这个负数，而被积函数明明非负——自检的好机会。</span><br>
+        <b>③ 这道题也可以直接套上面的一般结论</b>：$0\le u_n\le\int_0^1t^n\cdot|\ln t|\mathrm dt$，取 $f(t)=t|\ln t|$（补充定义 $f(0)=0$ 后连续）则 $\int_0^1t^{n-1}f(t)\mathrm dt\to0$。<b>书上的注正是这么把两者接起来的。</b><br>
+        <b>④ 数值验证</b>：$u_1=0.2088\le\frac14$，$u_2=0.0713\le\frac19$，$u_5=0.00686\le\frac1{36}$ ✓ <b>不等式 (1) 相当宽松</b>，因为 $\ln(1+t)$ 比 $t$ 小得多，这恰恰保证了夹逼一定成功。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">基 11.5</span><span class="pg">P.286</span>
+    设函数 $f(x)=x-[x]$（$[x]$ 表示不超过 $x$ 的最大整数），则 $\displaystyle\lim_{x\to+\infty}\frac1x\int_0^xf(t)\mathrm dt=\underline{\qquad}$。</div>
+    <div class="s">
+      <div><span class="lab">答案</span><span class="ans">$\dfrac12$</span></div>
+      <div><span class="lab">⚠️ 分析（书上专门写了这条）</span><b>不能用洛必达法则！</b>虽然是 $\frac\infty\infty$ 型，但<u>包含跳跃间断点的函数 $f(x)$ 无原函数</u>，$\left[\int_0^xf(t)\mathrm dt\right]'=f(x)$ 在间断点处不成立，洛必达的前提被破坏。</div>
+      <div><span class="lab">正解（夹逼）</span>$f$ 是周期为 1 的<b>锯齿波</b>（图 11-1），每个周期下的面积是一个直角三角形 $=\frac12$，故 $\displaystyle\int_0^nf(t)\mathrm dt=\frac n2$。<br>
+        当 $n\le x\lt n+1$ 时，$\dfrac1{n+1}\lt\dfrac1x\le\dfrac1n$（<b>分母的取值范围</b>），$\dfrac n2\le\displaystyle\int_0^xf\lt\dfrac{n+1}2$（<b>分子的取值范围</b>），于是
+        $$\frac n{2(n+1)}\lt\frac1x\int_0^xf(t)\mathrm dt\lt\frac{n+1}{2n}.$$
+        $x\to+\infty$ 时 $n\to\infty$，两边都趋于 $\dfrac12$，由夹逼准则得答案 $\dfrac12$。</div>
+      <div><span class="lab">★要害</span><b>① 分式放缩的口诀（书上眉批给了一般形式）</b>：当 $0\lt a\lt y\lt b$、$0\lt c\lt x\lt d$ 时，$\dfrac ad\lt\dfrac yx\lt\dfrac bc$。<b>——分子取小配分母取大得下界，分子取大配分母取小得上界。</b><br>
+        <b>② 洛必达的前提是本题的真考点</b>：<span class="dock">"$\frac\infty\infty$ 就洛"是最常见的送分陷阱。</span>洛必达要求分子分母在<u>邻域内可导</u>；$\int_0^xf$ 在整数点处不可导（左右导数分别是 1 和 0）。<br>
+        <b>③ 从"平均值"角度秒懂</b>：$\frac1x\int_0^xf$ 是 $f$ 在 $[0,x]$ 上的平均值，而 $f$ 是周期锯齿波，一个周期内的平均值就是 $\frac12$。<b>周期函数的长期平均＝一个周期内的平均</b>——这个直觉可以用来验答案。<br>
+        <b>④ 推广</b>：$f$ 以 $T$ 为周期且可积 ⇒ $\displaystyle\lim_{x\to+\infty}\frac1x\int_0^xf(t)\mathrm dt=\frac1T\int_0^Tf(t)\mathrm dt$。<span class="chip c-g">数值：$x=10^4$ 时值为 $0.49999$ ✓</span></div>
+    </div>
+  </div>
+
+  <h2 style="border-top:3px double var(--green);padding-top:14px;margin-top:34px">第二部分　证——积分等式与积分不等式的证明</h2>
+
+  <!-- ================= s8 积分中值定理 ================= -->
+  <h2 id="s8"><span class="idx">八</span>积分中值定理——把积分条件"兑换"成函数值</h2>
+
+  <div class="key"><span class="tag">必记 · 两个版本，差别在开闭区间（这是采分点）</span>
+    <span class="pg">P.283 · P.126</span>
+    <div class="duo">
+      <div class="dA"><b class="h">基本版（积分中值定理）</b>
+        $f$ 在 $[a,b]$ 上<b>连续</b> $\Rightarrow$ 存在 $\xi\in\boxed{[a,b]}$ 使
+        $$\int_a^bf(x)\mathrm dx=f(\xi)(b-a).$$
+        <span style="font-size:.82rem">给的是<b>闭</b>区间。</span></div>
+      <div class="dB"><b class="h">推广版（第一积分中值定理）</b>
+        $f$ 在 $[a,b]$ 上<b>连续</b>，$g$ 在 $[a,b]$ 上<b>可积且不变号</b> $\Rightarrow$ 存在 $\xi\in\boxed{(a,b)}$ 使
+        $$\int_a^bf(x)g(x)\mathrm dx=f(\xi)\int_a^bg(x)\mathrm dx.$$
+        <span style="font-size:.82rem">给的是<b>开</b>区间。18 讲评价："甚为有用"。</span></div>
+    </div>
+    <p><b style="color:var(--red)">⚠️ 为什么要盯着开闭</b>：<b>凡是后续还要对 $\xi$ 用罗尔定理的题，必须拿到开区间的中值点</b>（罗尔要求两个零点之间有开区间）。所以<u>即使 $g\equiv1$，卷面也应写"由推广的积分中值定理"</u>，以便直接得到 $\xi\in(a,b)$。<b>强 11.10 就是这么写的。</b></p>
+  </div>
+
+  <div class="key"><span class="tag">必记 · ★ 18 讲对这条定理的四句话（P.127）</span>
+    <ol style="margin-left:20px">
+      <li><b>思维开关</b>：<u>"需要把积分值表示成函数值的时候，你应该想到它。"</u>反过来，某些特殊函数值也可用定积分表示，如 $\frac\pi4=\int_1^{+\infty}\frac{\mathrm dx}{1+x^2}$，$1=\int_0^{\frac\pi2}\sin x\mathrm dx=\int_0^{\frac\pi2}\cos x\mathrm dx$。</li>
+      <li><b>几何</b>：$f$ 连续非负时，曲边梯形面积 $\int_a^bf$ 等于一个矩形面积，底 $b-a$、高 $f(\xi)$。</li>
+      <li><b>平均值</b>：$\dfrac{\int_a^bf\mathrm dx}{b-a}$ 是 $f$ 在 $[a,b]$ 上的平均值，<b>连续函数的平均值一定是某一点的函数值</b>。</li>
+      <li><b>推广版即上表右栏</b>，"这个定理是积分中值定理的推广，甚为有用"。</li>
+    </ol>
+    <p><b>本章所有"给积分条件、求证存在某点"的题，第一步全是这一句</b>：<b>把 $\int=\text{已知数}$ 兑换成 $f(\eta)=\text{具体值}$，从此进入微分中值定理的地盘。</b></p>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">基 11.1</span><span class="pg">P.283</span>
+    <b>(1)</b> 设 $f(x),g(x)$ 在 $[a,b]$ 上连续，且 $g(x)$ 在 $[a,b]$ 上<b>不变号</b>（即恒正、恒负或恒为 0），证明：存在 $\xi\in(a,b)$ 使
+    $$\int_a^bf(x)g(x)\mathrm dx=f(\xi)\int_a^bg(x)\mathrm dx;$$
+    <b>(2)</b> ★★★★　设 $f(x)$ 在 $[1,2]$ 上连续，计算 $\displaystyle\lim_{n\to\infty}\int_1^2f(x)\mathrm e^{-x^n}\mathrm dx$。</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>(1) 要证的是"两个积分之比等于某点的函数值"</b>——形如 $\dfrac{A}{B}=f(\xi)$。<u>凡是"比值＝导数值/函数值"，想柯西中值定理。</u></li>
+          <li><b>怎么把积分变成能用中值定理的对象</b>：把定积分的上限<b>变量化</b>（书上眉批"常数变量化"），造出两个函数 $F(x)=\int_a^xfg$、$G(x)=\int_a^xg$。这样 $F'=fg$、$G'=g$，比值恰好是 $f$。</li>
+          <li><b>柯西的前提要检查</b>：$G'(\xi)=g(\xi)\ne0$、$G(b)-G(a)=\int_a^bg\ne0$——这正是"$g$ 不变号且不恒为 0"要保证的事。所以要先把 $g\equiv0$ 单独拎出来讨论。</li>
+          <li><b>(2) 第一反应</b>：用 (1) 把 $f$ 提出来（取 $g=\mathrm e^{-x^n}\gt0$），得 $f(\xi_n)\int_1^2\mathrm e^{-x^n}\mathrm dx$。<b>但 $\xi_n$ 随 $n$ 变，不能对它取极限</b>！唯一安全的用法是把 $f(\xi_n)$ 当<b>有界量</b>。</li>
+          <li><b>于是目标变成证 $\int_1^2\mathrm e^{-x^n}\mathrm dx\to0$</b>：在 $(1,2)$ 上 $x^n\to+\infty$，指数衰减极快，用放缩 $\mathrm e^{u}\gt u+1$ 把它换成好积的幂函数。</li>
+        </ol>
+      </div>
+      <div class="paper"><div class="phead">✍️ 考场卷面<span class="score">参考 12 分</span></div>
+        <div class="step"><span class="k">(1) 证</span>若 $g(x)\equiv0$，则两端均为 0，结论显然成立。<span class="pt">⛳ 1分</span></div>
+        <div class="step">若 $g(x)\not\equiv0$，由 $g$ 不变号，<b>不妨设 $g(x)\gt0$</b>（$g\lt0$ 时同理）。令
+          $$F(x)=\int_a^xf(t)g(t)\mathrm dt,\qquad G(x)=\int_a^xg(t)\mathrm dt,$$
+          则 $F,G$ 在 $[a,b]$ 上连续、在 $(a,b)$ 内可导，且 $G'(x)=g(x)\gt0$。<span class="pt">⛳ 2分</span></div>
+        <div class="step">在 $[a,b]$ 上对 $F,G$ 应用<b>柯西中值定理</b>，存在 $\xi\in(a,b)$ 使
+          $$\frac{F(b)-F(a)}{G(b)-G(a)}=\frac{F'(\xi)}{G'(\xi)},\quad\text{即}\quad\frac{\int_a^bf(x)g(x)\mathrm dx}{\int_a^bg(x)\mathrm dx}=\frac{f(\xi)g(\xi)}{g(\xi)}=f(\xi).$$<span class="pt">⛳ 3分</span></div>
+        <div class="step">其中由<b>积分保号性</b>知 $\displaystyle\int_a^bg(x)\mathrm dx\gt0$，分母非零，上式合法。<span class="pt">⛳ 1分</span></div>
+        <div class="fin">故存在 $\xi\in(a,b)$ 使 $\displaystyle\int_a^bf(x)g(x)\mathrm dx=f(\xi)\int_a^bg(x)\mathrm dx$。证毕。<span class="pt">⛳ 1分</span></div>
+        <div class="step" style="margin-top:12px"><span class="k">(2) 解</span>由 (1)（取 $g(x)=\mathrm e^{-x^n}\gt0$）知，存在 $\xi_n\in(1,2)$ 使
+          $$\int_1^2f(x)\mathrm e^{-x^n}\mathrm dx=f(\xi_n)\int_1^2\mathrm e^{-x^n}\mathrm dx.$$<span class="pt">⛳ 1分</span></div>
+        <div class="step">因 $f$ 在 $[1,2]$ 上连续，故 $f$ 在 $[1,2]$ 上<b>有界</b>，从而 $\{f(\xi_n)\}$ 有界。<span class="pt">⛳ 1分</span></div>
+        <div class="step">又当 $x\in(1,2)$ 时 $\mathrm e^{x^n}\gt x^n+1\gt x^n\gt0$，即 $0\lt\mathrm e^{-x^n}\lt\dfrac1{x^n}$，故
+          $$0\lt\int_1^2\mathrm e^{-x^n}\mathrm dx\lt\int_1^2x^{-n}\mathrm dx=\frac{x^{1-n}}{1-n}\bigg|_1^2=\frac1{1-n}\left(2^{1-n}-1\right)\xrightarrow{\ n\to\infty\ }0.$$<span class="pt">⛳ 2分</span></div>
+        <div class="fin">由夹逼准则 $\displaystyle\lim_{n\to\infty}\int_1^2\mathrm e^{-x^n}\mathrm dx=0$，再由<b>有界量 × 无穷小量 = 无穷小量</b>得
+          $\displaystyle\lim_{n\to\infty}\int_1^2f(x)\mathrm e^{-x^n}\mathrm dx=0$。<span class="pt">⛳ 1分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（对照完再看）</span>
+        <b>① ⚠️⚠️ 本章第一号陷阱（书上用整整一个蓝框写它）：中值 $\xi_n$ 与 $n$ 有关。</b><br>
+        虽然 $\int_1^2f(x)\mathrm e^{-x^n}\mathrm dx$ 的上下限是常数，但<u>被积函数随 $n$ 变</u>，所以中值也随 $n$ 变。同理若写 $\int_1^2\mathrm e^{-x^n}\mathrm dx=\mathrm e^{-\eta_n^{\,n}}$，<b><span class="dock">此时绝不能用 $\lim\limits_{n\to\infty}\mathrm e^{-\eta_n^{\,n}}=0$</span></b>——$\eta_n$ 会随 $n$ 漂移，$\eta_n^n$ 的极限根本不知道（可能趋于任何数）。<br>
+        <b>书的拓展眉批把规律写死了</b>：对 $\int_a^bf=f(\xi)(b-a)$，<b>改变积分区间</b> $[a,b]\to[a,x]$ 时 $\xi=\xi(x)$；<b>改变被积函数</b> $f(x)\to f(x,n)$ 或 $f_n(x)$ 时 $\xi=\xi(n)$。<br>
+        <b>② 闭区间版也成立</b>：由 $\xi\in(a,b)\subset[a,b]$，所以"至少存在一点 $\xi\in[a,b]$"的说法当然对，只是更弱。<br>
+        <b>③ 放缩 $\mathrm e^u\gt u+1$ 的选择</b>：也可以更粗暴地用 $\mathrm e^{-x^n}\le\mathrm e^{-x}$（$x\gt1,n\ge1$）？不行，$\int_1^2\mathrm e^{-x}\mathrm dx$ 是个不趋于 0 的常数。<b>放缩必须保留"随 $n$ 衰减"这个特征</b>，$\frac1{x^n}$ 正好，$\int_1^2x^{-n}\mathrm dx\sim\frac1{n-1}\to0$。<br>
+        <b>④ (2) 的答案是 0，与 $f$ 完全无关</b>——因为 $[1,2]$ 上除端点 $x=1$ 外 $\mathrm e^{-x^n}$ 全被压成 0，而 $x=1$ 是零测度点。<span class="chip c-g">数值：$n=80$ 时积分已降到 $0.0055$ ✓</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">基 11.2</span><span class="pg">P.284</span>
+    ★★　设 $f(x)$ 在 $\left[0,\frac\pi2\right]$ 上有二阶导数，且 $f(0)=2$，$f\!\left(\frac\pi2\right)=1$，$\displaystyle\int_0^{\frac\pi2}f(x)\mathrm e^{\sin x}\cos x\,\mathrm dx=2(\mathrm e-1)$。<br>
+    证明：存在 $\xi\in\left(0,\frac\pi2\right)$ 使 $f''(\xi)\lt0$。</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>数一数条件与目标的"阶数差"</b>：结论要 $f''$，条件里最高只有 $f$ 的值和一个积分。<b>从 $f$ 到 $f''$ 差两阶 ⇒ 需要用两次中值定理</b>（每次降/升一阶）。</li>
+          <li><b>用中值定理需要"点"</b>：现在手上只有两个点 $f(0)=2$、$f(\frac\pi2)=1$。<b>两个点最多做出一次拉格朗日，做不出二阶。</b>⇒ <b>必须再造出第三个点。</b></li>
+          <li><b>第三个点从哪来？</b>——那个积分条件！它是<u>唯一还没用的东西</u>，而积分中值定理的功能正是"把积分兑换成一个函数值"。<b>关键是看出 $\mathrm e^{\sin x}\cos x$ 应该充当推广版里的 $g$</b>（它在 $[0,\frac\pi2]$ 上 $\ge0$ 不变号），而且 $\int_0^{\frac\pi2}\mathrm e^{\sin x}\cos x\mathrm dx$ 是能算的（凑微分）。</li>
+          <li><b>算一下就知道为什么给 $2(\mathrm e-1)$</b>：$\int_0^{\frac\pi2}\mathrm e^{\sin x}\cos x\mathrm dx=\mathrm e-1$，所以 $f(\eta)=2$——<b>恰好等于 $f(0)$！</b>命题人把这个数设计成与 $f(0)$ 相同，就是要送一个<b>罗尔定理</b>。</li>
+          <li><b>拼装</b>：$f(0)=f(\eta)$ ⇒ 罗尔得 $f'(\xi_1)=0$；$f(\eta)=2\ne1=f(\frac\pi2)$ ⇒ 拉格朗日得 $f'(\xi_2)\lt0$；两个 $f'$ 值一比 ⇒ 再拉格朗日一次得 $f''(\xi)\lt0$。</li>
+        </ol>
+      </div>
+      <div class="paper"><div class="phead">✍️ 考场卷面<span class="score">参考 10 分</span></div>
+        <div class="step"><span class="k">证</span>因 $\mathrm e^{\sin x}\cos x$ 在 $\left[0,\frac\pi2\right]$ 上连续且<b>不变号</b>（$\cos x\ge0$），由<b>推广的积分中值定理</b>，存在 $\eta\in\left(0,\frac\pi2\right)$ 使
+          $$\int_0^{\frac\pi2}f(x)\mathrm e^{\sin x}\cos x\,\mathrm dx=f(\eta)\int_0^{\frac\pi2}\mathrm e^{\sin x}\cos x\,\mathrm dx.\tag{1}$$<span class="pt">⛳ 2分</span></div>
+        <div class="step">又由凑微分法 $\displaystyle\int_0^{\frac\pi2}\mathrm e^{\sin x}\cos x\,\mathrm dx=\mathrm e^{\sin x}\Big|_0^{\frac\pi2}=\mathrm e-1$，代入 (1) 及题设得
+          $$f(\eta)(\mathrm e-1)=2(\mathrm e-1)\ \Longrightarrow\ f(\eta)=2,\quad\eta\in\left(0,\frac\pi2\right).\tag{2}$$<span class="pt">⛳ 2分</span></div>
+        <div class="step"><span class="k">(i)</span>由 (2) 与 $f(0)=2$ 知 $f(0)=f(\eta)$。因 $f$ 在 $[0,\eta]$ 上连续、在 $(0,\eta)$ 内可导，由<b>罗尔定理</b>，存在 $\xi_1\in(0,\eta)$ 使
+          $$f'(\xi_1)=0.\tag{3}$$<span class="pt">⛳ 2分</span></div>
+        <div class="step"><span class="k">(ii)</span>因 $f$ 在 $\left[\eta,\frac\pi2\right]$ 上连续、在 $\left(\eta,\frac\pi2\right)$ 内可导，由<b>拉格朗日中值定理</b>，存在 $\xi_2\in\left(\eta,\frac\pi2\right)$ 使
+          $$f'(\xi_2)=\frac{f\left(\frac\pi2\right)-f(\eta)}{\frac\pi2-\eta}=\frac{1-2}{\frac\pi2-\eta}\lt0.\tag{4}$$<span class="pt">⛳ 2分</span></div>
+        <div class="step"><span class="k">(iii)</span>由 $\xi_1\lt\eta\lt\xi_2$ 及 $f$ 有二阶导数，在 $[\xi_1,\xi_2]$ 上对 $f'$ 应用拉格朗日中值定理，存在 $\xi\in(\xi_1,\xi_2)\subset\left(0,\frac\pi2\right)$ 使
+          $$f''(\xi)=\frac{f'(\xi_2)-f'(\xi_1)}{\xi_2-\xi_1}\xlongequal{(3)(4)}\frac{f'(\xi_2)-0}{\xi_2-\xi_1}\lt0.$$<span class="pt">⛳ 1分</span></div>
+        <div class="fin">故存在 $\xi\in\left(0,\frac\pi2\right)$ 使 $f''(\xi)\lt0$。证毕。<span class="pt">⛳ 1分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（对照完再看）</span>
+        <b>① ★ 书上的拓展眉批＝一张可以直接套的方法卡（三点造二阶导）</b>：<br>
+        设有三个点 $a\lt b\lt c$，
+        <ul>
+          <li>若 $f(a)=f(b)=f(c)$ ⇒ <b>用两次罗尔</b>得 $f'(\xi_1)=f'(\xi_2)=0$ ⇒ 再罗尔一次得 $\boxed{f''(\xi)=0}$；</li>
+          <li>若三个值互不相同 ⇒ <b>用两次拉格朗日</b>：由 $f'(\xi_1)\lt0,f'(\xi_2)\gt0$ 得 $f''(\xi)\gt0$；由 $f'(\xi_1)\gt0,f'(\xi_2)\lt0$ 得 $f''(\xi)\lt0$（<b>这就是习 11.1</b>）。</li>
+        </ul>
+        本题是<b>混合型</b>：左半用罗尔（因为 $f(0)=f(\eta)$），右半用拉格朗日。<br>
+        <b>② <span class="dock">卷面必须写"$\xi_1\lt\xi_2$"</b></span>：第三次中值定理的区间 $[\xi_1,\xi_2]$ 得是真区间。本题靠 $\xi_1\in(0,\eta)$、$\xi_2\in(\eta,\frac\pi2)$ 自动保证，<b>一句话点出来即可，但不能不写。</b><br>
+        <b>③ 积分条件的唯一用途就是造第三个点</b>——用完之后它就退场了，后面全是微分中值定理的事。<b>看到"积分条件 + 证明存在 $\xi$ 使 $f^{(k)}(\xi)\ldots$"，条件反射走这条路。</b><br>
+        <b>④ 为什么 $g$ 选 $\mathrm e^{\sin x}\cos x$ 而不是 $\cos x$</b>：因为要让剩下的 $f$ 单独被提出来。$g$ 的选择原则是<b>"除 $f$ 以外的全部因子"</b>，前提是它们不变号。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">强 11.10</span><span class="pg">P.127</span>
+    已知函数 $f(x)$ 在 $\left[0,\frac\pi2\right]$ 上可导，且 $\displaystyle\int_0^{\frac\pi2}f(x)\cos x\,\mathrm dx=0$，证明：存在 $\xi\in\left(0,\frac\pi2\right)$ 使 $f'(\xi)=f(\xi)\tan\xi$。</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>结论里有 $\tan$，先把它拆开</b>（书的眉批第一句就是这个）：
+            $$f'(\xi)=f(\xi)\tan\xi\iff f'(\xi)\cos\xi-f(\xi)\sin\xi=0.$$
+            <b>拆完之后左边是什么？</b>正是 $[f(x)\cos x]'$ 在 $\xi$ 处的值。<u>辅助函数就这么"看"出来了。</u></li>
+          <li><b>于是目标变成"证 $F(x)=f(x)\cos x$ 有导数零点"</b> ⇒ 罗尔定理 ⇒ <b>需要找 $F$ 的两个零点</b>。</li>
+          <li><b>第一个零点是白送的</b>：$F\left(\frac\pi2\right)=f\left(\frac\pi2\right)\cos\frac\pi2=0$——<u>与 $f$ 是什么完全无关</u>。</li>
+          <li><b>第二个零点靠积分条件</b>：注意 $\int_0^{\frac\pi2}f(x)\cos x\mathrm dx$ <b>恰好就是 $\int_0^{\frac\pi2}F(x)\mathrm dx$</b>！题目说它等于 0，由积分中值定理立刻得到某点 $F(\eta)=0$。<b>条件是为 $F$ 量身定做的。</b></li>
+          <li><b>最后一步别忘了除法的合法性</b>：从 $f'\cos\xi-f\sin\xi=0$ 回到 $f'=f\tan\xi$ 要除以 $\cos\xi$，得说明 $\cos\xi\ne0$。</li>
+        </ol>
+      </div>
+      <div class="paper"><div class="phead">✍️ 考场卷面<span class="score">参考 10 分</span></div>
+        <div class="step"><span class="k">证</span>记 $F(x)=f(x)\cos x$，则 $F$ 在 $\left[0,\frac\pi2\right]$ 上可导，且
+          $$F'(x)=f'(x)\cos x-f(x)\sin x.\tag{1}$$<span class="pt">⛳ 2分</span></div>
+        <div class="step"><span class="k">(i)</span>由题设 $\displaystyle\int_0^{\frac\pi2}F(x)\mathrm dx=\int_0^{\frac\pi2}f(x)\cos x\,\mathrm dx=0$。由<b>推广的积分中值定理</b>（取 $g\equiv1$），存在 $\eta\in\left(0,\frac\pi2\right)$ 使
+          $$\frac\pi2\,F(\eta)=\int_0^{\frac\pi2}F(x)\mathrm dx=0\ \Longrightarrow\ F(\eta)=0.\tag{2}$$<span class="pt">⛳ 3分</span></div>
+        <div class="step"><span class="k">(ii)</span>又 $F\left(\dfrac\pi2\right)=f\left(\dfrac\pi2\right)\cos\dfrac\pi2=0$。<span class="pt">⛳ 1分</span></div>
+        <div class="step"><span class="k">(iii)</span>$F$ 在 $\left[\eta,\dfrac\pi2\right]$ 上连续、在 $\left(\eta,\dfrac\pi2\right)$ 内可导，且 $F(\eta)=F\left(\dfrac\pi2\right)=0$，由<b>罗尔定理</b>，存在 $\xi\in\left(\eta,\dfrac\pi2\right)\subset\left(0,\dfrac\pi2\right)$ 使 $F'(\xi)=0$，即
+          $$f'(\xi)\cos\xi-f(\xi)\sin\xi=0.\tag{3}$$<span class="pt">⛳ 2分</span></div>
+        <div class="step"><span class="k">(iv)</span>因 $\xi\lt\dfrac\pi2$，故 $\cos\xi\ne0$，(3) 式两端除以 $\cos\xi$ 得 $f'(\xi)-f(\xi)\tan\xi=0$。<span class="pt">⛳ 1分</span></div>
+        <div class="fin">故存在 $\xi\in\left(0,\dfrac\pi2\right)$ 使 $f'(\xi)=f(\xi)\tan\xi$。证毕。<span class="pt">⛳ 1分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（对照完再看）</span>
+        <b>① ★ 辅助函数的"倒推三步"（本题是最干净的范例，值得当模板背）</b>：
+        <ol>
+          <li><b>把结论写成"某个东西 $=0$"</b>：$f'-f\tan\xi=0$；</li>
+          <li><b>乘掉分母、凑成 $(uv)'$ 或 $\left(\frac uv\right)'$ 的形状</b>：乘 $\cos\xi$ 得 $f'\cos\xi-f\sin\xi$，一眼认出是 $(f\cos x)'$；</li>
+          <li><b>令 $F=$ 那个原函数</b>，再去题目条件里找 $F$ 的两个零点。</li>
+        </ol>
+        <b>② 为什么写"推广的积分中值定理"而不是基本版</b>：基本版给的是 $\eta\in\left[0,\frac\pi2\right]$（闭），若 $\eta$ 恰好取到 $\frac\pi2$，则 (iii) 的区间 $\left[\eta,\frac\pi2\right]$ 退化成一个点，罗尔无从谈起。<b><span class="dock">用推广版拿开区间，这一分才稳。</span></b><br>
+        <b>③ 与基 11.2 的对照</b>：两题都是"积分条件 → 兑换一个点 → 中值定理"，区别在<b>基 11.2 兑换出的是 $f$ 的值（与已知端点值配对用罗尔）</b>，<b>本题兑换出的是辅助函数 $F$ 的零点（与白送的零点配对用罗尔）</b>。<b>后者更常考，因为辅助函数这一步有区分度。</b><br>
+        <b>④ 同类结论的辅助函数速查</b>：$f'=f\tan x\Rightarrow F=f\cos x$；$f'=-f\tan x\Rightarrow F=\frac f{\cos x}$；$f'+f=0\Rightarrow F=f\mathrm e^x$；$f'=\frac fx\Rightarrow F=\frac fx$。<b>规律：$f'+p(x)f$ 型一律配 $\mathrm e^{\int p}$。</b>
+      </div>
+    </div>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">习 11.1</span><span class="pg">P.290</span>
+    若函数 $\varphi(x)$ 具有二阶导数，且满足 $\varphi(2)\gt\varphi(1)$，$\varphi(2)\gt\displaystyle\int_2^3\varphi(x)\mathrm dx$，证明：至少存在一点 $\xi\in(1,3)$ 使 $\varphi''(\xi)\lt0$。</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>这是基 11.2 拓展眉批的"纯拉格朗日版"</b>：目标 $\varphi''\lt0$，手上有 $\varphi(1),\varphi(2)$ 两个点和一个积分条件。<b>同样是"造第三个点"。</b></li>
+          <li><b>积分条件长得就是积分中值定理的样子</b>：$\int_2^3\varphi=\varphi(\eta)(3-2)=\varphi(\eta)$，于是条件变成 $\varphi(2)\gt\varphi(\eta)$。</li>
+          <li><b>三个点的大小关系全出来了</b>：$\varphi(1)\lt\varphi(2)$、$\varphi(\eta)\lt\varphi(2)$——<b>中间那个点最高</b>，形如一座山。<u>山峰的两侧，一边上坡（$\varphi'\gt0$）、一边下坡（$\varphi'\lt0$），导数从正变负，中间必有 $\varphi''\lt0$。</u></li>
+          <li><b>唯一要小心的技术点</b>：积分中值定理给的 $\eta\in[2,3]$ 是闭区间，若 $\eta=2$ 则第二次拉格朗日的区间 $[2,\eta]$ 退化。<b>必须论证 $\eta\ne2$。</b></li>
+        </ol>
+      </div>
+      <div class="paper"><div class="phead">✍️ 考场卷面<span class="score">参考 10 分</span></div>
+        <div class="step"><span class="k">证</span>由<b>积分中值定理</b>，至少存在一点 $\eta\in[2,3]$ 使
+          $$\int_2^3\varphi(x)\mathrm dx=\varphi(\eta)(3-2)=\varphi(\eta).\tag{1}$$<span class="pt">⛳ 2分</span></div>
+        <div class="step">又由题设 $\varphi(2)\gt\displaystyle\int_2^3\varphi(x)\mathrm dx=\varphi(\eta)$，故 $\varphi(\eta)\ne\varphi(2)$，从而 $\eta\ne2$，即 $\eta\in(2,3]$。<span class="pt">⛳ 1分</span></div>
+        <div class="step"><span class="k">(i)</span>对 $\varphi$ 在 $[1,2]$ 上应用<b>拉格朗日中值定理</b>，注意 $\varphi(1)\lt\varphi(2)$，存在 $\xi_1\in(1,2)$ 使
+          $$\varphi'(\xi_1)=\frac{\varphi(2)-\varphi(1)}{2-1}\gt0.\tag{2}$$<span class="pt">⛳ 2分</span></div>
+        <div class="step"><span class="k">(ii)</span>对 $\varphi$ 在 $[2,\eta]$ 上应用拉格朗日中值定理，注意 $\varphi(\eta)\lt\varphi(2)$，存在 $\xi_2\in(2,\eta)$ 使
+          $$\varphi'(\xi_2)=\frac{\varphi(\eta)-\varphi(2)}{\eta-2}\lt0,\qquad 2\lt\xi_2\lt\eta\le3.\tag{3}$$<span class="pt">⛳ 2分</span></div>
+        <div class="step"><span class="k">(iii)</span>由 $\xi_1\lt2\lt\xi_2$ 知 $[\xi_1,\xi_2]\subset(1,3)$。在 $[\xi_1,\xi_2]$ 上对<b>导函数 $\varphi'(x)$</b> 应用拉格朗日中值定理，存在 $\xi\in(\xi_1,\xi_2)\subset(1,3)$ 使
+          $$\varphi''(\xi)=\frac{\varphi'(\xi_2)-\varphi'(\xi_1)}{\xi_2-\xi_1}\xlongequal{(2)(3)}\frac{(\text{负})-(\text{正})}{\text{正}}\lt0.$$<span class="pt">⛳ 2分</span></div>
+        <div class="fin">故至少存在一点 $\xi\in(1,3)$ 使 $\varphi''(\xi)\lt0$。证毕。<span class="pt">⛳ 1分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（对照完再看）</span>
+        <b>① <span class="dock">"$\eta\in(2,3]$"这一句是本题唯一的技术采分点</span></b>：闭区间版积分中值定理只给 $\eta\in[2,3]$；若不排除 $\eta=2$，(3) 式的分母 $\eta-2$ 可能为 0。<b>排除的依据是题目那个<u>严格</u>大于号</b>——$\varphi(2)\gt\int_2^3\varphi$，如果 $\eta=2$ 就成了 $\varphi(2)\gt\varphi(2)$，矛盾。<br>
+        <u>凡是题目用了严格不等号，都要想想它是不是在帮你排除退化情形。</u><br>
+        <b>② 三次中值定理的分工要写清楚</b>：前两次作用在 <b>$\varphi$</b> 上（得到两个 $\varphi'$ 的值），第三次作用在 <b>$\varphi'$</b> 上（得到 $\varphi''$）。卷面上写"对<b>导函数</b> $\varphi'(x)$ 应用拉格朗日中值定理"，阅卷人一眼看到你知道自己在干什么。<br>
+        <b>③ 与基 11.2 的对照表</b>：
+        <div class="gridwrap"><table class="dense">
+          <tr><th></th><th>基 11.2</th><th>习 11.1</th></tr>
+          <tr><td>三个点</td><td>$f(0)=2,\ f(\eta)=2,\ f(\frac\pi2)=1$</td><td>$\varphi(1)\lt\varphi(2),\ \varphi(\eta)\lt\varphi(2)$</td></tr>
+          <tr><td>左半段</td><td>两值<b>相等</b> ⇒ <b>罗尔</b>，得 $f'(\xi_1)=0$</td><td>两值<b>不等</b> ⇒ <b>拉格朗日</b>，得 $\varphi'(\xi_1)\gt0$</td></tr>
+          <tr><td>右半段</td><td>拉格朗日，得 $f'(\xi_2)\lt0$</td><td>拉格朗日，得 $\varphi'(\xi_2)\lt0$</td></tr>
+          <tr><td>收口</td><td colspan="2">对导函数再来一次拉格朗日 ⇒ $f''(\xi)\lt0$</td></tr>
+        </table></div>
+        <b>两题的骨架完全一样，只有左半段用罗尔还是拉格朗日的差别。</b>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= s9 积分法证等式 ================= -->
+  <h2 id="s9"><span class="idx">九</span>用积分法证等式——恒等变形 / 换元 / 分部</h2>
+
+  <div class="key"><span class="tag">必记 · 三个动作（基础讲 P.286 眉批）</span>
+    <div class="steps3">
+      <div><b>① 恒等变形</b>把常数写回积分（$c=\int_a^t\frac c{t-a}\mathrm dx$）、把 $f(x)$ 与 $f(t)$ 凑到同一个积分号下。</div>
+      <div><b>② 换元法</b>改变积分区间，把一个积分变成另一个（第一部分的全部技巧）。</div>
+      <div><b>③ 分部积分法</b>在阶数链上移动：$\int f\ \leftrightarrow f\ \leftrightarrow f'\ \leftrightarrow f''$。<b>每部一次走一格。</b></div>
+    </div>
+    <p><b>判断用哪个</b>（回到第 0 节那条判据）：<b>结论两端积分区间不同 ⇒ 换元；区间相同但阶数不同 ⇒ 分部。</b></p>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">基 11.6</span><span class="pg">P.286–287</span>
+    设 $f(x)$ 的二阶导数 $f''(x)$ 在 $[0,1]$ 上连续，且 $f(0)=f(1)=0$，证明：<br>
+    <b>(1)</b> $\displaystyle\int_0^1f(x)\mathrm dx=\frac12\int_0^1x(x-1)f''(x)\mathrm dx$；　<b>(2)</b> $\left|\displaystyle\int_0^1f(x)\mathrm dx\right|\le\dfrac1{12}\max\limits_{0\le x\le1}\{|f''(x)|\}$。</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>(1) 看两端的差别</b>：区间都是 $[0,1]$ <b>没变</b>，但左边是 $f$、右边是 $f''$，<b>差两阶</b> ⇒ 用<b>两次分部积分</b>（书上分析原话）。</li>
+          <li><b>从哪一端推向哪一端</b>：<u>从复杂的一端（右边，含 $f''$）往简单的一端推</u>，因为分部积分是"把导数从一个因子转移到另一个"，让 $f''$ 一路降阶成 $f$ 更自然。</li>
+          <li><b>为什么右边的多项式偏偏是 $x(x-1)$</b>：分部两次会产生两个边界项，我们希望它们<b>全部为 0</b>。第一次的边界项含 $x(x-1)$，它在 $x=0,1$ 处都是 0 ✓；第二次的边界项含 $f(x)$，靠题给的 $f(0)=f(1)=0$ ✓。<b>题目条件和多项式是配套设计的。</b></li>
+          <li><b>(2) 是 (1) 的直接推论</b>：有了 (1)，估计 $\int f$ 就变成估计 $\int x(x-1)f''$，而 $|f''|\le M$，剩下的只是算 $\int_0^1|x(x-1)|\mathrm dx$。<b>典型的"第一问递刀给第二问"。</b></li>
+        </ol>
+      </div>
+      <div class="paper"><div class="phead">✍️ 考场卷面<span class="score">参考 12 分</span></div>
+        <div class="step"><span class="k">(1) 证</span>从等式右端出发，用<b>分部积分法</b>：
+          $$\frac12\int_0^1x(x-1)f''(x)\mathrm dx=\frac12\int_0^1x(x-1)\mathrm d[f'(x)]=\frac12x(x-1)f'(x)\bigg|_0^1-\frac12\int_0^1f'(x)(2x-1)\mathrm dx.$$<span class="pt">⛳ 3分</span></div>
+        <div class="step">因 $x(x-1)$ 在 $x=0$ 与 $x=1$ 处均为 0，故第一项为 0，于是
+          $$\text{上式}=-\frac12\int_0^1(2x-1)\mathrm d[f(x)]=-\frac12(2x-1)f(x)\bigg|_0^1+\int_0^1f(x)\mathrm dx.$$<span class="pt">⛳ 3分</span></div>
+        <div class="step">再由条件 $f(0)=f(1)=0$ 知 $(2x-1)f(x)\Big|_0^1=0$。<span class="pt">⛳ 1分</span></div>
+        <div class="fin">故 $\displaystyle\frac12\int_0^1x(x-1)f''(x)\mathrm dx=\int_0^1f(x)\mathrm dx$，即所证等式成立。证毕。<span class="pt">⛳ 1分</span></div>
+        <div class="step" style="margin-top:12px"><span class="k">(2) 证</span>记 $M=\max\limits_{0\le x\le1}\{|f''(x)|\}$（$f''$ 连续故最大值存在）。由 (1) 及<b>绝对值不等式</b> $\left|\int f\right|\le\int|f|$ 得
+          $$\left|\int_0^1f(x)\mathrm dx\right|=\frac12\left|\int_0^1x(x-1)f''(x)\mathrm dx\right|\le\frac12\int_0^1|x(x-1)|\cdot|f''(x)|\mathrm dx.$$<span class="pt">⛳ 2分</span></div>
+        <div class="step">当 $x\in[0,1]$ 时 $|x(x-1)|=x(1-x)$，且 $|f''(x)|\le M$，故
+          $$\left|\int_0^1f(x)\mathrm dx\right|\le\frac M2\int_0^1x(1-x)\mathrm dx=\frac M2\left(\frac12-\frac13\right)=\frac M{12}.$$<span class="pt">⛳ 1分</span></div>
+        <div class="fin">故 $\left|\displaystyle\int_0^1f(x)\mathrm dx\right|\le\dfrac1{12}\max\limits_{0\le x\le1}\{|f''(x)|\}$。证毕。<span class="pt">⛳ 1分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（对照完再看）</span>
+        <b>① 必记的小数字</b>：$\displaystyle\int_0^1x(1-x)\mathrm dx=\frac12-\frac13=\frac16$，所以 $\frac12\cdot\frac16=\frac1{12}$。<b>这个 $\frac16$ 在本章出现两次</b>（另一次是强 11.18 的梯形误差，第十四节），<b>建议直接背下来。</b><br>
+        <b>② <span class="dock">$|x(x-1)|$ 的绝对值别忘了脱</span></b>：$[0,1]$ 上 $x(x-1)\le0$，所以 $|x(x-1)|=x(1-x)$。忘了变号会算出 $-\frac1{12}$，与绝对值矛盾。<br>
+        <b>③ 这道题的"背景"</b>：(1) 式其实是<b>格林函数表示</b>——$G(x,t)$ 为 $[0,1]$ 上两端固定弦的格林函数，$f(x)=\int_0^1G(x,t)f''(t)\mathrm dt$。<u>知道背景不影响做题，但能解释"为什么偏偏是 $x(x-1)$"</u>：它是 $-G$ 的积分。<br>
+        <b>④ (2) 的界紧不紧</b>：取 $f(x)=x(1-x)$ 得 $f''\equiv-2$，$M=2$，左边 $=\frac16$，右边 $=\frac16$——<b>等号成立，界是紧的。</b><span class="chip c-g">数值验证：$f=\sin\pi x$ 时 $|\int f|=0.6366\le\frac{\pi^2}{12}=0.8225$ ✓</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">习 11.3</span><span class="pg">P.292</span>
+    设 $\varphi(x)$ 是可微函数 $f(x)$ 的<b>反函数</b>，且 $f(1)=0$，证明：
+    $$\int_0^1\left[\int_0^{f(x)}\varphi(t)\mathrm dt\right]\mathrm dx=2\int_0^1xf(x)\mathrm dx.$$</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>左端的被积函数是一个变限积分</b>（书上分析原话）——<u>凡是"被积函数含变限积分"的定积分，一律考虑分部积分，让那个变限积分挨求导。</u>取 $u=\int_0^{f(x)}\varphi(t)\mathrm dt$、$\mathrm dv=\mathrm dx$。</li>
+          <li><b>求导时要用两次链式</b>：$\dfrac{\mathrm d}{\mathrm dx}\int_0^{f(x)}\varphi(t)\mathrm dt=\varphi[f(x)]\cdot f'(x)$。</li>
+          <li><b>"反函数"三个字就是为这一步准备的</b>：$\varphi[f(x)]=x$！于是那一坨立刻塌缩成 $x\cdot f'(x)$，再配上分部出来的 $x$ 变成 $x^2f'(x)$。</li>
+          <li><b>右端有 $f$ 没有 $f'$</b> ⇒ 还得再分部一次把 $f'$ 降回 $f$。</li>
+          <li><b>$f(1)=0$ 会在两处杀掉边界项</b>：第一次分部的 $x\int_0^{f(x)}\varphi$ 在 $x=1$ 处上限为 $f(1)=0$ ⇒ 积分为 0；第二次分部的 $x^2f(x)$ 在 $x=1$ 处为 $f(1)=0$。</li>
+        </ol>
+      </div>
+      <div class="paper"><div class="phead">✍️ 考场卷面<span class="score">参考 10 分</span></div>
+        <div class="step"><span class="k">证</span>对左端用<b>分部积分法</b>（取 $u=\displaystyle\int_0^{f(x)}\varphi(t)\mathrm dt$，$v=x$）：
+          $$\int_0^1\left[\int_0^{f(x)}\varphi(t)\mathrm dt\right]\mathrm dx=x\int_0^{f(x)}\varphi(t)\mathrm dt\bigg|_0^1-\int_0^1x\cdot\varphi[f(x)]f'(x)\mathrm dx.\tag{1}$$<span class="pt">⛳ 3分</span></div>
+        <div class="step">因 $f(1)=0$，故 $x\displaystyle\int_0^{f(x)}\varphi(t)\mathrm dt\bigg|_{x=1}=1\cdot\int_0^0\varphi(t)\mathrm dt=0$；$x=0$ 处该式含因子 $x$ 亦为 0。故 (1) 的第一项为 0。<span class="pt">⛳ 1分</span></div>
+        <div class="step">又 $\varphi$ 是 $f$ 的<b>反函数</b>，故 $\varphi[f(x)]=x$，代入 (1) 得
+          $$\text{左端}=-\int_0^1x\cdot x\cdot f'(x)\mathrm dx=-\int_0^1x^2\mathrm d[f(x)].\tag{2}$$<span class="pt">⛳ 2分</span></div>
+        <div class="step">对 (2) 再次<b>分部积分</b>：
+          $$-\int_0^1x^2\mathrm d[f(x)]=-x^2f(x)\bigg|_0^1+\int_0^12xf(x)\mathrm dx=-f(1)+2\int_0^1xf(x)\mathrm dx.$$<span class="pt">⛳ 2分</span></div>
+        <div class="step">再由 $f(1)=0$ 知第一项为 0。<span class="pt">⛳ 1分</span></div>
+        <div class="fin">故 $\displaystyle\int_0^1\left[\int_0^{f(x)}\varphi(t)\mathrm dt\right]\mathrm dx=2\int_0^1xf(x)\mathrm dx$。证毕。<span class="pt">⛳ 1分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（对照完再看）</span>
+        <b>① 见到"反函数"就往 $\varphi(f(x))=x$ 上代</b>——这是反函数在积分题里<b>唯一</b>的用法。<u>不要试图求出 $\varphi$ 的表达式</u>，题目根本没给 $f$。<br>
+        <b>② 两次分部的方向都是"把导数从变限积分／$f$ 上卸下来"</b>：第一次把 $\int_0^{f(x)}\varphi$ 求导掉，第二次把 $f'$ 变回 $f$。<b>阶数链上先升后降，绕了一圈回到 $f$，但多出了 $x^2\to2x$ 这个因子——那正是结论里 2 的来源。</b><br>
+        <b>③ <span class="dock">$f(1)=0$ 用了两次，两次都要写出来</span></b>（分别在两个边界项处）。漏写任一处，那一项凭什么是 0 就没交代。<br>
+        <b>④ 验算（用具体函数自查）</b>：取 $f(x)=\ln x$（则 $f(1)=0$，$\varphi(t)=\mathrm e^t$）：左端 $=\int_0^1\left[\int_0^{\ln x}\mathrm e^t\mathrm dt\right]\mathrm dx=\int_0^1(x-1)\mathrm dx=-\frac12$；右端 $=2\int_0^1x\ln x\,\mathrm dx=2\cdot\left(-\frac14\right)=-\frac12$ ✓。<span class="chip c-g">另取 $f=x-1$ 也已数值复算 ✓</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= s10 五法总纲 ================= -->
+  <h2 id="s10"><span class="idx">十</span>积分不等式五法总纲——先决定走哪条路</h2>
+
+  <div class="key"><span class="tag">必记 · ★★ 全章总纲（基础讲 P.293 习 11.5 的注，原文）</span>
+    <span class="pg">P.293</span>
+    <blockquote style="border-left:3px solid var(--amber);padding-left:12px;margin:8px 0;color:var(--ink)">
+      对积分 $\left|\displaystyle\int_0^af(x)\mathrm dx\right|$ 作估计，<b>只要对被积函数 $f(x)$ 作估计即可</b>。条件中给出导数 $f'(x)$ 及 $f(0)=0$ 的信息，自然想办法<b>把 $f(x)$ 和 $f'(x)$ 联系起来</b>。在高等数学中，联系 $f(x)$ 和 $f'(x)$ 有<b>两种常用的办法</b>：一是微分学中的<b>拉格朗日中值定理</b>，二是积分学中的<b>牛顿–莱布尼茨公式</b>。
+    </blockquote>
+    <p><b>这段话是本章下半部分的顶层思想</b>，它把所有"含 $f'$ 条件的积分不等式"都归成了两条路。习 11.5 用两种方法各做一遍，就是<b>刻意安排的对照实验</b>（第十三节）。</p>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 五法选择表——看条件的"最高阶"和"端点值"下菜</span>
+    <div class="gridwrap"><table class="dense">
+      <tr><th>条件里最高出现</th><th>走哪条路</th><th>关键动作</th><th>本章例题</th></tr>
+      <tr><td>只有 <b>$f$ 连续</b></td><td><b>① 单调性</b></td><td>把某个积分限<b>变量化</b>（通常取上限），移项造 $F(x)$，看 $F'$ 的符号，用端点 $F(a)=0$ 收口</td><td>基 11.7、习 11.4</td></tr>
+      <tr><td><b>$f'$</b>（一阶可导）＋某端点值简单</td><td><b>② 拉格朗日</b></td><td>$f(x)-f(\text{端点})=f'(\xi)(x-\text{端点})$，把 $f$ 的界换成 $f'$ 的界</td><td>基 11.8</td></tr>
+      <tr><td><b>$f''$</b>（二阶可导）＋某点函数值简单</td><td><b>③ 泰勒</b></td><td>在<b>使尽量多项归零的点</b>展开（常是区间中点或已知零点），丢掉可控的余项</td><td>基 11.9、习 11.6、强 11.18</td></tr>
+      <tr><td>被积函数是<b>乘积/复合</b>形</td><td><b>④ 积分法</b></td><td>分部积分制造 $uv\big|_a^b$，再用绝对值不等式链放缩</td><td>基 11.10</td></tr>
+      <tr><td><b>$f'$</b> ＋ 要估计 $|f(x)|$ 本身</td><td><b>⑤ 牛莱</b></td><td>$f(x)-f(a)=\int_a^xf'$，把函数值差写成导数的积分</td><td>基 11.11、习 11.5</td></tr>
+    </table></div>
+    <p><b>② 与 ⑤ 是同一件事的两种写法</b>（就是上面那条总纲说的两条路）：<u>拉格朗日给"某一点的导数值 × 长度"，牛莱给"导数的积分"。</u>前者要求可导，后者要求 $f'$ 可积（通常连续），<b>牛莱得到的信息更细（保留了整段的信息），所以在需要 $\int|f'|$ 的题里只能用牛莱。</b></p>
+    <p><b>18 讲另给了四条"通用武器"</b>（P.134，是上面五法的工具而非并列关系）：
+    <span class="chip c-b">比较定理（保号性）</span>$f\le g\Rightarrow\int_a^bf\le\int_a^bg\ (b\gt a)$；
+    <span class="chip c-b">估值定理</span>$m\le f\le M\Rightarrow m(b-a)\le\int_a^bf\le M(b-a)$；
+    <span class="chip c-b">绝对值不等式</span>$\left|\int_a^bf\right|\le\int_a^b|f|$；
+    <span class="chip c-r">★★★黎曼思想</span>大区间拆小区间。<b>⚠️ 前三条都要求 $b\gt a$。</b></p>
+  </div>
+
+  <!-- ================= s11 单调性 ================= -->
+  <h2 id="s11"><span class="idx">十一</span>方法一：函数的单调性——最常用的一条</h2>
+
+  <div class="key"><span class="tag">必记 · 通法三步（基础讲 P.287 原文）</span>
+    <p><u>"首先将某一积分限（<b>通常取上限</b>）变量化，然后<b>移项构造辅助函数</b>，由辅助函数的单调性来证明不等式。此方法多用于所给条件为'$f(x)$ 在 $[a,b]$ 上连续'的情形。"</u></p>
+    <div class="steps3">
+      <div><b>① 变量化</b>把要证的 $A\le B$ 中的上限 $b$ 换成 $t$，令 $F(t)=B(t)-A(t)$。<b>要证的就变成 $F(b)\ge0$。</b></div>
+      <div><b>② 求 $F'$ 并因式分解</b>目标是把 $F'$ 化成<b>「单调性差」×「非负因子」</b>的形状——符号立刻可见。</div>
+      <div><b>③ 端点收口</b>$F(a)=0$（这是变量化时自动获得的），配合 $F$ 的单调性得 $F(b)$ 的符号。</div>
+    </div>
+    <p><b>为什么"通常取上限"</b>：因为变量化下限会让 $F(a)=0$ 这个免费端点跑掉。<b>选哪个端点变量化，就看哪个能让 $F(\text{起点})=0$ 自动成立。</b></p>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">基 11.7</span><span class="pg">P.287–288</span>
+    ★★★　设函数 $f(x),g(x)$ 在区间 $[a,b]$ 上连续，且 $f(x)$ <b>单调增加</b>，$0\le g(x)\le1$。证明：<br>
+    <b>(1)</b> $0\le\displaystyle\int_a^xg(t)\mathrm dt\le x-a,\ x\in[a,b]$；<br>
+    <b>(2)</b> $\displaystyle\int_a^{\,a+\int_a^bg(t)\mathrm dt}f(x)\mathrm dx\le\int_a^bf(x)g(x)\mathrm dx$。<br>
+    <span style="color:var(--muted);font-size:.85rem">书上分析：(2) 是<b>考研以来上限较复杂的定积分</b>，做题时要注意形式的复杂性。</span></div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>先别怕那个上限</b>。$a+\int_a^bg(t)\mathrm dt$ 只是一个<b>数</b>（$g$ 已知，积分是常数）。(1) 告诉我们这个数落在 $[a,b]$ 内——<b>(1) 的作用就是保证 (2) 的积分区间合法。</b></li>
+          <li><b>条件只有"连续"</b>（$f$ 单增也只是连续层面的信息，没给 $f'$）⇒ 查上一节的选择表，<b>走单调性法</b>。</li>
+          <li><b>变量化谁</b>：两端都含 $b$，把两处的 $b$ 一起换成 $t$，令
+            $$F(t)=\int_a^{\,a+\int_a^tg(u)\mathrm du}f(s)\mathrm ds-\int_a^tf(s)g(s)\mathrm ds.$$
+            要证的就是 $F(b)\le0$，而 $F(a)=0-0=0$ 白送。</li>
+          <li><b>求 $F'$ 时注意第一项是"变限积分套变限积分"</b>：外层上限是 $a+\int_a^tg$，对 $t$ 求导要用链式，得 $f\left[a+\int_a^tg(u)\mathrm du\right]\cdot g(t)$。</li>
+          <li><b>因式分解</b>：$F'(t)=\left\{f\left[a+\int_a^tg\right]-f(t)\right\}g(t)$——<b>大括号里是"$f$ 在两点的差"，非负因子是 $g$。</b>再用 (1) 得 $a+\int_a^tg\le t$，配 $f$ 单增 ⇒ 大括号 $\le0$ ⇒ $F'\le0$。<b>(1) 在这里第二次发挥作用。</b></li>
+        </ol>
+      </div>
+      <div class="paper"><div class="phead">✍️ 考场卷面<span class="score">参考 12 分</span></div>
+        <div class="step"><span class="k">(1) 证</span>因为 $0\le g(x)\le1$，所以当 $x\in[a,b]$ 时（此时 $x\ge a$，积分方向为正），由<b>积分的保号性</b>
+          $$\int_a^x0\,\mathrm dt\le\int_a^xg(t)\mathrm dt\le\int_a^x1\,\mathrm dt,$$
+          即 $0\le\displaystyle\int_a^xg(t)\mathrm dt\le x-a$。<span class="pt">⛳ 3分</span></div>
+        <div class="step" style="margin-top:12px"><span class="k">(2) 证</span>令（三个积分变量分别记作 $s,u,t$，<b>互不混用</b>）
+          $$F(t)=\int_a^{\,a+\int_a^tg(u)\mathrm du}f(s)\mathrm ds-\int_a^tf(s)g(s)\mathrm ds,\qquad t\in[a,b].$$<span class="pt">⛳ 2分</span></div>
+        <div class="step">因 $f,g$ 在 $[a,b]$ 上连续，故 $F(t)$ 在 $[a,b]$ 上可导，由变限积分求导法则（外层需用<b>复合函数求导</b>）
+          $$F'(t)=f\left[a+\int_a^tg(u)\mathrm du\right]\cdot g(t)-f(t)g(t)=\left\{f\left[a+\int_a^tg(u)\mathrm du\right]-f(t)\right\}g(t).\tag{1}$$<span class="pt">⛳ 3分</span></div>
+        <div class="step">由第 (1) 问知 $\displaystyle\int_a^tg(u)\mathrm du\le t-a$，即 $a+\displaystyle\int_a^tg(u)\mathrm du\le t$；又 $f$ <b>单调增加</b>，故
+          $$f\left[a+\int_a^tg(u)\mathrm du\right]\le f(t).$$<span class="pt">⛳ 2分</span></div>
+        <div class="step">再由 $g(t)\ge0$ 及 (1) 式得 $F'(t)\le0$，即 $F(t)$ 在 $[a,b]$ 上<b>单调减少</b>。<span class="pt">⛳ 1分</span></div>
+        <div class="fin">又 $F(a)=0$，故 $F(b)\le F(a)=0$，即
+          $\displaystyle\int_a^{\,a+\int_a^bg(t)\mathrm dt}f(x)\mathrm dx\le\int_a^bf(x)g(x)\mathrm dx$。证毕。<span class="pt">⛳ 1分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（对照完再看）</span>
+        <b>① <span class="dock">三个变量必须用不同字母</span></b>（书上眉批专门写了"三个变量要区分开"）：外层被积变量 $s$、内层被积变量 $u$、自变量 $t$。<b>写成同一个字母，阅卷人无法判断你是否真的理解求导过程，这一步的 3 分会丢。</b><br>
+        <b>② 第 (1) 问是第 (2) 问的刀</b>，而且用了<b>两次</b>：一次保证积分上限 $a+\int_a^bg\in[a,b]$（区间合法），一次给出 $a+\int_a^tg\le t$（符号判定）。<b>凡是多问的证明题，前一问几乎必然是后一问的引理——做不出后一问时，回头看前一问的结论还剩什么没用。</b><br>
+        <b>③ 这类"复杂上限"的心理战</b>：$a+\int_a^bg(t)\mathrm dt$ 看着吓人，其实<u>它就是把区间 $[a,b]$ "压缩"了一下</u>——因为 $0\le g\le1$，压缩后的长度 $\int_a^bg$ 不超过原长 $b-a$。<b>不等式的直观含义是：把 $f$ 在"压缩后的短区间"上积分，不如把 $f$ 用权重 $g$ 加权积分来得大（因为 $f$ 单增，权重把大值那头也算了进来）。</b><br>
+        <b>④ 变量化的选择</b>：本题把<b>两处 $b$ 同时</b>换成 $t$。<span class="dock">只换一处会导致 $F(a)\ne0$，收不了口。</span><br>
+        <b>⑤ 数值验证</b>：取 $[a,b]=[0,2]$，$f=x^3+x$（单增），$g=\frac{1+\sin3x}2\in[0,1]$：左 $=0.7634\le$ 右 $=1.4216$ ✓；另取 $f=\mathrm e^x,g=\frac x2$：左 $=1.7183\le$ 右 $=4.1945$ ✓
+      </div>
+    </div>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">习 11.4</span><span class="pg">P.292</span>
+    设 $f(x)$ 在 $[a,b]$ 上连续且<b>严格单调增加</b>，证明：
+    $$(a+b)\int_a^bf(x)\mathrm dx\lt2\int_a^bxf(x)\mathrm dx.$$</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>先移项</b>（书上分析原话）：要证的等价于 $(a+b)\displaystyle\int_a^bf-2\int_a^bxf\lt0$。<b>凡是不等式，先把它写成"某个式子 $\lt0$"，那个式子就是 $F$ 的候选。</b></li>
+          <li><b>条件只有"连续 + 严格单增"</b> ⇒ 单调性法。把 $b$ 变量化成 $t$。<b>注意 $(a+b)$ 里的 $b$ 也要一起换</b>，否则 $F(a)\ne0$。</li>
+          <li><b>求导后要会"把常数写回积分"</b>：$F'$ 里会出现 $\int_a^tf\mathrm dx-(t-a)f(t)$，两项形状不一样，无法直接判号。<b>把 $(t-a)f(t)$ 写成 $\int_a^tf(t)\mathrm dx$</b>（注意里面是 $f(t)$，$t$ 是常数，对 $x$ 积分），两项就能合并成 $\int_a^t[f(x)-f(t)]\mathrm dx$。</li>
+          <li><b>合并之后符号一目了然</b>：积分区间上 $x\lt t$，由严格单增得 $f(x)-f(t)\lt0$。</li>
+        </ol>
+      </div>
+      <div class="paper"><div class="phead">✍️ 考场卷面<span class="score">参考 10 分</span></div>
+        <div class="step"><span class="k">证</span>所证不等式等价于 $(a+b)\displaystyle\int_a^bf(x)\mathrm dx-2\int_a^bxf(x)\mathrm dx\lt0$。令
+          $$F(t)=(a+t)\int_a^tf(x)\mathrm dx-2\int_a^txf(x)\mathrm dx,\qquad t\in[a,b].$$<span class="pt">⛳ 2分</span></div>
+        <div class="step">因 $f$ 连续，$F$ 在 $[a,b]$ 上可导，且
+          $$F'(t)=\int_a^tf(x)\mathrm dx+(a+t)f(t)-2tf(t)=\int_a^tf(x)\mathrm dx-(t-a)f(t).$$<span class="pt">⛳ 3分</span></div>
+        <div class="step">将常数 $(t-a)f(t)$ <b>写回积分</b>：$(t-a)f(t)=\displaystyle\int_a^tf(t)\mathrm dx$，故
+          $$F'(t)=\int_a^tf(x)\mathrm dx-\int_a^tf(t)\mathrm dx=\int_a^t[f(x)-f(t)]\mathrm dx.\tag{1}$$<span class="pt">⛳ 2分</span></div>
+        <div class="step">当 $t\in(a,b]$ 且 $x\in[a,t)$ 时 $x\lt t$，由 $f$ <b>严格单调增加</b>得 $f(x)-f(t)\lt0$，于是由 (1) 知 $F'(t)\lt0$，即 $F(t)$ 在 $[a,b]$ 上<b>严格单调减少</b>。<span class="pt">⛳ 2分</span></div>
+        <div class="fin">又 $F(a)=0$，故 $F(b)\lt F(a)=0$，即
+          $(a+b)\displaystyle\int_a^bf(x)\mathrm dx\lt2\int_a^bxf(x)\mathrm dx$。证毕。<span class="pt">⛳ 1分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（对照完再看）</span>
+        <b>① ★★ "把常数写回积分"是本章的高频动作</b>，与基 11.1 的"常数变量化"是一对：
+        $$c=\int_a^t\frac c{t-a}\mathrm dx,\qquad (t-a)f(t)=\int_a^tf(t)\mathrm dx.$$
+        <b>目的永远是"凑成同一个积分号下，才能逐点比大小"。</b>看到 $F'$ 里"一个积分 + 一个乘积"却判不了号，就该想到它。<br>
+        <b>② 严格不等号的来源</b>：题目给的是<b>严格</b>单增，所以 $F'\lt0$（严格），得到 $F(b)\lt0$（严格）。<span class="dock">若只给"单调不减"，结论只能是 $\le$。</span><b>不等号严不严格，全看条件那一处。</b><br>
+        <b>③ 这个不等式的含义</b>：两端同除 $(b-a)$ 后可以写成
+        $$\frac{\int_a^bxf(x)\mathrm dx}{\int_a^bf(x)\mathrm dx}\gt\frac{a+b}2\quad(\text{当}f\gt0),$$
+        即<b>以 $f$ 为密度的"重心横坐标"比区间中点靠右</b>——因为 $f$ 单增，右边更重。<b>这是一个可以用来自查方向的物理直觉。</b><br>
+        <b>④ 变量化的位置</b>：$(a+t)$ 中<b>只有 $b$ 变成 $t$，$a$ 不动</b>。<span class="dock">写成 $(t+t)$ 或 $(a+b)$ 都会让 $F(a)=0$ 失效或 $F'$ 算错。</span><br>
+        <span class="chip c-g">数值验证：$f=\mathrm e^x$ 于 $[0,2]$ 得 $12.778\lt16.778$ ✓；$f=x^3$ 于 $[-1,2]$ 得 $3.75\lt13.2$ ✓</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= s12 拉格朗日 · 泰勒 ================= -->
+  <h2 id="s12"><span class="idx">十二</span>方法二、三：拉格朗日与泰勒——把 $f$ 的界换成 $f'$ 或 $f''$ 的界</h2>
+
+  <div class="key"><span class="tag">必记 · 两条路的适用条件（基础讲原文）</span>
+    <div class="duo">
+      <div class="dA"><b class="h">② 拉格朗日中值定理</b>
+        <u>"此方法多用于所给条件为'<b>$f(x)$ 一阶可导</b>'且<b>某一端点值较简单（甚至为 0）</b>的题目。"</u><br>
+        眉批：<b>这是由拉格朗日中值定理的条件决定的</b>；<b>见到 $f(x),f'(x)$，想拉格朗日中值定理</b>。</div>
+      <div class="dB"><b class="h">③ 泰勒公式</b>
+        <u>"此方法多用于所给条件为'<b>$f(x)$ 二阶可导</b>'且题中有<b>简单函数值（甚至为 0）</b>的题目。"</u><br>
+        分析：<b>当无法用牛顿–莱布尼茨公式时</b>，可考虑用泰勒公式将被积函数 $f(x)$ 展开成多项式再做。</div>
+    </div>
+    <p><b>选择的本质就一句话</b>：<b>条件给到几阶导，就用能"吃掉"那一阶的工具</b>——一阶用拉格朗日，二阶用泰勒。<b>而"端点值/某点值为 0"是必备的第二个条件</b>，因为展开式里的零阶项要靠它消掉。</p>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">基 11.8</span><span class="pg">P.288</span>
+    设 $f(x)$ 在 $[0,1]$ 上具有<b>一阶连续导数</b>，且 $f(0)=f(1)=0$。记 $M=\max\limits_{x\in[0,1]}\{|f'(x)|\}$。证明：
+    $$\left|\int_0^1f(x)\mathrm dx\right|\le\frac14M.$$</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>条件给 $f'$、结论要 $\int f$</b> ⇒ 先把 $f$ 用 $f'$ 表示。条件里<b>两个端点值都是 0</b>，用拉格朗日时可以任选一个端点作基准。</li>
+          <li><b>但选哪个端点？两个都要。</b>若只从左端点估：$|f(x)|=|f'(\xi_1)|x\le Mx$，则 $\left|\int_0^1f\right|\le M\int_0^1x\mathrm dx=\frac M2$——<b>只得到 $\frac12$，不够 $\frac14$。</b></li>
+          <li><b>问题出在哪</b>：靠近 $x=1$ 的地方，用左端点估太浪费（那里其实离右端零点很近，$|f|$ 也很小）。<b>应该"就近取材"：左半段用左端点估，右半段用右端点估。</b></li>
+          <li><b>于是把 $[0,1]$ 劈成 $[0,x]$ 与 $[x,1]$</b>（可加性！），分割点<b>先留成活口 $x$</b>，最后再优化。这就是"先留活口再优化"的套路。</li>
+          <li><b>算完得到上界 $M\left[\frac{x^2}2+\frac{(1-x)^2}2\right]$，它对每个 $x$ 都成立</b> ⇒ 取使它最小的 $x=\frac12$ ⇒ 得 $\frac M4$。</li>
+        </ol>
+      </div>
+      <div class="paper"><div class="phead">✍️ 考场卷面<span class="score">参考 10 分</span></div>
+        <div class="step"><span class="k">证</span>任取 $x\in[0,1]$，将区间 $[0,1]$ 分成 $[0,x]$ 与 $[x,1]$ 两段。<span class="pt">⛳ 1分</span></div>
+        <div class="step"><span class="k">(i)</span>在 $[0,x]$ 上对 $f$ 应用<b>拉格朗日中值定理</b>（$f$ 在 $[0,1]$ 上可导），存在 $\xi_1\in(0,x)$ 使
+          $$f(x)-f(0)=f'(\xi_1)x,\quad\text{由 }f(0)=0\text{ 得 }|f(x)|=|f'(\xi_1)|\,x\le Mx.\tag{1}$$<span class="pt">⛳ 2分</span></div>
+        <div class="step"><span class="k">(ii)</span>在 $[x,1]$ 上对 $f$ 应用拉格朗日中值定理，存在 $\xi_2\in(x,1)$ 使
+          $$f(1)-f(x)=f'(\xi_2)(1-x),\quad\text{由 }f(1)=0\text{ 得 }|f(x)|=|f'(\xi_2)|(1-x)\le M(1-x).\tag{2}$$<span class="pt">⛳ 2分</span></div>
+        <div class="step"><span class="k">(iii)</span>由积分的可加性与绝对值不等式，
+          $$\left|\int_0^1f(t)\mathrm dt\right|=\left|\int_0^xf(t)\mathrm dt+\int_x^1f(t)\mathrm dt\right|\le\int_0^x|f(t)|\mathrm dt+\int_x^1|f(t)|\mathrm dt.$$<span class="pt">⛳ 2分</span></div>
+        <div class="step">对第一段用 (1)（$|f(t)|\le Mt$），对第二段用 (2)（$|f(t)|\le M(1-t)$）：
+          $$\left|\int_0^1f(t)\mathrm dt\right|\le M\int_0^xt\,\mathrm dt+M\int_x^1(1-t)\mathrm dt=M\left[\frac{x^2}2+\frac{(1-x)^2}2\right].\tag{3}$$<span class="pt">⛳ 2分</span></div>
+        <div class="fin"><b>(3) 式对任意 $x\in[0,1]$ 成立</b>，取 $x=\dfrac12$，注意 $\dfrac{x^2}2+\dfrac{(1-x)^2}2=\left(x-\dfrac12\right)^2+\dfrac14$ 在 $x=\dfrac12$ 处取最小值 $\dfrac14$，故
+          $\left|\displaystyle\int_0^1f(x)\mathrm dx\right|\le\dfrac14M$。证毕。<span class="pt">⛳ 1分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（对照完再看）</span>
+        <b>① ⚠️⚠️ 书上这一步写得含糊，必须自己补齐逻辑。</b>原书末尾只写了"其中 $\frac{x^2}2+\frac{(1-x)^2}2=\left(x-\frac12\right)^2+\frac14\ge\frac14$，故得证"。<br>
+        <b><span class="dock">照抄成"因为右端 $\ge\frac14$，所以 $\left|\int f\right|\le\frac M4$"是方向反的假推理</span></b>——从"$A\le MB$ 且 $B\ge\frac14$"推不出"$A\le\frac M4$"。<br>
+        <b>正确的逻辑是</b>：不等式 (3) 对<b>每一个</b> $x$ 都成立，所以可以<b>取使右端最小的那个 $x$</b>（即 $x=\frac12$），得到最强的结论 $\frac M4$。<b>卷面上"上式对任意 $x\in[0,1]$ 成立，取 $x=\frac12$"这一句是采分点，不能省。</b><br>
+        <b>② 为什么劈成两段就能从 $\frac12$ 改进到 $\frac14$</b>：单端估计在远端浪费太多。<b>两端各管一半，误差正好减半。</b>这个"就近取材"的思想在基 11.11（第十三节）里换了个形式又出现一次。<br>
+        <b>③ 界紧不紧</b>：取"帐篷函数"$f(x)=\begin{cases}x,&x\le\frac12\\1-x,&x\gt\frac12\end{cases}$（$M=1$），$\int_0^1f=\frac14=\frac M4$，<b>等号成立（该 $f$ 只是分段可导，取光滑逼近可任意接近），界是紧的。</b><br>
+        <b>④ 检验用例</b>：$f=\sin\pi x$（$M=\pi$）：$\left|\int_0^1f\right|=\frac2\pi=0.6366\le\frac\pi4=0.7854$ ✓；$f=x(1-x)$（$M=1$）：$\frac16=0.1667\le0.25$ ✓
+      </div>
+    </div>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">基 11.9</span><span class="pg">P.288–289</span>
+    设 $f(x)$ 在 $[0,2]$ 上<b>二阶导数连续</b>，且 $f(1)=0$。当 $x\in[0,2]$ 时记 $M=\max\{|f''(x)|\}$，证明：
+    $$\left|\int_0^2f(x)\mathrm dx\right|\le\frac13M.$$</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>条件给到 $f''$</b> ⇒ 查表走<b>泰勒</b>。分析原话："当无法用牛顿–莱布尼茨公式时，可考虑用泰勒公式将被积函数展开成多项式再做。"</li>
+          <li><b>展开点选哪里？这是全题唯一的技巧。</b>泰勒展开会留下三项：$f(x_0)$、$f'(x_0)(x-x_0)$、余项。我们希望<b>前两项尽量消失</b>：
+            <ul>
+              <li>要 $f(x_0)=0$ ⇒ 题目只给了 $f(1)=0$ ⇒ <b>$x_0=1$</b>；</li>
+              <li>要 $\int_0^2f'(x_0)(x-x_0)\mathrm dx=0$ ⇒ 需要 $x_0$ 是区间中点 ⇒ <b>$x_0=1$ 恰好也是 $[0,2]$ 的中点！</b></li>
+            </ul>
+            <b>两个要求指向同一个点——这不是巧合，是命题人把 $f(1)=0$ 和区间 $[0,2]$ 配套设计的。</b></li>
+          <li><b>于是只剩二阶余项</b>，整体放缩成 $M$ 即可。</li>
+          <li><b>放缩时要小心 $\xi$</b>：泰勒余项里的 $\xi$ 是<b>随 $x$ 变化的函数</b>，<u>不能提到积分号外</u>，只能用 $|f''(\xi)|\le M$ 整体压住。</li>
+        </ol>
+      </div>
+      <div class="paper"><div class="phead">✍️ 考场卷面<span class="score">参考 10 分</span></div>
+        <div class="step"><span class="k">证</span>因 $f$ 在 $[0,2]$ 上二阶导数连续，<b>在 $x_0=1$ 处展开成带拉格朗日余项的一阶泰勒公式</b>：对任意 $x\in[0,2]$，存在 $\xi$ 介于 $x$ 与 $1$ 之间，使
+          $$f(x)=f(1)+f'(1)(x-1)+\frac{f''(\xi)}2(x-1)^2.$$<span class="pt">⛳ 2分</span></div>
+        <div class="step">由题设 $f(1)=0$，两端在 $[0,2]$ 上对 $x$ 积分：
+          $$\int_0^2f(x)\mathrm dx=f'(1)\int_0^2(x-1)\mathrm dx+\frac12\int_0^2f''(\xi)(x-1)^2\mathrm dx.\tag{1}$$<span class="pt">⛳ 2分</span></div>
+        <div class="step">其中 $\displaystyle\int_0^2(x-1)\mathrm dx=0$（<b>$x=1$ 是区间中点</b>），故 (1) 化为
+          $$\int_0^2f(x)\mathrm dx=\frac12\int_0^2f''(\xi)(x-1)^2\mathrm dx.\tag{2}$$<span class="pt">⛳ 2分</span></div>
+        <div class="step">对 (2) 取绝对值，并用 $\left|\int f\right|\le\int|f|$ 与 $|f''(\xi)|\le M$：
+          $$\left|\int_0^2f(x)\mathrm dx\right|\le\frac12\int_0^2|f''(\xi)|(x-1)^2\mathrm dx\le\frac M2\int_0^2(x-1)^2\mathrm dx.$$<span class="pt">⛳ 2分</span></div>
+        <div class="fin">又 $\displaystyle\int_0^2(x-1)^2\mathrm dx=\frac{(x-1)^3}3\bigg|_0^2=\frac23$，故
+          $\left|\displaystyle\int_0^2f(x)\mathrm dx\right|\le\dfrac M2\cdot\dfrac23=\dfrac13M$。证毕。<span class="pt">⛳ 2分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（对照完再看）</span>
+        <b>① ★ "展开点选在使尽量多项归零的地方"就是泰勒法的全部技巧。</b>本题两个归零同时发生：零阶项靠 $f(1)=0$，一阶项靠 $\int_0^{2x_0}(x-x_0)\mathrm dx=0$（书上眉批）。<b>下一题（习 11.6）是同一招的翻版。</b><br>
+        <b>② <span class="dock">$\xi=\xi(x)$ 不能提出积分号</span></b>：余项里的中值随 $x$ 变（与基 11.1 的注同源）。<b>正确做法是整体放缩 $|f''(\xi)|\le M$ 之后再积分。</b>写成 $\frac{f''(\xi)}2\int_0^2(x-1)^2\mathrm dx$ 是错的。<br>
+        <b>③ 展开到几阶</b>：本题展开到<b>一阶带二阶余项</b>就够（条件只给二阶导）。<b>规律：条件给到 $n$ 阶导，就展开到 $n-1$ 阶带 $n$ 阶余项。</b><br>
+        <b>④ 界紧不紧</b>：取 $f(x)=\frac{(x-1)^2-\frac13}2\cdot$ 常数……更简单地取 $f(x)=(x-1)^2-\frac13$（则 $f(1)=-\frac13\ne0$，不合），本题条件下的紧界留作思考。<b>检验用例</b>：$f=(x-1)^3$（$M=6$）：$\left|\int_0^2f\right|=0\le2$ ✓；$f=\sin\pi(x-1)$（$M=\pi^2$）：$0\le3.29$ ✓
+      </div>
+    </div>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">习 11.6</span><span class="pg">P.293</span>
+    设 $f(x)$ 在区间 $[0,1]$ 上有二阶导数，且 $f\!\left(\frac12\right)=1$，$f''(x)\gt0$，证明：$\displaystyle\int_0^1f(x)\mathrm dx\ge1$。</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>条件给 $f''$ 的符号 + 一个函数值</b> ⇒ 泰勒。展开点当然选 $x_0=\frac12$（那里有已知值，且它是 $[0,1]$ 的中点）。</li>
+          <li><b>与上一题的差别</b>：上一题要"估计大小"所以留着余项放缩；<b>本题只要一个方向的不等式，而 $f''\gt0$ 使余项恒非负 ⇒ 直接把余项<u>丢掉</u>，不等号方向不变。</b></li>
+          <li><b>丢掉余项后剩下的是切线</b>：$f(x)\ge f(\frac12)+f'(\frac12)(x-\frac12)$——<b>这就是"凸函数在切线上方"</b>。</li>
+          <li><b>两端积分</b>，一次项因中点对称而消失，只剩 $f(\frac12)=1$。</li>
+        </ol>
+      </div>
+      <div class="paper"><div class="phead">✍️ 考场卷面<span class="score">参考 10 分</span></div>
+        <div class="step"><span class="k">证</span>因 $f$ 在 $[0,1]$ 上有二阶导数，在 $x_0=\dfrac12$ 处展开成泰勒公式：对任意 $x\in[0,1]$，存在 $\xi$ 介于 $x$ 与 $\dfrac12$ 之间，使
+          $$f(x)=f\!\left(\frac12\right)+f'\!\left(\frac12\right)\left(x-\frac12\right)+\frac{f''(\xi)}{2!}\left(x-\frac12\right)^2.$$<span class="pt">⛳ 3分</span></div>
+        <div class="step">由 $f''(x)\gt0$ 知 $f''(\xi)\gt0$，又 $\left(x-\dfrac12\right)^2\ge0$，故余项非负，从而
+          $$f(x)\ge f\!\left(\frac12\right)+f'\!\left(\frac12\right)\left(x-\frac12\right),\qquad x\in[0,1].\tag{1}$$<span class="pt">⛳ 3分</span></div>
+        <div class="step">将 (1) 两端在 $[0,1]$ 上对 $x$ 积分（<b>积分保号性</b>）：
+          $$\int_0^1f(x)\mathrm dx\ge\int_0^1\left[f\!\left(\frac12\right)+f'\!\left(\frac12\right)\left(x-\frac12\right)\right]\mathrm dx=f\!\left(\frac12\right)+f'\!\left(\frac12\right)\underbrace{\int_0^1\left(x-\frac12\right)\mathrm dx}_{=0}.$$<span class="pt">⛳ 3分</span></div>
+        <div class="fin">故 $\displaystyle\int_0^1f(x)\mathrm dx\ge f\!\left(\frac12\right)=1$。证毕。<span class="pt">⛳ 1分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（对照完再看）</span>
+        <b>① 这就是 <b>Hermite–Hadamard 不等式的左半边</b>：$f$ 凸 $\Rightarrow$
+        $$f\!\left(\frac{a+b}2\right)\le\frac1{b-a}\int_a^bf(x)\mathrm dx\le\frac{f(a)+f(b)}2.$$
+        <b>左半＝中点值 ≤ 平均值（本题）；右半＝平均值 ≤ 梯形值（强 11.18 的背景，第十四节）。</b>本章把这个不等式的两半分别做成了一道基础题和一道强化题，<u>放在一起看才完整</u>。<br>
+        <b>② 为什么"丢余项"是合法的</b>：不等式 (1) 是<b>逐点</b>成立的，再由积分保号性传到积分。<b>顺序不能反</b>——先积分再丢余项是说不通的。<br>
+        <b>③ $f'(\frac12)$ 未知也没关系</b>：它配的那个积分恰好是 0。<b>这就是选中点展开的全部理由。</b>若展开点选 $x_0=0$（假设有 $f(0)$ 的值），一次项 $\int_0^1f'(0)x\mathrm dx=\frac{f'(0)}2\ne0$，$f'(0)$ 未知就卡住了。<br>
+        <b>④ 检验用例</b>：$f=1+(x-\frac12)^2$：$\int_0^1f=1.0833\ge1$ ✓；$f=\mathrm e^{x-1/2}$：$\int_0^1f=1.0422\ge1$ ✓
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= s13 积分法 · 牛莱 ================= -->
+  <h2 id="s13"><span class="idx">十三</span>方法四、五：积分法与牛顿–莱布尼茨公式</h2>
+
+  <div class="key"><span class="tag">必记 · 分部积分 + 绝对值不等式链（基 11.10 右侧眉批，可直接背）</span>
+    <div class="fml">$$\left|\int_a^bu\,\mathrm dv\right|=\left|uv\Big|_a^b-\int_a^bv\,\mathrm du\right|\le\left|uv\Big|_a^b\right|+\left|\int_a^bv\,\mathrm du\right|\le\left|uv\Big|_a^b\right|+\int_a^b|v|\,\mathrm du$$</div>
+    <p><b>三步：分部 → 三角不等式拆开 → 绝对值进积分。</b>最后一步要求 $\mathrm du\ge0$（即 $u$ 单增），否则要写成 $\int|v||u'|\mathrm dx$。<b>基 11.10 里 $f'\ge0$ 这个条件就是为这一步准备的。</b></p>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">基 11.10</span><span class="pg">P.289</span>
+    设 $f(x)$ 在 $[0,2\pi]$ 上具有<b>一阶连续导数</b>，且 $f'(x)\ge0$，证明：对任意正整数 $n$ 有
+    $$\left|\int_0^{2\pi}f(x)\sin nx\,\mathrm dx\right|\le\frac2n\left[f(2\pi)-f(0)\right].$$</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>看结论右边有 $\frac1n$</b>——$n$ 只出现在 $\sin nx$ 里，而 $\frac1n$ 是积分 $\sin nx$ 会掉出来的因子。<b>所以必然要把 $\sin nx$ 积掉</b>，即令 $\mathrm dv=\sin nx\,\mathrm dx$ ⇒ 分部积分（书上分析："被积函数是两项相乘的形式，故用分部积分法"）。</li>
+          <li><b>结论右边还有 $f(2\pi)-f(0)$</b>——它有两个来源：分部的边界项 $f(x)\cos nx\big|_0^{2\pi}$，以及 $\int_0^{2\pi}f'(x)\mathrm dx$。<b>系数 2 就是这两处各贡献 1 份。</b></li>
+          <li><b>$f'\ge0$ 这个条件用在哪</b>：<u>用两次</u>——① 保证 $f(2\pi)-f(0)\ge0$（右端非负，不等式才有意义）；② 保证放缩 $\int f'|\cos nx|\le\int f'$ 时不翻号。</li>
+          <li><b>$n$ 是正整数用在哪</b>：$\cos2n\pi=1$，边界项才能凑成漂亮的 $f(2\pi)-f(0)$。</li>
+        </ol>
+      </div>
+      <div class="paper"><div class="phead">✍️ 考场卷面<span class="score">参考 10 分</span></div>
+        <div class="step"><span class="k">证</span>由 $\sin nx\,\mathrm dx=-\dfrac1n\mathrm d(\cos nx)$ 及<b>分部积分法</b>，
+          $$\left|\int_0^{2\pi}f(x)\sin nx\,\mathrm dx\right|=\frac1n\left|\int_0^{2\pi}f(x)\mathrm d(\cos nx)\right|=\left|\frac1nf(x)\cos nx\bigg|_0^{2\pi}-\frac1n\int_0^{2\pi}f'(x)\cos nx\,\mathrm dx\right|.$$<span class="pt">⛳ 3分</span></div>
+        <div class="step">由三角不等式 $|A-B|\le|A|+|B|$ 及 $\left|\int g\right|\le\int|g|$：
+          $$\le\frac1n\left|f(x)\cos nx\bigg|_0^{2\pi}\right|+\frac1n\int_0^{2\pi}|f'(x)\cos nx|\,\mathrm dx.\tag{1}$$<span class="pt">⛳ 2分</span></div>
+        <div class="step"><span class="k">(i)</span>因 $n$ 为<b>正整数</b>，$\cos2n\pi=1$，$\cos0=1$，故
+          $$f(x)\cos nx\bigg|_0^{2\pi}=f(2\pi)-f(0);$$
+          又 $f'(x)\ge0$ 知 $f$ 单调不减，故 $f(2\pi)-f(0)\ge0$，绝对值可直接去掉。<span class="pt">⛳ 2分</span></div>
+        <div class="step"><span class="k">(ii)</span>因 $|\cos nx|\le1$ 且 $f'(x)\ge0$，故 $|f'(x)\cos nx|=f'(x)|\cos nx|\le f'(x)$，于是由<b>牛莱公式</b>
+          $$\int_0^{2\pi}|f'(x)\cos nx|\mathrm dx\le\int_0^{2\pi}f'(x)\mathrm dx=f(2\pi)-f(0).$$<span class="pt">⛳ 2分</span></div>
+        <div class="fin">将 (i)(ii) 代入 (1) 得
+          $\left|\displaystyle\int_0^{2\pi}f(x)\sin nx\,\mathrm dx\right|\le\dfrac1n[f(2\pi)-f(0)]+\dfrac1n[f(2\pi)-f(0)]=\dfrac2n[f(2\pi)-f(0)]$。证毕。<span class="pt">⛳ 1分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（对照完再看）</span>
+        <b>① 负号被绝对值吞掉</b>：$\sin nx\mathrm dx=-\frac1n\mathrm d(\cos nx)$，但因为整体带绝对值，写成 $\frac1n\left|\int f\mathrm d(\cos nx)\right|$ 是合法的。<b>书上就是这么写的，卷面照做即可。</b><br>
+        <b>② 这是黎曼–勒贝格引理的定量版</b>：$\int_0^{2\pi}f(x)\sin nx\,\mathrm dx\to0\ (n\to\infty)$——<b>高频振荡把任何"不太坏"的 $f$ 都平均掉了</b>，本题给出了衰减速度 $O(\frac1n)$。<u>这也是傅里叶系数趋于 0 的原因</u>，级数章会再见到。<br>
+        <b>③ $f'\ge0$ 若改成"$f'$ 有界"呢</b>：结论要改成 $\frac2n\int_0^{2\pi}|f'|\mathrm dx$（用全变差）。<b>本题因为 $f$ 单调，全变差恰好等于 $f(2\pi)-f(0)$。</b><br>
+        <b>④ <span class="dock">别漏写"$n$ 为正整数"这一句</span></b>——若 $n$ 不是整数，$\cos2n\pi\ne1$，边界项就不是 $f(2\pi)-f(0)$ 了。<br>
+        <span class="chip c-g">数值验证（$f=x^2+\mathrm e^{x/6}$）：$n=1$ 时 $41.28\le82.66$；$n=3$ 时 $13.77\le27.55$；$n=7$ 时 $5.90\le11.81$ ✓ <b>实际值恰好是界的一半，说明界有改进空间但形式最简。</b></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">基 11.11</span><span class="pg">P.289–290</span>
+    设 $f'(x)$ 在 $[a,b]$ 上连续，且 $f(a)=f(b)=0$。证明：$|f(x)|\le\dfrac12\displaystyle\int_a^b|f'(x)|\mathrm dx$。</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>结论把"某点的函数值"和"导数的积分"联系起来</b> ⇒ 查总纲，两条路里选<b>牛莱</b>（因为右端要的是 $\int|f'|$ 这种"整段信息"，拉格朗日只给一个点的导数值，给不出积分）。</li>
+          <li><b>两个端点值都是 0</b>，所以 $f(x)$ 有<b>两种</b>写法：从左边积过来 $f(x)=\int_a^xf'$，从右边积过来 $f(x)=-\int_x^bf'$。</li>
+          <li><b>右端的 $\frac12$ 提示要"两式相加除以 2"</b>——单独用一条只能得到 $|f(x)|\le\int_a^x|f'|$ 或 $\le\int_x^b|f'|$，都不是全区间的一半。<b>两式一加，右边正好拼成整个 $\int_a^b|f'|$。</b></li>
+          <li><b>这与基 11.8 是同一个念头</b>：基 11.8 劈的是<u>积分区间</u>，本题劈的是<u>积分路径的起点</u>。<b>都是"就近取材、两边各管一半"。</b></li>
+        </ol>
+      </div>
+      <div class="paper"><div class="phead">✍️ 考场卷面<span class="score">参考 10 分</span></div>
+        <div class="step"><span class="k">证</span>任取 $x\in[a,b]$。<b>（i）从左端点出发</b>：由 $f(a)=0$ 及<b>牛顿–莱布尼茨公式</b>，
+          $$f(x)=f(x)-f(a)=\int_a^xf'(t)\mathrm dt,$$
+          故
+          $$|f(x)|=\left|\int_a^xf'(t)\mathrm dt\right|\le\int_a^x|f'(t)|\mathrm dt.\tag{1}$$<span class="pt">⛳ 3分</span></div>
+        <div class="step"><b>（ii）从右端点出发</b>：由 $f(b)=0$，
+          $$f(x)=f(x)-f(b)=\int_b^xf'(t)\mathrm dt=-\int_x^bf'(t)\mathrm dt,$$
+          故
+          $$|f(x)|=\left|\int_x^bf'(t)\mathrm dt\right|\le\int_x^b|f'(t)|\mathrm dt.\tag{2}$$<span class="pt">⛳ 3分</span></div>
+        <div class="step">将 (1)、(2) 两式<b>相加</b>，并由积分的可加性
+          $$2|f(x)|\le\int_a^x|f'(t)|\mathrm dt+\int_x^b|f'(t)|\mathrm dt=\int_a^b|f'(t)|\mathrm dt.$$<span class="pt">⛳ 3分</span></div>
+        <div class="fin">故对任意 $x\in[a,b]$ 有 $|f(x)|\le\dfrac12\displaystyle\int_a^b|f'(x)|\mathrm dx$。证毕。<span class="pt">⛳ 1分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（对照完再看）</span>
+        <b>① <span class="dock">$\int_b^x=-\int_x^b$ 这一步不能跳</span></b>：取绝对值后两者相同，但卷面要写出来，否则"方向性"这一分说不清。<br>
+        <b>② $\frac12$ 从哪来的</b>：<b>两式相加得 2 倍。</b>凡是结论里出现 $\frac12$ 而条件是"两端点对称"，就该想到"两边各写一次再相加"。<br>
+        <b>③ 界紧不紧</b>：取帐篷函数（在中点尖起来），$|f(\text{中点})|=\frac12\int_a^b|f'|$，<b>等号成立。</b>直观：从左爬上去和从右爬上去走的"总垂直距离"合起来就是 $\int|f'|$，最高点最多占一半。<br>
+        <b>④ 这个不等式的名字</b>：它是 <b>Poincaré 型不等式</b>的一维最简形式，物理含义是"两端固定的绳子，中间能鼓多高，取决于绳子的总弯曲量"。<br>
+        <span class="chip c-g">数值验证（$f=\sin\pi x\cdot(1+\frac x3)$ 于 $[0,1]$）：$\max|f|=1.171453\le\frac12\int|f'|=1.171456$ ✓ <b>几乎取等</b>（该 $f$ 接近单峰）。</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">习 11.5</span><span class="pg">P.292–293</span>
+    设 $f'(x)$ 在 $[0,a]$ 上连续，且 $f(0)=0$，证明：$\left|\displaystyle\int_0^af(x)\mathrm dx\right|\le\dfrac{Ma^2}2$，其中 $M=\max\limits_{0\le x\le a}|f'(x)|$。<br>
+    <span style="color:var(--muted);font-size:.85rem">⚠️ 本题书上给了<b>两种方法</b>，且配了一条注——那条注是全章的总纲。</span></div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>先想清楚要估计什么</b>（这就是那条注的第一句）：<u>对 $\left|\int_0^af\right|$ 作估计，只要对<b>被积函数 $f(x)$</b> 作估计即可。</u>——先把 $|f(x)|$ 卡住，再积分。</li>
+          <li><b>条件给的是 $f'$ 和 $f(0)=0$</b>，要估计的是 $f$ ⇒ <b>必须把 $f$ 和 $f'$ 联系起来</b>。</li>
+          <li><b>联系 $f$ 与 $f'$ 只有两条路</b>（注的核心）：<b>微分学的拉格朗日中值定理</b>、<b>积分学的牛莱公式</b>。两条都试一遍，这就是书给两种方法的用意。</li>
+          <li>两条路都会得到同一个中间结论 $|f(x)|\le Mx$，再积一次得 $\frac{Ma^2}2$。</li>
+        </ol>
+      </div>
+      <div class="paper"><div class="phead">✍️ 考场卷面 · 方法一（拉格朗日）<span class="score">参考 10 分</span></div>
+        <div class="step"><span class="k">证</span>任取 $x\in(0,a]$。因 $f$ 在 $[0,x]$ 上连续、在 $(0,x)$ 内可导，由<b>拉格朗日中值定理</b>，存在 $\xi\in(0,x)$ 使
+          $$f(x)-f(0)=f'(\xi)x.$$<span class="pt">⛳ 3分</span></div>
+        <div class="step">又 $f(0)=0$，故 $f(x)=f'(\xi)x$，从而 $|f(x)|=|f'(\xi)|\,x\le Mx$（$x\ge0$）。<span class="pt">⛳ 3分</span></div>
+        <div class="step">于是由<b>绝对值不等式</b>与<b>积分保号性</b>
+          $$\left|\int_0^af(x)\mathrm dx\right|\le\int_0^a|f(x)|\mathrm dx\le\int_0^aMx\,\mathrm dx=\frac M2a^2.$$<span class="pt">⛳ 3分</span></div>
+        <div class="fin">故 $\left|\displaystyle\int_0^af(x)\mathrm dx\right|\le\dfrac{Ma^2}2$。证毕。<span class="pt">⛳ 1分</span></div>
+      </div>
+      <div class="paper"><div class="phead">✍️ 考场卷面 · 方法二（牛顿–莱布尼茨）<span class="score">参考 10 分</span></div>
+        <div class="step"><span class="k">证</span>任取 $x\in[0,a]$。由 $f(0)=0$ 及<b>牛顿–莱布尼茨公式</b>
+          $$f(x)=f(x)-f(0)=\int_0^xf'(t)\mathrm dt.$$<span class="pt">⛳ 3分</span></div>
+        <div class="step">故 $\displaystyle|f(x)|=\left|\int_0^xf'(t)\mathrm dt\right|\le\int_0^x|f'(t)|\mathrm dt\le\int_0^xM\,\mathrm dt=Mx.$<span class="pt">⛳ 3分</span></div>
+        <div class="step">再积一次：$\left|\displaystyle\int_0^af(x)\mathrm dx\right|\le\int_0^a|f(x)|\mathrm dx\le\int_0^aMx\,\mathrm dx=\dfrac{Ma^2}2$。<span class="pt">⛳ 3分</span></div>
+        <div class="fin">故 $\left|\displaystyle\int_0^af(x)\mathrm dx\right|\le\dfrac{Ma^2}2$。证毕。<span class="pt">⛳ 1分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（对照完再看）</span>
+        <b>① ★★ 这道题真正的价值是那条注，它是本章下半部分的总纲</b>（已在第十节全文引用）：<b>估计积分 ⇒ 估计被积函数；联系 $f$ 与 $f'$ ⇒ 拉格朗日 或 牛莱。</b><br>
+        <b>② 两法的分工（什么时候必须用哪一个）</b>：
+        <div class="gridwrap"><table class="dense">
+          <tr><th></th><th>拉格朗日</th><th>牛莱</th></tr>
+          <tr><td>给出的信息</td><td>$f(x)-f(a)=f'(\xi)(x-a)$，<b>一个点</b>的导数值</td><td>$f(x)-f(a)=\int_a^xf'$，<b>整段</b>的导数信息</td></tr>
+          <tr><td>要求</td><td>$f$ 可导即可</td><td>$f'$ 可积（通常要连续）</td></tr>
+          <tr><td>结论里含 $\int|f'|$ 时</td><td><b>做不到</b></td><td><b>只能用它</b>（如基 11.11）</td></tr>
+          <tr><td>结论里只含 $\max|f'|$ 时</td><td>两者都行，拉格朗日略快</td><td>两者都行</td></tr>
+        </table></div>
+        <b>③ 与基 11.8 的对照</b>：基 11.8 有<b>两个</b>零端点，所以能劈成两段把常数从 $\frac12$ 压到 $\frac14$；本题只有<b>一个</b>零端点（$f(0)=0$），只能单向估计，常数就是 $\frac12$。<b>零端点的个数决定了常数能压到多小。</b><br>
+        <b>④ 界紧不紧</b>：取 $f(x)=Mx$（$f(0)=0$，$|f'|\equiv M$），$\int_0^af=\frac{Ma^2}2$，<b>等号成立，界是紧的。</b><br>
+        <span class="chip c-g">数值验证（$f=\sin2x$ 于 $[0,1.7]$）：$0.983\le2.89$ ✓</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= s14 比较 · 绝对值 ================= -->
+  <h2 id="s14"><span class="idx">十四</span>18 讲的三条通用武器——比较定理、估值定理、绝对值不等式</h2>
+
+  <div class="key"><span class="tag">必记 · 三条（18 讲 P.134–135，注意都要 $b\gt a$）</span>
+    <span class="pg">P.134</span>
+    <div class="fcards">
+      <div><b>① 比较定理（保号性）</b>$f(x)\le g(x)\Rightarrow\displaystyle\int_a^bf\mathrm dx\le\int_a^bg\mathrm dx$<br><span style="color:var(--muted);font-size:.8rem">$D_1$ + $D_{22}$（转换等价表述）</span></div>
+      <div><b>② 估值定理</b>$m\le f(x)\le M\Rightarrow m(b-a)\le\displaystyle\int_a^bf\mathrm dx\le M(b-a)$<br><span style="color:var(--muted);font-size:.8rem">＝对常数用一次比较定理</span></div>
+      <div><b>③ 绝对值不等式</b>$\left|\displaystyle\int_a^bf\mathrm dx\right|\le\int_a^b|f(x)|\mathrm dx$<br><span style="color:var(--muted);font-size:.8rem">$D_1$ + $D_{23}$（化归经典形式）</span></div>
+    </div>
+    <p><b>★ 比较定理的"取等"版本（本节例 11.17 的钥匙）</b>：若 $h(x)\ge0$ 连续且 $\displaystyle\int_a^bh(x)\mathrm dx\le0$，则 $h(x)\equiv0$。<br>
+    <u>理由：若某点 $h(x_0)\gt0$，由连续性在其邻域内 $h\gt\frac{h(x_0)}2$，该邻域上的积分为正，与总积分 $\le0$ 矛盾。</u><b>这句推理在卷面上要写出来。</b></p>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">强 11.17</span><span class="pg">P.134–135</span>
+    设 $f(x)$ 在 $[0,1]$ 上连续，$\displaystyle\int_0^12x^2f(x)\mathrm dx\ge\int_0^1f^2(x)\mathrm dx+\frac15$，则 $f(x)=\underline{\qquad}$。</div>
+    <div class="s">
+      <div><span class="lab">答案</span><span class="ans">$f(x)=x^2$</span></div>
+      <div><span class="lab">★分析（配平方 + 保号性）</span><b>那个孤零零的 $\frac15$ 是钥匙</b>：注意 $\displaystyle\int_0^1x^4\mathrm dx=\frac15$，于是把条件移项后凑成完全平方：
+        $$\int_0^1\left[f^2(x)-2x^2f(x)+x^4\right]\mathrm dx=\int_0^1\left[f(x)-x^2\right]^2\mathrm dx\le0.$$
+        又被积函数 $[f(x)-x^2]^2\ge0$ 且连续，由<b>积分保号性（取等版本）</b>知 $[f(x)-x^2]^2\equiv0$，故 $f(x)=x^2$。</div>
+      <div><span class="lab">要害</span><b>① 见到孤零零的奇怪常数，先猜它是配方的第三项。</b>本题 $\frac15=\int_0^1x^4$；若题目给的是 $\frac13$，那就该猜 $\int_0^1x^2$，被积函数配成 $[f-x]^2$。<br>
+        <b>② <span class="dock">"非负 + 积分 ≤0 ⇒ 恒为 0"这句推理必须写全</span></b>，只写"所以 $f=x^2$"要扣分。<b>连续性是必需的</b>——若 $f$ 只可积，改动一个点不影响积分，结论只能是"几乎处处相等"。<br>
+        <b>③ 验算</b>：$f=x^2$ 时左 $=\int_0^12x^4=\frac25$，右 $=\int_0^1x^4+\frac15=\frac25$，<b>恰好取等</b>——说明题目条件里的 $\ge$ 实际上只能是 $=$。<br>
+        <span class="chip c-g">数值反证：取 $f=x^2+0.1$ 得左 $0.4667\lt$ 右 $0.4767$；取 $f=x^3$ 得左 $0.3333\lt$ 右 $0.3429$ ✓ <b>都不满足条件，佐证解的唯一性。</b></span></div>
+    </div>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">习 11.2</span><span class="pg">P.291</span>
+    证明：$\displaystyle\int_0^{\frac\pi2}\frac{\cos x}{1+x^2}\mathrm dx\ge\int_0^{\frac\pi2}\frac{\sin x}{1+x^2}\mathrm dx$。<br>
+    <span style="color:var(--muted);font-size:.85rem">书上给了<b>两种方法</b>，都值得掌握。</span></div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>先合并成一个积分</b>：要证 $\displaystyle\int_0^{\frac\pi2}\frac{\cos x-\sin x}{1+x^2}\mathrm dx\ge0$。<b>凡是"两个积分比大小"，一律先移到一边合并——变成判正负问题。</b></li>
+          <li><b>被积函数在哪变号</b>：$\cos x-\sin x$ 在 $x=\frac\pi4$ 变号（左正右负）。<b>$\frac\pi4$ 同时也是区间 $[0,\frac\pi2]$ 的中点</b>——这两件事撞在一起，就是命题人给的入口。</li>
+          <li><b>方法一（对称换元）</b>：把右半段用 $x=\frac\pi2-t$ 翻到左半段，两段合并后逐点比较。分子会变成 $\cos x-\sin x$ 的相反数，分母则从 $1+x^2$ 变成 $1+(\frac\pi2-x)^2$——<b>正段的分母小、负段的分母大 ⇒ 正的赢。</b></li>
+          <li><b>方法二（推广积分中值定理）</b>：在每段上 $\cos x-\sin x$ 不变号，可以把 $\frac1{1+x^2}$ 提成 $\frac1{1+\xi^2}$，两段的中值位置一左一右，大小关系立现。</li>
+        </ol>
+      </div>
+      <div class="paper"><div class="phead">✍️ 考场卷面 · 方法一（对称换元）<span class="score">参考 10 分</span></div>
+        <div class="step"><span class="k">证</span>要证原不等式成立，只需证
+          $$I=\int_0^{\frac\pi2}\frac{\cos x-\sin x}{1+x^2}\mathrm dx\ge0.$$<span class="pt">⛳ 1分</span></div>
+        <div class="step">由积分的可加性，以 $\dfrac\pi4$ 为分点拆开：
+          $$I=\int_0^{\frac\pi4}\frac{\cos x-\sin x}{1+x^2}\mathrm dx+\int_{\frac\pi4}^{\frac\pi2}\frac{\cos x-\sin x}{1+x^2}\mathrm dx.$$<span class="pt">⛳ 2分</span></div>
+        <div class="step">在第二项中令 $x=\dfrac\pi2-t$（则 $\cos x=\sin t$，$\sin x=\cos t$，$\mathrm dx=-\mathrm dt$，限 $\frac\pi4\to0$）：
+          $$\int_{\frac\pi4}^{\frac\pi2}\frac{\cos x-\sin x}{1+x^2}\mathrm dx=\int_0^{\frac\pi4}\frac{\sin t-\cos t}{1+\left(\frac\pi2-t\right)^2}\mathrm dt.$$<span class="pt">⛳ 3分</span></div>
+        <div class="step">代回并合并（积分变量与字母无关，统一记作 $x$）：
+          $$I=\int_0^{\frac\pi4}(\cos x-\sin x)\left[\frac1{1+x^2}-\frac1{1+\left(\frac\pi2-x\right)^2}\right]\mathrm dx.\tag{1}$$<span class="pt">⛳ 2分</span></div>
+        <div class="step">当 $x\in\left[0,\dfrac\pi4\right]$ 时：$\cos x\ge\sin x$ 故第一个因子 $\ge0$；又 $0\le x\le\dfrac\pi4\le\dfrac\pi2-x$ 故 $x^2\le\left(\dfrac\pi2-x\right)^2$，从而方括号 $\ge0$。<b>两个非负因子之积非负</b>，由积分保号性知 $I\ge0$。<span class="pt">⛳ 1分</span></div>
+        <div class="fin">故 $\displaystyle\int_0^{\frac\pi2}\frac{\cos x}{1+x^2}\mathrm dx\ge\int_0^{\frac\pi2}\frac{\sin x}{1+x^2}\mathrm dx$。证毕。<span class="pt">⛳ 1分</span></div>
+      </div>
+      <div class="paper"><div class="phead">✍️ 考场卷面 · 方法二（推广积分中值定理）<span class="score">参考 10 分</span></div>
+        <div class="step"><span class="k">证</span>只需证 $I=\displaystyle\int_0^{\frac\pi2}\frac{\cos x-\sin x}{1+x^2}\mathrm dx\ge0$。以 $\dfrac\pi4$ 为分点拆开，<b>在每段上 $\cos x-\sin x$ 不变号</b>（左段 $\ge0$，右段 $\le0$），由<b>推广的积分中值定理</b>（取 $f=\frac1{1+x^2}$，$g=\cos x-\sin x$），存在 $\xi\in\left[0,\frac\pi4\right]$、$\eta\in\left[\frac\pi4,\frac\pi2\right]$ 使
+          $$I=\frac1{1+\xi^2}\int_0^{\frac\pi4}(\cos x-\sin x)\mathrm dx+\frac1{1+\eta^2}\int_{\frac\pi4}^{\frac\pi2}(\cos x-\sin x)\mathrm dx.$$<span class="pt">⛳ 4分</span></div>
+        <div class="step">又 $\displaystyle\int(\cos x-\sin x)\mathrm dx=\sin x+\cos x+C$，故
+          $$\int_0^{\frac\pi4}(\cos x-\sin x)\mathrm dx=\sqrt2-1,\qquad\int_{\frac\pi4}^{\frac\pi2}(\cos x-\sin x)\mathrm dx=1-\sqrt2=-(\sqrt2-1).$$<span class="pt">⛳ 3分</span></div>
+        <div class="step">于是 $I=(\sqrt2-1)\left(\dfrac1{1+\xi^2}-\dfrac1{1+\eta^2}\right)$。<span class="pt">⛳ 1分</span></div>
+        <div class="step">因 $0\le\xi\le\dfrac\pi4\le\eta\le\dfrac\pi2$，故 $\xi^2\le\eta^2$，从而 $\dfrac1{1+\xi^2}\ge\dfrac1{1+\eta^2}$，又 $\sqrt2-1\gt0$，故 $I\ge0$。<span class="pt">⛳ 1分</span></div>
+        <div class="fin">故原不等式成立。证毕。<span class="pt">⛳ 1分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（对照完再看）</span>
+        <b>① 两法共用同一个断点 $\frac\pi4$，但理由不同</b>：<b>方法一</b>要它是<u>对称中心</u>（换元 $x\leftrightarrow\frac\pi2-x$ 的不动点）；<b>方法二</b>要它是<u>变号点</u>（推广积分中值定理要求 $g$ 不变号）。<b>两个理由在本题恰好指向同一个点，这是题目"好做"的原因。</b><br>
+        <b>② 方法二的收口全靠"中值点的位置"</b>：$\xi\le\frac\pi4\le\eta$ 是拆区间自带的信息。<b>"中值点的位置本身就是不等号的来源"</b>——这个思想在强 11.13、18 讲的 $\int_0^{2\pi}\frac{\sin x}x\gt0$ 里反复出现。<br>
+        <b>③ 直观解释（一句话看懂）</b>：$\cos$ 与 $\sin$ 在 $[0,\frac\pi2]$ 上是<u>镜像</u>的，$\int_0^{\frac\pi2}\cos=\int_0^{\frac\pi2}\sin=1$ 本来相等；但权重 $\frac1{1+x^2}$ <b>单调递减</b>，而 $\cos$ 把质量放在左边（权重大处）、$\sin$ 放在右边（权重小处），所以 $\cos$ 那一侧赢。<br>
+        <b>④ 推广</b>：只要权重 $w(x)$ 在 $[0,\frac\pi2]$ 上<b>单调不增</b>，就有 $\int_0^{\frac\pi2}w\cos\ge\int_0^{\frac\pi2}w\sin$。<b>本题的 $\frac1{1+x^2}$ 只是一个具体例子。</b><br>
+        <span class="chip c-g">数值验证：$I=0.2220630726\ge0$ ✓；$\int_0^{\pi/4}(\cos-\sin)=\sqrt2-1=0.4142$ ✓</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="trap"><span class="tag">陷阱 · ★ 绝对值不等式取严格号 ⇒ 必有零点（18 讲 P.135 蓝框）</span>
+    <p>设 $f(x)$ 在 $[a,b]$ 上连续且 $\left|\displaystyle\int_a^bf\mathrm dx\right|\boxed{\lt}\displaystyle\int_a^b|f|\mathrm dx$，则<b>存在 $c\in(a,b)$ 使 $f(c)=0$</b>。</p>
+    <p><b>证（反证，眉批标 $P_2$ 反证思路）</b>：如若不然，则 $f$ 在 $[a,b]$ 上恒不为零。由连续性（介值定理）$f$ 恒正或恒负。<br>
+    若 $f\gt0$，则 $\left|\int_a^bf\right|=\int_a^bf=\int_a^b|f|$；若 $f\lt0$，则 $\left|\int_a^bf\right|=-\int_a^bf=\int_a^b[-f]=\int_a^b|f|$。<b>两种情形都与严格不等号矛盾。</b><br>
+    故 $f$ 在 $[a,b]$ 上<b>必有正有负</b>，由<b>零点定理</b>知存在 $c\in(a,b)$ 使 $f(c)=0$。</p>
+    <p><b>书上的评语</b>：<u>"这又给我们研究'$f(x)$ 的某个零点'提供了一种方向。"</u><br>
+    <b>📌 记法：$\left|\int f\right|\lt\int|f|\iff f$ 变号。</b>看到题目给的是<b>严</b>号而不是等号，就该想到这条——<u>严格不等号本身是信息，不是装饰。</u></p>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">强 11.18</span><span class="pg">P.135–136</span>
+    设函数 $f(x)$ 具有二阶导数，且 $f'(0)=f'(1)$，$|f''(x)|\le1$。证明：<br>
+    <b>(1)</b> 当 $x\in(0,1)$ 时，$\left|f(x)-f(0)(1-x)-f(1)x\right|\le\dfrac{x(1-x)}2$；<br>
+    <b>(2)</b> $\left|\displaystyle\int_0^1f(x)\mathrm dx-\dfrac{f(0)+f(1)}2\right|\le\dfrac1{12}$。<br>
+    <span style="color:var(--muted);font-size:.85rem">眉批：此题<b>背景深刻</b>——虽然不知 $\int_0^1f(x)\mathrm dx$ 精确为多少，但可知其值到 $\frac{f(0)+f(1)}2$ 的距离不超过 $\frac1{12}$，而 $\frac{f(0)+f(1)}2$ 的值是<b>唾手可得</b>的。</span></div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>先看懂 (1) 在说什么</b>：$f(0)(1-x)+f(1)x$ 是<b>连接两端点 $(0,f(0))$ 与 $(1,f(1))$ 的那条直线</b>（线性插值）。所以 (1) 说的是"<b>曲线与它的弦相差不超过 $\frac{x(1-x)}2$</b>"。</li>
+          <li><b>条件给到 $f''$</b> ⇒ 泰勒。但在哪展开？<b>两端点各展一次</b>——因为结论里 $f(0)$ 与 $f(1)$ 都出现了。</li>
+          <li><b>两个展开式怎么合并才能消掉未知的 $f'$</b>：$f'(0)$ 与 $f'(1)$ 都不知道，但题目给了 $f'(0)=f'(1)$！<b>只要让这两项以相同的形状出现，就能靠这个条件对消。</b><br>
+            第一式的一阶项是 $f'(0)x$，第二式是 $f'(1)(x-1)$。<b>把第一式乘 $(x-1)$、第二式乘 $x$</b>，两个一阶项都变成 $f'(\cdot)x(x-1)$——形状一致了，相减即消。</li>
+          <li><b>(2) 是 (1) 的直接积分</b>：注意 $\int_0^1[f(0)(1-x)+f(1)x]\mathrm dx=\frac{f(0)+f(1)}2$（两个 $\int_0^1$ 都是 $\frac12$），再对 (1) 两端积分即可。</li>
+        </ol>
+      </div>
+      <div class="paper"><div class="phead">✍️ 考场卷面<span class="score">参考 12 分</span></div>
+        <div class="step"><span class="k">(1) 证</span>因 $f$ 具有二阶导数，当 $x\in(0,1)$ 时，分别在 $x_0=0$ 与 $x_0=1$ 处展开成泰勒公式：存在 $\xi_1,\xi_2\in(0,1)$ 使
+          $$f(x)=f(0)+f'(0)x+\frac12f''(\xi_1)x^2,\tag{1}$$
+          $$f(x)=f(1)+f'(1)(x-1)+\frac12f''(\xi_2)(x-1)^2.\tag{2}$$<span class="pt">⛳ 3分</span></div>
+        <div class="step">将 (1) 式两端乘 $(x-1)$、(2) 式两端乘 $x$：
+          $$(x-1)f(x)=f(0)(x-1)+f'(0)x(x-1)+\frac12f''(\xi_1)x^2(x-1),$$
+          $$xf(x)=f(1)x+f'(1)(x-1)x+\frac12f''(\xi_2)(x-1)^2x.$$<span class="pt">⛳ 2分</span></div>
+        <div class="step">两式相减（第二式减第一式），因 $f'(0)=f'(1)$，<b>两个一阶项恰好对消</b>，得
+          $$f(x)=f(0)(1-x)+f(1)x+\frac{x(1-x)}2\left[xf''(\xi_1)+(1-x)f''(\xi_2)\right].\tag{3}$$<span class="pt">⛳ 2分</span></div>
+        <div class="step">又 $|f''(x)|\le1$，且 $x\in(0,1)$ 时 $x\gt0,1-x\gt0$，故由 (3)
+          $$|f(x)-f(0)(1-x)-f(1)x|\le\frac{x(1-x)}2\left[x|f''(\xi_1)|+(1-x)|f''(\xi_2)|\right]\le\frac{x(1-x)}2\left[x+(1-x)\right]=\frac{x(1-x)}2.$$<span class="pt">⛳ 2分</span></div>
+        <div class="step" style="margin-top:12px"><span class="k">(2) 证</span>因 $\displaystyle\int_0^1(1-x)\mathrm dx=\int_0^1x\,\mathrm dx=\frac12$，故
+          $$\int_0^1\left[f(x)-f(0)(1-x)-f(1)x\right]\mathrm dx=\int_0^1f(x)\mathrm dx-\frac{f(0)+f(1)}2.$$<span class="pt">⛳ 1分</span></div>
+        <div class="step">于是由<b>绝对值不等式</b>和第 (1) 问的结论
+          $$\left|\int_0^1f(x)\mathrm dx-\frac{f(0)+f(1)}2\right|\le\int_0^1\left|f(x)-f(0)(1-x)-f(1)x\right|\mathrm dx\le\int_0^1\frac{x(1-x)}2\mathrm dx.$$<span class="pt">⛳ 1分</span></div>
+        <div class="fin">又 $\displaystyle\int_0^1\frac{x(1-x)}2\mathrm dx=\frac12\cdot\frac16=\frac1{12}$，故
+          $\left|\displaystyle\int_0^1f(x)\mathrm dx-\dfrac{f(0)+f(1)}2\right|\le\dfrac1{12}$。证毕。<span class="pt">⛳ 1分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（对照完再看）</span>
+        <b>① ★★ 本题的"深刻背景"就是<b>梯形公式的误差估计</b></b>：$\frac{f(0)+f(1)}2$ 正是用梯形法则近似 $\int_0^1f$，而数值分析里梯形公式的误差正是
+        $$\left|\int_a^bf-\frac{(b-a)[f(a)+f(b)]}2\right|\le\frac{(b-a)^3}{12}\max|f''|.$$
+        本题 $b-a=1$、$\max|f''|\le1$，界恰好是 $\frac1{12}$。<b>眉批说"虽然不知积分精确值，但知道它离一个唾手可得的数不超过 $\frac1{12}$"——这就是数值积分的全部思想。</b><br>
+        <b>② 与习 11.6 合起来才完整</b>：习 11.6 是 <b>Hermite–Hadamard 左半</b>（中点值 ≤ 平均值），本题是<b>右半的定量版</b>（平均值与梯形值的距离）。<b>两题一起看，凸函数的积分就被完全夹住了。</b><br>
+        <b>③ <span class="dock">"乘 $(x-1)$、乘 $x$ 再相减"是本题唯一的技术难点</span></b>——目的是让两个一阶项形状一致好对消。<b>条件 $f'(0)=f'(1)$ 只在这一步用，别的地方用不上；反过来，看到这个奇怪条件就该想到"要让两个一阶项对消"。</b><br>
+        <b>④ 又是 $\int_0^1x(1-x)\mathrm dx=\frac16$</b>——本章第二次出现（第一次是基 11.6）。<b>背下来。</b><br>
+        <b>⑤ 数值验证</b>：取 $f=-\frac{\cos2\pi x}{4\pi^2}$（则 $f'(0)=f'(1)=0$，$f''=\cos2\pi x$ 满足 $|f''|\le1$）：$\left|\int_0^1f-\frac{f(0)+f(1)}2\right|=0.02533\le\frac1{12}=0.0833$ ✓；<b>(1) 式在 49 个网格点上逐点验证，0 处违反</b> ✓
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= s15 黎曼思想 ================= -->
+  <h2 id="s15"><span class="idx">十五</span>★★★ 黎曼思想——本章压轴</h2>
+
+  <div class="key"><span class="tag">必记 · 一句话，但它是 18 讲唯一挂三星的武器（P.136）</span>
+    <div class="fml"><b>一个大区间 $[a,b]$ 解决不了的问题，拆成 $[a,c]$、$[c,b]$ 等小区间去处理。</b></div>
+    <p><u>"这是微积分解题中<b>遵循客观规律的典范思路</b>，十分重要。"</u>——它不是公式，是<b>思想</b>，所以三星。</p>
+    <p><b>本章它出现了五次</b>（见第一节"可加性凭什么最强"）：强 11.1 的 $\pm\sqrt h$、强 11.13 按符号拆、$\int_0^{2\pi}\frac{\sin x}x$ 拆成两段、基 11.8 劈成 $[0,x]$ 与 $[x,1]$、以及下面这道压轴题。<br>
+    <b>拆点的选法只有三种</b>：<span class="chip c-b">变号点</span><span class="chip c-b">对称中心</span><span class="chip c-b">最值点</span>。<b>下面这道选的是最值点。</b></p>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">强 11.19</span><span class="pg">P.136–137</span>
+    <span style="color:var(--red);font-weight:700">⚠️ 难度较大（原书自标）</span>　设 $f(x)$ 在 $[0,1]$ 上具有二阶连续导数，$f(0)=f(1)=0$，$f''(x)\lt0$，证明：
+    $$\int_0^1\left|\frac{f''(x)}{f(x)}\right|\mathrm dx\ge4.$$</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>先看清楚这是个什么形状</b>：被积函数是<u>分式</u>，分子 $f''$、分母 $f$。要证它的积分 $\ge4$，<b>就要把分子往大了估、分母往小了估</b>（即 $\frac1{|f|}$ 往大了估）。</li>
+          <li><b>分母怎么处理</b>：$\frac1{|f(x)|}\ge\frac1{|f(x_0)|}$，其中 $f(x_0)=\max f$。<b>把变动的分母换成一个常数</b>，这一步就是"估值定理"。于是
+            $$\int_0^1\left|\frac{f''}f\right|\mathrm dx\ge\frac1{|f(x_0)|}\int_0^1|f''(x)|\mathrm dx.$$
+            <b>目标转化为：证 $\int_0^1|f''|\ge4|f(x_0)|$。</b></li>
+          <li><b>现在要把 $f''$ 的积分和 $f$ 的值联系起来，中间隔着 $f'$</b>（眉批原话："二阶导由一阶导信息去联系"）。两步走：<br>
+            ① <b>$f'$ 的两个值</b>怎么得到？——$x_0$ 把 $[0,1]$ 分成两段（<b>黎曼思想！拆点选在最值点</b>），每段用一次拉格朗日，配上 $f(0)=f(1)=0$，得 $f'(\xi_1)=\frac{f(x_0)}{x_0}\gt0$、$f'(\xi_2)=\frac{-f(x_0)}{1-x_0}\lt0$。<br>
+            ② <b>$f'$ 的值差怎么变成 $\int|f''|$？</b>——牛莱 + 绝对值不等式：$\int_{\xi_1}^{\xi_2}|f''|\ge\left|\int_{\xi_1}^{\xi_2}f''\right|=|f'(\xi_2)-f'(\xi_1)|$。</li>
+          <li><b>最后一步是纯代数</b>：$\frac1{x_0}+\frac1{1-x_0}=\frac1{x_0(1-x_0)}\ge4$（因 $x_0(1-x_0)\le\frac14$）。<b>4 就是这么来的。</b></li>
+          <li><b>别忘了先说明 $f(x_0)\gt0$ 且 $x_0$ 是内点</b>——否则 $\frac1{|f|}$ 无意义、拉格朗日的区间会退化。</li>
+        </ol>
+      </div>
+      <div class="paper"><div class="phead">✍️ 考场卷面<span class="score">参考 12 分</span></div>
+        <div class="step"><span class="k">证</span><b>（预备）</b>因 $f''(x)\lt0$，故 $f$ 在 $[0,1]$ 上是<b>凸（上凸）</b>的；又 $f(0)=f(1)=0$，故当 $x\in(0,1)$ 时 $f(x)\gt0$。<br>
+          设 $f(x_0)=\max\limits_{0\le x\le1}f(x)$，则 $f(x_0)\gt0$ 且 $x_0\in(0,1)$。<span class="pt">⛳ 2分</span></div>
+        <div class="step"><span class="k">(i)</span>当 $x\in(0,1)$ 时 $0\lt|f(x)|\le|f(x_0)|$，故 $\dfrac1{|f(x)|}\ge\dfrac1{|f(x_0)|}$，于是
+          $$\int_0^1\left|\frac{f''(x)}{f(x)}\right|\mathrm dx\ge\frac1{|f(x_0)|}\int_0^1|f''(x)|\mathrm dx.\tag{1}$$<span class="pt">⛳ 2分</span></div>
+        <div class="step"><span class="k">(ii)</span><b>以 $x_0$ 为分点将 $[0,1]$ 拆开</b>，分别在 $[0,x_0]$ 与 $[x_0,1]$ 上对 $f$ 应用<b>拉格朗日中值定理</b>，存在 $\xi_1\in(0,x_0)$、$\xi_2\in(x_0,1)$ 使
+          $$f(x_0)-f(0)=f'(\xi_1)x_0,\qquad f(1)-f(x_0)=f'(\xi_2)(1-x_0),$$
+          由 $f(0)=f(1)=0$ 得
+          $$f'(\xi_1)=\frac{f(x_0)}{x_0},\qquad f'(\xi_2)=\frac{-f(x_0)}{1-x_0}.\tag{2}$$<span class="pt">⛳ 3分</span></div>
+        <div class="step"><span class="k">(iii)</span>因 $[\xi_1,\xi_2]\subset[0,1]$ 且 $|f''|\ge0$，再由<b>绝对值不等式</b>与<b>牛顿–莱布尼茨公式</b>
+          $$\int_0^1|f''(x)|\mathrm dx\ge\int_{\xi_1}^{\xi_2}|f''(x)|\mathrm dx\ge\left|\int_{\xi_1}^{\xi_2}f''(x)\mathrm dx\right|=\left|f'(\xi_2)-f'(\xi_1)\right|.\tag{3}$$<span class="pt">⛳ 2分</span></div>
+        <div class="step">将 (2) 代入 (3)：
+          $$\left|f'(\xi_2)-f'(\xi_1)\right|=\left|-\frac{f(x_0)}{1-x_0}-\frac{f(x_0)}{x_0}\right|=|f(x_0)|\left(\frac1{x_0}+\frac1{1-x_0}\right)=\frac{|f(x_0)|}{x_0(1-x_0)}.$$<span class="pt">⛳ 1分</span></div>
+        <div class="step"><span class="k">(iv)</span>又 $x_0(1-x_0)=-\left(x_0-\dfrac12\right)^2+\dfrac14\le\dfrac14$（$x_0\in(0,1)$），故 $\dfrac1{x_0(1-x_0)}\ge4$，从而由 (3)
+          $$\int_0^1|f''(x)|\mathrm dx\ge4|f(x_0)|.\tag{4}$$<span class="pt">⛳ 1分</span></div>
+        <div class="fin">将 (4) 代入 (1) 得 $\displaystyle\int_0^1\left|\frac{f''(x)}{f(x)}\right|\mathrm dx\ge\frac1{|f(x_0)|}\cdot4|f(x_0)|=4$。证毕。<span class="pt">⛳ 1分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（对照完再看）</span>
+        <b>① ⚠️ 书省略了"预备"那一步，但卷面必须写。</b>原书直接写"令 $f(x_0)=\max f$"就往下走了，可是：<br>
+        <span class="dock">若不说明 $f(x_0)\gt0$，则 $\frac1{|f(x_0)|}$ 可能无意义；若不说明 $x_0\in(0,1)$ 是<b>内点</b>，则 $[0,x_0]$ 或 $[x_0,1]$ 可能退化成一点，拉格朗日无从谈起，且 $\frac1{x_0(1-x_0)}$ 分母为 0。</span><br>
+        <b>论证很短</b>：$f''\lt0$ ⇒ $f$ 上凸 ⇒ 图像在弦（即 $x$ 轴，因两端为 0）上方 ⇒ 内部 $f\gt0$ ⇒ 最大值在内部取到。<b>两行，2 分。</b><br>
+        <b>② 四步链条各用了什么武器</b>（这是本章所有工具的总检阅）：
+        <div class="gridwrap"><table class="dense">
+          <tr><th>步</th><th>动作</th><th>用的武器</th></tr>
+          <tr><td>(i)</td><td>把变动分母换成常数</td><td><b>估值定理</b>（第十四节 ②）</td></tr>
+          <tr><td>(ii)</td><td>在最值点拆区间，两段各一次拉格朗日</td><td><b>黎曼思想</b> + <b>拉格朗日</b>（第十二节）</td></tr>
+          <tr><td>(iii)</td><td>$\int|f''|\ge\left|\int f''\right|=|f'(\xi_2)-f'(\xi_1)|$</td><td><b>绝对值不等式</b> + <b>牛莱</b>（第十三节）</td></tr>
+          <tr><td>(iv)</td><td>$\frac1{x_0(1-x_0)}\ge4$</td><td>配方 / 均值不等式</td></tr>
+        </table></div>
+        <b>③ 眉批"二阶导由一阶导信息去联系"</b>——这是全题的枢纽：<u>手上有的是 $f$ 的值（三个：两端点 + 最大值），要的是 $f''$ 的积分，中间必须过 $f'$ 这一关。</u>拉格朗日把 $f$ 的值变成 $f'$ 的值，牛莱把 $f'$ 的值差变成 $f''$ 的积分。<b>两个工具一进一出，正是第十节总纲说的那两条路各用一次。</b><br>
+        <b>④ 常数 4 的来源与推广</b>：$\min\limits_{x_0\in(0,1)}\frac1{x_0(1-x_0)}=4$，在 $x_0=\frac12$ 取到。<b>若区间改为 $[0,L]$，同样的推导给出下界 $\frac4L$。</b><br>
+        <b>⑤ 4 能取到吗</b>：<b>不能</b>——取等需要同时满足"$|f|$ 恒等于最大值"（不可能，因为两端为 0）等条件。<b>4 是下确界但不可达</b>，所以实际算出来的值往往<u>远大于</u> 4。<br>
+        <span class="chip c-g">数值验证：$f=\sin\pi x$ 得 $\pi^2=9.8696$；$f=x(1-x)$ 得 $\int_0^1\frac2{x(1-x)}\mathrm dx$ <b>发散</b>（$=+\infty$）；$f=x(1-x)(1+x)$ 得 $167.2$——<b>全部 $\ge4$，且都不接近 4，佐证下界不可达。</b></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="tool" id="tk-lb">
+    <h4>📉 下界探测器 —— $\int_0^1\left|\frac{f''}f\right|$ 到底能压到多低</h4>
+    <div class="hint">在满足 $f(0)=f(1)=0$、$f''\lt0$ 的函数族里滑动形状参数，实时显示 $x_0$（最大值点）、$\frac1{x_0(1-x_0)}$、以及积分的实际值。<b>看着 $\frac1{x_0(1-x_0)}$ 怎样在 $x_0=\frac12$ 处触底到 4，而实际积分值始终远在其上。</b></div>
+    <div class="ctl">
+      <label>函数族</label>
+      <select id="lb-f">
+        <option value="0">f(x) = sin(πx)^p　（p 控制胖瘦，顶点固定在 ½）</option>
+        <option value="1">f(x) = x^a (1−x)　（a 控制顶点偏移）</option>
+        <option value="2">f(x) = x(1−x)(1+kx)　（k 控制倾斜）</option>
+      </select>
+    </div>
+    <div class="ctl">
+      <label>形状参数</label>
+      <input type="range" id="lb-p" min="0" max="100" step="1" value="50">
+      <span class="val" id="lb-pv">—</span>
+    </div>
+    <div class="scene"><svg id="lb-svg" viewBox="0 0 700 240" xmlns="http://www.w3.org/2000/svg"></svg></div>
+    <div class="quant" id="lb-q" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:8px;margin:8px 0"></div>
+    <span class="verdict" id="lb-vd"></span>
+    <div class="legend2"><span class="chip c-b">蓝</span>$f(x)$　<span class="chip c-r">红虚线</span>最大值点 $x_0$　链条中的 $\frac1{x_0(1-x_0)}$ 是<b>证明给出的中间下界</b>，实际积分值总是更大。</div>
+  </div>
+
+  <!-- ================= 收官 ================= -->
+  <h2 id="end"><span class="idx">收官</span>三张表收全本章</h2>
+
+  <div class="key"><span class="tag">必记 · 表一：拿到题先问三句话</span>
+    <div class="steps3">
+      <div><b>① 是"算"还是"证"？</b>要一个数 ⇒ 第一部分工具箱（区间再现／祖孙三代／华里士／平移）。<br>要一个不等号或等式 ⇒ 第二部分五法。</div>
+      <div><b>② 条件里最高几阶导？</b>只有连续 ⇒ <b>单调性</b>造 $F$；有 $f'$ ⇒ <b>拉格朗日 / 牛莱</b>；有 $f''$ ⇒ <b>泰勒</b>。</div>
+      <div><b>③ 有没有"零值点"可用？</b>$f(a)=0$ 之类是展开点／分部边界项归零的关键。<b>题目给的每个零值都要用掉。</b></div>
+    </div>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 表二：本章反复出现的七个"小动作"（认出它们就等于会做题）</span>
+    <div class="gridwrap"><table class="dense">
+      <tr><th>动作</th><th>长什么样</th><th>出现在</th></tr>
+      <tr><td><b>常数变量化</b></td><td>把定积分上限换成 $x$ 或 $t$，造出可求导的 $F$</td><td>基 11.1(1)、基 11.7、习 11.4</td></tr>
+      <tr><td><b>常数写回积分</b></td><td>$(t-a)f(t)=\displaystyle\int_a^tf(t)\mathrm dx$，为了与另一项合并</td><td>习 11.4</td></tr>
+      <tr><td><b>拆区间（黎曼思想）</b></td><td>在变号点／对称中心／最值点切一刀</td><td>强 11.1、强 11.13、基 11.8、强 11.19</td></tr>
+      <tr><td><b>配对相加</b></td><td>$f(x)+f(a+b-x)$ 常为常数；或两端各写一次再相加</td><td>强 11.4/11.5/11.7、基 11.11</td></tr>
+      <tr><td><b>先留活口再优化</b></td><td>分割点先记作 $x$，最后取使上界最小的那个</td><td>基 11.8（取 $x=\frac12$）</td></tr>
+      <tr><td><b>整体放缩中值</b></td><td>$\xi=\xi(x)$ 不能提出积分号，只能用 $|f''(\xi)|\le M$ 压住</td><td>基 11.1(2)、基 11.9、强 11.18</td></tr>
+      <tr><td><b>配平方 + 保号性</b></td><td>非负函数的积分 $\le0$ ⇒ 该函数恒为 0</td><td>强 11.17</td></tr>
+    </table></div>
+    <p><b>★ 三个必背的小数字</b>：$\displaystyle\int_0^1x(1-x)\mathrm dx=\frac16$（基 11.6、强 11.18 都用）、$\displaystyle\int_{-R}^R\sqrt{R^2-x^2}\mathrm dx=\frac{\pi R^2}2$（强 11.12）、$\displaystyle\int_0^{n\pi}|\sin x|\mathrm dx=2n$（强 11.6、速查 2）。</p>
+  </div>
+
+  <div class="trap"><span class="tag">陷阱 · 表三：本章八个失分点，逐条对照自查</span>
+    <ol style="margin-left:20px">
+      <li><b>$\lim\int\ne\int\lim$</b>——极限不能随便进积分号（基 11.3、基 11.1(2)）。</li>
+      <li><b>中值 $\xi_n$ 随参数变</b>，唯一安全用法是当"有界量"配无穷小；<b>绝不能对它取极限</b>（基 11.1 的注、强 11.1、基 11.9）。</li>
+      <li><b>开方必带绝对值</b>：$\sqrt{1-\sin^2x}=|\cos x|$（周期 $\pi$ 不是 $2\pi$）、$\sqrt{\cos^2x}=|\cos x|$——<b>砍到半区间之后才敢去绝对值</b>（强 11.6、强 11.8）。</li>
+      <li><b>祖孙三代的积分性质要求下限为 0</b>，下限一挪就报废（第二节陷阱框）。</li>
+      <li><b>无原函数不能用洛必达</b>：含跳跃间断点的函数（基 11.5）。</li>
+      <li><b>积分中值定理的开闭区间</b>：后续要用罗尔就必须引用"推广的"版本拿开区间（强 11.10）；用严格不等号排除退化端点（习 11.1 的 $\eta\in(2,3]$）。</li>
+      <li><b>基 11.8 的收口逻辑</b>：书上写得含糊，卷面必须写"上式对任意 $x$ 成立，<b>取 $x=\frac12$</b>"。</li>
+      <li><b>强 11.19 的预备步骤</b>：必须先证 $f(x_0)\gt0$ 且 $x_0$ 是<b>内点</b>，书上省了。</li>
+    </ol>
+  </div>
+
+  <div class="outro">
+    <h3>📋 全章 36 题落位索引</h3>
+    <p style="color:var(--muted);font-size:.86rem">基础例题 11 ＋ 基础习题 6 ＋ 强化例题 19 ＝ <b>36 题，零遗漏</b>。全部结论经 mpmath 数值复算（44 项），<b>书一处没错</b>。<b>三层大题卡 19 张，选填教学卡 17 张。</b></p>
+    <div class="gridwrap"><table class="dense">
+      <tr><th>题号</th><th>卡型</th><th>落在</th><th>一句话</th></tr>
+      <tr><td><span class="layer L-str">强</span> 11.1</td><td>三层</td><td><a href="#s1">一</a></td><td>狄拉克核，$\pm\sqrt h$ 分割 ⇒ $\pi f(0)$</td></tr>
+      <tr><td><span class="layer L-str">强</span> 11.2</td><td>选填</td><td><a href="#s2">二</a></td><td>偶函数三阶导为奇 + 周期搬运 ⇒ 0</td></tr>
+      <tr><td><span class="layer L-str">强</span> 11.3</td><td>选填</td><td><a href="#s2">二</a></td><td>内偶则偶，内奇同外 ⇒ (C)</td></tr>
+      <tr><td><span class="layer L-str">强</span> 11.4</td><td>选填</td><td><a href="#s2">二</a></td><td>$\frac1{1+\mathrm e^{1/x}}$ 配对得 1</td></tr>
+      <tr><td><span class="layer L-str">强</span> 11.5</td><td>选填</td><td><a href="#s2">二</a></td><td>配对消分母 + 华里士 ⇒ $\frac{3\pi}{16}$</td></tr>
+      <tr><td><span class="layer L-str">强</span> 11.6</td><td>选填</td><td><a href="#s2">二</a></td><td>周期整数倍 ⇒ (D)／(C)</td></tr>
+      <tr><td><span class="layer L-str">强</span> 11.7</td><td>选填</td><td><a href="#s3">三</a></td><td>自指方程 $I=\frac\pi4\ln2-I$</td></tr>
+      <tr><td><span class="layer L-str">强</span> 11.8</td><td>选填</td><td><a href="#s3">三</a></td><td>化成 $f(\sin x)$ 后套公式⑤ ⇒ $\frac\pi2$</td></tr>
+      <tr><td><span class="layer L-str">强</span> 11.9</td><td>选填</td><td><a href="#s4">四</a></td><td>$x=\tan t$ 化华里士，比值 $\frac{2n-1}{2n}$ ⇒ $\mathrm e^{-1}$</td></tr>
+      <tr><td><span class="layer L-str">强</span> 11.10</td><td><b>三层</b></td><td><a href="#s8">八</a></td><td>结论倒推 $F=f\cos x$ ＋ 罗尔</td></tr>
+      <tr><td><span class="layer L-str">强</span> 11.11</td><td>选填</td><td><a href="#s5">五</a></td><td>平移还原对称性 ⇒ 两问均 0</td></tr>
+      <tr><td><span class="layer L-str">强</span> 11.12</td><td>选填</td><td><a href="#s5">五</a></td><td>配方定中心 + 半圆面积 ⇒ $4\pi$／$\frac32\pi$</td></tr>
+      <tr><td><span class="layer L-str">强</span> 11.13</td><td>选填</td><td><a href="#s5">五</a></td><td>拆区间逐点比 ⇒ 为正</td></tr>
+      <tr><td><span class="layer L-str">强</span> 11.14</td><td>选填</td><td><a href="#s5">五</a></td><td>降阶 ⇒ $\frac16-\frac14\ln3$</td></tr>
+      <tr><td><span class="layer L-str">强</span> 11.15</td><td>选填</td><td><a href="#s5">五</a></td><td>升阶（变限积分求导掉）⇒ $\frac{\mathrm e-2}6$</td></tr>
+      <tr><td><span class="layer L-str">强</span> 11.16</td><td>选填</td><td><a href="#s6">六</a></td><td>牛莱造差值 + 分段换元 ⇒ $\mathrm e-1$</td></tr>
+      <tr><td><span class="layer L-str">强</span> 11.17</td><td>选填</td><td><a href="#s14">十四</a></td><td>配平方 + 保号性 ⇒ $f=x^2$</td></tr>
+      <tr><td><span class="layer L-str">强</span> 11.18</td><td><b>三层</b></td><td><a href="#s14">十四</a></td><td>梯形公式误差 ⇒ $\frac1{12}$</td></tr>
+      <tr><td><span class="layer L-str">强</span> 11.19</td><td><b>三层</b></td><td><a href="#s15">十五</a></td><td>★压轴：四步链条 ⇒ $\ge4$</td></tr>
+      <tr><td><span class="layer L-base">基</span> 11.1</td><td><b>三层</b></td><td><a href="#s8">八</a></td><td>柯西证推广积分中值 + $\xi_n$ 陷阱</td></tr>
+      <tr><td><span class="layer L-base">基</span> 11.2</td><td><b>三层</b></td><td><a href="#s8">八</a></td><td>积分条件兑换第三点 ⇒ $f''(\xi)\lt0$</td></tr>
+      <tr><td><span class="layer L-base">基</span> 11.3</td><td>选填</td><td><a href="#s7">七</a></td><td>分部 + 夹逼 ⇒ $\ln2$</td></tr>
+      <tr><td><span class="layer L-base">基</span> 11.4</td><td><b>三层</b></td><td><a href="#s7">七</a></td><td>比大小递刀给求极限 ⇒ $u_n\to0$</td></tr>
+      <tr><td><span class="layer L-base">基</span> 11.5</td><td>选填</td><td><a href="#s7">七</a></td><td>锯齿波，不能洛必达 ⇒ $\frac12$</td></tr>
+      <tr><td><span class="layer L-base">基</span> 11.6</td><td><b>三层</b></td><td><a href="#s9">九</a></td><td>两次分部 ⇒ $\frac M{12}$</td></tr>
+      <tr><td><span class="layer L-base">基</span> 11.7</td><td><b>三层</b></td><td><a href="#s11">十一</a></td><td>★考研以来最复杂上限；单调性法</td></tr>
+      <tr><td><span class="layer L-base">基</span> 11.8</td><td><b>三层</b></td><td><a href="#s12">十二</a></td><td>劈两段 + 拉格朗日 ⇒ $\frac M4$</td></tr>
+      <tr><td><span class="layer L-base">基</span> 11.9</td><td><b>三层</b></td><td><a href="#s12">十二</a></td><td>中点展开泰勒 ⇒ $\frac M3$</td></tr>
+      <tr><td><span class="layer L-base">基</span> 11.10</td><td><b>三层</b></td><td><a href="#s13">十三</a></td><td>分部 + 绝对值链 ⇒ $\frac2n[f(2\pi)-f(0)]$</td></tr>
+      <tr><td><span class="layer L-base">基</span> 11.11</td><td><b>三层</b></td><td><a href="#s13">十三</a></td><td>两端各写一次相加 ⇒ $\frac12\int|f'|$</td></tr>
+      <tr><td><span class="layer L-base">习</span> 11.1</td><td><b>三层</b></td><td><a href="#s8">八</a></td><td>积分中值 + 三次拉格朗日；$\eta\in(2,3]$</td></tr>
+      <tr><td><span class="layer L-base">习</span> 11.2</td><td><b>三层</b>×2</td><td><a href="#s14">十四</a></td><td>对称换元／推广积分中值，两法</td></tr>
+      <tr><td><span class="layer L-base">习</span> 11.3</td><td><b>三层</b></td><td><a href="#s9">九</a></td><td>反函数 $\varphi(f(x))=x$ + 两次分部</td></tr>
+      <tr><td><span class="layer L-base">习</span> 11.4</td><td><b>三层</b></td><td><a href="#s11">十一</a></td><td>常数写回积分 ⇒ 单调性收口</td></tr>
+      <tr><td><span class="layer L-base">习</span> 11.5</td><td><b>三层</b>×2</td><td><a href="#s13">十三</a></td><td>★★注＝全章总纲；拉格朗日／牛莱两法</td></tr>
+      <tr><td><span class="layer L-base">习</span> 11.6</td><td><b>三层</b></td><td><a href="#s12">十二</a></td><td>丢掉非负余项 ⇒ Hermite–Hadamard 左半</td></tr>
+    </table></div>
+    <p style="margin-top:14px"><b>下一章</b>：第 12 章 · 一元函数积分学的应用（三）——物理应用<span style="color:var(--muted)">（尚未撰写；微元法原样搬到功、压力、引力上，与第 7 讲微分学物理应用对称）</span>　|　<b>上一章</b>：<a href="第10章_一元函数积分学的应用一_几何应用.html">第 10 章 · 几何应用</a>　|　<a href="../index.html">← 返回数学复盘中心</a></p>
+  </div>
+</div>
+
+<script>
+"use strict";
+/* ============ 通用小工具 ============ */
+function svgEl(t,a){var e=document.createElementNS("http://www.w3.org/2000/svg",t);for(var k in a)e.setAttribute(k,a[k]);return e;}
+function clear(n){while(n.firstChild)n.removeChild(n.firstChild);}
+function txt(n,x,y,s,o){o=o||{};var e=svgEl("text",{x:x,y:y,"font-size":o.fs||11,"text-anchor":o.ta||"start",
+  fill:o.fill||"var(--ink)","font-weight":o.fw||400});e.textContent=s;n.appendChild(e);return e;}
+function simpson(f,a,b,n){ // n 偶数
+  var h=(b-a)/n,s=f(a)+f(b),i;
+  for(i=1;i<n;i++)s+=f(a+i*h)*(i%2?4:2);
+  return s*h/3;
+}
+function fmt(v,d){ if(!isFinite(v))return "∞"; d=(d===undefined)?4:d; return v.toFixed(d); }
+
+/* ============ 模块 1：狄拉克核分割点实验台 ============ */
+(function(){
+  var svg=document.getElementById("dk-svg"); if(!svg)return;
+  var sa=document.getElementById("dk-a"),sh=document.getElementById("dk-h"),sf=document.getElementById("dk-f");
+  var av=document.getElementById("dk-av"),hv=document.getElementById("dk-hv");
+  var tab=document.getElementById("dk-tab"),say=document.getElementById("dk-say");
+  var FS=[{n:"e^x + x²",f:function(x){return Math.exp(x)+x*x;},f0:1},
+          {n:"cos 3x",f:function(x){return Math.cos(3*x);},f0:1},
+          {n:"2 + x",f:function(x){return 2+x;},f0:2},
+          {n:"|x| + 0.5",f:function(x){return Math.abs(x)+0.5;},f0:0.5}];
+  function draw(){
+    var al=parseFloat(sa.value), lh=parseFloat(sh.value), h=Math.pow(10,lh);
+    var F=FS[parseInt(sf.value,10)], d=Math.pow(h,al);
+    av.textContent="α = "+al.toFixed(2);
+    hv.textContent="h = "+h.toExponential(0).replace("e","e");
+    // 三段 arctan 增量
+    var A1=Math.atan(-d/h)-Math.atan(-1/h);
+    var A2=2*Math.atan(d/h);
+    var A3=Math.atan(1/h)-Math.atan(d/h);
+    // 实际积分（数值）：⚠️ 积分值本身与分割点 α 无关，分割只是证明手法。
+    // 故这里用固定的对数加密网格（在 0 附近逐级加密），与 α 完全无关，避免采样误差冒充"结果变了"。
+    var g=function(x){return h/(h*h+x*x)*F.f(x);};
+    var nodes=[0],s;
+    for(s=h;s<1;s*=4)nodes.push(s);
+    nodes.push(1);
+    var I=0,q;
+    for(q=0;q<nodes.length-1;q++){
+      I+=simpson(g,nodes[q],nodes[q+1],200)+simpson(g,-nodes[q+1],-nodes[q],200);
+    }
+    var target=Math.PI*F.f0;
+    /* --- 画图：对数纵轴的针 --- */
+    clear(svg);
+    var W=700,H=220,L=50,R=680,T=18,B=190;
+    svg.appendChild(svgEl("line",{x1:L,y1:B,x2:R,y2:B,stroke:"var(--line)","stroke-width":1.2}));
+    svg.appendChild(svgEl("line",{x1:(L+R)/2,y1:T,x2:(L+R)/2,y2:B,stroke:"var(--line)","stroke-width":1,"stroke-dasharray":"3 3"}));
+    var X=function(x){return L+(x+1)/2*(R-L);};
+    var top=1/h, lo=h/(h*h+1);
+    var Y=function(v){var t=(Math.log(v)-Math.log(lo))/(Math.log(top)-Math.log(lo));return B-t*(B-T);};
+    var pts="",i,x;
+    for(i=0;i<=600;i++){x=-1+2*i/600;pts+=(i?" L":"M")+X(x).toFixed(1)+","+Y(h/(h*h+x*x)).toFixed(1);}
+    svg.appendChild(svgEl("path",{d:pts,fill:"none",stroke:"var(--accent)","stroke-width":1.8}));
+    // 分割点
+    [-d,d].forEach(function(p){
+      if(p>=-1&&p<=1){ svg.appendChild(svgEl("line",{x1:X(p),y1:T,x2:X(p),y2:B,stroke:"var(--red)","stroke-width":1.4,"stroke-dasharray":"4 3"})); }
+    });
+    txt(svg,X(0),B+16,"0",{ta:"middle",fs:10,fill:"var(--muted)"});
+    txt(svg,L,B+16,"−1",{fs:10,fill:"var(--muted)"});
+    txt(svg,R,B+16,"1",{ta:"end",fs:10,fill:"var(--muted)"});
+    if(d<=1){ txt(svg,X(d)+4,T+12,"δ = h^α = "+d.toExponential(1),{fs:10,fill:"var(--red)",fw:700}); }
+    else { txt(svg,X(0)+4,T+12,"δ = "+d.toExponential(1)+" 已超出区间",{fs:10,fill:"var(--red)",fw:700}); }
+    txt(svg,L+4,T+12,"h/(h²+x²)（对数纵轴）",{fs:10,fill:"var(--muted)"});
+    /* --- 表 --- */
+    var ratio=d/h;
+    var okShrink=(d<0.05), okWide=(ratio>20);
+    tab.innerHTML="<tr><th>量</th><th>值</th><th>该趋于</th><th>状态</th></tr>"+
+      "<tr><td>δ = h^α</td><td>"+d.toExponential(2)+"</td><td>0</td><td class='"+(okShrink?"hit":"miss")+"'>"+(okShrink?"✓ ξ₂ 被夹到 0":"✗ ξ₂ 不趋于 0")+"</td></tr>"+
+      "<tr><td>δ/h = h^(α−1)</td><td>"+ratio.toExponential(2)+"</td><td>+∞</td><td class='"+(okWide?"hit":"miss")+"'>"+(okWide?"✓ 中段吃满 π":"✗ 中段吃不满 π")+"</td></tr>"+
+      "<tr><td>左段 A₁</td><td>"+fmt(A1)+"</td><td>0</td><td class='"+(Math.abs(A1)<0.05?"hit":"miss")+"'>"+(Math.abs(A1)<0.05?"✓":"✗")+"</td></tr>"+
+      "<tr><td>中段 A₂</td><td>"+fmt(A2)+"</td><td>π = 3.1416</td><td class='"+(Math.abs(A2-Math.PI)<0.05?"hit":"miss")+"'>"+(Math.abs(A2-Math.PI)<0.05?"✓":"✗")+"</td></tr>"+
+      "<tr><td>右段 A₃</td><td>"+fmt(A3)+"</td><td>0</td><td class='"+(Math.abs(A3)<0.05?"hit":"miss")+"'>"+(Math.abs(A3)<0.05?"✓":"✗")+"</td></tr>"+
+      "<tr><td><b>证明路线给出的答案</b></td><td><b>"+(okShrink?fmt(F.f0*A2)+"*":"无法定值")+"</b></td><td>π·f(0) = "+fmt(target)+"</td><td class='"+(Math.abs(F.f0*A2-target)<0.02*Math.max(1,target)&&okShrink?"hit":"miss")+"'>"+(Math.abs(F.f0*A2-target)<0.02*Math.max(1,target)&&okShrink?"✓ 证明走得通":(okShrink?"✗ 中段吃不满 π":"✗ f(ξ₂)↛f(0)"))+"</td></tr>"+
+      "<tr><td>积分真值（与 α <b>无关</b>）</td><td>"+fmt(I)+"</td><td>π·f(0) = "+fmt(target)+"</td><td class='hit'>✓</td></tr>";
+    /* --- 结论 --- */
+    var m;
+    if(al<=0.001){ m="<b>α = 0 ⇒ δ 是常数 1</b>：中段就是整个区间，ξ₂ 根本没被夹住，回到了那个“行不通”的错误示范。"; }
+    else if(al>=0.999){ m="<b>α ≥ 1 ⇒ δ/h 不再趋于 ∞</b>：中段的 arctan 只吃到 2·arctan(h^(α−1))，α=1 时仅 π/2，答案会变成 f(0)·π/2 之类，<b>偏小</b>。"; }
+    else if(Math.abs(al-0.5)<1e-9){ m="<b>α = ½ 就是书上的 √h</b>：δ→0 且 δ/h→∞ 两个条件同时满足，三段的值收敛到 0、π、0，答案正是 <b>π f(0)</b>。"; }
+    else { m="<b>α ∈ (0,1) 全都合法</b>：δ = h^"+al.toFixed(2)+" 比 h 慢地趋于 0，两个条件都满足。<b>√h 只是最好写的那一个，不是唯一正确的。</b>"; }
+    say.innerHTML=m;
+  }
+  [sa,sh,sf].forEach(function(e){e.addEventListener("input",draw);e.addEventListener("change",draw);});
+  draw();
+})();
+
+/* ============ 模块 2：区间再现配对器 ============ */
+(function(){
+  var svg=document.getElementById("pr-svg"); if(!svg)return;
+  var sel=document.getElementById("pr-f"),vd=document.getElementById("pr-vd"),say=document.getElementById("pr-say");
+  var P=Math.PI;
+  var DATA=[
+    {n:"√(4−x)/(√(4−x)+√(x+2))",a:0,b:2,f:function(x){var u=Math.sqrt(4-x),v=Math.sqrt(x+2);return u/(u+v);},
+     tag:"速查 3",note:"分母是两项之和、分子取其一，且两项在 x↔2−x 下互换 ⇒ 和恒为 1。"},
+    {n:"1/(1+e^(1/x))",a:-1,b:1,f:function(x){ if(Math.abs(x)<1e-9)return 0.5; var t=Math.exp(1/x); return isFinite(t)?1/(1+t):0;},
+     tag:"强 11.4",note:"e^(1/x) 与 e^(−1/x) 互为倒数 ⇒ 两项之和恒为 1（x=0 是跳跃间断，不影响积分）。"},
+    {n:"sin⁴x/(1+e^(−x))",a:-P/2,b:P/2,f:function(x){return Math.pow(Math.sin(x),4)/(1+Math.exp(-x));},
+     tag:"强 11.5",note:"分子 sin⁴x 是偶函数，可提为公因子；剩下的 1/(1+e^(−x))+1/(1+e^x)=1 ⇒ 和 = sin⁴x（不是常数，但分母消失了）。"},
+    {n:"cos t/(sin t+cos t)",a:0,b:P/2,f:function(x){return Math.cos(x)/(Math.sin(x)+Math.cos(x));},
+     tag:"速查 4",note:"t↔π/2−t 把 cos 与 sin 互换 ⇒ 和恒为 1。这正是公式⑦的直接应用。"},
+    {n:"ln(1+tan t)",a:0,b:P/4,f:function(x){return Math.log(1+Math.tan(x));},
+     tag:"强 11.7",note:"tan(π/4−u)=(1−tan u)/(1+tan u) ⇒ 两项之和恒为 ln2 ≈ 0.6931。这就是自指方程 I = (π/4)ln2 − I 的来源。"},
+    {n:"x/(e^x+e^(1−x))",a:0,b:1,f:function(x){return x/(Math.exp(x)+Math.exp(1-x));},
+     tag:"速查 1",note:"和 = 1/(e^x+e^(1−x))，<b>不是常数</b>——但 x 被消掉了，剩下的可换元求出。区间再现不一定给常数，能简化就是胜利。"},
+    {n:"x²",a:0,b:2,f:function(x){return x*x;},
+     tag:"反例",note:"和 = x²+(2−x)² = 2x²−4x+4，<b>不是常数</b>，区间再现帮不上忙。注意它仍然关于中点 x=1 对称——这是公式③的普遍结论。"}
+  ];
+  function draw(){
+    var D=DATA[parseInt(sel.value,10)],a=D.a,b=D.b,i,x;
+    var N=400,f1=[],f2=[],F=[],lo=1e9,hi=-1e9;
+    for(i=0;i<=N;i++){
+      x=a+(b-a)*i/N;
+      var u=D.f(x),v=D.f(a+b-x),w=u+v;
+      f1.push(u);f2.push(v);F.push(w);
+      [u,v,w].forEach(function(t){ if(isFinite(t)){ if(t<lo)lo=t; if(t>hi)hi=t; } });
+    }
+    if(hi-lo<1e-9){hi=lo+1;}
+    var pad=(hi-lo)*0.12; lo-=pad; hi+=pad;
+    clear(svg);
+    var W=700,H=250,L=52,R=676,T=16,B=214;
+    var X=function(t){return L+(t-a)/(b-a)*(R-L);},Y=function(v){return B-(v-lo)/(hi-lo)*(B-T);};
+    svg.appendChild(svgEl("line",{x1:L,y1:B,x2:R,y2:B,stroke:"var(--line)","stroke-width":1.2}));
+    svg.appendChild(svgEl("line",{x1:L,y1:T,x2:L,y2:B,stroke:"var(--line)","stroke-width":1.2}));
+    // 中点竖线
+    var mid=(a+b)/2;
+    svg.appendChild(svgEl("line",{x1:X(mid),y1:T,x2:X(mid),y2:B,stroke:"var(--muted)","stroke-width":1,"stroke-dasharray":"3 4"}));
+    txt(svg,X(mid),T-3,"中点 (a+b)/2",{ta:"middle",fs:9.5,fill:"var(--muted)"});
+    function path(arr,col,wd,dash){
+      var d="",k;
+      for(k=0;k<=N;k++){ var yy=arr[k]; if(!isFinite(yy))continue;
+        d+=(d?" L":"M")+X(a+(b-a)*k/N).toFixed(1)+","+Y(yy).toFixed(1); }
+      var p=svgEl("path",{d:d,fill:"none",stroke:col,"stroke-width":wd});
+      if(dash)p.setAttribute("stroke-dasharray",dash);
+      svg.appendChild(p);
+    }
+    path(f1,"var(--accent)",1.9);
+    path(f2,"var(--purple)",1.6,"5 3");
+    path(F,"var(--green)",2.4);
+    // 坐标标注
+    txt(svg,L,B+16,fmt(a,2),{fs:10,fill:"var(--muted)"});
+    txt(svg,R,B+16,fmt(b,2),{ta:"end",fs:10,fill:"var(--muted)"});
+    txt(svg,L-5,Y(hi-pad*0.5)+3,fmt(hi-pad*0.5,2),{ta:"end",fs:9.5,fill:"var(--muted)"});
+    txt(svg,L-5,Y(lo+pad*0.5)+3,fmt(lo+pad*0.5,2),{ta:"end",fs:9.5,fill:"var(--muted)"});
+    // 判定：F 是否常数
+    var mn=1e9,mx=-1e9;
+    F.forEach(function(v){ if(isFinite(v)){ if(v<mn)mn=v; if(v>mx)mx=v; } });
+    var isConst=(mx-mn)<1e-6*Math.max(1,Math.abs(mx));
+    var I=simpson(function(t){var v=D.f(t);return isFinite(v)?v:0;},a+1e-9,b-1e-9,800);
+    if(isConst){
+      vd.className="verdict v-ok";
+      vd.textContent="✓ 配对成功：f(x)+f(a+b−x) ≡ "+fmt(mx,6)+"　⇒　I = ½ × "+fmt(mx,4)+" × ("+fmt(b,3)+"−"+fmt(a,3)+") = "+fmt(mx*(b-a)/2,6)+"　（数值积分 = "+fmt(I,6)+"）";
+    }else{
+      vd.className="verdict v-inf";
+      vd.textContent="△ 和不是常数（在 "+fmt(mn,4)+" ~ "+fmt(mx,4)+" 之间变动）　数值积分 I = "+fmt(I,6);
+    }
+    say.innerHTML="<b>"+D.tag+"</b>　"+D.note;
+  }
+  sel.addEventListener("change",draw); draw();
+})();
+
+/* ============ 模块 3：例 11.19 下界探测器 ============ */
+(function(){
+  var svg=document.getElementById("lb-svg"); if(!svg)return;
+  var sf=document.getElementById("lb-f"),sp=document.getElementById("lb-p"),pv=document.getElementById("lb-pv");
+  var qq=document.getElementById("lb-q"),vd=document.getElementById("lb-vd");
+  function build(){
+    var kind=parseInt(sf.value,10),t=parseInt(sp.value,10)/100,f,f2,lab;
+    if(kind===0){ var p=0.5+t*3.5; lab="p = "+p.toFixed(2);
+      f=function(x){return Math.pow(Math.sin(Math.PI*x),p);};
+      f2=function(x){var s=Math.sin(Math.PI*x),c=Math.cos(Math.PI*x),P2=Math.PI*Math.PI;
+        return P2*p*Math.pow(s,p-2)*((p-1)*c*c-s*s);};
+    }else if(kind===1){ var a=0.6+t*2.4; lab="a = "+a.toFixed(2);
+      f=function(x){return Math.pow(x,a)*(1-x);};
+      f2=function(x){return a*(a-1)*Math.pow(x,a-2)-(a+1)*a*Math.pow(x,a-1);};
+    }else{ var k=-0.9+t*1.8; lab="k = "+k.toFixed(2);
+      f=function(x){return x*(1-x)*(1+k*x);};
+      f2=function(x){return -2-6*k*x+2*k;};
+    }
+    return {f:f,f2:f2,lab:lab};
+  }
+  function draw(){
+    var M=build(),f=M.f,f2=M.f2;
+    pv.textContent=M.lab;
+    // 找最大值点
+    var N=2000,i,x,best=-1e9,x0=0.5;
+    for(i=1;i<N;i++){ x=i/N; var v=f(x); if(isFinite(v)&&v>best){best=v;x0=x;} }
+    var bound=1/(x0*(1-x0));
+    // 积分 ∫|f''/f|（端点邻域会发散，用截断）
+    var eps=1e-4,S=0,n=4000,h=(1-2*eps)/n;
+    for(i=0;i<=n;i++){ x=eps+i*h; var g=Math.abs(f2(x)/f(x)); if(!isFinite(g))g=0;
+      S+=g*h*((i===0||i===n)?0.5:1); }
+    // 画
+    clear(svg);
+    var L=52,R=676,T=16,B=204;
+    var X=function(t){return L+t*(R-L);},Y=function(v){return B-(v/(best*1.15))*(B-T);};
+    svg.appendChild(svgEl("line",{x1:L,y1:B,x2:R,y2:B,stroke:"var(--line)","stroke-width":1.2}));
+    svg.appendChild(svgEl("line",{x1:L,y1:T,x2:L,y2:B,stroke:"var(--line)","stroke-width":1.2}));
+    var d="",k2;
+    for(k2=0;k2<=500;k2++){ x=k2/500; var v=f(x); if(!isFinite(v))v=0;
+      d+=(k2?" L":"M")+X(x).toFixed(1)+","+Y(v).toFixed(1); }
+    svg.appendChild(svgEl("path",{d:d,fill:"none",stroke:"var(--accent)","stroke-width":2.1}));
+    svg.appendChild(svgEl("line",{x1:X(x0),y1:T,x2:X(x0),y2:B,stroke:"var(--red)","stroke-width":1.4,"stroke-dasharray":"4 3"}));
+    svg.appendChild(svgEl("line",{x1:X(0.5),y1:T,x2:X(0.5),y2:B,stroke:"var(--muted)","stroke-width":1,"stroke-dasharray":"2 4"}));
+    txt(svg,X(x0)+4,T+12,"x₀ = "+x0.toFixed(3),{fs:10.5,fill:"var(--red)",fw:700});
+    txt(svg,L,B+16,"0",{fs:10,fill:"var(--muted)"});
+    txt(svg,R,B+16,"1",{ta:"end",fs:10,fill:"var(--muted)"});
+    txt(svg,X(0.5),B+16,"½",{ta:"middle",fs:10,fill:"var(--muted)"});
+    txt(svg,L+5,T+12,"f(x)（满足 f(0)=f(1)=0, f''<0）",{fs:10,fill:"var(--muted)"});
+    // 数字面板
+    qq.innerHTML=
+      "<div style='background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px 11px;text-align:center'><b style='display:block;font-size:.72rem;color:var(--muted)'>最大值点 x₀</b>"+x0.toFixed(4)+"</div>"+
+      "<div style='background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px 11px;text-align:center'><b style='display:block;font-size:.72rem;color:var(--muted)'>f(x₀)</b>"+best.toFixed(4)+"</div>"+
+      "<div style='background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px 11px;text-align:center'><b style='display:block;font-size:.72rem;color:var(--muted)'>1/(x₀(1−x₀))　≥4</b>"+bound.toFixed(4)+"</div>"+
+      "<div style='background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px 11px;text-align:center'><b style='display:block;font-size:.72rem;color:var(--muted)'>∫₀¹|f''/f| dx 实际</b>"+(S>1e3?"≈ +∞（发散）":S.toFixed(3))+"</div>";
+    var ok=(S>=4-1e-6)||!isFinite(S);
+    vd.className="verdict "+(ok?"v-ok":"v-no");
+    vd.textContent=ok
+      ? "✓ ∫|f''/f| = "+(S>1e3?"≈ +∞（发散：端点处 f→0 而 f''↛0）":S.toFixed(3))+" ≥ 4　（证明给出的中间下界是 1/(x₀(1−x₀)) = "+bound.toFixed(3)+"，在 x₀=½ 处触底到 4；实际积分总是远大于它——4 是下确界但取不到）"
+      : "✗ 出现 < 4？请检查该参数是否已破坏 f''<0 的前提";
+  }
+  [sf,sp].forEach(function(e){e.addEventListener("input",draw);e.addEventListener("change",draw);});
+  draw();
+})();
+</script>
+</body>
+</html>
