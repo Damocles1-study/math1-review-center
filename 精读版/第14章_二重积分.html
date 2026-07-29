@@ -1,0 +1,2345 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>精读版 · 高数 第14章 二重积分</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],ignoredClasses:['nokatex']})"></script>
+<link rel="stylesheet" href="style.css">
+<style>
+/* ===== 本章专属：对称性判定台 / 换序沙盘 / 极坐标定限台 / 区域大观图鉴 ===== */
+.tool{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:20px 0}
+.tool h4{margin:0 0 4px;font-size:1rem;color:var(--accent)}
+.tool .hint{color:var(--muted);font-size:.82rem;margin-bottom:12px;line-height:1.7}
+.ctl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0}
+.ctl button{font:inherit;font-size:.8rem;padding:4px 12px;border-radius:8px;cursor:pointer;
+  border:1px solid var(--line);background:var(--card);color:var(--muted)}
+.ctl button.on{background:var(--accent-soft);color:var(--accent);border-color:var(--accent);font-weight:700}
+.ctl button:hover{filter:brightness(.96)}
+.ctl label{font-size:.8rem;color:var(--muted);min-width:8.5em}
+.ctl input[type=range]{flex:1 1 150px;min-width:120px;accent-color:var(--accent)}
+.ctl .val{font-family:var(--mono);font-size:.78rem;color:var(--accent);min-width:6.5em;text-align:right}
+.scene{background:var(--bg);border:1px solid var(--line);border-radius:10px;margin:10px 0;overflow-x:auto}
+.scene canvas{display:block;margin:0 auto;max-width:100%}
+.scene svg{display:block;width:100%;height:auto;min-width:460px}
+.say{background:var(--accent-soft);border-radius:8px;padding:9px 13px;margin:10px 0;
+  font-size:.86rem;color:var(--accent);line-height:1.75;min-height:2em}
+.say b{color:var(--accent)}
+.verdict{font-size:.88rem;font-weight:700;border-radius:8px;padding:7px 13px;margin:10px 0;display:block;line-height:1.7}
+.v-ok{background:var(--green-soft);color:var(--green)}
+.v-no{background:var(--red-soft);color:var(--red)}
+.v-inf{background:var(--amber-soft);color:var(--amber)}
+.dqwrap{overflow-x:auto;margin:6px 0}
+.dq{width:100%;min-width:0;font-size:.8rem;border-collapse:collapse}
+.dq th,.dq td{padding:4px 8px;font-family:var(--mono);text-align:right;white-space:nowrap;border-bottom:1px solid var(--line)}
+.dq th:first-child,.dq td:first-child{text-align:left;font-family:var(--sans);white-space:normal}
+.dq td.hit{color:var(--green);font-weight:700}
+.dq td.miss{color:var(--red);font-weight:700}
+.twocanv{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
+.twocanv figure{margin:0;text-align:center}
+.twocanv figcaption{font-size:.76rem;color:var(--muted);margin-top:4px}
+.legend2{font-size:.78rem;color:var(--muted);line-height:1.7;margin-top:6px}
+.chip{display:inline-block;font-size:.72rem;border-radius:5px;padding:1px 7px;margin-right:6px}
+.c-b{background:var(--accent-soft);color:var(--accent)}
+.c-g{background:var(--green-soft);color:var(--green)}
+.c-r{background:var(--red-soft);color:var(--red)}
+.c-a{background:var(--amber-soft);color:var(--amber)}
+.c-p{background:var(--purple-soft);color:var(--purple)}
+table.dense{font-size:.84rem;min-width:420px}
+table.dense td{padding:5px 9px}
+/* 总图 */
+.tenline{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 12px;margin:16px 0}
+.tenline svg{display:block;min-width:660px}
+/* 三步条 */
+.steps3{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.steps3 div{flex:1 1 190px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 13px;font-size:.85rem;line-height:1.75}
+.steps3 div b{color:var(--accent);display:block;margin-bottom:3px}
+/* 公式速查小卡 */
+.fcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,230px),1fr));gap:9px;margin:14px 0}
+.fcards div{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:9px 12px;font-size:.84rem;line-height:1.8}
+.fcards div b{color:var(--accent);font-size:.74rem;display:block;letter-spacing:.05em;margin-bottom:2px}
+/* 两栏对照 */
+.duo{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:10px;margin:14px 0}
+.duo > div{border-radius:10px;padding:11px 14px;font-size:.86rem;line-height:1.8}
+.duo .dA{background:var(--accent-soft);border:1px solid var(--accent)}
+.duo .dB{background:var(--green-soft);border:1px solid var(--green)}
+.duo b.h{display:block;font-size:.76rem;letter-spacing:.06em;margin-bottom:4px}
+.duo .dA b.h{color:var(--accent)} .duo .dB b.h{color:var(--green)}
+/* 口诀条 */
+.mantra{background:var(--accent);color:#fff;border-radius:12px;padding:13px 18px;margin:16px 0;
+  font-family:var(--serif);font-size:1.06rem;letter-spacing:.04em;text-align:center;line-height:2}
+.mantra small{display:block;font-family:var(--sans);font-size:.76rem;opacity:.86;letter-spacing:0;margin-top:4px}
+/* 可积不可求积清单 */
+.nolist{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,150px),1fr));gap:7px;margin:12px 0}
+.nolist span{background:var(--red-soft);color:var(--red);border-radius:8px;padding:6px 4px;text-align:center;font-size:.86rem;overflow-x:auto}
+.nolist span.wide{grid-column:1/-1}
+/* 判定色 */
+td.bad{color:var(--red);font-weight:700}
+td.good{color:var(--green);font-weight:700}
+/* 表格横滚 */
+.tw{overflow-x:auto;margin:14px 0}
+.tw table{min-width:520px}
+@media (max-width:560px){ .ctl{gap:6px} .ctl label{min-width:100%} .dq{font-size:.72rem} .mantra{font-size:.94rem} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <a class="back" href="../index.html">← 返回数学复盘中心</a>
+
+  <header>
+    <h1>第 14 章 · 二重积分</h1>
+    <div class="sub">
+      张宇《基础30讲》第 14 讲（书页 <b>338–376</b>，39 页）＋《高数18讲》第 14 讲（书页 <b>175–183</b>，<b>只有 9 页</b>），共 <b>48 页</b>逐页转录。<br>
+      讲义题量 <b>37 题</b>（基础 17 例 + 12 习，强化 8 题）——<b>强化讲是全书最薄的一讲</b>，故从《1000题·强化篇》41 题中<b>精选补 14 题</b>，全章 <b>51 题</b>。<br>
+      全部结论经 <b>sympy / scipy 独立复算（67 项断言 ALL PASS）</b>；仅千41 因分章解析 PDF 缺页，回原书解析册交叉核对。
+    </div>
+  </header>
+
+  <div class="legend">
+    <b>怎么读这一页</b>（大题一律「想 → 写 → 校」三层，<b>顺序固定，别跳着看</b>）：<br>
+    <span class="swatch" style="background:var(--purple)"></span><b>💭 思路</b>：动手<b>前</b>看／卡壳时看。只讲"看到什么该想到什么"，不含结果。<b>看完就合上页面自己写，别直接翻卷面。</b><br>
+    <span class="swatch" style="background:var(--accent)"></span><b>✍️ 考场卷面</b>：写完<b>对照</b>。只有考场上真要落笔的字，<span style="color:var(--green);font-weight:700">⛳</span> 标采分点。<br>
+    <span class="swatch" style="background:var(--muted)"></span><b>📌 批注</b>：对照完<b>校对</b>。定限纪律、扣分点、心算技巧、跨章联系——这些考场上<b>不要</b>落笔。<br>
+    <span class="swatch" style="background:var(--amber)"></span><b>必记</b>　<span class="swatch" style="background:var(--red)"></span><b>陷阱</b>　<span class="swatch" style="background:var(--blue)"></span><b>补讲</b>（书上没写但该知道的）　<span class="swatch" style="background:var(--green)"></span><b>强化/千题专属</b><br>
+    <span class="layer L-base">基</span>＝基础30讲　<span class="layer L-str">强</span>＝高数18讲　<span class="layer" style="background:var(--purple-soft);color:var(--purple)">千</span>＝1000题强化篇　右上角 <span class="pg" style="float:none">P.345</span> 是书页码。<br>
+    <b>选择填空题不写卷面层</b>——考场上本就不写过程。<b>本章 51 题里 29 题是选填，<u>19 道解答／证明题写满三层</u>（20 份卷面 · 86 个 ⛳ 采分点）。</b>
+  </div>
+
+  <nav class="toc">
+    <a href="#s0">定位：4:1 的反常比例</a>
+    <a href="#s1">一、概念与七条性质</a>
+    <a href="#s2">二、★对称性 🔀</a>
+    <a href="#s3">三、比大小三条路</a>
+    <a href="#s4">四、直角坐标定限 📐</a>
+    <a href="#s5">五、换序（可积不可求积）</a>
+    <a href="#s6">六、极坐标 🧭</a>
+    <a href="#s7">七、极坐标 ⇄ 直角 互认</a>
+    <a href="#s8">八、换元法与雅可比</a>
+    <a href="#s9">九、绝对值 / max 型</a>
+    <a href="#s10">十、古鲁金第二定理</a>
+    <a href="#s11">十一、高斯积分与 Γ</a>
+    <a href="#s12">十二、平面区域 D 大观 🖼️</a>
+    <a href="#end">收官 + 落位索引</a>
+  </nav>
+
+  <!-- ================= s0 定位 ================= -->
+  <h2 id="s0"><span class="idx">定位</span>全书唯一的 <u>4:1</u>：基础讲教全套，强化讲只挑硬骨头</h2>
+
+  <div class="key"><span class="tag">必记 · 先把这一章在全书的位置看懂</span>
+    <p>上一讲（ch13 多元函数微分学）是全书最厚的一讲，64 页；<b>本讲基础 39 页、强化只有 9 页</b>，比例 <b>4:1</b>，
+    是全书<u>最悬殊</u>的一章——与 ch11（强化比基础厚一半）<b>恰好相反</b>。</p>
+    <p>为什么？因为二重积分的核心技能是<b>"画区域 → 定限"</b>，这是一件必须手把手教、反复练的<b>机械功夫</b>，
+    只能放在基础讲；而强化阶段真正的增量（和式极限、保号性反问题、轮换对称、换元法）加起来只有 8 道题。
+    <b>所以本章的读法与别章不同：基础讲要读得极细，强化讲一小时能读完。</b></p>
+    <p>基础讲的最后 10 页是<b>「平面区域 $D$ 大观」——76 幅区域图 + 9 幅参数型</b>，
+    书上原话："<em>这些图不是背的，而是训练画区域能力的素材</em>"。这是全书独一份的排版，本页把它做成了<a href="#s12">可交互的速画训练器</a>。</p>
+  </div>
+
+  <div class="mantra">
+    计算：换序 · 换系 · 换元
+    <small>—— 强化讲章名旁的手写批注，本讲一句话总纲。三个「换」，对应本页 §5 / §6–7 / §8</small>
+  </div>
+
+  <div class="tenline">
+    <svg viewBox="0 0 700 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="第14讲总图">
+      <defs><marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+        <path d="M0,1 L7,4 L0,7 z" fill="currentColor"/></marker></defs>
+      <g style="color:var(--accent)" fill="none" stroke="currentColor" stroke-width="1.4">
+        <rect x="245" y="8" width="210" height="34" rx="9" fill="var(--accent-soft)"/>
+        <path d="M350,42 L350,60" marker-end="url(#ar)"/>
+        <path d="M118,60 L582,60"/>
+        <path d="M118,60 L118,80" marker-end="url(#ar)"/><path d="M350,60 L350,80" marker-end="url(#ar)"/>
+        <path d="M582,60 L582,80" marker-end="url(#ar)"/>
+      </g>
+      <g font-family="var(--sans)" text-anchor="middle">
+        <text x="350" y="30" font-size="14" font-weight="700" fill="var(--accent)">二重积分 · 三大块</text>
+        <g font-size="12" fill="var(--ink)">
+          <rect x="28" y="80" width="180" height="46" rx="9" fill="var(--card)" stroke="var(--line)"/>
+          <text x="118" y="100" font-weight="700">① 先化简</text>
+          <text x="118" y="117" font-size="10.5" fill="var(--muted)">对称性 · 保号性 · 常用结论</text>
+          <rect x="260" y="80" width="180" height="46" rx="9" fill="var(--card)" stroke="var(--line)"/>
+          <text x="350" y="100" font-weight="700">② 再选系</text>
+          <text x="350" y="117" font-size="10.5" fill="var(--muted)">直角 · 极坐标 · 一般换元</text>
+          <rect x="492" y="80" width="180" height="46" rx="9" fill="var(--card)" stroke="var(--line)"/>
+          <text x="582" y="100" font-weight="700">③ 最后定限</text>
+          <text x="582" y="117" font-size="10.5" fill="var(--muted)">画区域 → 后积先定限</text>
+        </g>
+      </g>
+      <g style="color:var(--muted)" fill="none" stroke="currentColor" stroke-width="1.1" stroke-dasharray="3 3">
+        <path d="M118,126 L118,148"/><path d="M350,126 L350,148"/><path d="M582,126 L582,148"/>
+      </g>
+      <g font-family="var(--sans)" text-anchor="middle" font-size="10.5" fill="var(--muted)">
+        <rect x="16" y="148" width="204" height="110" rx="8" fill="var(--bg)" stroke="var(--line)"/>
+        <text x="118" y="166" fill="var(--red)" font-weight="700">书标「必考题！」</text>
+        <text x="118" y="184">普通对称性 4 条 + 平移 2 条</text>
+        <text x="118" y="200">轮换对称性（只在直角系）</text>
+        <text x="118" y="216">保号性：比大小 / 反问题</text>
+        <text x="118" y="232" fill="var(--green)">强化：常用结论 5 条</text>
+        <text x="118" y="250">口诀：偶倍奇零</text>
+        <rect x="248" y="148" width="204" height="110" rx="8" fill="var(--bg)" stroke="var(--line)"/>
+        <text x="350" y="166" fill="var(--accent)" font-weight="700">选系两条判据</text>
+        <text x="350" y="184">① 被积函数含 $x^2{+}y^2$</text>
+        <text x="350" y="200">② 区域是圆或圆的一部分</text>
+        <text x="350" y="216">满足其一 → 极坐标</text>
+        <text x="350" y="232" fill="var(--red)">主要看 ①（书上蓝批）</text>
+        <text x="350" y="250" fill="var(--green)">都不行 → 一般换元 J</text>
+        <rect x="480" y="148" width="204" height="110" rx="8" fill="var(--bg)" stroke="var(--line)"/>
+        <text x="582" y="166" fill="var(--red)" font-weight="700">一切错误的源头</text>
+        <text x="582" y="184">后积先定限，限内画条线</text>
+        <text x="582" y="200">先交写下限，后交写上限</text>
+        <text x="582" y="216">⚠️ 下限必须 ≤ 上限</text>
+        <text x="582" y="232">X 型 / Y 型 / 分块相加</text>
+        <text x="582" y="250">D 画不出 → 写不等式分析法</text>
+      </g>
+      <g font-family="var(--sans)" text-anchor="middle" font-size="11" font-weight="700">
+        <text x="350" y="278" fill="var(--purple)">出题形态：解答题（数一必考）　·　化简能省一半计算，定限错则全盘皆输</text>
+      </g>
+    </svg>
+  </div>
+
+  <div class="tw">
+  <table class="dense">
+    <tr><th>与前面几讲的对照</th><th>一元（ch8–ch12）</th><th>二重（本讲）</th></tr>
+    <tr><td>分割的对象</td><td>线段 $[a,b]$</td><td><b>平面区域 $D$</b></td></tr>
+    <tr><td>微元</td><td>$\mathrm dx$</td><td>$\mathrm d\sigma=\mathrm dx\mathrm dy=r\,\mathrm dr\mathrm d\theta$</td></tr>
+    <tr><td>"取极限"的度量</td><td>$\max\{\Delta x_i\}\to0$</td><td>各小闭区域<b>直径</b>的最大值 $\lambda\to0$</td></tr>
+    <tr><td>几何意义</td><td>曲边梯形面积</td><td><b>曲顶柱体体积</b>（负的部分抵扣）</td></tr>
+    <tr><td>中值定理</td><td>$\int_a^b f=f(\xi)(b-a)$</td><td>$\displaystyle\iint_D f=f(\xi,\eta)\cdot S_D$</td></tr>
+    <tr><td>换元的"测度"因子</td><td>$\varphi'(t)$（一维）</td><td>$\Big|\dfrac{\partial(x,y)}{\partial(u,v)}\Big|$（<b>二维雅可比</b>）</td></tr>
+    <tr><td>对称性</td><td>奇偶函数 + 对称区间</td><td>4 条普通 + <b>轮换对称性</b>（一元没有）</td></tr>
+    <tr><td>形心/旋转体</td><td>ch12 的 $V=2\pi\bar x S$</td><td><b>古鲁金第二定理</b>在这里被<u>二重积分正式推导</u></td></tr>
+  </table>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 本章最该先建立的一句话直觉</span>
+    <p><b>二重积分这一讲，真正难的从来不是"积分"，而是"区域"。</b>
+    被积函数一旦定限完成，剩下的就是 ch9 的一元积分技术（凑微分、分部、三角代换），本讲不教新的积分技巧。
+    所以复习的性价比排序是：</p>
+    <p style="text-align:center;font-weight:700;color:var(--accent)">画区域 ＞ 定限 ＞ 对称性化简 ＞ 选坐标系 ＞ 一元积分技术</p>
+    <p>本页的四个交互模块全部围绕前两项。<b>把 §4 的定限沙盘和 §12 的区域图鉴刷熟，本章就过了七成。</b></p>
+  </div>
+
+  <div class="dolinks">
+    <div class="t">去做题（分章 PDF，本地打开）</div>
+    <a href="../../张宇系列_分章易识别版/高等数学/14_二重积分/高数_第14章_基础30讲.pdf">基础30讲 第14讲</a>
+    <a href="../../张宇系列_分章易识别版/高等数学/14_二重积分/高数_第14章_强化18讲.pdf">高数18讲 第14讲</a>
+    <a href="../../张宇系列_分章易识别版/高等数学/14_二重积分/高数_第14章_1000题_强化_题目.pdf">1000题·强化篇 题目</a>
+    <a href="../../张宇系列_分章易识别版/高等数学/14_二重积分/高数_第14章_1000题_强化_解析.pdf">1000题·强化篇 解析</a>
+    <div class="note">⚠️ 分章解析 PDF 只到第 36 题，37–41 题的解析要回原书《27张宇1000题数一-解析册》PDF 第 335–338 页。</div>
+  </div>
+
+
+  <!-- ================= s1 概念与性质 ================= -->
+  <h2 id="s1"><span class="idx">一</span>概念与七条性质：<u>把定积分的每一句话抄一遍</u></h2>
+
+  <div class="key"><span class="tag">必记 · 定义（书上蓝批全是"对照定积分"）</span><a class="pg" href="#">P.339</a>
+    <p>设 $f(x,y)$ 是有界闭区域 $D$ 上的<b>有界函数</b>，将 $D$ <b>任意分成</b> $n$ 个小闭区域 $\Delta\sigma_1,\cdots,\Delta\sigma_n$
+    （$\Delta\sigma_i$ 既表示区域，<b>也表示它的面积</b>），在每个 $\Delta\sigma_i$ 上任取一点 $(\xi_i,\eta_i)$，
+    若当各小闭区域<b>直径中的最大值 $\lambda\to0$</b> 时，和的极限总存在（<b>与分法及取点法均无关</b>），则</p>
+    <div class="fml">$$\iint_D f(x,y)\,\mathrm d\sigma=\lim_{\lambda\to0}\sum_{i=1}^n f(\xi_i,\eta_i)\Delta\sigma_i.$$</div>
+    <p><b>可积性</b>：$f$ 在<b>有界闭区域 $D$ 上连续</b> $\Rightarrow$ 二重积分一定存在。</p>
+  </div>
+
+  <div class="duo">
+    <div class="dA"><b class="h">一元 → 二元 → 三元，同一个思想</b>
+      一维 $\displaystyle\int_a^b f(x)\mathrm dx$（细质杆）<br>
+      二维 $\displaystyle\iint_D f(x,y)\mathrm d\sigma$（平面薄板）<br>
+      三维 $\displaystyle\iiint_\Omega f(x,y,z)\mathrm dv$<br>
+      <b>数学思想</b>：先把它们分得足够细，也就是<b>测度足够小</b>，在这个测度上<b>近似认为函数值是常数</b>，
+      则一小块的质量 $=f(\xi_i,\eta_i)\Delta\sigma_i$，<b>再求和，最后求极限</b>。
+    </div>
+    <div class="dB"><b class="h">为什么是两个积分号</b>
+      书上蓝批：「$\lambda\to0$，这<b>不是一个方向</b>的积分，区域为<b>二维</b>，则有 <b>2 个积分符号</b>，即 $\iint$。」<br>
+      另一条：「$\mathrm d\sigma\gt0$」——面积元素永远为正，<b>这就是后面"下限必须小于上限"的根源</b>。
+    </div>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 几何意义的三句话（书上【注】，与定积分完全平行）</span><a class="pg" href="#">P.340</a>
+    <ol>
+      <li>$f\ge0$：$f(x,y)$ 是<b>曲顶柱体</b>在 $(x,y)$ 处的<b>高</b>，$f(x,y)\mathrm d\sigma$ 是一根"<b>小竖条</b>"的体积，累加即整个柱体体积。</li>
+      <li>$f\lt0$：柱体在 $xOy$ 面<b>下方</b>，二重积分的<b>绝对值</b>仍是体积，但积分值是<b>负</b>的。</li>
+      <li>$f$ 变号：积分 $=$ 上方体积 $-$ 下方体积。</li>
+    </ol>
+    <p>👉 <b>这三句话是 §3「比大小」整节的全部依据</b>：比大小从来不用算积分，只看被积函数在不同区域上的<b>正负</b>。</p>
+  </div>
+
+  <h3>七条性质（与一元函数类似）<a class="pg" href="#">P.340</a></h3>
+  <div class="tw">
+  <table>
+    <tr><th>性质</th><th>内容</th><th>本章用在哪</th></tr>
+    <tr><td>1 求面积</td><td>$\displaystyle\iint_D 1\cdot\mathrm d\sigma=A$（$A$ 为 $D$ 的面积）</td><td>习 14.7 把积分化成"求面积"</td></tr>
+    <tr><td>2 可积必有界</td><td>$f$ 在有界闭区域 $D$ 上可积 $\Rightarrow$ $f$ 在 $D$ 上必有界</td><td>概念判断题</td></tr>
+    <tr><td>3 线性</td><td>$\displaystyle\iint_D(k_1f\pm k_2g)=k_1\iint_D f\pm k_2\iint_D g$</td><td>习 14.8 拆成 $I_1+I_2$</td></tr>
+    <tr><td>4 可加性</td><td>$D_1\cup D_2=D,\ D_1\cap D_2=\varnothing\Rightarrow\displaystyle\iint_D=\iint_{D_1}+\iint_{D_2}$</td><td>例 14.1、例 14.3 劈区域</td></tr>
+    <tr><td>5 <b>保号性</b></td><td>$f\le g$ 于 $D$ $\Rightarrow\displaystyle\iint_D f\le\iint_D g$；特别地 $\Big|\displaystyle\iint_D f\Big|\le\iint_D|f|$</td><td><b>§3 整节 + 千41 证明题</b></td></tr>
+    <tr><td>6 估值定理</td><td>$mA\le\displaystyle\iint_D f\le MA$</td><td>比大小的粗界</td></tr>
+    <tr><td>7 <b>中值定理</b></td><td>$f$ 在有界闭区域 $D$ 上<b>连续</b> $\Rightarrow\exists(\xi,\eta)\in D$，$\displaystyle\iint_D f=f(\xi,\eta)\cdot A$</td><td><b>例 14.2 / 千41</b></td></tr>
+  </table>
+  </div>
+  <p class="legend2">📌 书上手批把性质 3、4 概括成四个字：<b>"瓦解敌人，各个击破"</b>——线性拆函数，可加性拆区域。<b>本章一切"算不动"的题，第一步都是这两个拆。</b></p>
+
+  <div class="mine"><span class="tag">补讲 · 讲义没有、但千41 用到的定理（务必补上）</span>
+    <p><b>二重积分的广义（加权）中值定理</b>：设 $f(x,y)$ 与 $g(x,y)$ 都在闭区域 $D$ 上<b>连续</b>，且 <b>$g$ 在 $D$ 上不变号</b>，则至少存在一点 $(\xi,\eta)\in D$，使</p>
+    <div class="fml">$$\iint_D f(x,y)g(x,y)\,\mathrm dx\mathrm dy=f(\xi,\eta)\iint_D g(x,y)\,\mathrm dx\mathrm dy.$$</div>
+    <p>取 $g\equiv1$ 即退化为性质 7。<b><span style="color:var(--red)">"$g$ 不变号"是不能丢的条件</span></b>——这是 <a href="#eg-q41">千41</a> 那道证明题的全部机关。</p>
+  </div>
+
+  <div class="eg" id="eg-b02">
+    <div class="q"><span class="no">基 例14.2</span><span class="exam">填空 · 动态区域 + 中值定理</span><a class="pg" href="#">P.342</a>
+      <p>设 $D(t)=\{(x,y)\mid 2x^2+3y^2\le 6t\}\ (t\ge0)$，
+      $f(x,y)=\begin{cases}\dfrac{\sqrt[3]{1-(x^2+y^2)}-1}{\mathrm e^{x^2+y^2}-1},&(x,y)\ne(0,0)\\[4pt] a,&(x,y)=(0,0)\end{cases}$ 为连续函数，
+      令 $F(t)=\displaystyle\iint_{D(t)}f(x,y)\mathrm dx\mathrm dy$，则 $F_+'(0)=\underline{\qquad}$。</p></div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$-\dfrac{\sqrt6\,\pi}{3}$</span></p>
+      <p><span class="lab">分析</span>积分区域是<b>动态</b>的 $D(t)$，$t\to0$ 时 $D(t)\to$ 一点。求的是<b>某一点处的导数</b> ⇒ 用<b>导数定义</b>；
+      而 $\displaystyle\iint_{D(t)}f\,\mathrm d\sigma$ <b>算不出来</b> ⇒ 用<b>中值定理</b>把积分号"吃掉"。</p>
+      <p><span class="lab">要害</span>三步各对应一个工具：</p>
+      <ol>
+        <li><b>补连续性定 $a$</b>：令 $u=x^2+y^2\to0$，$\sqrt[3]{1-u}-1\sim-\frac u3$，$\mathrm e^u-1\sim u$ ⇒ $a=f(0,0)=-\dfrac13$。</li>
+        <li><b>面积要会算</b>：$2x^2+3y^2\le6t\Leftrightarrow\dfrac{x^2}{3t}+\dfrac{y^2}{2t}\le1$，半轴 $\sqrt{3t},\sqrt{2t}$，面积 $S=\pi\sqrt{3t}\sqrt{2t}=\sqrt6\,\pi t$。</li>
+        <li><b>中值定理</b>：$\exists(\xi,\eta)\in D(t)$，$F(t)=\sqrt6\pi t\cdot f(\xi,\eta)$，于是
+        $$F_+'(0)=\lim_{t\to0^+}\frac{\sqrt6\pi t f(\xi,\eta)}{t}=\sqrt6\pi\lim_{t\to0^+}f(\xi,\eta)=\sqrt6\pi f(0,0)=-\frac{\sqrt6\pi}{3}.$$
+        （$t\to0^+$ 时 $(\xi,\eta)\to(0,0)$，用了 $f$ <b>连续</b>）</li>
+      </ol>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>抽象版同款套路</b>（书上【注】）：$f$ 有二阶连续偏导，$D(t)=\{0\le x\le t,0\le y\le t\}$，$F(t)=\displaystyle\iint_{D(t)}f''_{xy}\mathrm dx\mathrm dy$，则
+      $F_+'(0)=\lim\limits_{t\to0^+}\dfrac{f''_{xy}(\xi,\eta)\cdot t^2}{t}=\lim\limits_{t\to0^+}t\cdot f''_{xy}(\xi,\eta)=0$。<br>
+      <span class="dock">扣分点</span>：写中值定理时<b>必须先说 $f$ 在 $D(t)$ 上连续</b>（题目给了"为连续函数"就是为了这句）。<br>
+      <b>方法总结（书）</b>：当 $\displaystyle\iint_D f\,\mathrm d\sigma$ <b>难计算</b>或 $f$ 为<b>抽象型</b>时，考虑用中值定理。
+      <b>公式</b>：$\displaystyle\iint_D f\,\mathrm d\sigma=f(\xi,\eta)\cdot S_D$。</div>
+    </div>
+  </div>
+
+  <!-- ================= s2 对称性 ================= -->
+  <h2 id="s2"><span class="idx">二</span>★ 对称性：书上标 <u>「必考题！」</u>，也是省一半计算的唯一开关</h2>
+
+  <div class="mantra">
+    ① 看 $D$ 关于<b>谁</b>对称　②把<b>对称点代入</b> $f$：相等则 2 倍，相反则为 0
+    <small>—— 书上蓝批「关键两点」。四个字概括：<b>偶倍奇零</b></small>
+  </div>
+
+  <div class="key"><span class="tag">必记 · 普通对称性 4 条 + 平移推广 2 条</span><a class="pg" href="#">P.343–345</a>
+    <div class="tw">
+    <table>
+      <tr><th>$D$ 关于…对称</th><th>对称点</th><th>$\displaystyle\iint_D f\,\mathrm d\sigma=$</th><th>$D_1$ 取哪半边</th></tr>
+      <tr><td>① $y$ 轴（$x=0$）</td><td>$(-x,y)$</td><td>$2\displaystyle\iint_{D_1}f$ 若 $f(x,y)=f(-x,y)$；<b>0</b> 若 $f(x,y)=-f(-x,y)$</td><td>$y$ 轴<b>右</b>侧</td></tr>
+      <tr><td>★ $x=a\ (a\ne0)$</td><td>$(2a-x,y)$</td><td>把上式的 $f(-x,y)$ 换成 $f(2a-x,y)$</td><td>$x=a$ <b>右</b>侧</td></tr>
+      <tr><td>② $x$ 轴（$y=0$）</td><td>$(x,-y)$</td><td>$2\displaystyle\iint_{D_1}f$ / <b>0</b></td><td>$x$ 轴<b>上</b>侧</td></tr>
+      <tr><td>★ $y=a\ (a\ne0)$</td><td>$(x,2a-y)$</td><td>把 $f(x,-y)$ 换成 $f(x,2a-y)$</td><td>$y=a$ <b>上</b>侧</td></tr>
+      <tr><td>③ 原点</td><td>$(-x,-y)$</td><td>$2\displaystyle\iint_{D_1}f$ / <b>0</b></td><td>对称的<b>半个</b>部分</td></tr>
+      <tr><td>④ 直线 $y=x$</td><td>$(y,x)$</td><td>$2\displaystyle\iint_{D_1}f$ 若 $f(x,y)=f(y,x)$；<b>0</b> 若 $f(x,y)=-f(y,x)$</td><td>对称的<b>半个</b>部分</td></tr>
+    </table>
+    </div>
+    <p>📌 <b>平移版的经典例证（书上蓝批）</b>：$\displaystyle\iint_D(x-a)\mathrm d\sigma=0$（$D$ 关于 $x=a$ 对称）——
+    因为 $f(x,y)=x-a$，而 $f(2a-x,y)=(2a-x)-a=a-x=-f(x,y)$，<b>互为相反数</b>。
+    <span style="color:var(--red)">这一条在"偏心圆 + 一次函数"的题里天天用</span>（见 <a href="#eg-q29">千29</a>）。</p>
+  </div>
+
+  <div class="key"><span class="tag">必记 · 轮换对称性（一定是直角坐标系下）</span><a class="pg" href="#">P.346–347</a>
+    <p>若把 $x$ 与 $y$ <b>对调后区域 $D$ 不变</b>（等价于 $D$ 关于 $y=x$ 对称），则</p>
+    <div class="fml">$$\iint_D f(x,y)\,\mathrm d\sigma=\iint_D f(y,x)\,\mathrm d\sigma.$$</div>
+    <p><b>书上的两个引例（不背，理解）</b>：</p>
+    <ol>
+      <li><b>引例 1</b>：$\displaystyle\iint_{\frac{x^2}{4}+\frac{y^2}{3}\le1}(2x^2+3y^2)\mathrm dx\mathrm dy=\iint_{\frac{y^2}{4}+\frac{x^2}{3}\le1}(2y^2+3x^2)\mathrm dy\mathrm dx$
+      ——只是把 $x,y$ 两个<b>字母</b>对调了，<b>积分值与用什么字母表示无关</b>，当然相等。</li>
+      <li><b>引例 2</b>：把椭圆换成<b>圆</b> $\frac{x^2}{4}+\frac{y^2}{4}\le1$，此时"对调 $x,y$ 后 $D$ 不变"，于是可以写成同一个 $D$ 上的两个积分相等。
+      📌 书上配了一张立体图并批注：「<b>$x(y)$ 谁动了我的面包！答：没有动 ⇒ 体积不变</b>」。</li>
+    </ol>
+    <p><b>用法（书上原话）</b>：当 $\displaystyle\iint_D f(x,y)$ <b>难计算</b>，但 $f(x,y)+f(y,x)$ <b>之和式子简单</b>时，用</p>
+    <div class="fml">$$\iint_D f(x,y)\,\mathrm d\sigma=\frac12\iint_D\big[f(x,y)+f(y,x)\big]\mathrm d\sigma.$$</div>
+    <p>特别地，若 $f(x,y)+f(y,x)\equiv a$（常数），则 $\displaystyle\iint_D f=\dfrac a2 S_D$；不等号版本同理（$\ge$ / $\le$）。</p>
+  </div>
+
+  <div class="duo">
+    <div class="dA"><b class="h">普通对称性（第 ④ 条）</b>
+      ① $D$ 关于 $y=x$ 对称；<br>
+      ② 考查 $f(x,y)$ 与 $f(y,x)$ 是<b>相等</b>还是<b>相反</b>。<br>
+      <b>结论</b>：2 倍 或 0。
+    </div>
+    <div class="dB"><b class="h">轮换对称性</b>
+      ① $D$ 关于 $y=x$ 对称（<b>同一个前提</b>）；<br>
+      ② 考查 $f(x,y)+f(y,x)$ <b>是否简单</b>。<br>
+      <b>结论</b>：换成一个好算的积分。
+    </div>
+  </div>
+  <p class="legend2">📌 书上【注】：二者<b>都要求 $D$ 关于 $y=x$ 对称</b>，区别只在第 ②&nbsp;步问什么。
+  事实上，<b>当 $f(x,y)=-f(y,x)$ 时它们是一回事</b>（和为 0，2 倍也为 0）。
+  <span style="color:var(--red)">考场上的顺序：先试普通（能直接判 0 最省），不行再试轮换。</span></p>
+
+  <!-- ========== 模块① 对称性判定台 ========== -->
+  <div class="tool" id="t1">
+    <h4>🔀 对称性判定台 —— 「①看关于谁对称 ②代入对称点」两步走一遍</h4>
+    <div class="hint">左图画出区域与对称轴，右图把每个点 $(x,y)$ 与它的<b>对称点</b>用颜色配对：<b>蓝＝两点函数值同号同值（偶）</b>，<b>红＝互为相反数（奇）</b>，<b>灰＝既不相等也不相反</b>。
+    下方表格用<b>网格数值积分</b>当场验证结论（不是"讲道理"，是真算）。</div>
+    <div class="ctl" id="t1-pre"></div>
+    <div class="ctl">
+      <label>对称轴</label>
+      <button data-ax="y" class="on">$y$ 轴</button><button data-ax="x">$x$ 轴</button>
+      <button data-ax="o">原点</button><button data-ax="d">$y=x$</button>
+    </div>
+    <div class="scene"><div class="twocanv">
+      <figure><canvas id="t1-c1" width="260" height="260"></canvas><figcaption>区域 $D$ 与对称轴</figcaption></figure>
+      <figure><canvas id="t1-c2" width="260" height="260"></canvas><figcaption>对称点配对：蓝＝偶 / 红＝奇 / 灰＝都不是</figcaption></figure>
+    </div></div>
+    <div class="say" id="t1-say"></div>
+    <div class="dqwrap"><table class="dq" id="t1-tab"></table></div>
+    <span class="verdict" id="t1-v"></span>
+    <div class="legend2"><span class="chip c-b">偶</span>对称点函数值相等 ⇒ 算一半 ×2　
+      <span class="chip c-r">奇</span>互为相反数 ⇒ <b>整个积分 = 0</b>　
+      <span class="chip c-a">都不是</span>普通对称性失效 ⇒ 若关于 $y=x$ 对称，改试<b>轮换</b></div>
+  </div>
+
+  <div class="eg" id="eg-b03">
+    <div class="q"><span class="no">基 例14.3</span><span class="exam">选择 · ★作辅助曲线"造"对称</span><a class="pg" href="#">P.345</a>
+      <p>设 $J_i=\displaystyle\iint_{D_i}\sqrt[3]{x-y}\,\mathrm dx\mathrm dy\ (i=1,2,3)$，其中
+      $D_1=\{0\le x\le1,0\le y\le1\}$，$D_2=\{0\le x\le1,0\le y\le\sqrt x\}$，$D_3=\{0\le x\le1,x^2\le y\le1\}$，则（　）</p>
+      <p>(A) $J_1\lt J_2\lt J_3$　(B) $J_3\lt J_1\lt J_2$　(C) $J_2\lt J_3\lt J_1$　(D) $J_2\lt J_1\lt J_3$</p></div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">(B)</span>（复算：$J_1=0$，$J_2=+0.2492$，$J_3=-0.2492$）</p>
+      <p><span class="lab">要害</span><b>本题的价值不在"比大小"，而在"$D$ 不对称时，可以自己作一条辅助曲线把它劈成对称的一块 + 定号的一块"。</b></p>
+      <ol>
+        <li><b>$D_1$（正方形）</b>关于 $y=x$ 对称，而 $\sqrt[3]{x-y}=-\sqrt[3]{y-x}$ ⇒ <b>普通对称性第 ④ 条（奇）</b> ⇒ $J_1=0$。</li>
+        <li><b>$D_2$ 不对称</b>：作辅助线 <b>$y=x^2$</b>，把 $D_2$ 劈成
+          $D_{21}$（$x^2\le y\le\sqrt x$，<u>关于 $y=x$ 对称</u>，积分 $=0$）与 $D_{22}$（$0\le y\le x^2$，此处 $y\le x^2\le x$ ⇒ $\sqrt[3]{x-y}\ge0$）。
+          由保号性 $J_2=\displaystyle\iint_{D_{22}}\sqrt[3]{x-y}\gt0$。</li>
+        <li><b>$D_3$ 同理</b>：作辅助线 <b>$y=\sqrt x$</b>，劈成对称块（积分 0）与 $D_{31}$（$y\ge\sqrt x\ge x$ ⇒ $\sqrt[3]{x-y}\le0$）⇒ $J_3\lt0$。</li>
+      </ol>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>为什么辅助线一定是 $y=x^2$ 与 $y=\sqrt x$？</b>因为这两条曲线<b>互为反函数</b>，它们围出的区域天然关于 $y=x$ 对称——
+      看到 $y=x^2$ 就该想到 $y=\sqrt x$，反之亦然。<b>这是本章"造对称"唯一的招。</b><br>
+      <b>方法总结（书）</b>：<b>遇到二重积分的题目，首先应考虑对称性，看能否化简。</b><br>
+      <span class="dock">易错</span>：$\sqrt[3]{\ \cdot\ }$ 是<b>奇函数</b>才有 $\sqrt[3]{x-y}=-\sqrt[3]{y-x}$；若换成 $\sqrt{x-y}$（偶次根）就<b>连定义域都不对称</b>，此招失效。</div>
+    </div>
+  </div>
+
+  <div class="eg" id="eg-b04">
+    <div class="q"><span class="no">基 例14.4</span><span class="exam">选择 · 轮换对称性入门</span><a class="pg" href="#">P.347</a>
+      <p>设 $f(x)=\displaystyle\iint_{D(x)}\frac{v\ln\sqrt{u^2+v^2}}{u+v}\mathrm du\mathrm dv$，
+      $D(x)=\Big\{(u,v)\ \Big|\ \frac14\le u^2+v^2\le x^2,\ u\gt0,v\gt0\Big\}\ \big(x\gt\frac12\big)$，则 $f(x)=$（　）</p>
+      <p>(A) $\frac14\displaystyle\iint_{D(x)}\ln(u^2+v^2)\mathrm du\mathrm dv$　(B) $\frac12\displaystyle\iint_{D(x)}\ln(u^2+v^2)$　
+      (C) $\displaystyle\iint_{D(x)}\ln(u^2+v^2)$　(D) $2\displaystyle\iint_{D(x)}\ln(u^2+v^2)$</p></div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">(A)</span></p>
+      <p><span class="lab">分析</span>$D$ 中 $u,v$ 互换位置后 $D$ 不变；接着看 $g(u,v)$ 与 $g(v,u)$ 的关系——
+      <b>既不相等，也不相反</b>（普通对称性失效！）⇒ 考虑<b>把它们加起来</b>，发现 $g(u,v)+g(v,u)$ 计算简单 ⇒ <b>轮换对称性</b>。</p>
+      <p><span class="lab">解</span>由轮换对称性
+      $$f(x)=\iint\frac{v\ln\sqrt{u^2+v^2}}{u+v}=\iint\frac{u\ln\sqrt{u^2+v^2}}{u+v}
+      =\frac12\iint\frac{(u+v)\ln\sqrt{u^2+v^2}}{u+v}=\frac12\iint\ln\sqrt{u^2+v^2}=\frac14\iint\ln(u^2+v^2).$$</p>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>方法总结（书）</b>：$D$ 关于 $y=x$ 对称时，先看 $f(x,y)=\pm f(y,x)$ 用普通对称性；<b>若不满足，再看 $f(x,y)+f(y,x)$ 是否简单，用轮换对称性。</b><br>
+      <b>本题的"简单"体现在两处</b>：① 分母 $u+v$ 被消掉；② $\ln\sqrt{\ \cdot\ }=\frac12\ln(\ \cdot\ )$ 再吐出一个 $\frac12$，两个 $\frac12$ 乘出 $\frac14$。<b>系数别丢。</b><br>
+      🔗 这道题的 $f(x)$ 在 <a href="#eg-b10">例 14.10</a> 里被接着用来求拐点——<b>成对记忆</b>。</div>
+    </div>
+  </div>
+
+  <div class="eg" id="eg-q05">
+    <div class="q"><span class="no">强 强14.5</span><span class="exam">解答 · 轮换对称 + "积分本质是一个数"</span><a class="pg" href="#">P.179</a>
+      <p>设 $f(x,y)$ 在 $D=\{(x,y)\mid x^2+y^2\le1\}$ 上连续，
+      $f(x,y)=\mathrm e^{x^2+y^2}-\displaystyle\iint_D\frac{(2x^2+1)f(x,y)}{x^2+y^2+1}\mathrm dx\mathrm dy$，求 $\displaystyle\iint_D f(x,y)\mathrm d\sigma$。</p></div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\dfrac{(\mathrm e-1)\pi}{\pi+1}$</span></p>
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+      <ol>
+        <li>题里出现"<b>函数 = 表达式 − 一个含该函数的二重积分</b>"⇒ 书上蓝批一句话点破：<b>那个二重积分本质是一个数</b>。
+        凡见此形，第一步一律<b>设它为常数 $a$</b>，把方程变成 $f=\mathrm e^{x^2+y^2}-a$。</li>
+        <li>接下来要解出 $a$，就得把 $a$ 的定义式里的 $f$ 换成刚得到的表达式。但 $a$ 的被积函数带着 $\dfrac{2x^2+1}{x^2+y^2+1}$，<b>直接积不动</b>。</li>
+        <li>观察这个系数：$D$ 是圆盘（关于 $y=x$ 对称），且 $f(x,y)=\mathrm e^{x^2+y^2}-a$ 满足 $f(x,y)=f(y,x)$。
+        把 $x,y$ 对调，系数变成 $\dfrac{2y^2+1}{x^2+y^2+1}$——<b>两式相加分子恰好凑成 $2(x^2+y^2+1)$，分母被整除！</b> ⇒ <b>轮换对称性</b>。</li>
+        <li>化到 $a=\displaystyle\iint_D f\,\mathrm d\sigma$ 后，代入 $f=\mathrm e^{x^2+y^2}-a$，用<b>极坐标</b>（被积含 $x^2+y^2$，区域是圆——两条判据全中）解一个关于 $a$ 的<b>一次方程</b>。</li>
+      </ol></div>
+      <div class="paper"><span class="phead">✍️ 考场卷面<span class="score">参考 10 分</span></span>
+        <div class="step"><span class="k">解</span>令 $a=\displaystyle\iint_D\frac{(2x^2+1)f(x,y)}{x^2+y^2+1}\mathrm dx\mathrm dy$（<b>常数</b>），则
+        $$f(x,y)=\mathrm e^{x^2+y^2}-a. \tag{1}$$<span class="pt">⛳ 2分</span></div>
+        <div class="step">由 (1) 知 $f(x,y)=f(y,x)$，且区域 $D$ 关于直线 $y=x$ 对称，由<b>轮换对称性</b>得
+        $$a=\iint_D\frac{(2y^2+1)f(x,y)}{x^2+y^2+1}\mathrm dx\mathrm dy. \tag{2}$$<span class="pt">⛳ 3分</span></div>
+        <div class="step">(1)(2) 两式相加除以 2：
+        $$a=\frac12\iint_D\frac{(2x^2+1)+(2y^2+1)}{x^2+y^2+1}f(x,y)\mathrm dx\mathrm dy=\frac12\iint_D 2f(x,y)\mathrm dx\mathrm dy=\iint_D f(x,y)\mathrm dx\mathrm dy. \tag{3}$$<span class="pt">⛳ 2分</span></div>
+        <div class="step">将 (1) 代入 (3)，用极坐标：
+        $$a=\iint_D\big(\mathrm e^{x^2+y^2}-a\big)\mathrm d\sigma=\int_0^{2\pi}\mathrm d\theta\int_0^1\big(\mathrm e^{r^2}-a\big)r\,\mathrm dr=2\pi\Big[\frac12\mathrm e^{r^2}-\frac{a}{2}r^2\Big]_0^1=(\mathrm e-a-1)\pi.$$<span class="pt">⛳ 2分</span></div>
+        <div class="step">解得 $a=\dfrac{(\mathrm e-1)\pi}{\pi+1}$。</div>
+        <div class="fin">由 (3)，$\displaystyle\iint_D f(x,y)\mathrm d\sigma=a=\dfrac{(\mathrm e-1)\pi}{\pi+1}$。<span class="pt">⛳ 1分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（写完校对）</span>
+      <b>为什么 (3) 式这么关键</b>：它说明<b>要求的量恰好就是 $a$ 本身</b>——很多人算出 $a$ 之后还傻算一遍 $\iint f$，其实 (3) 已经给了答案。<br>
+      <span class="dock">扣分点</span>：用轮换对称性前<b>必须写出"$D$ 关于 $y=x$ 对称"</b>这句话，只写"由轮换对称性"不给分。<br>
+      <b>心算提速</b>：$\displaystyle\int_0^1\mathrm e^{r^2}r\,\mathrm dr=\frac12\int_0^1\mathrm e^{r^2}\mathrm d(r^2)=\frac{\mathrm e-1}{2}$，配上 $2\pi$ 直接得 $(\mathrm e-1)\pi$，不必展开写。<br>
+      🔗 同题在《1000题·强化篇》第 34 题<b>一字不差地再出一次</b>——这是张宇本人认定的模板题。</div>
+    </div>
+  </div>
+
+  <div class="eg" id="eg-q11">
+    <div class="q"><span class="no">千 千11</span><span class="exam">填空 · 轮换 + 展开（一秒题）</span>
+      <p>设平面区域 $D=\{(x,y)\mid x^2+y^2\le1\}$，则 $\displaystyle\iint_D(x-2y)^2\mathrm dx\mathrm dy=\underline{\qquad}$</p></div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\dfrac{5\pi}{4}$</span></p>
+      <p><span class="lab">要害</span>展开 $(x-2y)^2=x^2-4xy+4y^2$，三项各有各的杀法：</p>
+      <ul>
+        <li>$\displaystyle\iint_D xy\,\mathrm d\sigma=0$——$D$ 关于 $x$ 轴对称，$xy$ 是 $y$ 的<b>奇函数</b>（普通对称性第 ② 条）；</li>
+        <li>$\displaystyle\iint_D x^2=\iint_D y^2$（<b>轮换对称性</b>）$=\dfrac12\displaystyle\iint_D(x^2+y^2)=\dfrac12\cdot\dfrac\pi2=\dfrac\pi4$
+        （用了强化<b>常用结论①</b>，见 <a href="#s6">§6</a>）；</li>
+      </ul>
+      <p>故原式 $=\dfrac\pi4+4\cdot\dfrac\pi4=\dfrac{5\pi}{4}$。</p>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>模板</b>：一切 $\displaystyle\iint_{\text{圆}}(ax+by)^2\mathrm d\sigma$ 都这样做——<b>交叉项归零，平方项走轮换 + 常用结论①</b>，结果 $=\dfrac{a^2+b^2}{4}\pi R^4\cdot\dfrac{?}{}$。
+      对单位圆就是 $\dfrac{(a^2+b^2)\pi}{4}$；本题 $a=1,b=-2$，$\dfrac{(1+4)\pi}{4}=\dfrac{5\pi}{4}$ ✅ <b>一秒可验。</b></div>
+    </div>
+  </div>
+
+  <!-- ================= s3 比大小 ================= -->
+  <h2 id="s3"><span class="idx">三</span>比大小三条路：<u>一个积分都不用算</u></h2>
+
+  <div class="key"><span class="tag">必记 · 比大小的三条路（本章选择题的全部套路）</span>
+    <div class="steps3">
+      <div><b>路① 看被积函数正负</b>同一个 $f$ 在<b>不同区域</b>上比 ⇒ 用<b>可加性</b>把区域差拆出来，只判那块上 $f$ 的<b>符号</b>。<br><span class="chip c-p">例 14.1</span></div>
+      <div><b>路② 对称性造零</b>不同区域上比 ⇒ 找出<b>哪块积分为 0</b>，剩下的定号。必要时<b>自己作辅助曲线</b>造对称。<br><span class="chip c-p">例 14.3</span><span class="chip c-p">千 2</span></div>
+      <div><b>路③ 函数不等式逐点比</b>同一个区域上比<b>不同函数</b> ⇒ 在 $D$ 上把被积函数的大小<b>逐点排序</b>，再用保号性。<br><span class="chip c-p">千 3</span></div>
+    </div>
+  </div>
+
+  <div class="eg" id="eg-b01">
+    <div class="q"><span class="no">基 例14.1</span><span class="exam">选择 · 路① 被积函数正负</span><a class="pg" href="#">P.341</a>
+      <p>设平面闭区域 $D_i\ (i=1,2,3,4)$ 分别由 $L_1:x^2+y^2=1$，$L_2:x^2+y^2=2$，$L_3:x^2+2y^2=2$，$L_4:2x^2+y^2=2$ 围成，
+      记 $I_i=\displaystyle\iint_{D_i}\Big(1-x^2-\frac12y^2\Big)\mathrm dx\mathrm dy$，则 $\max\{I_1,I_2,I_3,I_4\}=$（　）</p>
+      <p>(A) $I_1$　(B) $I_2$　(C) $I_3$　(D) $I_4$</p></div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">(D)</span>（复算：$I_1=1.9635,\ I_2=1.5708,\ I_3=1.6661,\ \mathbf{I_4=2.2214}$）</p>
+      <p><span class="lab">分析</span><b>不需要计算二重积分</b>，只研究不同积分区域下被积函数的<b>正负情形</b>。
+      记 $f=1-\big(x^2+\frac12y^2\big)$，则 $f\ge0\Leftrightarrow x^2+\dfrac{y^2}{2}\le1\Leftrightarrow 2x^2+y^2\le2$——
+      <b>恰好就是 $D_4$！</b>于是 $D_4$ <u>内部 $f\gt0$，外部 $f\lt0$</u>。</p>
+      <p><span class="lab">解</span>三次比较，每次都用<b>可加性</b>把差集拆出来：</p>
+      <ul>
+        <li>$D_1\subset D_4$：$I_4=I_1+\displaystyle\iint_{D_4-D_1}f\gt I_1$（差集在 $D_4$ 内，$f\gt0$）；</li>
+        <li>$D_4\subset D_2$：$I_2=I_4+\displaystyle\iint_{D_2-D_4}f\lt I_4$（差集在 $D_4$ 外，$f\lt0$）；</li>
+        <li>$D_3$ 与 $D_4$ <b>互不包含</b>（一个横椭圆一个竖椭圆）：把互不重合的部分记作 $D_{31},D_{32}$（在 $D_4$ 外，$f\lt0$）与 $D_{41},D_{42}$（在 $D_4$ 内，$f\gt0$），
+        公共部分相同，逐项比较即得 $I_3\lt I_4$。</li>
+      </ul>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>方法总结（书）</b>：<b>寻找二重积分最大值的区域，即是寻找被积函数大于等于零的区域。</b><br>
+      这句话就是 <a href="#eg-q04">强 14.4</a> 和 <a href="#eg-q04">习 14.12</a> 两道"反问题"的答案模板：<b>题目问"$D$ 取什么使积分最大"，答案永远是 $\{f\ge0\}$ 这个集合。</b><br>
+      <span class="dock">易错</span>：第三次比较不能偷懒说"$D_3$ 比 $D_4$ 小"——<b>两者互不包含</b>，必须像书上那样画出四块互不重合的部分（图 14-3）逐项比。</div>
+    </div>
+  </div>
+
+  <div class="eg" id="eg-q2">
+    <div class="q"><span class="no">千 千2</span><span class="exam">选择 · 路② 对称性定符号（不是定零）</span>
+      <p>设 $D=\{(x,y)\mid |x|+|y|\le3\}$，$D_k\ (k=1,2,3,4)$ 是 $D$ 的第 $k$ 象限部分，
+      $I_k=\displaystyle\iint_{D_k}\sin(x-y)\mathrm dx\mathrm dy$，则（　）</p>
+      <p>(A) $I_1\gt0$　(B) $I_2\gt0$　(C) $I_3\gt0$　(D) $I_4\gt0$</p></div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">(D)</span>（复算：$I_1=I_3=0$，$I_2=-3.1111$，$I_4=+3.1111$）</p>
+      <p><span class="lab">要害</span>四块要用<b>两种不同</b>的判据，这正是本题的考点：</p>
+      <ol>
+        <li><b>$D_1,D_3$ 用对称性判零</b>：$D_1=\{x,y\ge0,\ x+y\le3\}$ 关于 $y=x$ 对称，而 $\sin(y-x)=-\sin(x-y)$ ⇒ <b>奇 ⇒ $I_1=0$</b>。$D_3$ 同理 $I_3=0$。</li>
+        <li><b>$D_2,D_4$ 用保号性判号</b>：在 $D_4$（$x\ge0\ge y$）上 $x-y\ge0$，且 $|x-y|\le3$；
+        <span style="color:var(--red);font-weight:700">$3\lt\pi$</span> ⇒ $x-y\in[0,3]\subset[0,\pi)$ ⇒ $\sin(x-y)\ge0$ 且不恒为零 ⇒ <b>$I_4\gt0$</b>。
+        在 $D_2$ 上 $x-y\in[-3,0]\subset(-\pi,0]$ ⇒ $\sin\le0$ ⇒ $I_2\lt0$。</li>
+      </ol>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+      <b><span class="dock">全题唯一的技术活是 $3\lt\pi$</span></b>。若菱形改成 $|x|+|y|\le4$，$x-y$ 会越过 $\pi$，$\sin$ 在区域上变号，$I_4$ 的符号就<b>不再显然</b>——
+      命题人把 3 这个数字选在 $\pi$ 下面，就是在考"你有没有意识到要检查 $\sin$ 在这段区间上不变号"。<br>
+      <b>与 §2 的分工</b>：对称性给出 $=0$，保号性给出 $\gt0$ / $\lt0$；<b>四个选项恰好要两种工具各用两次。</b></div>
+    </div>
+  </div>
+
+  <div class="eg" id="eg-q3">
+    <div class="q"><span class="no">千 千3</span><span class="exam">选择 · 路③ 逐点函数不等式</span>
+      <p>设 $M=\displaystyle\iint_D\ln(x^2+y^2)\mathrm dx\mathrm dy$，$N=\displaystyle\iint_D[\ln(x^2+y^2)]^2\mathrm dx\mathrm dy$，
+      $P=\displaystyle\iint_D(x^2+y^2-1)\mathrm dx\mathrm dy$，其中 $D=\{(x,y)\mid 1\le x^2+y^2\le2\}$，则必有（　）</p>
+      <p>(A) $M\lt N\lt P$　(B) $N\lt M\lt P$　(C) $M\lt P\lt N$　(D) $N\lt P\lt M$</p></div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">(B)</span>（复算：$M=1.2136,\ N=0.5916,\ P=1.5708$）</p>
+      <p><span class="lab">要害</span>同一个区域比不同函数 ⇒ 记 $t=x^2+y^2\in[1,2]$，把三个被积函数都写成 $t$ 的函数，<b>逐点排序</b>：</p>
+      <ol>
+        <li>$t\in[1,2]\Rightarrow\ln t\in[0,\ln2]$，而 <b>$\ln2\approx0.693\lt1$</b>；</li>
+        <li>$0\le\ln t\lt1\Rightarrow(\ln t)^2\le\ln t$（<b>小于 1 的数平方变小</b>）⇒ 保号性给 <b>$N\lt M$</b>；</li>
+        <li>万能不等式 <b>$\ln t\le t-1$</b>（等号仅 $t=1$）⇒ <b>$M\lt P$</b>。</li>
+      </ol>
+      <p>综上 $N\lt M\lt P$。</p>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+      <b><span class="dock">命门是 $\ln2\lt1$</span></b>：若区域改成 $1\le x^2+y^2\le\mathrm e^2$，则 $\ln t$ 会越过 1，$(\ln t)^2$ 与 $\ln t$ 的大小<b>在区域上翻转</b>，$M,N$ 就无法直接比。<br>
+      <b>要背的两条底层不等式</b>：$\ln t\le t-1\ (t\gt0)$、$\mathrm e^t\ge1+t$。<b>本章比大小题十有八九靠这两条。</b><br>
+      <b>与例 14.1 的分工</b>：例 14.1 是<b>同函数不同区域</b>（拆区域），本题是<b>同区域不同函数</b>（拆函数）——<u>两道题合起来才把"比大小"这个题型盖全</u>。</div>
+    </div>
+  </div>
+
+
+  <!-- ================= s4 直角坐标定限 ================= -->
+  <h2 id="s4"><span class="idx">四</span>直角坐标定限：<u>一切错误的源头</u>，也是本章唯一要练手的功夫</h2>
+
+  <div class="mantra">
+    后积先定限　·　限内画条线　·　先交写下限　·　后交写上限
+    <small>—— 基础讲 P.348 图 14-6 旁的手写批注。<b>这十六个字是整讲的操作系统。</b></small>
+  </div>
+
+  <div class="key"><span class="tag">必记 · X 型 / Y 型</span><a class="pg" href="#">P.347–348</a>
+    <div class="duo">
+      <div class="dA"><b class="h">X 型区域（先 $y$ 后 $x$）</b>
+      $$\iint_D f\,\mathrm d\sigma=\int_a^b\mathrm dx\int_{\varphi_1(x)}^{\varphi_2(x)}f(x,y)\,\mathrm dy$$
+      <b>特点</b>：穿过 $D$ 内部且<b>平行于 $y$ 轴</b>的直线与 $D$ 的边界<b>相交不多于两点</b>。<br>
+      <b>操作</b>：先定 $x\in[a,b]$（后积的先定），再在竖线上读 $y$ 的下上限。
+      </div>
+      <div class="dB"><b class="h">Y 型区域（先 $x$ 后 $y$）</b>
+      $$\iint_D f\,\mathrm d\sigma=\int_c^d\mathrm dy\int_{\psi_1(y)}^{\psi_2(y)}f(x,y)\,\mathrm dx$$
+      <b>特点</b>：穿过 $D$ 内部且<b>平行于 $x$ 轴</b>的直线与边界<b>相交不多于两点</b>。<br>
+      <b>操作</b>：先定 $y\in[c,d]$，再在横线上读 $x$ 的下上限。
+      </div>
+    </div>
+    <p><b>不是 X 型也不是 Y 型怎么办？</b>——<b>拆</b>。按 $x$（或 $y$）分段，写成几块之和：
+    $\displaystyle\iint_D f=\int_a^c\mathrm dx\int_{\varphi_1}^{\phi_1}f\,\mathrm dy+\int_c^b\mathrm dx\int_{\varphi_2}^{\phi_2}f\,\mathrm dy$。</p>
+  </div>
+
+  <div class="trap"><span class="tag">陷阱 · 书上【注】三条，条条是丢分点</span>
+    <ol>
+      <li><b>下限都必须小于等于上限</b>（因为 $\mathrm dx\gt0,\mathrm dy\gt0,\mathrm d\sigma\gt0$）。
+      若题目给的累次积分下限大于上限，那<b>它就不是二重积分，只是累次积分的形式</b>，必须<b>先添负号翻过来</b>再当二重积分处理：
+      $$\underbrace{\int_{\frac\pi2}^{\pi}\mathrm dx\int_1^{\sin x}f\,\mathrm dy}_{\sin x\lt1,\ \textbf{不是二重积分}}=-\underbrace{\int_{\frac\pi2}^{\pi}\mathrm dx\int_{\sin x}^{1}f\,\mathrm dy}_{\textbf{二重积分}}$$
+      <span class="dock">例 14.6 全靠这一步开局</span></li>
+      <li><b>次序的两条选择依据</b>：① 看<b>被积函数</b>易于对谁积分；② 看<b>区域</b>是 X 型还是 Y 型。<u>两条冲突时以 ① 为准</u>（可积不可求积是硬约束）。</li>
+      <li><b>关键是确定积分限</b> ⇒ 要<b>画好 $D$ 的边界图形</b>；当 $D$ 的边界<b>不易画出</b>时，要<b>写出 $D$ 的不等式表达式</b>来确定上下限（书上蓝批：「$D$ 不易画时，采用<b>分析法</b>」）。</li>
+    </ol>
+  </div>
+
+  <!-- ========== 模块② 换序沙盘 ========== -->
+  <div class="tool" id="t2">
+    <h4>📐 定限沙盘 · 换序对照台 —— 把「限内画条线」真的画出来</h4>
+    <div class="hint">选一道书上的题，拖动滑块让<b>探针线</b>扫过区域：竖线（X 型，先积 $y$）读出的是 $\varphi_1(x)\to\varphi_2(x)$，横线（Y 型，先积 $x$）读出的是 $\psi_1(y)\to\psi_2(y)$。
+    右侧实时显示两种次序写出的累次积分，并标出<b>哪一种会撞上"可积不可求积"</b>。</div>
+    <div class="ctl" id="t2-pre"></div>
+    <div class="ctl">
+      <label>探针方向</label>
+      <button data-dir="x" class="on">竖线（X 型 · 先积 $y$）</button>
+      <button data-dir="y">横线（Y 型 · 先积 $x$）</button>
+    </div>
+    <div class="ctl">
+      <label id="t2-lab">探针位置 x</label>
+      <input type="range" id="t2-t" min="0" max="1000" value="420">
+      <span class="val" id="t2-tv"></span>
+    </div>
+    <div class="scene"><div class="twocanv">
+      <figure><canvas id="t2-c" width="300" height="300"></canvas><figcaption>区域 $D$ ＋ 探针线（绿点＝先交＝下限，红点＝后交＝上限）</figcaption></figure>
+    </div></div>
+    <div class="say" id="t2-say"></div>
+    <div class="dqwrap"><table class="dq" id="t2-tab"></table></div>
+    <span class="verdict" id="t2-v"></span>
+    <div class="legend2">📌 探针扫到区域外时会提示"此处无交点"——<b>这正是"后积的变量范围 $[a,b]$"的确定方式：让探针有交点的那一段 $x$，就是外层积分限。</b></div>
+  </div>
+
+  <div class="eg" id="eg-b05">
+    <div class="q"><span class="no">基 例14.5</span><span class="exam">选择 · 换序 + 反三角分支</span><a class="pg" href="#">P.348</a>
+      <p>设函数 $f(x,y)$ 连续，则二次积分 $\displaystyle\int_{\frac\pi2}^{\pi}\mathrm dx\int_{\sin x}^{1}f(x,y)\mathrm dy=$（　）</p>
+      <p>(A) $\displaystyle\int_0^1\mathrm dy\int_{\pi+\arcsin y}^{\pi}f\,\mathrm dx$　(B) $\displaystyle\int_0^1\mathrm dy\int_{\pi-\arcsin y}^{\pi}f\,\mathrm dx$<br>
+      (C) $\displaystyle\int_0^1\mathrm dy\int_{\frac\pi2}^{\pi+\arcsin y}f\,\mathrm dx$　(D) $\displaystyle\int_0^1\mathrm dy\int_{\frac\pi2}^{\pi-\arcsin y}f\,\mathrm dx$</p></div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">(B)</span>（取 $f=\mathrm e^{xy}$ 数值对拍两侧同为 $4.20246$ ✅）</p>
+      <p><span class="lab">分析</span>题干先积 $y$，选项后积 $y$ ⇒ 考的是<b>交换积分次序</b>。区域 $D:\ \dfrac\pi2\lt x\lt\pi,\ \sin x\lt y\lt1$（图 14-7 的曲边三角形）。</p>
+      <p><span class="lab">要害</span>按口诀走：<b>后积 $y$ 先定限</b> ⇒ $y\in[0,1]$；<b>限内画条线</b>（平行 $x$ 轴的横线），<b>先交写下限</b>：
+      横线先碰到的是曲线 $y=\sin x$ 的<u>右半支</u>。</p>
+      <div class="trap"><span class="tag">陷阱 · 反函数取哪一支</span>
+      $y=\sin x$ 在 $\big[\frac\pi2,\pi\big]$ 上是<b>减</b>的，$\arcsin$ 的主值区间是 $\big[-\frac\pi2,\frac\pi2\big]$，<b>不能直接写 $x=\arcsin y$</b>。
+      书上蓝批引用<b>例 1.12</b>：当 $\dfrac\pi2\lt x\lt\dfrac32\pi$ 时，<b>$x=\pi-\arcsin y$</b>。<br>
+      <b>一秒自查</b>：取 $y=1$，右式 $=\pi-\frac\pi2=\frac\pi2$ ✅（$\sin\frac\pi2=1$）；取 $y=0$，右式 $=\pi$ ✅。<b>选项 (A)(C) 里的 $\pi+\arcsin y$ 代 $y=1$ 得 $\frac{3\pi}{2}\notin[\frac\pi2,\pi]$，当场排除。</b></div>
+      <p>故上限为 $x=\pi$，下限为 $x=\pi-\arcsin y$，选 (B)。</p>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>方法总结（书）</b>：交换积分顺序的题目，<b>应先确定积分区域，然后交换次序写成相应的累次积分</b>——<u>永远先画图，不要盯着式子硬换</u>。<br>
+      <b>选择题的省时打法</b>：不必真换序，<b>代特殊值排除</b>（如上）30 秒可解。</div>
+    </div>
+  </div>
+
+  <!-- ================= s5 换序 ================= -->
+  <h2 id="s5"><span class="idx">五</span>换序：<u>见到累次积分，基本可以断定是要换序的</u></h2>
+
+  <div class="key"><span class="tag">必记 · 判据（强化讲原话，考场直接照用）</span><a class="pg" href="#">P.176</a>
+    <p>当一个<b>累次积分</b>摆在面前时，看题目所给次序的<b>第一个积分</b>是不是以下情况：</p>
+    <p style="text-align:center"><b>（1）可积不可求积型　　（2）计算困难型</b></p>
+    <p>若是，则交换积分次序<b>成为必然</b>。书上断言：「事实上，<b>在考试中出现累次积分，基本可以断定是要交换积分次序的</b>。」</p>
+  </div>
+
+  <div class="key"><span class="tag">必记 · ★「可积不可求积」12 式清单（见到就换序）</span><a class="pg" href="#">P.176 / P.349</a>
+    <div class="nolist">
+      <span>$\dfrac{\sin x}{x}$</span><span>$\dfrac{\cos x}{x}$</span><span>$\dfrac{\ln(1+x)}{x}$</span><span>$\dfrac{1}{\ln x}$</span>
+      <span>$\sin x^2$</span><span>$\cos x^2$</span><span>$\sin\dfrac1x$</span><span>$\cos\dfrac1x$</span>
+      <span>$\dfrac{\tan x}{x}$</span><span>$\dfrac{\mathrm e^x}{x}$</span><span>$\tan x^2$</span><span class="wide">$\mathrm e^{ax^2+bx+c}\ (a\ne0)$</span>
+    </div>
+    <p>上述积分<b>均没有初等函数形式的原函数</b>，见到它们，一般都要交换积分次序，<b>避免先对 $x$ 求积分</b>。</p>
+    <p class="legend2">📌 最后一条 $\mathrm e^{ax^2+bx+c}$ 是<b>使用频率最高的</b>（$\mathrm e^{-x^2}$、$\mathrm e^{-y^2}$ 全在此列），
+    千23 / 千27 / 千40 / 习14.11 都靠它。而 $\sin x^2$ 在 <a href="#eg-q21">千21</a> 里出现时，<b>劈完区域恰好凑成 $x\sin x^2$ 可积</b>——这是命题人的巧思。</p>
+  </div>
+
+  <div class="eg" id="eg-q02">
+    <div class="q"><span class="no">强 强14.2 / 强14.3</span><span class="exam">填空 · 换序双联</span><a class="pg" href="#">P.176</a>
+      <p>(1) $\displaystyle\int_0^{\frac\pi6}\mathrm dy\int_y^{\frac\pi6}\frac{\cos x}{x}\mathrm dx=\underline{\qquad}$　
+      (2) $\displaystyle\int_0^2\mathrm dy\int_y^2\frac{y}{\sqrt{1+x^3}}\mathrm dx=\underline{\qquad}$</p></div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">(1) $\dfrac12$　(2) $\dfrac23$</span></p>
+      <p><span class="lab">要害</span>两题的区域<b>都是 $0\le y\le x\le c$ 的直角三角形</b>，换序后都变成 $\displaystyle\int_0^c\mathrm dx\int_0^x\cdots\mathrm dy$，
+      内层对 $y$ 积分时被积函数中的 $x$ 是<b>常数</b>——这就是换序的全部好处。</p>
+      <ul>
+        <li>(1) <b>可积不可求积型</b>（$\frac{\cos x}{x}$ 在清单里）：
+        $\displaystyle\int_0^{\frac\pi6}\mathrm dx\int_0^x\frac{\cos x}{x}\mathrm dy=\int_0^{\frac\pi6}\frac{\cos x}{x}\cdot x\,\mathrm dx=\int_0^{\frac\pi6}\cos x\,\mathrm dx=\sin x\Big|_0^{\frac\pi6}=\frac12$。
+        <b>$y$ 积出来的那个 $x$ 恰好把分母约掉</b>——这是所有 $\frac{g(x)}{x}$ 型换序题的共同爽点。</li>
+        <li>(2) <b>计算困难型</b>（$\frac{1}{\sqrt{1+x^3}}$ 不在清单，但算不出）：
+        $\displaystyle\int_0^2\mathrm dx\int_0^x\frac{y\,\mathrm dy}{\sqrt{1+x^3}}=\int_0^2\frac{x^2/2}{\sqrt{1+x^3}}\mathrm dx=\frac16\int_0^2(1+x^3)^{-\frac12}\mathrm d(1+x^3)=\frac13\sqrt{1+x^3}\Big|_0^2=1-\frac13=\frac23$。
+        <b>$y$ 积出 $\frac{x^2}{2}$，恰好凑 $\mathrm d(x^3)$</b>。</li>
+      </ul>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>两题合起来告诉你换序为什么有效</b>：不是"换了就能积"，而是<b>先积的那一层会吐出一个因子（$x$ 或 $\frac{x^2}{2}$），恰好把外层的难点补掉</b>。
+      做题时可以<u>先预判这个因子</u>：内层积分区间长度是 $x$（三角形），则因子含 $x$；被积函数含 $y$ 则因子含 $x^2$。<br>
+      <span class="dock">别硬凑</span>：若换序后仍积不动，说明<b>该换坐标系</b>（见 §7）而不是换序。</div>
+    </div>
+  </div>
+
+  <div class="eg" id="eg-b06">
+    <div class="q"><span class="no">基 例14.6</span><span class="exam">填空 · ★上下限颠倒 + 换序 + 等价无穷小</span><a class="pg" href="#">P.349</a>
+      <p>当 $x\to0^+$ 时，$f(x)=\displaystyle\int_0^{x^2}\mathrm dy\int_x^{\sqrt y}\sin\frac yt\,\mathrm dt$ 与 $g(x)=ax^b$ 是等价无穷小，则 $ab=\underline{\qquad}$。</p></div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$-\dfrac12$</span>（书上【注】另给：$a=-\dfrac18$，$b=4$）</p>
+      <p><span class="lab">分析</span>$\sin\frac yt$ 若对 $t$ 积分没有初等原函数；若<b>对 $y$ 积分</b>可用初等函数表示（$\int\sin\frac yt\mathrm dy=-t\cos\frac yt+C$）⇒ 要换成<b>先积 $y$</b>。</p>
+      <div class="trap"><span class="tag">陷阱 · 这不是二重积分！先添负号</span>
+      因为 $0\le y\le x^2$，所以 $\sqrt y\le x$，<b>内层的下限 $x$ 大于上限 $\sqrt y$</b> ⇒ 先添一个负号翻过来：
+      $$f(x)=\int_0^{x^2}\mathrm dy\int_x^{\sqrt y}\sin\frac yt\,\mathrm dt=-\int_0^{x^2}\mathrm dy\int_{\sqrt y}^{x}\sin\frac yt\,\mathrm dt=-\iint_D\sin\frac yt\,\mathrm d\sigma.$$
+      <b>不翻这一下，后面画出来的"区域"是负面积，一切都错。</b></div>
+      <p><span class="lab">解</span>区域 $D:\ 0\le y\le x^2,\ \sqrt y\le t\le x$（即 $0\le t\le x,\ 0\le y\le t^2$，$tOy$ 平面上抛物线下方）。换序：</p>
+      $$f(x)=-\int_0^x\mathrm dt\int_0^{t^2}\sin\frac yt\,\mathrm dy=\int_0^x t\cos\frac yt\Big|_{y=0}^{y=t^2}\mathrm dt=\int_0^x t(\cos t-1)\,\mathrm dt.$$
+      <p>于是 $\displaystyle\lim_{x\to0^+}\frac{f(x)}{g(x)}\xlongequal{\text{洛必达}}\lim_{x\to0^+}\frac{x(\cos x-1)}{abx^{b-1}}=\lim_{x\to0^+}\frac{-\frac12x^3}{abx^{b-1}}=1$，故 $b-1=3$、$ab=-\dfrac12$。</p>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>三个坑连成一串</b>：① 上下限颠倒要添负号；② 换序后<b>注意给哪个变量代上下限</b>（书上蓝批）——是给 $y$ 代 $0$ 与 $t^2$，不是给 $t$；③ 别忘 $-t\cos\frac yt$ 里外层还有个 $t$。<br>
+      <b>公式</b>：$\displaystyle\int\sin\frac yt\,\mathrm dy=-t\cos\frac yt+C$；当 $x\to0^+$ 时 $f\sim g\Rightarrow\displaystyle\int_0^x f\sim\int_0^x g$（洛必达可证）。<br>
+      <b>用第二条可以一步到位</b>：$t(\cos t-1)\sim-\frac{t^3}{2}$ ⇒ $f(x)\sim-\frac{x^4}{8}$ ⇒ $a=-\frac18,b=4$，$ab=-\frac12$。<b>比洛必达更快。</b></div>
+    </div>
+  </div>
+
+  <div class="eg" id="eg-b07">
+    <div class="q"><span class="no">基 例14.7</span><span class="exam">解答 · 换序（被积函数只含 $x$）</span><a class="pg" href="#">P.350</a>
+      <p>计算 $\displaystyle\int_0^1\mathrm dy\int_y^1\arcsin\sqrt{4x-4x^2}\,\mathrm dx$。</p></div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\dfrac12$</span>（数值复算 $0.5000$ ✅）</p>
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+      <ol>
+        <li>被积函数<b>只含 $x$</b>，而题目却要求<u>先对 $x$ 积分</u>——这是最刺眼的信号：<b>凡"被积函数只含一个变量，却要先对它积"，一律换序。</b></li>
+        <li>换序后先对 $y$ 积分，被积函数是<b>常数（相对 $y$ 而言）</b>，内层积分立刻退化成"区间长度 $\times$ 函数值"，二重积分塌成一元定积分。</li>
+        <li>区域 $0\le y\le x\le1$ 是标准直角三角形，内层长度恰好是 $x$，所以会吐出一个 $x$ 因子——预判到这一步，就知道最后要算 $\int_0^1 x\arcsin\sqrt{4x-4x^2}\mathrm dx$。</li>
+        <li>这个一元积分书上引用<b>例 9.15</b> 的结果，考场上属于"应当背下的公式"。</li>
+      </ol></div>
+      <div class="paper"><span class="phead">✍️ 考场卷面<span class="score">参考 10 分</span></span>
+        <div class="step"><span class="k">解</span>所给累次积分的积分区域为
+        $$D=\{(x,y)\mid 0\le y\le1,\ y\le x\le1\}=\{(x,y)\mid 0\le x\le1,\ 0\le y\le x\}.$$<span class="pt">⛳ 3分</span></div>
+        <div class="step">先对 $x$ 积分较困难，<b>交换积分次序</b>，得
+        $$\text{原式}=\int_0^1\mathrm dx\int_0^{x}\arcsin\sqrt{4x-4x^2}\,\mathrm dy. \tag{1}$$<span class="pt">⛳ 3分</span></div>
+        <div class="step">(1) 式内层被积函数不含 $y$，故
+        $$\text{原式}=\int_0^1 x\arcsin\sqrt{4x-4x^2}\,\mathrm dx. \tag{2}$$<span class="pt">⛳ 2分</span></div>
+        <div class="fin">由 $\displaystyle\int_0^1 x\arcsin\sqrt{4x-4x^2}\,\mathrm dx=\frac12$，得 $\displaystyle\int_0^1\mathrm dy\int_y^1\arcsin\sqrt{4x-4x^2}\,\mathrm dx=\frac12$。<span class="pt">⛳ 2分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（写完校对）</span>
+      <b>方法总结（书）</b>：$\displaystyle\int_c^d\mathrm dy\int_{x_1(y)}^{x_2(y)}f(x)\mathrm dx$ 对 $x$ 积分困难时，<b>转化为先积 $y$</b>，即 $\displaystyle\int_a^b\mathrm dx\int_{y_1(x)}^{y_2(x)}f(x)\mathrm dy$。<br>
+      <b>要背的两个公式（书上标"公式"）</b>：$\displaystyle\int_0^1\arcsin\sqrt{1-x^2}\,\mathrm dx=1$，$\displaystyle\int_0^1 x\arcsin\sqrt{4x-4x^2}\,\mathrm dx=\dfrac12$。<br>
+      <b>后者的现推法（万一忘了）</b>：$4x-4x^2=1-(2x-1)^2$，令 $2x-1=\sin u$ 化成 $\arcsin|\cos u|$，再用区间再现——考场上约 3 分钟，<u>不如背</u>。<br>
+      <span class="dock">扣分点</span>：换序时必须<b>写出区域 $D$ 的两种表达</b>（卷面第一步），只写"交换次序得"会被扣定限分。</div>
+    </div>
+  </div>
+
+  <div class="eg" id="eg-q23">
+    <div class="q"><span class="no">千 千23</span><span class="exam">填空 · 换序 + 二次换元</span>
+      <p>$\displaystyle\int_0^1 x^2\mathrm dx\int_x^1\mathrm e^{-y^2}\mathrm dy=\underline{\qquad}$</p></div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\dfrac16-\dfrac{1}{3\mathrm e}$</span>（$=0.0440402$，复算 ✅）</p>
+      <p><span class="lab">要害</span>$\mathrm e^{-y^2}$ 在清单里 ⇒ 换序。区域 $0\le x\le y\le1$：</p>
+      $$=\int_0^1\mathrm e^{-y^2}\mathrm dy\int_0^y x^2\mathrm dx=\frac13\int_0^1 y^3\mathrm e^{-y^2}\mathrm dy
+      \xlongequal{u=y^2}\frac16\int_0^1 u\mathrm e^{-u}\mathrm du=\frac16\Big[-(u+1)\mathrm e^{-u}\Big]_0^1=\frac16\Big(1-\frac2{\mathrm e}\Big).$$
+      <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>本题比强 14.2/14.3 多一步</b>：换完序得到 $y^3\mathrm e^{-y^2}$ —— <b>奇次幂配 $\mathrm e^{-y^2}$ 一律换 $u=y^2$</b>（偶次幂则要用 Γ 函数，见 <a href="#eg-b12">例 14.12</a>）。<br>
+      <b>$\displaystyle\int u\mathrm e^{-u}\mathrm du=-(u+1)\mathrm e^{-u}+C$</b> 应当背，考场上不必现分部。</div>
+    </div>
+  </div>
+
+  <div class="eg" id="eg-q27">
+    <div class="q"><span class="no">千 千27</span><span class="exam">选择 · ★无界区域也能换序</span>
+      <p>$\displaystyle\int_0^{+\infty}\mathrm dy\int_y^{2y}\mathrm e^{-x^2}\mathrm dx=$（　）　(A) $1$　(B) $\frac12$　(C) $\frac13$　(D) $\frac14$</p></div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">(D) $\dfrac14$</span></p>
+      <p><span class="lab">要害</span>区域是 $\{y\le x\le2y,\ y\ge0\}$，即<b>两条射线 $y=x$ 与 $y=\frac x2$ 夹的无界楔形</b>。
+      画图时把边界<b>当射线看</b>，换序后 $y$ 的范围是 $\Big[\dfrac x2,\ x\Big]$，长度 $\dfrac x2$：</p>
+      $$=\int_0^{+\infty}\mathrm e^{-x^2}\mathrm dx\int_{\frac x2}^{x}\mathrm dy=\frac12\int_0^{+\infty}x\mathrm e^{-x^2}\mathrm dx=\frac12\cdot\frac12=\frac14.$$
+      <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>无界区域换序的合法性</b>：本题被积函数非负且反常积分收敛，交换次序合法（考研范围内直接换即可，不必论证）。<br>
+      <b>爽点</b>：$\mathrm e^{-x^2}$ 本身算不出，但<b>换序吐出的因子 $\frac x2$ 恰好凑成 $x\mathrm e^{-x^2}$，可积</b>——与强 14.2/14.3 完全同构。<br>
+      🔗 <a href="#eg-h11">习 14.11</a> 也是无界楔形（$0\le x\le y$），但那题给的是<b>极坐标写法</b>，要先化回直角——<b>两题成对看</b>。</div>
+    </div>
+  </div>
+
+  <div class="eg" id="eg-h06">
+    <div class="q"><span class="no">基 习14.6</span><span class="exam">填空 · 二次变限积分求导（必须先换序）</span><a class="pg" href="#">P.372</a>
+      <p>设 $f(x)$ 为连续函数，$F(t)=\displaystyle\int_1^t\mathrm dy\int_y^t f(x)\mathrm dx$，则 $F'(t)=\underline{\qquad}$。</p></div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$(t-1)f(t)$</span></p>
+      <p><span class="lab">要害</span>所给是<b>二次变限积分</b>，$t$ 同时出现在<u>外层上限</u>与<u>内层上限</u>。
+      按<b>给定次序</b>无法化成变限单积分（内层积完得到的是 $\int_y^t f$，还带着 $y$）⇒ <b>必须先换序</b>：</p>
+      $$F(t)=\int_1^t\mathrm dy\int_y^t f(x)\mathrm dx=\int_1^t\mathrm dx\int_1^{x}f(x)\mathrm dy=\int_1^t(x-1)f(x)\mathrm dx\ \Rightarrow\ F'(t)=(t-1)f(t).$$
+      <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>⚠️ 与 <a href="#eg-q28">千28</a> 恰好相反，两题务必成对记</b>：<br>
+      <span class="chip c-b">本题</span>内层被积函数<b>不含 $t$</b> ⇒ <b>换序</b>，把二次变限压成一次变限再求导；<br>
+      <span class="chip c-g">千28</span>内层被积函数<b>含 $t$</b>（$t$ 在内层的限里）⇒ <b>不换序</b>，直接用"上限项 + 含参求导"两项公式。<br>
+      <b>一句话判据：$t$ 只出现在"限"上还是也钻进了"被积表达式"里。</b></div>
+    </div>
+  </div>
+
+  <div class="eg" id="eg-q28">
+    <div class="q"><span class="no">千 千28</span><span class="exam">填空 · ★★变限二重积分求导（本章最难填空）</span>
+      <p>已知函数 $f(t)=\displaystyle\int_1^{t^2}\mathrm dx\int_t^{\sqrt x}\mathrm e^{\frac xy}\mathrm dy$，则 $f'(\pi)=\underline{\qquad}$。</p></div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\pi\big(\mathrm e^{\frac1\pi}-\mathrm e^{\pi}\big)$</span>（$\approx-68.3796$，中心差分数值复算一致 ✅）</p>
+      <p><span class="lab">分析</span>$t$ 出现在<b>三个</b>位置：外层上限 $t^2$、内层下限 $t$、（内层上限 $\sqrt x$ 不含 $t$）。
+      记 $g(x,t)=\displaystyle\int_t^{\sqrt x}\mathrm e^{\frac xy}\mathrm dy$，则 $f(t)=\displaystyle\int_1^{t^2}g(x,t)\mathrm dx$，用<b>变限 + 含参</b>两项公式：</p>
+      $$f'(t)=\underbrace{g(t^2,t)\cdot(t^2)'}_{\text{上限项}}+\underbrace{\int_1^{t^2}\frac{\partial g}{\partial t}\mathrm dx}_{\text{含参项}}.$$
+      <p><span class="lab">要害</span><b>命题人埋的爽点：上限项恰好为 0。</b></p>
+      <ol>
+        <li>$g(t^2,t)=\displaystyle\int_t^{\sqrt{t^2}}\mathrm e^{\frac{t^2}{y}}\mathrm dy=\int_t^{t}(\cdots)\mathrm dy=0$ ⇒ 上限项 $=0\cdot2t=0$。</li>
+        <li>$\dfrac{\partial g}{\partial t}=-\mathrm e^{\frac xt}$（对<b>下限</b>求导带负号）。</li>
+        <li>$f'(t)=-\displaystyle\int_1^{t^2}\mathrm e^{\frac xt}\mathrm dx=-t\,\mathrm e^{\frac xt}\Big|_1^{t^2}=-t\big(\mathrm e^{t}-\mathrm e^{\frac1t}\big)=t\big(\mathrm e^{\frac1t}-\mathrm e^{t}\big)$。</li>
+      </ol>
+      <p>故 $f'(\pi)=\pi\big(\mathrm e^{\frac1\pi}-\mathrm e^{\pi}\big)$。</p>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+      <b><span class="dock">最大的坑：很多人条件反射去换序</span></b>——本题换序后区域要分段，比直接求导麻烦十倍。
+      <b>判据见 <a href="#eg-h06">习 14.6</a> 的批注：$t$ 钻进了内层的限，就直接求导，不换序。</b><br>
+      <b>第二个坑</b>：$\sqrt{t^2}=|t|$，题目问 $f'(\pi)$，$t\gt0$ 故 $=t$；若问 $f'(-\pi)$ 就要小心。<br>
+      <b>第三个坑</b>：$\displaystyle\int\mathrm e^{\frac xt}\mathrm dx=t\,\mathrm e^{\frac xt}+C$，<b>那个 $t$ 别丢</b>（对 $x$ 积分时 $t$ 是常数）。</div>
+    </div>
+  </div>
+
+
+  <!-- ================= s6 极坐标 ================= -->
+  <h2 id="s6"><span class="idx">六</span>极坐标：<u>三种情况看极点在哪</u></h2>
+
+  <div class="key"><span class="tag">必记 · 面积元素的来历</span><a class="pg" href="#">P.350</a>
+    <p>用 $r=r_0$（同心圆）与 $\theta=\theta_0$（射线）切分 $D$，小块<b>近似看成矩形</b>，两边长 $\mathrm dr$ 与 $r\mathrm d\theta$：</p>
+    <div class="fml">$$\mathrm d\sigma=\mathrm dr\cdot r\mathrm d\theta=r\,\mathrm dr\mathrm d\theta$$</div>
+    <p><b>那个 $r$ 不是凭空来的</b>——它就是雅可比行列式 $\Big|\dfrac{\partial(x,y)}{\partial(r,\theta)}\Big|=\begin{vmatrix}\cos\theta&-r\sin\theta\\ \sin\theta&r\cos\theta\end{vmatrix}=r$（见 <a href="#s8">§8</a>）。
+    <span style="color:var(--red);font-weight:700">漏掉 $r$ 是本章第一大丢分点</span>（<a href="#eg-h02">习 14.2</a> 的干扰项 (C) 就是专为此设的）。</p>
+  </div>
+
+  <div class="key"><span class="tag">必记 · 三种情况（图 14-8）</span><a class="pg" href="#">P.350–351</a>
+    <div class="tw">
+    <table>
+      <tr><th>极点 $O$ 的位置</th><th>公式</th><th>典型区域</th></tr>
+      <tr><td>① 在 $D$ <b>外部</b></td><td>$\displaystyle\int_\alpha^\beta\mathrm d\theta\int_{r_1(\theta)}^{r_2(\theta)}f(r\cos\theta,r\sin\theta)\,r\,\mathrm dr$</td><td>圆环、两条曲线夹的扇形（强 14.7）</td></tr>
+      <tr><td>② 在 $D$ <b>边界上</b></td><td>$\displaystyle\int_\alpha^\beta\mathrm d\theta\int_{0}^{r(\theta)}f\,r\,\mathrm dr$</td><td>过原点的圆 $r=2a\cos\theta$（强 14.8 法一）</td></tr>
+      <tr><td>③ 在 $D$ <b>内部</b></td><td>$\displaystyle\int_0^{2\pi}\mathrm d\theta\int_{0}^{r(\theta)}f\,r\,\mathrm dr$</td><td>圆心在原点的圆盘（例 14.8）</td></tr>
+    </table>
+    </div>
+    <p><b>定限口诀（图 14-8 下方手批）</b>：从 $Ox$ 轴<b>逆时针</b>出发，<b>先碰到</b>积分区域时记 $\theta=\alpha$，<b>后离开</b>区域时记 $\theta=\beta$；
+    然后<b>限内画条线</b>（从原点出发的射线），<b>先交</b>的曲线记 $r=r_1(\theta)$，<b>后交出</b>的曲线记 $r=r_2(\theta)$。
+    <span class="chip c-g">与直角坐标的十六字口诀完全同构，只是"竖线"换成"射线"</span></p>
+  </div>
+
+  <div class="key"><span class="tag">必记 · ★选系原则（考场 5 秒决策）</span><a class="pg" href="#">P.181 / P.351</a>
+    <p>一般来说，给出一个二重积分：</p>
+    <ol>
+      <li>看<b>被积函数</b>是否为 $f(x^2+y^2)$、$f\big(\frac yx\big)$、$f\big(\frac xy\big)$ 等形式；</li>
+      <li>看<b>积分区域</b>是否为圆或者圆的一部分。</li>
+    </ol>
+    <p>如果 ①、② <b>至少满足其中之一</b>，那么优先选用极坐标系；否则，就优先考虑直角坐标系。</p>
+    <p class="legend2">📌 强化讲蓝批补了关键一句：「<b>主要看 ①，通常 ② 不满足</b>」；基础讲蓝批：「<b>是否用极坐标系计算主要看 ①</b>」。
+    <b>两本书在同一处给了同一条批注，说明这是张宇本人反复强调的判据。</b></p>
+  </div>
+
+  <div class="key"><span class="tag">必记 · ★强化专属：二重积分常用结论 5 条（单位圆上，直接背）</span><a class="pg" href="#">P.179</a>
+    <div class="fcards">
+      <div><b>① 最常用</b>$\displaystyle\iint_{x^2+y^2\le1}(x^2+y^2)\mathrm d\sigma=\frac{\pi}{2}$</div>
+      <div><b>②</b>$\displaystyle\iint_{x^2+y^2\le1}\sqrt{x^2+y^2}\,\mathrm d\sigma=\frac{2\pi}{3}$</div>
+      <div><b>③ 半球体积</b>$\displaystyle\iint_{x^2+y^2\le1}\sqrt{1-(x^2+y^2)}\,\mathrm d\sigma=\frac{2\pi}{3}$</div>
+      <div><b>④ 圆锥体积</b>$\displaystyle\iint_{x^2+y^2\le1}\big(1-\sqrt{x^2+y^2}\big)\mathrm d\sigma=\frac{\pi}{3}$</div>
+      <div><b>⑤ 带参</b>$\displaystyle\iint_{x^2+y^2\le1}\Big(\frac{x^2}{a^2}+\frac{y^2}{b^2}\Big)\mathrm d\sigma=\frac{\pi}{4}\Big(\frac1{a^2}+\frac1{b^2}\Big)$</div>
+    </div>
+    <p>📌 书上蓝批称之为「<b>形式化归体系块</b>」。五条全部由 $\displaystyle\int_0^{2\pi}\mathrm d\theta\int_0^1 g(r)r\,\mathrm dr=2\pi\int_0^1 g(r)r\,\mathrm dr$ 秒推，
+    <b>考场上忘了就现推，10 秒；但背下来能省一道填空的全部时间。</b>（五条已 scipy 逐条复算 ✅，⑤ 还额外验了三组 $a,b$）</p>
+    <p class="legend2">🔗 ③ ④ 的几何意义值得记：③ 是<b>半径 1 的半球体积</b> $\frac23\pi$，④ 是<b>底半径 1 高 1 的圆锥体积</b> $\frac13\pi$——<u>用体积秒验，比记数字牢</u>。</p>
+  </div>
+
+  <!-- ========== 模块③ 极坐标定限台 ========== -->
+  <div class="tool" id="t3">
+    <h4>🧭 极坐标定限台 —— 让射线从 $Ox$ 轴逆时针扫过去</h4>
+    <div class="hint">拖动 $\theta$ 滑块，射线扫过区域：<b>绿点＝先交＝$r_1(\theta)$（下限）</b>，<b>红点＝后交出＝$r_2(\theta)$（上限）</b>。
+    右侧同时报出极点位于 $D$ 的<b>外部 / 边界 / 内部</b>（决定用三条公式中的哪一条），并把 $\theta$ 从 $\alpha$ 扫到当前值时<b>已累积的积分值</b>与书上答案对照。</div>
+    <div class="ctl" id="t3-pre"></div>
+    <div class="ctl">
+      <label>射线角 θ</label>
+      <input type="range" id="t3-t" min="0" max="1000" value="500">
+      <span class="val" id="t3-tv"></span>
+    </div>
+    <div class="scene"><div class="twocanv">
+      <figure><canvas id="t3-c" width="300" height="300"></canvas><figcaption>区域 $D$ ＋ 扫描射线</figcaption></figure>
+    </div></div>
+    <div class="say" id="t3-say"></div>
+    <div class="dqwrap"><table class="dq" id="t3-tab"></table></div>
+    <span class="verdict" id="t3-v"></span>
+    <div class="legend2">📌 注意观察：<b>极点在边界上时绿点始终贴在原点（$r_1\equiv0$）</b>；<b>极点在内部时 $\alpha=0,\beta=2\pi$ 且射线永远有交点</b>。
+    这就是三条公式的直观来源，不用死记。</div>
+  </div>
+
+  <div class="eg" id="eg-b08">
+    <div class="q"><span class="no">基 例14.8</span><span class="exam">填空 · 轮换 + 极坐标</span><a class="pg" href="#">P.351</a>
+      <p>设区域 $D=\{(x,y)\mid x^2+y^2\le\sqrt2\}$，则 $\displaystyle\iint_D\Big(x^2+\frac{y^2}{2}\Big)\mathrm dx\mathrm dy=\underline{\qquad}$</p></div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\dfrac{3\pi}{4}$</span>（复算 $2.356194$ ✅）</p>
+      <p><span class="lab">分析</span>积分区域是圆（判据 ② 中），但被积函数<b>不是平方和</b>（判据 ① 不中）。
+      注意到 $x\leftrightarrow y$ 互换后 $D$ 不变 ⇒ <b>先用轮换对称性把被积函数凑成平方和</b>，再上极坐标。</p>
+      $$\iint_D\Big(x^2+\frac{y^2}{2}\Big)=\iint_D\Big(y^2+\frac{x^2}{2}\Big)=\frac12\Big(1+\frac12\Big)\iint_D(x^2+y^2)
+      =\frac34\int_0^{2\pi}\mathrm d\theta\int_0^{2^{1/4}}r^3\,\mathrm dr=\frac34\cdot2\pi\cdot\frac{\sqrt2}{4}=\frac{3\pi}{4}.$$
+      <div class="notekeep"><span class="nh">📌 批注</span>
+      <b><span class="dock">半径别看错</span></b>：$x^2+y^2\le\sqrt2$ 说明 $r^2\le\sqrt2$，即 $r\le2^{1/4}\approx1.189$，<b>不是 $\sqrt2$</b>。
+      于是 $\displaystyle\int_0^{2^{1/4}}r^3\mathrm dr=\frac{(2^{1/4})^4}{4}=\frac{2}{4}=\frac12$，$\frac34\cdot2\pi\cdot\frac12=\frac{3\pi}{4}$ ✅。<br>
+      <b>系数 $\frac12(1+\frac12)=\frac34$ 的来历</b>：两式相加得 $\frac32(x^2+y^2)$，再取一半。<b>写卷面时要把这一步写出来。</b><br>
+      <b>方法总结（书）</b>：$D$ 关于 $y=x$ 对称时用 $\displaystyle\iint_D f=\frac12\iint_D[f(x,y)+f(y,x)]$。</div>
+    </div>
+  </div>
+
+  <div class="eg" id="eg-b09">
+    <div class="q"><span class="no">基 例14.9 ＝ 强 强14.7</span><span class="exam">解答 · ★★★ 书上标「二重积分复习标杆」</span><a class="pg" href="#">P.351 / P.181</a>
+      <p>设平面有界区域 $D$ 位于第一象限，由曲线 $x^2+y^2-xy=1$，$x^2+y^2-xy=2$ 与直线 $y=\sqrt3x$，$y=0$ 围成，
+      计算 $\displaystyle\iint_D\frac{1}{3x^2+y^2}\mathrm dx\mathrm dy$。</p></div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\dfrac{\sqrt3\ln2}{24}\pi$</span>（复算 $0.1571537$ ✅）</p>
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+      <ol>
+        <li><b>先判选系</b>：被积函数分母是 $3x^2+y^2$（二次齐次），边界含 $x^2+y^2$——<b>判据 ① 中</b>；且题目给的是"两条同型曲线 + 两条过原点的直线"，
+        这是极坐标最舒服的形状（<b>两条射线夹住，两条曲线一内一外</b>）⇒ <b>极坐标，极点在 $D$ 外部（情况 ①）</b>。</li>
+        <li><b>$\theta$ 的限来自两条直线</b>：$y=0\Rightarrow\theta=0$；$y=\sqrt3x\Rightarrow\tan\theta=\sqrt3\Rightarrow\theta=\frac\pi3$。<b>直线给 $\theta$，曲线给 $r$——这是极坐标定限的分工。</b></li>
+        <li><b>$r$ 的限来自两条曲线</b>：$x^2+y^2-xy=r^2(1-\cos\theta\sin\theta)$，两条曲线只差常数 1 与 2 ⇒
+        $r_1=\dfrac{1}{\sqrt{1-\cos\theta\sin\theta}}$，$r_2=\dfrac{\sqrt2}{\sqrt{1-\cos\theta\sin\theta}}$，<b>比值恒为 $\sqrt2$，与 $\theta$ 无关</b>。</li>
+        <li><b>预判爽点</b>：被积函数 $\dfrac{1}{r^2(3\cos^2\theta+\sin^2\theta)}$ 配上 $r\mathrm dr$ 变成 $\dfrac1r\mathrm dr$，积出 $\ln\dfrac{r_2}{r_1}=\ln\sqrt2=\dfrac{\ln2}{2}$——<b>常数，直接提到积分号外</b>。剩下的是一个纯 $\theta$ 的一元积分。</li>
+        <li>最后 $\displaystyle\int\frac{\mathrm d\theta}{3\cos^2\theta+\sin^2\theta}$ 型，<b>上下同除 $\cos^2\theta$ 凑 $\mathrm d(\tan\theta)$</b>——这是 ch9 的固定套路。</li>
+      </ol></div>
+      <div class="paper"><span class="phead">✍️ 考场卷面<span class="score">参考 10 分</span></span>
+        <div class="step"><span class="k">解</span>作极坐标变换 $x=r\cos\theta,\ y=r\sin\theta$。由 $x^2+y^2-xy=1$ 得 $r^2(1-\cos\theta\sin\theta)=1$，故
+        $$r=\frac{1}{\sqrt{1-\cos\theta\sin\theta}};$$
+        由 $x^2+y^2-xy=2$ 得 $\displaystyle r=\frac{\sqrt2}{\sqrt{1-\cos\theta\sin\theta}}$。<span class="pt">⛳ 2分</span></div>
+        <div class="step">由 $y=\sqrt3x$ 得 $r\sin\theta=\sqrt3r\cos\theta$，即 $\tan\theta=\sqrt3$，$\theta=\dfrac\pi3$；由 $y=0$ 得 $\theta=0$。
+        故 $D=\Big\{(r,\theta)\ \Big|\ 0\le\theta\le\dfrac\pi3,\ \dfrac{1}{\sqrt{1-\cos\theta\sin\theta}}\le r\le\dfrac{\sqrt2}{\sqrt{1-\cos\theta\sin\theta}}\Big\}$。<span class="pt">⛳ 3分</span></div>
+        <div class="step">于是
+        $$\iint_D\frac{\mathrm dx\mathrm dy}{3x^2+y^2}=\int_0^{\frac\pi3}\mathrm d\theta\int_{r_1(\theta)}^{r_2(\theta)}\frac{r\,\mathrm dr}{r^2(3\cos^2\theta+\sin^2\theta)}
+        =\int_0^{\frac\pi3}\frac{\mathrm d\theta}{3\cos^2\theta+\sin^2\theta}\int_{r_1}^{r_2}\frac{\mathrm dr}{r}. \tag{1}$$<span class="pt">⛳ 2分</span></div>
+        <div class="step">$\displaystyle\int_{r_1}^{r_2}\frac{\mathrm dr}{r}=\ln\frac{r_2}{r_1}=\ln\sqrt2=\frac{\ln2}{2}$（与 $\theta$ 无关），代入 (1) 得
+        $$\text{原式}=\frac{\ln2}{2}\int_0^{\frac\pi3}\frac{\mathrm d\theta}{3\cos^2\theta+\sin^2\theta}
+        =\frac{\ln2}{2}\int_0^{\frac\pi3}\frac{\mathrm d(\tan\theta)}{3+\tan^2\theta}. \tag{2}$$<span class="pt">⛳ 2分</span></div>
+        <div class="fin">由 $\displaystyle\int\frac{\mathrm du}{a^2+u^2}=\frac1a\arctan\frac ua+C$，
+        (2) $=\dfrac{\ln2}{2}\cdot\dfrac{1}{\sqrt3}\arctan\dfrac{\tan\theta}{\sqrt3}\Big|_0^{\frac\pi3}=\dfrac{\ln2}{2\sqrt3}\cdot\dfrac\pi4=\dfrac{\sqrt3\ln2}{24}\pi$。<span class="pt">⛳ 1分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（写完校对）</span>
+      <b>书上给了两个办法画出 $D$ 的边界图形</b>（考场上未必要画，但要能说）：<br>
+      　<b>① 描点法</b>：$x^2+y^2-xy=1$ 与 $=2$ 分别与 $x$ 轴、$y$ 轴、$y=x$ 交于 $(1,0)$ 与 $(\sqrt2,0)$、$(0,1)$ 与 $(0,\sqrt2)$、$(1,1)$ 与 $(\sqrt2,\sqrt2)$，连起来即得大致图形。<br>
+      　<b>② 二次型法</b>（学完线代分册再看）：$x^2+y^2-xy=[x,y]\begin{bmatrix}1&-\frac12\\-\frac12&1\end{bmatrix}\begin{bmatrix}x\\y\end{bmatrix}$，
+      特征值 $\lambda_1=\frac12,\lambda_2=\frac32$（或配方 $\big(x-\frac y2\big)^2+\frac34y^2$）⇒ 经正交变换化为 $\frac12y_1^2+\frac32y_2^2$，<b>是两个同心椭圆</b>。<br>
+      <b>方法总结（书）</b>：<b>当积分区域给出的不是常见曲线时，可考虑描点法画积分区域图。</b>
+      在考试时有些 $D$ 的边界图形不易画出，<b>考生可根据 $D$ 的表达式来确定上下限</b>（即"分析法"，本题卷面就是这么写的，全程没画图）。<br>
+      <span class="dock">最易丢的 2 分</span>：$\displaystyle\int\frac{\mathrm dr}{r}$ 的结果与 $\theta$ 无关这一点<b>必须在卷面上点明</b>，否则阅卷人不知道你为什么能提出去。<br>
+      <b>arctan 的值</b>：$\theta=\frac\pi3\Rightarrow\tan\theta=\sqrt3\Rightarrow\arctan\frac{\sqrt3}{\sqrt3}=\arctan1=\frac\pi4$。<b>这一步凑得太巧，正是"标杆题"的由来。</b></div>
+    </div>
+  </div>
+
+  <div class="eg" id="eg-b10">
+    <div class="q"><span class="no">基 例14.10</span><span class="exam">解答 · 接例 14.4，轮换 + 极坐标 + 拐点（跨章综合）</span><a class="pg" href="#">P.352</a>
+      <p>设 $f(x)=\displaystyle\iint_{D(x)}\frac{v\ln\sqrt{u^2+v^2}}{u+v}\mathrm du\mathrm dv$，
+      $D(x)=\Big\{(u,v)\ \Big|\ \frac14\le u^2+v^2\le x^2,\ u\gt0,v\gt0\Big\}$，
+      求曲线 $y(x)=\displaystyle\int_1^x f(t)\,\mathrm dt\ \big(x\gt\frac12\big)$ 的拐点。</p></div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">拐点 $(1,\ 0)$</span>（复算：$y''(x)=\frac\pi4x\ln x$，零点 $x=1$ ✅）</p>
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+      <ol>
+        <li>$f(x)$ 与<a href="#eg-b04">例 14.4</a> 是<b>同一个积分</b> ⇒ 由轮换对称性 $f(x)=\dfrac14\displaystyle\iint_{D(x)}\ln(u^2+v^2)\mathrm du\mathrm dv$。</li>
+        <li>区域是 $\frac14$ 个<b>圆环</b>、被积函数含平方和 ⇒ <b>选系两条判据全中，用极坐标</b>，$\theta\in\big[0,\frac\pi2\big]$，$r\in\big[\frac12,x\big]$。</li>
+        <li><b>★最省力的一步（书上原话）</b>：因为最终求的是 $y(x)$ 的<b>二阶</b>导数，即 $f(x)$ 的<b>一阶</b>导数，
+        <u>所以不必要真正计算出二重积分，只转化为变限积分即可</u>——积到 $\displaystyle\frac\pi4\int_{\frac12}^{x}r\ln r\,\mathrm dr$ 就停手。</li>
+        <li>拐点＝$y''$ 变号点 ⇒ 令 $\dfrac\pi4x\ln x=0$，在 $x\gt\frac12$ 上只有 $x=1$；再<b>左右取点验变号</b>（不能只算零点就下结论）。</li>
+        <li>纵坐标 $y(1)=\displaystyle\int_1^1 f=0$，白拿。</li>
+      </ol></div>
+      <div class="paper"><span class="phead">✍️ 考场卷面<span class="score">参考 10 分</span></span>
+        <div class="step"><span class="k">解</span>区域 $D(x)$ 关于直线 $v=u$ 对称，由<b>轮换对称性</b>，
+        $$f(x)=\iint_{D(x)}\frac{v\ln\sqrt{u^2+v^2}}{u+v}\mathrm du\mathrm dv=\frac12\iint_{D(x)}\ln\sqrt{u^2+v^2}\,\mathrm du\mathrm dv
+        =\frac14\iint_{D(x)}\ln(u^2+v^2)\mathrm du\mathrm dv. \tag{1}$$<span class="pt">⛳ 3分</span></div>
+        <div class="step">在极坐标下 $D(x):\ 0\le\theta\le\dfrac\pi2,\ \dfrac12\le r\le x$，故
+        $$f(x)=\frac14\int_0^{\frac\pi2}\mathrm d\theta\int_{\frac12}^{x}\ln r^2\cdot r\,\mathrm dr=\frac\pi4\int_{\frac12}^{x}r\ln r\,\mathrm dr. \tag{2}$$<span class="pt">⛳ 3分</span></div>
+        <div class="step">由 $y(x)=\displaystyle\int_1^x f(t)\mathrm dt$ 得 $y'(x)=f(x)$，再由 (2) 得
+        $$y''(x)=f'(x)=\frac\pi4 x\ln x. \tag{3}$$<span class="pt">⛳ 2分</span></div>
+        <div class="step">令 $y''(x)=0$，在 $x\gt\dfrac12$ 上得 $x=1$。当 $\dfrac12\lt x\lt1$ 时 $\ln x\lt0$，$y''(x)\lt0$；
+        当 $x\gt1$ 时 $y''(x)\gt0$，故 $y''$ 在 $x=1$ 处<b>变号</b>。<span class="pt">⛳ 1分</span></div>
+        <div class="fin">又 $y(1)=\displaystyle\int_1^1 f(t)\mathrm dt=0$，故曲线 $y(x)$ 的拐点为 $(1,\,0)$。<span class="pt">⛳ 1分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（写完校对）</span>
+      <b>(2) 式的 $\frac14\cdot\frac\pi2\cdot2=\frac\pi4$</b>：$\frac14$ 来自轮换，$\frac\pi2$ 来自 $\theta$ 积分，$2$ 来自 $\ln r^2=2\ln r$。<b>三个系数缺一不可。</b><br>
+      <span class="dock">扣分点</span>：拐点必须<b>验二阶导变号</b>，只写"$y''=0$ 得 $x=1$"要扣分；且拐点要写<b>坐标</b> $(1,0)$，只写 $x=1$ 也扣。<br>
+      <b>本题的教学价值</b>：<u>"求什么就算到什么为止"</u>——真去算 $\int_{1/2}^x r\ln r\,\mathrm dr=\frac{x^2}{2}\ln x-\frac{x^2}{4}+\frac{\ln2}{8}+\frac{1}{16}$ 纯属浪费三分钟。</div>
+    </div>
+  </div>
+
+  <div class="eg" id="eg-h08">
+    <div class="q"><span class="no">基 习14.8</span><span class="exam">解答 · 线性拆 + 对称性 + 极坐标</span><a class="pg" href="#">P.375</a>
+      <p>设区域 $D=\{(x,y)\mid x^2+y^2\le1,\ x\ge0\}$，计算二重积分 $I=\displaystyle\iint_D\frac{1+xy}{1+x^2+y^2}\mathrm dx\mathrm dy$。</p></div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\dfrac\pi2\ln2$</span>（复算 $1.0887930$ ✅）</p>
+      <div class="think"><span class="th">💭 思路</span>
+      <ol>
+        <li>分子是 $1+xy$ ⇒ <b>先用线性性质拆成两个积分</b>（"瓦解敌人，各个击破"），两块的命运完全不同。</li>
+        <li>$I_2=\displaystyle\iint_D\dfrac{xy}{1+x^2+y^2}$：$D$（右半圆盘）关于 <b>$x$ 轴</b>对称，被积函数是 $y$ 的<b>奇函数</b> ⇒ <b>直接为 0</b>，一秒。</li>
+        <li>$I_1=\displaystyle\iint_D\dfrac{1}{1+x^2+y^2}$：被积含 $x^2+y^2$、区域是半圆 ⇒ <b>判据双中，极坐标</b>，$\theta\in\big[-\frac\pi2,\frac\pi2\big]$。</li>
+        <li>内层 $\dfrac{r\,\mathrm dr}{1+r^2}$ 恰好凑 $\dfrac12\mathrm d\ln(1+r^2)$——<b>又是那个"多出来的 $r$"救场</b>。</li>
+      </ol></div>
+      <div class="paper"><span class="phead">✍️ 考场卷面<span class="score">参考 10 分</span></span>
+        <div class="step"><span class="k">解</span>由积分的线性性质，
+        $$I=\underbrace{\iint_D\frac{\mathrm dx\mathrm dy}{1+x^2+y^2}}_{I_1}+\underbrace{\iint_D\frac{xy}{1+x^2+y^2}\mathrm dx\mathrm dy}_{I_2}. \tag{1}$$<span class="pt">⛳ 2分</span></div>
+        <div class="step">区域 $D$ 关于 $x$ 轴对称，而 $\dfrac{xy}{1+x^2+y^2}$ 关于 $y$ 是奇函数，由<b>普通对称性</b>得
+        $$I_2=0. \tag{2}$$<span class="pt">⛳ 3分</span></div>
+        <div class="step">在极坐标下 $D:\ -\dfrac\pi2\le\theta\le\dfrac\pi2,\ 0\le r\le1$，故
+        $$I_1=\int_{-\frac\pi2}^{\frac\pi2}\mathrm d\theta\int_0^1\frac{r\,\mathrm dr}{1+r^2}=\pi\cdot\frac12\ln(1+r^2)\Big|_0^1=\frac\pi2\ln2. \tag{3}$$<span class="pt">⛳ 4分</span></div>
+        <div class="fin">将 (2)(3) 代入 (1)，得 $\displaystyle\iint_D\frac{1+xy}{1+x^2+y^2}\mathrm dx\mathrm dy=\frac\pi2\ln2$。<span class="pt">⛳ 1分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>$\theta$ 的范围别写成 $[0,\pi]$</b>：$x\ge0$ 是<b>右</b>半圆盘 ⇒ $\theta\in\big[-\frac\pi2,\frac\pi2\big]$（长度 $\pi$）。<span class="dock">写成 $[0,\pi]$ 就变成上半圆盘了</span><br>
+      <b>不拆会怎样</b>：$\displaystyle\iint\frac{1+xy}{1+x^2+y^2}$ 在极坐标下分子出现 $1+r^2\sin\theta\cos\theta$，与分母纠缠，<b>要多算一整个二重积分</b>。
+      <u>"先拆再各个击破"在本章是通用策略。</u></div>
+    </div>
+  </div>
+
+  <div class="eg" id="eg-q08">
+    <div class="q"><span class="no">强 强14.8</span><span class="exam">解答 · ★两法对照：直接极坐标 vs 平移换元</span><a class="pg" href="#">P.183</a>
+      <p>设 $D=\{(x,y)\mid (x-1)^2+(y-1)^2\le2,\ y\ge x\}$，计算 $\displaystyle\iint_D(x-y)\mathrm dx\mathrm dy$。</p></div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$-\dfrac83$</span>（两法数值复算均为 $-2.666667$ ✅）</p>
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+      <ol>
+        <li>区域是圆盘的一半，<b>圆过原点</b>（$(0-1)^2+(0-1)^2=2$ ✅）——这提示极坐标下<b>极点在边界上（情况 ②）</b>，$r$ 下限为 0。</li>
+        <li><b>法一</b>直接展开：$(x-1)^2+(y-1)^2\le2\Leftrightarrow x^2+y^2\le2x+2y\Leftrightarrow r\le2(\cos\theta+\sin\theta)$。
+        $y\ge x$ 给 $\theta$ 的下限 $\frac\pi4$；上限由 $r=0$（即 $\cos\theta+\sin\theta=0$）给出 $\theta=\frac{3\pi}{4}$。</li>
+        <li><b>法二</b>换个念头：圆心在 $(1,1)$，<b>把坐标原点搬到圆心</b>（平移换元 $u=x-1,v=y-1$，$J=1$），
+        区域立刻变成<b>标准半圆盘</b> $u^2+v^2\le2,\ v\ge u$，$r$ 的上限变成<b>常数 $\sqrt2$</b>，$r$ 与 $\theta$ 彻底解耦 ⇒ 两个一元积分直接相乘。</li>
+        <li><b>预判哪法快</b>：法一要算 $\int(\cos\theta-\sin\theta)(\sin\theta+\cos\theta)^3\mathrm d\theta$（凑微分，还行）；
+        法二只要算 $\int_{\pi/4}^{5\pi/4}(\cos\theta-\sin\theta)\mathrm d\theta\cdot\int_0^{\sqrt2}r^2\mathrm dr$。<b>法二明显更短。</b></li>
+      </ol></div>
+      <div class="paper"><span class="phead">✍️ 考场卷面（法二 · 推荐）<span class="score">参考 10 分</span></span>
+        <div class="step"><span class="k">解</span>作变量代换（平移）$\begin{cases}u=x-1\\ v=y-1\end{cases}$，则
+        $$\frac{\partial(x,y)}{\partial(u,v)}=\begin{vmatrix}1&0\\0&1\end{vmatrix}=1,\qquad
+        D_{uv}=\{(u,v)\mid u^2+v^2\le2,\ v\ge u\}.$$<span class="pt">⛳ 3分</span></div>
+        <div class="step">又 $x-y=(u+1)-(v+1)=u-v$，故
+        $$\iint_D(x-y)\mathrm dx\mathrm dy=\iint_{D_{uv}}(u-v)\,\mathrm du\mathrm dv. \tag{1}$$<span class="pt">⛳ 2分</span></div>
+        <div class="step">$D_{uv}$ 为半圆域，在极坐标下 $\dfrac\pi4\le\theta\le\dfrac{5\pi}{4}$，$0\le r\le\sqrt2$，于是
+        $$(1)=\int_{\frac\pi4}^{\frac{5\pi}4}\mathrm d\theta\int_0^{\sqrt2}(r\cos\theta-r\sin\theta)\cdot r\,\mathrm dr
+        =\int_{\frac\pi4}^{\frac{5\pi}4}(\cos\theta-\sin\theta)\mathrm d\theta\cdot\int_0^{\sqrt2}r^2\mathrm dr. \tag{2}$$<span class="pt">⛳ 3分</span></div>
+        <div class="fin">$(2)=\Big[\sin\theta+\cos\theta\Big]_{\frac\pi4}^{\frac{5\pi}4}\cdot\dfrac{r^3}{3}\Big|_0^{\sqrt2}=(-\sqrt2-\sqrt2)\cdot\dfrac{2\sqrt2}{3}=-\dfrac83$，
+        即 $\displaystyle\iint_D(x-y)\mathrm dx\mathrm dy=-\dfrac83$。<span class="pt">⛳ 2分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（写完校对）</span>
+      <b>法一（书上"法一"，也要会）</b>：$r\le2(\sin\theta+\cos\theta)$，$\theta\in\big[\frac\pi4,\frac{3\pi}{4}\big]$，
+      $$\int_{\frac\pi4}^{\frac{3\pi}4}\frac83(\cos\theta-\sin\theta)(\sin\theta+\cos\theta)^3\mathrm d\theta=\frac83\cdot\frac14(\sin\theta+\cos\theta)^4\Big|_{\frac\pi4}^{\frac{3\pi}4}=\frac23(0-4)=-\frac83.$$
+      <b>凑微分的关键</b>：$\mathrm d(\sin\theta+\cos\theta)=(\cos\theta-\sin\theta)\mathrm d\theta$，<b>被积函数天然成对</b>。<br>
+      <span class="dock">两法的 $\theta$ 范围不同，别串</span>：法一 $\big[\frac\pi4,\frac{3\pi}4\big]$（原点在边界，半圆"贴"在原点）；法二 $\big[\frac\pi4,\frac{5\pi}4\big]$（原点在圆心，半圆张角 $\pi$）。<b>范围长度分别是 $\frac\pi2$ 与 $\pi$，一眼可辨。</b><br>
+      <b>选法口诀</b>：<b>圆心不在原点 + 被积函数是一次式 ⇒ 一律平移</b>（见 <a href="#eg-q25">千25</a>、<a href="#eg-q29">千29</a>）。</div>
+    </div>
+  </div>
+
+  <div class="eg" id="eg-q25">
+    <div class="q"><span class="no">千 千25</span><span class="exam">填空 · 平移 + 轮换（三行秒杀）</span>
+      <p>设平面区域 $D=\{(x,y)\mid(x-1)^2+(y-1)^2\le1\}$，则 $\displaystyle\iint_D(x^2+y^2)\mathrm d\sigma=\underline{\qquad}$</p></div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\dfrac{5\pi}{2}$</span>（复算 $7.853982$ ✅）</p>
+      <p><span class="lab">要害</span>令 $u=x-1,v=y-1$（$J=1$），$D_{uv}:u^2+v^2\le1$，则
+      $x^2+y^2=(u+1)^2+(v+1)^2=(u^2+v^2)+2u+2v+2$，三项各有归宿：</p>
+      <ul>
+        <li>$\displaystyle\iint(u^2+v^2)=\dfrac\pi2$（<b>常用结论①</b>）；</li>
+        <li>$\displaystyle\iint 2u=\iint 2v=0$（关于两坐标轴对称的奇函数）；</li>
+        <li>$\displaystyle\iint 2=2\cdot\pi=2\pi$。</li>
+      </ul>
+      <p>合计 $\dfrac\pi2+2\pi=\dfrac{5\pi}{2}$。</p>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>不平移会怎样</b>：直接极坐标要算 $\displaystyle\int_{-\frac\pi4}^{\frac{3\pi}4}\mathrm d\theta\int_0^{2(\cos\theta+\sin\theta)}r^3\mathrm dr$，
+      展开 $(\cos\theta+\sin\theta)^4$——<b>能算，但要五分钟</b>。平移版三行。<br>
+      <b>偏心圆通法（背下来）</b>：$\displaystyle\iint_{(x-a)^2+(y-b)^2\le R^2}(x^2+y^2)\mathrm d\sigma=\Big[\frac{R^2}{2}+a^2+b^2\Big]\pi R^2$。
+      本题 $a=b=R=1$：$(\frac12+1+1)\pi=\frac{5\pi}{2}$ ✅ <b>一秒自查。</b></div>
+    </div>
+  </div>
+
+  <!-- ================= s7 互认 ================= -->
+  <h2 id="s7"><span class="idx">七</span>极坐标 ⇄ 直角坐标 <u>互认</u>：题目给什么系，不代表要用什么系</h2>
+
+  <div class="key"><span class="tag">必记 · 互相转化只有两件事</span><a class="pg" href="#">P.355</a>
+    <p><b>一是用好 $\begin{cases}x=r\cos\theta\\ y=r\sin\theta\end{cases}$ 这个公式；二是画出区域 $D$ 的边界图形，做好上限、下限的转化。</b></p>
+    <div class="tw">
+    <table class="dense">
+      <tr><th>极坐标写法</th><th>直角坐标是什么</th><th>出现在</th></tr>
+      <tr><td>$r\le\sec\theta$</td><td>$r\cos\theta\le1\Leftrightarrow x\le1$（<b>竖直线</b>）</td><td>强 14.6、习 14.10</td></tr>
+      <tr><td>$r\le\dfrac{1}{\sin\theta}$</td><td>$y\le1$（<b>水平线</b>）</td><td>大观极坐标型 (1)</td></tr>
+      <tr><td>$r\le2a\cos\theta$</td><td>$(x-a)^2+y^2\le a^2$（<b>过原点的圆</b>）</td><td>习 14.3、例 14.17</td></tr>
+      <tr><td>$r\le2a\sin\theta$</td><td>$x^2+(y-a)^2\le a^2$</td><td>习 14.2</td></tr>
+      <tr><td>$r\le\dfrac{c}{\cos\theta+\sin\theta}$</td><td>$x+y\le c$（<b>斜直线</b>）</td><td>例 14.14、例 14.15 注</td></tr>
+      <tr><td>$0\le\theta\le\dfrac\pi4$</td><td>$0\le y\le x$（<b>射线夹角</b>）</td><td>强 14.6、习 14.10</td></tr>
+      <tr><td>$r^2\cos2\theta$</td><td>$x^2-y^2$</td><td><b>习 14.10（★易漏）</b></td></tr>
+      <tr><td>$r^2\sin\theta\,\mathrm dr\mathrm d\theta$</td><td>$y\,\mathrm d\sigma$（因 $r\mathrm dr\mathrm d\theta=\mathrm d\sigma$）</td><td><b>习 14.10 / 14.11</b></td></tr>
+    </table>
+    </div>
+    <p class="legend2">📌 最后两行是<b>习 14.10 / 14.11 的全部机关</b>：题目故意把二重积分写成 $\displaystyle\iint_D(\cdots)\mathrm dr\mathrm d\theta$（<b>注意没有 $r$！</b>），
+    你要自己把其中一个 $r$ 与 $\mathrm dr\mathrm d\theta$ 合并成 $\mathrm d\sigma$，剩下的部分翻译回 $x,y$。<b>这是"互认"的最高形态。</b></p>
+  </div>
+
+  <div class="eg" id="eg-b14">
+    <div class="q"><span class="no">基 例14.14</span><span class="exam">填空 · 累次积分 → 换坐标系（不是换序！）</span><a class="pg" href="#">P.355</a>
+      <p>$\displaystyle\int_0^1\mathrm dx\int_{1-x}^{\sqrt{1-x^2}}\frac{x+y}{x^2+y^2}\mathrm dy=\underline{\qquad}$</p></div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$2-\dfrac\pi2$</span>（复算 $0.4292037$ ✅）</p>
+      <p><span class="lab">分析</span>（书上这段分析写得极好，照抄）本题乍一看，也许会先考虑是否在积分次序上设了障碍；
+      但细致做来，会发现<b>不管先对 $x$ 还是先对 $y$ 积分，都不容易计算</b>。
+      看来这不是积分次序的问题，这时该想<b>是不是选择何种坐标系的问题</b>。
+      被积函数含 $x^2+y^2$（判据 ①），积分区域是<b>圆的一部分</b>（判据 ②，图 14-9 的弓形）⇒ 优先极坐标。</p>
+      <p class="legend2">📌 书上还补了一句：即使发现 $D$ 关于 $y=x$ 对称，用轮换对称性算 $f(x,y)+f(y,x)$ <b>仍复杂</b>，所以<b>不用轮换</b>，直接放到极坐标下算。
+      ——<u>这说明"能用对称性"不等于"该用对称性"。</u></p>
+      <p><span class="lab">解</span>区域是 $x+y=1$ 与单位圆之间的弓形，$\theta\in\big[0,\frac\pi2\big]$；
+      由 $x+y=1$ 得 $r(\cos\theta+\sin\theta)=1$，故 $r_1=\dfrac{1}{\cos\theta+\sin\theta}$，$r_2=1$。</p>
+      $$\text{原式}=\int_0^{\frac\pi2}\mathrm d\theta\int_{\frac{1}{\cos\theta+\sin\theta}}^{1}\frac{r(\cos\theta+\sin\theta)}{r^2}\,r\,\mathrm dr
+      =\int_0^{\frac\pi2}(\cos\theta+\sin\theta)\cdot\frac{\cos\theta+\sin\theta-1}{\cos\theta+\sin\theta}\,\mathrm d\theta$$
+      $$=\int_0^{\frac\pi2}\cos\theta\,\mathrm d\theta+\int_0^{\frac\pi2}\sin\theta\,\mathrm d\theta-\int_0^{\frac\pi2}\mathrm d\theta=1+1-\frac\pi2=2-\frac\pi2.$$
+      <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>爽点</b>：$\dfrac{r(\cos\theta+\sin\theta)}{r^2}\cdot r=\cos\theta+\sin\theta$，<b>$r$ 全部约掉</b>，内层积分退化成"区间长度"$\big(1-\frac{1}{\cos\theta+\sin\theta}\big)$，
+      再与外面的 $(\cos\theta+\sin\theta)$ 相乘，分母又被约掉——<b>两次约分，最后只剩三个基本积分。</b><br>
+      <b>方法总结（书）</b>：<b>当题目是累次积分时，通常考虑换积分顺序或者换坐标系。</b>——<u>两条路都要想到，别只会换序。</u><br>
+      <span class="dock">易错</span>：$\displaystyle\int_0^{\pi/2}\cos\theta\mathrm d\theta=\int_0^{\pi/2}\sin\theta\mathrm d\theta=1$（不是 $\frac\pi2$）。</div>
+    </div>
+  </div>
+
+  <div class="eg" id="eg-h02">
+    <div class="q"><span class="no">基 习14.2 / 习14.3 / 习14.4</span><span class="exam">选择三连 · 互认的三种问法</span><a class="pg" href="#">P.371–372</a>
+      <p><b>14.2</b> 设 $f(t)$ 连续，$D=\{(x,y)\mid x^2+y^2\le2y\}$，则 $\displaystyle\iint_D f(xy)\mathrm dx\mathrm dy=$（　）<br>
+      (A) $\int_{-1}^1\mathrm dx\int_{-\sqrt{1-x^2}}^{\sqrt{1-x^2}}f(xy)\mathrm dy$　(B) $2\int_0^2\mathrm dy\int_0^{\sqrt{2y-y^2}}f(xy)\mathrm dx$　
+      (C) $\int_0^\pi\mathrm d\theta\int_0^{2\sin\theta}f(r^2\sin\theta\cos\theta)\mathrm dr$　(D) $\int_0^\pi\mathrm d\theta\int_0^{2\sin\theta}f(r^2\sin\theta\cos\theta)r\,\mathrm dr$</p>
+      <p><b>14.3</b> 累次积分 $\displaystyle\int_0^{\frac\pi2}\mathrm d\theta\int_0^{\cos\theta}f(r\cos\theta,r\sin\theta)r\,\mathrm dr$ 可以写成（　）<br>
+      (A) $\int_0^1\mathrm dy\int_0^{\sqrt{y-y^2}}f\,\mathrm dx$　(B) $\int_0^1\mathrm dy\int_0^{\sqrt{1-y^2}}f\,\mathrm dx$　
+      (C) $\int_0^1\mathrm dx\int_0^1 f\,\mathrm dy$　(D) $\int_0^1\mathrm dx\int_0^{\sqrt{x-x^2}}f\,\mathrm dy$</p>
+      <p><b>14.4</b> $\displaystyle\int_{-1}^1\mathrm dx\int_{|x|}^{\sqrt{2-x^2}}\sin(x^2+y^2)\mathrm dy=$（　）<br>
+      (A) $\frac\pi4(\cos2-1)$　(B) $\frac\pi4(-\cos2+1)$　(C) $\frac\pi4(\cos2+1)$　(D) $\frac\pi4(-\cos2-1)$</p></div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">14.2 (D)　14.3 (D)　14.4 (B)</span>（14.4 复算 $1.1122391$ ✅）</p>
+      <ul>
+        <li><b>14.2</b>：$x^2+y^2\le2y\Leftrightarrow x^2+(y-1)^2\le1$（圆心 $(0,1)$，半径 1）。
+        (A) 上下限写成了 $\pm\sqrt{1-x^2}$（那是圆心在原点的圆）✗；
+        (B) 用了对称性但<b>题设没给 $f$ 是偶函数</b>✗；
+        <b>(C) 漏了 $r$</b> ✗；(D) ✓。<span class="dock">"漏 $r$"是本章最经典的干扰项</span></li>
+        <li><b>14.3</b>：$r\le\cos\theta\Leftrightarrow r^2\le r\cos\theta\Leftrightarrow x^2+y^2\le x$，即 $\big(x-\frac12\big)^2+y^2\le\frac14$；
+        $\theta\in[0,\frac\pi2]$ 取<b>上半</b>。故 $D=\{0\le x\le1,\ 0\le y\le\sqrt{x-x^2}\}$ ⇒ (D)。
+        书上还给了 Y 型写法：$\Big\{0\le y\le\frac12,\ \frac12-\sqrt{\frac14-y^2}\le x\le\frac12+\sqrt{\frac14-y^2}\Big\}$。</li>
+        <li><b>14.4</b>：边界 $y=|x|$ 与 $y=\sqrt{2-x^2}$ 交于 $(\pm1,1)$ ⇒ $D=\{0\le r\le\sqrt2,\ \frac\pi4\le\theta\le\frac{3\pi}{4}\}$（<b>标准扇形</b>）。
+        被积函数 $\sin(x^2+y^2)$——判据 ① 中，必用极坐标：
+        $$\int_{\frac\pi4}^{\frac{3\pi}4}\mathrm d\theta\int_0^{\sqrt2}r\sin r^2\,\mathrm dr=\frac\pi2\cdot\Big[-\frac12\cos r^2\Big]_0^{\sqrt2}=\frac\pi4(1-\cos2).$$</li>
+      </ul>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>三题构成一个完整训练</b>：14.2 是"直角 → 极坐标"，14.3 是"极坐标 → 直角"，14.4 是"给直角、必须用极坐标"。
+      <b>考场上先看被积函数（判据 ①），再看区域（判据 ②），30 秒定系。</b><br>
+      <b>要背的两条圆方程翻译</b>：$r=2a\cos\theta$ 是圆心 $(a,0)$、半径 $|a|$ 的圆；$r=2a\sin\theta$ 是圆心 $(0,a)$、半径 $|a|$ 的圆。<b>两者都过原点。</b></div>
+    </div>
+  </div>
+
+  <div class="eg" id="eg-h10">
+    <div class="q"><span class="no">基 习14.10</span><span class="exam">解答 · ★极坐标写法回直角（$r^2\cos2\theta$）</span><a class="pg" href="#">P.375</a>
+      <p>计算二重积分 $I=\displaystyle\iint_D r^2\sin\theta\sqrt{1-r^2\cos2\theta}\,\mathrm dr\mathrm d\theta$，
+      其中 $D=\Big\{(r,\theta)\ \Big|\ 0\le r\le\sec\theta,\ 0\le\theta\le\dfrac\pi4\Big\}$。</p></div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\dfrac13-\dfrac{\pi}{16}$</span>（复算 $0.1369838$ ✅）</p>
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+      <ol>
+        <li><b>先看微元</b>：题目写的是 $\mathrm dr\mathrm d\theta$，<b>不是 $r\mathrm dr\mathrm d\theta$</b> ⇒ 这个式子不能直接当"极坐标下的二重积分"读，
+        必须自己把一个 $r$ 抽出来与 $\mathrm dr\mathrm d\theta$ 合并成 $\mathrm d\sigma$。</li>
+        <li>$r^2\sin\theta\,\mathrm dr\mathrm d\theta=(r\sin\theta)\cdot(r\,\mathrm dr\mathrm d\theta)=\boxed{y\,\mathrm d\sigma}$。</li>
+        <li>$r^2\cos2\theta=r^2(\cos^2\theta-\sin^2\theta)=\boxed{x^2-y^2}$。<b>这是最容易漏的一步——倍角公式要立刻反应。</b></li>
+        <li>区域翻译：$r\le\sec\theta\Leftrightarrow x\le1$，$0\le\theta\le\frac\pi4\Leftrightarrow 0\le y\le x$ ⇒ <b>三角形 $0\le y\le x\le1$</b>（图 14-16）。</li>
+        <li>于是 $I=\displaystyle\iint_D y\sqrt{1-x^2+y^2}\,\mathrm dx\mathrm dy$——<b>先对 $y$ 积分</b>，因为 $y\,\mathrm dy$ 恰好凑 $\mathrm d(1-x^2+y^2)$ 的一半。</li>
+      </ol></div>
+      <div class="paper"><span class="phead">✍️ 考场卷面<span class="score">参考 10 分</span></span>
+        <div class="step"><span class="k">解</span>由 $r\le\sec\theta$ 得 $r\cos\theta\le1$，即 $x\le1$；由 $0\le\theta\le\dfrac\pi4$ 得 $0\le y\le x$。故积分区域化为
+        $$D=\{(x,y)\mid 0\le y\le x\le1\}.$$<span class="pt">⛳ 2分</span></div>
+        <div class="step">又 $r^2\sin\theta\,\mathrm dr\mathrm d\theta=(r\sin\theta)\cdot r\,\mathrm dr\mathrm d\theta=y\,\mathrm dx\mathrm dy$，
+        $r^2\cos2\theta=r^2\cos^2\theta-r^2\sin^2\theta=x^2-y^2$，于是
+        $$I=\iint_D y\sqrt{1-x^2+y^2}\,\mathrm dx\mathrm dy. \tag{1}$$<span class="pt">⛳ 3分</span></div>
+        <div class="step">先对 $y$ 积分：
+        $$(1)=\frac12\int_0^1\mathrm dx\int_0^x\sqrt{1-x^2+y^2}\,\mathrm d(1-x^2+y^2)
+        =\frac13\int_0^1\big(1-x^2+y^2\big)^{\frac32}\Big|_{y=0}^{y=x}\mathrm dx=\frac13\int_0^1\Big[1-(1-x^2)^{\frac32}\Big]\mathrm dx. \tag{2}$$<span class="pt">⛳ 3分</span></div>
+        <div class="fin">令 $x=\sin t$，$\displaystyle\int_0^1(1-x^2)^{\frac32}\mathrm dx=\int_0^{\frac\pi2}\cos^4t\,\mathrm dt=\frac34\cdot\frac12\cdot\frac\pi2=\frac{3\pi}{16}$，
+        故 $I=\dfrac13-\dfrac13\cdot\dfrac{3\pi}{16}=\dfrac13-\dfrac{\pi}{16}$。<span class="pt">⛳ 2分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（写完校对）</span>
+      <b>$y=x$ 处的化简</b>：$1-x^2+y^2\big|_{y=x}=1$，所以上限项是 $1^{3/2}=1$——<b>这个"恰好为 1"是命题人设计的，别算错成 $(1-x^2+x^2)^{3/2}$ 以外的东西。</b><br>
+      <b>华里士公式</b>：$\displaystyle\int_0^{\frac\pi2}\cos^4t\,\mathrm dt=\frac{3}{4}\cdot\frac12\cdot\frac\pi2=\frac{3\pi}{16}$（偶数次要乘 $\frac\pi2$）。<span class="dock">忘乘 $\frac\pi2$ 是高频错</span><br>
+      🔗 <a href="#eg-h11">习 14.11</a> 是同型的第二题（$r^2\mathrm e^{-r^2\sin^2\theta}\cos\theta\,\mathrm dr\mathrm d\theta\Rightarrow x\mathrm e^{-y^2}\mathrm d\sigma$），<b>两题必须成对练</b>。</div>
+    </div>
+  </div>
+
+  <div class="eg" id="eg-h11">
+    <div class="q"><span class="no">基 习14.11</span><span class="exam">解答 · 同型第二题 + 高斯积分</span><a class="pg" href="#">P.376</a>
+      <p>计算 $I=\displaystyle\iint_D r^2\mathrm e^{-r^2\sin^2\theta}\cos\theta\,\mathrm dr\mathrm d\theta$，其中 $D=\Big\{(r,\theta)\ \Big|\ r\ge0,\ \dfrac\pi4\le\theta\le\dfrac\pi2\Big\}$。</p></div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\dfrac{\sqrt\pi}{8}$</span>（复算 $0.2215567$ ✅）</p>
+      <div class="think"><span class="th">💭 思路</span>
+      <ol>
+        <li>同样先合并微元：$r^2\cos\theta\,\mathrm dr\mathrm d\theta=(r\cos\theta)\cdot r\mathrm dr\mathrm d\theta=x\,\mathrm d\sigma$；$\mathrm e^{-r^2\sin^2\theta}=\mathrm e^{-y^2}$。</li>
+        <li>区域：$\frac\pi4\le\theta\le\frac\pi2$、$r\ge0$ ⇒ <b>无界楔形 $0\le x\le y$</b>（图 14-17）。</li>
+        <li>$\mathrm e^{-y^2}$ 在"可积不可求积"清单里 ⇒ <b>必须先积 $x$</b>（$x$ 出现在被积函数里，正好积得动）。</li>
+        <li>积完得 $\frac12y^2\mathrm e^{-y^2}$，<b>偶次幂配 $\mathrm e^{-y^2}$ ⇒ 用例 14.12 的结果</b>（或 Γ 函数），不要现分部。</li>
+      </ol></div>
+      <div class="paper"><span class="phead">✍️ 考场卷面<span class="score">参考 10 分</span></span>
+        <div class="step"><span class="k">解</span>由 $\dfrac\pi4\le\theta\le\dfrac\pi2$、$r\ge0$ 知积分区域为 $D=\{(x,y)\mid 0\le x\le y,\ y\ge0\}$。<span class="pt">⛳ 2分</span></div>
+        <div class="step">又 $r^2\cos\theta\,\mathrm dr\mathrm d\theta=(r\cos\theta)\cdot r\,\mathrm dr\mathrm d\theta=x\,\mathrm dx\mathrm dy$，$r^2\sin^2\theta=y^2$，故
+        $$I=\iint_D x\,\mathrm e^{-y^2}\mathrm dx\mathrm dy=\int_0^{+\infty}\mathrm e^{-y^2}\mathrm dy\int_0^{y}x\,\mathrm dx. \tag{1}$$<span class="pt">⛳ 4分</span></div>
+        <div class="step">$(1)=\displaystyle\frac12\int_0^{+\infty}y^2\mathrm e^{-y^2}\mathrm dy$。<span class="pt">⛳ 2分</span></div>
+        <div class="fin">由 $\displaystyle\int_0^{+\infty}y^2\mathrm e^{-y^2}\mathrm dy=\frac{\sqrt\pi}{4}$，得 $I=\dfrac12\cdot\dfrac{\sqrt\pi}{4}=\dfrac{\sqrt\pi}{8}$。<span class="pt">⛳ 2分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>$\displaystyle\int_0^{+\infty}y^2\mathrm e^{-y^2}\mathrm dy=\frac{\sqrt\pi}{4}$ 必须当公式背</b>（推导见 <a href="#eg-b12">例 14.12</a>）。<br>
+      <b>与 <a href="#eg-q27">千27</a> 的区别</b>：千27 也是无界楔形，但那题<b>给的是直角坐标累次积分</b>，考的是换序；本题<b>给的是极坐标写法</b>，考的是互认。<u>形似而考点不同。</u></div>
+    </div>
+  </div>
+
+
+  <!-- ================= s8 换元法 ================= -->
+  <h2 id="s8"><span class="idx">八</span>换元法：第三个「换」，<u>被积函数 × 雅可比 = 常数</u> 是最高境界</h2>
+
+  <div class="key"><span class="tag">必记 · 一元换元 → 二重换元，一一对应的"三换"</span><a class="pg" href="#">P.356 / P.182</a>
+    <p>书上原话：二重积分亦有和定积分<b>一脉相承</b>的换元法，有时很有用，现介绍于此，供参考。<b>若能够用上，可直接使用，不必证明。</b></p>
+    <div class="duo">
+      <div class="dA"><b class="h">一元：$\displaystyle\int_a^b f(x)\mathrm dx\xlongequal{x=\varphi(t)}\int_\alpha^\beta f[\varphi(t)]\varphi'(t)\mathrm dt$</b>
+        a. $f(x)\to f[\varphi(t)]$（换<b>被积函数</b>）<br>
+        b. $\displaystyle\int_a^b\to\int_\alpha^\beta$（换<b>积分区域</b>）<br>
+        c. $\mathrm dx\to\varphi'(t)\mathrm dt$（换<b>积分变量</b>，<u>一维上的"测度"关系</u>）<br>
+        <b>条件</b>：$x=\varphi(t)$ 单调，存在一阶连续导数。
+      </div>
+      <div class="dB"><b class="h">二重：$\displaystyle\iint_{D_{xy}}f\,\mathrm dx\mathrm dy=\iint_{D_{uv}}f[x(u,v),y(u,v)]\Big|\frac{\partial(x,y)}{\partial(u,v)}\Big|\mathrm du\mathrm dv$</b>
+        a. $f(x,y)\to f[x(u,v),y(u,v)]$<br>
+        b. $\displaystyle\iint_{D_{xy}}\to\iint_{D_{uv}}$<br>
+        c. $\mathrm dx\mathrm dy\to\Big|\dfrac{\partial(x,y)}{\partial(u,v)}\Big|\mathrm du\mathrm dv$（<u>二维上的"测度"关系</u>，<b>竖线是绝对值</b>）<br>
+        <b>条件</b>：一对一映射、一阶连续偏导、$J\ne0$。
+      </div>
+    </div>
+    <div class="fml">$$J=\frac{\partial(x,y)}{\partial(u,v)}=\begin{vmatrix}\dfrac{\partial x}{\partial u}&\dfrac{\partial x}{\partial v}\\[6pt]\dfrac{\partial y}{\partial u}&\dfrac{\partial y}{\partial v}\end{vmatrix}\ne0$$</div>
+    <p><b>极坐标只是换元法的一个特例</b>：令 $x=r\cos\theta,y=r\sin\theta$，
+    $\Big|\dfrac{\partial(x,y)}{\partial(r,\theta)}\Big|=\begin{vmatrix}\cos\theta&-r\sin\theta\\ \sin\theta&r\cos\theta\end{vmatrix}=r$，于是 $\mathrm dx\mathrm dy\to r\,\mathrm dr\mathrm d\theta$。
+    <b>这就是直角坐标系到极坐标系的换元过程</b>——那个 $r$ 终于有了出处。</p>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 求 $J$ 的两条路（考场上第二条常常更快）</span>
+    <p>题目给的往往是 $u=u(x,y),v=v(x,y)$（<b>反着的</b>），此时不必解出 $x,y$，直接用</p>
+    <div class="fml">$$\frac{\partial(x,y)}{\partial(u,v)}=\frac{1}{\dfrac{\partial(u,v)}{\partial(x,y)}}=\frac{1}{\begin{vmatrix}u_x&u_y\\ v_x&v_y\end{vmatrix}}$$</div>
+    <p>—— <b>千35 的"方法二"就是靠这一条把 $J$ 一步写出来的</b>（否则要解 $\xi,\eta$ 的反函数，极痛苦）。</p>
+  </div>
+
+  <div class="key"><span class="tag">必记 · ★两个必背换元（与极坐标平级）</span>
+    <div class="tw">
+    <table>
+      <tr><th>看到什么</th><th>换什么</th><th>$J$</th><th>区域变成</th><th>题</th></tr>
+      <tr><td>$\dfrac{y}{x+y}$、$\dfrac{x}{x+y}$（"头重脚轻"）</td><td>$u=x+y,\ v=y$</td><td>$1$</td><td>三角形 → 三角形（但函数变简单）</td><td>例 14.15 / 千26</td></tr>
+      <tr><td>双曲线 $xy=c$ ＋ 过原点射线 $y=kx$</td><td>$u=xy,\ v=\dfrac yx$</td><td>$\dfrac{1}{2v}$</td><td><b>矩形</b></td><td>千39</td></tr>
+      <tr><td>平移（偏心圆 / 圆心不在原点）</td><td>$u=x-a,\ v=y-b$</td><td>$1$</td><td>圆心搬到原点</td><td>强 14.8 / 千25 / 千29</td></tr>
+      <tr><td>椭圆 $\dfrac{x^2}{a^2}+\dfrac{y^2}{b^2}\le1$</td><td>$x=ar\cos\theta,\ y=br\sin\theta$</td><td>$abr$</td><td>单位圆盘</td><td>习 14.12</td></tr>
+    </table>
+    </div>
+  </div>
+
+  <div class="eg" id="eg-b15">
+    <div class="q"><span class="no">基 例14.15</span><span class="exam">解答 · ★换元法主打题（"头重脚轻"）</span><a class="pg" href="#">P.357</a>
+      <p>设平面区域 $D=\{(x,y)\mid 0\le x\le1-y,\ 0\le y\le1\}$，计算二重积分 $\displaystyle\iint_D\mathrm e^{\frac{y}{x+y}}\mathrm d\sigma$。</p></div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\dfrac12(\mathrm e-1)$</span>（复算 $0.8591409$ ✅）</p>
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+      <ol>
+        <li><b>先排除两条常规路</b>：区域虽是简单三角形，但<u>无论先积 $x$ 还是先积 $y$ 都做不动</u>（$\mathrm e^{y/(x+y)}$ 对任一变量都无初等原函数）；
+        若上极坐标，区域是三角形（判据 ② 不中），$r$ 上限含 $\frac{1}{\cos\theta+\sin\theta}$，计算量也大。</li>
+        <li><b>定位病灶</b>：麻烦全在 $\mathrm e$ 的指数 $\dfrac{y}{x+y}$，书上一个词点破——「<b>头重脚轻</b>」（分母比分子复杂）。</li>
+        <li><b>对症下药</b>：把分母整体换成新变量。令 $x+y=u,\ y=v$，指数立刻变成 $\dfrac vu$，<b>被积函数只剩两个新变量的简单商</b>。</li>
+        <li><b>顺带检查区域</b>：$0\le x\le1-y$ 即 $x+y\le1$ 且 $x\ge0$ ⇒ $u\le1$ 且 $u-v\ge0$；$0\le y\le1$ ⇒ $0\le v\le1$。
+        得 $v\le u\le1,\ 0\le v\le1$——<b>还是三角形，但内层对 $v$ 积分时 $u$ 是常数，$\int\mathrm e^{v/u}\mathrm dv$ 可积！</b></li>
+      </ol></div>
+      <div class="paper"><span class="phead">✍️ 考场卷面<span class="score">参考 10 分</span></span>
+        <div class="step"><span class="k">解</span>令 $\begin{cases}x+y=u\\ y=v\end{cases}$，则 $\begin{cases}x=u-v\\ y=v\end{cases}$，
+        $$J=\frac{\partial(x,y)}{\partial(u,v)}=\begin{vmatrix}1&-1\\ 0&1\end{vmatrix}=1\ne0.$$<span class="pt">⛳ 3分</span></div>
+        <div class="step">由 $\begin{cases}0\le x\le1-y\\ 0\le y\le1\end{cases}$ 得 $\begin{cases}v\le u\le1\\ 0\le v\le1\end{cases}$，
+        即 $D_{uv}=\{(u,v)\mid 0\le u\le1,\ 0\le v\le u\}$。<span class="pt">⛳ 2分</span></div>
+        <div class="step">于是
+        $$I=\iint_D\mathrm e^{\frac{y}{x+y}}\mathrm d\sigma=\iint_{D_{uv}}\mathrm e^{\frac vu}\,|J|\,\mathrm du\mathrm dv
+        =\int_0^1\mathrm du\int_0^{u}\mathrm e^{\frac vu}\mathrm dv. \tag{1}$$<span class="pt">⛳ 2分</span></div>
+        <div class="step">$(1)=\displaystyle\int_0^1 u\,\mathrm e^{\frac vu}\Big|_{v=0}^{v=u}\mathrm du=\int_0^1 u(\mathrm e-1)\mathrm du$。<span class="pt">⛳ 2分</span></div>
+        <div class="fin">故 $\displaystyle\iint_D\mathrm e^{\frac{y}{x+y}}\mathrm d\sigma=(\mathrm e-1)\cdot\dfrac{u^2}{2}\Big|_0^1=\dfrac12(\mathrm e-1)$。<span class="pt">⛳ 1分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（写完校对）</span>
+      <b>常规解法也要会（书上【注】，极坐标）</b>：$r$ 上限 $\dfrac{1}{\cos\theta+\sin\theta}$，
+      $$I=\frac12\int_0^{\frac\pi2}\mathrm e^{\frac{\sin\theta}{\cos\theta+\sin\theta}}\frac{\mathrm d\theta}{(\cos\theta+\sin\theta)^2}
+      =\frac12\int_0^{\frac\pi2}\mathrm e^{\frac{\sin\theta}{\cos\theta+\sin\theta}}\mathrm d\Big(\frac{\sin\theta}{\cos\theta+\sin\theta}\Big)=\frac12(\mathrm e-1).$$
+      <b>关键公式</b>：$\Big(\dfrac{\sin\theta}{\cos\theta+\sin\theta}\Big)'=\dfrac{1}{(\cos\theta+\sin\theta)^2}$（分子分母同除 $\cos\theta$ 后就是 $\frac{\tan}{1+\tan}$ 求导，一眼可验）。<br>
+      <b>方法总结（书）</b>：二重积分的换元<b>注意"三换"——换积分区域、换被积函数、换积分变量</b>。极坐标换元仅是一种换元法。<br>
+      <span class="dock">扣分点</span>：$|J|$ 的<b>绝对值符号不能丢</b>，且必须写出 $J\ne0$（一对一映射的前提）。<br>
+      <b>内层积分细节</b>：$\displaystyle\int_0^u\mathrm e^{v/u}\mathrm dv=u\,\mathrm e^{v/u}\Big|_0^u=u(\mathrm e-1)$——<b>那个 $u$ 是"对 $v$ 积分时 $u$ 当常数"吐出来的</b>，与千28 同一个手法。</div>
+    </div>
+  </div>
+
+  <div class="eg" id="eg-q26">
+    <div class="q"><span class="no">千 千26</span><span class="exam">解答 · 例 14.15 的四象限版（考"认题"）</span>
+      <p>设平面区域 $D=\{(x,y)\mid |x|+|y|\le1\}$，求 $\displaystyle\iint_D\mathrm e^{\frac{|y|}{|x|+|y|}}\mathrm d\sigma$。</p></div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$2(\mathrm e-1)$</span>（复算 $3.4365637$ ✅）</p>
+      <div class="think"><span class="th">💭 思路</span>
+      <ol>
+        <li>被积函数只依赖 $|x|,|y|$ ⇒ 对 $x$ 是偶函数、对 $y$ 也是偶函数；菱形 $D$ 关于两坐标轴都对称
+        ⇒ <b>普通对称性（偶，两次）</b>：削到第一象限要乘 $2\times2=4$。</li>
+        <li>第一象限部分 $D_1=\{x\ge0,y\ge0,x+y\le1\}$，此时 $|x|=x,|y|=y$，
+        被积函数变成 $\mathrm e^{\frac{y}{x+y}}$ —— <b>正是例 14.15！</b></li>
+        <li>剩下的照抄例 14.15 的换元即可，<b>本题的全部难度就在"认出它"。</b></li>
+      </ol></div>
+      <div class="paper"><span class="phead">✍️ 考场卷面<span class="score">参考 10 分</span></span>
+        <div class="step"><span class="k">解</span>被积函数 $\mathrm e^{\frac{|y|}{|x|+|y|}}$ 关于 $x$、关于 $y$ 均为偶函数，且 $D$ 关于 $x$ 轴、$y$ 轴均对称，
+        由对称性得
+        $$I=4\iint_{D_1}\mathrm e^{\frac{y}{x+y}}\mathrm d\sigma,\qquad D_1=\{(x,y)\mid x\ge0,\ y\ge0,\ x+y\le1\}. \tag{1}$$<span class="pt">⛳ 3分</span></div>
+        <div class="step">令 $\begin{cases}x+y=u\\ y=v\end{cases}$，则 $J=\dfrac{\partial(x,y)}{\partial(u,v)}=\begin{vmatrix}1&-1\\0&1\end{vmatrix}=1$，
+        且 $D_1$ 变为 $D_{uv}=\{(u,v)\mid 0\le u\le1,\ 0\le v\le u\}$。<span class="pt">⛳ 3分</span></div>
+        <div class="step">$$\iint_{D_1}\mathrm e^{\frac{y}{x+y}}\mathrm d\sigma=\int_0^1\mathrm du\int_0^u\mathrm e^{\frac vu}\mathrm dv=\int_0^1 u(\mathrm e-1)\mathrm du=\frac{\mathrm e-1}{2}. \tag{2}$$<span class="pt">⛳ 3分</span></div>
+        <div class="fin">将 (2) 代入 (1)，得 $\displaystyle\iint_D\mathrm e^{\frac{|y|}{|x|+|y|}}\mathrm d\sigma=4\cdot\dfrac{\mathrm e-1}{2}=2(\mathrm e-1)$。<span class="pt">⛳ 1分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+      <span class="dock">别在原点纠结</span>：$(0,0)$ 处被积函数无定义，但那是<b>单点（零测集）</b>，不影响二重积分，考场上不必讨论。<br>
+      <b>倍数别写成 2</b>：关于两条轴各对称一次 ⇒ <b>$2\times2=4$</b>。<u>只写 2 是本题最常见的错。</u></div>
+    </div>
+  </div>
+
+  <div class="eg" id="eg-q35">
+    <div class="q"><span class="no">千 千35</span><span class="exam">解答 · ★★分段定限 vs「被积函数 × J ＝ 常数」</span>
+      <p>计算 $\displaystyle\iint_D\frac{2x+y}{x^{3/2}}\mathrm dx\mathrm dy$，其中 $D$ 是由抛物线 $y^2=2x$ 与直线 $x+y=4$、$x+y=12$ 所围成的区域。</p></div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$32\sqrt2$</span>（三段数值复算 $3.882251+32.729679+8.642904=45.254834=32\sqrt2$ ✅）</p>
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+      <ol>
+        <li><b>先算四个交点</b>（决定分段）：$y^2=2x$ 与 $x+y=4$ ⇒ $y^2+2y-8=0$ ⇒ $y=2$ 或 $-4$，交点 $(2,2)$、$(8,-4)$；
+        与 $x+y=12$ ⇒ $y^2+2y-24=0$ ⇒ $y=4$ 或 $-6$，交点 $(8,4)$、$(18,-6)$。</li>
+        <li><b>法一（常规）</b>：$D=\{4\le x+y\le12,\ y^2\le2x\}$。按 $y$ 分三段（$y\in[-6,-4]$、$[-4,2]$、$[2,4]$），
+        内层原函数 $\displaystyle\int\frac{2x+y}{x^{3/2}}\mathrm dx=4\sqrt x-\frac{2y}{\sqrt x}$。<b>能做，但要写三段、算六个端点。</b></li>
+        <li><b>法二（★爽点）</b>：注意题里同时出现 $\dfrac{y}{\sqrt x}$ 的味道（$y^2=2x$ 即 $\frac{y}{\sqrt x}=\pm\sqrt2$）与 $x+y$。
+        令 $\xi=\dfrac{y}{\sqrt x}$、$\eta=x+y$，则<b>抛物线变成 $\xi=\pm\sqrt2$ 两条竖线，两条直线变成 $\eta=4,12$ 两条横线——$D$ 变成矩形！</b></li>
+        <li><b>再算 $J$</b>（用倒数法，别解反函数），会发现 <b>被积函数 $\times|J|$ 恰好等于常数 2</b>，积分退化成"$2\times$ 矩形面积"。</li>
+      </ol></div>
+      <div class="paper"><span class="phead">✍️ 考场卷面（法二 · 推荐）<span class="score">参考 12 分</span></span>
+        <div class="step"><span class="k">解</span>令 $\begin{cases}\xi=\dfrac{y}{\sqrt x}\\[4pt] \eta=x+y\end{cases}$。
+        由 $y^2=2x$ 得 $\xi^2=2$，即 $\xi=\pm\sqrt2$；由 $x+y=4$、$x+y=12$ 得 $\eta=4$、$\eta=12$。故
+        $$D'=\{(\xi,\eta)\mid -\sqrt2\le\xi\le\sqrt2,\ 4\le\eta\le12\}\ (\text{矩形}).$$<span class="pt">⛳ 4分</span></div>
+        <div class="step">雅可比行列式
+        $$J=\frac{\partial(x,y)}{\partial(\xi,\eta)}=\frac{1}{\dfrac{\partial(\xi,\eta)}{\partial(x,y)}}
+        =\frac{1}{\begin{vmatrix}-\dfrac{y}{2x^{3/2}}&\dfrac{1}{x^{1/2}}\\[6pt] 1&1\end{vmatrix}}
+        =\frac{1}{-\dfrac{2x+y}{2x^{3/2}}}=-\frac{2x^{3/2}}{2x+y}.$$<span class="pt">⛳ 4分</span></div>
+        <div class="step">于是
+        $$\iint_D\frac{2x+y}{x^{3/2}}\mathrm dx\mathrm dy=\iint_{D'}\frac{2x+y}{x^{3/2}}\cdot\Big|\frac{\partial(x,y)}{\partial(\xi,\eta)}\Big|\mathrm d\xi\mathrm d\eta
+        =\iint_{D'}2\,\mathrm d\xi\mathrm d\eta. \tag{1}$$<span class="pt">⛳ 3分</span></div>
+        <div class="fin">$(1)=2\times(2\sqrt2)\times 8=32\sqrt2$，即 $\displaystyle\iint_D\frac{2x+y}{x^{3/2}}\mathrm dx\mathrm dy=32\sqrt2$。<span class="pt">⛳ 1分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（写完校对）</span>
+      <b>★★ 换元法的最高境界</b>：不是"化简被积函数"，而是<b>让"被积函数 × 雅可比"变成常数</b>，积分退化为"常数 × 新区域面积"。
+      本题 $\dfrac{2x+y}{x^{3/2}}\cdot\dfrac{2x^{3/2}}{2x+y}=2$，<u>约得一干二净</u>。<br>
+      <b>怎么想到 $\xi=\frac{y}{\sqrt x}$</b>：把抛物线 $y^2=2x$ 写成 $\Big(\dfrac{y}{\sqrt x}\Big)^2=2$——<b>凡"曲线族可以写成 某个组合 = 常数"的形状，那个组合就该当新变量。</b>
+      两条直线同理给出 $\eta=x+y$。<b>这是所有一般换元题的找变量法则。</b><br>
+      <b>法一的分段（要会写）</b>：$\displaystyle\int_{-6}^{-4}\mathrm dy\int_{\frac{y^2}{2}}^{12-y}+\int_{-4}^{2}\mathrm dy\int_{4-y}^{12-y}+\int_{2}^{4}\mathrm dy\int_{\frac{y^2}{2}}^{12-y}$
+      （书上按 $x$ 分成 $\int_2^8+\int_8^{18}=16\sqrt2+16\sqrt2$，殊途同归）。<br>
+      <span class="dock">$|J|$ 的负号</span>：$J=-\frac{2x^{3/2}}{2x+y}\lt0$（第一象限内 $2x+y\gt0$），取绝对值后为正，<b>忘取绝对值会得 $-32\sqrt2$</b>。</div>
+    </div>
+  </div>
+
+  <div class="eg" id="eg-q39">
+    <div class="q"><span class="no">千 千39</span><span class="exam">解答 · ★★必背换元 $u=xy,\ v=y/x$</span>
+      <p>计算 $\displaystyle\iint_D\ln(xy)\mathrm dx\mathrm dy$，其中 $D=\{(x,y)\mid 1\le xy\le2,\ x\le y\le4x,\ x\gt0\}$。</p></div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\ln2\,(2\ln2-1)$</span>（$=0.2677588$；两法数值复算一致 ✅）</p>
+      <div class="think"><span class="th">💭 思路</span>
+      <ol>
+        <li>区域由<b>两条双曲线 $xy=1,xy=2$</b> 与<b>两条过原点的射线 $y=x,y=4x$</b> 围成——这是一个"曲边四边形"。</li>
+        <li>四条边界恰好可以写成 <b>$xy=$ 常数</b> 与 <b>$\dfrac yx=$ 常数</b> ⇒ 按 <a href="#eg-q35">千35</a> 的法则，
+        新变量就取 $u=xy$、$v=\dfrac yx$，<b>区域必变矩形</b> $1\le u\le2,\ 1\le v\le4$。</li>
+        <li>被积函数 $\ln(xy)=\ln u$，只含 $u$；只要 $J$ 只含 $v$，积分就<b>完全分离</b>成两个一元积分之积。</li>
+        <li>解出 $x=\sqrt{u/v},\ y=\sqrt{uv}$，算得 $J=\dfrac{1}{2v}$ ——果然只含 $v$。<b>大功告成。</b></li>
+      </ol></div>
+      <div class="paper"><span class="phead">✍️ 考场卷面<span class="score">参考 10 分</span></span>
+        <div class="step"><span class="k">解</span>$D=\Big\{(x,y)\ \Big|\ 1\le xy\le2,\ 1\le\dfrac yx\le4,\ x\gt0\Big\}$。令 $xy=u,\ \dfrac yx=v$，
+        则 $x=\sqrt{\dfrac uv}$，$y=\sqrt{uv}$（$u\gt0,v\gt0$）。<span class="pt">⛳ 2分</span></div>
+        <div class="step">$$J=\frac{\partial(x,y)}{\partial(u,v)}=\begin{vmatrix}\dfrac{1}{2\sqrt{uv}}&-\dfrac12\sqrt{\dfrac{u}{v^3}}\\[8pt]
+        \dfrac12\sqrt{\dfrac vu}&\dfrac12\sqrt{\dfrac uv}\end{vmatrix}=\frac{1}{2v},\qquad
+        D'=\{(u,v)\mid 1\le u\le2,\ 1\le v\le4\}.$$<span class="pt">⛳ 4分</span></div>
+        <div class="step">于是
+        $$\iint_D\ln(xy)\,\mathrm dx\mathrm dy=\iint_{D'}\ln u\cdot\frac{1}{2v}\mathrm du\mathrm dv
+        =\int_1^2\ln u\,\mathrm du\cdot\int_1^4\frac{\mathrm dv}{2v}. \tag{1}$$<span class="pt">⛳ 2分</span></div>
+        <div class="step">$\displaystyle\int_1^2\ln u\,\mathrm du=\big[u\ln u-u\big]_1^2=2\ln2-1$，
+        $\displaystyle\int_1^4\frac{\mathrm dv}{2v}=\frac12\ln4=\ln2$。<span class="pt">⛳ 1分</span></div>
+        <div class="fin">故 $\displaystyle\iint_D\ln(xy)\mathrm dx\mathrm dy=(2\ln2-1)\ln2=\ln2\,(2\ln2-1)$。<span class="pt">⛳ 1分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（写完校对）</span>
+      <b>法一（常规，三段）——知道它有多痛，就知道换元有多值</b>：$xy=1$ 与两射线交于 $(1,1)$、$\big(\frac12,2\big)$；$xy=2$ 交于 $(\sqrt2,\sqrt2)$、$\big(\frac{\sqrt2}{2},2\sqrt2\big)$，
+      $$\int_{\frac12}^{\frac{\sqrt2}{2}}\mathrm dx\int_{\frac1x}^{4x}+\int_{\frac{\sqrt2}{2}}^{1}\mathrm dx\int_{\frac1x}^{\frac2x}+\int_{1}^{\sqrt2}\mathrm dx\int_{x}^{\frac2x}
+      =\Big(\tfrac32\ln2-1\Big)+\Big(\ln^22-\tfrac12\ln2\Big)+\Big(\ln^22-2\ln2+1\Big)$$
+      （三段已逐段数值复算，和为 $\ln2(2\ln2-1)$ ✅）。用到 $\displaystyle\int\ln(xy)\mathrm dy=y\ln(xy)-y+C$。<br>
+      <b>$J=\frac{1}{2v}$ 的心算验法</b>：$\dfrac{\partial(u,v)}{\partial(x,y)}=\begin{vmatrix}y&x\\ -\frac{y}{x^2}&\frac1x\end{vmatrix}=\dfrac yx+\dfrac yx=\dfrac{2y}{x}=2v$，取倒数即得。<b>比硬算 $x,y$ 的偏导快得多。</b><br>
+      <b>记忆</b>：<span style="color:var(--red);font-weight:700">「双曲线 + 过原点射线 ⇒ $u=xy,\ v=y/x$，$J=\frac{1}{2v}$，区域必成矩形」</span>——与极坐标同级的必背换元。</div>
+    </div>
+  </div>
+
+  <!-- ================= s9 绝对值 / max ================= -->
+  <h2 id="s9"><span class="idx">九</span>绝对值 / $\max$ 型：<u>先找零线，再劈区域</u></h2>
+
+  <div class="key"><span class="tag">必记 · 三步通法</span>
+    <div class="steps3">
+      <div><b>① 找零线</b>令绝对值内部 $=0$（或令 $\max$ 的两支相等），得到一条曲线。<br>
+      $|xy-1|\Rightarrow xy=1$；$\max\{x^2,y^2\}\Rightarrow y=\pm x$；$|x-y|\Rightarrow y=x$。</div>
+      <div><b>② 劈区域</b>零线把 $D$ 切成两块，每块上去掉绝对值 / 定下 $\max$ 是哪支。<br><b>$\max$ 型的零线永远是 $y=x$（或 $y=-x$），这就是它总能用对称性的原因。</b></div>
+      <div><b>③ 找捷径</b>看能否<b>整体归零</b>（$\iint_D(\cdot)=0$ 时两块互为相反）或<b>用对称性</b>把两块并成一块 ×2。</div>
+    </div>
+  </div>
+
+  <div class="eg" id="eg-h09">
+    <div class="q"><span class="no">基 习14.9</span><span class="exam">解答 · $\max$ 型标准件</span><a class="pg" href="#">P.375</a>
+      <p>计算二重积分 $\displaystyle\iint_D\mathrm e^{\max\{x^2,\,y^2\}}\mathrm dx\mathrm dy$，其中 $D=\{(x,y)\mid 0\le x\le1,\ 0\le y\le1\}$。</p></div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\mathrm e-1$</span>（复算 $1.7182818$ ✅）</p>
+      <div class="think"><span class="th">💭 思路</span>
+      <ol>
+        <li>$\max\{x^2,y^2\}$ 的零线是 $|y|=|x|$，在第一象限就是 <b>$y=x$</b>。</li>
+        <li>$y=x$ 把正方形劈成 $D_1$（$y\le x$，此处 $\max=x^2$）与 $D_2$（$y\ge x$，此处 $\max=y^2$）。</li>
+        <li>两块上被积函数分别只含一个变量 ⇒ 内层积分吐出区间长度，<b>各自塌成一元积分</b> $\int_0^1 x\mathrm e^{x^2}\mathrm dx$。</li>
+        <li>预判：两块由对称性<b>值相等</b>，各 $\frac{\mathrm e-1}{2}$，加起来 $\mathrm e-1$——<u>可以只算一块再乘 2</u>。</li>
+      </ol></div>
+      <div class="paper"><span class="phead">✍️ 考场卷面<span class="score">参考 10 分</span></span>
+        <div class="step"><span class="k">解</span>设 $D_1=\{(x,y)\mid 0\le x\le1,\ 0\le y\le x\}$，$D_2=\{(x,y)\mid 0\le x\le1,\ x\le y\le1\}$，
+        则 $D=D_1\cup D_2$，且在 $D_1$ 上 $\max\{x^2,y^2\}=x^2$，在 $D_2$ 上 $\max\{x^2,y^2\}=y^2$。<span class="pt">⛳ 3分</span></div>
+        <div class="step">由积分的可加性，
+        $$\iint_D\mathrm e^{\max\{x^2,y^2\}}\mathrm dx\mathrm dy=\iint_{D_1}\mathrm e^{x^2}\mathrm dx\mathrm dy+\iint_{D_2}\mathrm e^{y^2}\mathrm dx\mathrm dy. \tag{1}$$<span class="pt">⛳ 2分</span></div>
+        <div class="step">$$(1)=\int_0^1\mathrm dx\int_0^{x}\mathrm e^{x^2}\mathrm dy+\int_0^1\mathrm dy\int_0^{y}\mathrm e^{y^2}\mathrm dx
+        =\int_0^1 x\mathrm e^{x^2}\mathrm dx+\int_0^1 y\mathrm e^{y^2}\mathrm dy=2\int_0^1 x\mathrm e^{x^2}\mathrm dx. \tag{2}$$<span class="pt">⛳ 3分</span></div>
+        <div class="fin">$(2)=2\cdot\dfrac12\mathrm e^{x^2}\Big|_0^1=\mathrm e-1$，即 $\displaystyle\iint_D\mathrm e^{\max\{x^2,y^2\}}\mathrm dx\mathrm dy=\mathrm e-1$。<span class="pt">⛳ 2分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>$D_2$ 的定限要变次序</b>：$D_2$ 上被积函数是 $\mathrm e^{y^2}$，所以<b>先积 $x$</b>（$x$ 从 0 到 $y$）才能吐出因子 $y$。
+      <u>若在 $D_2$ 上仍先积 $y$，会撞上不可求积的 $\int\mathrm e^{y^2}\mathrm dy$。</u><span class="dock">这是本题唯一的技术点</span><br>
+      <b>$\min$ 型同理</b>：$\displaystyle\iint_D\mathrm e^{\min\{x^2,y^2\}}\mathrm dx\mathrm dy$ 就是把两块的 $\max$ 换成另一支。</div>
+    </div>
+  </div>
+
+  <div class="eg" id="eg-q18">
+    <div class="q"><span class="no">千 千18</span><span class="exam">解答 · ★★绝对值 + 整体归零技巧</span>
+      <p>设 $D=\{(x,y)\mid 0\le x\le2,\ 0\le y\le2\}$，计算 $\displaystyle\iint_D|xy-1|\,\mathrm d\sigma$。</p></div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\dfrac32+2\ln2$</span>（复算 $2.8862944$ ✅）</p>
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+      <ol>
+        <li>零线是<b>双曲线 $xy=1$</b>，它把正方形 $[0,2]^2$ 切成 $A$（$xy\le1$，含原点的那块）与 $B$（$xy\ge1$，含 $(2,2)$ 的那块）。</li>
+        <li><b>老实做法</b>：两块分别去绝对值，要算两个二重积分。</li>
+        <li><b>★捷径</b>：先算<u>不带绝对值</u>的 $\displaystyle\iint_D(xy-1)\mathrm d\sigma=\Big(\int_0^2x\mathrm dx\Big)^2-1\cdot4=4-4=\mathbf0$。
+        零！于是 $\displaystyle\iint_B(xy-1)=-\iint_A(xy-1)=\iint_A(1-xy)$，
+        故 $\displaystyle\iint_D|xy-1|=2\iint_A(1-xy)\mathrm d\sigma$ —— <b>计算量直接砍半</b>。</li>
+        <li>$A$ 的定限要分两段：$x\in\big[0,\frac12\big]$ 时 $2x\le1$，双曲线在正方形外，$y$ 满贯 $[0,2]$；$x\in\big[\frac12,2\big]$ 时 $y\in\big[0,\frac1x\big]$。</li>
+      </ol></div>
+      <div class="paper"><span class="phead">✍️ 考场卷面<span class="score">参考 12 分</span></span>
+        <div class="step"><span class="k">解</span>记 $A=\{(x,y)\in D\mid xy\le1\}$，$B=\{(x,y)\in D\mid xy\ge1\}$。先计算
+        $$\iint_D(xy-1)\mathrm d\sigma=\int_0^2 x\,\mathrm dx\int_0^2 y\,\mathrm dy-1\cdot 4=2\times2-4=0. \tag{1}$$<span class="pt">⛳ 3分</span></div>
+        <div class="step">由 (1) 及可加性得 $\displaystyle\iint_B(xy-1)\mathrm d\sigma=-\iint_A(xy-1)\mathrm d\sigma=\iint_A(1-xy)\mathrm d\sigma$，故
+        $$\iint_D|xy-1|\mathrm d\sigma=\iint_A(1-xy)\mathrm d\sigma+\iint_B(xy-1)\mathrm d\sigma=2\iint_A(1-xy)\mathrm d\sigma. \tag{2}$$<span class="pt">⛳ 3分</span></div>
+        <div class="step">$A=\Big\{0\le x\le\dfrac12,\ 0\le y\le2\Big\}\cup\Big\{\dfrac12\le x\le2,\ 0\le y\le\dfrac1x\Big\}$，于是
+        $$\iint_A(1-xy)\mathrm d\sigma=\int_0^{\frac12}\Big(2-2x\Big)\mathrm dx+\int_{\frac12}^{2}\Big(\frac1x-\frac{1}{2x}\Big)\mathrm dx. \tag{3}$$<span class="pt">⛳ 3分</span></div>
+        <div class="step">$\displaystyle\int_0^{\frac12}(2-2x)\mathrm dx=\Big[2x-x^2\Big]_0^{\frac12}=\frac34$；
+        $\displaystyle\int_{\frac12}^{2}\frac{\mathrm dx}{2x}=\frac12\ln x\Big|_{\frac12}^{2}=\frac12\ln4=\ln2$。<span class="pt">⛳ 2分</span></div>
+        <div class="fin">代回 (2)：$\displaystyle\iint_D|xy-1|\mathrm d\sigma=2\Big(\frac34+\ln2\Big)=\frac32+2\ln2$。<span class="pt">⛳ 1分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（写完校对）</span>
+      <b>(3) 式两段内层积分的细节</b>：
+      第一段 $\displaystyle\int_0^2(1-xy)\mathrm dy=2-2x$；
+      第二段 $\displaystyle\int_0^{1/x}(1-xy)\mathrm dy=\frac1x-x\cdot\frac{1}{2x^2}=\frac{1}{2x}$。<b>第二段化简后是 $\frac{1}{2x}$，很干净——算出别的形式就是错了。</b><br>
+      <b>★"整体归零"能用的条件</b>：$\displaystyle\iint_D(\text{绝对值内部})\mathrm d\sigma=0$。本题因为 $\int_0^2 x\mathrm dx=2$ 而 $2\times2=4=1\times S_D$，纯属命题人安排。
+      <u>动手前先花 10 秒验一下这个积分是不是 0，值得。</u><br>
+      <span class="dock">分段点别写错</span>：双曲线 $xy=1$ 与正方形边界 $y=2$ 交于 $x=\frac12$，与 $x=2$ 交于 $y=\frac12$。<b>$x=\frac12$ 是分段点。</b></div>
+    </div>
+  </div>
+
+  <div class="eg" id="eg-q21">
+    <div class="q"><span class="no">千 千21</span><span class="exam">解答 · $\max$ 型升级版（外套 $\sin$）</span>
+      <p>设 $D=\{(x,y)\mid 0\le x\le\sqrt\pi,\ 0\le y\le\sqrt\pi\}$，计算 $\displaystyle\iint_D\sin\big(\max\{x^2,y^2\}\big)\mathrm d\sigma$。</p></div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$2$</span>（复算 $2.0000000$ ✅）</p>
+      <div class="think"><span class="th">💭 思路</span>
+      <ol>
+        <li>与习 14.9 同构，但这次用<b>普通对称性</b>更快：$D$ 关于 $y=x$ 对称，且 $\max\{x^2,y^2\}$ 在 $x\leftrightarrow y$ 下<b>不变</b>
+        ⇒ 被积函数满足 $f(x,y)=f(y,x)$（<b>偶</b>）⇒ 只算一半再 $\times2$。</li>
+        <li>取 $D_1=\{0\le y\le x\le\sqrt\pi\}$，其上 $\max=x^2$，被积函数变成 $\sin x^2$。</li>
+        <li><b>$\sin x^2$ 在"可积不可求积"清单里！</b>但内层对 $y$ 积分吐出因子 $x$ ⇒ 得到 $x\sin x^2$，<b>恰好可凑微分</b>。
+        <u>这就是命题人把区域边长选成 $\sqrt\pi$ 的用意（让上限 $x^2=\pi$，$\cos$ 取到 $-1$，答案是整数 2）。</u></li>
+      </ol></div>
+      <div class="paper"><span class="phead">✍️ 考场卷面<span class="score">参考 10 分</span></span>
+        <div class="step"><span class="k">解</span>区域 $D$ 关于直线 $y=x$ 对称，且 $\max\{x^2,y^2\}$ 在 $x$ 与 $y$ 对调后不变，即被积函数 $f(x,y)=f(y,x)$。
+        由对称性，
+        $$I=2\iint_{D_1}\sin\big(\max\{x^2,y^2\}\big)\mathrm d\sigma,\qquad D_1=\{(x,y)\mid 0\le y\le x\le\sqrt\pi\}. \tag{1}$$<span class="pt">⛳ 3分</span></div>
+        <div class="step">在 $D_1$ 上 $\max\{x^2,y^2\}=x^2$，故
+        $$I=2\int_0^{\sqrt\pi}\mathrm dx\int_0^{x}\sin x^2\,\mathrm dy=2\int_0^{\sqrt\pi}x\sin x^2\,\mathrm dx. \tag{2}$$<span class="pt">⛳ 4分</span></div>
+        <div class="fin">$(2)=\displaystyle\int_0^{\sqrt\pi}\sin x^2\,\mathrm d(x^2)=-\cos x^2\Big|_0^{\sqrt\pi}=-\cos\pi+\cos0=2$，
+        即 $\displaystyle\iint_D\sin\big(\max\{x^2,y^2\}\big)\mathrm d\sigma=2$。<span class="pt">⛳ 3分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>与习 14.9 的分工</b>：习 14.9 用<b>可加性</b>（拆成两块分别算），本题用<b>对称性</b>（算一半 ×2）——<u>两种写法都对，对称性更短，但必须先说明 $f(x,y)=f(y,x)$</u>。<br>
+      <span class="dock">$\sqrt\pi$ 是提示</span>：题目给的边长是 $\sqrt\pi$ 而不是 1，就是在喊"最后会出现 $\cos\pi$"。<b>看到不寻常的常数，先想它在终点会变成什么。</b></div>
+    </div>
+  </div>
+
+
+  <!-- ================= s10 古鲁金 ================= -->
+  <h2 id="s10"><span class="idx">十</span>古鲁金第二定理：ch12 的秒杀器，<u>在这里被正式推导</u></h2>
+
+  <div class="key"><span class="tag">必记 · 二重积分版的推导（图 14-12）</span><a class="pg" href="#">P.358</a>
+    <p>把 $D$ 分成 $n$ 个小块 $\Delta\sigma_i$，任取 $(\xi_i,\eta_i)$，绕直线 $L_0: ax+by+c=0$ 旋转一周，小块扫出的<b>细圆环体积</b>
+    $\Delta V_i=2\pi r_i\Delta\sigma_i=2\pi\dfrac{|a\xi_i+b\eta_i+c|}{\sqrt{a^2+b^2}}\Delta\sigma_i$，求和取极限：</p>
+    <div class="fml">$$V=\iint_D 2\pi\frac{|ax+by+c|}{\sqrt{a^2+b^2}}\mathrm d\sigma=\frac{2\pi}{\sqrt{a^2+b^2}}\iint_D|ax+by+c|\,\mathrm d\sigma\tag{14-1}$$</div>
+    <p>与第 12 讲的 (12-5) 比较得 $r(\bar x,\bar y)=\dfrac{M_{L_0}}{M}=\dfrac{V}{2\pi S}$，即</p>
+    <div class="fml">$$\boxed{\ V=2\pi\cdot S\cdot r(\bar x,\bar y)\ }$$</div>
+    <p>其中 <span class="chip c-b">$V$</span>旋转体的体积　<span class="chip c-g">$S$</span>平面区域 $D$ 的面积　<span class="chip c-a">$r(\bar x,\bar y)$</span><b>形心到旋转轴的距离</b>。</p>
+    <p class="legend2">📌 ch12 里这条是"秒杀器"（不在考纲、只秒杀选填），<b>这里给出了它的二重积分推导</b>——本章可以名正言顺地用。
+    另外 (14-1) 本身也是个公式：<b>绕任意直线旋转的体积 = $\dfrac{2\pi}{\sqrt{a^2+b^2}}\displaystyle\iint_D|ax+by+c|\mathrm d\sigma$</b>，
+    当形心不好求时可以直接积。</p>
+  </div>
+
+  <div class="eg" id="eg-b16">
+    <div class="q"><span class="no">基 例14.16</span><span class="exam">填空 · 古鲁金秒杀（绕斜线）</span><a class="pg" href="#">P.358</a>
+      <p>曲线 $y=\sin x\ (0\le x\le2\pi)$ 与 $x$ 轴所围区域 $D$ 绕直线 $y=-x$ 旋转一周所成的旋转体的体积为 $\underline{\qquad}$。</p></div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$4\sqrt2\,\pi^2$</span>（$S=4$、形心 $(\pi,0)$ 均已数值复算 ✅）</p>
+      <p><span class="lab">要害</span>三个量各查一处，10 秒出答案：</p>
+      <ul>
+        <li><b>面积</b> $S=\displaystyle\int_0^{2\pi}|\sin x|\mathrm dx=4$（两个半波，各 2）；</li>
+        <li><b>形心</b>：区域关于点 $(\pi,0)$ <b>中心对称</b>（上半波与下半波互为 $180°$ 旋转）⇒ 形心就是 $(\pi,0)$，<u>一个积分都不用算</u>；</li>
+        <li><b>距离</b>：$(\pi,0)$ 到直线 $x+y=0$ 的距离 $r=\dfrac{|\pi+0|}{\sqrt{1^2+1^2}}=\dfrac{\pi}{\sqrt2}$。</li>
+      </ul>
+      <p>故 $V=2\pi\cdot4\cdot\dfrac{\pi}{\sqrt2}=\dfrac{8\pi^2}{\sqrt2}=4\sqrt2\,\pi^2$。</p>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>形心靠"中心对称"白拿，是本题最大的省力点</b>：$\sin(2\pi-x)=-\sin x$ ⇒ 图形关于 $(\pi,0)$ 中心对称 ⇒ 形心必在对称中心。<br>
+      <span class="dock">别用错公式</span>：绕的是<b>斜线</b>，不能用 $V=2\pi\int x f(x)\mathrm dx$（那是绕 $y$ 轴）。<b>绕任意直线只有古鲁金一条路。</b><br>
+      <b>若不许用古鲁金</b>：按 (14-1) 算 $V=\dfrac{2\pi}{\sqrt2}\displaystyle\iint_D|x+y|\mathrm d\sigma$——<u>要处理绝对值，比秒杀慢十倍</u>。</div>
+    </div>
+  </div>
+
+  <div class="eg" id="eg-b17">
+    <div class="q"><span class="no">基 例14.17</span><span class="exam">填空 · ★反用古鲁金：由体积反求形心</span><a class="pg" href="#">P.359</a>
+      <p>设 $D$ 为 $(x-1)^2+y^2=1$ 与 $(x-2)^2+y^2=2^2$ 及 $x$ 轴所围区域在第一象限的部分，则 $D$ 的形心 $(\bar x,\bar y)=\underline{\qquad}$。</p></div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\Big(\dfrac73,\ \dfrac{28}{9\pi}\Big)$</span>（数值复算 $(2.3334,\ 0.9904)$ vs $(2.3333,\ 0.9903)$ ✅）</p>
+      <p><span class="lab">分析</span>$D$ 是<b>大半圆盘（圆心 $(2,0)$，半径 2）挖去小半圆盘（圆心 $(1,0)$，半径 1）</b>，都在上半平面。
+      直接积分求形心要算 $\iint x\mathrm d\sigma$，麻烦；<b>反过来用古鲁金</b>：先用"半圆盘绕轴"的已知体积拼出 $V$，再由 $r=\dfrac{V}{2\pi S}$ 反解形心。</p>
+      <p><span class="lab">解 · 求 $\bar x$</span>$D$ 绕 <b>$y$ 轴</b>旋转（此时 $r=\bar x$）。两个半圆盘的形心横坐标分别是圆心横坐标 2 与 1：</p>
+      $$V_y=2\pi\cdot\underbrace{\frac{\pi\cdot2^2}{2}}_{\text{大半圆面积}}\cdot 2-2\pi\cdot\underbrace{\frac{\pi\cdot1^2}{2}}_{\text{小半圆面积}}\cdot 1=8\pi^2-\pi^2=7\pi^2,$$
+      $$\bar x=\frac{V_y}{2\pi S}=\frac{7\pi^2}{2\pi\cdot\big(\pi\cdot2^2-\pi\cdot1^2\big)\cdot\frac12}=\frac{7\pi^2}{3\pi^2}=\frac73.$$
+      <p><span class="lab">解 · 求 $\bar y$</span>先要半圆盘的<b>形心竖坐标</b>：对 $(x-1)^2+y^2\le1\ (y\ge0)$，用极坐标 $r\le2\cos\theta$、$\theta\in[0,\frac\pi2]$：</p>
+      $$\bar y_1=\frac{\iint y\,\mathrm d\sigma}{\iint\mathrm d\sigma}=\frac{\int_0^{\frac\pi2}\mathrm d\theta\int_0^{2\cos\theta}r\sin\theta\cdot r\,\mathrm dr}{\pi\cdot1^2\cdot\frac12}
+      =\frac{\frac23}{\frac\pi2}=\frac{4}{3\pi},\qquad \bar y_2=\frac{8}{3\pi}\ (\text{半径 2，线性放大 2 倍}),$$
+      $$V_x=2\pi\cdot\frac{\pi\cdot2^2}{2}\cdot\frac{8}{3\pi}-2\pi\cdot\frac{\pi\cdot1^2}{2}\cdot\frac{4}{3\pi}=\frac{32\pi}{3}-\frac{4\pi}{3}=\frac{28\pi}{3},
+      \qquad \bar y=\frac{V_x}{2\pi S}=\frac{\frac{28\pi}{3}}{3\pi^2}=\frac{28}{9\pi}.$$
+      <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>要背的常数</b>：<b>半径 $R$ 的半圆盘，形心到直径的距离 $=\dfrac{4R}{3\pi}$</b>。本题 $\bar y_1=\frac{4}{3\pi}$、$\bar y_2=\frac{8}{3\pi}$ 就是它。
+      <u>背下来可省掉上面那个极坐标积分。</u><br>
+      <b>"挖洞"的正确姿势</b>：$M_{\text{总}}=M_{\text{大}}-M_{\text{小}}$（<b>矩不是形心相减，是"面积×形心"相减</b>），再除以总面积。
+      <span class="dock">直接把两个形心相减是最常见的错</span>。<br>
+      <b>自查</b>：$\bar x=\frac73\approx2.33$ 落在 $[1,4]$ 内、偏右（因为挖掉的洞在左边）✅；$\bar y=\frac{28}{9\pi}\approx0.99$ 落在 $[0,2]$ 内 ✅。</div>
+    </div>
+  </div>
+
+  <div class="eg" id="eg-q29">
+    <div class="q"><span class="no">千 千29</span><span class="exam">填空 · 形心秒杀一次函数（一秒题）</span>
+      <p>设 $D=\{(x,y)\mid(x-1)^2+(y-1)^2\le2\}$，则 $\displaystyle\iint_D(x+y)\mathrm d\sigma=\underline{\qquad}$</p></div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$4\pi$</span>（复算 $12.566371=4\pi$ ✅）</p>
+      <p><span class="lab">要害</span>$\displaystyle\iint_D x\,\mathrm d\sigma=\bar x\,S$、$\displaystyle\iint_D y\,\mathrm d\sigma=\bar y\,S$（<b>形心的定义式反着用</b>）。
+      圆盘的形心就是圆心 $(1,1)$，$S=\pi(\sqrt2)^2=2\pi$，故 $\displaystyle\iint_D(x+y)=(1+1)\cdot2\pi=4\pi$。</p>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>通法（背下来，本章能秒掉一大片填空）</b>：
+      $$\iint_D(ax+by+c)\,\mathrm d\sigma=(a\bar x+b\bar y+c)\,S_D.$$
+      只要<b>被积函数是一次的</b>、<b>区域的形心一眼可见</b>（圆、椭圆、矩形、三角形、任何中心对称图形），就是一秒题。<br>
+      <b>与对称性的关系</b>：也可以用平移 $u=x-1,v=y-1$ 说"$\iint u=\iint v=0$"，本质相同。<u>但形心法连平移都省了。</u><br>
+      🔗 常见形心：圆／椭圆＝中心；三角形＝三顶点坐标平均；半圆盘＝距直径 $\frac{4R}{3\pi}$（例 14.17）。</div>
+    </div>
+  </div>
+
+  <!-- ================= s11 高斯积分 ================= -->
+  <h2 id="s11"><span class="idx">十一</span>高斯积分与 Γ 函数：<u>二重积分反哺一元积分</u></h2>
+
+  <div class="eg" id="eg-b11">
+    <div class="q"><span class="no">基 例14.11</span><span class="exam">解答 · ★高斯积分 $\displaystyle\int_0^{+\infty}\mathrm e^{-x^2}\mathrm dx$</span><a class="pg" href="#">P.353</a>
+      <p>计算 $\displaystyle\int_0^{+\infty}\mathrm e^{-x^2}\mathrm dx$。</p></div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">$\dfrac{\sqrt\pi}{2}$</span>（复算 $0.8862269$ ✅）</p>
+      <div class="think"><span class="th">💭 思路（本讲最漂亮的一次"升维"）</span>
+      <ol>
+        <li>$\mathrm e^{-x^2}$ <b>没有初等原函数</b>（在清单里）⇒ 一元的路全部堵死。</li>
+        <li><b>关键一步：算 $I^2$ 而不是 $I$。</b>因为"积分与用什么字母表示无关"，
+        $I=\displaystyle\int_0^{+\infty}\mathrm e^{-x^2}\mathrm dx=\int_0^{+\infty}\mathrm e^{-y^2}\mathrm dy$，两式相乘就<b>凑出一个二重积分</b>。</li>
+        <li>$\mathrm e^{-x^2}\cdot\mathrm e^{-y^2}=\mathrm e^{-(x^2+y^2)}$——<b>判据 ① 正中</b>，用极坐标；
+        区域是<b>整个第一象限</b>，看成"广义的 $\frac14$ 个圆，半径 $r\to+\infty$"。</li>
+        <li>极坐标下 $\mathrm e^{-r^2}\cdot r\,\mathrm dr$ <b>恰好可凑微分</b>——<u>那个多出来的 $r$ 正是救命稻草</u>。这就是升维的全部收益。</li>
+        <li>最后由 $I\gt0$（<b>保号性</b>）从 $I^2$ 开方定号。</li>
+      </ol></div>
+      <div class="paper"><span class="phead">✍️ 考场卷面<span class="score">参考 10 分</span></span>
+        <div class="step"><span class="k">解</span>设 $I=\displaystyle\int_0^{+\infty}\mathrm e^{-x^2}\mathrm dx$。由于定积分之值与积分变量所用字母无关，故
+        $$I^2=\int_0^{+\infty}\mathrm e^{-x^2}\mathrm dx\cdot\int_0^{+\infty}\mathrm e^{-y^2}\mathrm dy
+        =\int_0^{+\infty}\mathrm dx\int_0^{+\infty}\mathrm e^{-(x^2+y^2)}\mathrm dy=\iint_{D}\mathrm e^{-(x^2+y^2)}\mathrm dx\mathrm dy, \tag{1}$$
+        其中 $D=\{(x,y)\mid 0\le x\lt+\infty,\ 0\le y\lt+\infty\}$。<span class="pt">⛳ 4分</span></div>
+        <div class="step">在极坐标下 $D:\ 0\le\theta\le\dfrac\pi2,\ 0\le r\lt+\infty$，故
+        $$(1)=\int_0^{\frac\pi2}\mathrm d\theta\int_0^{+\infty}\mathrm e^{-r^2}r\,\mathrm dr
+        =\frac\pi2\cdot\Big(-\frac12\Big)\int_0^{+\infty}\mathrm e^{-r^2}\mathrm d(-r^2)=-\frac\pi4\mathrm e^{-r^2}\Big|_0^{+\infty}=\frac\pi4. \tag{2}$$<span class="pt">⛳ 4分</span></div>
+        <div class="fin">由积分的保号性知 $I\gt0$，故 $\displaystyle\int_0^{+\infty}\mathrm e^{-x^2}\mathrm dx=\frac{\sqrt\pi}{2}$。<span class="pt">⛳ 2分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（写完校对）</span>
+      <b>书上难得的一句抒情（蓝批）</b>：「$\displaystyle\int_{-\infty}^{+\infty}\mathrm e^{-x^2}\mathrm dx=\sqrt\pi$，这叫<b>高斯积分</b>，
+      如同欧拉公式 $\mathrm e^{\mathrm i\pi}+1=0$ 一样美妙，<b>它们都同时包含 $\mathrm e,\pi$</b>。」<br>
+      <b>必背的一族值</b>：
+      $\displaystyle\int_0^{+\infty}\mathrm e^{-x^2}\mathrm dx=\frac{\sqrt\pi}{2}$；
+      $\displaystyle\int_{-\infty}^{+\infty}\mathrm e^{-x^2}\mathrm dx=\sqrt\pi$；
+      $\displaystyle\int_0^{+\infty}x^2\mathrm e^{-x^2}\mathrm dx=\frac{\sqrt\pi}{4}$；
+      $\displaystyle\int_{-\infty}^{+\infty}x^2\mathrm e^{-x^2}\mathrm dx=\frac{\sqrt\pi}{2}$。<br>
+      <span class="dock">最后一步不能省</span>：$I^2=\frac\pi4$ 只给出 $I=\pm\frac{\sqrt\pi}{2}$，<b>必须用保号性排除负根</b>，否则扣分。<br>
+      🔗 概率论里正态分布密度的归一性就是这条——<b>提前在这里把它算熟。</b></div>
+    </div>
+  </div>
+
+  <div class="eg" id="eg-b12">
+    <div class="q"><span class="no">基 例14.12 / 例14.13</span><span class="exam">解答二连 · Γ 函数 + 极限反问题</span><a class="pg" href="#">P.354</a>
+      <p><b>14.12</b> 计算 $\displaystyle\int_{-\infty}^{+\infty}x^2\mathrm e^{-x^2}\mathrm dx$。<br>
+      <b>14.13</b> 已知 $\displaystyle\lim_{x\to+\infty}\frac{\int_0^x t^2\mathrm e^{x^2-t^2}\mathrm dt+a\mathrm e^{x^2}}{x^b}=-\frac12$，求 $a,b$ 的值。</p></div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">14.12：$\dfrac{\sqrt\pi}{2}$　　14.13：$a=-\dfrac{\sqrt\pi}{4}$，$b=1$</span>（均已复算 ✅，14.13 用 mpmath 60 位精度验）</p>
+      <p><span class="lab">14.12 · 要害</span>被积函数是<b>偶函数</b>且积分收敛 ⇒ 用对称性化成 $2\displaystyle\int_0^{+\infty}$，再借 <b>Γ 函数</b>：</p>
+      $$2\int_0^{+\infty}x^{2\cdot\frac32-1}\mathrm e^{-x^2}\mathrm dx=\Gamma\Big(\frac32\Big)=\frac12\Gamma\Big(\frac12\Big)=\frac{\sqrt\pi}{2}.$$
+      <p class="legend2">📌 <b>要用的 Γ 形式</b>：$\displaystyle\int_0^{+\infty}x^{2\alpha-1}\mathrm e^{-x^2}\mathrm dx=\frac12\Gamma(\alpha)$，
+      故 $2\displaystyle\int_0^{+\infty}x^{2}\mathrm e^{-x^2}\mathrm dx=\Gamma\big(\frac32\big)$。<b>方法总结（书）</b>：Γ 函数的相关结论要牢记——
+      $\Gamma(\alpha)=\displaystyle\int_0^{+\infty}x^{\alpha-1}\mathrm e^{-x}\mathrm dx$，$\Gamma(\alpha+1)=\alpha\Gamma(\alpha)$，$\Gamma\big(\frac12\big)=\sqrt\pi$。</p>
+      <p><span class="lab">14.12 · 不用 Γ 的算法（书上【注】，更慢但保险）</span></p>
+      $$\int_0^{+\infty}x^2\mathrm e^{-x^2}\mathrm dx=\int_0^{+\infty}\Big(-\frac x2\Big)\mathrm d\big(\mathrm e^{-x^2}\big)
+      =-\frac x2\mathrm e^{-x^2}\Big|_0^{+\infty}+\frac12\int_0^{+\infty}\mathrm e^{-x^2}\mathrm dx=0+\frac12\cdot\frac{\sqrt\pi}{2}=\frac{\sqrt\pi}{4}.$$
+      <p>书上评价：「显然，这是相对麻烦的。」</p>
+      <div class="think"><span class="th">💭 思路（14.13：一道三考点串联题）</span>
+      <ol>
+        <li><b>先定型</b>：分子里 $\mathrm e^{x^2-t^2}=\mathrm e^{x^2}\mathrm e^{-t^2}$，$\mathrm e^{x^2}$ 与 $t$ 无关，可以提到积分号外
+        ⇒ 分子 $=\mathrm e^{x^2}\big(\int_0^x t^2\mathrm e^{-t^2}\mathrm dt+a\big)$。<b>分子分母同除 $\mathrm e^{x^2}$</b> 才看得出是什么型。</li>
+        <li><b>由分母定 $a$</b>：变形后分母 $x^b\mathrm e^{-x^2}\to0$（<u>不论 $b$ 取何值</u>，指数压倒幂），而极限值 $-\frac12\ne0$
+        ⇒ <b>分子必须也趋于 0</b> ⇒ $a=-\int_0^{+\infty}t^2\mathrm e^{-t^2}\mathrm dt$。这一步用到 14.12 的结果。</li>
+        <li><b>由洛必达定 $b$</b>：分母求导后主项是 $-2x^{b+1}\mathrm e^{-x^2}$，与分子 $x^2\mathrm e^{-x^2}$ 比较，
+        <b>要同阶才能有非零极限</b> ⇒ $b+1=2$；系数 $\frac{1}{-2}$ 恰好就是 $-\frac12$，自洽 ✅。</li>
+      </ol></div>
+      <div class="paper"><span class="phead">✍️ 考场卷面（14.13）<span class="score">参考 10 分</span></span>
+        <div class="step"><span class="k">解</span>因 $\mathrm e^{x^2-t^2}=\mathrm e^{x^2}\mathrm e^{-t^2}$，分子分母同除以 $\mathrm e^{x^2}$，得
+        $$\lim_{x\to+\infty}\frac{\int_0^x t^2\mathrm e^{-t^2}\mathrm dt+a}{x^b\mathrm e^{-x^2}}=-\frac12. \tag{1}$$<span class="pt">⛳ 2分</span></div>
+        <div class="step">由于对任何 $b$ 均有 $\lim\limits_{x\to+\infty}x^b\mathrm e^{-x^2}=0$，而 (1) 式极限存在且非零，故必有
+        $$\lim_{x\to+\infty}\Big(\int_0^x t^2\mathrm e^{-t^2}\mathrm dt+a\Big)=0,\qquad
+        a=-\int_0^{+\infty}t^2\mathrm e^{-t^2}\mathrm dt=-\frac{\sqrt\pi}{4}. \tag{2}$$<span class="pt">⛳ 4分</span></div>
+        <div class="step">将 (2) 代入 (1)，为 $\dfrac00$ 型，由洛必达法则
+        $$(1)=\lim_{x\to+\infty}\frac{x^2\mathrm e^{-x^2}}{b x^{b-1}\mathrm e^{-x^2}+x^b\mathrm e^{-x^2}(-2x)}
+        =\lim_{x\to+\infty}\frac{x^2}{b x^{b-1}-2x^{b+1}}. \tag{3}$$<span class="pt">⛳ 3分</span></div>
+        <div class="fin">要使 (3) 式极限等于 $-\dfrac12$，须 $b+1=2$，即 $b=1$（此时 (3) $=\lim\limits_{x\to+\infty}\dfrac{x^2}{x-2x^2}=-\dfrac12$ ✅）。
+        故 $a=-\dfrac{\sqrt\pi}{4}$，$b=1$。<span class="pt">⛳ 1分</span></div>
+      </div>
+      <p><span class="lab">14.13 · 要害</span>一开始<b>看不出是什么类型的未定式</b> ⇒ 作恒等变形：<b>分子分母同除 $\mathrm e^{x^2}$</b>。</p>
+      <ol>
+        <li>变形后 $\displaystyle\lim_{x\to+\infty}\frac{\int_0^x t^2\mathrm e^{-t^2}\mathrm dt+a}{x^b\mathrm e^{-x^2}}=-\frac12$。
+        分母 $x^b\mathrm e^{-x^2}\to0$（<b>不论 $b$ 取何值</b>）⇒ 判定为 $\frac00$ 型（变形前是 $\frac\infty\infty$）。</li>
+        <li><b>分母 $\to0$ 而分式极限不为 0 ⇒ 分子必 $\to0$</b>（方法总结）⇒
+        $a=-\displaystyle\int_0^{+\infty}t^2\mathrm e^{-t^2}\mathrm dt=-\frac{\sqrt\pi}{4}$（由例 14.12）。</li>
+        <li>洛必达：$\displaystyle\lim_{x\to+\infty}\frac{x^2\mathrm e^{-x^2}}{bx^{b-1}\mathrm e^{-x^2}+x^b\mathrm e^{-x^2}(-2x)}
+        =\lim_{x\to+\infty}\frac{x^2}{bx^{b-1}-2x^{b+1}}=-\frac12$ ⇒ <b>分母主项 $-2x^{b+1}$ 要与分子 $x^2$ 同阶</b> ⇒ $b+1=2$，$b=1$，且系数 $\frac{1}{-2}=-\frac12$ ✅。</li>
+      </ol>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>14.13 的三个考点串成一串</b>：① 恒等变形定型（$\mathrm e^{x^2}$ 是无穷大，要除掉）；② "分母趋零 ⇒ 分子趋零"定 $a$；③ 洛必达 + 同阶定 $b$。
+      <b>缺一不可，是一道很好的综合题。</b><br>
+      <b>公式</b>：$\displaystyle\int_0^{+\infty}t^2\mathrm e^{-t^2}\mathrm dt=\frac{\sqrt\pi}{4}$。<br>
+      <span class="dock">数值验证的教训（本页复算时踩到）</span>：想用双精度浮点验这个极限会得到 <b>0/0 的假象</b>——分子分母都是 $\mathrm e^{-x^2}$ 量级，
+      $x=30$ 时约 $10^{-391}$，<b>灾难性相消</b>。正确做法是把分子写成尾巴 $-\displaystyle\int_x^{+\infty}t^2\mathrm e^{-t^2}\mathrm dt$ 并用高精度算。
+      <u>⚠️ 这类"分子是两个几乎相等的量之差"的极限，数值验证一律不可信，必须符号推。</u></div>
+    </div>
+  </div>
+
+  <!-- ================= s12 保号性反问题 + 证明题 ================= -->
+  <h2 id="s12b"><span class="idx">十二</span>保号性的两个高阶用法：<u>反问题</u>与<u>证明题</u></h2>
+
+  <div class="key"><span class="tag">必记 · 三条保号性结论（强化讲标「重点」）</span><a class="pg" href="#">P.177</a>
+    <ol>
+      <li>若连续函数 $f(x,y)\ge0$ <b>且不恒为零</b>，则 $\displaystyle\iint_D f\,\mathrm d\sigma\gt0$。</li>
+      <li>若连续函数 $f$ 满足<b>对任意有界闭区域 $D$</b> 均有 $\displaystyle\iint_D f\,\mathrm d\sigma\equiv0$，则 $f(x,y)\equiv0$。
+      📌 蓝批：<b>「任意 $D$ 使之成立时才能推出 $f(x,y)=0$」——少了"任意"就推不出来。</b></li>
+      <li>$D=\{(x,y)\mid f(x,y)\ge0\}$ 时，$\displaystyle\iint_D f\,\mathrm d\sigma$ <b>取最大值</b>。</li>
+    </ol>
+  </div>
+
+  <div class="eg" id="eg-q04">
+    <div class="q"><span class="no">强 强14.4 ＋ 基 习14.12</span><span class="exam">解答 · 反问题（"求使积分最大的 $D$"）</span><a class="pg" href="#">P.177 / P.372</a>
+      <p><b>强14.4</b> 确定积分区域 $D$，使得二重积分 $I=\displaystyle\iint_D\Big(1-x^2-\frac{y^2}{2}\Big)\mathrm dx\mathrm dy$ 达到最大值。<br>
+      <b>习14.12</b> (1) 设 $D$ 能使 $\displaystyle\iint_D(1-2x^2-y^2)\mathrm d\sigma$ 的值达到最大，求出该区域 $D$；(2) 求出其最大值。</p></div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">强14.4：$D=\Big\{(x,y)\ \Big|\ x^2+\dfrac{y^2}{2}\le1\Big\}$　　习14.12：$D=\{2x^2+y^2\le1\}$，最大值 $\dfrac{\sqrt2\pi}{4}$</span>（复算 $1.1107207$ ✅）</p>
+      <div class="think"><span class="th">💭 思路</span>
+      <ol>
+        <li><b>答案模板是固定的</b>：由<b>比较定理</b>与<b>积分区域的可加性</b>，只要 $D$ <u>包含了所有使 $f\ge0$ 的点，而不包含任何使 $f\lt0$ 的点</u>，积分就最大。
+        所以 <b>$D=\{f\ge0\}$</b>，一句话的事。</li>
+        <li>习 14.12 第 (2) 问要真算：$D$ 是<b>椭圆</b> $2x^2+y^2\le1$（半轴 $\frac{1}{\sqrt2}$ 与 $1$）⇒ 用<b>广义极坐标</b>把椭圆拉成单位圆。</li>
+        <li>广义极坐标的 $J$ 要现算：$x=\frac{1}{\sqrt2}r\cos\theta,\ y=r\sin\theta$ ⇒ $J=\frac{r}{\sqrt2}$（一般地 $x=ar\cos\theta,y=br\sin\theta$ 给 $J=abr$）。</li>
+        <li>代入后 $1-2x^2-y^2=1-r^2$，积分完全分离。</li>
+      </ol></div>
+      <div class="paper"><span class="phead">✍️ 考场卷面（强14.4）<span class="score">参考 4 分</span></span>
+        <div class="step"><span class="k">解</span>根据二重积分的<b>比较定理</b>和积分区域的<b>可加性</b>，只要积分区域 $D$ 包含了使被积函数
+        $f(x,y)=1-x^2-\dfrac{y^2}{2}\ge0$ 的所有点，而没有包含使 $f(x,y)\lt0$ 的点，那么二重积分 $I$ 就会达到最大值。<span class="pt">⛳ 3分</span></div>
+        <div class="fin">故所求积分区域应取为 $D=\Big\{(x,y)\ \Big|\ x^2+\dfrac{y^2}{2}\le1\Big\}$。<span class="pt">⛳ 1分</span></div>
+      </div>
+      <div class="paper"><span class="phead">✍️ 考场卷面（习14.12）<span class="score">参考 10 分</span></span>
+        <div class="step"><span class="k">解</span>(1) 由二重积分的性质可知，当积分区域 $D$ 包含了所有使被积函数 $1-2x^2-y^2\ge0$ 的区域，
+        而不包含使 $1-2x^2-y^2\lt0$ 的区域时，此二重积分的值达到最大，即
+        $$D=\{(x,y)\mid 2x^2+y^2\le1\}\ (\text{椭圆 }2x^2+y^2=1\text{ 所围的平面闭区域}).$$<span class="pt">⛳ 4分</span></div>
+        <div class="step">(2) 令 $\begin{cases}x=\dfrac{1}{\sqrt2}r\cos\theta\\ y=r\sin\theta\end{cases}$，则
+        $$\frac{\partial(x,y)}{\partial(r,\theta)}=\begin{vmatrix}\frac{1}{\sqrt2}\cos\theta&-\frac{1}{\sqrt2}r\sin\theta\\ \sin\theta&r\cos\theta\end{vmatrix}=\frac{r}{\sqrt2},
+        \qquad D\ \longrightarrow\ \{0\le r\le1,\ 0\le\theta\le2\pi\}.$$<span class="pt">⛳ 3分</span></div>
+        <div class="step">于是
+        $$\iint_D(1-2x^2-y^2)\mathrm d\sigma=\int_0^{2\pi}\mathrm d\theta\int_0^1(1-r^2)\cdot\frac{r}{\sqrt2}\mathrm dr
+        =2\pi\cdot\frac{1}{\sqrt2}\int_0^1(r-r^3)\mathrm dr. \tag{1}$$<span class="pt">⛳ 2分</span></div>
+        <div class="fin">$(1)=\sqrt2\pi\Big[\dfrac{r^2}{2}-\dfrac{r^4}{4}\Big]_0^1=\sqrt2\pi\cdot\dfrac14=\dfrac{\sqrt2\pi}{4}$，即所求最大值为 $\dfrac{\sqrt2\pi}{4}$。<span class="pt">⛳ 1分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>强 14.4 与例 14.1 是同一件事的两面</b>：例 14.1 给了四个候选区域问哪个最大（选择题），强 14.4 直接问"最大的区域是什么"（解答题）。
+      <b>答案永远是 $\{f\ge0\}$。</b><br>
+      <b>为什么 $2x^2+y^2\le1$ 化成 $1-r^2$</b>：代入得 $1-2\cdot\frac{r^2\cos^2\theta}{2}-r^2\sin^2\theta=1-r^2(\cos^2\theta+\sin^2\theta)=1-r^2$。
+      <b>广义极坐标的设计目标就是让被积函数变成 $r$ 的函数。</b><br>
+      <span class="dock">$J$ 别写成 $r$</span>：广义极坐标的 $J=abr$（本题 $a=\frac{1}{\sqrt2},b=1$），<b>不是 $r$</b>。这是最常见的错。</div>
+    </div>
+  </div>
+
+  <div class="eg" id="eg-q41">
+    <div class="q"><span class="no">千 千41</span><span class="exam">★★★ 证明题 · 本章唯一（保号性 + 广义中值定理）</span>
+      <p>设平面区域 $D=\Big\{(x,y)\ \Big|\ 2x^2+y^2\le2\sqrt{x^2+y^2},\ y\ge x\ge0\Big\}$，
+      若 $\displaystyle\iint_D\frac{f(x,y)}{\sqrt{1-x^2}}\mathrm d\sigma=a\gt0$，$f(x,y)$ 是 $D$ 上的连续函数。<br>
+      (1) 计算 $\displaystyle\iint_D\frac{1}{\sqrt{1-x^2}}\mathrm d\sigma$；　
+      (2) 证明：存在 $(\xi,\eta)\in D$，使得 $|f(\xi,\eta)|\ge\dfrac{\sqrt2}{\pi}a$。</p></div>
+    <div class="s">
+      <p><span class="lab">答案</span><span class="ans">(1) $\dfrac{\sqrt2}{2}\pi-\sqrt2\arctan\dfrac{\sqrt2}{2}$</span>（$\approx1.35102$，复算 ✅，与解析册逐字符相符）</p>
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+      <ol>
+        <li><b>(1) 先化极坐标</b>：$2x^2+y^2=r^2(1+\cos^2\theta)$，边界 $r^2(1+\cos^2\theta)=2r$ ⇒ <b>$r(1+\cos^2\theta)=2$</b>；
+        $y\ge x\ge0$ ⇒ $\theta\in\big[\frac\pi4,\frac\pi2\big]$。<b>极点在边界上（情况 ②），$r$ 下限为 0。</b></li>
+        <li><b>预判内层能不能积</b>：被积函数 $\dfrac{1}{\sqrt{1-r^2\cos^2\theta}}$ 配上 $r\,\mathrm dr$——
+        <u>$r\,\mathrm dr$ 恰好是 $\mathrm d(r^2)$ 的一半，而根号里就是 $r^2$ 的一次式</u> ⇒ <b>可凑微分，能积</b>。这是敢往下走的依据。</li>
+        <li><b>算完内层一定要化简</b>：会发现根号下出现<b>完全平方</b>，结果奇美（$=\frac{2}{1+\cos^2\theta}$，与被积函数同型）——<u>这是命题人给的信号：你走对了</u>。</li>
+        <li><b>外层是 $\int\frac{\mathrm d\theta}{1+\cos^2\theta}$ 型</b>：上下同除 $\cos^2\theta$ 凑 $\mathrm d(\tan\theta)$（与例 14.9 同一个套路）。
+        注意上限 $\theta\to\frac\pi2$ 时 $\tan\theta\to+\infty$，是<b>反常积分</b>，用 $\arctan(+\infty)=\frac\pi2$。</li>
+        <li><b>(2) 的链条</b>：要证 $|f|$ 有下界，就要把 $a$ 往上界方向放：
+        $a=\big|\iint\big|\le\iint|f|/\sqrt{1-x^2}$（<b>保号性</b>）$=|f(\xi,\eta)|\cdot\iint\frac{\mathrm d\sigma}{\sqrt{1-x^2}}$（<b>广义中值定理</b>，$g=\frac{1}{\sqrt{1-x^2}}\gt0$ 不变号！）。</li>
+        <li><b>最后一步的技巧</b>：得到 $|f(\xi,\eta)|\ge\dfrac{a}{(1)\text{的值}}$ 后，把 (1) 里的负项 $-\sqrt2\arctan\frac{\sqrt2}{2}$ <b>丢掉</b>（分母变大、整体变小），
+        换来干净的常数 $\dfrac{\sqrt2}{\pi}$。<u>"再放缩一次换一个漂亮系数"是证明题的常规收口。</u></li>
+      </ol></div>
+      <div class="paper"><span class="phead">✍️ 考场卷面<span class="score">参考 12 分（(1) 7 分 + (2) 5 分）</span></span>
+        <div class="step"><span class="k">解</span>(1) 令 $x=r\cos\theta,\ y=r\sin\theta$。由 $2x^2+y^2\le2\sqrt{x^2+y^2}$ 得
+        $r^2(1+\cos^2\theta)\le2r$，即 $r\le\dfrac{2}{1+\cos^2\theta}$；由 $y\ge x\ge0$ 得 $\dfrac\pi4\le\theta\le\dfrac\pi2$。<span class="pt">⛳ 2分</span></div>
+        <div class="step">于是
+        $$\iint_D\frac{\mathrm d\sigma}{\sqrt{1-x^2}}=\int_{\frac\pi4}^{\frac\pi2}\mathrm d\theta\int_0^{\frac{2}{1+\cos^2\theta}}\frac{r\,\mathrm dr}{\sqrt{1-r^2\cos^2\theta}}. \tag{1}$$<span class="pt">⛳ 2分</span></div>
+        <div class="step">记 $R=\dfrac{2}{1+\cos^2\theta}$。内层积分
+        $$\int_0^{R}\frac{r\,\mathrm dr}{\sqrt{1-r^2\cos^2\theta}}=-\frac{\sqrt{1-r^2\cos^2\theta}}{\cos^2\theta}\Big|_0^{R}
+        =\frac{1-\sqrt{1-R^2\cos^2\theta}}{\cos^2\theta}=\frac{2}{1+\cos^2\theta},$$
+        其中用到 $1-R^2\cos^2\theta=\dfrac{(1+\cos^2\theta)^2-4\cos^2\theta}{(1+\cos^2\theta)^2}=\dfrac{(1-\cos^2\theta)^2}{(1+\cos^2\theta)^2}$。 <span class="pt">⛳ 2分</span></div>
+        <div class="step">代回 (1)：
+        $$(1)=2\int_{\frac\pi4}^{\frac\pi2}\frac{\mathrm d\theta}{1+\cos^2\theta}
+        =2\int_{\frac\pi4}^{\frac\pi2}\frac{\sec^2\theta\,\mathrm d\theta}{\sec^2\theta+1}=2\int_{\frac\pi4}^{\frac\pi2}\frac{\mathrm d(\tan\theta)}{2+\tan^2\theta}
+        \xlongequal{u=\tan\theta}2\int_1^{+\infty}\frac{\mathrm du}{2+u^2}=\sqrt2\arctan\frac{u}{\sqrt2}\Big|_1^{+\infty}.$$<span class="pt">⛳ 2分</span></div>
+        <div class="step">故 $\displaystyle\iint_D\frac{\mathrm d\sigma}{\sqrt{1-x^2}}=\sqrt2\Big(\frac\pi2-\arctan\frac{\sqrt2}{2}\Big)=\frac{\sqrt2}{2}\pi-\sqrt2\arctan\frac{\sqrt2}{2}$。<span class="pt">⛳ 1分</span></div>
+        <div class="step"><span class="k">证</span>(2) $f(x,y)$ 在有界闭区域 $D$ 上连续，$g(x,y)=\dfrac{1}{\sqrt{1-x^2}}$ 在 $D$ 上连续且<b>恒正（不变号）</b>，
+        由积分的保号性及<b>二重积分的广义中值定理</b>，存在 $(\xi,\eta)\in D$，使
+        $$a=\Big|\iint_D\frac{f(x,y)}{\sqrt{1-x^2}}\mathrm d\sigma\Big|\le\iint_D\frac{|f(x,y)|}{\sqrt{1-x^2}}\mathrm d\sigma
+        =|f(\xi,\eta)|\iint_D\frac{\mathrm d\sigma}{\sqrt{1-x^2}}. \tag{2}$$<span class="pt">⛳ 3分</span></div>
+        <div class="step">将 (1) 的结果代入 (2)：$a\le\Big(\dfrac{\sqrt2}{2}\pi-\sqrt2\arctan\dfrac{\sqrt2}{2}\Big)|f(\xi,\eta)|$，即
+        $$|f(\xi,\eta)|\ \ge\ \frac{a}{\frac{\sqrt2}{2}\pi-\sqrt2\arctan\frac{\sqrt2}{2}}. \tag{3}$$<span class="pt">⛳ 1分</span></div>
+        <div class="fin">又 $\sqrt2\arctan\dfrac{\sqrt2}{2}\gt0$，故 $\dfrac{\sqrt2}{2}\pi-\sqrt2\arctan\dfrac{\sqrt2}{2}\lt\dfrac{\sqrt2}{2}\pi$，代入 (3) 得
+        $$|f(\xi,\eta)|\ \ge\ \frac{a}{\frac{\sqrt2}{2}\pi}=\frac{\sqrt2}{\pi}a,$$
+        即存在 $(\xi,\eta)\in D$，使得 $|f(\xi,\eta)|\ge\dfrac{\sqrt2}{\pi}a$。<b>证毕。</b><span class="pt">⛳ 1分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（写完校对）</span>
+      <b>用广义中值定理前必须先点名两个条件</b>：<u>$f$ 连续</u>、<u>$g$ 连续且不变号</u>。<span class="dock">漏掉"不变号"直接扣分</span><br>
+      <b>为什么先取绝对值再放缩</b>：题目要证的是 $|f(\xi,\eta)|$ 的下界，而 $f$ 本身可能变号，
+      所以必须先用 $\big|\iint h\big|\le\iint|h|$（<b>性质 5 的特殊情形</b>）把绝对值挪到被积函数上，才能用中值定理。<br>
+      <b>(1) 的内层积分是全题最漂亮的一步</b>：$1-R^2\cos^2\theta$ 化出<b>完全平方</b> $(1-\cos^2\theta)^2$，开根号后 $\dfrac{1-\cos^2\theta}{1+\cos^2\theta}$，
+      与 1 相减再除以 $\cos^2\theta$，$\cos^2\theta$ <b>约得干干净净</b>，结果 $\dfrac{2}{1+\cos^2\theta}$ 与 $R$ 同形。<u>算不出这个形状就是算错了。</u><br>
+      <b>数值自查</b>：$\dfrac{\sqrt2}{2}\pi\approx2.2214$，$\sqrt2\arctan\dfrac{\sqrt2}{2}\approx1.4142\times0.6155=0.8703$，差 $\approx1.3510$；
+      而 $a/1.3510=0.740a\ \ge\ 0.450a=\frac{\sqrt2}{\pi}a$ ✅ <b>放缩方向正确。</b><br>
+      <span class="dock">⚠️ 分章解析 PDF 缺页</span>：本题解析不在 <code>高数_第14章_1000题_强化_解析.pdf</code>（只到第 36 题）里，要回原书解析册 PDF 第 337 页（打印页 332）。</div>
+    </div>
+  </div>
+
+
+  <!-- ================= s12 大观 ================= -->
+  <h2 id="s12"><span class="idx">十三</span>平面区域 $D$ 大观：<u>全书独一份的 85 幅图鉴</u></h2>
+
+  <div class="key"><span class="tag">必记 · 书上的定位（原话）</span><a class="pg" href="#">P.360–371</a>
+    <p>「<b>要想正确计算二重积分，准确画出平面区域 $D$ 是必不可少的基本功</b>，本讲最后，总结出常见的平面区域 $D$ 的图形及表达，
+    考生应<b>多画、多练</b>，这些图<em>不是背的，而是训练画区域能力的素材</em>。」</p>
+    <div class="tw">
+    <table class="dense">
+      <tr><th>分组</th><th>数量</th><th>代表形状</th></tr>
+      <tr><td>① 直角坐标系下<b>直线边界型</b></td><td>17</td><td>正方形 / 三角形 / 平行四边形 / 梯形 / <b>菱形 $|x|+|y|\le1$</b> / 楔形</td></tr>
+      <tr><td>② 直角坐标系下<b>曲线边界型</b></td><td><b>44</b></td><td>圆环 / 月牙 / 透镜 / <b>双纽线</b> / <b>心形线</b> / 椭圆环 / <b>斜椭圆 $x^2+y^2+xy\le1$</b> / 双曲线截正方形</td></tr>
+      <tr><td>③ <b>极坐标方程型</b></td><td>15</td><td>$r\le\sec\theta$ / $r\le2\cos\theta$ / $r\le2(1+\cos\theta)$ / $r\le\sqrt{\sin2\theta}$ / 含参扇环</td></tr>
+      <tr><td>④ <b>参数方程型</b></td><td>9</td><td>含 $t$ 或 $a$ 的动态区域，<b>其中第 5 个要按 $a$ 分三种情况讨论</b></td></tr>
+    </table>
+    </div>
+    <p><b>合计 85 幅。</b></p>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 书上【注】里藏的一道真题</span>
+    <p>「有些 $D$ 是用<b>直角坐标系下的表达式</b>描述的，但实际上用<b>极坐标方程</b>更方便，要归到这里来。」</p>
+    <p>例：<b>2019 年考研真题数学二（18）</b>的平面区域为 $D=\{(x,y)\mid |x|\le y,\ (x^2+y^2)^3\le y^4\}$。
+    其中 $g: y=|x|$（两条射线），$f: y^4=(x^2+y^2)^3$（上下两片花瓣），$D$ 是 $y=|x|$ 上方那片花瓣。
+    <b>化极坐标：$r^6\le r^4\sin^4\theta\Rightarrow r\le\sin^2\theta$，$\theta\in\big[\frac\pi4,\frac{3\pi}4\big]$</b> —— 一眼可画。</p>
+    <p style="color:var(--red);font-weight:700">判据：只要 $D$ 的不等式里出现 $(x^2+y^2)^k$，先化极坐标再说。</p>
+  </div>
+
+  <!-- ========== 模块④ 区域大观图鉴 ========== -->
+  <div class="tool" id="t4">
+    <h4>🖼️ 平面区域 $D$ 速画训练器 —— 「先猜后揭」，练的是<u>看式子出图</u></h4>
+    <div class="hint">从书上 85 幅里选了 <b>24 幅</b>代表作（四组都覆盖）。默认<b>盖住图形</b>：先自己在草稿纸上画，再点「揭晓」对答案。
+    点「全部揭晓」可当图鉴翻。每幅下方标注它在书上的组别与出处题。</div>
+    <div class="ctl" id="t4-grp"></div>
+    <div class="ctl">
+      <button id="t4-all">全部揭晓</button><button id="t4-hide" class="on">全部盖住</button>
+      <span class="val" id="t4-cnt"></span>
+    </div>
+    <div id="t4-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,168px),1fr));gap:10px;margin-top:10px"></div>
+    <div class="legend2">📌 点单个卡片可单独揭晓/盖住。<b>练法建议：每天翻 8 幅，只画不算，一周把 24 幅过三遍。</b>
+    画不出来的那几幅，回书上 P.360–371 找同组的其余图补练。</div>
+  </div>
+
+  <!-- ================= 收官 ================= -->
+  <h2 id="end"><span class="idx">收官</span>全章落位索引 + 一页纸提要</h2>
+
+  <div class="key"><span class="tag">必记 · 一道二重积分题的标准思考顺序（考场照走）</span>
+    <div class="steps3">
+      <div><b>第 0 步 · 看它长什么样</b>是<b>累次积分</b>？→ 八成要<b>换序</b>或<b>换系</b>（§5/§7）。<br>
+      是 <b>$\displaystyle\iint_D$</b>？→ 往下走。</div>
+      <div><b>第 1 步 · 先化简</b>① <b>对称性</b>（§2，能判 0 最省）② <b>保号性</b>（§3，比大小题到此结束）③ 一次函数用<b>形心</b>（§10）。</div>
+      <div><b>第 2 步 · 再选系</b>被积函数含 $x^2{+}y^2$ 或 $\frac yx$？区域是圆的一部分？→ <b>极坐标</b>（§6）。<br>
+      都不是但有<b>可整体替换的组合</b>？→ <b>一般换元</b>（§8）。<br>
+      否则 → <b>直角坐标</b>（§4）。</div>
+      <div><b>第 3 步 · 最后定限</b>「<b>后积先定限，限内画条线，先交写下限，后交写上限</b>」。<br>
+      画不出 $D$ → 写不等式用<b>分析法</b>。<br>
+      有绝对值/$\max$ → <b>先找零线再劈</b>（§9）。</div>
+    </div>
+  </div>
+
+  <div class="tw">
+  <table>
+    <tr><th>题号</th><th>题型</th><th>核心</th><th>落位</th></tr>
+    <tr><td>例 14.1</td><td>选择</td><td>比大小 · 被积函数正负 · $D_4$ 恰是 $\{f\ge0\}$</td><td><a href="#eg-b01">§3</a></td></tr>
+    <tr><td>例 14.2</td><td>填空</td><td>动态区域 + 中值定理 + 导数定义</td><td><a href="#eg-b02">§1</a></td></tr>
+    <tr><td>例 14.3</td><td>选择</td><td>★作辅助曲线（互为反函数）造对称</td><td><a href="#eg-b03">§2</a></td></tr>
+    <tr><td>例 14.4</td><td>选择</td><td>轮换对称性入门</td><td><a href="#eg-b04">§2</a></td></tr>
+    <tr><td>例 14.5</td><td>选择</td><td>换序 + $\pi-\arcsin y$ 分支</td><td><a href="#eg-b05">§4</a></td></tr>
+    <tr><td>例 14.6</td><td>填空</td><td>★上下限颠倒添负号 + 换序 + 等价无穷小</td><td><a href="#eg-b06">§5</a></td></tr>
+    <tr><td>例 14.7</td><td>解答</td><td>换序（被积函数只含 $x$）</td><td><a href="#eg-b07">§5</a></td></tr>
+    <tr><td>例 14.8</td><td>填空</td><td>轮换 + 极坐标；半径是 $2^{1/4}$</td><td><a href="#eg-b08">§6</a></td></tr>
+    <tr><td><b>例 14.9 ＝ 强 14.7</b></td><td>解答</td><td><b>★★★「二重积分复习标杆」</b>；两边界差常数倍 ⇒ $\ln\sqrt2$ 提出</td><td><a href="#eg-b09">§6</a></td></tr>
+    <tr><td>例 14.10</td><td>解答</td><td>接例 14.4；只需变限积分，不必真算二重积分</td><td><a href="#eg-b10">§6</a></td></tr>
+    <tr><td>例 14.11</td><td>解答</td><td>★高斯积分（算 $I^2$ 升维）</td><td><a href="#eg-b11">§11</a></td></tr>
+    <tr><td>例 14.12 / 14.13</td><td>解答</td><td>Γ 函数；极限反问题（同除 $\mathrm e^{x^2}$）</td><td><a href="#eg-b12">§11</a></td></tr>
+    <tr><td>例 14.14</td><td>填空</td><td>累次积分 → <b>换坐标系</b>（不是换序）</td><td><a href="#eg-b14">§7</a></td></tr>
+    <tr><td>例 14.15</td><td>解答</td><td>★换元法主打（"头重脚轻" $\mathrm e^{y/(x+y)}$）</td><td><a href="#eg-b15">§8</a></td></tr>
+    <tr><td>例 14.16 / 14.17</td><td>填空</td><td>古鲁金秒杀；★反用古鲁金求形心</td><td><a href="#eg-b16">§10</a></td></tr>
+    <tr><td>习 14.1</td><td>选择</td><td>二重黎曼和（矩形 ⇒ 两个定积分之积），值 $\frac\pi4\ln2$</td><td><a href="#eg-h01">下方</a></td></tr>
+    <tr><td>习 14.2 / 14.3 / 14.4</td><td>选择</td><td>极坐标 ⇄ 直角互认三连；<b>(C) 漏 $r$ 是经典干扰项</b></td><td><a href="#eg-h02">§7</a></td></tr>
+    <tr><td>习 14.5</td><td>填空</td><td>分段函数"卷积型"，答案是<b>平行四边形面积</b> $\times a^2$</td><td><a href="#eg-h01">下方</a></td></tr>
+    <tr><td>习 14.6</td><td>填空</td><td>二次变限 → <b>先换序</b>再求导</td><td><a href="#eg-h06">§5</a></td></tr>
+    <tr><td>习 14.7</td><td>填空</td><td>作辅助线 $y=-\sin x$ 劈两块，$xy^5$ 两次归零，剩下求面积</td><td><a href="#eg-h01">下方</a></td></tr>
+    <tr><td>习 14.8</td><td>解答</td><td>线性拆 $I_1+I_2$，$I_2$ 由对称性为 0</td><td><a href="#eg-h01">下方</a></td></tr>
+    <tr><td>习 14.9</td><td>解答</td><td>★$\max$ 型：$y=x$ 劈开，<b>两块的积分次序要各选各的</b></td><td><a href="#eg-h09">§9</a></td></tr>
+    <tr><td>习 14.10 / 14.11</td><td>解答</td><td>★极坐标写法回直角（$r^2\cos2\theta=x^2-y^2$）</td><td><a href="#eg-h10">§7</a></td></tr>
+    <tr><td>习 14.12</td><td>解答</td><td>保号性反问题 + 广义极坐标 $J=\frac{r}{\sqrt2}$</td><td><a href="#eg-q04">§12</a></td></tr>
+    <tr><td>强 14.1</td><td>填空</td><td>和式极限：矩形区域 ⇒ 两个定积分之积</td><td><a href="#eg-h01">下方</a></td></tr>
+    <tr><td>强 14.2 / 14.3</td><td>填空</td><td>换序双联（可积不可求积型 / 计算困难型）</td><td><a href="#eg-q02">§5</a></td></tr>
+    <tr><td>强 14.4</td><td>解答</td><td>保号性反问题</td><td><a href="#eg-q04">§12</a></td></tr>
+    <tr><td>强 14.5</td><td>解答</td><td>轮换对称 + "积分本质是一个数"</td><td><a href="#eg-q05">§2</a></td></tr>
+    <tr><td>强 14.6</td><td>填空</td><td>极坐标描述的 $D$ 反化直角（$r\le\sec\theta\Leftrightarrow x\le1$）</td><td><a href="#eg-h01">下方</a></td></tr>
+    <tr><td>强 14.8</td><td>解答</td><td>★两法：直接极坐标 vs <b>平移换元</b></td><td><a href="#eg-q08">§6</a></td></tr>
+    <tr><td>千 2 / 千 3</td><td>选择</td><td>对称性<b>定符号</b>（$3\lt\pi$）；逐点函数不等式（$\ln2\lt1$）</td><td><a href="#eg-q2">§3</a></td></tr>
+    <tr><td>千 11 / 千 25 / 千 29</td><td>填空</td><td>轮换展开；偏心圆平移；形心秒杀一次函数</td><td><a href="#eg-q11">§2/§6/§10</a></td></tr>
+    <tr><td>千 18 / 千 21</td><td>解答</td><td>★绝对值 + <b>整体归零</b>；$\max$ 型升级版</td><td><a href="#eg-q18">§9</a></td></tr>
+    <tr><td>千 23 / 千 27 / 千 28</td><td>填空/选择</td><td>换序 + 二次换元；无界换序；<b>★★变限二重积分求导</b></td><td><a href="#eg-q23">§5</a></td></tr>
+    <tr><td>千 26 / 千 35 / 千 39</td><td>解答</td><td>四象限版例 14.15；<b>★★被积函数×J＝常数</b>；<b>★★$u=xy,v=y/x$</b></td><td><a href="#eg-q26">§8</a></td></tr>
+    <tr><td><b>千 41</b></td><td><b>证明</b></td><td><b>★★★本章唯一证明题</b>：保号性 + <b>广义中值定理</b> + 二次放缩</td><td><a href="#eg-q41">§12</a></td></tr>
+  </table>
+  </div>
+
+  <h3 id="eg-h01">剩余小题速览（习 14.1 / 14.5 / 14.7 / 14.8 · 强 14.1 / 14.6）</h3>
+
+  <div class="eg">
+    <div class="s">
+      <p><b>强 14.1 与 习 14.1 · 和式极限</b><a class="pg" href="#">P.175 / P.371</a><br>
+      核心公式（<b>只对矩形区域</b>）：$\displaystyle\iint_D f\,\mathrm d\sigma=\lim_{n\to\infty}\sum_{i=1}^n\sum_{j=1}^n f\Big(a+\frac{b-a}{n}i,\ c+\frac{d-c}{n}j\Big)\frac{b-a}{n}\cdot\frac{d-c}{n}$。
+      📌 书上蓝批：<b>「$x$ 与 $y$ 的上下限均为常数，相当于计算 2 个定积分」</b>，且「$\frac in,\frac jn$ 谁转化为 $x$ 均可」。<br>
+      <b>强 14.1</b>：$\displaystyle\lim_{n\to\infty}\sum\sum\frac{i}{(n+i)(n^2+j^2)}$ ——<b>提取 $\frac{1}{n^2}$</b> 后化为
+      $\displaystyle\int_0^1\frac{x\,\mathrm dx}{1+x}\cdot\int_0^1\frac{\mathrm dy}{1+y^2}=[x-\ln(1+x)]_0^1\cdot\arctan y\big|_0^1=(1-\ln2)\cdot\frac\pi4$。<br>
+      <b>习 14.1</b>：$\displaystyle\lim_{n\to\infty}\sum\sum\frac{n}{(n+i)(n^2+j^2)}=\int_0^1\mathrm dx\int_0^1\frac{\mathrm dy}{(1+x)(1+y^2)}$ ⇒ 选 <b>(D)</b>，其值为 $\dfrac\pi4\ln2$（复算 ✅）。
+      <span class="dock">干扰项 (A)(B) 把上限写成 $x$（三角形），(C) 把 $1+y^2$ 写成 $1+y$——都对应"配凑"时没数清 $n$ 的幂次</span></p>
+      <p><b>习 14.5 · 分段函数（卷积型）</b>　答案 <b>$a^2$</b>（$a=3$ 时复算 $9.0000$ ✅）<br>
+      $g(y-x)=a$ 当且仅当 $0\le y-x\le1$，即 $x\le y\le1+x$；再叠上 $f(x)\ne0$ 要求 $0\le x\le1$
+      ⇒ 非零区域 $D_1$ 是<b>平行四边形</b>（顶点 $(0,0),(1,1),(1,2),(0,1)$，图 14-14），面积 $=1$。
+      故 $I=a^2\cdot S_{D_1}=a^2$。<b>本题的实质是"求面积"，不是"求积分"。</b></p>
+      <p><b>习 14.7 · 对称性 + 求面积</b>　答案 <b>$-\pi$</b>（复算 ✅）<br>
+      $D$ 由 $y=\sin x$、$x=\pm\frac\pi2$、$y=1$ 围成。<b>作辅助线 $y=-\sin x$</b>，曲线 $BO$ 把 $D$ 分成 $D_1$（关于 $x$ 轴对称）与 $D_2$（关于 $y$ 轴对称）；
+      而 $xy^5$ <b>既是 $x$ 的奇函数，也是 $y$ 的奇函数</b> ⇒ 两块上积分都为 0。剩下
+      $-\displaystyle\iint_D\mathrm dx\mathrm dy=-\int_{-\frac\pi2}^{\frac\pi2}(1-\sin x)\mathrm dx=-2\int_0^{\frac\pi2}\mathrm dx=-\pi$（$\sin x$ 在对称区间上积分为 0）。
+      <span class="dock">一个被积函数对两个变量都是奇函数时，可以配两种不同的对称性——这正是"作辅助线"的目的</span></p>
+      <p><b>强 14.6 · 极坐标描述反化直角</b>　答案 <b>$\dfrac\pi4-\dfrac13$</b>（复算 $0.4520648$ ✅）<br>
+      $D=\{0\le\theta\le\frac\pi4,\ 0\le r\le\sec\theta\}$ ⇒ $x\le1$ 且 $0\le y\le x$ ⇒ <b>三角形 $0\le y\le x\le1$</b>。
+      $\displaystyle\iint_D\sqrt{1-(x-y)^2}\,\mathrm d\sigma=\int_0^1\mathrm dx\int_0^x\sqrt{1-(x-y)^2}\mathrm dy\xlongequal{x-y=t}\int_0^1\mathrm dx\int_0^x\sqrt{1-t^2}\mathrm dt$
+      $=\displaystyle\int_0^1\Big(\frac12\arcsin x+\frac x2\sqrt{1-x^2}\Big)\mathrm dx=\frac12\Big(\frac\pi2-1\Big)+\frac16=\frac\pi4-\frac13$。
+      <b>用到 $\displaystyle\int\sqrt{a^2-x^2}\mathrm dx=\frac{a^2}{2}\arcsin\frac xa+\frac x2\sqrt{a^2-x^2}+C$。</b></p>
+          </div>
+  </div>
+
+  <div class="outro">
+    <h3>下一章</h3>
+    <p>本讲结束多元积分的<b>第一站</b>。按张宇的编排，第 15 讲是<b>微分方程</b>，第 16 讲<b>无穷级数</b>，
+    第 17–18 讲回到<b>多元函数积分学</b>（曲线曲面积分），二重积分的"画区域 + 定限"功夫会在第 18 讲被<u>原样搬到三重积分与曲面积分上</u>。
+    <b>本讲练熟的十六字口诀，是后面三讲的通行证。</b></p>
+    <p><a href="第13章_多元函数微分学.html">← 第 13 章 多元函数微分学</a>　|　<a href="../index.html">返回数学复盘中心</a></p>
+  </div>
+
+  <footer>
+    第 14 章 · 二重积分　|　基础30讲 P.338–376（39 页）＋ 高数18讲 P.175–183（9 页）＋ 1000题强化篇补 14 题<br>
+    全章 51 题　·　19 张三层卷面卡（20 份卷面 · 86 个 ⛳）　·　4 个交互模块　·　sympy/scipy 67 项断言 ALL PASS
+  </footer>
+
+<script>
+(function(){
+"use strict";
+function el(id){return document.getElementById(id);}
+function css(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim();}
+function num(v,d){ if(!isFinite(v))return '—'; return (Math.abs(v)>=1e4||(Math.abs(v)<1e-3&&v!==0))?v.toExponential(2):v.toFixed(d===undefined?4:d); }
+
+/* ---------- 共享：画布世界坐标 ---------- */
+function Cam(cv,W){
+  this.cv=cv; this.ctx=cv.getContext('2d'); this.W=W;
+  this.w=cv.width; this.h=cv.height;
+  var pad=18;
+  this.sx=(this.w-2*pad)/(W.x1-W.x0); this.sy=(this.h-2*pad)/(W.y1-W.y0);
+  var s=Math.min(this.sx,this.sy); this.sx=s; this.sy=s;
+  this.ox=pad + (this.w-2*pad - s*(W.x1-W.x0))/2;
+  this.oy=pad + (this.h-2*pad - s*(W.y1-W.y0))/2;
+}
+Cam.prototype.X=function(x){return this.ox + (x-this.W.x0)*this.sx;};
+Cam.prototype.Y=function(y){return this.h - this.oy - (y-this.W.y0)*this.sy;};
+Cam.prototype.clear=function(){var c=this.ctx;c.clearRect(0,0,this.w,this.h);c.fillStyle=css('--bg');c.fillRect(0,0,this.w,this.h);};
+Cam.prototype.axes=function(){
+  var c=this.ctx,W=this.W; c.save(); c.strokeStyle=css('--muted'); c.lineWidth=1; c.globalAlpha=.75;
+  c.beginPath();
+  if(W.y0<=0&&W.y1>=0){c.moveTo(this.X(W.x0),this.Y(0));c.lineTo(this.X(W.x1),this.Y(0));}
+  if(W.x0<=0&&W.x1>=0){c.moveTo(this.X(0),this.Y(W.y0));c.lineTo(this.X(0),this.Y(W.y1));}
+  c.stroke();
+  c.globalAlpha=1; c.fillStyle=css('--muted'); c.font='10px sans-serif';
+  c.fillText('x',this.X(W.x1)-8,this.Y(0)-5); c.fillText('y',this.X(0)+5,this.Y(W.y1)+10);
+  c.restore();
+};
+/* 扫描填充满足 pred 的像素 */
+Cam.prototype.fill=function(pred,color,alpha,step){
+  var c=this.ctx,st=step||2; c.save(); c.globalAlpha=alpha===undefined?.4:alpha; c.fillStyle=color;
+  for(var px=0;px<this.w;px+=st){ for(var py=0;py<this.h;py+=st){
+    var x=this.W.x0+(px-this.ox)/this.sx, y=this.W.y0+(this.h-py-this.oy)/this.sy;
+    if(pred(x,y)) c.fillRect(px,py,st,st);
+  }}
+  c.restore();
+};
+Cam.prototype.line=function(x0,y0,x1,y1,color,dash,wdt){
+  var c=this.ctx;c.save();c.strokeStyle=color;c.lineWidth=wdt||1.4;if(dash)c.setLineDash(dash);
+  c.beginPath();c.moveTo(this.X(x0),this.Y(y0));c.lineTo(this.X(x1),this.Y(y1));c.stroke();c.restore();
+};
+Cam.prototype.dot=function(x,y,color,r){
+  var c=this.ctx;c.save();c.fillStyle=color;c.beginPath();c.arc(this.X(x),this.Y(y),r||4,0,7);c.fill();c.restore();
+};
+Cam.prototype.tag=function(x,y,t,color){
+  var c=this.ctx;c.save();c.fillStyle=color||css('--ink');c.font='11px sans-serif';c.fillText(t,this.X(x),this.Y(y));c.restore();
+};
+/* 网格数值二重积分 */
+function grid2(pred,f,W,N){
+  N=N||220; var hx=(W.x1-W.x0)/N, hy=(W.y1-W.y0)/N, s=0;
+  for(var i=0;i<N;i++){ var x=W.x0+(i+.5)*hx;
+    for(var j=0;j<N;j++){ var y=W.y0+(j+.5)*hy;
+      if(pred(x,y)){ var v=f(x,y); if(isFinite(v)) s+=v; } } }
+  return s*hx*hy;
+}
+function cbrt(t){return t<0?-Math.pow(-t,1/3):Math.pow(t,1/3);}
+function mkbtns(box,items,cb,init){
+  box.innerHTML='';
+  items.forEach(function(it,k){
+    var b=document.createElement('button'); b.innerHTML=it.t; b.setAttribute('data-k',k);
+    if(k===(init||0)) b.className='on';
+    b.onclick=function(){ [].forEach.call(box.children,function(e){e.className='';}); b.className='on'; cb(k); };
+    box.appendChild(b);
+  });
+}
+
+/* ================= 模块① 对称性判定台 ================= */
+var P1=[
+ {t:'例14.3 $D_1$', W:{x0:-.2,x1:1.2,y0:-.2,y1:1.2}, ax:'d',
+  D:function(x,y){return x>=0&&x<=1&&y>=0&&y<=1;}, f:function(x,y){return cbrt(x-y);},
+  fn:'\\sqrt[3]{x-y}', Dn:'0\\le x\\le1,\\ 0\\le y\\le1', book:'普通对称性（奇）⇒ $J_1=0$'},
+ {t:'例14.3 $D_2$', W:{x0:-.2,x1:1.2,y0:-.2,y1:1.2}, ax:'d',
+  D:function(x,y){return x>=0&&x<=1&&y>=0&&y<=Math.sqrt(x);}, f:function(x,y){return cbrt(x-y);},
+  fn:'\\sqrt[3]{x-y}', Dn:'0\\le x\\le1,\\ 0\\le y\\le\\sqrt x', book:'$D$ 本身<b>不对称</b> ⇒ 要作辅助线 $y=x^2$ 造对称'},
+ {t:'例14.8', W:{x0:-1.4,x1:1.4,y0:-1.4,y1:1.4}, ax:'d',
+  D:function(x,y){return x*x+y*y<=Math.SQRT2;}, f:function(x,y){return x*x+y*y/2;},
+  fn:'x^2+\\frac{y^2}{2}', Dn:'x^2+y^2\\le\\sqrt2', book:'既不等也不反 ⇒ 走<b>轮换对称性</b>，答案 $\\frac{3\\pi}{4}$'},
+ {t:'千11', W:{x0:-1.2,x1:1.2,y0:-1.2,y1:1.2}, ax:'x',
+  D:function(x,y){return x*x+y*y<=1;}, f:function(x,y){return x*y;},
+  fn:'xy', Dn:'x^2+y^2\\le1', book:'关于 $x$ 轴的奇函数 ⇒ 交叉项为 0'},
+ {t:'千2 $D_1$', W:{x0:-.4,x1:3.4,y0:-.4,y1:3.4}, ax:'d',
+  D:function(x,y){return x>=0&&y>=0&&x+y<=3;}, f:function(x,y){return Math.sin(x-y);},
+  fn:'\\sin(x-y)', Dn:'x\\ge0,y\\ge0,x+y\\le3', book:'奇 ⇒ $I_1=0$'},
+ {t:'习14.8', W:{x0:-.3,x1:1.3,y0:-1.3,y1:1.3}, ax:'x',
+  D:function(x,y){return x*x+y*y<=1&&x>=0;}, f:function(x,y){return x*y/(1+x*x+y*y);},
+  fn:'\\frac{xy}{1+x^2+y^2}', Dn:'x^2+y^2\\le1,\\ x\\ge0', book:'$I_2=0$，只剩 $I_1=\\frac\\pi2\\ln2$'},
+ {t:'千21', W:{x0:-.2,x1:2,y0:-.2,y1:2}, ax:'d',
+  D:function(x,y){var R=Math.sqrt(Math.PI);return x>=0&&x<=R&&y>=0&&y<=R;},
+  f:function(x,y){return Math.sin(Math.max(x*x,y*y));},
+  fn:'\\sin(\\max\\{x^2,y^2\\})', Dn:'0\\le x,y\\le\\sqrt\\pi', book:'偶 ⇒ 算一半 ×2，答案 2'},
+ {t:'千26', W:{x0:-1.3,x1:1.3,y0:-1.3,y1:1.3}, ax:'y',
+  D:function(x,y){return Math.abs(x)+Math.abs(y)<=1;},
+  f:function(x,y){var d=Math.abs(x)+Math.abs(y);return d<1e-9?1:Math.exp(Math.abs(y)/d);},
+  fn:'\\mathrm e^{|y|/(|x|+|y|)}', Dn:'|x|+|y|\\le1', book:'对两轴都是偶 ⇒ ×4 削到第一象限'}
+];
+var S1={k:0,ax:'d'};
+function mirror(ax,x,y){ return ax==='y'?[-x,y]:ax==='x'?[x,-y]:ax==='o'?[-x,-y]:[y,x]; }
+function halfPred(ax,x,y){ return ax==='y'?x>=0:ax==='x'?y>=0:ax==='o'?y>=0:y<=x; }
+function draw1(){
+  var P=P1[S1.k], ax=S1.ax, W=P.W;
+  var A=new Cam(el('t1-c1'),W), B=new Cam(el('t1-c2'),W);
+  A.clear(); A.axes(); A.fill(P.D,css('--accent'),.42);
+  /* 对称轴 */
+  var axc=css('--red');
+  if(ax==='y') A.line(0,W.y0,0,W.y1,axc,[6,4],2);
+  else if(ax==='x') A.line(W.x0,0,W.x1,0,axc,[6,4],2);
+  else if(ax==='d') A.line(Math.max(W.x0,W.y0),Math.max(W.x0,W.y0),Math.min(W.x1,W.y1),Math.min(W.x1,W.y1),axc,[6,4],2);
+  else { A.dot(0,0,axc,5); }
+  /* 区域是否关于该轴对称（网格判定） */
+  var symOK=true, N=90, hx=(W.x1-W.x0)/N, hy=(W.y1-W.y0)/N, bad=0, tot=0;
+  for(var i=0;i<N;i++)for(var j=0;j<N;j++){
+    var x=W.x0+(i+.5)*hx, y=W.y0+(j+.5)*hy, m=mirror(ax,x,y);
+    var a=P.D(x,y), b=P.D(m[0],m[1]);
+    if(a){tot++; if(!b) bad++;}
+  }
+  symOK = tot>0 && bad/tot < 0.02;
+  /* 配对图 */
+  B.clear(); B.axes();
+  var evenC=css('--accent'), oddC=css('--red'), neiC=css('--muted');
+  var nEven=0,nOdd=0,nNei=0;
+  B.fill(function(x,y){
+    if(!P.D(x,y)) return false;
+    var m=mirror(ax,x,y); if(!P.D(m[0],m[1])) return false;
+    var u=P.f(x,y), v=P.f(m[0],m[1]);
+    return Math.abs(u-v)<1e-6*(1+Math.abs(u));
+  },evenC,.5);
+  B.fill(function(x,y){
+    if(!P.D(x,y)) return false;
+    var m=mirror(ax,x,y); if(!P.D(m[0],m[1])) return false;
+    var u=P.f(x,y), v=P.f(m[0],m[1]);
+    return Math.abs(u+v)<1e-6*(1+Math.abs(u)) && Math.abs(u-v)>=1e-6*(1+Math.abs(u));
+  },oddC,.5);
+  B.fill(function(x,y){
+    if(!P.D(x,y)) return false;
+    var m=mirror(ax,x,y); if(!P.D(m[0],m[1])) return true;
+    var u=P.f(x,y), v=P.f(m[0],m[1]);
+    return Math.abs(u-v)>=1e-6*(1+Math.abs(u)) && Math.abs(u+v)>=1e-6*(1+Math.abs(u));
+  },neiC,.5);
+  /* 统计 + 数值积分 */
+  var NN=140, hx2=(W.x1-W.x0)/NN, hy2=(W.y1-W.y0)/NN;
+  nEven=nOdd=nNei=0;
+  for(var i2=0;i2<NN;i2++)for(var j2=0;j2<NN;j2++){
+    var x2=W.x0+(i2+.5)*hx2, y2=W.y0+(j2+.5)*hy2;
+    if(!P.D(x2,y2)) continue;
+    var m2=mirror(ax,x2,y2);
+    if(!P.D(m2[0],m2[1])){nNei++;continue;}
+    var u2=P.f(x2,y2), v2=P.f(m2[0],m2[1]);
+    if(Math.abs(u2-v2)<1e-6*(1+Math.abs(u2))) nEven++;
+    else if(Math.abs(u2+v2)<1e-6*(1+Math.abs(u2))) nOdd++;
+    else nNei++;
+  }
+  var totc=nEven+nOdd+nNei||1;
+  var ID=grid2(P.D,P.f,W,240);
+  var IH=grid2(function(x,y){return P.D(x,y)&&halfPred(ax,x,y);},P.f,W,240);
+  var isOdd = symOK && nOdd/(nEven+nOdd+nNei||1)>0.98;
+  var isEven= symOK && nEven/(nEven+nOdd+nNei||1)>0.98;
+  var rows='<tr><th>数值实测（网格 240×240）</th><th>值</th><th>结论</th></tr>';
+  rows+='<tr><td>$\\iint_D f\\,\\mathrm d\\sigma$</td><td>'+num(ID,5)+'</td><td>'+
+        (Math.abs(ID)<2e-3?'<span class="hit">≈ 0　（奇零 ✅）</span>':'≠ 0')+'</td></tr>';
+  rows+='<tr><td>$2\\iint_{D_1} f\\,\\mathrm d\\sigma$（半边 ×2）</td><td>'+num(2*IH,5)+'</td><td>'+
+        (isOdd ? '—　<span style="opacity:.75">奇型不看这一行（两半互相抵消）</span>'
+               : (Math.abs(2*IH-ID)<2e-3?'<span class="hit">＝ 全积分 ✅　（偶倍）</span>':'<span class="miss">≠ 全积分 ⇒ 偶倍不成立</span>'))+'</td></tr>';
+  rows+='<tr><td>配对占比（偶 / 奇 / 都不是）</td><td>'+(100*nEven/totc).toFixed(0)+'% / '+(100*nOdd/totc).toFixed(0)+'% / '+(100*nNei/totc).toFixed(0)+'%</td><td>'+
+        (symOK?'区域对称 ✅':'<span class="miss">区域不对称 ❌</span>')+'</td></tr>';
+  el('t1-tab').innerHTML=rows;
+  el('t1-say').innerHTML='当前：$D=\\{'+P.Dn+'\\}$，$f='+P.fn+'$，对称轴 = '+
+    (ax==='y'?'$y$ 轴':ax==='x'?'$x$ 轴':ax==='o'?'原点':'$y=x$')+'。　<b>书上结论：'+P.book+'</b>';
+  var V=el('t1-v'),txt,cls;
+  if(!symOK){ txt='① <b>区域 $D$ 关于此轴并不对称</b> ⇒ 普通对称性<u>根本用不了</u>，要么换一条轴，要么<b>作辅助曲线把 $D$ 劈成对称块 + 定号块</b>（例 14.3 的做法）。'; cls='v-no'; }
+  else if(isOdd){ txt='② 对称点函数值<b>互为相反数（奇）</b> ⇒ <b>$\\iint_D f\\,\\mathrm d\\sigma=0$</b>，实测 '+num(ID,5)+' ✅　<b>偶倍奇零的"奇零"。</b>'; cls='v-ok'; }
+  else if(isEven){ txt='② 对称点函数值<b>相等（偶）</b> ⇒ <b>$\\iint_D f=2\\iint_{D_1}f$</b>，实测 '+num(ID,5)+' vs '+num(2*IH,5)+' ✅　<b>偶倍奇零的"偶倍"。</b>'; cls='v-ok'; }
+  else { txt='② 对称点函数值<b>既不相等也不相反</b> ⇒ <b>普通对称性失效</b>。若此轴是 $y=x$，改问「$f(x,y)+f(y,x)$ 是否简单」——那就是<b>轮换对称性</b>。'; cls='v-inf'; }
+  V.className='verdict '+cls; V.innerHTML=txt;
+  if(window.renderMathInElement) renderMathInElement(el('t1'),{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});
+}
+mkbtns(el('t1-pre'),P1,function(k){S1.k=k;S1.ax=P1[k].ax;
+  [].forEach.call(el('t1').querySelectorAll('[data-ax]'),function(b){b.className=(b.getAttribute('data-ax')===S1.ax)?'on':'';});
+  draw1();},0);
+[].forEach.call(el('t1').querySelectorAll('[data-ax]'),function(b){
+  b.onclick=function(){ [].forEach.call(el('t1').querySelectorAll('[data-ax]'),function(e){e.className='';});
+    b.className='on'; S1.ax=b.getAttribute('data-ax'); draw1(); };});
+S1.ax=P1[0].ax;
+[].forEach.call(el('t1').querySelectorAll('[data-ax]'),function(b){b.className=(b.getAttribute('data-ax')===S1.ax)?'on':'';});
+draw1();
+
+/* ================= 模块② 换序沙盘 ================= */
+var P2=[
+ {t:'例14.5', W:{x0:1.2,x1:3.4,y0:-.2,y1:1.3},
+  D:function(x,y){return x>=Math.PI/2&&x<=Math.PI&&y>=Math.sin(x)&&y<=1;},
+  X:'\\int_{\\pi/2}^{\\pi}\\mathrm dx\\int_{\\sin x}^{1}f\\,\\mathrm dy',
+  Y:'\\int_0^1\\mathrm dy\\int_{\\pi-\\arcsin y}^{\\pi}f\\,\\mathrm dx',
+  note:'两种写法都合法，题目考的是<b>反函数取哪一支</b>：$\\frac\\pi2\\lt x\\lt\\pi$ 时 $x=\\pi-\\arcsin y$。'},
+ {t:'例14.7', W:{x0:-.2,x1:1.2,y0:-.2,y1:1.2},
+  D:function(x,y){return x>=0&&x<=1&&y>=0&&y<=x;},
+  X:'\\int_0^1\\mathrm dx\\int_0^{x}\\arcsin\\sqrt{4x-4x^2}\\,\\mathrm dy\\ \\Rightarrow\\ \\int_0^1 x\\arcsin\\sqrt{4x-4x^2}\\mathrm dx',
+  Y:'\\int_0^1\\mathrm dy\\int_y^{1}\\arcsin\\sqrt{4x-4x^2}\\,\\mathrm dx',
+  note:'<b>被积函数只含 $x$，却要先对 $x$ 积</b> ⇒ 必换。竖线（X 型）方向内层长度是 $x$，吐出因子 $x$。'},
+ {t:'强14.2', W:{x0:-.06,x1:.62,y0:-.06,y1:.62},
+  D:function(x,y){return x>=0&&x<=Math.PI/6&&y>=0&&y<=x;},
+  X:'\\int_0^{\\pi/6}\\mathrm dx\\int_0^{x}\\frac{\\cos x}{x}\\mathrm dy=\\int_0^{\\pi/6}\\cos x\\,\\mathrm dx=\\frac12',
+  Y:'\\int_0^{\\pi/6}\\mathrm dy\\int_y^{\\pi/6}\\frac{\\cos x}{x}\\mathrm dx\\ (\\textbf{可积不可求积})',
+  note:'$\\frac{\\cos x}{x}$ 在清单里 ⇒ <b>Y 型（先积 $x$）走不通</b>，必须走 X 型。内层吐出的 $x$ 恰好约掉分母。'},
+ {t:'千23', W:{x0:-.15,x1:1.15,y0:-.15,y1:1.15},
+  D:function(x,y){return x>=0&&y<=1&&y>=x;},
+  X:'\\int_0^1 x^2\\mathrm dx\\int_x^1\\mathrm e^{-y^2}\\mathrm dy\\ (\\textbf{可积不可求积})',
+  Y:'\\int_0^1\\mathrm e^{-y^2}\\mathrm dy\\int_0^{y}x^2\\mathrm dx=\\frac13\\int_0^1 y^3\\mathrm e^{-y^2}\\mathrm dy',
+  note:'$\\mathrm e^{-y^2}$ 在清单里 ⇒ 必须<b>先积 $x$（Y 型）</b>。吐出 $\\frac{y^3}{3}$，奇次幂配 $\\mathrm e^{-y^2}$ ⇒ 换元 $u=y^2$。'},
+ {t:'千27（无界）', W:{x0:-.2,x1:3,y0:-.2,y1:3},
+  D:function(x,y){return y>=0&&x>=y&&x<=2*y;},
+  X:'\\int_0^{+\\infty}\\mathrm e^{-x^2}\\mathrm dx\\int_{x/2}^{x}\\mathrm dy=\\frac12\\int_0^{+\\infty}x\\mathrm e^{-x^2}\\mathrm dx=\\frac14',
+  Y:'\\int_0^{+\\infty}\\mathrm dy\\int_y^{2y}\\mathrm e^{-x^2}\\mathrm dx\\ (\\textbf{可积不可求积})',
+  note:'<b>无界楔形</b>：两条边界 $y=x$ 与 $y=\\frac x2$ 都是射线。换序后内层长度 $\\frac x2$，凑出 $x\\mathrm e^{-x^2}$。'},
+ {t:'习14.6（$t=3$）', W:{x0:-.2,x1:3.4,y0:-.2,y1:3.4},
+  D:function(x,y){return y>=1&&x>=y&&x<=3;},
+  X:'\\int_1^{3}\\mathrm dx\\int_1^{x}f(x)\\mathrm dy=\\int_1^{3}(x-1)f(x)\\mathrm dx',
+  Y:'\\int_1^{3}\\mathrm dy\\int_y^{3}f(x)\\mathrm dx\\ (\\textbf{化不成变限单积分})',
+  note:'求 $F\'(t)$ 必须先把<b>二次变限压成一次变限</b> ⇒ 走 X 型，得 $F(t)=\\int_1^t(x-1)f(x)\\mathrm dx$，$F\'(t)=(t-1)f(t)$。'},
+ {t:'例14.14（换序无效）', W:{x0:-.2,x1:1.2,y0:-.2,y1:1.2},
+  D:function(x,y){return x>=0&&y>=0&&x+y>=1&&x*x+y*y<=1;},
+  X:'\\int_0^1\\mathrm dx\\int_{1-x}^{\\sqrt{1-x^2}}\\frac{x+y}{x^2+y^2}\\mathrm dy\\ (\\textbf{难})',
+  Y:'\\int_0^1\\mathrm dy\\int_{1-y}^{\\sqrt{1-y^2}}\\frac{x+y}{x^2+y^2}\\mathrm dx\\ (\\textbf{同样难})',
+  note:'★<b>两种次序都不好算 ⇒ 这不是换序问题，是换坐标系问题</b>。被积含 $x^2+y^2$、区域是弓形 ⇒ 极坐标，答案 $2-\\frac\\pi2$。'}
+];
+var S2={k:0,dir:'x',t:.42};
+function scanSeg(P,dir,c){
+  /* 沿探针线求区域的先交/后交点（取最外的一对，中间空洞忽略） */
+  var W=P.W, lo=null, hi=null, N=1400;
+  for(var i=0;i<=N;i++){
+    var u=(dir==='x'?W.y0:W.x0)+((dir==='x'?W.y1-W.y0:W.x1-W.x0))*i/N;
+    var inside = dir==='x' ? P.D(c,u) : P.D(u,c);
+    if(inside){ if(lo===null) lo=u; hi=u; }
+  }
+  return lo===null?null:[lo,hi];
+}
+function draw2(){
+  var P=P2[S2.k], W=P.W, dir=S2.dir;
+  var A=new Cam(el('t2-c'),W); A.clear(); A.axes(); A.fill(P.D,css('--accent'),.42);
+  var c = dir==='x' ? (W.x0+(W.x1-W.x0)*S2.t) : (W.y0+(W.y1-W.y0)*S2.t);
+  var seg=scanSeg(P,dir,c);
+  var lc=css('--purple');
+  if(dir==='x') A.line(c,W.y0,c,W.y1,lc,[5,4],1.8); else A.line(W.x0,c,W.x1,c,lc,[5,4],1.8);
+  var rows='<tr><th>项</th><th>值</th><th>口诀对应</th></tr>';
+  if(seg){
+    if(dir==='x'){ A.dot(c,seg[0],css('--green'),5); A.dot(c,seg[1],css('--red'),5); }
+    else { A.dot(seg[0],c,css('--green'),5); A.dot(seg[1],c,css('--red'),5); }
+    rows+='<tr><td>后积的变量（外层）</td><td>'+(dir==='x'?'x':'y')+' = '+num(c,3)+'</td><td>后积<b>先定限</b></td></tr>';
+    rows+='<tr><td><span style="color:'+css('--green')+'">先交</span>（下限）</td><td>'+(dir==='x'?'y':'x')+' = '+num(seg[0],3)+'</td><td><b>先交写下限</b></td></tr>';
+    rows+='<tr><td><span style="color:'+css('--red')+'">后交出</span>（上限）</td><td>'+(dir==='x'?'y':'x')+' = '+num(seg[1],3)+'</td><td><b>后交写上限</b></td></tr>';
+    rows+='<tr><td>内层积分区间长度</td><td>'+num(seg[1]-seg[0],3)+'</td><td>被积函数不含内层变量时，<b>这就是吐出的因子</b></td></tr>';
+    el('t2-v').className='verdict v-ok';
+    el('t2-v').innerHTML='探针与 $D$ 相交 ⇒ 该处 '+(dir==='x'?'$x$':'$y$')+' <b>落在外层积分限之内</b>。';
+  }else{
+    rows+='<tr><td colspan="3"><span class="miss">此处探针与 $D$ 无交点</span></td></tr>';
+    el('t2-v').className='verdict v-no';
+    el('t2-v').innerHTML='探针与 $D$ <b>无交点</b> ⇒ 该处 '+(dir==='x'?'$x$':'$y$')+' <b>不在外层积分限内</b>。<u>让探针有交点的那一段，就是外层的 $[a,b]$。</u>';
+  }
+  el('t2-tab').innerHTML=rows;
+  el('t2-lab').textContent = dir==='x' ? '探针位置 x' : '探针位置 y';
+  el('t2-tv').textContent = (dir==='x'?'x = ':'y = ')+num(c,3);
+  el('t2-say').innerHTML='<b>X 型（先积 $y$）</b>：$'+P.X+'$<br><b>Y 型（先积 $x$）</b>：$'+P.Y+'$<br>📌 '+P.note;
+  if(window.renderMathInElement) renderMathInElement(el('t2'),{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});
+}
+mkbtns(el('t2-pre'),P2,function(k){S2.k=k;draw2();},0);
+[].forEach.call(el('t2').querySelectorAll('[data-dir]'),function(b){
+  b.onclick=function(){[].forEach.call(el('t2').querySelectorAll('[data-dir]'),function(e){e.className='';});
+    b.className='on'; S2.dir=b.getAttribute('data-dir'); draw2();};});
+el('t2-t').addEventListener('input',function(){S2.t=parseFloat(this.value)/1000;draw2();});
+draw2();
+
+/* ================= 模块③ 极坐标定限台 ================= */
+var P3=[
+ {t:'例14.8（极点<b>内</b>）', R:2*Math.pow(2,.25), a:0, b:2*Math.PI,
+  r1:function(){return 0;}, r2:function(){return Math.pow(2,.25);},
+  g:function(r,th){return (r*r*Math.cos(th)*Math.cos(th)+r*r*Math.sin(th)*Math.sin(th)/2)*r;},
+  ans:3*Math.PI/4, ansT:'\\frac{3\\pi}{4}', Dn:'x^2+y^2\\le\\sqrt2,\\ f=x^2+\\frac{y^2}{2}'},
+ {t:'强14.8 法一（<b>边界</b>）', R:3.2, a:Math.PI/4, b:3*Math.PI/4,
+  r1:function(){return 0;}, r2:function(th){return 2*(Math.sin(th)+Math.cos(th));},
+  g:function(r,th){return (r*Math.cos(th)-r*Math.sin(th))*r;},
+  ans:-8/3, ansT:'-\\frac83', Dn:'(x-1)^2+(y-1)^2\\le2,\\ y\\ge x,\\ f=x-y'},
+ {t:'强14.8 法二（平移后）', R:1.7, a:Math.PI/4, b:5*Math.PI/4,
+  r1:function(){return 0;}, r2:function(){return Math.SQRT2;},
+  g:function(r,th){return (r*Math.cos(th)-r*Math.sin(th))*r;},
+  ans:-8/3, ansT:'-\\frac83', Dn:'u^2+v^2\\le2,\\ v\\ge u,\\ f=u-v'},
+ {t:'例14.9（极点<b>外</b>）', R:1.7, a:0, b:Math.PI/3,
+  r1:function(th){return Math.sqrt(1/(1-Math.cos(th)*Math.sin(th)));},
+  r2:function(th){return Math.sqrt(2/(1-Math.cos(th)*Math.sin(th)));},
+  g:function(r,th){return r/(3*Math.pow(r*Math.cos(th),2)+Math.pow(r*Math.sin(th),2));},
+  ans:Math.sqrt(3)*Math.log(2)/24*Math.PI, ansT:'\\frac{\\sqrt3\\ln2}{24}\\pi',
+  Dn:'x^2+y^2-xy\\in[1,2],\\ 0\\le\\theta\\le\\frac\\pi3,\\ f=\\frac{1}{3x^2+y^2}'},
+ {t:'习14.3（<b>边界</b>）', R:1.2, a:0, b:Math.PI/2,
+  r1:function(){return 0;}, r2:function(th){return Math.cos(th);},
+  g:function(r,th){return r;}, ans:Math.PI/8, ansT:'\\frac{\\pi}{8}\\ (\\text{半圆面积})',
+  Dn:'r\\le\\cos\\theta\\ \\Leftrightarrow\\ (x-\\frac12)^2+y^2\\le\\frac14,\\ y\\ge0,\\ f=1'},
+ {t:'习14.4（扇形）', R:1.7, a:Math.PI/4, b:3*Math.PI/4,
+  r1:function(){return 0;}, r2:function(){return Math.SQRT2;},
+  g:function(r){return Math.sin(r*r)*r;}, ans:Math.PI/4*(1-Math.cos(2)), ansT:'\\frac\\pi4(1-\\cos2)',
+  Dn:'|x|\\le y\\le\\sqrt{2-x^2},\\ f=\\sin(x^2+y^2)'},
+ {t:'千41（<b>边界</b>）', R:1.6, a:Math.PI/4, b:Math.PI/2,
+  r1:function(){return 0;}, r2:function(th){return 2/(1+Math.cos(th)*Math.cos(th));},
+  g:function(r,th){return r/Math.sqrt(Math.max(1e-12,1-Math.pow(r*Math.cos(th),2)));},
+  ans:Math.SQRT2/2*Math.PI-Math.SQRT2*Math.atan(Math.SQRT2/2), ansT:'\\frac{\\sqrt2}{2}\\pi-\\sqrt2\\arctan\\frac{\\sqrt2}{2}',
+  Dn:'2x^2+y^2\\le2\\sqrt{x^2+y^2},\\ y\\ge x\\ge0,\\ f=\\frac{1}{\\sqrt{1-x^2}}'}
+];
+var S3={k:0,t:.5};
+function acc3(P,thEnd){
+  var M=600, s=0, dth=(thEnd-P.a)/M; if(dth<=0) return 0;
+  for(var i=0;i<M;i++){
+    var th=P.a+(i+.5)*dth, lo=P.r1(th), hi=P.r2(th), K=160, dr=(hi-lo)/K, si=0;
+    for(var j=0;j<K;j++){ var r=lo+(j+.5)*dr, v=P.g(r,th); if(isFinite(v)) si+=v; }
+    s+=si*dr;
+  }
+  return s*dth;
+}
+function draw3(){
+  var P=P3[S3.k], R=P.R, W={x0:-R,x1:R,y0:-R,y1:R};
+  var A=new Cam(el('t3-c'),W); A.clear(); A.axes();
+  /* 用极坐标扫描填充 */
+  var ctx=A.ctx; ctx.save(); ctx.globalAlpha=.4; ctx.fillStyle=css('--accent');
+  var Mn=300, Kn=120;
+  for(var i=0;i<Mn;i++){
+    var th=P.a+(P.b-P.a)*(i+.5)/Mn, lo=P.r1(th), hi=P.r2(th);
+    for(var j=0;j<Kn;j++){
+      var r=lo+(hi-lo)*(j+.5)/Kn;
+      ctx.fillRect(A.X(r*Math.cos(th))-1.4,A.Y(r*Math.sin(th))-1.4,2.8,2.8);
+    }
+  }
+  ctx.restore();
+  var th0=P.a+(P.b-P.a)*S3.t, lo0=P.r1(th0), hi0=P.r2(th0);
+  A.line(0,0,R*Math.cos(th0),R*Math.sin(th0),css('--purple'),[5,4],1.8);
+  A.dot(lo0*Math.cos(th0),lo0*Math.sin(th0),css('--green'),5);
+  A.dot(hi0*Math.cos(th0),hi0*Math.sin(th0),css('--red'),5);
+  A.dot(0,0,css('--amber'),4);
+  /* 极点位置判定 */
+  var atO=0, Mn2=200;
+  for(var i2=0;i2<Mn2;i2++){ var t2=P.a+(P.b-P.a)*(i2+.5)/Mn2; if(P.r1(t2)<1e-9) atO++; }
+  var span=P.b-P.a;
+  var caseTxt = (atO<Mn2*0.5) ? '① 极点在 $D$ <b>外部</b>' : (span>=2*Math.PI-1e-9 ? '③ 极点在 $D$ <b>内部</b>' : '② 极点在 $D$ <b>边界上</b>');
+  var cur=acc3(P,th0), full=acc3(P,P.b);
+  var rows='<tr><th>项</th><th>当前 θ</th><th>说明</th></tr>';
+  rows+='<tr><td>θ</td><td>'+num(th0,4)+' rad = '+num(th0*180/Math.PI,1)+'°</td><td>α = '+num(P.a,4)+'，β = '+num(P.b,4)+'</td></tr>';
+  rows+='<tr><td><span style="color:'+css('--green')+'">$r_1(\\theta)$ 先交</span></td><td>'+num(lo0,4)+'</td><td>'+(lo0<1e-9?'贴在原点 ⇒ 用 $\\int_0^{r(\\theta)}$':'非零 ⇒ 用 $\\int_{r_1}^{r_2}$')+'</td></tr>';
+  rows+='<tr><td><span style="color:'+css('--red')+'">$r_2(\\theta)$ 后交出</span></td><td>'+num(hi0,4)+'</td><td>'+(Math.abs(hi0-P.r2(P.a))<1e-9&&Math.abs(hi0-P.r2(P.b))<1e-9?'与 θ 无关（常数）⇒ 可分离':'随 θ 变化')+'</td></tr>';
+  rows+='<tr><td>已累积 $\\int_\\alpha^{\\theta}\\!\\!\\int_{r_1}^{r_2}f\\,r\\,\\mathrm dr\\mathrm d\\theta$</td><td>'+num(cur,5)+'</td><td>扫到 β 时 = '+num(full,5)+'</td></tr>';
+  rows+='<tr><td>书上答案</td><td class="'+(Math.abs(full-P.ans)<3e-3*Math.max(1,Math.abs(P.ans))?'hit':'miss')+'">'+num(P.ans,5)+'</td><td>$'+P.ansT+'$</td></tr>';
+  el('t3-tab').innerHTML=rows;
+  el('t3-tv').textContent='θ = '+num(th0*180/Math.PI,1)+'°';
+  el('t3-say').innerHTML='当前：$D:\\ '+P.Dn+'$';
+  el('t3-v').className='verdict '+(Math.abs(full-P.ans)<3e-3*Math.max(1,Math.abs(P.ans))?'v-ok':'v-inf');
+  el('t3-v').innerHTML=caseTxt+' ⇒ 用<b>第 '+(caseTxt.indexOf('外')>0?'①':caseTxt.indexOf('内')>0?'③':'②')+' 条公式</b>。'+
+    '　数值累积到 β 得 '+num(full,5)+'，与书上答案 '+num(P.ans,5)+' '+(Math.abs(full-P.ans)<3e-3*Math.max(1,Math.abs(P.ans))?'<b>吻合 ✅</b>':'略有网格误差');
+  if(window.renderMathInElement) renderMathInElement(el('t3'),{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});
+}
+mkbtns(el('t3-pre'),P3,function(k){S3.k=k;draw3();},0);
+el('t3-t').addEventListener('input',function(){S3.t=parseFloat(this.value)/1000;draw3();});
+draw3();
+
+/* ================= 模块④ 区域大观图鉴 ================= */
+var G4=[
+ {g:1,n:'直2',  s:'x+y\\le1,\\ x\\ge0,\\ y\\ge0', W:1.3, D:function(x,y){return x>=0&&y>=0&&x+y<=1;}, src:'例14.15'},
+ {g:1,n:'直4',  s:'0\\le x\\le2,\\ x\\le y\\le\\sqrt3 x', W:2.4, D:function(x,y){return x>=0&&x<=2&&y>=x&&y<=Math.sqrt(3)*x;}, src:'楔形'},
+ {g:1,n:'直6',  s:'1\\le x+y\\le2,\\ x\\ge0,\\ y\\ge0', W:2.3, D:function(x,y){return x>=0&&y>=0&&x+y>=1&&x+y<=2;}, src:'梯形'},
+ {g:1,n:'直13', s:'0\\le x\\le1,\\ x\\le y\\le1+x', W:2.2, D:function(x,y){return x>=0&&x<=1&&y>=x&&y<=1+x;}, src:'习14.5'},
+ {g:1,n:'直14', s:'x\\le3y,\\ y\\le3x,\\ x+y\\le8', W:7, D:function(x,y){return x<=3*y&&y<=3*x&&x+y<=8&&x>=0&&y>=0;}, src:'三角形'},
+ {g:1,n:'直15', s:'|x|+|y|\\le1', W:1.3, D:function(x,y){return Math.abs(x)+Math.abs(y)<=1;}, src:'千26 · 菱形'},
+ {g:2,n:'曲3',  s:'0\\le x,y\\le1,\\ (x-1)^2+(y-1)^2\\le1', W:1.25, D:function(x,y){return x>=0&&x<=1&&y>=0&&y<=1&&(x-1)*(x-1)+(y-1)*(y-1)<=1;}, src:'正方形挖角'},
+ {g:2,n:'曲5',  s:'1\\le x^2+y^2\\le\\mathrm e^2,\\ x,y\\ge0', W:3, D:function(x,y){var t=x*x+y*y;return x>=0&&y>=0&&t>=1&&t<=Math.E*Math.E;}, src:'例14.10 · 圆环'},
+ {g:2,n:'曲6',  s:'y\\ge-x,\\ x^2+y^2\\le4,\\ x^2+y^2\\ge2x,\\ y\\ge0', W:2.4, Win:{x0:-2.3,x1:2.4,y0:-.35,y1:2.4}, D:function(x,y){var t=x*x+y*y;return y>=-x&&t<=4&&t>=2*x&&y>=0;}, src:'月牙'},
+ {g:2,n:'曲12', s:'(x^2+y^2)^2\\le2xy,\\ x,y\\ge0', W:1.1, D:function(x,y){var t=x*x+y*y;return x>=0&&y>=0&&t*t<=2*x*y;}, src:'双纽线一叶'},
+ {g:2,n:'曲17', s:'y\\le\\sqrt{1-x^2},\\ y\\ge1-\\sqrt{1-x^2}', W:1.2, D:function(x,y){return x*x<=1&&y<=Math.sqrt(1-x*x)&&y>=1-Math.sqrt(1-x*x);}, src:'透镜'},
+ {g:2,n:'曲18', s:'x^2+y^2\\le4,\\ 2x-x^2-y^2\\le0', W:2.3, D:function(x,y){var t=x*x+y*y;return t<=4&&t>=2*x;}, src:'大圆挖小圆'},
+ {g:2,n:'曲19', s:'(x^2+y^2)^2\\le2xy', W:1.1, D:function(x,y){var t=x*x+y*y;return t*t<=2*x*y;}, src:'双纽线两叶'},
+ {g:2,n:'曲22', s:'1\\le x^2+y^2\\le2x,\\ y\\ge0', W:2.2, D:function(x,y){var t=x*x+y*y;return t>=1&&t<=2*x&&y>=0;}, src:'月牙'},
+ {g:2,n:'曲23', s:'(x^2+y^2)^2\\le x^2-y^2,\\ x\\ge0', W:1.15, D:function(x,y){var t=x*x+y*y;return x>=0&&t*t<=x*x-y*y;}, src:'双纽线右叶'},
+ {g:2,n:'曲42', s:'2\\le2x^2+y^2\\le4,\\ x,y\\ge0', W:2.2, D:function(x,y){var t=2*x*x+y*y;return x>=0&&y>=0&&t>=2&&t<=4;}, src:'习14.12 · 椭圆环'},
+ {g:2,n:'曲43', s:'x^2+y^2+xy\\le1', W:1.5, D:function(x,y){return x*x+y*y+x*y<=1;}, src:'例14.9 · 斜椭圆'},
+ {g:2,n:'曲44', s:'0\\le x,y\\le2,\\ y\\le\\frac1x', W:2.3, D:function(x,y){return x>=0&&x<=2&&y>=0&&y<=2&&(x<1e-9||y<=1/x);}, src:'千18 · 双曲线截'},
+ {g:3,n:'极2',  s:'0\\le r\\le\\sec\\theta,\\ 0\\le\\theta\\le\\frac\\pi4', W:1.25, D:function(x,y){return x<=1&&y>=0&&y<=x;}, src:'强14.6 / 习14.10'},
+ {g:3,n:'极6',  s:'2\\le r\\le2(1+\\cos\\theta),\\ |\\theta|\\le\\frac\\pi2', W:4.4, Win:{x0:-.6,x1:4.4,y0:-2.5,y1:2.5}, D:function(x,y){var r=Math.hypot(x,y),th=Math.atan2(y,x);return Math.abs(th)<=Math.PI/2&&r>=2&&r<=2*(1+Math.cos(th));}, src:'心形线'},
+ {g:3,n:'极7',  s:'0\\le r\\le\\sqrt{\\sin2\\theta},\\ 0\\le\\theta\\le\\frac\\pi2', W:1.1, D:function(x,y){var r=Math.hypot(x,y),th=Math.atan2(y,x);return th>=0&&th<=Math.PI/2&&r*r<=Math.sin(2*th);}, src:'＝曲12'},
+ {g:3,n:'极10', s:'0\\le r\\le2(\\sin\\theta{+}\\cos\\theta),\\ \\frac\\pi4\\le\\theta\\le\\frac{3\\pi}4', W:3, D:function(x,y){return (x-1)*(x-1)+(y-1)*(y-1)<=2&&y>=x;}, src:'强14.8'},
+ {g:3,n:'极15', s:'1\\le r\\le2,\\ 0\\le\\theta\\le\\frac\\pi3', W:2.2, D:function(x,y){var r=Math.hypot(x,y),th=Math.atan2(y,x);return r>=1&&r<=2&&th>=0&&th<=Math.PI/3;}, src:'含参扇环'},
+ {g:4,n:'参5c', s:'x^2+(y-1)^2\\le1,\\ \\frac23x^2+\\frac29y^2\\le a^2\\ (a=1.2)', W:3.4, Win:{x0:-1.5,x1:1.5,y0:-.3,y1:2.6}, D:function(x,y){var a=1.2;return x*x+(y-1)*(y-1)<=1&&(2/3)*x*x+(2/9)*y*y<=a*a;}, src:'★三情况之 (c)'}
+];
+var S4={grp:0, open:{}};
+function draw4(){
+  var box=el('t4-grid'); box.innerHTML='';
+  var list=G4.filter(function(g){return S4.grp===0||g.g===S4.grp;});
+  list.forEach(function(P,i){
+    var idx=G4.indexOf(P);
+    var d=document.createElement('div');
+    d.style.cssText='background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px;cursor:pointer;text-align:center';
+    var cv=document.createElement('canvas'); cv.width=150; cv.height=150;
+    cv.style.cssText='display:block;margin:0 auto;border-radius:6px;background:var(--bg)';
+    d.appendChild(cv);
+    var cap=document.createElement('div');
+    cap.style.cssText='font-size:.72rem;color:var(--muted);margin-top:5px;line-height:1.6';
+    cap.innerHTML='<span class="chip '+(P.g===1?'c-b':P.g===2?'c-g':P.g===3?'c-a':'c-p')+'">'+P.n+'</span><br>$'+P.s+'$<br><span style="opacity:.75">'+P.src+'</span>';
+    d.appendChild(cap);
+    var w=P.W, W=P.Win||{x0:-w*0.18,x1:w,y0:-w*0.18,y1:w};
+    if(!P.Win&&(P.n==='曲19'||P.n==='直15'||P.n==='曲43'||P.n==='曲18'||P.n==='曲17'||P.n==='曲23')) W={x0:-w,x1:w,y0:-w,y1:w};
+    var C=new Cam(cv,W);
+    function render(){
+      C.clear(); C.axes();
+      if(S4.open[idx]) C.fill(P.D,css('--accent'),.45,2);
+      else { var c=cv.getContext('2d'); c.save(); c.fillStyle=css('--muted'); c.globalAlpha=.13;
+             c.fillRect(0,0,cv.width,cv.height); c.globalAlpha=.75; c.font='13px sans-serif'; c.textAlign='center';
+             c.fillText('点击揭晓', cv.width/2, cv.height/2+4); c.restore(); }
+    }
+    d.onclick=function(){ S4.open[idx]=!S4.open[idx]; render(); updCnt(); };
+    render();
+    box.appendChild(d);
+  });
+  updCnt();
+  if(window.renderMathInElement) renderMathInElement(box,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});
+}
+function updCnt(){
+  var n=0; for(var k in S4.open) if(S4.open[k]) n++;
+  el('t4-cnt').textContent='已揭晓 '+n+' / '+G4.length;
+}
+mkbtns(el('t4-grp'),[{t:'全部 24 幅'},{t:'① 直线边界型'},{t:'② 曲线边界型'},{t:'③ 极坐标型'},{t:'④ 参数型'}],
+  function(k){S4.grp=k;draw4();},0);
+el('t4-all').onclick=function(){ G4.forEach(function(_,i){S4.open[i]=true;}); draw4(); };
+el('t4-hide').onclick=function(){ S4.open={}; draw4(); };
+draw4();
+
+})();
+</script>
+
+
+
+
+
+
+
+</div>
+</body>
+</html>
