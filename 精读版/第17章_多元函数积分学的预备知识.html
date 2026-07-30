@@ -1,0 +1,2065 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>精读版 · 高数 第17章 多元函数积分学的预备知识</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],ignoredClasses:['nokatex']})"></script>
+<link rel="stylesheet" href="style.css">
+<style>
+/* ===== 本章专属：曲面识别器 / 梯度罗盘 / 三胞胎求解器 / 生成器 / 梯度线 ===== */
+.tool{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:20px 0}
+.tool h4{margin:0 0 4px;font-size:1rem;color:var(--accent)}
+.tool .hint{color:var(--muted);font-size:.82rem;margin-bottom:12px;line-height:1.7}
+.ctl{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0}
+.ctl button{font:inherit;font-size:.8rem;padding:4px 12px;border-radius:8px;cursor:pointer;
+  border:1px solid var(--line);background:var(--card);color:var(--muted)}
+.ctl button.on{background:var(--accent-soft);color:var(--accent);border-color:var(--accent);font-weight:700}
+.ctl button:hover{filter:brightness(.96)}
+.ctl label{font-size:.8rem;color:var(--muted);min-width:8.5em}
+.ctl input[type=range]{flex:1 1 150px;min-width:120px;accent-color:var(--accent)}
+.ctl input[type=number]{font:inherit;font-size:.8rem;width:5.2em;padding:3px 6px;border-radius:7px;
+  border:1px solid var(--line);background:var(--bg);color:var(--fg)}
+.ctl .val{font-family:var(--mono);font-size:.78rem;color:var(--accent);min-width:6.5em;text-align:right}
+.scene{background:var(--bg);border:1px solid var(--line);border-radius:10px;margin:10px 0;overflow-x:auto}
+.scene svg{display:block;width:100%;height:auto;min-width:440px}
+.say{background:var(--accent-soft);border-radius:8px;padding:9px 13px;margin:10px 0;
+  font-size:.86rem;color:var(--accent);line-height:1.75;min-height:2em}
+.verdict{font-size:.88rem;font-weight:700;border-radius:8px;padding:7px 13px;margin:10px 0;display:block;line-height:1.7}
+.v-ok{background:var(--green-soft);color:var(--green)}
+.v-no{background:var(--red-soft);color:var(--red)}
+.v-inf{background:var(--amber-soft);color:var(--amber)}
+.dqwrap{overflow-x:auto;margin:6px 0}
+.dq{width:100%;min-width:0;font-size:.8rem;border-collapse:collapse}
+.dq th,.dq td{padding:4px 8px;font-family:var(--mono);text-align:right;white-space:nowrap;border-bottom:1px solid var(--line)}
+.dq th:first-child,.dq td:first-child{text-align:left;font-family:var(--sans);white-space:normal}
+.dq td.hit{color:var(--green);font-weight:700}
+.dq td.miss{color:var(--red);font-weight:700}
+.dq td.dim{color:var(--muted)}
+.chip{display:inline-block;font-size:.72rem;border-radius:5px;padding:1px 7px;margin-right:6px}
+.c-b{background:var(--accent-soft);color:var(--accent)}
+.c-g{background:var(--green-soft);color:var(--green)}
+.c-r{background:var(--red-soft);color:var(--red)}
+.c-a{background:var(--amber-soft);color:var(--amber)}
+.c-p{background:var(--purple-soft);color:var(--purple)}
+.legend2{font-size:.78rem;color:var(--muted);line-height:1.7;margin-top:6px}
+/* 总图 */
+.tenline{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 12px;margin:16px 0}
+.tenline svg{display:block;min-width:660px}
+/* 支线条 */
+.gates{display:flex;flex-direction:column;gap:8px;margin:14px 0}
+.gates > div{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--accent);
+  border-radius:0 10px 10px 0;padding:9px 14px;font-size:.86rem;line-height:1.8}
+.gates > div > b.g{display:inline-block;font-size:.72rem;font-weight:700;color:#fff;background:var(--accent);
+  border-radius:5px;padding:1px 8px;margin-right:8px;vertical-align:2px}
+/* 三步条 */
+.steps3{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.steps3 div{flex:1 1 190px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 13px;font-size:.85rem;line-height:1.75}
+.steps3 div b{color:var(--accent);display:block;margin-bottom:3px}
+/* 公式速查小卡 */
+.fcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,230px),1fr));gap:9px;margin:14px 0}
+.fcards > div{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:9px 12px;font-size:.84rem;line-height:1.8}
+.fcards > div > b:first-child{color:var(--accent);font-size:.74rem;display:block;letter-spacing:.05em;margin-bottom:2px}
+/* 两栏对照 */
+.duo{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:10px;margin:14px 0}
+.duo > div{border-radius:10px;padding:11px 14px;font-size:.86rem;line-height:1.8}
+.duo .dA{background:var(--accent-soft);border:1px solid var(--accent)}
+.duo .dB{background:var(--green-soft);border:1px solid var(--green)}
+.duo .dR{background:var(--red-soft);border:1px solid var(--red)}
+.duo b.h{display:block;font-size:.76rem;letter-spacing:.06em;margin-bottom:4px}
+.duo .dA b.h{color:var(--accent)} .duo .dB b.h{color:var(--green)} .duo .dR b.h{color:var(--red)}
+/* 口诀条 */
+.mantra{background:var(--accent);color:#fff;border-radius:12px;padding:13px 18px;margin:16px 0;
+  font-family:var(--serif);font-size:1.06rem;letter-spacing:.04em;text-align:center;line-height:2}
+.mantra small{display:block;font-family:var(--sans);font-size:.76rem;opacity:.86;letter-spacing:0;margin-top:4px}
+/* 思想馆 */
+.lore{background:var(--purple-soft);border-left:4px solid var(--purple);border-radius:0 10px 10px 0;
+  padding:12px 16px;margin:16px 0;font-size:.87rem;line-height:1.9;clear:both}
+.lore .tag{display:block;font-size:.74rem;color:var(--purple);letter-spacing:.06em;font-weight:700;margin-bottom:5px}
+/* 本章新增：⚠️ 强警示块（比 .trap 更醒目，用于"两个都会写反"这类必背对照） */
+.warn{background:var(--amber-soft);border:2px solid var(--amber);border-radius:12px;
+  padding:13px 17px;margin:18px 0;clear:both}
+.warn .tag{display:block;font-size:.76rem;color:var(--amber);letter-spacing:.06em;font-weight:700;margin-bottom:6px}
+/* 本章新增：1000题 来源标签（style.css 只有 L-base / L-str） */
+.L-1k{background:var(--purple-soft);color:var(--purple)}
+/* 判定色 */
+td.bad{color:var(--red);font-weight:700}
+td.good{color:var(--green);font-weight:700}
+td.mid{color:var(--amber);font-weight:700}
+/* 表格横滚 */
+.tw{overflow-x:auto;margin:14px 0}
+.tw table{min-width:520px}
+table.dense{font-size:.84rem;min-width:440px}
+table.dense td{padding:5px 9px}
+@media (max-width:560px){ .ctl{gap:6px} .ctl label{min-width:100%} .dq{font-size:.72rem} .mantra{font-size:.94rem} }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <a class="back" href="../index.html">← 返回数学复盘中心</a>
+
+  <header>
+    <h1>第 17 章 · 多元函数积分学的预备知识<span style="font-size:.5em;color:var(--muted);font-weight:400">（仅数学一）</span></h1>
+    <div class="sub">
+      张宇《基础30讲》第 17 讲（书页 <b>464–487</b>，24 页）＋《高数18讲》第 17 讲（书页 <b>237–243</b>，7 页），共 <b>31 页</b>逐页转录——
+      <b>全书倒数第三短的章</b>，而《高数18讲》第 17 讲仅 <b>7 页 / 7 道例题</b>，是<b>全书最薄的一讲</b>。<br>
+      讲义数一实占 <b>30 题</b>（强化 7 例 + 基础 13 例 + 10 习），题量明显不足 ⇒ <b>动用《1000题》补 29 题</b>（基础篇 14 + 强化篇 15），
+      去重后<b>全章 53 题全收</b>。<br>
+      本章<b>扉页写明只考选择题、填空题</b>——但它是第 18 讲<b>三重积分定限、曲线积分定向、曲面积分定侧</b>的全部前提，
+      <b>考法轻、地位重</b>。全部结论经 <b>sympy / numpy 独立复算</b>（脚本见页末说明）。
+    </div>
+  </header>
+
+  <div class="legend">
+    <b>怎么读这一页</b>（大题一律「想 → 写 → 校」三层，<b>顺序固定，别跳着看</b>）：<br>
+    <span class="swatch" style="background:var(--purple)"></span><b>💭 思路</b>：动手<b>前</b>看／卡壳时看。只讲"看到什么该想到什么"，不含结果。<b>看完就合上页面自己写，别直接翻卷面。</b><br>
+    <span class="swatch" style="background:var(--accent)"></span><b>✍️ 考场卷面</b>：写完<b>对照</b>。只有考场上真要落笔的字，<span style="color:var(--green);font-weight:700">⛳</span> 标采分点。<br>
+    <span class="swatch" style="background:var(--muted)"></span><b>📌 批注</b>：对照完<b>校对</b>。定理边界、审题陷阱、心算技巧、跨章联系——这些考场上<b>不要</b>落笔。<br>
+    <span class="swatch" style="background:var(--amber)"></span><b>必记</b>　<span class="swatch" style="background:var(--red)"></span><b>陷阱</b>　<span class="swatch" style="background:var(--blue)"></span><b>补讲</b>（书上没写但该知道的）　<span class="swatch" style="background:var(--green)"></span><b>强化专属</b>　<span class="swatch" style="background:var(--purple)"></span><b>思想馆</b><br>
+    <span class="layer L-base">基</span>＝基础30讲　<span class="layer L-str">强</span>＝高数18讲　<span class="layer L-1k">千</span>＝1000题　右上角 <span class="pg" style="float:none">P.481</span> 是书页码。<br>
+    <b>选择填空题不写卷面层</b>——考场上本就不写过程。本章公式题极多（切平面、方向导数、旋度多是三五行的代入题），
+    这些保持「答案 → 分析 → 要害」的教学式排版；<b><u>真正要写过程的解答／证明／最值题写满三层</u></b>。<br>
+    <b>讲义内部有 6 处同题重复、1000题与讲义有 2 处一字不差的重题</b>（见<a href="#end">页末落位索引</a>），本页<b>已合并成一张卡</b>，不重复计数。
+  </div>
+
+  <nav class="toc">
+    <a href="#s0">定位：为第18讲铺的五块砖</a>
+    <a href="#s1">一、向量代数（三种乘法）</a>
+    <a href="#s2">二、空间平面与直线 ⚠️</a>
+    <a href="#s3">三、空间曲面 🎲</a>
+    <a href="#s4">四、空间曲线与投影 🔭</a>
+    <a href="#s5">五、切线·法平面·切平面·法线</a>
+    <a href="#s6">六、方向导数 ⚠️⚠️</a>
+    <a href="#s7">七、梯度 🧭</a>
+    <a href="#s8">八、散度与旋度</a>
+    <a href="#s9">九、综合大题（四章串联）</a>
+    <a href="#end">收官 + 落位索引</a>
+  </nav>
+
+  <div class="dolinks">
+    <div class="t">去做题（分章 PDF，本地打开）</div>
+    <a href="../../张宇系列_分章易识别版/高等数学/17_多元函数积分学的预备知识/高数_第17章_基础30讲.pdf">基础30讲 第17讲</a>
+    <a href="../../张宇系列_分章易识别版/高等数学/17_多元函数积分学的预备知识/高数_第17章_强化18讲.pdf">高数18讲 第17讲</a>
+    <a href="../../张宇系列_分章易识别版/高等数学/17_多元函数积分学的预备知识/高数_第17章_1000题_基础_题目.pdf">1000题·基础篇 题目</a>
+    <a href="../../张宇系列_分章易识别版/高等数学/17_多元函数积分学的预备知识/高数_第17章_1000题_强化_题目.pdf">1000题·强化篇 题目</a>
+    <div class="note">⚠️ <b>本章分章 PDF 有三处切割问题，做题前先知道</b>：<br>
+    ① <b>两个「解析」PDF 都切错了章</b>——切出来的 4 页 / 6 页<b>全是第 16 章无穷级数</b>的解析，本页答案是回整本
+    <code>27张宇1000题数一-解析册</code> 取的（基础篇 ch17 = 书页 112–115，强化篇 ch17 = 书页 367–372，两者都是 <b>PDF 页 = 书页 + 6</b>）。<br>
+    ② <b>「1000题·强化篇 题目」的第 1 页也是第 16 章的尾巴</b>（书页 126），第 17 章从第 2 页起。<br>
+    ③ 两本<b>讲义</b>的边界干净（强化 p.243、基础 p.487 都正常收尾），可以放心用。</div>
+  </div>
+
+
+  <!-- ================= s0 定位 ================= -->
+  <h2 id="s0"><span class="idx">定位</span>这一章不是"新知识"，是<u>给第 18 讲铺的五块砖</u></h2>
+
+  <div class="key"><span class="tag">必记 · 先看清这一章在整本书里的位置</span>
+    <p>强化讲把本讲的目标写得很直白——<b>O（盯住目标）＝「继续研究多元函数在一点的性质」</b>，
+    也就是说它<b>接的是第 13 讲多元函数微分学</b>，<b>供的是第 18 讲多元函数积分学</b>。五个分支全部标着
+    <span class="chip c-b">D₁ 常规操作</span> 或 <span class="chip c-b">D₂₂ 转换等价表述</span>，<b>一个 D₃ 都没有</b>：</p>
+    <div class="tenline">
+      <svg viewBox="0 0 680 250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="三向解题法五分支总图">
+        <rect x="210" y="10" width="260" height="42" rx="9" fill="var(--accent-soft)" stroke="var(--accent)"/>
+        <text x="340" y="30" text-anchor="middle" font-size="13" font-weight="700" fill="var(--accent)">继续研究多元函数在一点的性质</text>
+        <text x="340" y="46" text-anchor="middle" font-size="11" fill="var(--accent)">O（盯住目标）· 承第13讲 · 供第18讲</text>
+        <path d="M340 52 L340 76 M80 76 L600 76 M80 76 L80 96 M210 76 L210 96 M340 76 L340 96 M470 76 L470 96 M600 76 L600 96"
+              stroke="var(--line)" fill="none" stroke-width="1.4"/>
+        <g font-size="11.5" text-anchor="middle">
+          <rect x="14" y="96" width="132" height="52" rx="8" fill="var(--card)" stroke="var(--line)"/>
+          <text x="80" y="116" fill="var(--fg)" font-weight="700">方向导数</text>
+          <text x="80" y="133" fill="var(--muted)" font-size="10">D₁ ＋ D₂₂</text>
+          <rect x="144" y="96" width="132" height="52" rx="8" fill="var(--card)" stroke="var(--line)"/>
+          <text x="210" y="116" fill="var(--fg)" font-weight="700">梯度的概念</text>
+          <text x="210" y="133" fill="var(--muted)" font-size="10">D₂₂ 转换等价表述</text>
+          <rect x="274" y="96" width="132" height="52" rx="8" fill="var(--card)" stroke="var(--line)"/>
+          <text x="340" y="112" fill="var(--fg)" font-weight="700">多元函数的</text>
+          <text x="340" y="127" fill="var(--fg)" font-weight="700">泰勒多项式</text>
+          <text x="340" y="141" fill="var(--muted)" font-size="10">D₁ 常规操作</text>
+          <rect x="404" y="96" width="132" height="52" rx="8" fill="var(--card)" stroke="var(--line)"/>
+          <text x="470" y="112" fill="var(--fg)" font-weight="700">空间曲线的</text>
+          <text x="470" y="127" fill="var(--fg)" font-weight="700">切线与法平面</text>
+          <text x="470" y="141" fill="var(--muted)" font-size="10">D₁ · 眉批「考得不多」</text>
+          <rect x="534" y="96" width="132" height="52" rx="8" fill="var(--card)" stroke="var(--line)"/>
+          <text x="600" y="112" fill="var(--fg)" font-weight="700">空间曲面的</text>
+          <text x="600" y="127" fill="var(--fg)" font-weight="700">切平面与法线</text>
+          <text x="600" y="141" fill="var(--muted)" font-size="10">D₁ · 眉批「重中之重 ★★★」</text>
+        </g>
+        <rect x="14" y="172" width="652" height="64" rx="9" fill="var(--amber-soft)" stroke="var(--amber)"/>
+        <text x="28" y="192" font-size="11.5" fill="var(--amber)" font-weight="700">⚠️ 强化讲只有这五块。基础讲另有四块，全是强化讲一个字没提的：</text>
+        <text x="28" y="211" font-size="11.5" fill="var(--amber)">向量代数 · 空间平面与直线（含平面束） · 二次曲面与旋转曲面 · 场论初步（散度、旋度）</text>
+        <text x="28" y="229" font-size="11.5" fill="var(--amber)" font-weight="700">⇒ 本页以「基础讲」为骨架，强化讲的 7 题作为考场化补充。</text>
+      </svg>
+    </div>
+  </div>
+
+  <div class="mantra">向量给方向 · 方程给形状 · 切一刀给线性 · 梯度给最快
+    <small>四句话就是本章的全部内容，也是第 18 讲每一道题开头都要用的四件工具</small></div>
+
+  <div class="tw">
+  <table class="dense">
+    <thead><tr><th>本章教的</th><th>第 18 讲拿它干什么</th></tr></thead>
+    <tbody>
+      <tr><td>二次曲面识别、柱面、旋转曲面</td><td><b>三重积分定限</b>——画不出图就定不了限</td></tr>
+      <tr><td>空间曲线在坐标面上的<b>投影</b></td><td><b>曲面积分投影法</b>；三重积分"先二后一"的底面区域</td></tr>
+      <tr><td>曲线的<b>切向量（小参数指向大参数）</b></td><td><b>第二类曲线积分定向</b></td></tr>
+      <tr><td>曲面的<b>法向量（向上 / 向下两种写法）</b></td><td><b>第二类曲面积分定侧</b>、两类曲面积分互化</td></tr>
+      <tr><td><b>方向余弦</b> $(\cos\alpha,\cos\beta,\cos\gamma)$</td><td>两类曲线积分互化、两类曲面积分互化里的那三个余弦</td></tr>
+      <tr><td><b>散度、旋度</b></td><td><b>高斯公式、斯托克斯公式</b>的被积函数就是它们</td></tr>
+    </tbody>
+  </table>
+  </div>
+
+
+  <!-- ================= s1 向量代数 ================= -->
+  <h2 id="s1"><span class="idx">一</span>向量代数：<u>三种乘法，各管一件事</u></h2>
+
+  <div class="key"><span class="tag">必记 · 向量的自由性</span>
+    <p>两个向量，只要<b>大小相等、方向相同</b>，它们就是相等的向量，<b>与它们在空间中的位置无关</b>——这称为<b>向量的自由性</b>。
+    表达形式 $\boldsymbol a=(a_x,a_y,a_z)=a_x\boldsymbol i+a_y\boldsymbol j+a_z\boldsymbol k$。</p>
+    <p class="legend2">📌 书的旁批：<b>高等数学中手写要打箭头 $\vec a$，线性代数中不需要</b>（线代写成列向量）。
+    这不是废话——本章的 $\boldsymbol n$、$\boldsymbol\tau$ 在卷面上不打箭头会被当成数量，是<b>会扣分的书写细节</b>。</p>
+  </div>
+
+  <div class="fcards">
+    <div><b>① 数量积（内积、点积）· 结果是数</b>
+      $\boldsymbol a\cdot\boldsymbol b=a_xb_x+a_yb_y+a_zb_z=|\boldsymbol a||\boldsymbol b|\cos\theta$</div>
+    <div><b>② 反求夹角</b>
+      $\cos\theta=\dfrac{\boldsymbol a\cdot\boldsymbol b}{|\boldsymbol a||\boldsymbol b|}$，$\theta$ 是 $\boldsymbol a,\boldsymbol b$ 的夹角</div>
+    <div><b>③ 垂直方程（最常用）</b>
+      $\boldsymbol a\perp\boldsymbol b\iff a_xb_x+a_yb_y+a_zb_z=0$</div>
+    <div><b>④ 投影</b>
+      $\operatorname{Prj}_{\boldsymbol b}\boldsymbol a=\dfrac{\boldsymbol a\cdot\boldsymbol b}{|\boldsymbol b|}=|\boldsymbol a|\cos\theta$</div>
+    <div><b>⑤ 向量积（外积、叉积）· 结果是向量</b>
+      $\boldsymbol a\times\boldsymbol b=\begin{vmatrix}\boldsymbol i&\boldsymbol j&\boldsymbol k\\a_x&a_y&a_z\\b_x&b_y&b_z\end{vmatrix}$，
+      $|\boldsymbol a\times\boldsymbol b|=|\boldsymbol a||\boldsymbol b|\sin\theta$ ＝ <b>平行四边形面积</b></div>
+    <div><b>⑥ 平行方程</b>
+      $\boldsymbol a\parallel\boldsymbol b\iff\dfrac{a_x}{b_x}=\dfrac{a_y}{b_y}=\dfrac{a_z}{b_z}$（含反平行 $\theta=\pi$）</div>
+    <div><b>⑦ 混合积 ＝ 有向体积</b>
+      $[\boldsymbol a\boldsymbol b\boldsymbol c]=(\boldsymbol a\times\boldsymbol b)\cdot\boldsymbol c=\begin{vmatrix}a_x&a_y&a_z\\b_x&b_y&b_z\\c_x&c_y&c_z\end{vmatrix}$
+      ＝ 平行六面体的<b>有向</b>体积</div>
+    <div><b>⑧ 共面判据</b>
+      $\begin{vmatrix}a_x&a_y&a_z\\b_x&b_y&b_z\\c_x&c_y&c_z\end{vmatrix}=0\iff$ <b>三向量共面</b></div>
+  </div>
+
+  <div class="key"><span class="tag">必记 · 方向角与方向余弦（第 18 讲两类积分互化的那三个余弦）</span>
+    <p>非零向量 $\boldsymbol a$ 与 $x,y,z$ 轴<b>正向</b>的夹角 $\alpha,\beta,\gamma$ 称为<b>方向角</b>，
+    $\cos\alpha=\dfrac{a_x}{|\boldsymbol a|}$，$\cos\beta=\dfrac{a_y}{|\boldsymbol a|}$，$\cos\gamma=\dfrac{a_z}{|\boldsymbol a|}$ 称为<b>方向余弦</b>。</p>
+    $$\boldsymbol a^\circ=\frac{\boldsymbol a}{|\boldsymbol a|}=(\cos\alpha,\cos\beta,\cos\gamma),\qquad
+      \boxed{\cos^2\alpha+\cos^2\beta+\cos^2\gamma=1}$$
+    <p class="legend2">📌 书给的算例：$\boldsymbol a=(1,1,2)$，$|\boldsymbol a|=\sqrt6$，
+    $\boldsymbol a^\circ=\left(\frac1{\sqrt6},\frac1{\sqrt6},\frac2{\sqrt6}\right)$，三个分量<b>依次就是</b> $\cos\alpha,\cos\beta,\cos\gamma$。<br>
+    ⭐ <b>"单位向量的三个分量 ＝ 三个方向余弦"这句话，本章后面每一道方向导数题都要用一次。</b></p>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">千基 17.4</span><a class="pg" href="#">习17.4</a>
+      设 $|\boldsymbol a+\boldsymbol b|=|\boldsymbol a-\boldsymbol b|$，且 $\boldsymbol a=(3,-5,8)$，$\boldsymbol b=(-1,1,z)$，则 $z=$ ______。</div>
+    <div class="s">
+      <span class="lab">答</span>$z=1$。
+      <p><b>书上的算法（硬算）：</b>$\boldsymbol a+\boldsymbol b=(2,-4,8+z)$，$\boldsymbol a-\boldsymbol b=(4,-6,8-z)$，
+      由 $\sqrt{20+(8+z)^2}=\sqrt{52+(8-z)^2}$ 解得 $z=1$。</p>
+      <div class="notekeep"><span class="nh">📌 批注 · 这题有一行的秒杀法，考场上别硬算</span>
+        <b>$|\boldsymbol a+\boldsymbol b|=|\boldsymbol a-\boldsymbol b|\iff\boldsymbol a\cdot\boldsymbol b=0$</b>
+        （两式平方相减得 $4\boldsymbol a\cdot\boldsymbol b=0$；几何上就是"<b>平行四边形两条对角线相等 ⟺ 它是矩形</b>"）。<br>
+        于是 $3\cdot(-1)+(-5)\cdot1+8z=0\Rightarrow-8+8z=0\Rightarrow z=1$。<b>一行出答案。</b><br>
+        <span class="dock">配套记住另一条：$|\boldsymbol a+\boldsymbol b|^2+|\boldsymbol a-\boldsymbol b|^2=2\left(|\boldsymbol a|^2+|\boldsymbol b|^2\right)$（平行四边形恒等式），
+        这两条在向量小题里覆盖了绝大多数"模的等式"。</span>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ================= s2 空间平面与直线 ================= -->
+  <h2 id="s2"><span class="idx">二</span>空间平面与直线：<u>定平面靠法向量，定直线靠方向向量</u></h2>
+
+  <div class="key"><span class="tag">必记 · 平面的四式 + 平面束</span>
+    <p>假设平面的法向量 $\boldsymbol n=(A,B,C)$。<b>定平面的二要素 ＝ 法向量 $\boldsymbol n$ ＋ 过一点 $P_0$。</b></p>
+    <div class="tw">
+    <table class="dense">
+      <tbody>
+        <tr><td><b>① 一般式</b></td><td>$Ax+By+Cz+D=0$（三元一次方程）</td></tr>
+        <tr><td><b>② 点法式</b></td><td>$A(x-x_0)+B(y-y_0)+C(z-z_0)=0$</td></tr>
+        <tr><td><b>③ 三点式</b><span class="chip c-a">不常用</span></td><td>$\begin{vmatrix}x-x_1&y-y_1&z-z_1\\x-x_2&y-y_2&z-z_2\\x-x_3&y-y_3&z-z_3\end{vmatrix}=0$（过不共线三点）</td></tr>
+        <tr><td><b>④ 截距式</b></td><td>$\dfrac xa+\dfrac yb+\dfrac zc=1$（过 $(a,0,0),(0,b,0),(0,0,c)$）</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p><b>点法式怎么来的</b>：设 $P(x,y,z)$ 在平面上，$\overrightarrow{P_0P}\perp\boldsymbol n\Rightarrow\overrightarrow{P_0P}\cdot\boldsymbol n=0$，
+    展开即得。<b>把点法式展开、记 $D=-(Ax_0+By_0+Cz_0)$，就是一般式</b>——所以一般式里的
+    <b>$(A,B,C)$ 永远是法向量，常数项 $D$ 与法向量无关</b>。</p>
+  </div>
+
+  <div class="trap"><span class="tag">陷阱 · 平面束为什么"必漏一个平面"</span>
+    <p>设 $\pi_i:A_ix+B_iy+C_iz+D_i=0\ (i=1,2)$，两组系数<b>不成比例</b>，则过交线
+    $L:\begin{cases}A_1x+B_1y+C_1z+D_1=0,\\A_2x+B_2y+C_2z+D_2=0\end{cases}$ 的平面束方程为</p>
+    $$A_1x+B_1y+C_1z+D_1+\lambda(A_2x+B_2y+C_2z+D_2)=0\quad(\text{不含 }\pi_2)$$
+    <p>书的旁批把原理说透了：$\lambda\boldsymbol n_1+\mu\boldsymbol n_2$ <b>生成 $\boldsymbol n_1,\boldsymbol n_2$ 张成的整个平面</b>，
+    所以 $\lambda(\cdots)+\mu(\cdots)=0$ 才是"过交线的<b>所有</b>平面"。<b>令 $\lambda=1$ 归一化 ⇒ 丢掉 $\mu\ne0,\lambda=0$ 的那一张，即 $\pi_2$。</b></p>
+    <p class="legend2">⚠️ <b>考场处置</b>：用平面束求出的 $\lambda$ 若无解，第一反应是<b>答案恰好是被漏掉的那个平面</b>，
+    要单独把 $\pi_2$（或 $\pi_1$）代进去验一次。本章两道投影题都不涉及这个坑，但真题里出现过。</p>
+  </div>
+
+  <div class="key"><span class="tag">必记 · 直线的四式</span>
+    <p>假设直线的方向向量 $\boldsymbol\tau=(l,m,n)$。<b>定直线的二要素 ＝ 方向向量 $\boldsymbol\tau$ ＋ 过一点 $P_0$。</b></p>
+    <div class="tw">
+    <table class="dense">
+      <tbody>
+        <tr><td><b>① 一般式</b><span class="chip c-b">交面式</span></td>
+            <td>$\begin{cases}A_1x+B_1y+C_1z+D_1=0,\\A_2x+B_2y+C_2z+D_2=0,\end{cases}$ 其中 $\boldsymbol n_1\nparallel\boldsymbol n_2$</td></tr>
+        <tr><td><b>② 点向式</b></td><td>$\dfrac{x-x_0}l=\dfrac{y-y_0}m=\dfrac{z-z_0}n$</td></tr>
+        <tr><td><b>③ 参数式</b></td><td>$x=x_0+lt,\ y=y_0+mt,\ z=z_0+nt$</td></tr>
+        <tr><td><b>④ 两点式</b></td><td>$\dfrac{x-x_1}{x_2-x_1}=\dfrac{y-y_1}{y_2-y_1}=\dfrac{z-z_1}{z_2-z_1}$</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="mantra">给一般式，先叉乘：$\boldsymbol\tau=\boldsymbol n_1\times\boldsymbol n_2$
+      <small>直线是两平面的交线，交线的方向必须同时垂直两个法向量——这条会在第五节被推广到"两曲面的交线"</small></div>
+    <p class="legend2">⚠️ <b>参数式里"缺项"的分量是 0，不是 1。</b>
+    基例 17.2 的 $\begin{cases}x=1,\\y=-1+t,\\z=2+t\end{cases}$，书专门旁批 $x=1+0\cdot t$，故 $\boldsymbol\tau_1=(0,1,1)$。</p>
+  </div>
+
+  <div class="warn"><span class="tag">⚠️⚠️ 陷阱 · 三种夹角：两个用 arccos，一个用 arcsin；线⊥面用"平行方程"，线∥面用"垂直方程"</span>
+    <p><b>这是本节唯一真正会写反的地方，必须背成一张表。</b></p>
+    <div class="tw">
+    <table class="dense">
+      <thead><tr><th>关系</th><th>垂直</th><th>平行</th><th>夹角（都落在 $\left[0,\frac\pi2\right]$）</th></tr></thead>
+      <tbody>
+        <tr><td><b>线与线</b><br><span style="color:var(--muted);font-size:.8rem">$\boldsymbol\tau_1$ 对 $\boldsymbol\tau_2$</span></td>
+            <td>$l_1l_2+m_1m_2+n_1n_2=0$</td>
+            <td>$\dfrac{l_1}{l_2}=\dfrac{m_1}{m_2}=\dfrac{n_1}{n_2}$</td>
+            <td class="good">$\theta=\arccos\dfrac{|\boldsymbol\tau_1\cdot\boldsymbol\tau_2|}{|\boldsymbol\tau_1||\boldsymbol\tau_2|}$</td></tr>
+        <tr><td><b>面与面</b><br><span style="color:var(--muted);font-size:.8rem">$\boldsymbol n_1$ 对 $\boldsymbol n_2$</span></td>
+            <td>$A_1A_2+B_1B_2+C_1C_2=0$</td>
+            <td>$\dfrac{A_1}{A_2}=\dfrac{B_1}{B_2}=\dfrac{C_1}{C_2}$</td>
+            <td class="good">$\theta=\arccos\dfrac{|\boldsymbol n_1\cdot\boldsymbol n_2|}{|\boldsymbol n_1||\boldsymbol n_2|}$</td></tr>
+        <tr><td><b>线与面</b><br><span style="color:var(--muted);font-size:.8rem">$\boldsymbol\tau$ 对 $\boldsymbol n$</span></td>
+            <td class="bad">$L\perp\pi\iff\boldsymbol\tau\parallel\boldsymbol n\iff\dfrac lA=\dfrac mB=\dfrac nC$<br><span style="font-size:.78rem">（用<b>平行</b>方程）</span></td>
+            <td class="bad">$L\parallel\pi\iff\boldsymbol\tau\perp\boldsymbol n\iff Al+Bm+Cn=0$<br><span style="font-size:.78rem">（用<b>垂直</b>方程）</span></td>
+            <td class="bad">$\theta=\arcsin\dfrac{|\boldsymbol\tau\cdot\boldsymbol n|}{|\boldsymbol\tau||\boldsymbol n|}$</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p><b>为什么第三行全都反过来？</b>因为前两行比较的是<b>同类向量</b>（方向对方向、法向对法向），
+    第三行比较的是<b>方向向量与法向量</b>，两者天生差 $\dfrac\pi2$：$\theta=\left|\dfrac\pi2-\widehat{(\boldsymbol\tau,\boldsymbol n)}\right|$，
+    所以 $\cos$ 变 $\sin$、垂直变平行。<b>把"差 90°"这一句记住，三行都不用死背。</b></p>
+    <p class="legend2">📌 三个公式都要<b>加绝对值</b>——不加会算出钝角，而这三个夹角按定义都取锐角（或直角）。</p>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 例17.2</span><a class="pg" href="#">P.471</a>
+      与两直线 $\begin{cases}x=1,\\y=-1+t,\\z=2+t\end{cases}$ 和 $\dfrac{x+1}1=\dfrac{y+2}2=\dfrac{z-1}1$ 都平行，且过原点的平面方程为 ______。</div>
+    <div class="s">
+      <span class="lab">答</span>$x-y+z=0$。
+      <p><span class="lab">分析</span>两直线的方向向量分别为 $\boldsymbol\tau_1,\boldsymbol\tau_2$，所求平面同时平行于它们
+      ⇒ 平面的法向量同时垂直于它们 ⇒ $\boldsymbol n=\boldsymbol\tau_1\times\boldsymbol\tau_2$。</p>
+      $$\boldsymbol n=\begin{vmatrix}\boldsymbol i&\boldsymbol j&\boldsymbol k\\0&1&1\\1&2&1\end{vmatrix}=-\boldsymbol i+\boldsymbol j-\boldsymbol k$$
+      <p>平面过原点，故 $-1\cdot(x-0)+1\cdot(y-0)-1\cdot(z-0)=0$，即 $x-y+z=0$。</p>
+      <div class="notekeep"><span class="nh">📌 批注 · 叉乘是本节的"通用换挡器"</span>
+        <b>要什么就叉乘什么</b>：<br>
+        · 已知两个<b>法向量</b>，要<b>交线方向</b> ⇒ $\boldsymbol\tau=\boldsymbol n_1\times\boldsymbol n_2$（直线一般式）<br>
+        · 已知两个<b>方向向量</b>，要<b>平面法向量</b> ⇒ $\boldsymbol n=\boldsymbol\tau_1\times\boldsymbol\tau_2$（本题）<br>
+        · 已知<b>一个方向、一个连线</b>，要<b>面积/距离</b> ⇒ $|\boldsymbol\tau\times\overrightarrow{M_1M_0}|$（下面的点线距）<br>
+        <span class="dock">$\boldsymbol\tau_1=(0,1,1)$ 这个 0 是从 $x=1$ 读出来的（$x=1+0\cdot t$），写成 $(1,1,1)$ 是本题最常见的错法。</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="key"><span class="tag">必记 · 两个距离公式，一个思想：投影</span>
+    <div class="duo">
+      <div class="dA"><b class="h">点到平面（考得多，必须秒出）</b>
+        点 $P_0(x_0,y_0,z_0)$ 到 $Ax+By+Cz+D=0$：
+        $$d=\frac{|Ax_0+By_0+Cz_0+D|}{\sqrt{A^2+B^2+C^2}}$$
+        <b>原理</b>：$d=\left|\overrightarrow{P_0P}\cdot\dfrac{\boldsymbol n}{|\boldsymbol n|}\right|$，
+        即 <b>连线在单位法向量上的投影</b>。</div>
+      <div class="dB"><b class="h">点到直线（考得少，会推就行）</b>
+        点 $M_1$ 到 $L:\dfrac{x-x_0}l=\dfrac{y-y_0}m=\dfrac{z-z_0}n$：
+        $$d=\frac{\left|\boldsymbol\tau\times\overrightarrow{M_1M_0}\right|}{|\boldsymbol\tau|}$$
+        <b>原理</b>：平行四边形面积两算 $S=|\boldsymbol\tau|d=|\boldsymbol\tau\times\overrightarrow{M_1M_0}|$。</div>
+    </div>
+    <p class="legend2">📌 书上用的<b>双竖线记号</b>要看清：<b>内层竖线是行列式，外层竖线是向量的模</b>。<br>
+    📌 二维版 $d=\dfrac{|Ax_0+By_0+C|}{\sqrt{A^2+B^2}}$ 是三维版的退化，书还专门按 $B\ne0$ 与 $B=0$ 两种情形补了推导——
+    <b>说明它想让你知道这不是"背来的公式"，而是投影思想的产物。</b></p>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 例17.4</span><a class="pg" href="#">P.471</a>
+      设有直线 $L_1:\dfrac{x-1}1=\dfrac{y-5}{-2}=\dfrac{z+8}1$ 与 $L_2:\begin{cases}x-y=6,\\2y+z=3,\end{cases}$ 则 $L_1$ 与 $L_2$ 的夹角为（　）。
+      　(A) $\dfrac\pi6$　(B) $\dfrac\pi4$　(C) $\dfrac\pi3$　(D) $\dfrac\pi2$</div>
+    <div class="s">
+      <span class="lab">答</span>(C)。
+      <p>$\boldsymbol\tau_1=(1,-2,1)$；$L_2$ 是交面式，先叉乘：
+      $\boldsymbol\tau_2=\begin{vmatrix}\boldsymbol i&\boldsymbol j&\boldsymbol k\\1&-1&0\\0&2&1\end{vmatrix}=(-1,-1,2)$。</p>
+      $$\cos\varphi=\frac{|\boldsymbol\tau_1\cdot\boldsymbol\tau_2|}{|\boldsymbol\tau_1||\boldsymbol\tau_2|}=\frac{|-1+2+2|}{\sqrt6\cdot\sqrt6}=\frac36=\frac12
+        \ \Longrightarrow\ \varphi=\frac\pi3$$
+      <div class="notekeep"><span class="nh">📌 批注 · 两个细节</span>
+        ① <b>常数项不进法向量</b>：$x-y=6$ 的法向量是 $(1,-1,0)$，那个 $6$ 与方向无关。<br>
+        ② <b>绝对值不能省</b>：若不加绝对值，本题 $\boldsymbol\tau_1\cdot\boldsymbol\tau_2=3\gt0$ 恰好没影响；
+        但把 $L_1$ 的方向反写成 $(-1,2,-1)$（<b>同一条直线</b>）就会得到 $-\frac12$，答出 $\frac{2\pi}3$——
+        <span class="dock">直线的方向向量差一个符号仍是同一条直线，所以夹角公式必须对符号免疫，这就是绝对值的意义。</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="key"><span class="tag">★ 套路 · 投影直线三步法（本讲考得最多的一个套路，讲义里出现了两次）</span>
+    <div class="steps3">
+      <div><b>第 1 步 · 造平面束</b>把 $L$ 写成<b>一般式</b>（点向式要先化过去），写出过 $L$ 的平面束
+        $\pi_1:(\text{式一})+\lambda(\text{式二})=0$。</div>
+      <div><b>第 2 步 · 令 $\pi_1\perp\pi$</b>用 <b>$\boldsymbol n_{\pi_1}\cdot\boldsymbol n_\pi=0$</b> 定出 $\lambda$。
+        这个 $\pi_1$ 就是<b>"投影柱面"</b>——过 $L$ 且垂直于投影面的那一张。</div>
+      <div><b>第 3 步 · 交面式收口</b>投影直线 $L_0=\pi_1\cap\pi$，<b>答案写成交面式</b>
+        $\begin{cases}\pi_1=0,\\\pi=0.\end{cases}$ <b>不要再化点向式</b>。</div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 例17.3</span><a class="pg" href="#">P.471</a>
+      已知直线 $L$ 是直线 $L_0:\begin{cases}2x-z-3=0,\\y-2z+4=0\end{cases}$ 在平面 $x+y-z=5$ 上的投影方程，求 $L$ 的表达式。</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li>题目问"投影"，第一反应<b>不是</b>去求投影点，而是问：<b>把 $L_0$ 投下来的那张"幕布"是什么？</b>——
+          是过 $L_0$ 且<b>垂直于</b>投影面的平面。</li>
+          <li>"过 $L_0$ 的平面"有无穷多张，正好用<b>平面束</b>把它们一次写完，再用"垂直"这<b>一个</b>条件定出<b>一个</b>参数 $\lambda$。
+          <b>一个条件定一个未知数，数量对上了。</b></li>
+          <li>$L_0$ 已经是一般式，省掉了化式子的一步。求出的投影直线是两平面的交，<b>交面式就是最终答案形式</b>，别多此一举去化点向式。</li>
+        </ol>
+      </div>
+      <div class="paper"><span class="phead">✍️ 考场卷面<span class="score">解答题 · 约 10 分</span></span>
+        <div class="step"><span class="k">解</span>设过直线 $L_0$ 的平面束方程为
+          $$(2x-z-3)+\lambda(y-2z+4)=0,$$
+          即 $2x+\lambda y-(2\lambda+1)z+4\lambda-3=0$，其中 $\lambda$ 为待定常数。<span class="pt">⛳ 3分</span></div>
+        <div class="step">该平面与平面 $x+y-z=5$ 垂直，故两法向量的数量积为零：
+          $$2\cdot1+\lambda\cdot1+\left[-(2\lambda+1)\right]\cdot(-1)=0,$$
+          即 $3\lambda+3=0$，解得 $\lambda=-1$。<span class="pt">⛳ 4分</span></div>
+        <div class="step">将 $\lambda=-1$ 代回，得该平面为 $2x-y+z-7=0$。<span class="pt">⛳ 2分</span></div>
+        <div class="step fin">故直线 $L$ 为 $\begin{cases}2x-y+z-7=0,\\x+y-z=5.\end{cases}$<span class="pt">⛳ 1分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注 · 为什么"垂直"这一步就能定住投影</span>
+        <b>投影 ＝ 沿着投影面的法线方向把 $L_0$ 压下去。</b>这些法线拉出来的曲面就是一张<b>平面</b>（因为 $L_0$ 是直线），
+        它同时含 $L_0$、又含所有法线方向 ⇒ <b>它必然垂直于投影面</b>。反过来，过 $L_0$ 且垂直于投影面的平面只有一张，
+        所以"垂直"这一条就唯一确定了它。<br>
+        <span class="dock">⚠️ 常见错法：直接令平面束<b>平行于</b>投影面——那是求不到投影的，那张平面与投影面根本不相交。</span><br>
+        <b>本套路在本讲考了两次</b>：这道例 17.3 与习题 17.5（<a href="#e175">见下</a>）。习题那道多一步"点向式先化一般式"。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg" id="e175">
+    <div class="q"><span class="no">基 习17.5</span><a class="pg" href="#">P.484</a>
+      直线 $L:\dfrac{x-1}1=\dfrac y1=\dfrac{z-1}{-1}$ 在平面 $\pi:3x-y+3z=5$ 上的投影直线 $L_0$ 的方程为 ______。</div>
+    <div class="s">
+      <span class="lab">答</span>$\begin{cases}3x-y+3z=5,\\x-3y-2z+1=0.\end{cases}$
+      <p><b>第 0 步（本题独有）· 点向式化一般式</b>：由 $\dfrac{x-1}1=\dfrac{z-1}{-1}$ 得 $x+z-2=0$；
+      由 $\dfrac y1=\dfrac{z-1}{-1}$ 得 $y+z-1=0$。故 $L:\begin{cases}x+z-2=0,\\y+z-1=0.\end{cases}$</p>
+      <p><b>第 1–2 步</b>：平面束 $(x+z-2)+\lambda(y+z-1)=0$，法向量 $(1,\lambda,1+\lambda)$，令其与 $\boldsymbol n_\pi=(3,-1,3)$ 垂直：
+      $3\cdot1+(-1)\lambda+3(1+\lambda)=6+2\lambda=0\Rightarrow\lambda=-3$。</p>
+      <p><b>第 3 步</b>：代回得 $\pi_1:x-3y-2z+1=0$，故 $L_0:\begin{cases}3x-y+3z=5,\\x-3y-2z+1=0.\end{cases}$</p>
+      <div class="notekeep"><span class="nh">📌 批注 · 点向式化一般式的机械做法</span>
+        点向式 $\dfrac{x-x_0}l=\dfrac{y-y_0}m=\dfrac{z-z_0}n$ 本身就是<b>两个</b>等式，
+        <b>任取其中两对</b>交叉相乘即得两张平面。<b>取哪两对都行，得到的直线一样</b>，
+        但<b>挑分母简单的那两对</b>能少算一次。本题取了 $x\!-\!z$ 与 $y\!-\!z$ 两对，都得到系数为 $\pm1$ 的干净式子。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 习17.1 ＋ 千基 2</span><a class="pg" href="#">P.484</a>
+      <b>同型两题</b>：判断直线与平面的位置关系。<br>
+      <b>(习17.1)</b> $L:\begin{cases}x+y-z+1=0,\\x-y+3z+3=0,\end{cases}$ $\pi:x-2y-z+3=0$，则 $L$（　）。<br>
+      <b>(千基2)</b> $L:\begin{cases}x+3y+2z+1=0,\\2x-y-10z+3=0,\end{cases}$ $\pi:4x-2y+z-2=0$，则 $L$（　）。<br>
+      　(A) 平行于 $\pi$　(B) 在 $\pi$ 上　(C) 垂直于 $\pi$　(D) 与 $\pi$ 相交但不垂直／斜交</div>
+    <div class="s">
+      <span class="lab">答</span>两题都选 <b>(C) 垂直于 $\pi$</b>。
+      <div class="duo">
+        <div class="dA"><b class="h">法一 · 加减消元（习17.1 书上用的）</b>
+          ①＋②：$2x+2z+4=0\Rightarrow\dfrac{x+2}{-1}=z$；<br>
+          ①－②：$2y-4z-2=0\Rightarrow\dfrac{y-1}2=z$。<br>
+          故 $L:\dfrac{x+2}{-1}=\dfrac{y-1}2=\dfrac z1$，$\boldsymbol\tau=(-1,2,1)$。<br>
+          $\boldsymbol n=(1,-2,-1)=-\boldsymbol\tau$ ⇒ $\boldsymbol\tau\parallel\boldsymbol n$ ⇒ <b>$L\perp\pi$</b>。</div>
+        <div class="dB"><b class="h">法二 · 叉乘（千基2 书上用的）</b>
+          $\boldsymbol\tau=\begin{vmatrix}\boldsymbol i&\boldsymbol j&\boldsymbol k\\1&3&2\\2&-1&-10\end{vmatrix}=(-28,14,-7)$，<br>
+          即 $\boldsymbol\tau=-7(4,-2,1)=-7\boldsymbol n$ ⇒ $\boldsymbol\tau\parallel\boldsymbol n$ ⇒ <b>$L\perp\pi$</b>。</div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注 · 两法怎么选</span>
+        <b>只要问"位置关系"，叉乘永远够用且更快</b>（一个 $3\times3$ 行列式，30 秒）。<br>
+        <b>加减消元的价值在于它顺手给出了点向式</b>——如果题目还要求"写出直线方程"或"求直线上的点"，
+        消元法一步到位；只判关系时用叉乘。<span class="dock">⚠️ 再提醒一次：$L\perp\pi\iff\boldsymbol\tau\parallel\boldsymbol n$，
+        <b>几何上的"垂直"对应向量上的"平行"</b>，这是本节最容易写反的一处。</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= s3 空间曲面 ================= -->
+  <h2 id="s3"><span class="idx">三</span>空间曲面：<u>看方程认形状</u>（本讲扉页点名的"重难点"）</h2>
+
+  <div class="key"><span class="tag">必记 · 二次曲面识别口诀（把七张图压成四句话）</span>
+    <div class="gates">
+      <div><b class="g">①</b><b>三个平方项 ＝ 常数</b> ⇒ <b>数正负号的个数</b>：
+        三正 = <b>椭球面</b>（$a=b=c$ 时是球面）；两正一负 = <b>单叶双曲面</b>（一个"腰"）；
+        一正两负 = <b>双叶双曲面</b>（两瓣），且<b>正号对应中心轴</b>。</div>
+      <div><b class="g">②</b><b>两个平方项 ＝ 一次项 $z$</b> ⇒ <b>看两项同号还是异号</b>：
+        同号 = <b>椭圆抛物面</b>（碗，$p=q$ 时是旋转抛物面 $x^2+y^2=z$）；异号 = <b>双曲抛物面（马鞍面）</b>。</div>
+      <div><b class="g">③</b><b>三个平方项 ＝ 0</b>（即两平方 ＝ 一平方）⇒ <b>椭圆锥面</b>，一般考 $a=b$ 的圆锥。
+        <b>注意 $z=\sqrt{x^2+y^2}$ 只是上半个锥</b>。</div>
+      <div><b class="g">④</b><b>缺哪个字母，就是母线平行于哪个轴的柱面</b>（书上的原话）。
+        椭圆柱面 $\frac{x^2}{a^2}+\frac{y^2}{b^2}=1$、双曲柱面 $\frac{x^2}{a^2}-\frac{y^2}{b^2}=1$、抛物柱面 $y=ax^2$，
+        <b>准线就是同名的平面曲线</b>。</div>
+    </div>
+    <p class="legend2">📌 <b>怎么"切"</b>（书在每张图旁都标了）：用<b>平行于坐标面的平面去截</b>，看截线是圆/椭圆、双曲线还是抛物线。
+    <b>这正是第 18 讲三重积分"先一后二 / 先二后一"两种定限法的几何来源。</b></p>
+  </div>
+
+  <div class="tool" id="tool-quad">
+    <h4>🎲 二次曲面识别器 —— 拖系数，看方程变形，实时判类型</h4>
+    <p class="hint">本讲扉页把「空间曲面方程的求解」列为<b>重难点</b>，而认曲面是它的第一关。
+    下面这个方程 $\;Ax^2+By^2+Cz^2+Dz=E\;$ 覆盖了书上表格里的<b>全部六类二次曲面</b>（柱面另列）。
+    改动系数，右边会说明<b>凭哪一条判据</b>认出它，并给出<b>三个坐标面方向的截线</b>——考场上认曲面靠的就是这三刀。</p>
+    <div class="ctl">
+      <button data-q="ell" class="on">椭球面</button><button data-q="one">单叶双曲面</button>
+      <button data-q="two">双叶双曲面</button><button data-q="par">椭圆抛物面</button>
+      <button data-q="sad">马鞍面</button><button data-q="con">椭圆锥面</button>
+      <button data-q="cyl">柱面（缺字母）</button>
+    </div>
+    <div class="ctl"><label>$x^2$ 的系数 $A$</label><input type="range" id="qA" min="-2" max="2" step="1" value="1"><span class="val" id="qAv">1</span></div>
+    <div class="ctl"><label>$y^2$ 的系数 $B$</label><input type="range" id="qB" min="-2" max="2" step="1" value="1"><span class="val" id="qBv">1</span></div>
+    <div class="ctl"><label>$z^2$ 的系数 $C$</label><input type="range" id="qC" min="-2" max="2" step="1" value="1"><span class="val" id="qCv">1</span></div>
+    <div class="ctl"><label>一次项 $Dz$ 的 $D$</label><input type="range" id="qD" min="-1" max="1" step="1" value="0"><span class="val" id="qDv">0</span></div>
+    <div class="ctl"><label>右端常数 $E$</label><input type="range" id="qE" min="0" max="1" step="1" value="1"><span class="val" id="qEv">1</span></div>
+    <div class="say nokatex" id="qEq">方程：x² + y² + z² = 1</div>
+    <span class="verdict v-ok nokatex" id="qName">椭球面（球面）</span>
+    <div class="say nokatex" id="qWhy"></div>
+    <div class="dqwrap"><table class="dq"><thead><tr><th>用平面去截</th><th>截得什么</th></tr></thead>
+      <tbody id="qCut"></tbody></table></div>
+    <p class="legend2">📌 本模块只判<b>标准型</b>（不含 $xy,yz,zx$ 交叉项）。真题里出现 $z=xy$ 这类交叉项时，
+    要先做坐标变换：书给的样板是 $z=xy\xrightarrow{u=y+x,\;v=y-x}z=\frac{u v}{1}$，本质是把 $z=y^2-x^2$
+    的坐标轴<b>逆时针转 $\frac\pi4$</b>——所以 <b>$z=xy$ 也是马鞍面</b>。</p>
+  </div>
+
+  <div class="lore"><span class="tag">思想馆 · 为什么书要专门标出 $z=xy$ 被 $x+y=1$ 截出的图形</span>
+    基础讲在马鞍面那一格写了句旁批：「$z=xy$ 中由 $x+y=1$ 截出的图形，<b>可以与三重积分、曲线积分、曲面积分相结合</b>」。
+    这句话是本讲少见的<b>"命题预告"</b>——张宇在告诉你：<b>二次曲面不是拿来背图的，是拿来当第 18 讲的积分区域的。</b>
+    $z=xy$ 与 $x+y=1$ 的交线是一条空间曲线，它在 $xOy$ 面的投影是直线 $x+y=1$，
+    而 $z=xy=x(1-x)$ 是抛物线——<b>一条"平面上是直线、空间里是抛物线"的曲线</b>，正是第二类曲线积分最爱出的载体。
+  </div>
+
+  <div class="key"><span class="tag">必记 · 旋转曲面：通法一条，特例一句</span>
+    <p><b>定义</b>：曲线 $\Gamma$ 绕一条定直线旋转一周所形成的曲面。</p>
+    <div class="duo">
+      <div class="dA"><b class="h">通法（绕任意直线 $L$，二要素）</b>
+        设 $L$ 过 $M_0$、方向 $\boldsymbol\tau$；在母线上取 $M_1$，则过 $M_1$ 的<b>纬圆</b>上任一点 $P$ 满足
+        $$\begin{cases}\overrightarrow{M_1P}\perp\boldsymbol\tau &(\text{同一纬圆})\\ \left|\overrightarrow{M_0P}\right|=\left|\overrightarrow{M_0M_1}\right| &(\text{同一球面})\end{cases}$$
+        与 $\Gamma$ 的两个方程<b>联立消去 $x_1,y_1,z_1$</b>。<br>
+        <b>纬圆 ＝ 平面 ∩ 球面。</b></div>
+      <div class="dB"><b class="h">特例（绕 $z$ 轴，考场只用这一条）</b>
+        $\overrightarrow{M_1P}\perp(0,0,1)\iff z=z_1$，于是 $\left|\overrightarrow{OP}\right|=\left|\overrightarrow{OM_1}\right|$ 化为
+        $$\boxed{x^2+y^2=x_1^2+y_1^2}$$
+        若能从 $\Gamma$ 解出 $x=f_1(z)$、$y=f_2(z)$，则旋转曲面为
+        $$x^2+y^2=[f_1(z)]^2+[f_2(z)]^2$$</div>
+    </div>
+    <div class="mantra">绕 $z$ 轴：$z$ 不动，$x^2+y^2$ 打包，用 $z$ 把它换掉
+      <small>绕 $x$ 轴就打包 $y^2+z^2$，绕 $y$ 轴就打包 $x^2+z^2$——三句话是同一句</small></div>
+    <p class="legend2">📌 书给的算例：$\begin{cases}y^2-(z-1)^2=1,\\x=0\end{cases}$ 绕 $z$ 轴 ⇒ $x_1=0$、$y_1^2=1+(z-1)^2$
+    ⇒ $x^2+y^2=0+1+(z-1)^2$，即 $x^2+y^2-(z-1)^2=1$（<b>一个单叶双曲面</b>，正好用上面的识别口诀验一遍）。</p>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 习17.6</span><a class="pg" href="#">P.484</a>
+      经过点 $A(1,0,0)$ 与点 $B(0,1,1)$ 的直线绕 $z$ 轴旋转一周生成的曲面方程是 ______。</div>
+    <div class="s">
+      <span class="lab">答</span>$x^2+y^2-2z^2+2z-1=0$。
+      <p><b>① 两点式定直线</b>：方向 $\overrightarrow{AB}=(-1,1,1)$，取反向 $(1,-1,-1)$，
+      得 $\dfrac{x-1}1=\dfrac y{-1}=\dfrac z{-1}$，参数式 $x=1+t,\ y=-t,\ z=-t$。</p>
+      <p><b>② 用 $z$ 表出 $x,y$</b>：由 $z=-t$ 得 $t=-z$，故 $x=1-z$，$y=z$。</p>
+      <p><b>③ 打包</b>：$x^2+y^2=(1-z)^2+z^2=2z^2-2z+1$，即 $x^2+y^2-2z^2+2z-1=0$。</p>
+      <div class="notekeep"><span class="nh">📌 批注 · 这是个什么曲面？用识别口诀验一下</span>
+        写成 $\dfrac{x^2}{1}+\dfrac{y^2}{1}-\dfrac{(z-\frac12)^2}{\frac12}=\dfrac12$（配方：$-2z^2+2z-1=-2\left(z-\frac12\right)^2-\frac12$），
+        <b>两正一负 ⇒ 单叶双曲面</b>，中心在 $\left(0,0,\frac12\right)$。<br>
+        <b>几何上完全合理</b>：一条<b>与 $z$ 轴异面</b>的直线绕 $z$ 轴转，转出来的就是单叶双曲面——
+        <span class="dock">这是单叶双曲面最著名的性质：<b>它是直纹面</b>（可以由直线族生成，冷却塔就是这么造的）。
+        如果直线与 $z$ 轴<b>相交</b>，转出来是圆锥；<b>平行</b>则是圆柱。三种情形对应三种曲面，值得一起记。</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">千基 7</span><a class="pg" href="#">千·基7</a>
+      <b>[讲义没有的题型]</b> 求以 $M_0(1,1,1)$ 为顶点，以曲线 $C$（$C$ 是平面 $z=0$ 上 $y^2=x$ 被 $x=1$ 截下的有限部分）为准线的<b>锥面</b>方程。</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li>旋转曲面靠"垂直＋等距"生成，<b>锥面靠什么？</b>——靠<b>共线</b>：锥面上任一点 $M$、顶点 $M_0$、准线上的对应点 $M_1$
+          <b>三点共线</b>。这是锥面唯一的几何约束，也是全部解题依据。</li>
+          <li>共线怎么写成方程？<b>参数化</b>：$M_1=M_0+t\,\overrightarrow{M_0M}$，即 $M_1$ 的三个坐标都能用 $M$ 的坐标与一个参数 $t$ 表出。</li>
+          <li>$M_1$ 在准线上 ⇒ 满足准线的两个方程（$y_1^2=x_1$ 与 $z_1=0$）。
+          <b>五个方程、四个待消量（$x_1,y_1,z_1,t$），恰好消干净剩一个关于 $x,y,z$ 的方程</b>——数量对上了，放心消。</li>
+          <li>消元次序：<b>先用 $z_1=0$ 解出 $t$</b>（这是唯一一个只含一个未知量的式子），再回代。</li>
+        </ol>
+      </div>
+      <div class="paper"><span class="phead">✍️ 考场卷面<span class="score">解答题 · 约 10 分</span></span>
+        <div class="step"><span class="k">解</span>设 $M(x,y,z)$ 是所求锥面上任意一点，母线 $MM_0$ 与准线 $C$ 相交于点 $M_1(x_1,y_1,z_1)$，
+          则由三点共线及 $M_1\in C$ 得
+          $$\begin{cases}y_1^2=x_1,\\z_1=0,\\x_1=1+(x-1)t,\\y_1=1+(y-1)t,\\z_1=1+(z-1)t.\end{cases}$$<span class="pt">⛳ 4分</span></div>
+        <div class="step">由第 2、5 式得 $1+(z-1)t=0$，故 $t=\dfrac1{1-z}\ (z\ne1)$。<span class="pt">⛳ 2分</span></div>
+        <div class="step">代入第 3、4 式得
+          $$x_1=1+\frac{x-1}{1-z}=\frac{x-z}{1-z},\qquad y_1=1+\frac{y-1}{1-z}=\frac{y-z}{1-z}.$$<span class="pt">⛳ 2分</span></div>
+        <div class="step fin">代入 $y_1^2=x_1$ 得 $\dfrac{(y-z)^2}{(1-z)^2}=\dfrac{x-z}{1-z}$，
+          故所求锥面方程为 $(z-y)^2=(z-x)(z-1)$。<span class="pt">⛳ 2分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注 · 三类"生成曲面"的题，做成一张对照表</span>
+        <div class="tw"><table class="dense">
+          <thead><tr><th>曲面</th><th>几何约束</th><th>要消掉的量</th></tr></thead>
+          <tbody>
+            <tr><td><b>柱面</b></td><td>母线<b>平行</b>于定方向：$M_1=M+t\boldsymbol s$</td><td>$M_1$ 的坐标、$t$</td></tr>
+            <tr><td><b>锥面</b></td><td>母线<b>过定点</b>：$M_1=M_0+t\overrightarrow{M_0M}$</td><td>$M_1$ 的坐标、$t$</td></tr>
+            <tr><td><b>旋转曲面</b></td><td>$\overrightarrow{M_1M}\perp\boldsymbol\tau$ 且到轴上定点<b>等距</b></td><td>$M_1$ 的坐标</td></tr>
+          </tbody></table></div>
+        <b>三者是同一个套路</b>：写出母线上"另一点"$M_1$ 的参数表达 ⇒ 代准线方程 ⇒ 消参数。
+        <span class="dock">⚠️ $t=\frac1{1-z}$ 要求 $z\ne1$，即<b>顶点所在的水平面被排除</b>——但最终方程 $(z-y)^2=(z-x)(z-1)$ 在 $z=1$ 时化为 $(1-y)^2=0$，
+        即 $y=1$ 这条直线（过顶点），说明<b>最终方程把顶点也含进去了</b>，这是消元"补回"的点，不必额外说明。</span><br>
+        <b>验算</b>：取准线上一点 $(1,1,0)$（$y^2=x$ 且 $x=1$），代入 $(0-1)^2=(0-1)(0-1)$ ⇒ $1=1$ ✔；
+        顶点 $(1,1,1)$：$(1-1)^2=(1-1)(1-1)$ ⇒ $0=0$ ✔。
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ================= s4 空间曲线与投影 ================= -->
+  <h2 id="s4"><span class="idx">四</span>空间曲线与投影：<u>第 18 讲每道题的第一步</u></h2>
+
+  <div class="key"><span class="tag">必记 · 曲线的两种表示与"选参数"的原则</span>
+    <div class="duo">
+      <div class="dA"><b class="h">一般式（几何背景：两曲面的交线）</b>
+        $$\Gamma:\begin{cases}F(x,y,z)=0,\\G(x,y,z)=0\end{cases}$$</div>
+      <div class="dB"><b class="h">参数方程（算积分时必须化到这一步）</b>
+        $$\Gamma:\begin{cases}x=\varphi(t),\\y=\psi(t),\quad t\in[\alpha,\beta]\\z=\omega(t)\end{cases}$$</div>
+    </div>
+    <p><b>怎么选参数</b>：在一般式里<b>挑一个直角坐标变量当自变量</b>，把另外两个解成它的函数。
+    书特别说明了这条路的<b>失败情形</b>：解出来会<b>多值、带根式，甚至"解不出"</b>——
+    此时<b>另引新变量作参数</b>（比如三角参数）。</p>
+    <p class="legend2">📌 <b>实操原则：谁能让其余两个变量都"显式、单值"地表出，就选谁。</b><br>
+    强例 17.5(2) 的 $\begin{cases}x=y^2,\\z=x^2\end{cases}$ 选了 <b>$y$</b>（则 $x=y^2$、$z=y^4$ 全显式）；<br>
+    强千 3 的 $\begin{cases}y^2=z,\\x=2(y-1)\end{cases}$ 书选了 <b>$z$</b>（得 $y=\sqrt z$、$x=2(\sqrt z-1)$，带根式），
+    其实<b>选 $y$ 更干净</b>（$x=2(y-1)$、$z=y^2$，全是多项式）——两种参数化的切向量 $(1,\frac12,1)$ 与 $(2,1,2)$ <b>同向，答案一致</b>。</p>
+  </div>
+
+  <div class="key"><span class="tag">★ 必记 · 投影三步法（第 18 讲定限的入口）</span>
+    <div class="steps3">
+      <div><b>第 1 步 · 消元</b>求在 $xOy$ 面的投影就<b>消 $z$</b>；$xOz$ 面消 $y$；$yOz$ 面消 $x$。
+        得到 $\varphi(x,y)=0$，这是<b>投影柱面</b>。</div>
+      <div><b>第 2 步 · 配上坐标面</b>投影曲线写成
+        $\begin{cases}\varphi(x,y)=0,\\z=0.\end{cases}$
+        <b>缺了 $z=0$ 这一行就不是曲线而是柱面。</b></div>
+      <div><b>第 3 步 · 反过来用：参数化</b>若 $\varphi(x,y)=0$ 容易参数化成 $x=x(t),y=y(t)$，
+        <b>代回原曲线解出单值的 $z=z(t)$</b>，就得到了空间曲线的参数式。</div>
+    </div>
+    <p><b>书给的样板</b>：$\Gamma:\begin{cases}x^2+y^2=1,\\z=x+y\end{cases}\Longrightarrow
+    \begin{cases}x=\cos t,\\y=\sin t,\quad(0\leqslant t\leqslant2\pi)\\z=\cos t+\sin t\end{cases}$</p>
+  </div>
+
+  <div class="trap"><span class="tag">陷阱 · 书上那三个字："投影曲线<u>包含于</u>……"</span>
+    <p>消元得到的 $\begin{cases}\varphi(x,y)=0,\\z=0\end{cases}$ 只是<b>包含</b>真实投影，可能<b>比真投影大</b>。
+    原因很直白：<b>消元是"取并"</b>——$\varphi(x,y)=0$ 上的某个点，可能对应的 $z$ 落在曲线的定义范围之外。</p>
+    <p class="legend2">📌 <b>考场处置</b>：若原曲线有<b>范围限制</b>（例如 $z\geqslant0$、只取上半支、参数只跑半圈），
+    投影也要<b>同步加上范围</b>。下面的基例 17.5 就明确写了"位于 $z\geqslant0$ 的部分"，所以取 $z=+\sqrt{x^2+y^2}$ 而不是 $z^2=x^2+y^2$。</p>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 例17.5</span><a class="pg" href="#">P.476</a>
+      <b>★ 旋转曲面 ＋ 投影 的合体题</b>　设 $\Sigma_1$ 是由过点 $(0,-1,1)$ 与点 $(0,0,0)$ 的直线 $L$ 绕 $z$ 轴旋转一周所得的旋转曲面
+      <b>位于 $z\geqslant0$ 的部分</b>，$\Sigma_2$ 的方程为 $z^2=2x$，则 $\Sigma_1$ 与 $\Sigma_2$ 的交线 $\Gamma$ 在 $xOy$ 面上的投影曲线方程为 ______。</div>
+    <div class="s">
+      <span class="lab">答</span>$\begin{cases}x^2+y^2=2x,\\z=0.\end{cases}$
+      <p><b>① 定直线</b>：两点式 $\dfrac x0=\dfrac{y+1}1=\dfrac{z-1}{-1}$，参数式 $x=0,\ y=-1+t,\ z=1-t$，
+      消 $t$ 得 $\begin{cases}x=0,\\y=-z.\end{cases}$</p>
+      <p><b>② 绕 $z$ 轴打包</b>：$x^2+y^2=0^2+(-z)^2=z^2$。因限定 $z\geqslant0$，故 $\Sigma_1:z=\sqrt{x^2+y^2}$（<b>上半锥面</b>）。</p>
+      <p><b>③ 消 $z$ 得投影</b>：把 $z=\sqrt{x^2+y^2}$ 代入 $z^2=2x$，得 $x^2+y^2=2x$，
+      故投影曲线为 $\begin{cases}x^2+y^2=2x,\\z=0.\end{cases}$</p>
+      <div class="notekeep"><span class="nh">📌 批注 · 这道题为什么值得反复做</span>
+        <b>它把本节三件事串成一条流水线</b>：两点式 → 绕轴旋转 → 消元投影，<b>正是第 18 讲每道曲面积分题开头的三步</b>。<br>
+        <b>投影圆 $x^2+y^2=2x$ 即 $(x-1)^2+y^2=1$</b>——圆心 $(1,0)$、半径 1、<b>过原点</b>。
+        <span class="dock">这是极坐标 $r=2\cos\theta$（$-\frac\pi2\leqslant\theta\leqslant\frac\pi2$）的那个圆，
+        第 14 讲二重积分与第 18 讲三重积分里出现频率最高的区域之一，<b>见到 $x^2+y^2=2x$ 就该立刻写出 $r=2\cos\theta$</b>。</span><br>
+        ⚠️ <b>若丢掉"$z\geqslant0$"</b>，$\Sigma_1$ 就是整个双锥 $z^2=x^2+y^2$，代入后得到的还是 $x^2+y^2=2x$——
+        本题<b>恰好不受影响</b>，但这是运气，不是规律：书特意写这个条件，就是提醒你<b>开方要定号</b>。
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ================= s5 切线与切平面 ================= -->
+  <h2 id="s5"><span class="idx">五</span>切一刀：<u>曲线给切向量，曲面给法向量</u></h2>
+
+  <div class="mantra">曲线切线用 $\boldsymbol\tau$，曲面切平面用 $\boldsymbol n$；两曲面交出的曲线，$\boldsymbol\tau=\boldsymbol n_1\times\boldsymbol n_2$
+    <small>第三句是本讲的枢纽：它把"直线是两平面的交"一路推广到"曲线是两曲面的交"，一条规则通吃</small></div>
+
+  <div class="key"><span class="tag">必记 · 空间曲线的切线与法平面（两种给法）</span>
+    <div class="duo">
+      <div class="dA"><b class="h">给法一 · 参数方程</b>
+        $\Gamma:\begin{cases}x=x(t),\\y=y(t),\\z=z(t)\end{cases}$，光滑（一阶导连续且 $[x']^2+[y']^2+[z']^2\ne0$），则
+        $$\boldsymbol\tau=(x'(t_0),\,y'(t_0),\,z'(t_0))$$
+        <b>切线</b>：$\dfrac{x-x_0}{x'(t_0)}=\dfrac{y-y_0}{y'(t_0)}=\dfrac{z-z_0}{z'(t_0)}$<br>
+        <b>法平面</b>：$x'(t_0)(x-x_0)+y'(t_0)(y-y_0)+z'(t_0)(z-z_0)=0$</div>
+      <div class="dB"><b class="h">给法二 · 方程组（两曲面的交线）</b>
+        $\Gamma:\begin{cases}F(x,y,z)=0,\\G(x,y,z)=0\end{cases}$，当雅可比行列式
+        $\dfrac{\partial(F,G)}{\partial(y,z)}\ne0$ 时可定出 $y=y(x)$、$z=z(x)$，且
+        $$\boldsymbol\tau=\left.\begin{vmatrix}\boldsymbol i&\boldsymbol j&\boldsymbol k\\F_x'&F_y'&F_z'\\G_x'&G_y'&G_z'\end{vmatrix}\right|_{P_0}=(A,B,C)$$
+        即 <b>$\boldsymbol\tau=\mathbf{grad}\,F\times\mathbf{grad}\,G=\boldsymbol n_1\times\boldsymbol n_2$</b>。</div>
+    </div>
+    <p class="legend2">⭐ <b>切向量的方向：由小参数指向大参数</b>（书上的注 1）。
+    <b>这条在第 18 讲第二类曲线积分定向时就是全部依据</b>——本讲考它只为了下一讲。</p>
+  </div>
+
+  <div class="key"><span class="tag">必记 · 空间曲面的切平面与法线（隐式 / 显式两版）</span>
+    <div class="duo">
+      <div class="dA"><b class="h">隐式 $F(x,y,z)=0$ · 强化讲标「重中之重 ★★★」</b>
+        $$\boxed{\boldsymbol n=\left(F_x'(a,b,c),\,F_y'(a,b,c),\,F_z'(a,b,c)\right)=\mathbf{grad}\,F}$$
+        <b>切平面</b>：$F_x'(x-a)+F_y'(y-b)+F_z'(z-c)=0$<br>
+        <b>法线</b>：$\dfrac{x-a}{F_x'}=\dfrac{y-b}{F_y'}=\dfrac{z-c}{F_z'}$</div>
+      <div class="dB"><b class="h">显式 $z=f(x,y)$ · 两个符号约定都对</b>
+        <b>向上</b>：$\boldsymbol n=(-f_x',-f_y',1)$　<b>向下</b>：$\boldsymbol n=(f_x',f_y',-1)$<br>
+        <b>切平面</b>：$z-f(a,b)=f_x'(a,b)(x-a)+f_y'(a,b)(y-b)$<br>
+        类似地，$y=y(x,z)$ 时 $\boldsymbol n=(-y_x',1,-y_z')$；$x=x(y,z)$ 时 $\boldsymbol n=(1,-x_y',-x_z')$。</div>
+    </div>
+    <div class="mantra">"$1$" 永远站在被解出来的那个变量的位置上，另外两个取<u>负</u>偏导
+      <small>$z=f(x,y)\Rightarrow(-f_x',-f_y',\underline1)$；$y=y(x,z)\Rightarrow(-y_x',\underline1,-y_z')$；$x=x(y,z)\Rightarrow(\underline1,-x_y',-x_z')$</small></div>
+    <p><b>两个必须看穿的等价</b>：<br>
+    ① <b>$\boldsymbol n=\mathbf{grad}\,F$</b>——梯度垂直于等值面。本讲两大主题（梯度 / 切平面）在这里合流。<br>
+    ② 显式切平面 $z-f(a,b)=f_x'\Delta x+f_y'\Delta y$ <b>正是全微分</b>——
+    <b>切平面就是"用全微分做线性逼近"的几何面孔</b>（回扣第 13 讲）。</p>
+  </div>
+
+  <div class="warn"><span class="tag">⚠️ 陷阱 · 法向量含 0 分量时，法线<u>不能</u>写成三分式</span>
+    <p>本讲有两道题的法向量带 0：</p>
+    <div class="duo">
+      <div class="dR"><b class="h">基 例17.8 · $F_z'=0$</b>
+        曲面 $z-\mathrm e^z+2xy=3$ 在 $(1,2,0)$：$\boldsymbol n=(4,2,0)$，
+        切平面 $2x+y-4=0$（<b>平行于 $z$ 轴</b>）。<br>
+        法线应写 $\begin{cases}\dfrac{x-1}4=\dfrac{y-2}2,\\z=0\end{cases}$ 或参数式。</div>
+      <div class="dR"><b class="h">强千 7 · 两个分量都是 0</b>
+        曲面 $\mathrm e^z-xz+y=3$ 在 $(1,2,0)$：$\boldsymbol n=(0,1,0)$，
+        切平面退化成 <b>$y=2$</b>（平行于 $xOz$ 面）。<br>
+        法线就是过该点<b>平行于 $y$ 轴</b>的直线 $\begin{cases}x=1,\\z=0.\end{cases}$</div>
+    </div>
+    <p class="legend2">📌 <b>不少答案纸上照写 $\dfrac{x-1}4=\dfrac{y-2}2=\dfrac{z-0}0$，这在阅卷时按"分母为零"的约定是可以接受的记法</b>
+    （表示 $z-0=0$），但<b>更稳妥的是拆成方程组</b>。考场上若心里没底，直接写方程组不会错。</p>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 例17.8　强 例17.6　强千 7</span><a class="pg" href="#">P.479 / P.242</a>
+      <b>三题同型 · 隐式曲面求切平面</b><br>
+      (a) 曲面 $z-\mathrm e^z+2xy=3$ 在点 $(1,2,0)$ 处的切平面方程为 ______。<br>
+      (b) 曲面 $z=x+2y+\ln(1+x^2+y^2)$ 在点 $(0,0,0)$ 处的切平面方程为 ______。<br>
+      (c) 曲面 $\mathrm e^z-xz+y=3$ 在点 $(1,2,0)$ 处的切平面方程为 ______。</div>
+    <div class="s">
+      <span class="lab">答</span>(a) $2x+y-4=0$；(b) $x+2y-z=0$；(c) $y=2$。
+      <p><b>统一做法（四步，一步都不能省）</b>：</p>
+      <div class="steps3">
+        <div><b>① 移项造 $F$</b>把方程写成 $F(x,y,z)=0$。<b>常数项也要移过来。</b></div>
+        <div><b>② 验点在曲面上</b>(a) $0-1+4=3$ ✔；(b) $0=0+0+\ln1$ ✔；(c) $1-0+2=3$ ✔。<b>不在曲面上就无从谈切。</b></div>
+        <div><b>③ 三个偏导代点</b>(a) $(2y,2x,1-\mathrm e^z)\to(4,2,0)$；(b) $\left(-1-\frac{2x}{1+x^2+y^2},\;-2-\frac{2y}{1+x^2+y^2},\;1\right)\to(-1,-2,1)$；
+          (c) $(-z,1,\mathrm e^z-x)\to(0,1,0)$。</div>
+        <div><b>④ 点法式 + 化简</b>(a) $4(x-1)+2(y-2)=0$；(b) $-x-2y+z=0$；(c) $y-2=0$。</div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注 · (b) 有一行的秒杀法，值得单独记</span>
+        $\ln(1+x^2+y^2)=x^2+y^2+o(\rho^2)=o(\rho)$，<b>在原点它对一阶部分毫无贡献</b>，
+        所以 $z=x+2y+o(\rho)$ 的切平面就是 <b>$z=x+2y$</b>。<br>
+        <b>一般结论</b>：$z=f(x,y)$ 在 $(0,0)$ 的切平面 <b>＝ $f$ 展开式的一次部分</b>。
+        <span class="dock">凡"曲面在原点求切平面"且函数容易展开的，一律用泰勒秒杀，不要去求三个偏导。
+        这与第 13 讲"全微分 ＝ 一次部分"是同一句话。</span><br>
+        <b>(a)(c) 的对照价值</b>：两题的点<b>都是 $(1,2,0)$</b>，曲面只差一点点，
+        结果一个法向量丢了 $z$ 分量、一个丢了两个分量——<b>说明"退化"不是罕见情况，是常态</b>。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">千基 4</span><a class="pg" href="#">千·基4</a>
+      <b>[漏解陷阱]</b> 过点 $(1,0,1)$ 与点 $(0,1,1)$ 且与曲面 $z=1+x^2+y^2$ <b>相切</b>的平面为 ______。</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li>"与曲面相切"＝ 该平面是曲面在<b>某个未知切点</b> $(x_0,y_0,z_0)$ 处的切平面。
+          <b>切点未知，就设出来</b>——这是三个未知数。</li>
+          <li>凑三个方程：① 切点<b>在曲面上</b>；② 给定点 A 在<b>切平面上</b>；③ 给定点 B 在切平面上。
+          <b>三个方程三个未知数，数量刚好。</b></li>
+          <li>⚠️ 最后一步要小心：这是<b>二次方程组</b>，<b>解可能不止一个</b>。
+          "相切"这个词<b>没有规定切点唯一</b>，所以<b>解完必须把每一组都写出来</b>。</li>
+        </ol>
+      </div>
+      <div class="paper"><span class="phead">✍️ 考场卷面<span class="score">填空题 · 但过程按 8 分写</span></span>
+        <div class="step"><span class="k">解</span>设切点为 $(x_0,y_0,z_0)$。曲面 $z=1+x^2+y^2$ 在该点的法向量为
+          $\boldsymbol n=(-2x_0,\,-2y_0,\,1)$。<span class="pt">⛳ 2分</span></div>
+        <div class="step">由「切点在曲面上」与「两给定点在切平面上」得
+          $$\begin{cases}z_0=1+x_0^2+y_0^2,\\-2x_0(x_0-0)-2y_0(y_0-1)+(z_0-1)=0,\\-2x_0(1-0)-2y_0(0-1)+(1-1)=0.\end{cases}$$<span class="pt">⛳ 3分</span></div>
+        <div class="step">解得 $\begin{cases}x_0=0,\\y_0=0,\\z_0=1\end{cases}$ 或 $\begin{cases}x_0=1,\\y_0=1,\\z_0=3,\end{cases}$
+          对应法向量 $(0,0,1)$ 与 $(-2,-2,1)$。<span class="pt">⛳ 2分</span></div>
+        <div class="step fin">故所求平面为 $z=1$ 或 $z-2x-2y+1=0$。<span class="pt">⛳ 1分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注 · 两解的几何图像 + 一个心算校验</span>
+        曲面是开口向上的<b>旋转抛物面</b>，顶点 $(0,0,1)$。两个给定点 $(1,0,1)$、$(0,1,1)$ <b>都在 $z=1$ 这个水平面上</b>，
+        而 $z=1$ 恰好是抛物面在<b>顶点</b>处的切平面 ⇒ <b>第一个解几乎是"看出来"的</b>。<br>
+        另一个解是过这两点的<b>倾斜</b>切平面，切于 $(1,1,3)$。<br>
+        <span class="dock">⚠️ 直接设"切平面 $z=ax+by+c$ 再联立判别式"是二元的思路，三维里会很乱；
+        <b>设切点</b>才是标准解法——因为法向量由切点唯一决定。</span><br>
+        <b>验算</b>：$z-2x-2y+1$ 在 $(1,0,1)$：$1-2-0+1=0$ ✔；在 $(0,1,1)$：$1-0-2+1=0$ ✔；
+        切点 $(1,1,3)$：$3-2-2+1=0$ ✔ 且 $3=1+1+1$ ✔。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强千 4</span><a class="pg" href="#">千·强4</a>
+      曲线 $\begin{cases}x^2+2y^2+3z^2=6,\\x+y+z=3\end{cases}$ 在点 $(1,1,1)$ 处的切线方程为 ______。</div>
+    <div class="s">
+      <span class="lab">答</span>$\dfrac{x-1}1=\dfrac{y-1}{-2}=\dfrac{z-1}1$。
+      <div class="duo">
+        <div class="dA"><b class="h">法一 · 隐函数求导（书上用的）</b>
+          两边对 $x$ 求导：$\begin{cases}2x+4y\frac{\mathrm dy}{\mathrm dx}+6z\frac{\mathrm dz}{\mathrm dx}=0,\\1+\frac{\mathrm dy}{\mathrm dx}+\frac{\mathrm dz}{\mathrm dx}=0,\end{cases}$
+          代 $(1,1,1)$ 得 $\begin{cases}4y'+6z'=-2,\\y'+z'=-1,\end{cases}$
+          解得 $y'=-2$，$z'=1$，故 $\boldsymbol\tau=(1,-2,1)$。</div>
+        <div class="dB"><b class="h">法二 · 梯度叉乘（快一倍，推荐）</b>
+          $\boldsymbol n_1=(2x,4y,6z)|_{(1,1,1)}=(2,4,6)$，$\boldsymbol n_2=(1,1,1)$，
+          $$\boldsymbol\tau=\boldsymbol n_1\times\boldsymbol n_2=\begin{vmatrix}\boldsymbol i&\boldsymbol j&\boldsymbol k\\2&4&6\\1&1&1\end{vmatrix}=(-2,4,-2)$$
+          即 $-2(1,-2,1)$，与法一同向 ✔。</div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注 · 为什么叉乘法更该成为默认</span>
+        法一要解一个二元线性方程组，而且<b>预设了能把 $y,z$ 解成 $x$ 的函数</b>（雅可比行列式非零），
+        遇到 $\boldsymbol\tau$ 的第一个分量为 0 的曲线就<b>直接失效</b>（此时 $x$ 不能当参数）。<br>
+        <b>叉乘法没有这个前提</b>，只要两个梯度不平行就能用，而且它就是书上正文给的公式
+        $\boldsymbol\tau=\begin{vmatrix}\boldsymbol i&\boldsymbol j&\boldsymbol k\\F_x'&F_y'&F_z'\\G_x'&G_y'&G_z'\end{vmatrix}$。
+        <span class="dock">书在正文给了叉乘公式，在 1000 题解析里却用隐函数求导——两法都要会，但<b>考场上默认叉乘</b>。</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 例17.5　强千 3　基 例17.6</span><a class="pg" href="#">P.241 / P.478</a>
+      <b>三题同型 · 参数式曲线求切线与法平面</b><br>
+      (a) $x=\cos t+\sin^2t$，$y=\sin t(1-\cos t)$，$z=\cos t$，在 $t=\frac\pi2$ 对应点；<br>
+      (b) $x=y^2$，$z=x^2$，在点 $(1,1,1)$；<br>
+      (c) $\Gamma:\begin{cases}x=\int_0^t\mathrm e^u\cos u\,\mathrm du,\\y=2\sin t+\cos t,\\z=1+\mathrm e^{3t}\end{cases}$ 在 $t=0$ 处；<br>
+      (d) $L:\begin{cases}y^2=z,\\x=2(y-1)\end{cases}$ 在 $y=1$ 处。</div>
+    <div class="s">
+      <span class="lab">答</span>
+      (a) 切线 $\dfrac{x-1}{-1}=\dfrac{y-1}1=\dfrac z{-1}$，法平面 $x-y+z=0$；
+      (b) 切线 $\dfrac{x-1}2=\dfrac{y-1}1=\dfrac{z-1}4$，法平面 $2x+y+4z-7=0$；
+      (c) 切线 $\dfrac{x-0}1=\dfrac{y-1}2=\dfrac{z-2}3$；
+      (d) 切线 $\dfrac{x-0}1=\dfrac{y-1}{\frac12}=\dfrac{z-1}1$（等价于方向 $(2,1,2)$）。
+      <p><b>四题的唯一技术点各不相同，正好覆盖了全部情形：</b></p>
+      <div class="tw"><table class="dense">
+        <thead><tr><th>题</th><th>难点</th><th>处置</th></tr></thead>
+        <tbody>
+          <tr><td>(a)</td><td>三角函数求导易错</td><td>$x'=-\sin t+\sin2t$，$y'=\cos t(1-\cos t)+\sin^2t$，$z'=-\sin t$；
+            代 $t=\frac\pi2$ 得 $\boldsymbol\tau=(-1,1,-1)$，点 $(1,1,0)$</td></tr>
+          <tr><td>(b)</td><td><b>没给参数</b></td><td><b>选 $y$ 当参数</b>：$x=t^2,\ y=t,\ z=t^4$，$t=1$ 处 $\boldsymbol\tau=(2,1,4)$</td></tr>
+          <tr><td>(c)</td><td><b>变限积分</b></td><td>$x'=\mathrm e^t\cos t$（上限求导），$t=0$ 时 $x=0$；$\boldsymbol\tau=(1,2,3)$，点 $(0,1,2)$</td></tr>
+          <tr><td>(d)</td><td>参数怎么选</td><td>书选 $z$（带根式）；<b>选 $y$ 更干净</b>：$x=2(y-1),\ z=y^2$，$\boldsymbol\tau=(2,1,2)$</td></tr>
+        </tbody>
+      </table></div>
+      <div class="notekeep"><span class="nh">📌 批注 · 法平面的写法，以及一个反复出现的验算习惯</span>
+        <b>法平面 ＝ 以 $\boldsymbol\tau$ 为法向量、过切点的平面</b>——所以切线与法平面是<b>同一组数据的两种写法</b>，
+        求出 $\boldsymbol\tau$ 和切点之后，两个答案都只是"填空"。<br>
+        <b>⚠️ 别忘了先算切点坐标</b>：(a) 要把 $t=\frac\pi2$ 代回三个式子得 $(1,1,0)$，(c) 要注意 $\int_0^0=0$。
+        <span class="dock">"求出了 $\boldsymbol\tau$ 却把切点写错"是本类题最常见的失分，占比高于求导错误。
+        <b>养成习惯：先写切点，再写切向量，最后拼方程。</b></span><br>
+        <b>方向向量可以整体乘非零常数</b>：(d) 的 $(1,\frac12,1)$ 与 $(2,1,2)$ 是同一个答案，
+        写成整数更好看，阅卷都算对。
+      </div>
+    </div>
+  </div>
+
+  <div class="key"><span class="tag">补讲 · 偏导数的几何意义（强化注(3)＋基例17.7＋强千6，三处同源）</span>
+    <p>强化讲注(3) 把第 13 讲欠的一笔补上了：<b>$\left.\dfrac{\partial f}{\partial x}\right|_{(a,b)}$ 到底是什么的斜率？</b></p>
+    <p>它是曲线 $\begin{cases}z=f(x,y),\\y=b\end{cases}$（<b>曲面被平面 $y=b$ 切出来的那条线</b>）在 $(a,b,f(a,b))$ 处
+    <b>关于 $x$ 轴的斜率</b>。把这条曲线参数化成 $\begin{cases}x=x,\\y=b,\\z=f(x,b),\end{cases}$ 切向量就是</p>
+    $$\boldsymbol\tau=\left(1,\;0,\;\left.\frac{\partial f}{\partial x}\right|_{(a,b)}\right),\qquad\text{同理}\qquad
+      \boldsymbol\tau=\left(0,\;1,\;\left.\frac{\partial f}{\partial y}\right|_{(a,b)}\right)$$
+    <p class="legend2">📌 书旁批「$L$ 是两个特殊柱面的交线」——$z=f(x,y)$ 与 $y=b$ 都是柱面（后者缺 $x,z$），
+    <b>偏导数就这样被纳入了"曲线切线"的统一框架</b>。</p>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 例17.7 ＝ 强千 6</span><a class="pg" href="#">P.478</a>
+      <b>[两处一字不差的重题]</b> 设函数 $z=f(x,y)$ 在点 $(0,0)$ 附近有定义，且 $f_x'(0,0)=3$，
+      则曲线 $\begin{cases}z=f(x,y),\\y=0\end{cases}$ 在点 $(0,0,f(0,0))$ 处的法平面方程为 ______。</div>
+    <div class="s">
+      <span class="lab">答</span>$x+3z-3f(0,0)=0$。
+      <p>曲线写成参数式 $\begin{cases}x=t,\\y=0,\\z=f(t,0),\end{cases}$ 则
+      $\boldsymbol\tau=\left.(x_t',y_t',z_t')\right|_{t=0}=(1,\,0,\,f_x'(0,0))=(1,0,3)$。</p>
+      <p>法平面：$1\cdot(x-0)+0\cdot(y-0)+3\cdot\left(z-f(0,0)\right)=0$，即 $x+3z-3f(0,0)=0$。</p>
+      <div class="notekeep"><span class="nh">📌 批注 · 这道题只给了一个偏导，为什么就够了</span>
+        因为曲线被 <b>$y=0$ 锁死在一张平面里</b>，它的切向量<b>第二个分量必然是 0</b>，
+        第三个分量是 $\dfrac{\mathrm d}{\mathrm dt}f(t,0)\Big|_{t=0}=f_x'(0,0)$——<b>只用到对 $x$ 的偏导</b>。
+        $f_y'$ 在这条曲线上根本不出现。<br>
+        <span class="dock">⚠️ 注意题设只说"<b>有定义</b>"且给了 $f_x'(0,0)$，<b>没说可微、也没说 $f_y'$ 存在</b>——
+        这正是本题的设计：<b>它测你是否知道"只需要一个偏导"</b>。若你下意识去找 $f_y'$，就会觉得条件不够而卡住。</span><br>
+        <b>$f(0,0)$ 是个未知常数，答案里保留它就行</b>，不要试图求出来。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 习17.3 ＋ 千基 3</span><a class="pg" href="#">P.484</a>
+      <b>同一个曲面，正反两问</b>　曲面 $z=4-x^2-y^2$：<br>
+      <b>(正问 · 千基3)</b> 在点 $P(1,1,2)$ 处的切平面方程为 ______。<br>
+      <b>(反问 · 习17.3)</b> 上点 $P$ 处的切平面<b>平行于</b>平面 $2x+2y+z-1=0$，则 $P$ 的坐标是（　）。</div>
+    <div class="s">
+      <span class="lab">答</span>正问：$2x+2y+z=6$；反问：$(1,1,2)$，选 (C)。
+      <div class="duo">
+        <div class="dA"><b class="h">正问 · 给点求平面</b>
+          $F=4-x^2-y^2-z$，$\boldsymbol n=(-2x,-2y,-1)|_{(1,1,2)}=(-2,-2,-1)$，<br>
+          $-2(x-1)-2(y-1)-(z-2)=0\Rightarrow2x+2y+z=6$。</div>
+        <div class="dB"><b class="h">反问 · 给平面求点</b>
+          设 $P(x_0,y_0,z_0)$，$\boldsymbol n=(-2x_0,-2y_0,-1)$，<br>
+          平行 ⇒ $\dfrac{-2x_0}2=\dfrac{-2y_0}2=\dfrac{-1}1\Rightarrow x_0=y_0=1$，<br>
+          代曲面得 $z_0=4-1-1=2$。</div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注 · 反问才是真正的考点，而且它有一个更重要的化身</span>
+        <b>"曲面上哪一点的切平面平行于给定平面"</b>这个问题，等价于<b>"曲面上哪一点离该平面最远／最近"</b>——
+        因为距离取极值处，曲面必与平行于该平面的某张平面相切。<br>
+        <b>强千 2</b>（求曲面 $4z=3x^2-2xy+3y^2$ 到平面 $x+y-4z=1$ 的最短距离）就是这个化身，
+        它可以完全绕开拉格朗日乘数法：<b>直接令法向量成比例</b>。<a href="#s9">详见第九节</a>。
+        <span class="dock">⚠️ 反问用的是<b>比例式（平行方程）</b>而不是点积为零——两个平面平行 ⟺ 两个法向量平行。别与"垂直"混了。</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 习17.2</span><a class="pg" href="#">P.484</a>
+      <b>★ 必须验"点不在平面上"</b>　在曲线 $\begin{cases}x=t,\\y=-t^2,\\z=t^3\end{cases}$ 的所有切线中，与平面 $x+2y+z=4$ 平行的切线（　）。
+      　(A) 只有 1 条　(B) 只有 2 条　(C) 至少有 3 条　(D) 不存在</div>
+    <div class="s">
+      <span class="lab">答</span>(B) 只有 2 条。
+      <p><b>① 切向量</b>：$\boldsymbol\tau=(1,\,-2t_0,\,3t_0^2)$。</p>
+      <p><b>② 切线 ∥ 平面 ⟺ $\boldsymbol\tau\perp\boldsymbol n$</b>（<b>又是"几何平行 ⟺ 向量垂直"</b>）：
+      $\boldsymbol\tau\cdot(1,2,1)=1-4t_0+3t_0^2=0\Rightarrow t_0=1$ 或 $t_0=\dfrac13$。</p>
+      <p><b>③ ⚠️ 验切点不在平面上</b>：$t_0=1$ 给点 $(1,-1,1)$，代入 $x+2y+z=1-2+1=0\ne4$ ✔；
+      $t_0=\frac13$ 给点 $\left(\frac13,-\frac19,\frac1{27}\right)$，代入得 $\frac13-\frac29+\frac1{27}=\frac{9-6+1}{27}=\frac4{27}\ne4$ ✔。
+      两点都不在平面上，故两条切线都是真正的"平行"。</p>
+      <div class="notekeep"><span class="nh">📌 批注 · 第 ③ 步是这道题的全部含金量</span>
+        <b>"直线与平面平行"的完整定义是：方向向量垂直于法向量，<u>且直线不在平面内</u>。</b>
+        若切点恰好在平面上，$\boldsymbol\tau\perp\boldsymbol n$ 仍成立，但这条切线是<b>躺在平面里</b>的，
+        按定义<b>不算平行</b>（这也是选项 (A)"只有 1 条"存在的理由——命题人在等你漏掉一个）。<br>
+        <span class="dock">同一个坑在"两平面平行"里也有：法向量成比例还不够，还要<b>常数项不成同一比例</b>，否则是同一张平面。
+        <b>凡判定"平行"，都要补一句"且不重合"。</b></span><br>
+        📌 二次方程 $3t^2-4t+1=0$ 的两根 $1$ 与 $\frac13$，判别式 $16-12=4\gt0$ ⇒ 必有两个不同的 $t$，
+        <b>而不同的 $t$ 给出不同的切点</b>（因为 $x=t$ 单调），所以答案就是 2 条，不会因"两条切线重合"再减一。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">★ 基 例17.9</span><a class="pg" href="#">P.479</a>
+      <b>[全讲最难的一题，书标 ★]</b> 设 $f$ 可微，则曲面 $\mathrm e^{2x-z}=f(\pi y-\sqrt2z)$ 是（　）。
+      　(A) 旋转抛物面　(B) 双叶双曲面　(C) 单叶双曲面　(D) 柱面</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li>题目给的 $f$ <b>是抽象函数</b>——这就断了"配方看系数"的路。
+          <b>抽象函数出现在曲面题里，只能从"法向量"这个不依赖具体形式的量下手。</b></li>
+          <li>四个选项里，只有<b>柱面</b>有一个不需要具体方程就能验证的刻画：
+          <b>柱面 ＝ 沿某个定方向平移不变的曲面 ⟺ 处处的法向量都垂直于同一个定向量</b>。
+          其余三种曲面的法向量方向是"发散"的，不可能全垂直于同一向量。</li>
+          <li>于是问题变成：<b>能不能找到一个非零常向量 $\boldsymbol\tau=(a,b,c)$，使 $\boldsymbol n\cdot\boldsymbol\tau\equiv0$ 对曲面上每一点都成立？</b>
+          注意是<b>恒等式</b>，不是某一点成立。</li>
+          <li>恒等式怎么解？把 $\mathrm e^{2x-z}$ 与 $f'$ 看成两个<b>互相独立、且不恒为零</b>的量，
+          <b>各自的系数必须分别为零</b>——这是"待定系数"在恒等式里的标准用法。</li>
+        </ol>
+      </div>
+      <div class="paper"><span class="phead">✍️ 考场卷面<span class="score">选择题 · 但过程按 10 分写</span></span>
+        <div class="step"><span class="k">解</span>设 $F(x,y,z)=f(\pi y-\sqrt2z)-\mathrm e^{2x-z}$，则曲面上任一点处的法向量为
+          $$\boldsymbol n=\left(-2\mathrm e^{2x-z},\;\pi f',\;-\sqrt2f'+\mathrm e^{2x-z}\right).$$<span class="pt">⛳ 3分</span></div>
+        <div class="step">设常向量 $\boldsymbol\tau=(a,b,c)$（$a,b,c$ 不同时为零）与 $\boldsymbol n$ 垂直，即
+          $$\boldsymbol n\cdot\boldsymbol\tau=-2a\mathrm e^{2x-z}+\pi bf'+\left(-\sqrt2f'+\mathrm e^{2x-z}\right)c\equiv0.$$<span class="pt">⛳ 3分</span></div>
+        <div class="step">整理为 $(-2a+c)\mathrm e^{2x-z}+(\pi b-\sqrt2c)f'\equiv0$。由 $\mathrm e^{2x-z}$ 与 $f'$ 的独立性，得
+          $$-2a+c=0,\qquad \pi b-\sqrt2c=0,$$
+          即 $a=\dfrac c2$，$b=\dfrac{\sqrt2}\pi c$。令 $c=1$，得 $\boldsymbol\tau=\left(\dfrac12,\dfrac{\sqrt2}\pi,1\right)\ne\boldsymbol 0$。<span class="pt">⛳ 3分</span></div>
+        <div class="step fin">曲面上任一点处的法向量 $\boldsymbol n$ 均与定向量 $\left(\dfrac12,\dfrac{\sqrt2}\pi,1\right)$ 垂直，
+          故该曲面是母线平行于该向量的柱面，应选 (D)。<span class="pt">⛳ 1分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注 · "柱面判据"值得单独背下来，它是本讲唯一的概念级判据</span>
+        <div class="mantra">处处的法向量都垂直于同一个定向量 $\iff$ 母线平行于该向量的柱面
+          <small>正向：柱面沿母线平移不变 ⇒ 法向量必与母线垂直；反向：法向量恒垂直于 $\boldsymbol\tau$ ⇒ 沿 $\boldsymbol\tau$ 的方向导数恒为 0 ⇒ 曲面沿 $\boldsymbol\tau$ 平移不变</small></div>
+        <b>另一条更快的路（可作法二）</b>：令 $u=2x-z$、$v=\pi y-\sqrt2z$，原方程化为 $\mathrm e^u=f(v)$，
+        <b>只含两个"线性组合变量"而不含第三个独立方向</b> ⇒ 沿使 $u,v$ 都不变的方向平移，方程不变。
+        解 $\begin{cases}2a-c=0,\\\pi b-\sqrt2c=0\end{cases}$ 即得同一个 $\boldsymbol\tau$。
+        <span class="dock">⚠️ "$\mathrm e^{2x-z}$ 与 $f'$ 独立"这一步在卷面上要写出来（哪怕一句"由 $x,y,z$ 的任意性"），
+        <b>直接令系数为零而不说理由，是会被扣分的跳步</b>。</span><br>
+        📌 <b>排除法验算</b>：(A)(B)(C) 三种曲面的法向量场都会"张开"——例如球面上对径点的法向量方向相反，
+        不可能同时垂直于一个固定向量。所以一旦发现"存在这样的 $\boldsymbol\tau$"，答案必是 (D)。
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= s6 方向导数 ================= -->
+  <h2 id="s6"><span class="idx">六</span>方向导数：<u>先看清 $t\to0^+$，再谈计算</u></h2>
+
+  <div class="key"><span class="tag">必记 · 定义（$t$ 是距离，所以只能从右边趋近）</span>
+    <p>设 $u=u(x,y,z)$ 在 $P_0$ 的某邻域内有定义，$\boldsymbol l$ 是<b>从 $P_0$ 出发的射线</b>，
+    $P$ 是 $\boldsymbol l$ 上的点，$t=\left|\overrightarrow{P_0P}\right|$，则</p>
+    $$\left.\frac{\partial u}{\partial\boldsymbol l}\right|_{P_0}=\lim_{t\to0^{\boldsymbol+}}
+      \frac{u(x_0+t\cos\alpha,\;y_0+t\cos\beta,\;z_0+t\cos\gamma)-u(x_0,y_0,z_0)}{t}$$
+    <div class="duo">
+      <div class="dA"><b class="h">方向导数</b>
+        · $\boldsymbol l$ 是<b>射线</b>，$t$ 是<b>距离 $\geqslant0$</b>，故 $t\to0^{\boldsymbol+}$（<b>单侧</b>）<br>
+        · 需要 $\boldsymbol l$ 是<b>单位向量</b>，即 $(\cos\alpha,\cos\beta,\cos\gamma)$<br>
+        · 沿 $x$ 轴<b>正</b>向的方向导数 ＝ $u_x'$（若存在）</div>
+      <div class="dB"><b class="h">偏导数</b>
+        · 是<b>双侧</b>极限 $\Delta x\to0$<br>
+        · 沿 $x$ 轴<b>负</b>向的方向导数 ＝ $-u_x'$，不是 $u_x'$<br>
+        · 故 <b>$u_x'$ 存在 $\Rightarrow$ 两个方向导数都存在且互为相反数</b>；反之不成立</div>
+    </div>
+  </div>
+
+  <div class="warn"><span class="tag">⚠️⚠️ 陷阱 · 本章最该记住的一句：$t\to0^+$ 允许你去掉绝对值（千基 8 的【注】）</span>
+    <p>设 $f(x,y)=\begin{cases}\dfrac{x^2|y|}{x^2+y^2},&(x,y)\ne(0,0),\\[2mm]0,&(x,y)=(0,0),\end{cases}$
+    求 $f$ 在 $(0,0)$ 处沿 $\boldsymbol l=(1,1)$ 的方向导数。</p>
+    <p>单位化 $\boldsymbol l^\circ=\left(\frac1{\sqrt2},\frac1{\sqrt2}\right)$，代入定义：</p>
+    $$\left.\frac{\partial f}{\partial\boldsymbol l}\right|_{(0,0)}
+      =\lim_{t\to0^+}\frac{f\!\left(\tfrac t{\sqrt2},\tfrac t{\sqrt2}\right)-0}{t}
+      =\lim_{t\to0^+}\frac{\dfrac{t^2}2\cdot\dfrac{t}{\sqrt2}}{\left(\dfrac{t^2}2+\dfrac{t^2}2\right)\cdot t}
+      =\frac{1}{2\sqrt2}=\frac{\sqrt2}4$$
+    <p><b>书的【注】原话</b>：由于 $t\to0^+$，则 $|y|=\dfrac{|t|}{\sqrt2}=\dfrac t{\sqrt2}$，这是要注意的。
+    <b>若认为 $t\to0$，则会得出方向导数不存在的错误结果。</b></p>
+    <p class="legend2">📌 <b>为什么会"不存在"</b>：若当成双侧，$|y|=\dfrac{|t|}{\sqrt2}$ 里的 $|t|$ 在 $t\lt0$ 时变号，
+    分子含 $|t|\cdot t^2$、分母含 $t^3$，左极限是 $-\frac{\sqrt2}4$、右极限是 $+\frac{\sqrt2}4$ ⇒ 判"不存在"。
+    <b>一个绝对值，两个答案，全看你有没有记住 $t\geqslant0$。</b><br>
+    📌 这与强化讲定义处的旁批「<b>$t$ 是距离 $\geqslant0$，所以 $t\to0^+$</b>」是同一件事，
+    <b>书在两处分别提醒，说明它确实是高频失分点。</b></p>
+  </div>
+
+  <div class="key"><span class="tag">必记 · 计算公式（大前提：<u>可微</u>）</span>
+    <p><b>定理</b>　若 $u=u(x,y,z)$ 在 $P_0$ 处<b>可微</b>（强化讲给"可微"加了方框，旁批"<b>大前提</b>"），
+    则沿<b>任一</b>方向 $\boldsymbol l=(\cos\alpha,\cos\beta,\cos\gamma)$ 的方向导数都存在，且</p>
+    $$\left.\frac{\partial u}{\partial\boldsymbol l}\right|_{P_0}=u_x'(P_0)\cos\alpha+u_y'(P_0)\cos\beta+u_z'(P_0)\cos\gamma
+      =\mathbf{grad}\,u|_{P_0}\cdot\boldsymbol l^\circ$$
+    <p><b>证明骨架（三步，值得记住）</b>：① 可微 ⇒ $\Delta u=u_x'\Delta x+u_y'\Delta y+u_z'\Delta z+o(t)$；
+    ② 除以 $t=\sqrt{(\Delta x)^2+(\Delta y)^2+(\Delta z)^2}$；
+    ③ $\dfrac{\Delta x}t=\cos\alpha$ 等三式恰好凑出方向余弦，$\dfrac{o(t)}t\to0$。</p>
+    <p class="legend2">📌 <b>整个证明的全部依赖就是"可微"这一条</b>——所以下面强例 17.1 的反例才那么值钱：
+    <b>不可微时，方向导数可以照样存在，只是不能用这个公式算。</b></p>
+  </div>
+
+  <div class="warn"><span class="tag">⚠️ 陷阱 · 忘记单位化：书把它做成了干扰项</span>
+    <div class="duo">
+      <div class="dA"><b class="h">基 例17.10（P.481）</b>
+        $f=x^2y+z^2$ 在 $(1,2,0)$ 沿 $\boldsymbol n=(1,2,2)$ 的方向导数。<br>
+        $\mathbf{grad}\,f=(2xy,x^2,2z)|_{(1,2,0)}=(4,1,0)$，$|\boldsymbol n|=3$，$\boldsymbol n^\circ=\left(\frac13,\frac23,\frac23\right)$。<br>
+        $\dfrac{\partial f}{\partial\boldsymbol n}=\frac43+\frac23+0=\boldsymbol 2$　<span class="chip c-g">正确 (D)</span><br>
+        <b>不单位化会得 $4+2+0=6$</b>　<span class="chip c-r">干扰项 (B)</span></div>
+      <div class="dB"><b class="h">强 例17.2（P.238）</b>
+        $u=xy^2z^3$，$\boldsymbol n=(2,2,-1)$，在 $(1,1,1)$。<br>
+        $\mathbf{grad}\,u=(y^2z^3,2xyz^3,3xy^2z^2)|_{(1,1,1)}=(1,2,3)$，$|\boldsymbol n|=3$。<br>
+        $\dfrac{\partial u}{\partial\boldsymbol n}=(1,2,3)\cdot\left(\frac23,\frac23,-\frac13\right)=\frac23+\frac43-1=\boldsymbol 1$<br>
+        <b>不单位化会得 $2+4-3=3$，正好是 3 倍。</b></div>
+    </div>
+    <p class="legend2">⭐ <b>题面给的是"向量 $\boldsymbol n$"还是"方向 $\boldsymbol l$"，一律先单位化</b>。
+    强化讲把"$\boldsymbol l$ 是单位向量"单独做成一个蓝框注，就是因为这一步天天丢分。<br>
+    📌 <b>唯一不用单位化的情形</b>：给的已经是单位向量（如千基 6 的 $\boldsymbol l=(1,0)$）——
+    此时方向导数就直接等于 $z_x'$，这也是"方向导数与偏导数何时相等"的最小实证。</p>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">★ 强 例17.1</span><a class="pg" href="#">P.238</a>
+      <b>[本讲最重要的反例]</b> 设 $f(x,y)=\begin{cases}1,&y=x^2,\ x\ne0,\\0,&\text{其他},\end{cases}$
+      $f$ 在 $(0,0)$ 处沿任意方向的方向导数记为 $\left.\dfrac{\partial f}{\partial\boldsymbol l}\right|_{(0,0)}$，则（　）。<br>
+      　(A) 存在，$f$ 在 $(0,0)$ 连续　(B) 存在，$f$ 在 $(0,0)$ 不连续<br>
+      　(C) 不存在，$f$ 不连续　(D) 不存在，$f$ 连续</div>
+    <div class="s">
+      <span class="lab">答</span>(B)。
+      <p><b>方向导数全部存在且为 0</b>：沿任意方向 $\boldsymbol l=(\cos\alpha,\cos\beta)$，
+      当 $t$ 充分小时点 $(t\cos\alpha,\,t\cos\beta)$ <b>落在抛物线 $y=x^2$ 之外</b>
+      （直线与抛物线在原点附近只交于原点本身），故 $f=0$，</p>
+      $$\left.\frac{\partial f}{\partial\boldsymbol l}\right|_{(0,0)}=\lim_{t\to0^+}\frac{0-0}t=0.$$
+      <p><b>但 $f$ 在原点不连续</b>：$\lim\limits_{\substack{x\to0\\y=x^2}}f=1$，而 $\lim\limits_{\substack{x\to0\\y=x}}f=0$，两路径极限不等。</p>
+      <div class="notekeep"><span class="nh">📌 批注 · 把这个反例挂到第 13 讲的六性态关系图上</span>
+        第 13 讲讲过"偏导存在 ⇏ 连续"，本题给的是<b>更强的版本</b>：
+        <div class="mantra">沿<u>任意方向</u>的方向导数都存在 $\;\nRightarrow\;$ 连续
+          <small>因为"任意方向"只覆盖了所有<b>直线</b>路径，而连续性要求<b>所有</b>路径（包括曲线路径）都收敛到同一个值</small></div>
+        <b>这正是本题构造的巧妙处</b>：函数在一条<b>抛物线</b>上取 1，抛物线在原点处与每条直线都"相切成零阶接触"，
+        所以任何直线方向都感觉不到它，只有沿抛物线走才撞上。<br>
+        <span class="dock">完整的蕴含链（第 13 讲 + 本讲）：<br>
+        <b>可微 ⇒ 沿任意方向的方向导数存在 ⇒ 偏导数存在</b>；<b>可微 ⇒ 连续</b>。<br>
+        中间那一环<b>反过来全不成立</b>，本题就是"方向导数全存在但不连续（从而不可微）"的标准反例。</span>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ================= s7 梯度 ================= -->
+  <h2 id="s7"><span class="idx">七</span>梯度：<u>方向导数的"最大值方向"打包成一个向量</u></h2>
+
+  <div class="key"><span class="tag">必记 · 两本书给了两个定义，别混，也别只记一个</span>
+    <div class="duo">
+      <div class="dA"><b class="h">强化讲（P.239）· 几何定义：<u>梯度是什么</u></b>
+        若<b>单位</b>向量 $\boldsymbol l_0$ 满足
+        $$\left.\frac{\partial f}{\partial\boldsymbol l_0}\right|_{(a,b)}=\max_{|\boldsymbol l|=1}\left\{\left.\frac{\partial f}{\partial\boldsymbol l}\right|_{(a,b)}\right\},$$
+        则称向量 $\left.\dfrac{\partial f}{\partial\boldsymbol l_0}\right|_{(a,b)}\boldsymbol l_0$ 为<b>梯度</b> $\mathbf{grad}\,f(a,b)$。<br>
+        <b>方向</b>＝取到最大方向导数的方向；<b>长度</b>＝方向导数的最大值。</div>
+      <div class="dB"><b class="h">基础讲（P.480）· 计算定义：<u>梯度怎么算</u></b>
+        设 $u$ 在 $P_0$ 具有<b>一阶连续偏导数</b>，定义
+        $$\left.\mathbf{grad}\,u\right|_{P_0}=\left(u_x'(P_0),\,u_y'(P_0),\,u_z'(P_0)\right)$$
+        旁批：<b>等于该点处切平面的法向量</b>。<br>
+        运算法则与一元求导同构：$\mathbf{grad}(u\pm v)$、$\mathbf{grad}(uv)=v\,\mathbf{grad}u+u\,\mathbf{grad}v$、
+        $\mathbf{grad}\dfrac uv=\dfrac{v\,\mathbf{grad}u-u\,\mathbf{grad}v}{v^2}$。</div>
+    </div>
+    <p class="legend2">📌 <b>两个定义在"可微"条件下等价</b>（强化讲注(2) 明确写了"在可微条件下的梯度为 $(f_x',f_y')$"）。
+    <b>考概念时用强化讲那个（它不依赖坐标系），考计算时用基础讲那个。</b></p>
+  </div>
+
+  <div class="key"><span class="tag">★★ 必记 · 一条恒等式，三个极值（讲义只给了一个，1000题补齐另外两个）</span>
+    $$\left.\frac{\partial u}{\partial\boldsymbol l}\right|_{P_0}=\left.\mathbf{grad}\,u\right|_{P_0}\cdot\boldsymbol l^\circ
+      =\left|\left.\mathbf{grad}\,u\right|_{P_0}\right|\cos\theta,\qquad \theta=\widehat{\left(\mathbf{grad}\,u,\;\boldsymbol l\right)}$$
+    <div class="tw"><table class="dense">
+      <thead><tr><th>$\theta$</th><th>$\boldsymbol l$ 与梯度的关系</th><th>方向导数</th><th>出处</th></tr></thead>
+      <tbody>
+        <tr><td>$0$</td><td><b>同向</b></td><td class="good">$+\left|\mathbf{grad}\,u\right|$ ← <b>最大值</b></td><td>基 P.481、强 P.239</td></tr>
+        <tr><td>$\pi$</td><td><b>反向</b></td><td class="bad">$-\left|\mathbf{grad}\,u\right|$ ← <b>最小值</b></td><td class="mid">⚠️ 讲义<b>没写</b>，千基 10、强千 12 补</td></tr>
+        <tr><td>$\frac\pi2$</td><td><b>垂直</b>（沿等值线／等值面）</td><td>$0$ ← <b>变化率为零</b></td><td>基 P.481 ②</td></tr>
+      </tbody>
+    </table></div>
+    <div class="mantra">$\left|\mathbf{grad}\,u\right|=\sqrt{(u_x')^2+(u_y')^2+(u_z')^2}$
+      <small>「最大方向导数」「方向导数的最大值」「沿梯度方向的方向导数」——这三句话在题面里指的都是它</small></div>
+  </div>
+
+  <div class="tool" id="tool-compass">
+    <h4>🧭 梯度罗盘 —— 拖动方向 $\boldsymbol l$，看 $\dfrac{\partial f}{\partial\boldsymbol l}=|\mathbf{grad}f|\cos\theta$ 怎么变</h4>
+    <p class="hint">上表的三行不是三个孤立结论，而是<b>同一条余弦曲线上的三个点</b>。
+    转动下面的方向角，左边看向量、右边看数值：<b>方向导数就是梯度在 $\boldsymbol l$ 上的投影</b>。
+    最大／最小／为零三个位置会自动高亮。</p>
+    <div class="ctl">
+      <button data-g="1,2" class="on">$\mathbf{grad}=(1,2)$</button>
+      <button data-g="3,0">$(3,0)$</button>
+      <button data-g="-2,1">$(-2,1)$</button>
+      <button data-g="1,3">千基12 的 $(1,3)$</button>
+    </div>
+    <div class="ctl"><label>方向 $\boldsymbol l$ 的极角</label><input type="range" id="cAng" min="0" max="360" step="1" value="30"><span class="val" id="cAngv">30°</span></div>
+    <div class="scene"><svg id="cSvg" viewBox="0 0 460 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="梯度罗盘"></svg></div>
+    <div class="say nokatex" id="cSay"></div>
+    <span class="verdict v-inf nokatex" id="cVer"></span>
+  </div>
+
+  <div class="key"><span class="tag">★ 套路 · "梯度定参数"三胞胎（同一模型考了三次）</span>
+    <p>题面模板：<b>函数 $z=c_0+ax^2+by^2$ 在点 $P$ 处沿方向 $\boldsymbol l$ 的方向导数最大，最大值为 $M$，求 $a,b$。</b></p>
+    <div class="steps3">
+      <div><b>① 写梯度</b>$\mathbf{grad}\,z|_P=(2ax_P,\;2by_P)$。</div>
+      <div><b>② 方向条件</b>梯度 $\parallel\boldsymbol l$ <b>且同向</b>：
+        $\dfrac{2ax_P}{l_1}=\dfrac{2by_P}{l_2}=k$，<b>$k\gt0$ 不能漏</b>。</div>
+      <div><b>③ 模条件</b>$\sqrt{(2ax_P)^2+(2by_P)^2}=M$。<br>
+        两个条件、两个未知数，解完<b>回代验 $k\gt0$</b>。</div>
+    </div>
+    <div class="tw"><table class="dense">
+      <thead><tr><th>出处</th><th>点 $P$</th><th>方向 $\boldsymbol l$</th><th>最大值 $M$</th><th>答案</th></tr></thead>
+      <tbody>
+        <tr><td>强 例17.3（P.239）</td><td>$(2,1)$</td><td>$\boldsymbol i+2\boldsymbol j$</td><td>$4\sqrt5$</td><td>$a=1,\ b=4$</td></tr>
+        <tr><td>基 例17.11（P.482）</td><td>$(3,4)$</td><td>$-3\boldsymbol i-4\boldsymbol j$</td><td>$10$</td><td class="bad">$a=-1,\ b=-1$（<b>方向为负</b>）</td></tr>
+        <tr><td>千基 11</td><td>$(1,2)$</td><td>$\boldsymbol i+2\boldsymbol j$</td><td>$10$</td><td>$a=\sqrt5,\ b=\sqrt5$</td></tr>
+      </tbody>
+    </table></div>
+    <p class="legend2">⚠️ <b>$k\gt0$ 是这类题唯一的陷阱</b>。以基例 17.11 为例：梯度 $=(6a,8b)$，若只写"平行"，
+    $a=1,b=1$ 也满足模条件 $\sqrt{36+64}=10$——那正是选项 (D)。<b>但此时梯度是 $(6,8)$，与 $\boldsymbol l=(-3,-4)$ 反向，
+    对应的是方向导数的<u>最小</u>值。</b>加上 $k\gt0$ 才排除掉。</p>
+  </div>
+
+  <div class="tool" id="tool-triplet">
+    <h4>📐 三胞胎求解器 —— 输入点、方向、最大值，自动解 $a,b$ 并检查 $k\gt0$</h4>
+    <p class="hint">三道题只是数据不同。改下面四个输入，看方程组怎么建、$k$ 是正是负、增根从哪来。
+    <b>特意试一下"把 $k\gt0$ 去掉"这个按钮，看看增根长什么样。</b></p>
+    <div class="ctl">
+      <button data-t="2,1,1,2,8.94427191" class="on">强17.3</button>
+      <button data-t="3,4,-3,-4,10">基17.11</button>
+      <button data-t="1,2,1,2,10">千基11</button>
+    </div>
+    <div class="ctl"><label>点 $P=(x_P,y_P)$</label>
+      <input type="number" id="tXP" value="2" step="1"><input type="number" id="tYP" value="1" step="1"></div>
+    <div class="ctl"><label>方向 $\boldsymbol l=(l_1,l_2)$</label>
+      <input type="number" id="tL1" value="1" step="1"><input type="number" id="tL2" value="2" step="1"></div>
+    <div class="ctl"><label>最大值 $M$</label><input type="number" id="tM" value="8.94427191" step="0.1"></div>
+    <div class="ctl"><button id="tK" class="on">要求 $k\gt0$（正确）</button><button id="tNoK">不要求 $k\gt0$（看增根）</button></div>
+    <div class="say nokatex" id="tSay"></div>
+    <span class="verdict v-ok nokatex" id="tVer"></span>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 例17.12 ＝ 强千 10</span><a class="pg" href="#">P.482</a>
+      <b>[两处一字不差的重题 · 两个方向反解梯度]</b> 已知 $z=f(x,y)$ 可微，其在点 $P_0(1,2)$ 处
+      沿从 $P_0$ 到 $P_1(2,3)$ 的方向导数为 $2\sqrt2$，沿从 $P_0$ 到 $P_2(1,0)$ 的方向导数为 $-3$，
+      则 $z$ 在 $P_0$ 处的最大方向导数为 ______。</div>
+    <div class="s">
+      <span class="lab">答</span>$\sqrt{10}$。
+      <p><b>① 两个方向单位化</b>：$\boldsymbol l_1=\overrightarrow{P_0P_1}=(1,1)\Rightarrow\boldsymbol l_1^\circ=\left(\frac1{\sqrt2},\frac1{\sqrt2}\right)$；
+      $\boldsymbol l_2=\overrightarrow{P_0P_2}=(0,-2)\Rightarrow\boldsymbol l_2^\circ=(0,-1)$。</p>
+      <p><b>② 列方程组</b>：$\begin{cases}\dfrac1{\sqrt2}z_x'+\dfrac1{\sqrt2}z_y'=2\sqrt2,\\ -z_y'=-3,\end{cases}$
+      解得 $z_y'=3$，$z_x'=4-3=1$。</p>
+      <p><b>③ 取模</b>：最大方向导数 $=\left|\mathbf{grad}\,z|_{P_0}\right|=\sqrt{1^2+3^2}=\sqrt{10}$。</p>
+      <div class="notekeep"><span class="nh">📌 批注 · 书后面那个推广注，是本讲唯一与线代联通的地方</span>
+        书把这道题抽象成了一个<b>命题</b>：设 $f$ 可微，沿两条<b>不共线</b>方向 $\boldsymbol l_1^\circ,\boldsymbol l_2^\circ$ 的方向导数满足
+        $$\begin{cases}\dfrac{\partial f}{\partial\boldsymbol l_1^\circ}=f_x'\cos\alpha_1+f_y'\cos\beta_1,\\[1mm]
+          \dfrac{\partial f}{\partial\boldsymbol l_2^\circ}=f_x'\cos\alpha_2+f_y'\cos\beta_2,\end{cases}\qquad
+          \begin{vmatrix}\cos\alpha_1&\cos\beta_1\\\cos\alpha_2&\cos\beta_2\end{vmatrix}\ne0$$
+        <b>(1)</b> 两个方向导数<b>不全为 0</b> ⇒ <b>非齐次</b>方程组有<b>唯一解</b>（就是本题）。<br>
+        <b>(2)</b> 两个方向导数<b>都为 0</b> ⇒ <b>齐次</b>方程组<b>只有零解</b> ⇒ $f_x'=f_y'=0$ ⇒ $\mathrm df=0$，
+        <b>由 $P_0$ 的任意性得 $f$ 恒为常数</b>。<br>
+        <span class="dock">"不共线 ⟺ 系数行列式 $\ne0$ ⟺ 克拉默法则可解"——<b>这一句把线代的语言原样搬进了高数</b>。
+        结论 (2) 是一个漂亮的命题：<b>处处沿两个固定不共线方向的变化率都为零 ⇒ 函数是常数</b>。
+        它的三维版本（三个不共面方向）在真题里出现过。</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 例17.1 ＋ 千基 1 ＋ 强千 13</span><a class="pg" href="#">P.467</a>
+      <b>★ 三题同源 · "可微"的四种写法</b><br>
+      (a) $f$ 在 $(0,0)$ 可微，$f(0,0)=0$，$\boldsymbol n=\left(f_x',f_y',-1\right)\big|_{(0,0)}$，
+        求 $\lim\limits_{(x,y)\to(0,0)}\dfrac{\boldsymbol n\cdot(x,y,f(x,y))}{\sqrt{x^2+y^2}}$。<br>
+      (b) 同上但给具体值 $f_x'(0,0)=1$，$f_y'(0,0)=-1$，$\boldsymbol n=(-1,1,1)$，分母换成 $\mathrm e^{\sqrt{x^2+y^2}}-1$。<br>
+      (c) 选择题：下列哪个极限式刻画了"$f$ 在 $p_0$ 可微"？</div>
+    <div class="s">
+      <span class="lab">答</span>(a) 0；(b) 0；(c) 选 (D)。
+      <p><b>三题的内核是同一句话</b>：</p>
+      <div class="mantra">$f(p)=f(p_0)+\mathbf{grad}f|_{p_0}\cdot\overrightarrow{p_0p}+o\!\left(\left|\overrightarrow{p_0p}\right|\right)$
+        <small>即 $\displaystyle\lim_{p\to p_0}\frac{f(p)-\left[f(p_0)+\mathbf{grad}f|_{p_0}\cdot\overrightarrow{p_0p}\right]}{\left|\overrightarrow{p_0p}\right|}=0$</small></div>
+      <div class="tw"><table class="dense">
+        <thead><tr><th>写法</th><th>形式</th><th>出处</th></tr></thead>
+        <tbody>
+          <tr><td>① 增量式</td><td>$\Delta z-\mathrm dz=o(\rho)$</td><td>第 13 讲定义</td></tr>
+          <tr><td>② 分量式</td><td>$\dfrac{f(x,y)-f(0,0)-f_x'x-f_y'y}{\sqrt{x^2+y^2}}\to0$</td><td>基例17.1、千基1</td></tr>
+          <tr><td>③ 向量式</td><td>$\dfrac{f(p)-f(p_0)-\mathbf{grad}f\cdot\overrightarrow{p_0p}}{\left|\overrightarrow{p_0p}\right|}\to0$</td><td>强千13</td></tr>
+          <tr><td>④ 几何式</td><td><b>曲面到切平面的距离是 $\rho$ 的高阶无穷小</b></td><td>本页的解读（书未明写）</td></tr>
+        </tbody>
+      </table></div>
+      <div class="notekeep"><span class="nh">📌 批注 · ④ 才是这三道题真正想让你看见的东西</span>
+        题 (a) 里的 $\boldsymbol n=(f_x',f_y',-1)$ <b>正是曲面 $z=f(x,y)$ 在原点处的法向量</b>（"向下"那一版）。
+        于是分子
+        $$\boldsymbol n\cdot(x,y,f(x,y))=f_x'x+f_y'y-f(x,y)$$
+        恰好是<b>点 $(x,y,f(x,y))$ 到切平面 $z=f_x'x+f_y'y$ 的有向距离乘上 $|\boldsymbol n|$</b>。
+        分母 $\rho=\sqrt{x^2+y^2}$ 是这点到原点的水平距离。<b>整个极限说的就是：</b>
+        <div class="mantra">可微 $\iff$ 曲面离它的切平面，比离切点本身还要快地靠拢
+          <small>用切平面做线性逼近，误差是 $o(\rho)$——这就是"可微"两个字的全部几何含义</small></div>
+        <span class="dock">(b) 的唯一新东西是分母：$\mathrm e^{\sqrt{x^2+y^2}}-1\sim\sqrt{x^2+y^2}=\rho$，
+        <b>等价无穷小替换后就完全变成 (a)</b>。命题人换个分母就多考一次，内核一点没变。</span><br>
+        <b>(c) 的选项设计</b>：四个选项分别在 $f(p_0)$ 前用 $+/-$、在 $\mathbf{grad}$ 前用 $+/-$ 排列组合。
+        <b>只要记住"实际值 减 线性逼近值"这个顺序</b>，就只有 (D) 能对上。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">千基 10　强千 12</span><a class="pg" href="#">千</a>
+      <b>[讲义没有的另一半：最小值]</b><br>
+      (a) 设 $f(x,y,z)=x^2\mathrm e^{yz^2}$，则 $f$ 在点 $(-1,0,1)$ 处方向导数的<b>最小值</b>为 ______。<br>
+      (b) 设可微 $f(x,y)$ 在 $(0,0)$ 处的<b>最小方向导数</b>为 $a$（$a\ne0$，$a\ne-1$），$b^2+c^2$ 为正常数，
+        则 $\mathbf{grad}f(0,0)$ 与 $(b,c)$ 内积的<b>最大值</b>为（　）。
+        (A) $a\sqrt{b^2+c^2}$　(B) $-a\sqrt{b^2+c^2}$　(C) $\sqrt{|a|(b^2+c^2)}$　(D) $-\sqrt{|a|(b^2+c^2)}$</div>
+    <div class="s">
+      <span class="lab">答</span>(a) $-\sqrt5$；(b) (B)。
+      <p><b>(a)</b> $\mathbf{grad}f=\left(2x\mathrm e^{yz^2},\;x^2z^2\mathrm e^{yz^2},\;2x^2yz\mathrm e^{yz^2}\right)\big|_{(-1,0,1)}=(-2,1,0)$，
+      最小值 $=-\left|\mathbf{grad}f\right|=-\sqrt5$。</p>
+      <p><b>(b)</b> 由「最小方向导数 $=-\left|\mathbf{grad}f\right|$」得 $\left\|\mathbf{grad}f(0,0)\right\|=-a$（<b>所以 $a\lt0$</b>）。
+      再由柯西不等式的向量版
+      $$\left|\boldsymbol\alpha\cdot\boldsymbol\beta\right|=\|\boldsymbol\alpha\|\|\boldsymbol\beta\|\cos\theta\leqslant\|\boldsymbol\alpha\|\|\boldsymbol\beta\|,$$
+      得内积的最大值 $=\left\|\mathbf{grad}f(0,0)\right\|\cdot\sqrt{b^2+c^2}=-a\sqrt{b^2+c^2}$，选 (B)。</p>
+      <div class="notekeep"><span class="nh">📌 批注 · 为什么答案里带一个负号看着"别扭"却是对的</span>
+        因为 <b>$a$ 本身是负数</b>（它是最小方向导数）。$-a\gt0$ 才是模长，所以 $-a\sqrt{b^2+c^2}\gt0$，
+        作为"最大值"完全合理。<span class="dock">选项 (A) $a\sqrt{b^2+c^2}$ 是负数，
+        而内积的最大值不可能是负的（取 $\boldsymbol\beta$ 与梯度同向即得正值），<b>凭符号就能排除</b>。</span><br>
+        <b>题设里那个 $a\ne-1$ 是干什么的？</b>——它是<b>干扰条件</b>，本题用不上。
+        （若 $a=-1$ 则 $\|\mathbf{grad}\|=1$，答案照样是 $-a\sqrt{b^2+c^2}=\sqrt{b^2+c^2}$，没有任何特殊性。）
+        <b>能识别出"多余条件"，也是审题能力的一部分。</b>
+      </div>
+    </div>
+  </div>
+
+  <div class="key"><span class="tag">补讲 · 多元函数的泰勒多项式（强化讲第三节，眉批"考前记"）</span>
+    <p>设 $f(x,y)$ <b>二阶偏导数连续</b>，记 $X_0(x_0,y_0)$，$\Delta X=(\Delta x,\Delta y)$，则<b>二次泰勒多项式</b>为</p>
+    $$f(x_0,y_0)+\underbrace{\left.(f_x',f_y')\right|_{X_0}}_{\text{梯度}}\begin{pmatrix}\Delta x\\\Delta y\end{pmatrix}
+      +\frac1{2!}(\Delta x,\Delta y)\underbrace{\left.\begin{pmatrix}f_{xx}''&f_{xy}''\\f_{yx}''&f_{yy}''\end{pmatrix}\right|_{X_0}}_{\text{黑塞矩阵}}\begin{pmatrix}\Delta x\\\Delta y\end{pmatrix}$$
+    <p>展开即 $\dfrac1{2!}\left[f_{xx}''(\Delta x)^2+2f_{xy}''\Delta x\Delta y+f_{yy}''(\Delta y)^2\right]$。</p>
+    <p class="legend2">⭐ <b>一次项用梯度，二次项用黑塞矩阵（一个二次型！）</b>——这也解释了第 13 讲极值判别里
+    $\Delta=AC-B^2$ 的来历：<b>它就是黑塞矩阵的行列式</b>，正定/负定/不定对应极小/极大/非极值，
+    <b>与线代的二次型判别法完全是同一件事</b>。</p>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 例17.4</span><a class="pg" href="#">P.240</a>
+      设 $f(x,y)=\dfrac{\cos x}{\cos y}$ 在点 $(0,0)$ 处的二次泰勒多项式为 $a+bx^2+cy^2$，则（　）。<br>
+      　(A) $a=1,b=-\frac12,c=\frac12$　(B) $a=1,b=\frac12,c=-\frac12$　(C) $a=-1,b=-\frac12,c=\frac12$　(D) $a=-1,b=\frac12,c=-\frac12$</div>
+    <div class="s">
+      <span class="lab">答</span>(A)。
+      <div class="duo">
+        <div class="dA"><b class="h">法一 · 书上的做法（求五个偏导）</b>
+          $f(0,0)=1$，$f_x'(0,0)=f_y'(0,0)=0$，<br>
+          $f_{xx}''(0,0)=-1$，$f_{xy}''(0,0)=0$，$f_{yy}''(0,0)=1$。<br>
+          代入公式得 $1-\frac12x^2+\frac12y^2+o(x^2+y^2)$。<br>
+          <span style="color:var(--muted)">书的旁批：由 $f(0,0)=1$ 立刻<b>排除 (C)(D)</b>。</span></div>
+        <div class="dB"><b class="h">法二 · 一元展开相乘（快得多，推荐）</b>
+          $\cos x=1-\dfrac{x^2}2+o(x^2)$，<br>
+          $\dfrac1{\cos y}=\sec y=1+\dfrac{y^2}2+o(y^2)$，<br>
+          相乘（只留二阶）$=1-\dfrac{x^2}2+\dfrac{y^2}2+o(\rho^2)$。<br>
+          <b>三十秒，不用求任何偏导。</b></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注 · 什么时候能用"一元展开相乘"</span>
+        <b>当二元函数能写成"只含 $x$ 的部分 × 只含 $y$ 的部分"（可分离）时，直接把两个一元麦克劳林式相乘。</b>
+        本题 $\dfrac{\cos x}{\cos y}=\cos x\cdot\sec y$ 正是这种。<br>
+        <span class="dock">⚠️ 要记住 $\sec y=1+\frac{y^2}2+\frac{5y^4}{24}+\cdots$，
+        或者更稳的：$\dfrac1{1-\frac{y^2}2+o(y^2)}=1+\frac{y^2}2+o(y^2)$（<b>用 $\frac1{1-u}=1+u+o(u)$</b>），
+        后者不用背 $\sec$ 的展开式。</span><br>
+        <b>不可分离时</b>（如 $\mathrm e^{xy}$、$\ln(1+x+y)$）就整体代入一元展开式，再按 $x,y$ 的次数收集——
+        <b>仍然比求五个偏导快</b>。求偏导只在"函数复杂到无法展开"时才用。
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ================= s8 散度与旋度 ================= -->
+  <h2 id="s8"><span class="idx">八</span>散度与旋度：<u>高斯公式与斯托克斯公式的被积函数</u></h2>
+
+  <div class="key"><span class="tag">必记 · 什么叫"场"，以及四个算子的"进出"</span>
+    <p>场就是<b>空间区域 $\Omega$ 上的一种对应法则</b>：每点对应一个<b>数</b>就是<b>数量场</b>（如温度场，只讲大小）；
+    每点对应一个<b>向量</b>就是<b>向量场</b>（如引力场，既讲大小也讲方向）。</p>
+    <div class="tw"><table class="dense">
+      <thead><tr><th>算子</th><th>输入</th><th>输出</th><th>公式</th></tr></thead>
+      <tbody>
+        <tr><td><b>方向导数</b> $\dfrac{\partial u}{\partial\boldsymbol l}$</td><td>数量场 ＋ 方向</td><td class="mid"><b>数</b></td>
+            <td>$u_x'\cos\alpha+u_y'\cos\beta+u_z'\cos\gamma$</td></tr>
+        <tr><td><b>梯度</b> $\mathbf{grad}\,u$</td><td>数量场</td><td class="good"><b>向量场</b></td>
+            <td>$(u_x',u_y',u_z')$</td></tr>
+        <tr><td><b>散度</b> $\operatorname{div}\boldsymbol A$</td><td>向量场</td><td class="mid"><b>数量场</b></td>
+            <td>$\dfrac{\partial P}{\partial x}+\dfrac{\partial Q}{\partial y}+\dfrac{\partial R}{\partial z}$</td></tr>
+        <tr><td><b>旋度</b> $\mathbf{rot}\,\boldsymbol A$</td><td>向量场</td><td class="good"><b>向量场</b></td>
+            <td>$\begin{vmatrix}\boldsymbol i&\boldsymbol j&\boldsymbol k\\\frac\partial{\partial x}&\frac\partial{\partial y}&\frac\partial{\partial z}\\P&Q&R\end{vmatrix}$</td></tr>
+      </tbody>
+    </table></div>
+    <p class="legend2">⚠️ <b>散度是数、旋度是向量</b>——填空题写错类型直接零分。
+    书的旁批：散度<b>表示向外（内）流的强度</b>（"源"）；旋度<b>描述向量场中向量旋转量的强度</b>。</p>
+  </div>
+
+  <div class="warn"><span class="tag">⚠️ 必记 · 旋度展开式：$\boldsymbol j$ 分量最容易记反</span>
+    $$\mathbf{rot}\,\boldsymbol A=\left(\frac{\partial R}{\partial y}-\frac{\partial Q}{\partial z}\right)\boldsymbol i
+      +\left(\underline{\frac{\partial P}{\partial z}-\frac{\partial R}{\partial x}}\right)\boldsymbol j
+      +\left(\frac{\partial Q}{\partial x}-\frac{\partial P}{\partial y}\right)\boldsymbol k$$
+    <p><b>记法一 · 循环</b>：三个分量按 $(y,z)\to(z,x)\to(x,y)$ <b>循环</b>，被求导的函数按 $(R,Q)\to(P,R)\to(Q,P)$ 循环。
+    <b>$\boldsymbol j$ 分量写成 $P_z'-R_x'$ 而不是 $R_x'-P_z'$，正是因为行列式展开的负号已经被"循环"吸收了。</b></p>
+    <p><b>记法二 · 直接展行列式</b>，按第一行展开时 $\boldsymbol j$ 前面自带一个负号：
+    $-\left(\dfrac{\partial R}{\partial x}-\dfrac{\partial P}{\partial z}\right)=\dfrac{\partial P}{\partial z}-\dfrac{\partial R}{\partial x}$。
+    <b>考场上直接写行列式再展开，比背展开式更保险。</b></p>
+    <p class="legend2">📌 <b>书的展开式出现在习题 17.10 的解答里，而不是正文</b>——正文只给了行列式。
+    这里把它提到正文位置，是因为选择填空要求速度。</p>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 例17.13　基 习17.9/17.10　强 例17.7　千基 14　强千 15</span><a class="pg" href="#">P.483 / P.484 / P.243</a>
+      <b>六道散度旋度题一次做完</b><br>
+      (a) $\boldsymbol F=xy\boldsymbol i-yz\boldsymbol j+zx\boldsymbol k$，求 $\mathbf{rot}\,\boldsymbol F(1,1,0)$。<br>
+      (b) $\boldsymbol F=x^3\boldsymbol i+y^3\boldsymbol j+z^3\boldsymbol k$，求 $\operatorname{div}\boldsymbol F$ 在 $(1,0,-1)$。<br>
+      (c) $\boldsymbol A=(z,3x,2y)$，求 $\mathbf{rot}\,\boldsymbol A$。<br>
+      (d) $\boldsymbol v_1=(0,x,z)$，$\boldsymbol v_2=(y,0,1)$，$\boldsymbol F=\boldsymbol v_1\times\boldsymbol v_2$，求 $\operatorname{div}\boldsymbol F$。<br>
+      (e) $\boldsymbol F=xy\boldsymbol i-y\cos z\boldsymbol j+z\sin x\boldsymbol k$，求 $\mathbf{rot}\,\boldsymbol F|_{(1,1,0)}$。<br>
+      (f) $\boldsymbol F=|x|\cos y\,\boldsymbol i-y\sin z\,\boldsymbol j+z\boldsymbol k$，求 $\mathbf{rot}\,\boldsymbol F(1,1,0)$。</div>
+    <div class="s">
+      <div class="tw"><table class="dense">
+        <thead><tr><th>题</th><th>过程</th><th>答案</th></tr></thead>
+        <tbody>
+          <tr><td>(a)</td><td>$\mathbf{rot}=\left(y,\,-z,\,-x\right)$，代 $(1,1,0)$</td><td class="good">$\boldsymbol i-\boldsymbol k$</td></tr>
+          <tr><td>(b)</td><td>$\operatorname{div}=3x^2+3y^2+3z^2$，代 $(1,0,-1)$</td><td class="good">$6$</td></tr>
+          <tr><td>(c)</td><td>$P=z,Q=3x,R=2y$：$\boldsymbol i$ 位 $2-0$，$\boldsymbol j$ 位 $1-0$，$\boldsymbol k$ 位 $3-0$</td><td class="good">$2\boldsymbol i+\boldsymbol j+3\boldsymbol k$</td></tr>
+          <tr><td>(d)</td><td>先叉乘 $\boldsymbol F=\begin{vmatrix}\boldsymbol i&\boldsymbol j&\boldsymbol k\\0&x&z\\y&0&1\end{vmatrix}=x\boldsymbol i+yz\boldsymbol j-xy\boldsymbol k$，再 $\operatorname{div}=1+z+0$</td><td class="good">$1+z$</td></tr>
+          <tr><td>(e)</td><td>$\mathbf{rot}=\left(-y\sin z,\,-z\cos x,\,-x\right)$，代 $(1,1,0)$</td><td class="good">$-\boldsymbol k$</td></tr>
+          <tr><td>(f)</td><td><b>先定号</b>：所求点 $x=1\gt0$，故 $|x|=x$；$\mathbf{rot}=\left(y\cos z,\,0,\,x\sin y\right)$，代 $(1,1,0)$</td><td class="good">$\boldsymbol i+\sin1\cdot\boldsymbol k$</td></tr>
+        </tbody>
+      </table></div>
+      <div class="notekeep"><span class="nh">📌 批注 · 六道题里只有两道有技术含量</span>
+        <b>(d) 的技术含量在"先叉乘再求散度"</b>：题目给的是两个向量场的叉积，
+        <b>必须先算出 $\boldsymbol F$ 的三个分量</b>，才能对号入座求 $\operatorname{div}$。
+        叉乘验算：$\boldsymbol i$ 位 $x\cdot1-z\cdot0=x$；$\boldsymbol j$ 位 $-(0\cdot1-z\cdot y)=yz$；$\boldsymbol k$ 位 $0-xy=-xy$ ✔。<br>
+        <b>(f) 的技术含量在绝对值</b>：<span class="dock">$|x|$ 在 $x=0$ 处不可导，
+        但所求点是 $x=1$，<b>在该点的一个邻域内恒有 $x\gt0$</b>，所以可以放心写 $|x|=x$ 再求导。
+        若求点在 $x\lt0$ 侧，则 $P=-x\cos y$，$\boldsymbol k$ 分量变成 $-x\sin y$，<b>结果反号</b>；
+        若求点恰在 $x=0$ 上，$P_y'$ 要左右分别讨论。<b>凡带绝对值的场，第一步永远是"看所求点落在哪一侧"。</b></span><br>
+        📌 <b>速算口诀</b>：散度是"对角线"（$P$ 对 $x$、$Q$ 对 $y$、$R$ 对 $z$），旋度是"交叉减"。
+        <b>散度求和、旋度作差</b>，一秒区分。
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ================= s9 综合大题 ================= -->
+  <h2 id="s9"><span class="idx">九</span>综合大题：<u>本章真正需要写卷面的六道</u></h2>
+
+  <div class="key"><span class="tag">必记 · 本章大题只有三个"母型"</span>
+    <div class="gates">
+      <div><b class="g">母型①</b><b>最值型</b>——"求最短距离 / 最大方向导数在哪取到"。
+        <b>标准路：拉格朗日乘数法</b>；<b>快路：几何判据</b>（切平面平行、距离＝到定点距离）。<b>两条路都要会。</b></div>
+      <div><b class="g">母型②</b><b>反解型</b>——已知若干方向导数 / 已知场的性质，反解梯度或函数本身。
+        <b>核心动作：把条件写成线性方程组</b>，用"不共线 ⟺ 行列式 ≠0"保证可解。</div>
+      <div><b class="g">母型③</b><b>串联型</b>——方向导数 → 偏微分方程 → 常微分方程 → 极值判别。
+        <b>本章唯一的四章串联题（千基 13），也是全章最值得写满三层的一道。</b></div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">★★ 千基 13</span><a class="pg" href="#">千·基13</a>
+      <b>[母型③ · 全章最综合]</b> 设可微函数 $z=z(x,y)$ 在平面上任一点 $(x,y)$ 处沿 $x$ 轴正向 $\boldsymbol i$ 与 $y$ 轴正向 $\boldsymbol j$ 的
+      方向导数分别为 $\left[\mathrm e^{-x}-f(x)\right]y$ 与 $f(x)$，其中 $f(x)$ 的一阶导数连续，且 $f(0)=1$。<br>
+      (1) 求 $z(x,y)$ 的表达式；(2) 判断 $z(x,y)$ 是否有极值，若有，求之；若无，说明理由。</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li>"沿 $x$ 轴正向 $\boldsymbol i$ 的方向导数"——$\boldsymbol i$ 已经是单位向量，所以它<b>就是 $z_x'$</b>；
+          同理 $\boldsymbol j$ 方向的就是 $z_y'$。<b>题目绕了一圈，其实只是给了两个偏导数。</b>这一步看穿了，题就矮了一半。</li>
+          <li>两个偏导都知道 ⇒ 想求 $z$，就<b>挑积分起来最容易的那个先积</b>。
+          $z_y'=f(x)$ <b>不含 $y$</b>，对 $y$ 积分只是乘一个 $y$：$z=yf(x)+\psi(x)$。<b>比对 $x$ 积分省事得多。</b></li>
+          <li>拿到 $z=yf(x)+\psi(x)$ 后<b>回代另一个条件</b>：$z_x'=yf'(x)+\psi'(x)$，
+          与题给的 $\left[\mathrm e^{-x}-f(x)\right]y$ 比较。
+          <b>两边都是"$y$ 的一次多项式"，按 $y$ 的系数与常数项分别相等</b>——这就把待定函数逼出了微分方程。</li>
+          <li>$f'+f=\mathrm e^{-x}$ 是<b>一阶线性</b>（第 15 讲），有初值 $f(0)=1$，唯一确定。</li>
+          <li>(2) 是标准的<b>二元极值判别</b>（第 13 讲）：解驻点 → 算 $A,B,C$ → 看 $\Delta=AC-B^2$ 的符号。
+          <b>注意 $\Delta\lt0$ 时结论是"不是极值点"，要说清楚。</b></li>
+        </ol>
+      </div>
+      <div class="paper"><span class="phead">✍️ 考场卷面<span class="score">解答题 · 约 12 分</span></span>
+        <div class="step"><span class="k">解</span><b>(1)</b> 因 $\boldsymbol i,\boldsymbol j$ 均为单位向量，由方向导数的计算公式知
+          $$z_x'=\left[\mathrm e^{-x}-f(x)\right]y,\qquad z_y'=f(x).\tag{1}$$<span class="pt">⛳ 2分</span></div>
+        <div class="step">将 (1) 的第二式对 $y$ 积分，得
+          $$z(x,y)=yf(x)+\psi(x),\tag{2}$$
+          其中 $\psi(x)$ 为待定的可微函数。<span class="pt">⛳ 2分</span></div>
+        <div class="step">将 (2) 式对 $x$ 求偏导，得 $z_x'=yf'(x)+\psi'(x)$。与 (1) 的第一式比较，
+          由 $y$ 的任意性得
+          $$f'(x)=\mathrm e^{-x}-f(x),\qquad \psi'(x)=0,$$
+          即 $\psi(x)\equiv C_0$（常数），且 $f$ 满足一阶线性微分方程
+          $$f'(x)+f(x)=\mathrm e^{-x}.\tag{3}$$<span class="pt">⛳ 3分</span></div>
+        <div class="step">解 (3) 式：$f(x)=\mathrm e^{-\int1\mathrm dx}\left[\int\mathrm e^{-x}\mathrm e^{\int1\mathrm dx}\mathrm dx+C\right]
+          =\mathrm e^{-x}(x+C)$。由 $f(0)=1$ 得 $C=1$，故 $f(x)=(x+1)\mathrm e^{-x}$，从而
+          $$z(x,y)=y(x+1)\mathrm e^{-x}+C_0\quad(C_0\text{ 为任意常数}).$$<span class="pt">⛳ 2分</span></div>
+        <div class="step"><b>(2)</b> 由 (1) 得 $z_x'=-xy\mathrm e^{-x}$，$z_y'=(x+1)\mathrm e^{-x}$。
+          令 $z_x'=0,\ z_y'=0$，因 $\mathrm e^{-x}\ne0$，得唯一驻点 $(-1,\,0)$。<span class="pt">⛳ 1分</span></div>
+        <div class="step">又
+          $$A=z_{xx}''=y(x-1)\mathrm e^{-x},\quad B=z_{xy}''=-x\mathrm e^{-x},\quad C=z_{yy}''=0,$$
+          代入 $x=-1,\ y=0$ 得 $A=0,\ B=\mathrm e,\ C=0$。<span class="pt">⛳ 1分</span></div>
+        <div class="step fin">于是 $\Delta=AC-B^2=-\mathrm e^2\lt0$，由二元函数极值的充分条件知
+          点 $(-1,0)$ <b>不是</b>极值点。故 $z(x,y)$ <b>无极值</b>。<span class="pt">⛳ 1分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注 · 三个容易翻车的地方 + 一次完整验算</span>
+        <span class="dock">① <b>"由 $y$ 的任意性"这句话必须写</b>。$yf'(x)+\psi'(x)=\left[\mathrm e^{-x}-f(x)\right]y$
+        是对<b>所有</b> $y$ 成立的恒等式，才能按系数比较。不写这句就是跳步。</span><br>
+        <span class="dock">② <b>先对 $y$ 积分，不要先对 $x$ 积分。</b>若从 $z_x'$ 入手，会遇到 $\int f(x)\mathrm dx$ 这个<b>未知积分</b>，
+        表达式里带着积分号很难往下走（书上的解析就是这么写的，多绕了一步）。<b>挑"不含该变量"的那个偏导先积，是通用技巧。</b></span><br>
+        <span class="dock">③ <b>$\Delta\lt0$ 的结论是"不是极值点"，不是"无法判断"。</b>无法判断是 $\Delta=0$ 的情形。
+        本题写"故无极值"要有依据：<b>驻点唯一且它不是极值点</b>，而极值点必是驻点（$z$ 处处可微），所以确实无极值。</span><br>
+        <b>验算 $f$</b>：$f=(x+1)\mathrm e^{-x}$ ⇒ $f'=\mathrm e^{-x}-(x+1)\mathrm e^{-x}=-x\mathrm e^{-x}$；
+        $f'+f=-x\mathrm e^{-x}+(x+1)\mathrm e^{-x}=\mathrm e^{-x}$ ✔；$f(0)=1$ ✔。<br>
+        <b>验算 $z_x'$</b>：$z=y(x+1)\mathrm e^{-x}$ ⇒ $z_x'=y\mathrm e^{-x}-y(x+1)\mathrm e^{-x}=-xy\mathrm e^{-x}$；
+        而题给 $\left[\mathrm e^{-x}-f\right]y=\left[\mathrm e^{-x}-(x+1)\mathrm e^{-x}\right]y=-xy\mathrm e^{-x}$ ✔ 两者一致。<br>
+        📌 <b>这道题一次性用到了第 6、13、15、17 四讲</b>（单位向量、偏导反解、一阶线性、二元极值），
+        <b>是本章唯一配得上"综合题"三个字的题</b>。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">★ 强千 2</span><a class="pg" href="#">千·强2</a>
+      <b>[母型① · 两条路都要会]</b> 求曲面 $4z=3x^2-2xy+3y^2$ 上的点到平面 $x+y-4z=1$ 的最短距离。</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li>"曲面上的点到平面的距离"有现成公式 $d=\dfrac{|x+y-4z-1|}{\sqrt{18}}$，
+          <b>所以这是一道"带约束求最值"的题</b>，约束就是曲面方程。</li>
+          <li>带绝对值和根号不好求导 ⇒ <b>转化为求 $S=(x+y-4z-1)^2$ 的最小值</b>（分母是常数，平方保序）。
+          <b>这个"去根号去绝对值"的转化是最值题的标准第一步。</b></li>
+          <li>标准路是拉格朗日；但要先想一下<b>几何</b>：距离取到极值的点，曲面在那里的<b>切平面必然平行于给定平面</b>
+          （否则沿切平面挪一点距离还能变小）。<b>这条几何判据能把四元方程组降成两个线性方程。</b></li>
+          <li>两条路都写出来，考场上按时间选：<b>法二快，但要能一句话说清理由；法一慢，但零风险。</b></li>
+        </ol>
+      </div>
+      <div class="paper"><span class="phead">✍️ 考场卷面<span class="score">解答题 · 约 10 分</span></span>
+        <div class="step"><span class="k">解</span>设曲面上的点为 $(x,y,z)$，它到平面 $x+y-4z-1=0$ 的距离为
+          $$d=\frac{|x+y-4z-1|}{\sqrt{1^2+1^2+(-4)^2}}=\frac{|x+y-4z-1|}{3\sqrt2}.$$
+          在约束 $3x^2-2xy+3y^2-4z=0$ 下求 $d$ 的最小值，等价于求 $S=(x+y-4z-1)^2$ 的最小值。<span class="pt">⛳ 2分</span></div>
+        <div class="step">构造辅助函数
+          $$F(x,y,z,\lambda)=(x+y-4z-1)^2+\lambda\left(3x^2-2xy+3y^2-4z\right),$$
+          令
+          $$\begin{cases}F_x'=2(x+y-4z-1)+6\lambda x-2\lambda y=0,\\F_y'=2(x+y-4z-1)-2\lambda x+6\lambda y=0,\\
+            F_z'=-8(x+y-4z-1)-4\lambda=0,\\F_\lambda'=3x^2-2xy+3y^2-4z=0.\end{cases}$$<span class="pt">⛳ 4分</span></div>
+        <div class="step">前两式相减得 $8\lambda(x-y)=0$；由第三式知 $\lambda\ne0$（否则 $x+y-4z-1=0$，
+          与该点在曲面上矛盾），故 $x=y$。代入第四式得 $z=x^2$，再由前三式解得
+          $$x=y=\frac14,\qquad z=\frac1{16}.$$<span class="pt">⛳ 2分</span></div>
+        <div class="step fin">由题设知最短距离必存在，故
+          $$d_{\min}=\frac{\left|\frac14+\frac14-4\cdot\frac1{16}-1\right|}{3\sqrt2}=\frac{\frac34}{3\sqrt2}=\frac{\sqrt2}8.$$<span class="pt">⛳ 2分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注 · 法二：切平面平行判据（不用拉格朗日，三行）</span>
+        距离取极值处，<b>曲面的切平面必平行于给定平面</b>，即两法向量成比例。
+        令 $F=3x^2-2xy+3y^2-4z$，则 $\boldsymbol n=(6x-2y,\,-2x+6y,\,-4)$，给定平面 $\boldsymbol n_\pi=(1,1,-4)$。
+        <b>第三个分量已经相等（都是 $-4$），故比例系数为 1</b>，于是
+        $$\begin{cases}6x-2y=1,\\-2x+6y=1\end{cases}\Longrightarrow x=y=\frac14,\qquad z=\frac{3\cdot\frac1{16}-2\cdot\frac1{16}+3\cdot\frac1{16}}4=\frac1{16}.$$
+        <b>与法一同一个点，但只解了一个二元线性方程组。</b>
+        <span class="dock">⚠️ 用法二时<b>必须在卷面上写出理由</b>（"距离取极值处切平面平行于给定平面"），
+        否则阅卷看不出依据。写一句话即可，仍比拉格朗日省时间。<br>
+        ⚠️ 法二有个前提：<b>曲面与平面不相交</b>（否则最短距离是 0，取不到"切平面平行"的点）。
+        本题 $3x^2-2xy+3y^2=2x^2+2y^2+(x-y)^2\geqslant0$ ⇒ $z\geqslant0$ 且曲面是个开口向上的椭圆抛物面，
+        与那个平面确实不相交。</span><br>
+        <b>验算</b>：点 $\left(\frac14,\frac14,\frac1{16}\right)$ 在曲面上？$4z=\frac14$，
+        $3\cdot\frac1{16}-2\cdot\frac1{16}+3\cdot\frac1{16}=\frac4{16}=\frac14$ ✔。
+        $\frac34\div(3\sqrt2)=\frac1{4\sqrt2}=\frac{\sqrt2}8\approx0.177$ ✔。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">★ 千基 12</span><a class="pg" href="#">千·基12</a>
+      <b>[母型① · 几何秒杀]</b> 设 $g(x,y)$ 是函数 $f(x,y)=x+2y+xy$ 在点 $(x,y)$ 处的最大方向导数。<br>
+      (1) 求 $g(x,y)$ 的表达式；(2) 求 $g(x,y)$ 在曲线 $C:x^2+y^2=5$ 上的最大值。</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li>(1) "最大方向导数"＝ 梯度的模。$\mathbf{grad}f=(1+y,\,2+x)$，<b>别忘了开根号</b>——书的【注】专门提醒了这一点。</li>
+          <li>(2) 是"在圆上求函数最大值"，标准路是拉格朗日或参数化 $x=\sqrt5\cos t$。</li>
+          <li>但先<b>看一眼 $g$ 的形状</b>：$g=\sqrt{(x+2)^2+(y+1)^2}$ 是<b>点 $(x,y)$ 到定点 $(-2,-1)$ 的距离</b>。
+          <b>"到定点的距离在圆上的最值"是初中几何</b>——算一下定点到圆心的距离就知道了。</li>
+          <li>$\left|(-2,-1)\right|=\sqrt5$ ＝ 圆的半径 ⇒ <b>定点恰好在圆上！</b>
+          于是最大距离 ＝ 直径 $2\sqrt5$（取对径点），最小距离 ＝ 0（取定点自身）。</li>
+        </ol>
+      </div>
+      <div class="paper"><span class="phead">✍️ 考场卷面<span class="score">解答题 · 约 10 分</span></span>
+        <div class="step"><span class="k">解</span><b>(1)</b> 因 $f(x,y)=x+2y+xy$ 处处可微，其梯度为
+          $$\mathbf{grad}\,f(x,y)=\left(f_x',\,f_y'\right)=(1+y,\;2+x),$$
+          而最大方向导数等于梯度的模，故
+          $$g(x,y)=\left|\mathbf{grad}\,f(x,y)\right|=\sqrt{(2+x)^2+(1+y)^2}.$$<span class="pt">⛳ 4分</span></div>
+        <div class="step"><b>(2)</b> 由 (1)，$g(x,y)$ 即点 $M(x,y)$ 到定点 $A(-2,-1)$ 的距离。
+          注意到 $|OA|=\sqrt{(-2)^2+(-1)^2}=\sqrt5$，恰为圆 $C:x^2+y^2=5$ 的半径，
+          故 <b>$A$ 在圆 $C$ 上</b>。<span class="pt">⛳ 3分</span></div>
+        <div class="step fin">圆上一点到圆上定点 $A$ 的距离，最大值为直径，即
+          $$\max_{(x,y)\in C}g(x,y)=2\sqrt5,$$
+          在 $A$ 的对径点 $(2,1)$ 处取到。<span class="pt">⛳ 3分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注 · 书上的两条路，以及为什么第三条更该会</span>
+        <b>书上的法一（拉格朗日）</b>：求 $(2+x)^2+(1+y)^2$ 在 $x^2+y^2=5$ 下的最值，
+        令 $F=(2+x)^2+(1+y)^2+\lambda(x^2+y^2-5)$，得驻点 $(2,1)$ 与 $(-2,-1)$，
+        比较 $g(2,1)=2\sqrt5$、$g(-2,-1)=0$。<br>
+        <b>书上的法二（【注】给的消元法）</b>：令 $x=\sqrt5\cos t,\ y=\sqrt5\sin t$，转成一元函数
+        $h(t)=g(\sqrt5\cos t,\sqrt5\sin t)$ 求最值，"只用基本的函数关系就能解决"。<br>
+        <b>本页给的法三（几何）</b>：<span class="dock">识别出"梯度的模 ＝ 到定点的距离"这个结构，
+        一眼看出定点在圆上，直接给出直径。<b>三十秒，零计算。</b></span><br>
+        📌 <b>这个结构不是巧合</b>：只要 $f$ 是<b>二次多项式</b>，$\mathbf{grad}f$ 就是 $(x,y)$ 的<b>线性</b>函数，
+        $\left|\mathbf{grad}f\right|$ 就必然是"到某个定点的距离"（可能带线性变换）。
+        <b>见到"二次函数的最大方向导数"，先把梯度的模配成距离形式。</b>
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">★ 强千 14</span><a class="pg" href="#">千·强14</a>
+      <b>[母型① · 题面最容易读错的一道]</b> 在曲面 $\Sigma:x^2+2y^2+z^2=1$ 上求一点，
+      使函数 $f(x,y,z)=2x^2+y^2+z$ 在该点沿方向 $\boldsymbol n$ 的方向导数最大，
+      其中 $\boldsymbol n$ 是曲面 $\Sigma$ 在点 $P\left(\frac12,-\frac12,\frac12\right)$ 处的外侧法向量。</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>⚠️ 先把题面读清楚</b>：$\boldsymbol n$ 是在<b>点 $P$</b> 算出来的、<b>固定不动</b>的一个向量；
+          要找的是<b>另一个点</b>（在同一张曲面上），使沿这个<b>固定方向</b>的方向导数最大。
+          <b>读成"在 $P$ 点求"就全错了。</b></li>
+          <li>方向固定 ⇒ 方向导数 $\dfrac{\partial f}{\partial\boldsymbol n}$ 是一个<b>关于 $(x,y,z)$ 的函数</b>；
+          点要在曲面上 ⇒ 这是<b>条件极值</b>。母型①的标准结构。</li>
+          <li>第一步永远是把 $\boldsymbol n$ 算出来<b>并单位化</b>（拿到三个方向余弦），
+          第二步把 $\dfrac{\partial f}{\partial\boldsymbol n}$ 写成显式函数，第三步拉格朗日。</li>
+          <li>$f_z'=1$ 是常数，$f_x'=4x$、$f_y'=2y$ 都是线性的 ⇒ <b>目标函数是线性的</b>，
+          这类"线性目标 + 二次约束"的拉格朗日方程组一定好解。</li>
+        </ol>
+      </div>
+      <div class="paper"><span class="phead">✍️ 考场卷面<span class="score">解答题 · 约 12 分</span></span>
+        <div class="step"><span class="k">解</span>令 $G(x,y,z)=x^2+2y^2+z^2-1$，则曲面 $\Sigma$ 在点 $P\left(\frac12,-\frac12,\frac12\right)$ 处的外侧法向量为
+          $$\boldsymbol n=\left.(2x,\,4y,\,2z)\right|_{\left(\frac12,-\frac12,\frac12\right)}=(1,-2,1),$$
+          其方向余弦为 $\cos\alpha=\dfrac1{\sqrt6},\ \cos\beta=-\dfrac2{\sqrt6},\ \cos\gamma=\dfrac1{\sqrt6}$。<span class="pt">⛳ 3分</span></div>
+        <div class="step">因 $f$ 处处可微，$f_x'=4x,\ f_y'=2y,\ f_z'=1$，故 $f$ 沿方向 $\boldsymbol n$ 的方向导数为
+          $$\frac{\partial f}{\partial\boldsymbol n}=f_x'\cos\alpha+f_y'\cos\beta+f_z'\cos\gamma=\frac1{\sqrt6}\left(4x-4y+1\right).$$<span class="pt">⛳ 3分</span></div>
+        <div class="step">按题意，即求 $S=\dfrac1{\sqrt6}(4x-4y+1)$ 在条件 $x^2+2y^2+z^2=1$ 下的最大值。
+          设 $F(x,y,z,\lambda)=4x-4y+1+\lambda\left(x^2+2y^2+z^2-1\right)$，令
+          $$\begin{cases}F_x'=4+2\lambda x=0,\\F_y'=-4+4\lambda y=0,\\F_z'=2\lambda z=0,\\F_\lambda'=x^2+2y^2+z^2-1=0,\end{cases}$$
+          由第三式及 $\lambda\ne0$ 得 $z=0$，解得驻点
+          $$M_1\left(\frac2{\sqrt6},\,-\frac1{\sqrt6},\,0\right),\qquad M_2\left(-\frac2{\sqrt6},\,\frac1{\sqrt6},\,0\right).$$<span class="pt">⛳ 4分</span></div>
+        <div class="step fin">因最大值必存在，比较
+          $\left.\dfrac{\partial f}{\partial\boldsymbol n}\right|_{M_1}=2+\dfrac1{\sqrt6}$ 与
+          $\left.\dfrac{\partial f}{\partial\boldsymbol n}\right|_{M_2}=-2+\dfrac1{\sqrt6}$，
+          知所求点为 $M_1\left(\dfrac2{\sqrt6},\,-\dfrac1{\sqrt6},\,0\right)$。<span class="pt">⛳ 2分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注 · 三处细节</span>
+        <span class="dock">① <b>"外侧"两个字要不要管？</b>对椭球面 $x^2+2y^2+z^2=1$，
+        $\mathbf{grad}G=(2x,4y,2z)$ 天然指向<b>外</b>（因为 $G$ 在球外为正）。
+        所以直接取梯度就是外法向，<b>不用反号</b>。若题目要"内侧"，才需要加负号——而那会让最终答案变成 $M_2$。</span><br>
+        <span class="dock">② <b>$\boldsymbol n$ 一定要单位化</b>（除以 $|\boldsymbol n|=\sqrt6$），否则方向导数的表达式整体差 $\sqrt6$ 倍。
+        虽然本题<b>比大小时倍数不影响结论</b>，但表达式写错就丢分。</span><br>
+        <span class="dock">③ <b>$\lambda\ne0$ 要说一句</b>：若 $\lambda=0$，第一式 $4=0$ 矛盾，故 $\lambda\ne0$，从而 $z=0$。
+        <b>这一步跳过去阅卷会扣。</b></span><br>
+        <b>验算</b>：$M_1$ 在曲面上？$\frac46+2\cdot\frac16+0=\frac46+\frac26=1$ ✔。<br>
+        $\left.\dfrac{\partial f}{\partial\boldsymbol n}\right|_{M_1}=\dfrac{4\cdot\frac2{\sqrt6}+4\cdot\frac1{\sqrt6}+1}{\sqrt6}
+        =\dfrac{\frac{12}{\sqrt6}+1}{\sqrt6}=\dfrac{12}6+\dfrac1{\sqrt6}=2+\dfrac1{\sqrt6}$ ✔。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">★ 强千 5</span><a class="pg" href="#">千·强5</a>
+      <b>[母型① · 与第 18 讲三重积分挂钩]</b> 求抛物面 $\Sigma:z=x^2+y^2$ 上的点到空间图形
+      $\Omega:x^2+y^2\leqslant z\leqslant1$ 的<b>形心</b>的最短距离。</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li>题目分两截：<b>先求形心（三重积分）</b>，<b>再求最短距离（条件极值）</b>。两截彼此独立，别混着做。</li>
+          <li>形心先看<b>对称性</b>：$\Omega$ 关于 $xOz$、$yOz$ 面都对称 ⇒ $\bar x=\bar y=0$，<b>只剩 $\bar z$ 要算</b>。
+          这一步能省掉三分之二的积分量。</li>
+          <li>算 $\bar z=\dfrac{\iiint z\mathrm dv}{\iiint\mathrm dv}$ 用<b>"先一后二"</b>（先对 $z$ 从 $x^2+y^2$ 积到 1，
+          再在圆盘 $x^2+y^2\leqslant1$ 上用极坐标）。</li>
+          <li>第二截：距离平方 $u=x^2+y^2+\left(z-\bar z\right)^2$ 在约束 $x^2+y^2=z$ 下求最小。
+          <b>注意约束里 $x^2+y^2$ 可以整体换成 $z$</b>，其实能降成一元问题——但拉格朗日更"标准"。</li>
+          <li>⚠️ 解出两个候选点后<b>必须比大小</b>，因为其中一个是原点（顶点），另一个是"腰"上的圆。</li>
+        </ol>
+      </div>
+      <div class="paper"><span class="phead">✍️ 考场卷面<span class="score">解答题 · 约 12 分</span></span>
+        <div class="step"><span class="k">解</span>由 $\Omega$ 关于 $xOz$ 面与 $yOz$ 面均对称，得 $\bar x=\bar y=0$。又
+          $$\bar z=\frac{\displaystyle\iiint_\Omega z\,\mathrm dv}{\displaystyle\iiint_\Omega\mathrm dv}
+          =\frac{\displaystyle\iint_{x^2+y^2\leqslant1}\mathrm d\sigma\int_{x^2+y^2}^1z\,\mathrm dz}
+                {\displaystyle\iint_{x^2+y^2\leqslant1}\mathrm d\sigma\int_{x^2+y^2}^1\mathrm dz}
+          =\frac{\displaystyle\int_0^{2\pi}\!\!\mathrm d\theta\int_0^1\frac12\left(1-r^4\right)r\,\mathrm dr}
+                {\displaystyle\int_0^{2\pi}\!\!\mathrm d\theta\int_0^1\left(1-r^2\right)r\,\mathrm dr}=\frac23,$$
+          故形心为 $P\left(0,0,\dfrac23\right)$。<span class="pt">⛳ 4分</span></div>
+        <div class="step">抛物面 $\Sigma$ 上任一点 $(x,y,z)$ 到 $P$ 的距离为
+          $d=\sqrt{x^2+y^2+\left(z-\frac23\right)^2}$，故问题化为求
+          $$u=x^2+y^2+\left(z-\frac23\right)^2\quad\text{在约束}\quad x^2+y^2=z\ \text{下的最小值}.$$<span class="pt">⛳ 2分</span></div>
+        <div class="step">设 $F(x,y,z,\lambda)=x^2+y^2+\left(z-\frac23\right)^2+\lambda\left(x^2+y^2-z\right)$，令
+          $$\begin{cases}F_x'=2x+2\lambda x=0,\\F_y'=2y+2\lambda y=0,\\F_z'=2\left(z-\frac23\right)-\lambda=0,\\F_\lambda'=x^2+y^2-z=0,\end{cases}$$
+          解得 $x^2+y^2=\dfrac16,\ z=\dfrac16$，或 $x=y=z=0$。<span class="pt">⛳ 4分</span></div>
+        <div class="step fin">由题设知最短距离必存在，比较两处的距离：
+          $$d\Big|_{x^2+y^2=z=\frac16}=\sqrt{\frac16+\left(\frac16-\frac23\right)^2}=\sqrt{\frac16+\frac14}=\frac{\sqrt{15}}6,
+            \qquad d\Big|_{(0,0,0)}=\frac23,$$
+          而 $\dfrac{\sqrt{15}}6\lt\dfrac23$，故 $d_{\min}=\dfrac{\sqrt{15}}6$。<span class="pt">⛳ 2分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注 · 为什么"两个候选点必须都算"</span>
+        由 $F_x'=2x(1+\lambda)=0$ 得 <b>$x=0$ 或 $\lambda=-1$</b>，这是两个<b>分支</b>：<br>
+        · 若 $\lambda=-1$，第三式给 $z=\frac23-\frac12=\frac16$，第四式给 $x^2+y^2=\frac16$——<b>一整圈点</b>；<br>
+        · 若 $x=y=0$，第四式给 $z=0$——<b>抛物面的顶点</b>。<br>
+        <span class="dock">⚠️ 拉格朗日解出"或"型分支时，<b>每个分支都要代回目标函数比大小</b>。
+        本题若只取第一个分支就答 $\frac{\sqrt{15}}6$，虽然答案对，但过程<b>缺了比较这一步</b>，会扣分；
+        若只取顶点则直接答错。</span><br>
+        <b>数值校验</b>：$\frac{\sqrt{15}}6\approx0.6455$，$\frac23\approx0.6667$，确实前者小 ✔。<br>
+        <b>形心的验算</b>：分子 $2\pi\cdot\frac12\left(\frac12-\frac16\right)=2\pi\cdot\frac16=\frac\pi3$；
+        分母 $2\pi\left(\frac12-\frac14\right)=\frac\pi2$；商 $=\frac23$ ✔。<br>
+        📌 <b>这道题提前用了第 18 讲的三重积分</b>——张宇把它放在第 17 章的 1000 题里，
+        本身就是在提示：<b>17、18 两讲是连着做的，不要指望学完 17 再开 18。</b>
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">★ 强千 1</span><a class="pg" href="#">千·强1</a>
+      <b>[母型② · 讲义完全没有的题型：梯度线]</b> 设 $f(x,y)=\mathrm e^{-(x^2+2y^2)}$，
+      曲线 $y=y(x)$ 上任一点 $P(x,y)$ 的切线方向<b>始终指向 $f(x,y)$ 变化率最大的方向</b>，且 $y(1)=2$，则 $y(x)=$（　）。<br>
+      　(A) $2x^2$　(B) $x^2+x$　(C) $\mathrm e^{-x^2+1}+x$　(D) $2\mathrm e^{-x^2+1}$</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li>"变化率最大的方向"＝ <b>梯度方向</b>。题目说切线方向<b>始终</b>与梯度同向——
+          <b>"始终"意味着这是一个处处成立的条件，会导出微分方程。</b></li>
+          <li>切线方向怎么写？曲线 $y=y(x)$ 在 $P$ 的切向量是 $(\mathrm dx,\mathrm dy)$。
+          <b>两个向量平行 ⟺ 对应分量成比例</b>，于是 $\dfrac{\mathrm dx}{f_x'}=\dfrac{\mathrm dy}{f_y'}$。</li>
+          <li>把梯度算出来：$\mathbf{grad}f=\mathrm e^{-(x^2+2y^2)}\cdot(-2x,\,-4y)$。
+          <b>那个正的公因子 $\mathrm e^{-(\cdots)}$ 在比例式里会约掉</b>——所以方程会很干净。</li>
+          <li>得到 $\dfrac{\mathrm dx}{-2x}=\dfrac{\mathrm dy}{-4y}$，<b>可分离变量</b>（第 15 讲），
+          积分后用初值 $y(1)=2$ 定常数。</li>
+        </ol>
+      </div>
+      <div class="paper"><span class="phead">✍️ 考场卷面<span class="score">选择题 · 但过程按 10 分写</span></span>
+        <div class="step"><span class="k">解</span>曲线 $y=y(x)$ 上任一点 $P(x,y)$ 处的切线方向为 $(\mathrm dx,\mathrm dy)$，
+          而 $f(x,y)$ 变化率最大的方向为其梯度方向
+          $$\mathbf{grad}\,f=f_x'\boldsymbol i+f_y'\boldsymbol j=\mathrm e^{-(x^2+2y^2)}\left(-2x\,\boldsymbol i-4y\,\boldsymbol j\right).$$<span class="pt">⛳ 3分</span></div>
+        <div class="step">由题意两向量平行，故对应分量成比例：
+          $$\frac{\mathrm dx}{-2x}=\frac{\mathrm dy}{-4y}\ \Longrightarrow\ \frac{\mathrm dy}y=\frac{2\,\mathrm dx}x.$$<span class="pt">⛳ 3分</span></div>
+        <div class="step">两端积分得 $\ln|y|=2\ln|x|+\ln C_1$，即 $y=Cx^2$。<span class="pt">⛳ 2分</span></div>
+        <div class="step fin">由 $y(1)=2$ 得 $C=2$，故 $y=2x^2$，应选 (A)。<span class="pt">⛳ 2分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注 · 这类曲线叫什么，以及为什么公因子能约掉</span>
+        <b>处处沿梯度方向前进的曲线，叫"梯度线"或"最速上升曲线"</b>，
+        它与 $f$ 的<b>等值线族处处正交</b>（因为梯度垂直于等值线）。
+        本题 $f=\mathrm e^{-(x^2+2y^2)}$ 的等值线是椭圆族 $x^2+2y^2=\text{const}$，
+        而梯度线族 $y=Cx^2$ 正是这族椭圆的<b>正交轨线</b>。<br>
+        <span class="dock">⚠️ <b>公因子 $\mathrm e^{-(x^2+2y^2)}$ 恒正</b>，所以约掉它<b>既不改变方向也不改变正负号</b>。
+        如果公因子可能变号（例如是 $f'$ 这类抽象量），就<b>不能随意约</b>，
+        因为"同向"与"反向"会被混为一谈——本题题面说"指向"，严格讲要求同向，
+        约掉正因子后 $\frac{\mathrm dx}{-2x}=\frac{\mathrm dy}{-4y}$ 已含了这一信息。</span><br>
+        📌 <b>排除法</b>：只有 (A)(B) 过 $(1,2)$ 吗？(A) $2\cdot1=2$ ✔；(B) $1+1=2$ ✔；
+        (C) $\mathrm e^0+1=2$ ✔；(D) $2\mathrm e^0=2$ ✔——<b>四个选项全过该点</b>，
+        <span class="dock">命题人堵死了"代初值排除"这条捷径，必须真解方程。这是很典型的设计。</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="tool" id="tool-gline">
+    <h4>🌀 梯度线实验台 —— 等值线族 与 它的正交轨线</h4>
+    <p class="hint">强千 1 的几何图像：<b>蓝色是 $f=\mathrm e^{-(x^2+2\lambda y^2)}$ 的等值线（椭圆族）</b>，
+    <b>橙色是梯度线族 $y=Cx^{\lambda}$</b>。两族处处<b>正交</b>——这正是"梯度垂直于等值线"的可视化。
+    拖动 $\lambda$ 看两族怎么一起变形；$\lambda=2$ 就是原题。</p>
+    <div class="ctl"><label>$y^2$ 前的系数 $\lambda$</label><input type="range" id="gL" min="1" max="4" step="0.5" value="2"><span class="val" id="gLv">2</span></div>
+    <div class="scene"><svg id="gSvg" viewBox="0 0 460 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="等值线与梯度线正交"></svg></div>
+    <div class="say nokatex" id="gSay"></div>
+  </div>
+
+
+  <!-- ================= end ================= -->
+  <h2 id="end"><span class="idx">收官</span>全章落位索引与去重清单</h2>
+
+  <div class="key"><span class="tag">必记 · 一页纸带走本章</span>
+    <div class="fcards">
+      <div><b>定平面</b>法向量 ＋ 一点。给两方向 ⇒ $\boldsymbol n=\boldsymbol\tau_1\times\boldsymbol\tau_2$。</div>
+      <div><b>定直线</b>方向向量 ＋ 一点。给交面式 ⇒ $\boldsymbol\tau=\boldsymbol n_1\times\boldsymbol n_2$。</div>
+      <div><b>三个夹角</b>线线、面面用 $\arccos$；<b>线面用 $\arcsin$</b>。都加绝对值。</div>
+      <div><b>线⊥面</b>$\boldsymbol\tau\parallel\boldsymbol n$（比例式）；<b>线∥面</b>$\boldsymbol\tau\perp\boldsymbol n$（点积为 0）<b>且不在面内</b>。</div>
+      <div><b>投影直线</b>平面束 → 令 ⊥ 投影面定 $\lambda$ → 交面式收口。</div>
+      <div><b>投影曲线</b>消掉该坐标 → 配上 $z=0$。注意"<b>包含于</b>"。</div>
+      <div><b>绕 $z$ 轴旋转</b>$z$ 不动，$x^2+y^2$ 打包，用 $z$ 换掉。</div>
+      <div><b>认曲面</b>三平方=常数看正负号个数；两平方=$z$ 看同异号；缺字母＝柱面。</div>
+      <div><b>曲线切向量</b>参数式 $(x',y',z')$；交面式 $\mathbf{grad}F\times\mathbf{grad}G$。<b>由小参数指向大参数。</b></div>
+      <div><b>曲面法向量</b>隐式 $\mathbf{grad}F$；显式 $(-f_x',-f_y',1)$ 向上 / $(f_x',f_y',-1)$ 向下。</div>
+      <div><b>方向导数</b>$t\to0^{\boldsymbol+}$；<b>方向必须单位化</b>；可微时 $=\mathbf{grad}u\cdot\boldsymbol l^\circ$。</div>
+      <div><b>三个极值</b>最大 $+|\mathbf{grad}|$，最小 $-|\mathbf{grad}|$，垂直时为 0。</div>
+      <div><b>散度</b>求和（对角线），是<b>数</b>。<b>旋度</b>作差（行列式），是<b>向量</b>，$\boldsymbol j$ 位是 $P_z'-R_x'$。</div>
+      <div><b>可微</b>$f(p)=f(p_0)+\mathbf{grad}f\cdot\overrightarrow{p_0p}+o(\rho)$ ⟺ 曲面到切平面距离是 $o(\rho)$。</div>
+    </div>
+  </div>
+
+  <div class="key"><span class="tag">必记 · 去重清单（同一道题在多本书出现，本页已合并）</span>
+    <div class="tw"><table class="dense">
+      <thead><tr><th>基础30讲</th><th>高数18讲</th><th>1000题</th><th>内容</th><th>本页位置</th></tr></thead>
+      <tbody>
+        <tr><td>例17.7</td><td>注(3)</td><td class="bad">强千6（<b>一字不差</b>）</td><td>偏导数 ＝ 特殊柱面交线的切线</td><td><a href="#s5">第五节</a></td></tr>
+        <tr><td>例17.12</td><td>—</td><td class="bad">强千10（<b>一字不差，连图都一样</b>）</td><td>两方向反解梯度 ＋ 推广注</td><td><a href="#s7">第七节</a></td></tr>
+        <tr><td>例17.11</td><td>例17.3</td><td>千基11</td><td>梯度定参数「三胞胎」</td><td><a href="#tool-triplet">第七节 📐</a></td></tr>
+        <tr><td>例17.10</td><td>例17.2</td><td>—</td><td>方向导数计算（都在"单位化"设陷）</td><td><a href="#s6">第六节</a></td></tr>
+        <tr><td>例17.8</td><td>例17.6</td><td>千基3/千基5/强千7</td><td>隐式曲面求切平面</td><td><a href="#s5">第五节</a></td></tr>
+        <tr><td>例17.6</td><td>例17.5(1)</td><td>强千3/强千4</td><td>参数式曲线求切线</td><td><a href="#s5">第五节</a></td></tr>
+        <tr><td>例17.13 / 习17.9 / 习17.10</td><td>例17.7</td><td>千基14 / 强千15</td><td>散度与旋度计算</td><td><a href="#s8">第八节</a></td></tr>
+        <tr><td>例17.1</td><td>—</td><td>千基1 / 强千13</td><td>可微的四种等价写法</td><td><a href="#s7">第七节</a></td></tr>
+        <tr><td>习17.3</td><td>—</td><td>千基3 / 强千2</td><td>切平面平行于给定平面（正反两问 ＋ 最短距离）</td><td><a href="#s5">第五节</a>、<a href="#s9">第九节</a></td></tr>
+        <tr><td>习17.1</td><td>—</td><td>千基2</td><td>直线与平面的位置关系（消元法 vs 叉乘法）</td><td><a href="#s2">第二节</a></td></tr>
+        <tr><td>例17.3</td><td>—</td><td>—</td><td rowspan="2">投影直线（<b>讲义内考了两次</b>）</td><td rowspan="2"><a href="#s2">第二节</a></td></tr>
+        <tr><td>习17.5</td><td>—</td><td>—</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div class="key"><span class="tag">补讲 · 1000题相对讲义的<u>净新增</u>题型（讲义一个字没写的）</span>
+    <div class="gates">
+      <div><b class="g">1</b><b>梯度线（最速上升曲线）</b>——强千1。切向 ∥ 梯度 ⇒ 可分离变量的 ODE。<a href="#tool-gline">🌀 实验台</a></div>
+      <div><b class="g">2</b><b>锥面的生成法</b>——千基7。顶点 ＋ 准线 ＋ 参数消元，与旋转曲面配成"两类特殊曲面"。</div>
+      <div><b class="g">3</b><b>最小方向导数 $=-\left|\mathbf{grad}\right|$</b>——千基10、强千12。讲义只讲了最大值。</div>
+      <div><b class="g">4</b><b>$t\to0^+$ 的绝对值陷阱</b>——千基8 及其【注】。<b>本章最该记住的一处。</b></div>
+      <div><b class="g">5</b><b>方向导数 → 偏微分方程 → ODE → 极值判别</b>——千基13，<b>四讲串联</b>。</div>
+      <div><b class="g">6</b><b>梯度的模 ＝ 到定点的距离</b>——千基12 的几何秒杀。</div>
+      <div><b class="g">7</b><b>相切平面有两解</b>——千基4 的漏解陷阱。</div>
+      <div><b class="g">8</b><b>隐函数 / 复合函数反解梯度</b>——千基5、千基8（隐函数）、强千8（复合）。</div>
+      <div><b class="g">9</b><b>固定方向 ＋ 变动点 的条件极值</b>——强千14，题面最容易读错。</div>
+      <div><b class="g">10</b><b>带绝对值的向量场求旋度</b>——强千15，先定号再求导。</div>
+      <div><b class="g">11</b><b>形心（三重积分）＋ 条件极值</b>——强千5，提前用了第 18 讲。</div>
+    </div>
+  </div>
+
+  <div class="lore"><span class="tag">思想馆 · 这一章为什么"考得轻，却不能轻做"</span>
+    扉页写着「题型：<b>选择题、填空题</b>」，强化讲只有 7 页、全是 D₁/D₂₂，眉批还在"空间曲线的切线"旁写了「<b>考得不多</b>」。
+    这些都是真的——<b>本章直接命题的分值确实低</b>。<br>
+    但把这一章做薄，代价会在第 18 讲一次性还清：<b>三重积分定不出限，是因为不会画曲面；
+    曲面积分的符号错，是因为没记住法向量的两种写法；曲线积分方向反了，是因为忘了"由小参数指向大参数"。</b>
+    张宇把这一章命名为「<b>预备知识</b>」而不是「空间解析几何」，用意就在这里——
+    <b>它不是一章内容，是一套工具；工具不熟，下一章每道题都要多花五分钟。</b><br>
+    <b>所以本章的正确做法是：概念快过，公式背死，画图练到不用想。</b>把省下的时间全投给第 18 讲。
+  </div>
+
+  <div class="key"><span class="tag">复算说明</span>
+    <p>本页所有数值结论均由 <b>sympy / numpy</b> 独立复算（脚本
+    <code>scratchpad/g17_v1.py</code>），逐题核对了：向量运算与叉乘、切平面与法线方程、
+    参数曲线切向量、旋转曲面与锥面的消元结果、方向导数与梯度的模、拉格朗日驻点、
+    三重积分形心、散度与旋度的六道题。<b>凡书上答案与复算不符之处，均已在对应卡片中标出（本章无此情形）。</b></p>
+  </div>
+
+  <div class="dolinks">
+    <div class="t">下一讲</div>
+    <a href="#" style="pointer-events:none;opacity:.6">第 18 章 · 多元函数积分学（待写）</a>
+    <div class="note">第 18 讲是全书<b>最后一章</b>，也是本章所有工具的唯一去处：
+    基础30讲 58 页（书页 488–545）＋ 高数18讲 45 页（书页 244–288），共 <b>103 页</b>——
+    <b>将超过第 16 章无穷级数的 89 页，成为全书最厚的一章。</b><br>
+    ⚠️ 开工前先自查该章的 <code>1000题_基础_解析</code> 与 <code>1000题_强化_解析</code> 两个分章 PDF
+    是否也切错了章（本章两个都切成了第 16 章）。</div>
+  </div>
+
+  <div class="outro">
+    <h3>上一讲</h3>
+    <p><a href="第16章_无穷级数.html"><b>第 16 讲 · 无穷级数</b></a>（89 页 113 题，全书最厚的一章）——
+    本章与它<b>没有直接的题型往来</b>，但两讲共享同一个思想入口：<b>级数是"用一组基去逼近函数"，
+    而本章的切平面是"用线性函数去逼近曲面"</b>，都是<b>逼近</b>。<br>
+    另外两条并行的线：<a href="线代_第02章_矩阵.html">线代 ch2 已完成</a>，下一步是<b>向量组 + 线性方程组（须成对写）</b>；
+    <a href="概率_第01章_随机事件与概率.html">概率 ch1 已完成</a>，下一步 ch2 一维随机变量。</p>
+    <p style="color:var(--muted);font-size:.88rem">
+      精读版进度：高数 <b>17/18 章</b>（ch1–ch17 全部完成，<b>只剩最后的 ch18</b>）＋ 线代 ch1–ch2 ＋ 概率 ch1。
+    </p>
+  </div>
+
+  <footer>
+    张宇《考研数学基础30讲·高等数学分册》第 17 讲（书页 464–487）＋《高等数学18讲》第 17 讲（书页 237–243）
+    ＋《考研数学题源探析经典1000题（数学一）》第 17 章（基础篇 14 题、强化篇 15 题）逐页转录重排。<br>
+    本页仅供个人复习使用；题面与解法版权归原作者与出版社所有。
+  </footer>
+
+<script>
+(function(){
+  var css=function(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim()||'#888';};
+
+  /* ---------- 🎲 二次曲面识别器 ---------- */
+  var PRE={ell:[1,1,1,0,1],one:[1,1,-1,0,1],two:[1,-1,-1,0,1],par:[1,1,0,-1,0],
+           sad:[-1,1,0,-1,0],con:[1,1,-1,0,0],cyl:[1,1,0,0,1]};
+  var qi={A:document.getElementById('qA'),B:document.getElementById('qB'),C:document.getElementById('qC'),
+          D:document.getElementById('qD'),E:document.getElementById('qE')};
+  function term(c,s){ if(c===0) return ''; var p=(c>0?' + ':' − '); var a=Math.abs(c);
+    return p+(a===1?'':a)+s; }
+  function fmtEq(A,B,C,D,E){
+    var L=term(A,'x²')+term(B,'y²')+term(C,'z²')+term(D,'z');
+    L=L.replace(/^ \+ /,'').replace(/^ − /,'−');
+    if(L==='') L='0';
+    return '方程：'+L+' = '+E;
+  }
+  function classify(A,B,C,D,E){
+    var sq=[A,B,C], nz=sq.filter(function(v){return v!==0;});
+    var pos=sq.filter(function(v){return v>0;}).length, neg=sq.filter(function(v){return v<0;}).length;
+    var missing=['x','y','z'][sq.indexOf(0)];
+    // 有一次项 Dz
+    if(D!==0){
+      if(C!==0) return {n:'非标准型（同时含 z² 与 z）',w:'含 z² 又含一次项 z，可对 z 配方后化为无一次项的标准型再判。',k:'other'};
+      if(A===0||B===0) return {n:'抛物柱面（或退化）',w:'两个平方项里少了一个，剩下"一个平方 = 一次项"，是抛物柱面。',k:'cyl'};
+      if(A*B>0) return {n:'椭圆抛物面（碗）',w:'判据②：两个平方项同号，且等于一次项 z ⇒ 椭圆抛物面。A=B 时是旋转抛物面。',k:'par'};
+      return {n:'双曲抛物面（马鞍面）',w:'判据②：两个平方项异号，且等于一次项 z ⇒ 马鞍面。',k:'sad'};
+    }
+    // 无一次项
+    if(nz.length<3){
+      if(nz.length===0) return {n:'退化（无平方项）',w:'三个平方项系数都为 0，不是二次曲面。',k:'other'};
+      return {n:'柱面（母线平行于 '+missing+' 轴）',w:'判据④：方程里缺了字母 '+missing+' ⇒ 母线平行于 '+missing+' 轴的柱面。'
+        +(pos===2?'准线是椭圆或圆。':(pos===1&&neg===1?'准线是双曲线。':'两负号，实点集为空。')),k:'cyl'};
+    }
+    if(E===0){
+      if(pos===3||neg===3) return {n:'退化为一点（原点）',w:'三项同号且等于 0，只有原点满足。',k:'other'};
+      return {n:'椭圆锥面（双锥）',w:'判据③：三个平方项、两正一负（或一正两负）且等于 0 ⇒ 锥面。注意 z=√(x²+y²) 只是上半个锥。',k:'con'};
+    }
+    if(pos===3) return {n:'椭球面'+(A===B&&B===C?'（球面）':''),w:'判据①：三个平方项全为正 ⇒ 椭球面；三系数相等时是球面。',k:'ell'};
+    if(neg===3) return {n:'虚曲面（无实点）',w:'三个平方项全为负而右端为正，无实数解。',k:'other'};
+    if(pos===2) return {n:'单叶双曲面',w:'判据①：两正一负 ⇒ 单叶双曲面（一个"腰"）。用 z=k 切得椭圆，用 x=k 或 y=k 切得双曲线。',k:'one'};
+    return {n:'双叶双曲面',w:'判据①：一正两负 ⇒ 双叶双曲面（两瓣）。正号对应中心轴。',k:'two'};
+  }
+  function cuts(A,B,C,D,E,k){
+    function one(name,rest){ return '<tr><td>'+name+'</td><td>'+rest+'</td></tr>'; }
+    var out='';
+    if(k==='ell') out=one('z = k（|k| 不太大）','椭圆或圆')+one('x = k','椭圆或圆')+one('y = k','椭圆或圆');
+    else if(k==='one') out=one('z = k（任意常数）','椭圆或圆 ← 这一刀最好认')+one('x = k','双曲线')+one('y = k','双曲线');
+    else if(k==='two') out=one('x = k（|k| 足够大）','椭圆或圆')+one('y = k','双曲线')+one('z = k','双曲线');
+    else if(k==='par') out=one('z = k（k > 0）','椭圆或圆')+one('x = k','抛物线')+one('y = k','抛物线');
+    else if(k==='sad') out=one('z = k（k ≠ 0）','双曲线 ← 马鞍面的标志')+one('x = k','抛物线')+one('y = k','抛物线（开口相反）');
+    else if(k==='con') out=one('z = k（k ≠ 0）','椭圆或圆')+one('过顶点的平面','两条相交直线 ← 锥面的标志')+one('x = k（k ≠ 0）','双曲线');
+    else if(k==='cyl') out=one('垂直于母线切','准线（椭圆 / 双曲线 / 抛物线）')+one('平行于母线切','两条平行直线或空')+one('—','母线方向上截线不变 ← 柱面的标志');
+    else out=one('—','非标准型，先配方再判');
+    return out;
+  }
+  function qDraw(){
+    var A=+qi.A.value,B=+qi.B.value,C=+qi.C.value,D=+qi.D.value,E=+qi.E.value;
+    ['A','B','C','D','E'].forEach(function(k){document.getElementById('q'+k+'v').textContent=qi[k].value;});
+    document.getElementById('qEq').textContent=fmtEq(A,B,C,D,E);
+    var r=classify(A,B,C,D,E);
+    var v=document.getElementById('qName');
+    v.textContent=r.n;
+    v.className='verdict nokatex '+(r.k==='other'?'v-inf':'v-ok');
+    document.getElementById('qWhy').textContent=r.w;
+    document.getElementById('qCut').innerHTML=cuts(A,B,C,D,E,r.k);
+  }
+  Object.keys(qi).forEach(function(k){qi[k].addEventListener('input',qDraw);});
+  document.querySelectorAll('#tool-quad .ctl button[data-q]').forEach(function(b){
+    b.addEventListener('click',function(){
+      document.querySelectorAll('#tool-quad .ctl button[data-q]').forEach(function(x){x.classList.remove('on');});
+      b.classList.add('on');
+      var p=PRE[b.dataset.q];
+      qi.A.value=p[0];qi.B.value=p[1];qi.C.value=p[2];qi.D.value=p[3];qi.E.value=p[4];
+      qDraw();
+    });
+  });
+  qDraw();
+
+  /* ---------- 🧭 梯度罗盘 ---------- */
+  var GRAD=[1,2];
+  function cDraw(){
+    var ang=+document.getElementById('cAng').value;
+    document.getElementById('cAngv').textContent=ang+'°';
+    var th=ang*Math.PI/180, lx=Math.cos(th), ly=Math.sin(th);
+    var gx=GRAD[0], gy=GRAD[1], gm=Math.hypot(gx,gy);
+    var dot=gx*lx+gy*ly;                 // = |grad| cosθ
+    var gAng=Math.atan2(gy,gx);
+    var diff=((th-gAng)*180/Math.PI+540)%360-180;   // -180..180
+    var s=document.getElementById('cSvg'), O=[150,130], S=34;
+    function X(u){return O[0]+u*S;} function Y(v){return O[1]-v*S;}
+    var acc=css('--accent'), grn=css('--green'), red=css('--red'), mut=css('--muted'), ln=css('--line');
+    var h='';
+    // 坐标轴
+    h+='<line x1="20" y1="'+O[1]+'" x2="285" y2="'+O[1]+'" stroke="'+ln+'"/>';
+    h+='<line x1="'+O[0]+'" y1="10" x2="'+O[0]+'" y2="250" stroke="'+ln+'"/>';
+    // 半径为 |grad| 的圆（方向导数的取值范围就是这个圆在 l 上的投影）
+    h+='<circle cx="'+O[0]+'" cy="'+O[1]+'" r="'+(gm*S)+'" fill="none" stroke="'+ln+'" stroke-dasharray="3 3"/>';
+    // 梯度
+    h+='<line x1="'+O[0]+'" y1="'+O[1]+'" x2="'+X(gx)+'" y2="'+Y(gy)+'" stroke="'+grn+'" stroke-width="3"/>';
+    h+='<text x="'+(X(gx)+6)+'" y="'+(Y(gy)-4)+'" font-size="11" fill="'+grn+'">grad f</text>';
+    // 方向 l（单位）
+    h+='<line x1="'+O[0]+'" y1="'+O[1]+'" x2="'+X(lx*1.6)+'" y2="'+Y(ly*1.6)+'" stroke="'+acc+'" stroke-width="2.6"/>';
+    h+='<text x="'+(X(lx*1.6)+5)+'" y="'+(Y(ly*1.6)+12)+'" font-size="11" fill="'+acc+'">l°</text>';
+    // 投影（方向导数）
+    h+='<line x1="'+O[0]+'" y1="'+O[1]+'" x2="'+X(lx*dot)+'" y2="'+Y(ly*dot)+'" stroke="'+(dot>=0?red:mut)+'" stroke-width="6" opacity=".45"/>';
+    h+='<line x1="'+X(gx)+'" y1="'+Y(gy)+'" x2="'+X(lx*dot)+'" y2="'+Y(ly*dot)+'" stroke="'+mut+'" stroke-dasharray="2 3"/>';
+    // 右侧：cos 曲线
+    var bx=310, by=130, bw=130, bh=80;
+    h+='<line x1="'+bx+'" y1="'+by+'" x2="'+(bx+bw)+'" y2="'+by+'" stroke="'+ln+'"/>';
+    h+='<text x="'+bx+'" y="'+(by-bh-8)+'" font-size="10" fill="'+mut+'">∂f/∂l = |grad f|·cosθ</text>';
+    var path='';
+    for(var i=0;i<=130;i++){ var t=i/130*360; var val=gm*Math.cos((t-0)*Math.PI/180);
+      path+=(i?'L':'M')+(bx+i)+' '+(by-val/gm*bh*0.9)+' '; }
+    h+='<path d="'+path+'" fill="none" stroke="'+acc+'" stroke-width="1.6"/>';
+    var px=bx+((diff+360)%360)/360*130;
+    h+='<circle cx="'+px+'" cy="'+(by-dot/gm*bh*0.9)+'" r="4" fill="'+red+'"/>';
+    h+='<text x="'+bx+'" y="'+(by+bh+2)+'" font-size="9.5" fill="'+mut+'">θ=0° 同向</text>';
+    h+='<text x="'+(bx+bw/2)+'" y="'+(by+bh+2)+'" text-anchor="middle" font-size="9.5" fill="'+mut+'">180° 反向</text>';
+    h+='<text x="'+(bx+bw)+'" y="'+(by+bh+2)+'" text-anchor="end" font-size="9.5" fill="'+mut+'">360°</text>';
+    h+='<text x="14" y="252" font-size="9.5" fill="'+mut+'">粗线＝方向导数（梯度在 l 上的投影）　红点＝当前 θ，曲线最高／最低／过零就是上表三行</text>';
+    s.innerHTML=h;
+    document.getElementById('cSay').textContent=
+      'grad f = ('+gx+', '+gy+')，|grad f| = '+gm.toFixed(4)+'；'+
+      'l° = ('+lx.toFixed(3)+', '+ly.toFixed(3)+')，θ = '+Math.abs(diff).toFixed(0)+'°；'+
+      '∂f/∂l = |grad f|·cosθ = '+dot.toFixed(4)+'。';
+    var v=document.getElementById('cVer'), a=Math.abs(diff);
+    if(a<3){ v.className='verdict v-ok nokatex'; v.textContent='θ ≈ 0°：l 与梯度同向 ⇒ 方向导数取到最大值 +|grad f| = '+gm.toFixed(4); }
+    else if(a>177){ v.className='verdict v-no nokatex'; v.textContent='θ ≈ 180°：l 与梯度反向 ⇒ 方向导数取到最小值 −|grad f| = '+(-gm).toFixed(4)+'（讲义没写，1000题补的那一半）'; }
+    else if(Math.abs(a-90)<3){ v.className='verdict v-inf nokatex'; v.textContent='θ ≈ 90°：l 与梯度垂直 ⇒ 方向导数为 0，此时 l 沿等值线方向，函数值不变'; }
+    else { v.className='verdict v-inf nokatex'; v.textContent='一般方向：∂f/∂l = '+dot.toFixed(4)+'，介于 −'+gm.toFixed(4)+' 与 +'+gm.toFixed(4)+' 之间'; }
+  }
+  document.getElementById('cAng').addEventListener('input',cDraw);
+  document.querySelectorAll('#tool-compass .ctl button[data-g]').forEach(function(b){
+    b.addEventListener('click',function(){
+      document.querySelectorAll('#tool-compass .ctl button[data-g]').forEach(function(x){x.classList.remove('on');});
+      b.classList.add('on'); GRAD=b.dataset.g.split(',').map(Number); cDraw();
+    });
+  });
+  cDraw();
+
+  /* ---------- 📐 三胞胎求解器 ---------- */
+  var needK=true;
+  function tSolve(){
+    var xp=+document.getElementById('tXP').value, yp=+document.getElementById('tYP').value;
+    var l1=+document.getElementById('tL1').value, l2=+document.getElementById('tL2').value;
+    var M=+document.getElementById('tM').value;
+    // grad = (2a·xp, 2b·yp) 平行于 (l1,l2) 且模为 M
+    // 设 grad = k(l1,l2)，|k|·|l| = M ⇒ k = ±M/|l|
+    var ll=Math.hypot(l1,l2);
+    var lines=[], ver='';
+    if(ll===0||xp===0||yp===0){
+      document.getElementById('tSay').textContent='点的坐标与方向向量的分量都不能为 0，否则 a 或 b 定不出来。';
+      var v0=document.getElementById('tVer'); v0.className='verdict v-inf nokatex'; v0.textContent='参数不合法';
+      return;
+    }
+    var ks=needK?[M/ll]:[M/ll,-M/ll];
+    lines.push('梯度 grad z|P = (2a·'+xp+', 2b·'+yp+') = ('+(2*xp)+'a, '+(2*yp)+'b)。');
+    lines.push('方向条件：grad ∥ l ＝ ('+l1+', '+l2+')，设 grad = k·l'+(needK?'，且 k > 0（同向，才是"最大"）':'，k 的正负不限（错误做法）')+'。');
+    lines.push('模条件：|grad| = |k|·|l| = |k|·'+ll.toFixed(4)+' = '+M+' ⇒ |k| = '+(M/ll).toFixed(4)+'。');
+    var sols=ks.map(function(k){
+      var a=k*l1/(2*xp), b=k*l2/(2*yp);
+      return {k:k,a:a,b:b};
+    });
+    sols.forEach(function(s,i){
+      lines.push('　解'+(i+1)+'：k = '+s.k.toFixed(4)+' ⇒ a = k·l₁/(2x_P) = '+s.a.toFixed(4)+'，b = k·l₂/(2y_P) = '+s.b.toFixed(4)+'。');
+    });
+    document.getElementById('tSay').innerHTML=lines.join('<br>');
+    var v=document.getElementById('tVer');
+    if(needK){
+      v.className='verdict v-ok nokatex';
+      v.textContent='唯一解：a = '+sols[0].a.toFixed(4)+'，b = '+sols[0].b.toFixed(4)+
+        '（k = '+sols[0].k.toFixed(4)+' > 0 ✓ 梯度与 l 同向，方向导数确实在 l 方向取到最大值）';
+    }else{
+      v.className='verdict v-no nokatex';
+      v.textContent='出现两组解：(a, b) = ('+sols[0].a.toFixed(4)+', '+sols[0].b.toFixed(4)+') 与 ('+
+        sols[1].a.toFixed(4)+', '+sols[1].b.toFixed(4)+')。第二组的 k < 0，梯度与 l 反向 ⇒ 沿 l 取到的是最小值，是增根，必须靠 k > 0 排除。';
+    }
+  }
+  ['tXP','tYP','tL1','tL2','tM'].forEach(function(id){document.getElementById(id).addEventListener('input',tSolve);});
+  document.getElementById('tK').addEventListener('click',function(){
+    needK=true; this.classList.add('on'); document.getElementById('tNoK').classList.remove('on'); tSolve();});
+  document.getElementById('tNoK').addEventListener('click',function(){
+    needK=false; this.classList.add('on'); document.getElementById('tK').classList.remove('on'); tSolve();});
+  document.querySelectorAll('#tool-triplet .ctl button[data-t]').forEach(function(b){
+    b.addEventListener('click',function(){
+      document.querySelectorAll('#tool-triplet .ctl button[data-t]').forEach(function(x){x.classList.remove('on');});
+      b.classList.add('on');
+      var p=b.dataset.t.split(',').map(Number);
+      document.getElementById('tXP').value=p[0];document.getElementById('tYP').value=p[1];
+      document.getElementById('tL1').value=p[2];document.getElementById('tL2').value=p[3];
+      document.getElementById('tM').value=p[4];
+      tSolve();
+    });
+  });
+  tSolve();
+
+  /* ---------- 🌀 梯度线实验台 ---------- */
+  function gDraw(){
+    var L=+document.getElementById('gL').value;
+    document.getElementById('gLv').textContent=L;
+    var s=document.getElementById('gSvg'), O=[230,150], S=52;
+    function X(u){return O[0]+u*S;} function Y(v){return O[1]-v*S;}
+    var acc=css('--accent'), amb=css('--amber'), ln=css('--line'), mut=css('--muted');
+    var h='';
+    h+='<line x1="10" y1="'+O[1]+'" x2="450" y2="'+O[1]+'" stroke="'+ln+'"/>';
+    h+='<line x1="'+O[0]+'" y1="8" x2="'+O[0]+'" y2="292" stroke="'+ln+'"/>';
+    // 等值线：x² + L y² = c  （椭圆族）
+    [0.3,0.8,1.5,2.5,3.8].forEach(function(c){
+      var ax=Math.sqrt(c), by=Math.sqrt(c/L), p='';
+      for(var i=0;i<=72;i++){ var t=i/72*2*Math.PI;
+        p+=(i?'L':'M')+X(ax*Math.cos(t)).toFixed(1)+' '+Y(by*Math.sin(t)).toFixed(1)+' '; }
+      h+='<path d="'+p+'Z" fill="none" stroke="'+acc+'" stroke-width="1.3" opacity=".75"/>';
+    });
+    // 梯度线：y = C x^L
+    [0.15,0.4,0.9,-0.15,-0.4,-0.9].forEach(function(C){
+      var p='';
+      for(var i=0;i<=80;i++){ var x=i/80*2.1; var y=C*Math.pow(x,L);
+        if(Math.abs(y)>2.7) break;
+        p+=(i?'L':'M')+X(x).toFixed(1)+' '+Y(y).toFixed(1)+' '; }
+      h+='<path d="'+p+'" fill="none" stroke="'+amb+'" stroke-width="1.7"/>';
+      var p2='';
+      for(var j=0;j<=80;j++){ var x2=-j/80*2.1; var y2=C*Math.pow(Math.abs(x2),L);
+        if(Math.abs(y2)>2.7) break;
+        p2+=(j?'L':'M')+X(x2).toFixed(1)+' '+Y(y2).toFixed(1)+' '; }
+      h+='<path d="'+p2+'" fill="none" stroke="'+amb+'" stroke-width="1.7" opacity=".5" stroke-dasharray="4 3"/>';
+    });
+    // 原题那一条：C 由初值 y(1)=2 定出，故 C=2，曲线 y=2x^λ 恒过 (1,2)
+    var pt='';
+    for(var m=0;m<=80;m++){ var xm=m/80*2.1, ym=2*Math.pow(xm,L);
+      if(ym>2.7) break;
+      pt+=(m?'L':'M')+X(xm).toFixed(1)+' '+Y(ym).toFixed(1)+' '; }
+    h+='<path d="'+pt+'" fill="none" stroke="'+amb+'" stroke-width="3.4"/>';
+    h+='<circle cx="'+X(1)+'" cy="'+Y(2)+'" r="5" fill="'+amb+'"/>';
+    h+='<text x="'+(X(1)+8)+'" y="'+(Y(2)-4)+'" font-size="11" fill="'+amb+'" font-weight="700">y(1)=2 ⇒ y=2x'+
+       (Math.abs(L-2)<1e-9?'²':'^'+L)+'</text>';
+    h+='<text x="14" y="20" font-size="11" fill="'+acc+'">蓝：等值线 x² + '+L+'y² = c</text>';
+    h+='<text x="14" y="36" font-size="11" fill="'+amb+'">橙：梯度线 y = C x^'+L+'（粗线＝原题的 C=2；虚线＝x&lt;0 的镜像分支）</text>';
+    h+='<text x="14" y="286" font-size="10" fill="'+mut+'">两族处处正交 —— 这就是「梯度垂直于等值线」</text>';
+    s.innerHTML=h;
+    document.getElementById('gSay').textContent=
+      'f = e^{−(x² + '+L+'y²)}，grad f = e^{−(…)}·(−2x, −2·'+L+'y)。切向 ∥ 梯度 ⇒ dx/(−2x) = dy/(−2·'+L+'y) '+
+      '⇒ dy/y = '+L+'·dx/x ⇒ y = C x^'+L+'。λ = 2 时即原题的 y = C x²，代 y(1)=2 得 C = 2。';
+  }
+  document.getElementById('gL').addEventListener('input',gDraw);
+  gDraw();
+})();
+</script>
+
+
+
+</div>
+</body>
+</html>
