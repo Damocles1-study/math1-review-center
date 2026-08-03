@@ -1,0 +1,2105 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>精读版 · 线代 第3章 向量组</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],ignoredClasses:['nokatex']})"></script>
+<link rel="stylesheet" href="style.css">
+<style>
+/* ===== 本章专属：极大无关组步进器 + 过渡矩阵实验台 ===== */
+.tool{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:20px 0;clear:both}
+.tool h4{margin:0 0 4px;font-size:1rem;color:var(--accent)}
+.tool .hint{color:var(--muted);font-size:.82rem;margin-bottom:12px;line-height:1.7}
+.stepbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0}
+.stepbar button{font:inherit;font-size:.84rem;padding:4px 14px;border-radius:8px;cursor:pointer;
+  border:1px solid var(--line);background:var(--accent-soft);color:var(--accent)}
+.stepbar button:hover:not(:disabled){filter:brightness(.94)}
+.stepbar button:disabled{opacity:.4;cursor:default}
+.stepbar select{font:inherit;font-size:.84rem;padding:4px 8px;border-radius:8px;
+  border:1px solid var(--line);background:var(--card);color:var(--ink)}
+.stepbar .cnt{font-family:var(--mono);font-size:.8rem;color:var(--muted);margin-left:auto}
+.mxrow{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start;justify-content:center;margin:12px 0}
+.mxbox{text-align:center}
+.mxbox .cap{font-size:.74rem;color:var(--muted);margin-bottom:5px}
+table.mx{border-collapse:collapse;margin:0 auto;min-width:0;width:auto;font-size:.9rem}
+table.mx td{border:none;padding:3px 11px;text-align:center;font-family:var(--mono);
+  vertical-align:middle;transition:background .25s}
+table.mx{border-left:2px solid var(--ink);border-right:2px solid var(--ink);border-radius:3px}
+table.mx td.piv{background:var(--green-soft);color:var(--green);font-weight:700;border-radius:4px}
+table.mx td.free{background:var(--amber-soft);color:var(--amber);border-radius:4px}
+table.mx td.hi{background:var(--blue-soft);color:var(--blue);border-radius:4px}
+table.mx .colhd{font-size:.7rem;color:var(--muted);font-family:var(--sans);padding:0 11px 2px;border:none}
+.oplog{background:var(--accent-soft);border-radius:8px;padding:8px 12px;margin:10px 0;
+  font-size:.86rem;color:var(--accent);min-height:1.9em}
+.oplog b{color:var(--accent)}
+.resbox{border-top:1px dashed var(--line);margin-top:12px;padding-top:10px;font-size:.88rem}
+.resbox .ttl{font-size:.74rem;font-weight:700;letter-spacing:.06em;color:var(--muted);margin-bottom:4px}
+.repline{font-size:.88rem;margin:3px 0}
+.repline .cf{color:var(--green);font-weight:700}
+.badge{display:inline-block;font-size:.7rem;font-weight:700;border-radius:5px;padding:1px 8px;margin-right:6px}
+.badge.p{background:var(--green-soft);color:var(--green)}
+.badge.f{background:var(--amber-soft);color:var(--amber)}
+
+/* 过渡矩阵实验台 */
+.lab{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:12px 0}
+@media(max-width:640px){.lab{grid-template-columns:1fr}}
+.lab .pane{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--bg)}
+.lab .pane .pt2{font-size:.74rem;font-weight:700;color:var(--accent);margin-bottom:6px;letter-spacing:.05em}
+.lab input{font:inherit;font-family:var(--mono);font-size:.84rem;width:3.1em;text-align:center;
+  border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--ink);padding:2px 0;margin:2px}
+.lab input:focus{outline:2px solid var(--accent);outline-offset:1px}
+.warn{color:var(--red);font-size:.84rem;font-weight:700}
+.okmsg{color:var(--green);font-size:.84rem;font-weight:700}
+.eqchk{font-family:var(--mono);font-size:.84rem;margin:4px 0}
+svg.fig{display:block;margin:12px auto;max-width:100%;height:auto}
+svg.fig text{font-family:var(--sans);font-size:12px;fill:var(--ink)}
+svg.fig .mut{fill:var(--muted);font-size:11px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../index.html">← 返回 数学一复盘中心</a>
+  <header>
+    <h1>精读版 · 线代第 3 章　向量组</h1>
+    <div class="sub">融合张宇《基础30讲·线代分册》第 3 讲「向量组」+《线代9讲》第 6 讲「向量组」· 以张宇的<b>四目标解题法（O₁ 具体型 / O₂ 抽象型 / O₃ 等价 / O₄ 向量空间）</b>为主干 ·
+    <span class="layer L-base">基础</span> 打地基、<span class="layer L-str">强化</span> 上题型 ·
+    <b>全部 14 道基础例题 + 12 道习题 + 7 道强化例题（共 33 题）以及七大定理、三条秩不等式，均用 sympy 符号复算 / 随机矩阵批量对拍，零分歧</b> ·
+    本章交付两个交互模块：<b>极大无关组步进器</b>（行最简形 → 主元列 → 直接读表示系数）与 <b>过渡矩阵实验台</b>（数一专属）。</div>
+  </header>
+
+  <div class="legend">
+    <b>这一页的两个维度：</b><br>
+    <b>① 来源</b>（这句话从哪来）——
+    <span class="swatch" style="background:var(--blue)"></span><b style="color:var(--blue)">补讲</b>、
+    <span class="swatch" style="background:var(--amber)"></span><b style="color:var(--amber)">必记</b>、
+    <span class="swatch" style="background:var(--red)"></span><b style="color:var(--red)">陷阱</b>、
+    <span class="swatch" style="background:var(--green)"></span><b style="color:var(--green)">强化题型</b>。<br>
+    <b>② 功能</b>（这句话干什么用，本章新增）——
+    <b style="color:var(--muted)">筛</b>：灰化的一段＝<b>铺垫背景，考试不碰</b>，可以快速滑过；
+    <span class="swatch" style="background:var(--blue)"></span><b style="color:var(--blue)">挖</b>：蓝块里凡带「潜台词」的，格式固定为<b>书上说 X → 潜台词是 Y → 所以能考 Z</b>；
+    <span class="swatch" style="background:var(--teal)"></span><b style="color:var(--teal)">串</b>：青色块＝<b>与前后章的连接点</b>，本章共 <b>14 处</b>，是向量组这一章最值钱的部分。<br>
+    紫色 <b>例题</b> 卡里，<b>基</b>3.x = 基础30讲例题、<b>习</b>3.x = 基础30讲课后习题、<b>强</b>6.x = 线代9讲第 6 讲例题（三处各自编号，别混）。<b>每题都标 ✔</b> = 答案已被我用程序独立算过一遍，不是照抄扫描件。<br>
+    需要写过程的题按 <b>💭思路 → ✍️考场卷面 → 📌批注</b> 三层排（想 → 写 → 校）；<b>选择填空题不加卷面层</b>，保持教学式排版。
+  </div>
+
+  <nav class="toc">
+    <a href="#s0">定位 · 两种读法与四目标</a>
+    <a href="#s1">向量 · 内积正交与正交矩阵</a>
+    <a href="#s2">线性表示 与 线性相关</a>
+    <a href="#s3">七大定理 · 一张表</a>
+    <a href="#s4">O₁ 具体型 · 三条常规操作</a>
+    <a href="#s5">极大无关组 🛠步进器 + 满秩分解</a>
+    <a href="#s6">O₂ 抽象型 · 定义法四种打法</a>
+    <a href="#s7">秩的三条不等式</a>
+    <a href="#s8">O₃ 等价向量组 vs 等价矩阵</a>
+    <a href="#s9">O₄ 向量空间 🛠实验台（数一）</a>
+    <a href="#s10">施密特正交化</a>
+    <a href="#s11">习题答案速查</a>
+  </nav>
+
+  <!-- ================= s0 定位 ================= -->
+  <h2 id="s0"><span class="idx">定位</span>向量组到底在学什么 · 两种读法与四个目标</h2>
+
+  <div class="mine"><span class="tag">补讲 · 一句话定位</span>
+    第 1 章行列式把方阵压成<b>一个数</b>，第 2 章矩阵把信息<b>留住</b>并立起了「秩」这把尺子。
+    这一章要回答的是尺子量的<b>究竟是什么</b>——
+    <b>书上说</b>「矩阵是由行（列）向量拼成的，向量之间存在线性关系」；
+    <b>潜台词是</b>：矩阵的全部本质信息，就是它的列向量里<b>有几个是真独立的、其余的怎么由这几个拼出来</b>；
+    <b>所以能考</b>：给你一堆向量问相关性（＝独立的有几个）、问能否表示（＝新来的这个是不是多余的）、问极大无关组（＝把独立的那几个挑出来）。
+    <em>三种问法是同一件事的三个说法。</em>
+  </div>
+
+  <div class="key"><span class="tag">必记 · 张宇的重要结论：非黑即白</span>
+    我们致力于搞清楚的就是向量与向量之间的关系——<b>这种关系「非黑即白」：要么线性无关（"独立"），要么线性相关（"多余"）</b>。
+    在充斥着诸多抽象理论和方法的向量组问题上，只有把握住这个结论，才不会迷失方向。<span class="exam">书页 84 原话</span>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 张宇写在书页 84 边上的两句方法论（全书级别，不只是本章）</span>
+    <b>①</b> 代数学研究的主要是两个问题，第一是<b>把握代数表达式与几何之间的关系</b>——理解清楚每个代数式及其背后的几何问题，<b>用几何这一条线贯穿整个代数学习过程</b>。<br>
+    <b>②</b> <b>一定要有一个「向量空间」的思考方式。</b><br>
+    <b>潜台词是</b>：本章每一个代数命题都应该翻译成一句几何话（"$\beta$ 在 $\alpha$ 们张成的空间里吗"、"这组向量张成几维"），
+    <b>所以能考</b>：抽象型的题（不给具体数字）如果只在代数式里打转就会卡死，翻成"维数够不够、在不在这个空间里"往往三行就完。本页每个概念后面都会跟一句几何翻译。
+  </div>
+
+  <div class="zy"><span class="tag">强化题型 · 张宇《线代9讲》第 6 讲的「四目标解题法」（本页骨架）</span>
+    拿到一道向量组的题，<b>第一步永远是先认领它属于哪个目标（O）</b>，再选常规操作（D）：
+    <div class="gridwrap"><table>
+      <tr><th>目标</th><th>问的是什么</th><th>张宇编码</th><th>本页位置</th></tr>
+      <tr><td><b>O₁ 具体型</b></td><td>给了<b>具体数字</b>的向量，问表示 / 相关性 / 极大无关组</td><td>D₁ 常规操作（+ D₂₁ 观察研究对象）</td><td><a href="#s4">§四</a><a href="#s5">§五</a></td></tr>
+      <tr><td><b>O₂ 抽象型</b></td><td>只给<b>字母和条件</b>，问由此能推出什么</td><td>D₁（定义法）+ D₂₃ 化归经典形式</td><td><a href="#s6">§六</a></td></tr>
+      <tr><td><b>O₃ 等价</b></td><td>两组向量是不是<b>同一个空间</b></td><td>D₁ + 三秩相等</td><td><a href="#s8">§八</a></td></tr>
+      <tr><td><b>O₄ 向量空间</b><span class="layer L-str" style="margin-left:6px">仅数一</span></td><td>基 / 维数 / 坐标 / 过渡矩阵 / 坐标变换</td><td>D₁ + D₂₂ 转换等价表述 + D₄₂ 引入符号</td><td><a href="#s9">§九</a><a href="#s10">§十</a></td></tr>
+    </table></div>
+    <b>O₁ 的三条支线（书页 65–67，最该练熟的三套手法）</b>：
+    ① <b>$\beta$ 与 $\alpha_1,\cdots,\alpha_n$</b> → 拼 $[A\,|\,\beta]$ 化阶梯，比 <b>三个秩</b>；
+    ② <b>$\alpha_1,\cdots,\alpha_n$ 自身</b> → 先看 <b>个数 vs 维数</b>（D₂₁ 观察研究对象）；
+    ③ <b>求极大无关组</b> → 化<b>行最简形</b>，主元列即无关组。
+    <br><span style="color:var(--green)"><b>怎么用这张表</b>：考场上先问「题给的是数字还是字母」（分 O₁/O₂），
+    再问「问的是表示、相关性、还是挑代表」（分三条支线）。本章 90% 的题就是这两问。</span>
+  </div>
+
+  <div class="link"><span class="tag">串 · 两种读法：为什么 ch3 与 ch4 要成对读</span>
+    <b>《基础30讲》的章序</b>是：第 3 讲 <b>向量组</b> → 第 4 讲 <b>线性方程组</b>（先讲向量语言，再用它讲方程组）。<br>
+    <b>《线代9讲》的讲序恰好反过来</b>：第 <b>5</b> 讲 <b>线性方程组</b> → 第 <b>6</b> 讲 <b>向量组</b>（<b>先把方程组讲透，再用方程组的视角统一讲向量组</b>）。<br>
+    <b>这不是编排随意，而是两种教法</b>：基础阶段需要先有"向量"这个词才能说清方程组的解结构；
+    强化阶段则发现——<em>向量组的每一个命题，都可以翻译成一句关于齐次/非齐次方程组的话</em>，于是把方程组当成唯一的地基。<br>
+    <b>本页的处理</b>：正文按<b>基础章序</b>展开（先向量语言），但每个关键命题都<b>就地给出"方程组说法"</b>（见 <a href="#s3">§三定理 4、定理 5</a>）。
+    ch4 写完后这里会补上双向锚点，两页互跳。<br>
+    <span style="color:var(--teal)"><b>一句话记住这条翻译</b>：$x_1\alpha_1+\cdots+x_m\alpha_m=0$ 里的那组数 $x_i$，
+    <b>在向量组语境叫"组合的系数"，在方程组语境叫"解"</b>——同一组数，两个名字。</span>
+  </div>
+
+  <div class="dolinks">
+    <div class="t">本章体量</div>
+    基础30讲第 3 讲 <b>书页 82–113（32 页）</b> · 线代9讲第 6 讲 <b>书页 64–71（8 页）</b>，共 <b>40 页</b>。
+    例题：基础 14 道 + 习题 12 道 + 强化 7 道 = <b>33 道，本页全收</b>。
+    <div class="note">⚠️ 分章 PDF 的页码换算：基础30讲 <b>PDF 第 n 页 = 印刷书页 n+81</b>；强化第6讲 <b>PDF 第 n 页 = 印刷书页 n+63</b>。（资料索引 md 里写的"89–120 / 75–82"是整册 PDF 页，不是页眉。）</div>
+  </div>
+
+  <!-- ================= s1 向量的概念 ================= -->
+  <h2 id="s1"><span class="idx">一</span>向量的概念 · 内积、正交与正交矩阵<span class="layer L-base">基础</span></h2>
+
+  <div class="bg"><span class="tag">筛 · 这段是背景，考试不碰</span>
+    $n$ 维向量 $\alpha=[a_1,\cdots,a_n]$ 的<b>定义、相等、加法、数乘</b>：相等＝对应元素全相等，加法＝对应元素相加，数乘＝每个元素都乘 $k$。
+    可以把向量看成 $n\times1$ 或 $1\times n$ 的矩阵，这些性质与矩阵完全一致。
+    <b>这一小节从来不单独出题</b>，扫一眼确认没歧义即可，真正的内容从内积开始。
+  </div>
+
+  <h3>1.1　内积：把"位置关系"装进代数式</h3>
+  <p>设 $\alpha=[a_1,\cdots,a_n]^{\mathrm T},\ \beta=[b_1,\cdots,b_n]^{\mathrm T}$，称</p>
+  <div class="fml">$$(\alpha,\beta)=\alpha^{\mathrm T}\beta=\sum_{i=1}^{n}a_ib_i=a_1b_1+a_2b_2+\cdots+a_nb_n$$</div>
+  <p>为 $\alpha,\beta$ 的<b>内积</b>（点积）。<b>模</b>（长度）$\|\alpha\|=\sqrt{\sum_{i=1}^{n}a_i^2}$，$\|\alpha\|=1$ 时称<b>单位向量</b>。由</p>
+  <div class="fml">$$(\alpha,\beta)=\|\alpha\|\cdot\|\beta\|\cos\theta\ \Longrightarrow\ \cos\theta=\frac{(\alpha,\beta)}{\|\alpha\|\cdot\|\beta\|}$$</div>
+  <p>两向量的夹角就得出来了。当 $\alpha^{\mathrm T}\beta=0$ 时称 $\alpha,\beta$ <b>正交</b>（2、3 维叫"垂直"，4 维及以上就只能叫"正交"了）。</p>
+
+  <div class="mine"><span class="tag">补讲 · 内积这一步为什么关键（挖）</span>
+    <b>书上说</b>「$(\alpha,\beta)=\alpha^{\mathrm T}\beta$」，一个转置乘法而已；<br>
+    <b>潜台词是</b>：这行等式把<b>几何量（夹角、长度）压进了一次矩阵乘法</b>——从此"垂直"不再需要画图，写成 $\alpha^{\mathrm T}\beta=0$ 就能参与代数推演；<br>
+    <b>所以能考</b>：凡是题目里出现<b>「两两正交」「$\alpha^{\mathrm T}\beta=0$」「$A^{\mathrm T}A=E$」</b>，第一反应就是——
+    <em>我手上多了一批可以拿来"两边同乘"的零</em>（见 <a href="#eg-x311">习 3.11</a>，整道证明就是把定义式两边跟 $\alpha_1$ 作内积，一乘就打掉两项）。
+  </div>
+
+  <h3>1.2　Gram 矩阵：$A^{\mathrm T}A$ 为什么处处都是它</h3>
+  <p>设 $A=[\alpha,\beta]$（$\alpha,\beta$ 为 3 维列向量），则</p>
+  <div class="fml">$$A^{\mathrm T}A=\begin{bmatrix}\alpha^{\mathrm T}\\\beta^{\mathrm T}\end{bmatrix}[\alpha,\beta]
+  =\begin{bmatrix}\alpha^{\mathrm T}\alpha&\alpha^{\mathrm T}\beta\\\beta^{\mathrm T}\alpha&\beta^{\mathrm T}\beta\end{bmatrix}
+  =\begin{bmatrix}\|\alpha\|^2&\|\alpha\|\|\beta\|\cos\theta\\\|\alpha\|\|\beta\|\cos\theta&\|\beta\|^2\end{bmatrix}$$</div>
+
+  <div class="link"><span class="tag">串 · Gram 矩阵是一根贯穿到第 6 章的钢筋</span>
+    上面这个矩阵（<b>Gram 矩阵</b>）把"一组向量之间的全部长度与夹角信息"装进一个方阵，它在后面三处原样复现：<br>
+    <b>① 本章 §一.3 正交矩阵</b>：若 $\alpha\perp\beta$ 且都是单位向量，$A^{\mathrm T}A=E$ ——这就是正交矩阵的定义式；<br>
+    <b>② <a href="线代_第02章_矩阵.html">第 2 章</a> 的秩公式 $r(A^{\mathrm T}A)=r(A)$</b>：为什么"左乘自己的转置不掉秩"？因为 $A^{\mathrm T}Ax=0\Rightarrow x^{\mathrm T}A^{\mathrm T}Ax=\|Ax\|^2=0\Rightarrow Ax=0$，<b>靠的正是"模为 0 只能是零向量"这条内积性质</b>；<br>
+    <b>③ 第 6 章二次型</b>：$x^{\mathrm T}Ax$ 的正定性判据，本质上就是问"这个 Gram 矩阵对应的长度平方恒正吗"。<br>
+    <span style="color:var(--teal)">先在这里认下它，后面见到就不会觉得是新东西。</span>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · "规范正交基"凭什么单独起个名字（挖）</span>
+    <b>书上说</b>：满足 $\alpha_i^{\mathrm T}\alpha_j=\begin{cases}0,&i\ne j\\1,&i=j\end{cases}$ 的一组向量叫标准（规范）正交向量组，并举了自然基 $e_1,\cdots,e_s$ 为例；<br>
+    <b>潜台词是</b>：一般的基要算某个向量的坐标，得<b>解一个方程组</b>（$[\xi]x=\alpha$）；
+    但如果基是规范正交的，<b>坐标可以直接用内积读出来</b>：$x_i=(\alpha,\xi_i)$——因为 $[\xi]^{-1}=[\xi]^{\mathrm T}$。
+    <em>「规范正交」买的就是这个便宜：把"解方程"降级成"做乘法"。</em><br>
+    <b>所以能考</b>：第 5 章实对称阵对角化要求 $Q$ 是<b>正交</b>阵而不是随便一个可逆阵，第 6 章正交变换化二次型同理——
+    <b>都是为了让 $Q^{-1}=Q^{\mathrm T}$，把求逆这一步彻底省掉</b>。做那些题时如果发现要求逆，八成是哪一步没正交化。
+  </div>
+
+  <h3>1.3　正交矩阵：把数据"转一下"</h3>
+  <p>设 $A$ 是 $n$ 阶方阵，满足 $A^{\mathrm T}A=E$，则称 $A$ 是<b>正交矩阵</b>。</p>
+  <div class="fml">$$A\ \text{是正交矩阵}\iff A^{\mathrm T}A=E\iff A^{\mathrm T}=A^{-1}\iff A\ \text{的行（列）向量组是规范正交基}$$</div>
+  <p>其中<b>标准（规范）正交向量组</b>指满足 $\alpha_i^{\mathrm T}\alpha_j=\begin{cases}0,&i\ne j\\1,&i=j\end{cases}$ 的一组向量——<b>两两正交，且每个长度为 1</b>。</p>
+
+  <div class="key"><span class="tag">必记 · 展开 $AA^{\mathrm T}=E$ 得到的六个条件</span>
+    设 $A=\begin{bmatrix}a_1&a_2&a_3\\b_1&b_2&b_3\\c_1&c_2&c_3\end{bmatrix}$，记三个<b>行</b>向量为 $\alpha,\beta,\gamma$，则 $AA^{\mathrm T}=E$ 等价于<b>六个等式</b>：
+    $$\|\alpha\|=\|\beta\|=\|\gamma\|=1,\qquad (\alpha,\beta)=(\alpha,\gamma)=(\beta,\gamma)=0.$$
+    即 <b>$A$ 是由两两正交的单位向量组成的</b>。$n$ 阶时是 $n$ 个"长度为 1"加 $\binom n2$ 个"互相正交"，共 $\frac{n(n+1)}2$ 个方程——
+    <em>这正是为什么正交矩阵的题总能"数条件个数"解出参数</em>。
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 正交矩阵的几何本体：旋转（挖）</span>
+    <b>书上说</b>「正交矩阵的作用：将数据进行旋转」，并给了 $\begin{bmatrix}\cos\theta&-\sin\theta\\\sin\theta&\cos\theta\end{bmatrix}$；<br>
+    <b>潜台词是</b>：<b>正交变换只改变位置，不改变模长、不改变形状</b>（书页 87 原批注）。因此它保内积、保夹角、保长度——
+    这就是为什么它可以在<b>不破坏任何几何信息</b>的前提下把图形摆正；<br>
+    <b>所以能考</b>：第 6 章「用正交变换化二次型为标准形」为什么必须用<b>正交</b>阵而不是随便一个可逆阵——因为只有正交阵能保证
+    <em>化简前后是同一个曲面，只是换了个角度看</em>，从而"从标准形上读出的最值"才是原曲面的真最值。
+  </div>
+
+  <div class="bg"><span class="tag">筛 · 书上的两个示例，理解即可，不必记</span>
+    <b>示例 1</b>（图 3-1）：$\theta=\frac\pi4$ 时 $\begin{bmatrix}\frac{\sqrt2}2&-\frac{\sqrt2}2\\\frac{\sqrt2}2&\frac{\sqrt2}2\end{bmatrix}\begin{bmatrix}1\\1\end{bmatrix}=\begin{bmatrix}0\\\sqrt2\end{bmatrix}$——把 $[1,1]^{\mathrm T}$ 逆时针转了 $\frac\pi4$ 到 $y$ 轴上，<b>长度都是 $\sqrt2$，没变</b>。<br>
+    <b>示例 2</b>（图 3-2）：一个斜放的椭圆经正交变换转正，转正后<b>直接从图上读出最值</b>。<br>
+    这两个示例是<b>第 6 章的几何伏笔</b>，本章不考。
+  </div>
+
+  <!-- ================= s2 线性表示与线性相关 ================= -->
+  <h2 id="s2"><span class="idx">二</span>线性表示 与 线性相关 · 三组定义与它们的几何翻译<span class="layer L-base">基础</span></h2>
+
+  <h3>2.1　三个定义</h3>
+  <div class="gridwrap"><table>
+    <tr><th>概念</th><th>代数定义</th><th>几何翻译（张宇要求的那条线）</th></tr>
+    <tr><td><b>线性组合</b></td><td>$k_1\alpha_1+k_2\alpha_2+\cdots+k_m\alpha_m$</td><td>在 $\alpha$ 们<b>张成的空间</b>里任取一点</td></tr>
+    <tr><td><b>线性表示</b></td><td>存在 $k_i$ 使 $\beta=k_1\alpha_1+\cdots+k_m\alpha_m$</td><td>$\beta$ <b>落在</b>这个张成空间<b>里面</b></td></tr>
+    <tr><td><b>线性相关</b></td><td>存在<b>不全为零</b>的 $k_i$ 使 $\sum k_i\alpha_i=0$</td><td>至少有一个向量<b>躺平</b>了（落在其余向量张成的空间里）</td></tr>
+    <tr><td><b>线性无关</b></td><td><b>只有</b>全为零的 $k_i$ 才使 $\sum k_i\alpha_i=0$</td><td>每一个向量都<b>对张成空间有贡献</b>，谁也不多余</td></tr>
+  </table></div>
+
+  <div class="mine"><span class="tag">补讲 · "个数超过维数必相关"的直觉：这是一条鸽笼原理（挖）</span>
+    <b>书上说</b>（定理 4 注 (1)）：「如果 $n\lt m$，即方程个数小于未知数个数，则齐次组求解时必有自由未知量，即必有非零解。
+    因此，<b>任何 $n+1$ 个 $n$ 维向量都是线性相关的</b>」；<br>
+    <b>潜台词是</b>：<b>$n$ 维空间"装不下" $n+1$ 个独立方向</b>——这跟"$n+1$ 只鸽子放进 $n$ 个笼子必有一笼两只"是同一种论证。
+    代数上体现为"未知数比方程多，自由度必然剩下"；<br>
+    <b>所以能考</b>：它是本章<b>唯一一条零计算量的判据</b>，出现在三处——
+    <a href="#eg-35">例 3.5</a>（$s\gt n$ 直接结案）、<a href="#eg-64">强 6.4(2)</a>（反证的收口）、
+    以及大量选择题的排除。<em>拿到向量组先数一数"几个、几维"，这一秒可能就省掉整道题。</em>
+  </div>
+
+  <div class="key"><span class="tag">必记 · 一眼判相关的三条 + 一眼判无关的两条</span>
+    <b>必相关</b>：① 含<b>零向量</b>的向量组；② 有<b>两个成比例</b>的向量；③ <b>个数 $\gt$ 维数</b>（$n+1$ 个 $n$ 维向量必相关）。<br>
+    <b>必无关</b>：① 单个<b>非零</b>向量；② 两个<b>不成比例</b>的向量。<br>
+    <b>非黑即白</b>：向量组或相关或无关，<b>二者必居其一且仅居其一</b>。
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · "相关"这个定义为什么要写成"$=0$"而不是"某个能被表示"（挖）</span>
+    <b>书上说</b>：设 $k_i\ne0$，从 $\sum k_j\alpha_j=0$ 可解出 $\alpha_i=-\frac{k_1}{k_i}\alpha_1-\cdots-\frac{k_m}{k_i}\alpha_m$，
+    "亦即<b>至少有一个</b>向量可由其他向量线性表示"；<br>
+    <b>潜台词是</b>：两种说法等价，但<b>"$\sum k_i\alpha_i=0$" 这个写法是对称的、不用挑出某一个 $\alpha_i$</b>，
+    因此它<b>直接就是一个齐次方程组</b>，可以交给消元法机械处理；而"某个能被表示"要先猜是哪个，没法算；<br>
+    <b>所以能考</b>：<em>凡遇相关性，一律先写 $\sum k_i\alpha_i=0$</em>——这是 O₂ 抽象型全部题目的第一行。
+    同时也解释了<a href="#eg-33">例 3.3</a>(C) 为什么错：相关只保证<b>至少有一个</b>能被表示，<b>不是任一个</b>（$k_i=0$ 的那些 $\alpha_i$ 就不行）。
+  </div>
+
+  <div class="link"><span class="tag">串 · 三个定义各自对应的方程组说法（ch3 → ch4 的第一根梁）</span>
+    <div class="gridwrap"><table>
+      <tr><th>向量组语言</th><th>方程组语言</th><th>秩语言</th></tr>
+      <tr><td>$\alpha_1,\cdots,\alpha_m$ <b>相关</b></td><td>$[\alpha_1,\cdots,\alpha_m]x=0$ 有<b>非零解</b></td><td>$r([\alpha_1,\cdots,\alpha_m])\lt m$</td></tr>
+      <tr><td>$\alpha_1,\cdots,\alpha_m$ <b>无关</b></td><td>$[\alpha_1,\cdots,\alpha_m]x=0$ <b>只有零解</b></td><td>$r([\alpha_1,\cdots,\alpha_m])=m$</td></tr>
+      <tr><td>$\beta$ <b>可由</b> $\alpha$ 们表示</td><td>$[\alpha_1,\cdots,\alpha_s]x=\beta$ <b>有解</b></td><td>$r(A)=r([A,\beta])$</td></tr>
+      <tr><td>$\beta$ <b>不可由</b> $\alpha$ 们表示</td><td>$[\alpha_1,\cdots,\alpha_s]x=\beta$ <b>无解</b></td><td>$r(A)+1=r([A,\beta])$</td></tr>
+    </table></div>
+    <b>这张表就是本章与第 4 章的兑换汇率</b>，下面的定理 4、定理 5 会把它正式写成定理。
+    <span style="color:var(--teal)">最后一行的 <b>"+1"</b> 常被写成 "$\ne$"，其实<b>只能差 1</b>——添一列最多让秩加 1，这一点书页 92 的旁注专门点了。</span>
+  </div>
+
+  <!-- ================= s3 七大定理 ================= -->
+  <h2 id="s3"><span class="idx">三</span>判别线性相关性的七大定理 · 一张表看完<span class="layer L-base">基础</span><span class="layer L-str">强化</span></h2>
+
+  <div class="bg"><span class="tag">筛 · 证明不用掌握</span>
+    书页 88 在这一节标题旁明写「<b>★ 不需要掌握证明</b>」。七大定理的证明书上都给了，读一遍理解即可，
+    <b>考场上只用结论</b>。下面的表把七条并成一张，证明思路只留一句话（真要复述时够用）。
+  </div>
+
+  <div class="gridwrap"><table>
+    <tr><th>#</th><th>定理内容</th><th>逆否 / 等价说法</th><th>证明一句话</th></tr>
+    <tr><td><b>1</b></td><td>$\alpha_1,\cdots,\alpha_n\,(n\ge2)$ <b>相关</b> $\iff$ 其中<b>至少有一个</b>可由其余 $n-1$ 个表示</td>
+        <td><b>无关</b> $\iff$ <b>任一</b>向量都<b>不能</b>由其余表示</td><td>挑出 $k_1\ne0$，两边除以它</td></tr>
+    <tr><td><b>2</b></td><td>$\alpha_1,\cdots,\alpha_n$ <b>无关</b>，而 $\beta,\alpha_1,\cdots,\alpha_n$ <b>相关</b> $\Rightarrow$ $\beta$ 可由 $\alpha$ 们表示，<b>且表示法唯一</b></td>
+        <td>——</td><td>$\beta$ 前系数 $k\ne0$（否则与无关矛盾）；唯一性靠两式相减</td></tr>
+    <tr><td><b>3</b></td><td><b>以少表多，多的相关</b>：$\beta_1,\cdots,\beta_t$ 可由 $\alpha_1,\cdots,\alpha_s$ 表示且 $t\gt s$ $\Rightarrow$ $\beta$ 们相关</td>
+        <td>若 $\beta$ 们<b>无关</b>，则 $t\le s$</td><td>化成 $s$ 个方程 $t$ 个未知数的齐次组，必有非零解</td></tr>
+    <tr><td><b>3′</b></td><td><b>被表示的秩不大</b>：$\beta$ 们可由 $\alpha$ 们表示 $\Rightarrow r(\beta_1,\cdots,\beta_t)\le r(\alpha_1,\cdots,\alpha_s)$</td>
+        <td>（强化讲的定理 2，书页 99 的 (3)）</td><td>低维空间装在高维空间里</td></tr>
+    <tr><td><b>4</b></td><td><b>相关 $\iff$ 齐次组有非零解</b>：$\alpha_1,\cdots,\alpha_m$ 相关 $\iff [\alpha_1,\cdots,\alpha_m]x=0$ 有非零解 $\iff r\lt m$</td>
+        <td><b>无关</b> $\iff$ 只有零解 $\iff r=m$</td><td>就是定义的改写</td></tr>
+    <tr><td><b>5</b></td><td><b>可表示 $\iff$ 非齐次组有解</b>：$\beta$ 可由 $\alpha$ 们表示 $\iff r(A)=r([A,\beta])$</td>
+        <td>不可表示 $\iff r(A)+1=r([A,\beta])$</td><td>就是定义的改写</td></tr>
+    <tr><td><b>6</b></td><td><b>部分相关 $\Rightarrow$ 整体相关</b></td><td><b>整体无关 $\Rightarrow$ 部分无关</b></td><td>把系数补 0 凑成整组</td></tr>
+    <tr><td><b>7</b></td><td><b>原来无关，延长无关</b>（各加相同位置的分量）</td><td><b>原来相关，缩短相关</b></td><td>$Ax=0$ 只有零解 $\Rightarrow$ 加行后的 $Bx=0$ 更只有零解</td></tr>
+  </table></div>
+
+  <div class="mine"><span class="tag">补讲 · 定理 2 里"表示法唯一"这四个字，撑起了后面整个"坐标"概念（挖）</span>
+    <b>书上说</b>：$\alpha_1,\cdots,\alpha_n$ 无关而 $\beta,\alpha_1,\cdots,\alpha_n$ 相关 $\Rightarrow$ $\beta$ 可由 $\alpha$ 们表示，<b>且表示法唯一</b>；
+    并在旁边手写：「其中 $k_1,\cdots,k_n$ 为 $\beta$ 在由 $\alpha_1,\cdots,\alpha_n$ 张成的空间中的<b>坐标</b>」；<br>
+    <b>潜台词是</b>：<b>"唯一"是"坐标"这个词能成立的前提</b>——如果同一个向量在同一组基下能写出两套不同的系数，
+    "坐标"就不是一个良定义的东西，<a href="#s9">§九</a>整节都会塌掉。
+    而唯一性的证明只用了一句：两式相减后由无关性推出对应系数相等；<br>
+    <b>所以能考</b>：<b>(i)</b> 凡题目说"在基 $\xi$ 下的坐标为……"，你可以放心地把它当作<u>唯一确定</u>的一组数来解方程；
+    <b>(ii)</b> 反过来，若一组向量<b>相关</b>，"坐标"就不唯一（<a href="#eg-31">例 3.1</a> 的 $b=2,a=1$ 支就是无穷多种表示法），
+    <em>这正是"基必须线性无关"这条要求的全部理由。</em>
+  </div>
+
+  <div class="key"><span class="tag">必记 · 定理 6 + 定理 7 的四句口诀（张宇书上手写红字）</span>
+    <div class="fml" style="font-size:1.05rem;line-height:2.2">
+      <b>部分相关，整体相关；　整体无关，部分无关。</b><br>
+      <b>原来无关，延长无关；　原来相关，缩短相关。</b>
+    </div>
+    <b>四句话的共同结构</b>：「相关」是<b>往大了传</b>（部分→整体、缩短方向），「无关」是<b>往小了传</b>（整体→部分、延长方向）。
+    记不住方向时想一句：<em>多余的东西加进去还是多余（相关传上去），独立的东西砍掉一部分还是独立（无关传下来）</em>。
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 定理 4 那条旁注是全章题眼（挖）</span>
+    <b>书上说</b>（书页 91 右侧手写）：「$x_i$ <b>在方程组里叫解，在向量组里叫组合的系数</b>」；<br>
+    <b>潜台词是</b>：向量组与方程组<b>不是两个话题，是同一个对象的两套读法</b>——
+    竖着看 $[\alpha_1,\cdots,\alpha_m]x=0$ 是"$n$ 个方程 $m$ 个未知量"，横着看是"$m$ 个向量的一个线性关系式"；<br>
+    <b>所以能考</b>：任何一句"向量之间的关系式"都可以<b>把系数排成一列，当作 $Ax=0$ 的一个解向量</b>——
+    <a href="#eg-65">强 6.5</a> 整道题就是这一步（由 $\alpha_1+\alpha_2-\alpha_3-\alpha_4=0$ 直接读出基础解系 $[1,1,-1,-1]^{\mathrm T}$）。
+    <em>这条兑换是本章性价比最高的一句话。</em>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 定理 3 与定理 3′ 的分工（挖）</span>
+    <b>书上说</b>：定理 3 给"相关"，定理 3′ 给"秩不大"；强化讲第 6 讲的旁注则写「<b>证秩等式，一般用方程组同解；证秩不等式，一般用定理 2（即本页定理 3′）</b>」；<br>
+    <b>潜台词是</b>：这两条定理是<b>证明题的两台不同机器</b>——要证 $r(X)\le r(Y)$，就去说明 "$X$ 的每一列都能由 $Y$ 的列表示"；要证 $r(X)=r(Y)$，就去说明 "$Xx=0$ 与 $Yx=0$ 同解"；<br>
+    <b>所以能考</b>：<a href="#s7">§七</a>的三条秩不等式（$r(AB)\le\min$、$r(A+B)\le r([A,B])\le r(A)+r(B)$、$r(A^*)$ 三分）<b>全部</b>是定理 3′ 的应用，
+    而 <a href="#eg-64">强 6.4(2)</a> 的 $r(A^{n+1})=r(A^n)$ 用的是"同解"。<em>看到 $\le$ 想载体，看到 $=$ 想同解。</em>
+  </div>
+
+  <div class="link"><span class="tag">串 · 七大定理 ↔ 强化讲四大定理的对应（别当成两套东西背）</span>
+    《线代9讲》第 6 讲书页 68 也列了四条定理，其实<b>就是本页七条里的四条</b>，编号不同而已：
+    <div class="gridwrap"><table>
+      <tr><th>《线代9讲》第6讲</th><th>＝《基础30讲》第3讲</th><th>内容</th></tr>
+      <tr><td>强 · 定理 1</td><td>基 · 定理 3</td><td>以少表多，多的相关</td></tr>
+      <tr><td>强 · 定理 2</td><td>基 · 定理 3′（书页 99 的 (3)）</td><td>被表示的向量组秩不大</td></tr>
+      <tr><td>强 · 定理 3</td><td>基 · 定理 6</td><td>部分相关，整体相关</td></tr>
+      <tr><td>强 · 定理 4</td><td>基 · 定理 7</td><td>原来无关，延长无关</td></tr>
+    </table></div>
+    <b>基础讲多出的三条</b>（定理 1、2、4、5 中的定理 1、2、5）是<b>概念层</b>的（相关的等价刻画、表示唯一性、可表示 $\iff$ 有解）；
+    <b>强化讲挑走的四条是"能直接当工具用"的那四条</b>。<span style="color:var(--teal)">背的时候按强化那四条背，剩下三条是理解用的。</span>
+  </div>
+
+  <!-- ================= s4 O1 具体型 ================= -->
+  <h2 id="s4"><span class="idx">四</span>O₁ 具体型 · 三条常规操作（给了数字就照这个流程走）<span class="layer L-str">强化</span></h2>
+
+  <div class="zy"><span class="tag">强化题型 · 支线①：$\beta$ 与 $\alpha_1,\cdots,\alpha_n$（D₁ 常规操作）</span>
+    书页 65 明写「<b>熟练掌握步骤</b>」，三步：<br>
+    <b>(1) 建立方程组</b>：$\beta=x_1\alpha_1+\cdots+x_n\alpha_n$，即 $[\alpha_1,\cdots,\alpha_n]\,x=\beta$；<br>
+    <b>(2) 化阶梯形</b>：$[A,\beta]=[\alpha_1,\cdots,\alpha_n,\beta]\xrightarrow{\text{初等行变换}}$ 阶梯形；<br>
+    <b>(3) 讨论</b>（比三个数：$r(A)$、$r([A,\beta])$、未知数个数 $n$）：
+    <div class="gridwrap"><table>
+      <tr><th>秩的关系</th><th>解的情况</th><th>表示法</th></tr>
+      <tr><td>$r(A)\ne r([A,\beta])$</td><td>无解</td><td><b>不能</b>表示</td></tr>
+      <tr><td>$r(A)=r([A,\beta])=n$</td><td>唯一解</td><td><b>唯一一种</b>表示法</td></tr>
+      <tr><td>$r(A)=r([A,\beta])\lt n$</td><td>无穷多解</td><td><b>无穷多种</b>表示法</td></tr>
+    </table></div>
+    <b>【注】含未知参数的向量组是常考题型。</b>（书页 65 与书页 66 各写了一遍，说明是重点。）
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 第三行为什么最容易丢分（挖）</span>
+    <b>书上说</b>「$r(A)=r([A,\beta])\lt n\iff$ 无穷多解 $\iff$ 无穷多种表示法」；<br>
+    <b>潜台词是</b>：这一行要求的<b>不是判断"能不能表示"，而是把无穷多种表示法全写出来</b>——
+    即写出通解 $x=\eta^*+k\xi$ 后，还要<b>代回去</b>写成 $\beta=(\cdots)\alpha_1+(\cdots)\alpha_2+\cdots$ 的含 $k$ 形式；<br>
+    <b>所以能考</b>：<a href="#eg-31">例 3.1</a> 第 (2) 问 $b=2,a=1$ 那一支，答案是 $\beta=-(2k+1)\alpha_1+(k+2)\alpha_2+k\alpha_3$——
+    <em>只写"可以表示"或只写通解 $x$，都只能拿一半分。</em>
+  </div>
+
+  <div class="eg" id="eg-31">
+    <div class="q"><span class="no">基 3.1 ✔</span><b>解答题 · 含参讨论模板题</b>　已知
+      $\alpha_1=[1,4,0,2]^{\mathrm T},\ \alpha_2=[2,7,1,3]^{\mathrm T},\ \alpha_3=[0,1,-1,a]^{\mathrm T},\ \beta=[3,10,b,4]^{\mathrm T}$，问：<br>
+      (1) $a,b$ 取何值时，$\beta$ <b>不能</b>由 $\alpha_1,\alpha_2,\alpha_3$ 线性表示？<br>
+      (2) $a,b$ 取何值时，$\beta$ 可由 $\alpha_1,\alpha_2,\alpha_3$ 线性表示？<b>并写出此表达式。</b></div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看，别直接翻卷面）</span>
+        <ol>
+          <li><b>题给了 4 维向量 4 个、参数 2 个，还问"能否表示"</b>——这是支线①的标准信号：不用想别的，直接拼 $[\alpha_1,\alpha_2,\alpha_3\,\vdots\,\beta]$ 化阶梯形。</li>
+          <li><b>参数放在哪很关键</b>：$a$ 在系数矩阵里（影响 $r(A)$），$b$ 只在增广列里（只影响 $r([A,\beta])$）。
+              所以可以预判：<em>$b$ 管"有没有解"，$a$ 管"解唯不唯一"</em>——化完阶梯形要能看出这个分工。</li>
+          <li>阶梯形的最后两行必然长成 $\begin{bmatrix}0&0&\ast(a)&\vdots&0\\0&0&0&\vdots&\ast(b)\end{bmatrix}$ 的样子，
+              <b>第 4 行是"有解性方程" $0=\ast(b)$，第 3 行是"唯一性方程"</b>。分类讨论就照这两行走，别乱枚举。</li>
+          <li>三种情形要<b>全部落地</b>：无解 / 唯一解（写出唯一表达式）/ 无穷多解（写出<b>含参数 $k$ 的</b>表达式）。第三种最容易漏。</li>
+        </ol>
+      </div>
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面<span class="score">按 11 分估</span></div>
+        <div class="step"><span class="k">解</span>　设 $\beta=x_1\alpha_1+x_2\alpha_2+x_3\alpha_3$，即 $[\alpha_1,\alpha_2,\alpha_3]x=\beta$。对增广矩阵作初等行变换：<span class="pt">⛳ 建立方程组 2 分</span></div>
+        <div class="step">$$[\alpha_1,\alpha_2,\alpha_3\,\vdots\,\beta]=\begin{bmatrix}1&2&0&\vdots&3\\4&7&1&\vdots&10\\0&1&-1&\vdots&b\\2&3&a&\vdots&4\end{bmatrix}
+        \longrightarrow\begin{bmatrix}1&2&0&\vdots&3\\0&-1&1&\vdots&-2\\0&0&a-1&\vdots&0\\0&0&0&\vdots&b-2\end{bmatrix}.\tag{1}$$<span class="pt">⛳ 化阶梯形 3 分</span></div>
+        <div class="step"><span class="k">(1)</span>　<b>当 $b\ne2$ 时</b>，由 (1) 式知 $r([\alpha_1,\alpha_2,\alpha_3])\lt r([\alpha_1,\alpha_2,\alpha_3,\beta])$，方程组无解，
+        故 $\beta$ 不能由 $\alpha_1,\alpha_2,\alpha_3$ 线性表示。<span class="pt">⛳ 2 分</span></div>
+        <div class="step"><span class="k">(2)</span>　<b>当 $b=2,\ a\ne1$ 时</b>，$r([\alpha_1,\alpha_2,\alpha_3])=r([\alpha_1,\alpha_2,\alpha_3,\beta])=3$，方程组有唯一解。
+        由 (1) 式回代得 $\begin{cases}x_1+2x_2=3,\\-x_2+x_3=-2,\\x_3=0,\end{cases}$ 解得 $x=[-1,2,0]^{\mathrm T}$，
+        于是 $\beta$ 可唯一表示为
+        $$\beta=-\alpha_1+2\alpha_2.$$<span class="pt">⛳ 2 分</span></div>
+        <div class="step">　　　<b>当 $b=2,\ a=1$ 时</b>，$r([\alpha_1,\alpha_2,\alpha_3])=r([\alpha_1,\alpha_2,\alpha_3,\beta])=2\lt 3$，方程组有无穷多解，通解为
+        $$x=k[-2,1,1]^{\mathrm T}+[-1,2,0]^{\mathrm T}\quad(k\ \text{为任意常数}),$$
+        此时 $\beta$ 可由 $\alpha_1,\alpha_2,\alpha_3$ 线性表示为
+        $$\beta=-(2k+1)\alpha_1+(k+2)\alpha_2+k\alpha_3\quad(k\ \text{为任意常数}).$$<span class="pt">⛳ 2 分</span></div>
+        <div class="fin">综上：$b\ne2$ 时不能表示；$b=2,a\ne1$ 时唯一表示为 $\beta=-\alpha_1+2\alpha_2$；$b=2,a=1$ 时有无穷多种表示法，如上式。</div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（写完对照，这些字考场不落笔）</span>
+        <b>①</b> <span class="dock">扣分点</span>：第 (2) 问只写"可以表示"不写表达式，或无穷多解那支只写通解 $x$ 不代回成 $\beta=\cdots$ 的形式，<b>各扣 2 分</b>。题干白纸黑字写着"并写出此表达式"。<br>
+        <b>②</b> <b>为什么中间式子要编号 (1)</b>：后面三种情形都要引用它读秩，编号后写"由 (1) 式知"比重抄一遍矩阵省时间，也让阅卷老师一眼找到采分点。<br>
+        <b>③</b> <b>提速心算</b>：阶梯形最后一行是 $b-2$，<b>不含 $a$</b>——这说明 $a$ 绝不影响"有没有解"。看出这一点就可以直接按 $b$ 先切一刀，不必对 $(a,b)$ 做二维枚举。<br>
+        <b>④</b> <b>本题的三支正好是支线①三种情形的完整样本</b>，做完这一道，支线①就算过关了。<br>
+        <b>⑤</b> 三个结论（$x=[-1,2,0]^{\mathrm T}$、基础解系 $[-2,1,1]^{\mathrm T}$、含 $k$ 表达式）已用 sympy 逐项复算，与书一致。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg" id="eg-61">
+    <div class="q"><span class="no">强 6.1 ✔</span><b>选择题</b>　已知 $\alpha_1=\begin{bmatrix}1\\2\\3\end{bmatrix},\ \alpha_2=\begin{bmatrix}2\\1\\1\end{bmatrix},\ \beta_1=\begin{bmatrix}2\\5\\9\end{bmatrix},\ \beta_2=\begin{bmatrix}1\\0\\1\end{bmatrix}$。
+      若 $\gamma$ <b>既</b>可由 $\alpha_1,\alpha_2$ 线性表示，<b>也</b>可由 $\beta_1,\beta_2$ 线性表示，则 $\gamma=(\quad)$。<br>
+      (A) $k\begin{bmatrix}3\\3\\4\end{bmatrix}$　(B) $k\begin{bmatrix}3\\5\\10\end{bmatrix}$　(C) $k\begin{bmatrix}-1\\1\\2\end{bmatrix}$　(D) $k\begin{bmatrix}1\\5\\8\end{bmatrix}$，$k\in\mathbf R$</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(D)</span><br>
+      <span class="lab">分析</span>设 $\gamma=k_1\alpha_1+k_2\alpha_2=l_1\beta_1+l_2\beta_2$，移项得
+      $$k_1\alpha_1+k_2\alpha_2-l_1\beta_1-l_2\beta_2=0.$$
+      记 $x_1=k_1,\ x_2=k_2,\ x_3=-l_1,\ x_4=-l_2$，则化为一个<b>齐次方程组</b>
+      $x_1\alpha_1+x_2\alpha_2+x_3\beta_1+x_4\beta_2=0$，解得 $\begin{cases}x_1=3k\\x_2=-k\end{cases}$，$k\in\mathbf R$。故
+      $$\gamma=3k\begin{bmatrix}1\\2\\3\end{bmatrix}-k\begin{bmatrix}2\\1\\1\end{bmatrix}=k\begin{bmatrix}1\\5\\8\end{bmatrix}.$$
+      <span class="lab">要害</span><b>"既能被甲表示又能被乙表示" ＝ 两个表示式相等 ＝ 把四个向量搬进同一个齐次方程组</b>。
+      这是张宇的 <b>D₂₂（转换等价表述）</b>：把一个"求两个空间的交"的问题，化成"解一个 $[\alpha_1,\alpha_2,\beta_1,\beta_2]x=0$"。
+      解出来后<b>只用前两个分量</b>（$x_1,x_2$）去还原 $\gamma$——后两个分量是 $\beta$ 那边的系数，验算用。<br>
+      <span class="lab">秒杀</span>考场上四个选项都是具体向量，其实<b>直接验</b>更快：拿选项去解 $[\alpha_1,\alpha_2]x=\gamma$ 与 $[\beta_1,\beta_2]y=\gamma$ 两个 $3\times2$ 组，
+      两边都有解的只有 (D)。<b>但方法一是通法</b>（选项换成"求 $\gamma$ 的全体"就只能这么做），别只会验选项。
+    </div>
+  </div>
+
+  <div class="zy"><span class="tag">强化题型 · 支线②：$\alpha_1,\cdots,\alpha_n$ 自身（D₁ + D₂₁ 观察研究对象）</span>
+    书页 66 把这一支按<b>「向量个数 vs 维数」</b>分成三档，<b>这就是 D₂₁「观察研究对象」的全部内容</b>——动手前先数一数：
+    <div class="gridwrap"><table>
+      <tr><th>个数 $m$ 与维数 $n$</th><th>怎么判</th><th>为什么</th></tr>
+      <tr><td><b>$m\gt n$</b>（个数多于维数）</td><td><b>必线性相关</b>，不用算</td><td>$n$ 个方程 $m$ 个未知量，方程少于未知量，必有非零解</td></tr>
+      <tr><td><b>$m=n$</b>（拼成方阵）</td><td>用<b>行列式</b>：$|\alpha_1,\cdots,\alpha_n|=0\iff$ 相关；$\ne0\iff$ 无关</td><td>方阵才有行列式，这是最快的一条路</td></tr>
+      <tr><td><b>$m\lt n$</b>（个数少于维数）</td><td>化<b>阶梯形</b>：$r\lt m\iff$ 相关；$r=m\iff$ 无关</td><td>不是方阵，只能算秩</td></tr>
+    </table></div>
+    第三档若判出相关，还要问 $\alpha_s$ 与其余的表示关系时，<b>回到支线①即可</b>。
+    <b>【注】含未知参数的向量组是常考题型。</b>
+  </div>
+
+  <div class="link"><span class="tag">串 · 这三档，就是第 4 章"三种解的情形"的同一张表</span>
+    把上面那张"个数 vs 维数"的表<b>竖着翻译成方程组语言</b>，你会发现它和 ch4 讲的是同一件事：
+    <div class="gridwrap"><table>
+      <tr><th>本章（向量组）</th><th>第 4 章（齐次方程组 $Ax=0$，$A$ 是 $n\times m$）</th></tr>
+      <tr><td>$m\gt n$（个数多于维数）→ 必相关</td><td>未知量多于方程 → <b>必有非零解</b>（书页 91 注 (1) 原话）</td></tr>
+      <tr><td>$m=n$ → 用行列式 $|A|=0$ 判</td><td>方阵：$|A|=0$ 有非零解，$|A|\ne0$ 只有零解（<b>克拉默法则</b>）</td></tr>
+      <tr><td>$m\lt n$ → 化阶梯形比 $r$ 与 $m$</td><td>$r(A)\lt m$ 有非零解，$r(A)=m$ 只有零解</td></tr>
+    </table></div>
+    <b>书页 91–92 的那三张"矩形示意图"（宽扁 / 方形 / 竖高）画的就是这三档。</b>
+    <span style="color:var(--teal)">其中第三张图书上写了一句含糊的原话「这种形式的方程组是不存在的」——
+    它的意思<b>不是</b>"竖高矩阵不存在"，而是：<em>讨论齐次组的相关性时，"方程多于未知量"不构成一种需要单独讨论的情形</em>
+    （齐次组永远有零解，不存在"超定必无解"的问题），所以三档里实际上只有前两档需要动脑子。ch4 讲非齐次组时，这一档才会真正有内容。</span>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · "先数个数"这个动作省掉多少事（挖）</span>
+    <b>书上说</b>把它编码为 <b>D₂₁「观察研究对象」</b>，单独立了一档；<br>
+    <b>潜台词是</b>：张宇认为<b>"数个数"值得单独成为一个解题动作</b>——因为 $m\gt n$ 这一档<b>零计算量</b>，而考生常常上来就化矩阵；<br>
+    <b>所以能考</b>：<a href="#eg-35">例 3.5</a>（范德蒙德）第一句就是"若 $s\gt n$ 则必相关"，一句话拿分；
+    <a href="#eg-64">强 6.4(2)</a> 的反证也是靠"<b>$n+1$ 个 $n$ 维向量必相关</b>"卡死的。
+    <em>看到一堆向量，先看看它们是"胖"还是"瘦"。</em>
+  </div>
+
+  <div class="eg" id="eg-62">
+    <div class="q"><span class="no">强 6.2 ✔</span><b>选择题</b>　设 $\alpha_1=\begin{bmatrix}a\\1\\-1\\1\end{bmatrix},\ \alpha_2=\begin{bmatrix}1\\1\\b\\a\end{bmatrix},\ \alpha_3=\begin{bmatrix}1\\a\\-1\\1\end{bmatrix}$。
+      若 $\alpha_1,\alpha_2,\alpha_3$ <b>线性相关</b>，且其中<b>任意两个向量均线性无关</b>，则（　）。<br>
+      (A) $a=1,b\ne-1$　(B) $a=1,b=-1$　(C) $a\ne-2,b=2$　(D) $a=-2,b=2$</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(D)</span><br>
+      <span class="lab">要害</span><b>把两个条件翻译成一个数：秩恰好等于 2。</b>
+      "三个向量相关" $\Rightarrow r\le2$；"任意两个无关" $\Rightarrow$ 任取两列秩都是 2 $\Rightarrow r\ge2$。<b>两头一夹，$r(\alpha_1,\alpha_2,\alpha_3)=2$。</b>
+      这一步是全题的枢纽——把"相关"和"两两无关"这两句话变成<b>一个可算的等式</b>。<br>
+      <span class="lab">解</span>3 个 4 维向量（$m\lt n$），走第三档，化阶梯形：
+      $$[\alpha_1,\alpha_2,\alpha_3]=\begin{bmatrix}a&1&1\\1&1&a\\-1&b&-1\\1&a&1\end{bmatrix}
+      \to\begin{bmatrix}1&1&a\\0&1-a&1-a^2\\0&b+1&a-1\\0&0&2-a^2-a\end{bmatrix}.$$
+      <b>① 当 $a=1$ 时</b>：此时 $\alpha_1=[1,1,-1,1]^{\mathrm T}=\alpha_3$，<b>$\alpha_1$ 与 $\alpha_3$ 线性相关</b>，违反"任意两个无关"，舍。<br>
+      <b>② 当 $a\ne1$ 时</b>：继续化简得
+      $$\to\begin{bmatrix}1&1&a\\0&1&1+a\\0&b+1&a-1\\0&0&a+2\end{bmatrix}
+      \to\begin{bmatrix}1&1&a\\0&1&1+a\\0&0&-b(a+1)-2\\0&0&a+2\end{bmatrix},$$
+      要秩为 2，须<b>后两行同时为零</b>：$a+2=0$ 且 $-b(a+1)-2=0$，故 $\begin{cases}a=-2,\\b=2.\end{cases}$<br>
+      <span class="lab">复核</span>已用 sympy 逐项验：$a=-2,b=2$ 时秩确为 2，且三组两列子阵秩均为 2；(A)(B)(C) 的代表值全部不满足。<br>
+      <span class="lab">陷阱</span><b>① 当 $a=1$ 时不能只看秩</b>——那时秩也可能是 2，但"两两无关"已经破了，必须单独排除。<em>题干里"任意两个均无关"这句话，作用就是砍掉 $a=1$ 这一支。</em><br>
+      <b>② 别忘了两个方程要同时成立</b>：只解 $a+2=0$ 会漏掉 $b$；只解 $-b(a+1)-2=0$ 会得到一族解。
+    </div>
+  </div>
+
+  <div class="eg" id="eg-34">
+    <div class="q"><span class="no">基 3.4 ✔</span><b>选择题 · 循环和差型</b>　已知 4 维列向量组 $\alpha_1,\alpha_2,\alpha_3,\alpha_4$ 线性无关，则下列向量组中<b>线性无关</b>的是（　）。<br>
+      (A) $\alpha_1-\alpha_2,\ \alpha_2-\alpha_3,\ \alpha_3-\alpha_4,\ \alpha_4-\alpha_1$　　(B) $\alpha_1+\alpha_2,\ \alpha_2+\alpha_3,\ \alpha_3+\alpha_4,\ \alpha_4+\alpha_1$<br>
+      (C) $\alpha_1+\alpha_2,\ \alpha_2+\alpha_3,\ \alpha_3-\alpha_4,\ \alpha_4-\alpha_1$　　(D) $\alpha_1+\alpha_2,\ \alpha_2+\alpha_3,\ \alpha_3+\alpha_4,\ \alpha_4-\alpha_1$</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(D)</span><br>
+      <span class="lab">分析</span>题目的意思是<b>找出 4 维空间的另一个基</b>——哪个选项的 4 个向量也能张成 $\alpha_1,\cdots,\alpha_4$ 张成的那个空间。<br>
+      <span class="lab">法一 · 排除法（考场首选，30 秒）</span>凑一个"交错求和为零"的组合即可：
+      <div class="gridwrap"><table>
+        <tr><th>选项</th><th>零组合</th><th>结论</th></tr>
+        <tr><td>(A)</td><td>$(\alpha_1-\alpha_2)+(\alpha_2-\alpha_3)+(\alpha_3-\alpha_4)+(\alpha_4-\alpha_1)=0$</td><td>相关</td></tr>
+        <tr><td>(B)</td><td>$(\alpha_1+\alpha_2)-(\alpha_2+\alpha_3)+(\alpha_3+\alpha_4)-(\alpha_4+\alpha_1)=0$</td><td>相关</td></tr>
+        <tr><td>(C)</td><td>$(\alpha_1+\alpha_2)-(\alpha_2+\alpha_3)+(\alpha_3-\alpha_4)+(\alpha_4-\alpha_1)=0$</td><td>相关</td></tr>
+      </table></div>
+      故选 (D)。<br>
+      <span class="lab">法二 · 行列式（通法）</span>
+      $$[\alpha_1+\alpha_2,\ \alpha_2+\alpha_3,\ \alpha_3+\alpha_4,\ \alpha_4-\alpha_1]=[\alpha_1,\alpha_2,\alpha_3,\alpha_4]\begin{bmatrix}1&0&0&-1\\1&1&0&0\\0&1&1&0\\0&0&1&1\end{bmatrix},$$
+      两边取行列式。因 $\alpha$ 组无关，$|\alpha_1,\alpha_2,\alpha_3,\alpha_4|\ne0$；又右边系数阵的行列式 $=2\ne0$，故乘积 $\ne0$，无关。<br>
+      <span class="lab">要害</span><b>把"新向量组"写成"旧向量组 × 系数矩阵"，问题就变成看系数矩阵的行列式（或秩）。</b>
+      这一招在<a href="#eg-x34">习 3.4</a>还要再用一次，那里 $\alpha$ 是 $n\,(n\ge3)$ 维的，<b>不能取 $|\alpha_1,\alpha_2,\alpha_3|$</b>（非方阵），要换成秩的说法——见那题的批注。<br>
+      <span class="lab">规律</span>$n$ 为偶数时，<b>全"$+$"型或全"$-$"型的循环组必相关</b>（交错加减一定归零），<b>把某一项的符号翻一个</b>才可能无关。
+      记住这条，四个选项扫一眼就能锁定唯一那个"破了对称"的。<br>
+      <span class="lab">复核</span>四个 $4\times4$ 系数行列式已 sympy 算过：(A)(B)(C) 均为 $0$，(D) 为 $2$。
+    </div>
+  </div>
+
+  <div class="eg" id="eg-35">
+    <div class="q"><span class="no">基 3.5 ✔</span><b>讨论题 · 范德蒙德</b>　设 $a_1,a_2,\cdots,a_s$ 是 $s$ 个<b>互不相同</b>的数，试讨论 $s$ 个 $n$ 维列向量
+      $\alpha_i=[1,a_i,a_i^2,\cdots,a_i^{n-1}]^{\mathrm T}\ (i=1,2,\cdots,s)$ 的线性相关性。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$s\gt n$ 时相关；$s\le n$ 时无关。</span><br>
+      <span class="lab">解</span>按<b>个数 vs 维数</b>三档走（D₂₁）：<br>
+      <b>① $s\gt n$</b>：向量个数超过维数，<b>必线性相关</b>（零计算）。<br>
+      <b>② $s=n$</b>：拼成方阵，取行列式——正好是<b>范德蒙德行列式</b>
+      $$|\alpha_1,\cdots,\alpha_n|=\begin{vmatrix}1&1&\cdots&1\\a_1&a_2&\cdots&a_n\\\vdots&\vdots&&\vdots\\a_1^{n-1}&a_2^{n-1}&\cdots&a_n^{n-1}\end{vmatrix}=\prod_{1\le j\lt i\le n}(a_i-a_j)\ne0,$$
+      （因 $a_i$ 互不相同）故 $[\alpha_1,\cdots,\alpha_n]x=0$ 只有零解，<b>无关</b>。<br>
+      <b>③ $s\lt n$</b>：由 ② 知 $n$ 个（整体）无关 $\Rightarrow$ 其中 $s$ 个（部分）无关（<b>整体无关，部分无关</b>）。<br>
+      <span class="lab">另一条路</span>书页 96 的"分析"给了更漂亮的一条：$s\lt n$ 时直接看矩阵的<b>前 $s$ 行</b>，那是一个 $s$ 阶范德蒙德行列式 $\ne0$，
+      说明<b>截短后的 $s$ 维向量组无关</b>，再由<b>「原来无关，延长无关」</b>（定理 7）得原 $n$ 维组无关。<br>
+      <span class="lab">要害</span>本题是<b>七大定理里三条（个数vs维数、整体无关部分无关、原来无关延长无关）的一次联合演习</b>，
+      而且两条路各用一条定理——<em>这就是为什么它值得单独做一遍，而不是背个结论</em>。<br>
+      <span class="lab">跨章</span>范德蒙德行列式来自<a href="线代_第01章_行列式.html">第 1 章</a>，这里是它在线代中<b>最主要的用途</b>：
+      证明"$1,t,t^2,\cdots$ 这类幂次向量组无关"。后面第 5 章证"<b>不同特征值的特征向量线性无关</b>"时，标准证法之一也是构造范德蒙德阵。
+    </div>
+  </div>
+
+  <!-- ================= s5 极大无关组 ================= -->
+  <h2 id="s5"><span class="idx">五</span>极大线性无关组 · 向量组的秩 · 满秩分解<span class="layer L-base">基础</span><span class="layer L-str">强化</span></h2>
+
+  <h3>5.1　定义与"代表"的比喻</h3>
+  <p>在向量组 $\alpha_1,\cdots,\alpha_s$ 中，若存在部分组 $\alpha_{i_1},\cdots,\alpha_{i_r}$ 满足
+  ① $\alpha_{i_1},\cdots,\alpha_{i_r}$ <b>线性无关</b>；② 向量组中<b>任一</b>向量均可由它们线性表示，
+  则称该部分组是原向量组的<b>极大线性无关组</b>。其中所含向量的个数 $r$ 称为<b>向量组的秩</b>，记 $r(\alpha_1,\cdots,\alpha_s)=r$。</p>
+
+  <div class="key"><span class="tag">必记 · 三句话锁死这一节</span>
+    <b>①</b> 极大无关组是原向量组的<b>「代表」</b>，其中<b>向量的个数是唯一的</b>（但<b>代表本身可以不唯一</b>）。<br>
+    <b>②</b> <b>秩＝独立信息的个数＝张成空间的维数</b>（书页 84 手写旁注：「这个空间的维数，也就是剩下向量的个数，这个维数就是秩」）。<br>
+    <b>③</b> <b>三秩相等</b>：$r(A)$（矩阵的秩）＝ $A$ 的<b>行秩</b>（行向量组的秩）＝ $A$ 的<b>列秩</b>（列向量组的秩）。
+    <em>所以"矩阵的秩"和"向量组的秩"从来就是同一个数</em>——书页 82 的知识结构图上，张宇就在"极大线性无关组与向量组的秩"旁边手写了一句「<b>与矩阵的秩是一个意思</b>」。
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · "三秩相等"其实是一件很不显然的事（挖）</span>
+    <b>书上说</b>：$r(A)=$ 行秩 $=$ 列秩，一句话带过；<br>
+    <b>潜台词是</b>：这句话<b>一点也不显然</b>——"横着看有几个独立的行"和"竖着看有几个独立的列"，
+    是两个<b>完全不同的计数</b>，凭什么总是相等？一个 $3\times7$ 的矩阵，行最多 3 个独立、列最多 7 个独立，
+    结果两个数居然永远一样。<em>正是这个巧合，才让"矩阵的秩"能作为一个<b>不看方向</b>的固有量存在。</em><br>
+    <b>所以能考</b>：<b>(i)</b> 需要时可以<b>任意切换视角</b>——<a href="#eg-39">例 3.9</a> 证 $r(AB)\le r(B)$ 走的是<b>行</b>，
+    证 $r(AB)\le r(A)$ 就换成<b>列</b>（或转置），靠的全是这条；
+    <b>(ii)</b> $r(A)=r(A^{\mathrm T})$ 这个常用等式就是它的直接推论；
+    <b>(iii)</b> 因此"求向量组的秩"永远可以把向量<b>按列</b>摆好、只作行变换——不必纠结原题给的是行向量还是列向量。
+  </div>
+
+  <div class="bg"><span class="tag">筛 · 两个边界情形，知道就行</span>
+    只由一个<b>零向量</b>组成的向量组<b>不存在</b>极大线性无关组；一个本身就<b>线性无关</b>的向量组，它的极大无关组<b>就是自己</b>。
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · "代表不唯一"这件事怎么在选择题里坑人（挖）</span>
+    <b>书上说</b>（例 3.7 注 (3)）：「向量组（或矩阵）的<b>秩是唯一的</b>，其<b>极大线性无关组可以是不唯一的</b>」；<br>
+    <b>潜台词是</b>：一道"求极大无关组"的选择题，<b>正确答案可能不止一组，但选项里只放了一组</b>——
+    所以<b>不能靠"我算出来是 $\alpha_1,\alpha_2,\alpha_4$，选项里没有就选不出来"</b>，必须会判断<b>某个给定选项是不是</b>极大无关组；<br>
+    <b>所以能考</b>：<a href="#eg-37">例 3.7</a> 的六组答案里只有一组在选项中。
+    <em>正确做法是：算出 $r=3$ 后，逐个检验选项那 3 列的秩是不是 3。</em>
+  </div>
+
+  <h3>5.2　求法（D₁ 常规操作）· 三步</h3>
+  <div class="zy"><span class="tag">强化题型 · 书页 67 与书页 99 手写步骤（两处一字不差，说明是死流程）</span>
+    ① 把列向量们组成矩阵 $A=[\alpha_1,\cdots,\alpha_n]$；<br>
+    ② $A\xrightarrow{\text{初等行变换}}B$（<b>行阶梯形</b>，最好一路化到<b>行最简形</b>）；<br>
+    ③ 算出<b>台阶数 $r$</b>，按列找出一个秩为 $r$ 的子矩阵——<b>主元所在的那些列</b>就是一个极大无关组。<br>
+    <b>化到行最简形的额外好处</b>：<em>非主元列的每一个数，直接就是它用主元列表示的系数</em>，不必再解一次方程。下面的步进器就是把这一步做成可视的。
+  </div>
+
+  <div class="trap"><span class="tag">陷阱 · 例 3.7 注 (4)：本节最高频的送命点</span>
+    求向量组的极大线性无关组时，<b>只能都作初等行变换（或都作初等列变换），<u>绝不能既作行变换又作列变换</u></b>。
+    <b>为什么</b>：行变换不改变列向量之间的线性关系（改变的是列向量本身），列变换则会<b>把列打乱重组</b>——
+    一旦混用，你最后指着的"第 1、2、4 列"已经不是原来的 $\alpha_1,\alpha_2,\alpha_4$ 了。<br>
+    <b>书上的推荐</b>（手写旁注）：<b>只作行变换</b>。若向量是<b>行</b>向量，可以处理成行向量作<b>初等列变换</b>，效果与"列向量作行变换"完全一样——但两条路选一条，别串。
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 为什么行变换保住了"列之间的关系"（挖）</span>
+    <b>书上说</b>（书页 98 的 (2)②、书页 100 的注 (1)）：$A\xrightarrow{\text{行}}B$ 时，「$A$ 和 $B$ 的<b>任何相应的部分列向量组具有相同的线性相关性</b>」，理由是
+    $Ax=0$ 与 $Bx=0$ 是<b>同解方程组</b>；<br>
+    <b>潜台词是</b>：同解 $\Rightarrow$ <b>"列的系数向量 $x$"这套东西一个字都没变</b>——变的只是列向量本身长什么样，
+    而<em>"哪几列相关、系数是多少"完全冻结</em>；<br>
+    <b>所以能考</b>：<b>(i)</b> 在最简形上读出的表示系数，可以<b>原封不动</b>搬回原向量组（<a href="#eg-37">例 3.7</a> 注 (5)、<a href="#eg-38">例 3.8</a> 的核心）；
+    <b>(ii)</b> 也解释了上面的陷阱——列变换会动 $x$，所以不能混用。
+  </div>
+
+  <div class="eg" id="eg-37">
+    <div class="q"><span class="no">基 3.7 ✔</span><b>选择题 · 求极大无关组模板</b>　设向量组
+      $\alpha_1=[1,-1,2,4]^{\mathrm T},\ \alpha_2=[0,3,1,2]^{\mathrm T},\ \alpha_3=[3,0,7,14]^{\mathrm T},\ \alpha_4=[1,-2,2,0]^{\mathrm T},\ \alpha_5=[2,1,5,10]^{\mathrm T}$，
+      则该向量组的极大线性无关组是（　）。<br>
+      (A) $\alpha_1,\alpha_2,\alpha_3$　(B) $\alpha_1,\alpha_2,\alpha_4$　(C) $\alpha_1,\alpha_2,\alpha_5$　(D) $\alpha_2,\alpha_3,\alpha_5$</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(B)</span><br>
+      <span class="lab">解</span>拼成 $4\times5$ 矩阵作初等行变换（<b>下面的步进器可以逐步看这个过程</b>，预设已内置本题）：
+      $$A=[\alpha_1,\cdots,\alpha_5]=\begin{bmatrix}1&0&3&1&2\\-1&3&0&-2&1\\2&1&7&2&5\\4&2&14&0&10\end{bmatrix}
+      \longrightarrow\begin{bmatrix}1&0&3&0&2\\0&1&1&0&1\\0&0&0&1&0\\0&0&0&0&0\end{bmatrix}=B.$$
+      台阶数 $r(A)=3$，主元落在<b>第 1、2、4 列</b>，故 $\alpha_1,\alpha_2,\alpha_4$ 是一个极大无关组，<b>选 (B)</b>。<br>
+      <span class="lab">全部答案</span>本题的极大无关组共有<b>六组</b>：
+      $\{\alpha_1,\alpha_2,\alpha_4\},\{\alpha_1,\alpha_3,\alpha_4\},\{\alpha_1,\alpha_4,\alpha_5\},\{\alpha_2,\alpha_3,\alpha_4\},\{\alpha_2,\alpha_4,\alpha_5\},\{\alpha_3,\alpha_4,\alpha_5\}$。
+      <span style="color:var(--red)">注意 $\alpha_4$ <b>出现在每一组里</b></span>——因为 $\alpha_1,\alpha_2,\alpha_3,\alpha_5$ 这四列的秩只有 2（它们都在同一个 2 维子空间里），
+      <b>不含 $\alpha_4$ 就凑不出 3</b>。选项 (A)(C)(D) 全都漏了 $\alpha_4$，所以全错。<br>
+      <span class="lab">秒杀</span>看出"$\alpha_3=3\alpha_1+\alpha_2$、$\alpha_5=2\alpha_1+\alpha_2$"（从最简形第 3、5 列直接读）后，
+      $\alpha_1,\alpha_2,\alpha_3,\alpha_5$ 显然只有 2 个独立的，<b>凡不含 $\alpha_4$ 的选项一律排除</b>——三个选项一秒杀掉。<br>
+      <span class="lab">复核</span>已用 sympy 枚举全部 $\binom53=10$ 个三列子集算秩，恰好上述六组为 3，与书上六组完全一致。
+    </div>
+  </div>
+
+  <!-- ---------- 交互模块 A：极大无关组步进器 ---------- -->
+  <div class="tool" id="stepper">
+    <h4>🛠 极大线性无关组 步进器（行最简形 → 主元列 → 直接读表示系数）</h4>
+    <div class="hint">
+      本页第一个交互模块。选一个预设，点「下一步」逐次施加初等<b>行</b>变换，看着矩阵一步步走向行最简形。
+      走完后：<span class="badge p">主元列</span>＝一个极大线性无关组；<span class="badge f">非主元列</span>＝多余的向量，
+      而<b>它那一列的数字，就是它用主元列表示的系数</b>——下方「读出的表示式」会自动写出来。<br>
+      <b>这个模块要让你形成的条件反射</b>：看到行最简形，眼睛先找主元（每行第一个 1），主元列就是代表；剩下的列<b>竖着念下来就是系数</b>，不用再解方程。
+      全部算术用<b>精确分数</b>，不会出现 0.9999。
+    </div>
+    <div class="stepbar">
+      <select id="sp-preset"></select>
+      <button id="sp-prev">← 上一步</button>
+      <button id="sp-next">下一步 →</button>
+      <button id="sp-all">直接到底</button>
+      <button id="sp-reset">复位</button>
+      <span class="cnt" id="sp-cnt"></span>
+    </div>
+    <div class="oplog" id="sp-log"></div>
+    <div class="mxrow">
+      <div class="mxbox"><div class="cap">原矩阵 $A$（列＝向量）</div><div id="sp-orig"></div></div>
+      <div class="mxbox" style="align-self:center;font-size:1.4rem;color:var(--muted)">→</div>
+      <div class="mxbox"><div class="cap">当前矩阵</div><div id="sp-cur"></div></div>
+    </div>
+    <div class="resbox" id="sp-res"></div>
+  </div>
+
+  <h3>5.3　注 (5) 与例 3.8：极大无关组的真正用途——满秩分解</h3>
+
+  <div class="mine"><span class="tag">补讲 · 例 3.7 注 (5) 打了三颗星，它到底在说什么（挖）</span>
+    <b>书上说</b>：「事实上，本题 $A=\begin{bmatrix}1&0&1\\-1&3&-2\\2&1&2\\4&2&0\end{bmatrix}\begin{bmatrix}1&0&3&0&2\\0&1&1&0&1\\0&0&0&1&0\end{bmatrix}$。<b>你是否看出来其中的道理了？</b>」<br>
+    <b>潜台词是</b>：左边那个 $4\times3$ 就是<b>极大无关组 $[\alpha_1,\alpha_2,\alpha_4]$ 原样拼起来</b>，右边那个 $3\times5$ 就是<b>行最简形的非零行</b>。
+    也就是说——<em>「求极大无关组」这个动作，同时就把 $A$ 分解成了 $A=G\cdot H$（$G$ 列满秩、$H$ 行满秩），这叫<b>满秩分解</b></em>；<br>
+    <b>所以能考</b>：<b>(i)</b> 直接考分解本身（<a href="#eg-63">强 6.3</a> 第 (2) 问就是"求 $H$ 使 $A=GH$"）；
+    <b>(ii)</b> 反过来给你 $A$ 和 $G$ 让你求 $H$，形状"怪异"到无从下手（<a href="#eg-38">例 3.8</a>）；
+    <b>(iii)</b> 用它<b>降幂算 $A^n$</b>：$A^9=(GH)^9=G(HG)^8H$，把 $4$ 阶的方幂降成 $2$ 阶的方幂。
+  </div>
+
+  <div class="link"><span class="tag">串 · 满秩分解：ch2 → ch3 → ch5 的一条完整链</span>
+    这是本章<b>最值钱的一条跨章线</b>，三章各管一段：<br>
+    <b>① <a href="线代_第02章_矩阵.html">第 2 章 强 3.17</a>（秩 1 / 低秩阵求 $A^{10}$）</b>：那里第一次出现 $A=BC$ 后用 $A^n=B(CB)^{n-1}C$ 降幂，但<b>没说 $B,C$ 怎么来的</b>；<br>
+    <b>② 本章例 3.7 注 (5) + 例 3.8 + 强 6.3</b>：回答了"$B,C$ 怎么来"——<b>$B$＝极大无关组，$C$＝行最简形的非零行</b>，一次行变换全出来；<br>
+    <b>③ 第 5 章特征值</b>：例 3.8 的注最后一句「至于如何求 $\begin{bmatrix}-1&0\\-1&-2\end{bmatrix}^8$，<b>留到第 5 讲再研究</b>」——
+    降完幂剩下的那个小方阵，交给相似对角化。<br>
+    <span style="color:var(--teal)"><b>一句话串起来</b>：<em>行变换负责"把矩阵拆小"，特征值负责"把小的算快"，中间的接口就是极大无关组。</em></span>
+  </div>
+
+  <div class="eg" id="eg-38">
+    <div class="q"><span class="no">基 3.8 ✔</span><b>选择题 · 满秩分解的逆向读法</b>　设
+      $A=\begin{bmatrix}1&-2&-1&2\\2&-3&-2&3\\2&-2&-2&2\\1&-1&-1&1\end{bmatrix}=BC$，$B=\begin{bmatrix}-1&-2\\-2&-3\\-2&-2\\-1&-1\end{bmatrix}$，则 $CB=(\quad)$。<br>
+      (A) $\begin{bmatrix}1&0\\-1&2\end{bmatrix}$　(B) $\begin{bmatrix}1&0\\-1&-2\end{bmatrix}$　(C) $\begin{bmatrix}-1&0\\-1&2\end{bmatrix}$　(D) $\begin{bmatrix}-1&0\\-1&-2\end{bmatrix}$</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(D)</span><br>
+      <span class="lab">审题信号</span>题给 $A=BC$ 与 $A,B$，让你求 $CB$。<b>若用待定系数法求 $C$（8 个未知数），算起来很麻烦</b>——
+      书上手写旁注直接点破：<b>「我们只能去理解矩阵的含义」</b>。所谓含义就是：<em>$B$ 的两列是不是 $A$ 的某两列？</em><br>
+      <span class="lab">解</span>记 $A=[\alpha_1,\alpha_2,\alpha_3,\alpha_4]$，一眼看出 <b>$B=[\alpha_3,\alpha_2]$</b>（$B$ 的第 1 列 $=[-1,-2,-2,-1]^{\mathrm T}=\alpha_3$，第 2 列 $=\alpha_2$）。对 $A$ 作初等行变换：
+      $$A\longrightarrow\begin{bmatrix}1&0&-1&0\\0&1&0&-1\\0&0&0&0\\0&0&0&0\end{bmatrix},$$
+      由此可知 $\alpha_3,\alpha_2$ 是 $A$ 的一个极大线性无关组，且 <b>$\alpha_3=-\alpha_1,\ \alpha_2=-\alpha_4$</b>，即
+      $\alpha_1=-\alpha_3,\ \alpha_4=-\alpha_2$。于是把每一列用 $[\alpha_3,\alpha_2]$ 表示，系数排成列：
+      $$A=[\alpha_1,\alpha_2,\alpha_3,\alpha_4]=[\alpha_3,\alpha_2]\underbrace{\begin{bmatrix}-1&0&1&0\\0&1&0&-1\end{bmatrix}}_{C}=BC,$$
+      故
+      $$CB=\begin{bmatrix}-1&0&1&0\\0&1&0&-1\end{bmatrix}\begin{bmatrix}-1&-2\\-2&-3\\-2&-2\\-1&-1\end{bmatrix}=\begin{bmatrix}-1&0\\-1&-2\end{bmatrix}.$$
+      <span class="lab">要害</span><b>$C$ 的第 $i$ 列 ＝ $\alpha_i$ 由 $\alpha_3,\alpha_2$ 表示的系数。</b>知道这句话，$C$ 是"读"出来的不是"解"出来的。<br>
+      <span class="lab">命题人的用心</span>书上注里明说：<b>没有直接问 $C$，是为了防止考生把四个选项代进去算 $BC$ 来排除，失去考查功能。</b>
+      <em>——这句话本身就是一条重要情报：命题人知道你会代入验算，所以会故意改问一个"代入验算无从下手"的量。</em><br>
+      <span class="lab">更深一层</span>还可继续考 $A^9=(BC)^9=B(CB)^8C=B\begin{bmatrix}-1&0\\-1&-2\end{bmatrix}^8C$——<b>$4$ 阶的 9 次方降成 $2$ 阶的 8 次方</b>。<br>
+      <span class="lab">复核</span>$A$ 的行最简形、$B=[\alpha_3,\alpha_2]$、$BC=A$、$CB=\begin{bmatrix}-1&0\\-1&-2\end{bmatrix}$，四项已全部 sympy 验过。
+    </div>
+  </div>
+
+  <div class="eg" id="eg-63">
+    <div class="q"><span class="no">强 6.3 ✔</span><b>解答题 · 定 $a$ + 求极大无关组 + 满秩分解</b>　设矩阵
+      $A=\begin{bmatrix}1&-1&3&0&-1\\-1&0&-2&-a&-1\\1&1&a&2&3\end{bmatrix}$ 的秩为 2。<br>
+      (1) 求 $a$ 的值；　(2) 求 $A$ 的列向量组的一个极大线性无关组 $\alpha,\beta$，并求矩阵 $H$，使得 $A=GH$，其中 $G=[\alpha,\beta]$。</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>"秩为 2"是唯一的已知条件</b>，$3\times5$ 的矩阵秩最大是 3——所以这个条件的作用是<b>逼第 3 行在消元后归零</b>。第 (1) 问就是解"第 3 行的非零元 $=0$"。</li>
+          <li>第 (2) 问的 $G=[\alpha,\beta]$ 已经暗示了<b>极大无关组恰好 2 个</b>（与 $r=2$ 对上），所以不必担心选错个数。</li>
+          <li><b>关键决策</b>：第 (1) 问只需化到<b>行阶梯形</b>（看秩就够），第 (2) 问必须<b>一路化到行最简形</b>——
+              因为 $H$ 的每一列就是对应列用 $\alpha,\beta$ 表示的系数，<b>只有最简形能直接读</b>。别在第 (1) 问停手。</li>
+          <li>写 $H$ 时不要重新解方程：<em>把最简形的非零行原样抄下来就是 $H$</em>。这是注 (5) 的直接应用。</li>
+        </ol>
+      </div>
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面<span class="score">按 11 分估</span></div>
+        <div class="step"><span class="k">解</span>　<b>(1)</b> 对 $A$ 施以初等行变换，得
+        $$A=\begin{bmatrix}1&-1&3&0&-1\\-1&0&-2&-a&-1\\1&1&a&2&3\end{bmatrix}\longrightarrow
+        \begin{bmatrix}1&-1&3&0&-1\\0&-1&1&-a&-2\\0&0&a-1&2(1-a)&0\end{bmatrix}.\tag{1}$$<span class="pt">⛳ 化阶梯形 3 分</span></div>
+        <div class="step">由 $r(A)=2$ 知 (1) 式第 3 行必为零行，故 $a-1=0$，即 $\boxed{a=1}$。<span class="pt">⛳ 2 分</span></div>
+        <div class="step"><span class="k">(2)</span>　记 $A=[\alpha_1,\alpha_2,\alpha_3,\alpha_4,\alpha_5]$。由 (1)，将 $a=1$ 代入并继续化为行最简形：
+        $$A\longrightarrow\begin{bmatrix}1&0&2&1&1\\0&1&-1&1&2\\0&0&0&0&0\end{bmatrix}.\tag{2}$$<span class="pt">⛳ 化行最简形 2 分</span></div>
+        <div class="step">主元位于第 1、2 列，取 $\alpha=\alpha_1,\ \beta=\alpha_2$，则 $\alpha,\beta$ 为 $A$ 的列向量组的一个极大线性无关组。<span class="pt">⛳ 2 分</span></div>
+        <div class="step">由 (2) 式读出 $\alpha_3=2\alpha_1-\alpha_2,\ \alpha_4=\alpha_1+\alpha_2,\ \alpha_5=\alpha_1+2\alpha_2$，所以
+        $$A=[\alpha_1,\ \alpha_2,\ 2\alpha_1-\alpha_2,\ \alpha_1+\alpha_2,\ \alpha_1+2\alpha_2]=[\alpha,\beta]\begin{bmatrix}1&0&2&1&1\\0&1&-1&1&2\end{bmatrix}.$$</div>
+        <div class="fin">取 $H=\begin{bmatrix}1&0&2&1&1\\0&1&-1&1&2\end{bmatrix}$，则 $A=GH$，其中 $G=[\alpha,\beta]=[\alpha_1,\alpha_2]$。<span class="pt">⛳ 2 分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（写完对照）</span>
+        <b>①</b> <span class="dock">扣分点</span>：第 (1) 问只写 "$a=1$" 不写"由 $r(A)=2$ 知第 3 行为零行"，<b>扣 1 分</b>——判断类结论必须点依据。
+        另外阶梯形第 3 行是 $[0,0,a-1,2(1-a),0]$，<b>两个元素同时含 $a$ 且同时在 $a=1$ 时归零</b>，写清"故 $a=1$"即可，不必分别讨论。<br>
+        <b>②</b> <b>为什么 $H$ 一定是 $2\times5$</b>：$G$ 是 $3\times2$，$A$ 是 $3\times5$，形状被卡死。<b>写完先对一眼形状</b>，这是 30 秒的自检。<br>
+        <b>③</b> <b>$H$ 的本质</b>：它就是最简形 (2) 的<b>前 2 行（非零行）</b>——一个字都不用改。这不是巧合，是 <a href="#eg-37">例 3.7 注 (5)</a> 说的那件事，见上面的<b>满秩分解跨章链</b>。<br>
+        <b>④</b> <b>答案不唯一</b>：取 $\alpha=\alpha_1,\beta=\alpha_3$ 也是极大无关组，那时 $H$ 会跟着变。题目问"一个"，写出一组并自洽即可，<b>不必声明唯一</b>。<br>
+        <b>⑤</b> 已 sympy 验：$a$ 在 $\{-3,\cdots,3\}$ 中使 $r(A)=2$ 的只有 $1$；最简形与书一致；$GH=A$ 成立。
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= s6 O2 抽象型 ================= -->
+  <h2 id="s6"><span class="idx">六</span>O₂ 抽象型 · 定义法的四种打法<span class="layer L-base">基础</span><span class="layer L-str">强化</span></h2>
+
+  <div class="zy"><span class="tag">强化题型 · 定义法（D₁）· 书页 68 的两步 + 四种常用手法</span>
+    已知某些向量关系，研究另一些向量关系（旁注：<b>传统考查方式</b>）。<br>
+    <b>(1) 写定义式</b> $k_1\alpha_1+k_2\alpha_2+\cdots+k_n\alpha_n=0$；<b>(2) 考查 $k_1=\cdots=k_n=0$ 是否成立</b>。<br>
+    书上列了四条常用方法，我把它们整理成<b>「两边同乘什么」的一张对照表</b>——这才是这四条的真正区别：
+    <div class="gridwrap"><table>
+      <tr><th>打法</th><th>两边同乘（作用）什么</th><th>为什么这么乘</th><th>本页例题</th></tr>
+      <tr><td><b>① 乘矩阵</b></td><td>左乘 $A^{k-1}$、$A$、$A^{\mathrm T}$ 等</td><td>利用题给的 $A^k\alpha=0$ 之类条件，<b>把绝大多数项打成 0，只剩一项</b></td><td><a href="#eg-64">强 6.4(1)</a>、<a href="#eg-36">基 3.6</a></td></tr>
+      <tr><td><b>② 作内积</b></td><td>两边与 $\alpha_i$ 作内积</td><td>利用<b>两两正交</b>，$(\alpha_i,\alpha_j)=0$ 把其余项打成 0</td><td><a href="#eg-x311">习 3.11</a></td></tr>
+      <tr><td><b>③ 转齐次组</b></td><td>不乘，直接化成"证某齐次组只有零解"</td><td>把抽象条件翻成秩，交给 $r=m$ 判据</td><td><a href="#s3">定理 4</a>、<a href="#eg-65">强 6.5</a></td></tr>
+      <tr><td><b>④ 用定理</b></td><td>不算，直接引<b>七大定理</b></td><td>"以少表多"「整体无关部分无关」等能一句话结案</td><td><a href="#eg-32">基 3.2 法一</a></td></tr>
+    </table></div>
+    <b>书上手写旁注（打法①的原理）</b>：「<b>数 × 向量 $=0$，若向量 $\ne0$，则数 $=0$</b>」——这就是整套打法的收官动作。
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 抽象题的通用起手式（挖）</span>
+    <b>书上说</b>：定义法就两步，写式子、看系数是否全零；<br>
+    <b>潜台词是</b>：抽象题<b>没有数字可算</b>，唯一的进攻方式就是<b>制造"某个数乘某个非零向量等于零"的局面</b>——
+    题给的每一个条件（$A^k\alpha=0$、$\alpha_i\perp\alpha_j$、某组无关）都是一台<b>"消项机器"</b>，你的任务是找出该乘什么把项消干净；<br>
+    <b>所以能考</b>：拿到抽象题，<b>先写 $\sum k_i\alpha_i=0$，再把题给条件一条条摆出来，问"哪条能把式子里的项打掉最多"</b>。
+    <em>这是 O₂ 全部题目的统一入口，比记具体题型有用得多。</em>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 什么时候该改用反证法（挖）</span>
+    <b>书上说</b>（例 3.2 旁注）：「<b>当我们在证明时，若正着想不好想，可以用反证法</b>」；<br>
+    <b>潜台词是</b>：这句话看似废话，实际有一条可操作的判据——<b>结论是"否定式"时，正面证明要遍历所有可能，几乎无从下手</b>。
+    "$\alpha_{s+1}$ <u>不能</u>被表示"意味着"对任何一组系数都凑不出"，你没法把所有系数都试一遍；
+    <em>而反证只需要假设"能凑出某一组"，就有了一个具体的等式可以往下推。</em><br>
+    <b>所以能考</b>：本章"否定式结论"共三类，<b>全部走反证</b>——
+    「不能线性表示」（<a href="#eg-32">例 3.2(2)</a>）、「两组不等价」（<a href="#eg-312">例 3.12</a> 的临界支）、
+    「秩严格小于」（<a href="#eg-66">强 6.6</a>，反证"若取等则等价"）。
+    <b>看到"不能""不等价""严格小于"，先写"假设……"。</b>
+  </div>
+
+  <div class="eg" id="eg-32">
+    <div class="q"><span class="no">基 3.2 ✔</span><b>证明题 · 真题原型（考生做得并不理想）</b>　设向量组 $\alpha_1,\alpha_2,\cdots,\alpha_s$ <b>线性相关</b>，
+      $\alpha_2,\alpha_3,\cdots,\alpha_s,\alpha_{s+1}$ <b>线性无关</b>，问：<br>
+      (1) $\alpha_1$ 能否由 $\alpha_2,\alpha_3,\cdots,\alpha_s$ 线性表示？证明你的结论；<br>
+      (2) $\alpha_{s+1}$ 能否由 $\alpha_1,\alpha_2,\cdots,\alpha_s$ 线性表示？证明你的结论。
+      <div style="margin-top:6px"><span class="exam">书页 95 注：考研真题「设 $\alpha_1,\alpha_2,\alpha_3$ 相关，$\alpha_2,\alpha_3,\alpha_4$ 无关，问 $\alpha_1$ 能否由 $\alpha_2,\alpha_3$ 表示 / $\alpha_4$ 能否由 $\alpha_1,\alpha_2,\alpha_3$ 表示」由本题改编而得</span></div></div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>两个条件一正一反，且共用 $\alpha_2,\cdots,\alpha_s$</b>——这是全题的设计核心。先把"无关"那条<b>缩短</b>：
+              $\alpha_2,\cdots,\alpha_s,\alpha_{s+1}$ 无关 $\Rightarrow$ <b>$\alpha_2,\cdots,\alpha_s$ 无关</b>（整体无关，部分无关）。这一步不做，后面全卡。</li>
+          <li>做完这一步，(1) 的局面变成：<b>$\alpha_2,\cdots,\alpha_s$ 无关，添上 $\alpha_1$ 后相关</b>——<em>这正好是定理 2 的原文</em>，一句话结案，连算都不用算。</li>
+          <li>(2) 问的是"<b>不能</b>表示"。<b>否定性结论正着不好证</b>（要说明所有系数组合都凑不出），
+              书上旁注也写了「若正着想不好想，可以用<b>反证法</b>」——假设能表示，推出与"$\alpha_2,\cdots,\alpha_{s+1}$ 无关"矛盾。</li>
+          <li>反证的技术关键：假设 $\alpha_{s+1}=\lambda_1\alpha_1+\cdots+\lambda_s\alpha_s$ 里<b>含 $\alpha_1$</b>，而 (1) 已经把 $\alpha_1$ 表示成了 $\alpha_2,\cdots,\alpha_s$ 的组合，
+              <b>代进去消掉 $\alpha_1$</b>，就得到 $\alpha_{s+1}$ 是 $\alpha_2,\cdots,\alpha_s$ 的组合 —— 与无关矛盾。<em>(1) 是 (2) 的引理，别把两问割裂。</em></li>
+        </ol>
+      </div>
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面<span class="score">按 11 分估</span></div>
+        <div class="step"><span class="k">解</span>　<b>(1)</b> $\alpha_1$ <b>能</b>由 $\alpha_2,\alpha_3,\cdots,\alpha_s$ 线性表示。<span class="pt">⛳ 结论 1 分</span></div>
+        <div class="step"><span class="k">证</span>　由已知 $\alpha_2,\alpha_3,\cdots,\alpha_s,\alpha_{s+1}$ 线性无关，<b>由「整体无关，部分无关」</b>知 $\alpha_2,\alpha_3,\cdots,\alpha_s$ 线性无关。<span class="pt">⛳ 2 分</span></div>
+        <div class="step">又 $\alpha_1,\alpha_2,\cdots,\alpha_s$ 线性相关，<b>由定理 2</b>（若 $\alpha_2,\cdots,\alpha_s$ 无关而添上 $\alpha_1$ 后相关，则 $\alpha_1$ 可由其线性表示且表示法唯一）知，存在唯一一组数 $l_2,\cdots,l_s$，使
+        $$\alpha_1=l_2\alpha_2+l_3\alpha_3+\cdots+l_s\alpha_s.\tag{1}$$<span class="pt">⛳ 2 分</span></div>
+        <div class="step"><span class="k">(2)</span>　$\alpha_{s+1}$ <b>不能</b>由 $\alpha_1,\alpha_2,\cdots,\alpha_s$ 线性表示。<span class="pt">⛳ 结论 1 分</span></div>
+        <div class="step"><span class="k">证</span>　<b>用反证法。</b>设 $\alpha_{s+1}$ 可由 $\alpha_1,\alpha_2,\cdots,\alpha_s$ 线性表示，即存在 $\lambda_1,\lambda_2,\cdots,\lambda_s$，使
+        $$\alpha_{s+1}=\lambda_1\alpha_1+\lambda_2\alpha_2+\cdots+\lambda_s\alpha_s.\tag{2}$$<span class="pt">⛳ 1 分</span></div>
+        <div class="step">将 (1) 式代入 (2) 式，消去 $\alpha_1$，得
+        $$\alpha_{s+1}=(\lambda_1l_2+\lambda_2)\alpha_2+(\lambda_1l_3+\lambda_3)\alpha_3+\cdots+(\lambda_1l_s+\lambda_s)\alpha_s,$$
+        即 $\alpha_{s+1}$ 可由 $\alpha_2,\alpha_3,\cdots,\alpha_s$ 线性表示，从而 $\alpha_2,\alpha_3,\cdots,\alpha_s,\alpha_{s+1}$ 线性相关。<span class="pt">⛳ 3 分</span></div>
+        <div class="fin">这与已知 $\alpha_2,\alpha_3,\cdots,\alpha_s,\alpha_{s+1}$ 线性无关矛盾。故 $\alpha_{s+1}$ 不能由 $\alpha_1,\alpha_2,\cdots,\alpha_s$ 线性表示。<span class="pt">⛳ 1 分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（写完对照）</span>
+        <b>①</b> <span class="dock">扣分点</span>：(1) 中<b>不写"由整体无关推部分无关"这一步</b>直接用定理 2，扣 2 分——定理 2 的前提是"$\alpha_2,\cdots,\alpha_s$ 无关"，题目<b>没有</b>直接给这句话，必须自己推出来。<b>用定理前先验条件</b>。<br>
+        <b>②</b> <span class="dock">扣分点</span>：(2) 只写"不能表示"不给证明，或反证时忘了写"这与已知矛盾"，各扣 1 分。<b>反证法的最后一句必须显式指出矛盾在哪。</b><br>
+        <b>③</b> <b>书上还给了 (1) 的方法二</b>（不引定理 2，直接从 $\sum k_i\alpha_i=0$ 出发论证 $k_1\ne0$）：
+        若 $k_1=0$，则 $k_2,\cdots,k_s$ 不全为零，得 $\alpha_2,\cdots,\alpha_s$ 相关，从而 $\alpha_2,\cdots,\alpha_{s+1}$ 相关，与已知矛盾，故 $k_1\ne0$，两边除以 $k_1$ 即得。
+        <em>方法二更"底层"，但方法一更短</em>——考场用方法一，方法二拿来在定理 2 记不清时兜底。<br>
+        <b>④</b> <b>为什么这道真题"考生做得并不理想"</b>：多数人卡在 (2)，因为看不出<b>(1) 是 (2) 的引理</b>，
+        试图直接对 (2) 硬推。<em>两问相连的证明题，第 (2) 问八成要用第 (1) 问的结论——这是通用经验。</em><br>
+        <b>⑤</b> <b>本题只用定理，不含计算，因此没有可复算的数值</b>；逻辑链已逐句核对无误。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg" id="eg-64">
+    <div class="q"><span class="no">强 6.4 ✔ ★★★</span><b>证明题 · 本讲最漂亮的一题</b>　设 $A$ 为 $n$ 阶方阵，证明：<br>
+      (1) 若 $A^{k-1}\alpha\ne0,\ A^k\alpha=0$，则 $\alpha,A\alpha,\cdots,A^{k-1}\alpha$（$k$ 为正整数）线性无关；<br>
+      (2) $r(A^{n+1})=r(A^n)$。
+      <div style="margin-top:6px" class="bg" id="eg-36"><span class="tag">同题提示</span>第 (1) 问就是<b>基础 30 讲的例 3.6</b>（书页 97），
+      基础层只到这里为止（旁注写「学习线性无关如何证明」）；<b>强化层在它上面又加了第 (2) 问</b>。基础打地基、强化加一层，这是两本书配合的典型样子。</div></div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>(1) 题给的是 $A^k\alpha=0$ 与 $A^{k-1}\alpha\ne0$——一个"消项机器"加一个"非零挡板"。</b>
+              写下 $l_0\alpha+l_1A\alpha+\cdots+l_{k-1}A^{k-1}\alpha=0$ 后，要问：<em>乘什么能只留下一项？</em></li>
+          <li>乘 $A^{k-1}$：第 $j$ 项变成 $l_jA^{k-1+j}\alpha$，只要 $k-1+j\ge k$（即 $j\ge1$）就被 $A^k\alpha=0$ 吃掉，
+              <b>只剩 $l_0A^{k-1}\alpha=0$</b>，而挡板说 $A^{k-1}\alpha\ne0$，故 $l_0=0$。<b>这就是打法①的完整机理。</b></li>
+          <li>剩下的项递推：消掉 $l_0$ 后改乘 $A^{k-2}$ 得 $l_1=0$，如此下去。<b>写卷面时不必把每一步都写全</b>，写清前两步 + "同理" 即可。</li>
+          <li><b>(2) 要证的是秩<u>相等</u>——按 §三的分工，走"两方程组同解"。</b>一边显然（$A^n x=0\Rightarrow A^{n+1}x=0$），
+              另一边要反证，而反证时正好用得上 (1)：若 $A^n\gamma\ne0$ 则 $\gamma,A\gamma,\cdots,A^n\gamma$ 无关，
+              可这是 <b>$n+1$ 个 $n$ 维向量，必相关</b>——矛盾。<em>(1) 又一次是 (2) 的引理。</em></li>
+        </ol>
+      </div>
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面<span class="score">按 12 分估</span></div>
+        <div class="step"><span class="k">证</span>　<b>(1)</b> 设存在一组数 $l_0,l_1,\cdots,l_{k-1}$，使得
+        $$l_0\alpha+l_1A\alpha+\cdots+l_{k-1}A^{k-1}\alpha=0.\tag{1}$$<span class="pt">⛳ 写定义式 1 分</span></div>
+        <div class="step">在 (1) 式两端<b>左乘 $A^{k-1}$</b>，得
+        $$l_0A^{k-1}\alpha+l_1A^{k}\alpha+\cdots+l_{k-1}A^{2(k-1)}\alpha=0.$$<span class="pt">⛳ 2 分</span></div>
+        <div class="step">由 $A^k\alpha=0$ 知 $A^{k+1}\alpha=\cdots=A^{2(k-1)}\alpha=0$，从而 $l_0A^{k-1}\alpha=0$。
+        又 $A^{k-1}\alpha\ne0$，于是 $l_0=0$。<span class="pt">⛳ 2 分</span></div>
+        <div class="step">将 $l_0=0$ 代回 (1) 式并在两端左乘 $A^{k-2}$，同理得 $l_1=0$；如此继续，可得 $l_2=\cdots=l_{k-1}=0$。
+        故 $\alpha,A\alpha,\cdots,A^{k-1}\alpha$ 线性无关。<span class="pt">⛳ 2 分</span></div>
+        <div class="step"><span class="k">(2)</span>　设 $\eta$ 为 $A^nx=0$ 的任一解，则 $A^n\eta=0$，于是 $A^{n+1}\eta=A\cdot A^n\eta=0$，
+        即 $A^nx=0$ 的解均是 $A^{n+1}x=0$ 的解。<span class="pt">⛳ 2 分</span></div>
+        <div class="step">反之，设 $\gamma$ 为 $A^{n+1}x=0$ 的任一解，即 $A^{n+1}\gamma=0$。<b>若 $A^n\gamma\ne0$</b>，则由 (1) 知（取 $\alpha=\gamma,\ k=n+1$）
+        $\gamma,A\gamma,\cdots,A^n\gamma$ 线性无关；而这是 $n+1$ 个 $n$ 维向量，<b>必线性相关</b>，矛盾。<span class="pt">⛳ 2 分</span></div>
+        <div class="step">故 $A^n\gamma=0$，即 $A^{n+1}x=0$ 的解均是 $A^nx=0$ 的解。<span class="pt">⛳ 1 分</span></div>
+        <div class="fin">两方程组同解，故它们的基础解系所含向量个数相同，即 $n-r(A^{n+1})=n-r(A^n)$，所以 $r(A^{n+1})=r(A^n)$。</div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（写完对照）</span>
+        <b>①</b> <span class="dock">扣分点</span>：(1) 中<b>漏掉"又 $A^{k-1}\alpha\ne0$"这句</b>就直接写 $l_0=0$，扣 2 分——"数×向量=0"要推出"数=0"，<b>必须声明向量非零</b>。这是本题唯一的采分陷阱。<br>
+        <b>②</b> <span class="dock">扣分点</span>：(2) 只证一个方向（$A^nx=0$ 的解是 $A^{n+1}x=0$ 的解）就下结论，扣 3 分。<b>"同解"是双向的</b>，另一半必须反证。<br>
+        <b>③</b> <b>为什么恰好是 $n+1$ 与 $n$</b>：因为反证要用"$n+1$ 个 $n$ 维向量必相关"，<b>指数 $n$ 与维数 $n$ 是对上的</b>。
+        换成 $r(A^{5})=r(A^{4})$（$A$ 是 3 阶）也对，但那要另证。<em>题目里指数出现 $n$，八成就是要用这条。</em><br>
+        <b>④</b> <b>方法论（书页 68 旁注，值得抄进笔记）</b>：<b>证秩等式，一般用方程组同解；证秩不等式，一般用定理 2（被表示的秩不大）。</b>
+        本题 (2) 是"等式"走同解的<b>标准样板</b>，<a href="#s7">§七</a>三条不等式则全是"不等式"走载体。<br>
+        <b>⑤</b> <b>最后一行为什么要绕基础解系</b>：因为"同解"直接给的是<b>解空间相同</b>，而解空间维数 $=n-r$，
+        所以必须经过"维数相同"这一步才能落到"秩相同"。<em>直接写"同解故秩相等"会被认为跳步。</em><br>
+        <b>⑥</b> <b>推论（顺手记）</b>：由本题可得 $r(A^n)=r(A^{n+1})=r(A^{n+2})=\cdots$，即<b>矩阵幂的秩序列到 $n$ 步之后必定稳定</b>。
+      </div>
+      <div class="link"><span class="tag">串 · 这道题连着三处</span>
+        <b>① 往回</b>：$n+1$ 个 $n$ 维向量必相关 ← 本页 <a href="#s3">定理 4 注 (1)</a>；<br>
+        <b>② 往回</b>：$Ax=0$ 的基础解系含 $n-r(A)$ 个向量 ← <b>第 4 章</b>（本页暂用结论，ch4 补证）；<br>
+        <b>③ 往前</b>：第 5 章的 <b>Jordan 块 / 幂零矩阵</b>，$\alpha,A\alpha,\cdots,A^{k-1}\alpha$ 这一串正是"<b>Jordan 链</b>"，
+        本题证的就是"Jordan 链上的向量线性无关"。<span style="color:var(--teal)">数一不直接考 Jordan，但这个构造会在"求 $A^n$ / 判可对角化"的题里以变形出现。</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="eg" id="eg-65">
+    <div class="q"><span class="no">强 6.5 ✔</span><b>填空题 · 综合问题（D₁ + D₂₃ 化归经典形式）</b>　设矩阵 $A=[\alpha_1,\alpha_2,\alpha_3,\alpha_4]$，
+      若 $\alpha_1,\alpha_2,\alpha_3$ 线性无关，且 $\alpha_1+\alpha_2=\alpha_3+\alpha_4$，则方程组 $Ax=\alpha_1+4\alpha_4$ 的通解为 $x=$ ________。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$x=k\begin{bmatrix}1\\1\\-1\\-1\end{bmatrix}+\begin{bmatrix}1\\0\\0\\4\end{bmatrix}$（$k$ 为任意常数）</span><br>
+      <span class="lab">审题信号</span>问"通解"，<b>方向就是确定的</b>（书上旁注：「总的方向是确定的，D₂₃ 化归经典形式」）——
+      非齐次通解 = <b>齐次通解 + 一个特解</b>，所以只需办两件事：<b>① 找 $Ax=0$ 的基础解系；② 找 $Ax=\beta$ 的一个特解。</b><br>
+      <span class="lab">① 基础解系</span>先定 $r(A)$：由 $\alpha_1+\alpha_2=\alpha_3+\alpha_4$ 知四个向量相关，故 $r(A)\le3$；又 $\alpha_1,\alpha_2,\alpha_3$ 无关，故 $r(A)\ge3$。<b>夹出 $r(A)=3$</b>。
+      于是基础解系含 $s=n-r(A)=4-3=1$ 个向量。<br>
+      把条件改写成 $\alpha_1+\alpha_2-\alpha_3-\alpha_4=0$，即
+      $$[\alpha_1,\alpha_2,\alpha_3,\alpha_4]\begin{bmatrix}1\\1\\-1\\-1\end{bmatrix}=0,$$
+      <b>系数排成列，直接就是 $Ax=0$ 的一个非零解</b>；因基础解系只需 1 个，它就是基础解系。<br>
+      <span class="lab">② 特解</span>把右端 $\alpha_1+4\alpha_4$ 也按同样方式读：
+      $$[\alpha_1,\alpha_2,\alpha_3,\alpha_4]\begin{bmatrix}1\\0\\0\\4\end{bmatrix}=\alpha_1+4\alpha_4,$$
+      故 $[1,0,0,4]^{\mathrm T}$ 是一个特解。两者相加即得通解。<br>
+      <span class="lab">要害</span><b>全题没有一个具体数字，也没有解一次方程</b>——靠的就是那条兑换：
+      <em>「向量间的一个线性关系式」＝「$Ax=0$ 的一个解向量」，「把 $\beta$ 写成列组合的系数」＝「$Ax=\beta$ 的一个解」。</em>
+      这道题是本章与第 4 章之间那条翻译规则的<b>最纯粹的样本</b>。<br>
+      <span class="lab">陷阱</span>算 $r(A)$ 时<b>两头都要说</b>：只说"四个向量相关所以 $r\le3$"不够（可能是 2），必须补"$\alpha_1,\alpha_2,\alpha_3$ 无关所以 $r\ge3$"。<b>基础解系的个数错了，整题就废了。</b><br>
+      <span class="lab">复核</span>已用 $\alpha_1,\alpha_2,\alpha_3=e_1,e_2,e_3,\ \alpha_4=e_1+e_2-e_3$ 的具体实现 sympy 验证：$r(A)=3$，零空间与 $[1,1,-1,-1]^{\mathrm T}$ 平行，$[1,0,0,4]^{\mathrm T}$ 确为特解。
+    </div>
+  </div>
+
+  <div class="eg" id="eg-33">
+    <div class="q"><span class="no">基 3.3 ✔</span><b>选择题 · 四个反例（本章陷阱总集）</b>　设 $\alpha_1,\alpha_2,\cdots,\alpha_s$ 是 $s$ 个 $n$ 维向量，下列论断正确的是（　）。<br>
+      (A) 若 $\alpha_s$ 不能由 $\alpha_1,\cdots,\alpha_{s-1}$ 线性表示，则向量组 $\alpha_1,\cdots,\alpha_s$ 线性无关<br>
+      (B) 已知存在不全为零的数 $k_1,\cdots,k_{s-1}$，使 $k_1\alpha_1+\cdots+k_{s-1}\alpha_{s-1}+0\alpha_s=0$，则 $\alpha_s$ 不能由 $\alpha_1,\cdots,\alpha_{s-1}$ 线性表示<br>
+      (C) 若 $\alpha_1,\cdots,\alpha_s$ 线性相关，则<b>任一</b>向量均可由其余向量线性表示<br>
+      (D) 若 $\alpha_1,\cdots,\alpha_s$ 线性相关，$\alpha_s$ 不能由 $\alpha_1,\cdots,\alpha_{s-1}$ 线性表示，则 $\alpha_1,\cdots,\alpha_{s-1}$ 线性相关</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(D)</span><br>
+      <span class="lab">四个反例（本章最该背下来的一组）</span>
+      <div class="gridwrap"><table>
+        <tr><th>选项</th><th>错在哪</th><th>反例</th></tr>
+        <tr><td><b>(A)</b></td><td>"某<b>一个</b>不能被表示" $\ne$ "整组无关"——<b>别的向量之间可能仍然相关</b></td>
+            <td>$\alpha_1=[1,0],\alpha_2=[2,0],\alpha_3=[0,2]$：$\alpha_3$ 确实不能由 $\alpha_1,\alpha_2$ 表示，但 $\alpha_1,\alpha_2$ 成比例，整组相关</td></tr>
+        <tr><td><b>(B)</b></td><td>使整组相关的<b>系数组合不唯一</b>——这一组里 $\alpha_s$ 系数为 0，不代表<b>所有</b>组合里都为 0</td>
+            <td>$\alpha_1=[1,1],\alpha_2=[2,2],\alpha_3=[3,3]$：有 $2\alpha_1-\alpha_2+0\alpha_3=0$，但同时 $\alpha_3=\alpha_1+\alpha_2$</td></tr>
+        <tr><td><b>(C)</b></td><td>相关只保证<b>至少有一个</b>能被其余表示，<b>不是任一个</b>（系数为 0 的那些就不行）</td>
+            <td>$\alpha_1=[0,0],\alpha_2=[1,0]$：相关；$\alpha_1$ 可由 $\alpha_2$ 表示，但 $\alpha_2$ <b>不能</b>由 $\alpha_1$ 表示</td></tr>
+        <tr><td><b>(D) ✔</b></td><td colspan="2">若 $\alpha_1,\cdots,\alpha_{s-1}$ <b>无关</b>，而 $\alpha_1,\cdots,\alpha_s$ 相关，则<b>由定理 2</b> $\alpha_s$ 必可由前 $s-1$ 个表示（且唯一），与已知矛盾。故前 $s-1$ 个相关。</td></tr>
+      </table></div>
+      <span class="lab">要害</span>三个错项的病根<b>是同一个</b>：<em>把"存在一个"偷换成了"对任意一个"</em>。
+      (A) 把"某个不能表示"当成"都不能表示"；(B) 把"某一组系数"当成"所有系数组"；(C) 把"至少一个能表示"当成"每个都能表示"。<br>
+      <b>读向量组的命题时，随时问一句："这里的量词是"存在"还是"任意"？"</b>——本章至少一半的错选来自这一处。<br>
+      <span class="lab">另存</span>(A) 的反例 $[1,0],[2,0],[0,2]$ 结构极简（<b>两个共线 + 一个独立</b>），几乎可以拿来反驳本章所有"由个别推整体"的错误命题，值得背下来。
+    </div>
+  </div>
+
+  <!-- ================= s7 秩的不等式 ================= -->
+  <h2 id="s7"><span class="idx">七</span>秩的三条不等式 · 全部用"向量组作载体"证<span class="layer L-base">基础</span></h2>
+
+  <div class="key"><span class="tag">必记 · 证秩不等式的唯一依据（书页 101 的"分析"）</span>
+    <b>证明秩的不等式，一般用向量组作为载体。</b>依据只有一条（＝定理 3′）：
+    <div class="fml">$$\text{若每个 }\beta_i\text{ 均可由 }\alpha_1,\cdots,\alpha_s\text{ 线性表示，则 } r(\beta_1,\cdots,\beta_t)\le r(\alpha_1,\cdots,\alpha_s).$$</div>
+    <b>用法固定三步</b>：① 把要比的两边<b>按行或按列分块</b>成向量组；② 说明<b>一边的每个向量都能由另一边表示</b>；③ 套上式。<br>
+    <span style="color:var(--amber)">书上旁注：<b>「两向量组，被表示的向量组秩小，即低维可用高维表示」</b>——记这一句就够。</span>
+  </div>
+
+  <div class="link"><span class="tag">串 · 本章只证三条，第 2 章那 17 条秩公式是同一个家族</span>
+    <a href="线代_第02章_矩阵.html#s9">第 2 章 §九</a>已经把<b>17 条秩公式</b>列全了并要求背下来；
+    本章做的事情是<b>回过头把其中最核心的三条<u>证明</u>一遍</b>，让它们从"背下来的结论"变成"能现推的东西"：
+    <div class="gridwrap"><table>
+      <tr><th>本章例题</th><th>结论</th><th>在 ch2 秩公式表里的位置</th><th>证明工具</th></tr>
+      <tr><td><a href="#eg-39">基 3.9</a></td><td>$r(AB)\le\min\{r(A),r(B)\}$</td><td>公式 6</td><td>按行/列分块 + 定理 3′</td></tr>
+      <tr><td><a href="#eg-310">基 3.10</a></td><td>$r(A+B)\le r([A,B])\le r(A)+r(B)$</td><td>公式 7、8</td><td>按列分块 + 极大无关组扩充</td></tr>
+      <tr><td><a href="#eg-311">基 3.11</a></td><td>$r(A^*)$ 三分</td><td>公式 9</td><td>$AA^*=|A|E$ + $AB=O$ 的秩不等式</td></tr>
+    </table></div>
+    <span style="color:var(--teal)"><b>为什么值得回炉证一遍</b>：ch2 学秩公式时还没有"向量组"这个语言，只能死记；
+    有了本章的<b>"载体法"</b>（每条不等式都翻译成"谁能被谁表示"），这三条<b>忘了可以当场推回来</b>，
+    而且推的过程就是在复习定理 3′。<em>剩下 14 条不必在这里重证，但要知道它们全都是这一套。</em></span>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 秩不等式的几何本体（挖）</span>
+    <b>书上说</b>（例 3.10 分析②）：「<b>秩的不等式的背景，本质上是空间维数的不等</b>，因为空间中的向量间存在互相线性表示的关系」；<br>
+    <b>潜台词是</b>：$r(A)+r(B)$ 是"两个空间维数<b>直接相加</b>"，而 $r([A,B])$ 是"两个空间<b>合并后</b>的维数"——
+    <em>合并时如果有重叠（$\beta$ 们与 $\alpha$ 们有线性关系），合并后的维数就<b>小于</b>相加</em>，这就是 $\le$ 的来历；<b>取等当且仅当两组完全独立</b>；<br>
+    <b>所以能考</b>：凡遇 $r(A)+r(B)$ 与 $r([A,B])$ 或 $r(A+B)$ 比大小，先在心里画两个子空间问"它们有没有交"。
+    <em>这比死记公式表管用——公式记反了可以现推。</em>
+  </div>
+
+  <div class="eg" id="eg-39">
+    <div class="q"><span class="no">基 3.9 ✔ ★</span><b>证明题</b>　证明：$r(AB)\le\min\{r(A),\,r(B)\}$。
+      <span style="color:var(--amber);font-size:.85rem">（书上旁注：秩的不等式证明，<b>结论要记住</b>）</span></div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li>要证的是 $\le$，<b>按 §三的分工走"载体法"</b>：找出"谁能被谁表示"。</li>
+          <li><b>关键决策：按行分块还是按列分块？</b>看你想证哪一半。
+              想证 $r(AB)\le r(B)$，就要说明 <b>$AB$ 的每一<u>行</u>都是 $B$ 的行的组合</b>——所以<b>按行分块</b>；
+              想证 $r(AB)\le r(A)$，则按列分块（$AB$ 的每一列是 $A$ 的列的组合）。</li>
+          <li><b>更省事的做法（书上旁注给的）</b>：只证一半，另一半用转置搬过去——
+              $r(AB)=r((AB)^{\mathrm T})=r(B^{\mathrm T}A^{\mathrm T})\le r(A^{\mathrm T})=r(A)$。<b>考场上这样写，省一半篇幅。</b></li>
+          <li>写卷面时，<b>$AB$ 按行展开那一大步必须写出来</b>——它就是"每一行是 $B$ 的行的组合"这句话的证据，是采分点。</li>
+        </ol>
+      </div>
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面<span class="score">按 10 分估</span></div>
+        <div class="step"><span class="k">证</span>　不妨设 $A$ 为 $m\times n$ 矩阵，$B$ 为 $n\times s$ 矩阵。将 $B$ 与 $AB$ <b>按行分块</b>为
+        $$B=\begin{bmatrix}\beta_1\\\beta_2\\\vdots\\\beta_n\end{bmatrix},\qquad AB=C=\begin{bmatrix}\gamma_1\\\gamma_2\\\vdots\\\gamma_m\end{bmatrix}.$$<span class="pt">⛳ 分块 2 分</span></div>
+        <div class="step">于是
+        $$AB=\begin{bmatrix}a_{11}&a_{12}&\cdots&a_{1n}\\a_{21}&a_{22}&\cdots&a_{2n}\\\vdots&\vdots&&\vdots\\a_{m1}&a_{m2}&\cdots&a_{mn}\end{bmatrix}
+        \begin{bmatrix}\beta_1\\\beta_2\\\vdots\\\beta_n\end{bmatrix}
+        =\begin{bmatrix}a_{11}\beta_1+a_{12}\beta_2+\cdots+a_{1n}\beta_n\\a_{21}\beta_1+a_{22}\beta_2+\cdots+a_{2n}\beta_n\\\vdots\\a_{m1}\beta_1+a_{m2}\beta_2+\cdots+a_{mn}\beta_n\end{bmatrix}
+        =\begin{bmatrix}\gamma_1\\\gamma_2\\\vdots\\\gamma_m\end{bmatrix}.\tag{1}$$<span class="pt">⛳ 3 分</span></div>
+        <div class="step">由 (1) 式知，$AB$ 的行向量 $\gamma_i\ (i=1,2,\cdots,m)$ 均可由 $B$ 的行向量组 $\beta_1,\cdots,\beta_n$ 线性表示，
+        <b>由「被表示的向量组秩不大」</b>得
+        $$r(AB)\le r(B).\tag{2}$$<span class="pt">⛳ 2 分</span></div>
+        <div class="step">又由 $(AB)^{\mathrm T}=B^{\mathrm T}A^{\mathrm T}$，对 $B^{\mathrm T}A^{\mathrm T}$ 重复上述过程得 $r(B^{\mathrm T}A^{\mathrm T})\le r(A^{\mathrm T})$，
+        而 $r(AB)=r\big((AB)^{\mathrm T}\big)$、$r(A)=r(A^{\mathrm T})$，故
+        $$r(AB)\le r(A).\tag{3}$$<span class="pt">⛳ 2 分</span></div>
+        <div class="fin">由 (2)(3) 两式，得 $r(AB)\le\min\{r(A),\,r(B)\}$。</div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（写完对照）</span>
+        <b>①</b> <span class="dock">扣分点</span>：只证 $r(AB)\le r(B)$ 就收尾，扣 3 分。<b>$\min$ 是两个数，两边都要给。</b><br>
+        <b>②</b> <b>为什么"按行分块"对应 $r(AB)\le r(B)$</b>：因为 $AB$ 的行是 <b>$B$ 的行</b>的组合（$A$ 只提供系数）。
+        对偶地，$AB$ 的<b>列</b>是 <b>$A$ 的列</b>的组合。<em>记法：「$A$ 在左边就管列，$B$ 在右边就管行」——分块方向跟着"想留住谁"走。</em><br>
+        <b>③</b> <b>转置那一步要写全</b>：$r(AB)=r((AB)^{\mathrm T})$ 与 $r(A)=r(A^{\mathrm T})$ 各是一次"转置不变秩"，
+        虽是常识但作为推理环节应当出现，否则会被认为跳步。<br>
+        <b>④</b> <b>取等条件（顺手记）</b>：$r(AB)=r(B)$ 当且仅当 $A$ <b>列满秩</b>（可左消）——这条在<a href="#eg-x34">习 3.4</a> 的注里正式登场。<br>
+        <b>⑤</b> 已用 300 组随机整数矩阵（阶数 1–4 随机）对拍 $r(AB)\le\min\{r(A),r(B)\}$，<b>零反例</b>。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg" id="eg-310">
+    <div class="q"><span class="no">基 3.10 ✔</span><b>证明题</b>　设 $A,B$ 均是 $m\times s$ 矩阵，证明：$r(A+B)\le r([A,B])\le r(A)+r(B)$。
+      <span style="color:var(--amber);font-size:.85rem">（书上旁注：<b>不考证明，直接用</b>）</span></div>
+    <div class="s">
+      <span class="lab">先记结论</span>这条是<b>只背不证</b>的（书上明写"不考证明，直接用"）。但中间那个 $r([A,B])$ 是关键跳板——
+      <em>比较 $A+B$ 与 $A,B$ 时，先把它们塞进同一个大矩阵 $[A,B]$，比较就变成"添列"的问题。</em><br>
+      <span class="lab">左半边为什么成立</span>按列分块 $A=[\alpha_1,\cdots,\alpha_s],\ B=[\beta_1,\cdots,\beta_s]$，则
+      $$A+B=[\alpha_1+\beta_1,\ \cdots,\ \alpha_s+\beta_s],\qquad [A,B]=[\alpha_1,\cdots,\alpha_s,\beta_1,\cdots,\beta_s].$$
+      每个 $\alpha_i+\beta_i$ 显然可由 $[A,B]$ 的列表示（系数就是两个 1），故 $r(A+B)\le r([A,B])$。
+      书上还给了矩阵形式：$[\alpha_1+\beta_1,\ \alpha_2+\beta_2]=[\alpha_1,\alpha_2,\beta_1,\beta_2]\begin{bmatrix}1&0\\0&1\\1&0\\0&1\end{bmatrix}$，
+      <b>右边那个 $4\times2$ 就是"坐标"</b>。<br>
+      <span class="lab">右半边为什么成立</span>设 $r(A)=p,\ r(B)=q$。取 $A$ 的列的极大无关组 $\alpha_1,\cdots,\alpha_p$，
+      把它<b>扩充</b>成 $[A,B]$ 的极大无关组，不妨设为 $\alpha_1,\cdots,\alpha_p,\beta_1,\cdots,\beta_w$。显然 $w\le q$（补进来的 $\beta$ 不会超过 $B$ 自己独立的个数），故
+      $$r([A,B])=p+w\le p+q=r(A)+r(B).$$
+      <span class="lab">要害</span><b>$w$ 就是"$B$ 相对于 $A$ 新增的独立方向数"</b>。
+      $w=q$（取等）意味着 $B$ 的每一个独立方向都是 $A$ 里没有的；<em>更常见的情况是添进来的 $\beta$ 与 $\alpha$ 相关，此时严格小于。</em><br>
+      <span class="lab">陷阱</span>不要写成 $r(A+B)\le r(A)+r(B)$ 就完事——<b>中间那一项 $r([A,B])$ 才是能直接用的那个</b>（很多题给的正是分块矩阵的秩）。三个量的顺序要背准。<br>
+      <span class="lab">复核</span>已用 300 组随机 $m\times s$ 整数矩阵对拍 $r(A+B)\le r([A,B])\le r(A)+r(B)$，<b>零反例</b>。
+    </div>
+  </div>
+
+  <div class="eg" id="eg-311">
+    <div class="q"><span class="no">基 3.11 ✔</span><b>证明题 · 伴随矩阵的秩三分公式</b>　设 $A$ 是 $n\,(n\ge2)$ 阶方阵，$A^*$ 是 $A$ 的伴随矩阵。证明：
+      $$r(A^*)=\begin{cases}n,&r(A)=n,\\1,&r(A)=n-1,\\0,&r(A)\lt n-1.\end{cases}$$</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>题给的是"$A$ 的秩"，要的是"$A^*$ 的秩"，中间只有一座桥：$AA^*=|A|E$。</b>书上分析栏就写了这一句。</li>
+          <li>三种情形<b>各用一件不同的工具</b>，别指望一招通吃：
+              $r(A)=n$ 用<b>可逆</b>（或取行列式）；$r(A)\lt n-1$ 用<b>代数余子式全为零</b>（回定义）；
+              最难的是中间那档 $r(A)=n-1$，要<b>上下夹</b>。</li>
+          <li>中间档怎么夹：<b>下界</b>——$r(A)=n-1$ 说明存在 $n-1$ 阶子式非零，即<b>某个 $A_{ij}\ne0$</b>，而 $A^*$ 的元素正是这些 $A_{ij}$，故 $r(A^*)\ge1$；
+              <b>上界</b>——此时 $|A|=0$，$AA^*=O$，由 $AB=O\Rightarrow r(A)+r(B)\le n$ 得 $r(A^*)\le n-r(A)=1$。<b>夹出 $=1$。</b></li>
+          <li>写卷面时，<b>"存在 $n-1$ 阶子式非零 $\Rightarrow$ 某 $A_{ij}\ne0$"这一句是必写的</b>——它是下界的唯一依据，漏了就只证了一半。</li>
+        </ol>
+      </div>
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面<span class="score">按 11 分估</span></div>
+        <div class="step"><span class="k">证</span>　<b>(i) 当 $r(A)=n$ 时</b>，$A$ 可逆，$|A|\ne0$。由 $AA^*=|A|E$ 两边取行列式得
+        $|A|\,|A^*|=|A|^{n}$，故 $|A^*|=|A|^{n-1}\ne0$，从而 $A^*$ 可逆，$r(A^*)=n$。<span class="pt">⛳ 3 分</span></div>
+        <div class="step"><span class="k">(ii)</span>　<b>当 $r(A)=n-1$ 时</b>，由矩阵秩的定义知，$|A|$ 中存在 $n-1$ 阶子式不等于零，
+        即存在代数余子式 $A_{ij}\ne0$。而 $A^*$ 由诸 $A_{ij}$ 组成，故
+        $$r(A^*)\ge1.\tag{1}$$<span class="pt">⛳ 2 分</span></div>
+        <div class="step">又 $r(A)=n-1$ 时 $|A|=0$，于是 $AA^*=|A|E=O$，由 $AB=O\Rightarrow r(A)+r(B)\le n$ 得
+        $$r(A)+r(A^*)\le n,\qquad\text{即}\qquad r(A^*)\le n-(n-1)=1.\tag{2}$$<span class="pt">⛳ 3 分</span></div>
+        <div class="step">由 (1)(2) 两式得 $r(A^*)=1$。<span class="pt">⛳ 1 分</span></div>
+        <div class="step"><span class="k">(iii)</span>　<b>当 $r(A)\lt n-1$ 时</b>，由 $A$ 的秩的定义知，$|A|$ 的<b>所有</b> $n-1$ 阶子式全为零，
+        即所有代数余子式 $A_{ij}=0$，故 $A^*=O$，$r(A^*)=0$。<span class="pt">⛳ 2 分</span></div>
+        <div class="fin">综上，$r(A^*)=n,\,1,\,0$ 分别对应 $r(A)=n,\ r(A)=n-1,\ r(A)\lt n-1$。</div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（写完对照）</span>
+        <b>①</b> <b>本题的三分是<u>可逆</u>的</b>（书上注 (1)）：$r(A)=n\iff r(A^*)=n$，$r(A)=n-1\iff r(A^*)=1$，$r(A)\lt n-1\iff r(A^*)=0$。
+        <b>考研正考过反向的问法</b>（给 $r(A^*)$ 反推 $r(A)$）。<br>
+        <b>②</b> <span class="dock">扣分点</span>：(ii) 中<b>只证上界不证下界</b>（或反之）扣 2 分。中间这一档<b>必须两头夹</b>。<br>
+        <b>③</b> <b>上界的另一条路（书上给的括号版）</b>：$AA^*=O$ 说明 <b>$A^*$ 的每一列都是 $Ax=0$ 的解向量</b>，
+        而 $r(A)=n-1$ 时解空间维数只有 1，故 $r(A^*)\le1$。<em>这条路更几何，也更好记。</em><br>
+        <b>④</b> <b>推论（顺手记，书上注 (2)）</b>：$A^*$ 的秩只可能是 $n,1,0$ 三个值，因此 $A^*$ 的行（列）向量组只有三种长相：
+        <b>$n$ 行线性无关 / $n$ 行两两成比例 / 全是零向量</b>。选择题里见到"$A^*$ 有两行不成比例但又不满秩"之类，直接判错。<br>
+        <b>⑤</b> 已用 200 组随机方阵（2–4 阶）逐个对拍三分公式，<b>零反例</b>。
+      </div>
+      <div class="link"><span class="tag">串 · $AB=O\Rightarrow r(A)+r(B)\le n$ 的完整来历（书页 103 手写旁注）</span>
+        上面 (ii) 用到的这条，是<b>本章与第 4 章之间的第二根大梁</b>，书上把推导逐字写在了页边，值得原样记住：<br>
+        <b>若 $AB=O$，则 $B$ 的每个列向量 $\beta_i$ 都是 $Ax=0$ 的解向量</b>；
+        由 <b>$n-r(A)=s$</b> 可知 $Ax=0$ 全部线性无关解向量的个数为 $s$（$s$ 也就是<b>解空间的维数</b>）；
+        于是 $B$ 的列都住在这个 $s$ 维解空间里，故 $r(B)\le s=n-r(A)$，即
+        $$r(A)+r(B)\le n.$$
+        <span style="color:var(--teal)"><b>三层含义要分清</b>：$AB=O$ 是<b>矩阵语言</b>，"$B$ 的列是 $Ax=0$ 的解"是<b>方程组语言</b>，
+        "$B$ 的列在 $A$ 的解空间里"是<b>向量空间语言</b>——同一件事的三个说法，考场上哪个顺手用哪个。
+        「解空间维数 $=n-r(A)$」这条要到 ch4 才正式证，本章先用。</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= s8 等价 ================= -->
+  <h2 id="s8"><span class="idx">八</span>O₃ 等价向量组 · 与"等价矩阵"的正面对撞<span class="layer L-base">基础</span><span class="layer L-str">强化</span></h2>
+
+  <h3>8.1　定义与三条等价刻画</h3>
+  <p>设两个向量组（Ⅰ）$\alpha_1,\cdots,\alpha_s$，（Ⅱ）$\beta_1,\cdots,\beta_t$（<b>维数必须相同，个数可以不等</b>）。
+  若（Ⅰ）(Ⅱ) 能<b>相互</b>线性表示，则称二者<b>等价</b>，记 (Ⅰ)$\cong$(Ⅱ)。</p>
+
+  <div class="key"><span class="tag">必记 · 三条等价刻画（书页 104 完整链）</span>
+    <div class="fml">$$\begin{aligned}
+    \{\alpha_1,\cdots,\alpha_s\}\cong\{\beta_1,\cdots,\beta_t\}
+    &\iff \text{两组可以}\textbf{相互表示}\\[2pt]
+    &\iff r(\alpha_1,\cdots,\alpha_s)=r(\beta_1,\cdots,\beta_t)\ \textbf{且可单方向表示}\\[2pt]
+    &\iff r(\alpha_1,\cdots,\alpha_s)=r(\beta_1,\cdots,\beta_t)=r(\alpha_1,\cdots,\alpha_s,\beta_1,\cdots,\beta_t)\quad(\textbf{三秩相同})
+    \end{aligned}$$</div>
+    <b>「可单方向表示」的意思</b>：两组中<b>某一个</b>能被另一个表示就行（哪一边都可以）。<br>
+    <b>实战首选第三条（三秩相同）</b>：把两组拼成一个大矩阵 $[\alpha_1,\cdots,\alpha_s,\beta_1,\cdots,\beta_t]$ 做一次行变换，<b>三个秩一起读出来</b>，一次消元解决战斗。
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · "可<u>单</u>方向表示"这个措辞是故意的（挖）</span>
+    <b>书上说</b>（判据第二条）：$r(Ⅰ)=r(Ⅱ)$ <b>且可单方向表示</b>；并特意加注「所谓可单方向表示，是指两个向量组中的<b>某一个</b>可由另一个线性表示」；<br>
+    <b>潜台词是</b>：<b>这是在告诉你可以少干一半活</b>——等价的定义要求"相互"表示，
+    但判据只要你验证<b>一个方向</b>，另一个方向由"秩相等"<b>自动补上</b>（理由见上一段：加进去秩不变＝是多余的＝能被表示）。
+    <em>省下的正好是一半的消元。</em><br>
+    <b>所以能考</b>：<b>(i)</b> <a href="#eg-312">例 3.12</a> 的非临界支只验了"3 阶满秩故都有解"，没有分别验两个方向；
+    <b>(ii)</b> 反过来，<a href="#eg-x36">习 3.6</a> 选项 (B)「只有单方向表示」被判错——<b>因为它<u>缺了"秩相等"这一半</u></b>。
+    <span style="color:var(--red)"><b>「单方向表示」永远要和「秩相等」配对出现，单独任何一个都不够。</b></span>
+  </div>
+
+  <div class="trap"><span class="tag">陷阱 · 光"秩相等"推不出等价（书页 98 的示例）</span>
+    $\alpha_1=\begin{bmatrix}1\\0\end{bmatrix},\ \alpha_2=\begin{bmatrix}0\\1\end{bmatrix}$，两组各自的秩 $r(\alpha_1)=r(\alpha_2)=1$，
+    <b>但它们互不能表示</b>，显然不等价。<br>
+    <b>所以判据里必须补上第二个条件</b>——要么"可单方向表示"，要么直接查"三秩相同"。
+    <em>「等价向量组具有相等的秩，反之未必成立」</em>，这句话正着说对、反着说错，是选择题的常客（见 <a href="#eg-x36">习 3.6</a> 选项 (D)）。
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 为什么"三秩相同"能一举取代前两条（挖）</span>
+    <b>书上说</b>（书页 98 手写旁注）：不妨设 $\alpha$ 组可由 $\beta$ 组表示，则 $r(\alpha,\beta)=r(\beta)$；若又有 $r(\alpha)=r(\beta)$，
+    「<b>这个式子意味着 $\beta$ 们加入 $\alpha$ 中，向量组的秩未改变</b> $\Rightarrow\beta$ 们也可以由 $\alpha$ 们表示 $\Rightarrow$ 两组等价」；<br>
+    <b>潜台词是</b>：<b>「添进去秩不变」＝「添的东西是多余的」＝「添的东西能被原来的表示」</b>——这三句是同一句话。
+    三秩相同同时说了两遍这件事（$\beta$ 加进 $\alpha$ 不变、$\alpha$ 加进 $\beta$ 也不变），于是双向表示自动成立；<br>
+    <b>所以能考</b>：凡见「$r(A)=r([A,B])$」这种式子，脑子里立刻翻译成<b>"$B$ 的列全是多余的，能被 $A$ 表示"</b>。
+    这个翻译在<a href="#s3">定理 5</a>、<a href="#eg-31">例 3.1</a>、<a href="#eg-312">例 3.12</a>、<a href="#eg-66">强 6.6</a> 里反复出现，是本章使用频率最高的一句翻译。
+  </div>
+
+  <div class="link"><span class="tag">串 · 等价矩阵 vs 等价向量组：两个完全不同的概念（书页 103 + 例 3.12）</span>
+    <div class="gridwrap"><table>
+      <tr><th></th><th>等价<b>矩阵</b></th><th>等价<b>向量组</b></th></tr>
+      <tr><td><b>前提</b></td><td><b>必须同型</b>（行数、列数都相等）</td><td><b>必须同维</b>，但<b>向量个数可以不等</b></td></tr>
+      <tr><td><b>定义</b></td><td>$PAQ=B$（$P,Q$ 可逆），即 $B$ 由 $A$ 经若干次初等行、列变换得到</td><td>两组能<b>相互</b>线性表示</td></tr>
+      <tr><td><b>判别</b></td><td>$A\cong B\iff r(A)=r(B)$（在同型前提下）</td><td>(Ⅰ)$\cong$(Ⅱ)$\iff r(Ⅰ)=r(Ⅱ)=r(Ⅰ,Ⅱ)$</td></tr>
+      <tr><td><b>一句话</b></td><td><b>只看秩</b></td><td><b>看三个秩</b></td></tr>
+    </table></div>
+    <b>为什么会混</b>：两者都叫"等价"、都写 $\cong$、判据里都出现"秩相等"。<b>差别就在那第三个秩</b>。<br>
+    书页 104 的手写问答把这件事说得最透：<b>「$\alpha_1$ 和 $\alpha_2$ 拼成的矩阵与矩阵 $B$ 等价吗？——显然不等价，它们不是同型矩阵。
+    矩阵等价的过程中，一个两列的矩阵不可能变成三列，三列的矩阵也不可能变成两列；<u>但是此时可以讨论向量组等价</u>。」</b><br>
+    <span style="color:var(--teal)">下面的例 3.12 是这两个概念<b>唯一一次正面对撞</b>，两个临界值 $a=-1$ 与 $a=0$ 一个让 $A$ 掉秩、一个让 $B$ 掉秩，设计得很对称。</span>
+  </div>
+
+  <div class="eg" id="eg-312">
+    <div class="q"><span class="no">基 3.12 ✔ ★★★</span><b>解答题 · 本节压轴</b>　设向量组（Ⅰ）$\alpha_1=[1,0,2]^{\mathrm T},\ \alpha_2=[0,1,1]^{\mathrm T},\ \alpha_3=[2,-1,a+4]^{\mathrm T}$，
+      向量组（Ⅱ）$\beta_1=[1,2,4]^{\mathrm T},\ \beta_2=[1,-1,a+2]^{\mathrm T},\ \beta_3=[3,3,10]^{\mathrm T}$，
+      矩阵 $A=\begin{bmatrix}1&0&2\\0&1&-1\\2&1&a+4\end{bmatrix},\ B=\begin{bmatrix}1&1&3\\2&-1&3\\4&a+2&10\end{bmatrix}$。问：<br>
+      (1) $A,B$ 是否等价？说明理由；　(2) 向量组（Ⅰ）与（Ⅱ）是否等价？说明理由。</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>两问问的是两个不同的概念</b>（见上面的对照表），别用同一个判据答两问。
+              (1) 只需 $r(A)$ 与 $r(B)$ 两个数；(2) 需要<b>三个</b>秩。</li>
+          <li>$A$ 与 $B$ 都是 3 阶方阵、都含参数 $a$——先分别求出<b>它们各自的掉秩临界值</b>，那些临界值就是分类讨论的分界线。</li>
+          <li><b>关键决策</b>：(2) 不要分别对"（Ⅰ）能否由（Ⅱ）表示"和"（Ⅱ）能否由（Ⅰ）表示"各做一次消元。
+              <b>把两组拼在一起做一次行变换</b>（书上做的是 $[A\vdots B]$ 与 $[B\vdots A]$ 两次），一次读出所需的秩。</li>
+          <li>在<b>非临界值</b>那一支（$r(A)=r(B)=3$），有一条捷径：<b>3 阶满秩 $\Rightarrow$ 由克拉默法则，$[\alpha_1,\alpha_2,\alpha_3]x=\beta_i$ 与 $[\beta_1,\beta_2,\beta_3]y=\alpha_j$ 都有解</b>，双向表示直接成立，不必再算 $r(Ⅰ,Ⅱ)$。</li>
+          <li>在临界值那两支，要<b>具体指出是哪个向量表示不了</b>（不能只说"不等价"），这是采分点。</li>
+        </ol>
+      </div>
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面<span class="score">按 12 分估</span></div>
+        <div class="step"><span class="k">解</span>　将 $A,B$ 合并，一起作初等行变换：
+        $$[A\vdots B]=\begin{bmatrix}1&0&2&\vdots&1&1&3\\0&1&-1&\vdots&2&-1&3\\2&1&a+4&\vdots&4&a+2&10\end{bmatrix}
+        \longrightarrow\begin{bmatrix}1&0&2&\vdots&1&1&3\\0&1&-1&\vdots&2&-1&3\\0&0&a+1&\vdots&0&a+1&1\end{bmatrix}.\tag{1}$$<span class="pt">⛳ 3 分</span></div>
+        <div class="step">同理对 $[B\vdots A]$ 作初等行变换，得
+        $$[B\vdots A]\longrightarrow\begin{bmatrix}1&1&3&\vdots&1&0&2\\0&1&1&\vdots&\tfrac23&-\tfrac13&\tfrac53\\0&a&0&\vdots&-\tfrac23&\tfrac13&a-\tfrac23\end{bmatrix}.\tag{2}$$<span class="pt">⛳ 2 分</span></div>
+        <div class="step"><span class="k">(1)</span>　由 (1)(2) 两式读秩：<br>
+        当 $a\ne-1$ 且 $a\ne0$ 时，$r(A)=r(B)=3$，又 $A,B$ 同型，故 $A\cong B$；<br>
+        当 $a=-1$ 时，$r(A)=2\ne r(B)=3$，$A$ 不等价于 $B$；<br>
+        当 $a=0$ 时，$r(A)=3\ne r(B)=2$，$A$ 不等价于 $B$。<span class="pt">⛳ 3 分</span></div>
+        <div class="step"><span class="k">(2)</span>　<b>当 $a\ne-1$ 且 $a\ne0$ 时</b>，$r(A)=r(B)=3$，故由<b>克拉默法则</b>知
+        $[\alpha_1,\alpha_2,\alpha_3]x=\beta_i\ (i=1,2,3)$ 以及 $[\beta_1,\beta_2,\beta_3]y=\alpha_j\ (j=1,2,3)$ 均有解，
+        故（Ⅰ）(Ⅱ) 可相互表示，即（Ⅰ）$\cong$（Ⅱ）。<span class="pt">⛳ 2 分</span></div>
+        <div class="step">　　　<b>当 $a=-1$ 时</b>，$r(\alpha_1,\alpha_2,\alpha_3)=2$，而 $r(\alpha_1,\alpha_2,\alpha_3,\beta_3)=3$，
+        故 $\beta_3$ 不能由 $\alpha_1,\alpha_2,\alpha_3$ 线性表示，（Ⅰ）与（Ⅱ）<b>不等价</b>。<span class="pt">⛳ 1 分</span></div>
+        <div class="step">　　　<b>当 $a=0$ 时</b>，$r(\alpha_1,\alpha_2,\alpha_3)=3$，$r(\beta_1,\beta_2,\beta_3)=2$，
+        而 $r(\beta_1,\beta_2,\beta_3,\alpha_j)=3\ (j=1,2,3)$，故 $\alpha_1,\alpha_2,\alpha_3$ <b>均</b>不能由 $\beta_1,\beta_2,\beta_3$ 线性表示，（Ⅰ）与（Ⅱ）<b>不等价</b>。<span class="pt">⛳ 1 分</span></div>
+        <div class="fin">综上：$a\ne-1$ 且 $a\ne0$ 时 $A\cong B$ 且（Ⅰ）$\cong$（Ⅱ）；$a=-1$ 或 $a=0$ 时两者<b>都</b>不等价。</div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（写完对照）</span>
+        <b>①</b> <span class="dock">扣分点</span>：(1) 中<b>不写"又 $A,B$ 同型"</b>就由 $r(A)=r(B)$ 断定等价，扣 1 分。
+        矩阵等价的<b>大前提是同型</b>——本题恰好都是 3 阶所以成立，但这句话必须写（<a href="#eg-x36">习 3.6</a> 选项 (A) 考的就是漏掉它）。<br>
+        <b>②</b> <span class="dock">扣分点</span>：(2) 的两个临界支只写"不等价"，不指出<b>具体哪个向量表示不了</b>，各扣 1 分。"说明理由"四个字要求给证据。<br>
+        <b>③</b> <b>本题的对称设计</b>：$a=-1$ 让 <b>$A$</b> 掉秩（此时是 $\beta$ 越界，$\beta_3$ 表示不了），$a=0$ 让 <b>$B$</b> 掉秩（此时是 $\alpha$ 越界，三个 $\alpha$ 全表示不了）。
+        <em>「谁秩小谁装不下对方」——记住这句就不会把两支的结论写反。</em><br>
+        <b>④</b> <b>提速</b>：(2) 的非临界支用克拉默法则一句话带过，<b>比再算一次 $r(Ⅰ,Ⅱ)$ 快得多</b>——3 阶方阵满秩时任意右端都有解，这是免费的。<br>
+        <b>⑤</b> 已 sympy 对 $a\in\{-2,-1,0,1,2\}$ 逐个算出 $r(A),r(B),r([A,B])$：$a=-1$ 时 $(2,3,3)$，$a=0$ 时 $(3,2,3)$，其余 $(3,3,3)$，与书完全一致。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg" id="eg-66">
+    <div class="q"><span class="no">强 6.6 ✔</span><b>解答题 · 把"不能表示"变成一个严格不等式</b>　求常数 $a$ 的值，使
+      $\alpha_1=[1,1,a]^{\mathrm T},\ \alpha_2=[1,a,1]^{\mathrm T},\ \alpha_3=[a,1,1]^{\mathrm T}$ 能由
+      $\beta_1=[1,1,a]^{\mathrm T},\ \beta_2=[-2,a,4]^{\mathrm T},\ \beta_3=[-2,a,a]^{\mathrm T}$ 线性表示，
+      <b>但</b> $\beta_1,\beta_2,\beta_3$ <b>不能</b>由 $\alpha_1,\alpha_2,\alpha_3$ 线性表示。</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>题给的是"一边能表示、另一边不能"——这是一个不对称条件</b>，而"不对称"在秩的语言里只有一个说法：<b>严格不等号</b>。这是全题的枢纽。</li>
+          <li>怎么推出严格不等：$\alpha$ 能由 $\beta$ 表示 $\Rightarrow r(\alpha)\le r(\beta)$；
+              <b>若取等</b>，则由"秩相等 + 可单方向表示"（等价刻画第二条）就得出两组<b>等价</b>，从而 $\beta$ 也能由 $\alpha$ 表示——与题设矛盾。
+              <b>故必须 $r(\alpha)\lt r(\beta)$。</b></li>
+          <li>有了 $r(\alpha)\lt r(\beta)\le3$，立刻得 $r(\alpha)\lt3$，即 <b>$|\alpha_1,\alpha_2,\alpha_3|=0$</b>——参数被逼出来了。这是把抽象条件变成方程的一步。</li>
+          <li>解出候选值后<b>必须逐个回代检验</b>：上面推的是<b>必要条件</b>，不是充分条件。<em>凡是"由必要条件解出参数"的题，最后一定要验根。</em></li>
+        </ol>
+      </div>
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面<span class="score">按 11 分估</span></div>
+        <div class="step"><span class="k">解</span>　由 $\alpha_1,\alpha_2,\alpha_3$ 能由 $\beta_1,\beta_2,\beta_3$ 线性表示，得
+        $r(\alpha_1,\alpha_2,\alpha_3)\le r(\beta_1,\beta_2,\beta_3)$。<span class="pt">⛳ 2 分</span></div>
+        <div class="step">若 $r(\alpha_1,\alpha_2,\alpha_3)=r(\beta_1,\beta_2,\beta_3)$，则由"<b>秩相等且可单方向表示</b>"知两向量组等价，
+        从而 $\beta_1,\beta_2,\beta_3$ 可由 $\alpha_1,\alpha_2,\alpha_3$ 线性表示，与题设矛盾。故
+        $$r(\alpha_1,\alpha_2,\alpha_3)\lt r(\beta_1,\beta_2,\beta_3).\tag{1}$$<span class="pt">⛳ 3 分</span></div>
+        <div class="step">而 $r(\beta_1,\beta_2,\beta_3)\le3$，于是由 (1) 式得 $r(\alpha_1,\alpha_2,\alpha_3)\lt3$，从而
+        $$|\alpha_1,\alpha_2,\alpha_3|=\begin{vmatrix}1&1&a\\1&a&1\\a&1&1\end{vmatrix}=0,$$
+        解得 $a=1$ 或 $a=-2$。<span class="pt">⛳ 2 分</span></div>
+        <div class="step"><span class="k">检验</span>　<b>当 $a=1$ 时</b>，$\alpha_1=\alpha_2=\alpha_3=\beta_1=[1,1,1]^{\mathrm T}$，
+        显然 $\alpha_1,\alpha_2,\alpha_3$ 可由 $\beta_1,\beta_2,\beta_3$ 线性表示；而此时 $\beta_2=[-2,1,4]^{\mathrm T}$ 不能由 $\alpha_1,\alpha_2,\alpha_3$ 线性表示。
+        故 $a=1$ 符合题意。<span class="pt">⛳ 2 分</span></div>
+        <div class="step">　　　<b>当 $a=-2$ 时</b>，对 $[\beta_1,\beta_2,\beta_3,\alpha_1,\alpha_2,\alpha_3]$ 作初等行变换：
+        $$\begin{bmatrix}1&-2&-2&\vdots&1&1&-2\\1&-2&-2&\vdots&1&-2&1\\-2&4&-2&\vdots&-2&1&1\end{bmatrix}
+        \longrightarrow\begin{bmatrix}1&-2&-2&\vdots&1&1&-2\\0&0&-6&\vdots&0&3&-3\\0&0&0&\vdots&0&-3&3\end{bmatrix},$$
+        可知 $r(\beta_1,\beta_2,\beta_3)=2$，而 $r(\beta_1,\beta_2,\beta_3,\alpha_2)=3$，
+        故 <b>$\alpha_2$ 不能由 $\beta_1,\beta_2,\beta_3$ 线性表示</b>，不满足题设"$\alpha$ 能由 $\beta$ 表示"。故 $a=-2$ 不符合题意。<span class="pt">⛳ 2 分</span></div>
+        <div class="fin">综上所述，$a=1$。</div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（写完对照）</span>
+        <b>①</b> <span class="dock">扣分点</span>：直接写"因为不能反向表示所以 $r(\alpha)\lt r(\beta)$"而<b>不给反证过程</b>，扣 2 分。
+        这一步是全题的核心逻辑，<b>必须把"若取等则等价、与题设矛盾"写出来</b>。<br>
+        <b>②</b> <span class="dock">扣分点</span>：解出 $a=1,-2$ 就<b>直接两个都答</b>，扣 4 分。上面推的是<b>必要条件</b>，必须验根。
+        <em>本题就是靠"验根"淘汰掉一半答案的——命题人正是冲着这个来的。</em><br>
+        <b>③</b> <b>$a=-2$ 被淘汰的原因要看准</b>：不是"$\beta$ 能由 $\alpha$ 表示了"，而是<b>"$\alpha$ 反而不能由 $\beta$ 表示"</b>——
+        题设的<b>前半句</b>就没满足。写理由时别写反。<br>
+        <b>④</b> <b>$a=1$ 时的验证很省事</b>：四个向量全变成 $[1,1,1]^{\mathrm T}$，$\alpha$ 组秩为 1、$\beta$ 组秩为 3，一眼看出单向可表、反向不可表。
+        <em>遇到参数使向量"塌缩成同一个"的情形，优先代入观察，别急着消元。</em><br>
+        <b>⑤</b> 已 sympy 验：$|\alpha|=0$ 的解恰为 $\{1,-2\}$；$a=1$ 时 $r(\alpha)=1,r(\beta)=3,r(\beta,\alpha)=3$（单向可表 ✔、反向不可表 ✔）；
+        $a=-2$ 时 $r(\alpha)=2,r(\beta)=2,r(\beta,\alpha)=3$（<b>$\alpha$ 不能由 $\beta$ 表示</b>，故淘汰），与书一致。
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= s9 向量空间 ================= -->
+  <h2 id="s9"><span class="idx">九</span>O₄ 向量空间 · 基、坐标、过渡矩阵、坐标变换<span class="layer L-str">仅数学一</span></h2>
+
+  <div class="bg"><span class="tag">筛 · 张宇的一句话：数二数三也该看</span>
+    书页 105 标题旁写着「<b>数学二、数学三的考生也要看</b>」，书页 82 的结构图上写「有利于考生做题」。
+    对数一考生这是<b>必考内容</b>（近年真题里"过渡矩阵/坐标"以填空或解答小问出现），本节不能跳。
+  </div>
+
+  <h3>9.1　基、维数、坐标</h3>
+  <p>若 $\xi_1,\cdots,\xi_n$ 是 $\mathbf R^n$ 中<b>线性无关的有序向量组</b>，则任一 $\alpha\in\mathbf R^n$ 均可由它们线性表示：
+  $\alpha=a_1\xi_1+\cdots+a_n\xi_n$。称 $\xi_1,\cdots,\xi_n$ 是 $\mathbf R^n$ 的一个<b>基</b>，个数 $n$ 是<b>维数</b>，
+  有序数组 $[a_1,\cdots,a_n]^{\mathrm T}$ 是 $\alpha$ 在该基下的<b>坐标</b>。</p>
+  <p>更一般地（书页 70），若 $V$ 是向量空间，$V$ 中有 $r$ 个向量 $\alpha_1,\cdots,\alpha_r$ 满足
+  ① 线性无关；② $V$ 中任一向量都可由它们线性表示，则它们是 $V$ 的一个基，$r$ 是 $V$ 的维数，
+  $V=\{x_1\alpha_1+\cdots+x_r\alpha_r\mid x_i\in\mathbf R\}$。</p>
+
+  <div class="mine"><span class="tag">补讲 · "基"其实就是"极大无关组"换了个名字（挖）</span>
+    <b>书上说</b>（书页 105 手写旁注）：把这里的概念<b>与方程组相应的概念做好等价转化</b>（D₂₂ 转换等价表述）；<br>
+    <b>潜台词是</b>：<b>基 ＝ 极大线性无关组，维数 ＝ 秩，坐标 ＝ 用极大无关组表示时的那组系数</b>——
+    §五讲的三件事在这里<b>原封不动换了三个名字</b>，只是把视角从"给定的一堆向量"换成了"整个空间"；<br>
+    <b>所以能考</b>：<a href="#eg-314">例 3.14</a> 就是这个转化的直接检验——题给三个向量张成 $V$，
+    <b>答案的规范正交基只有两个向量</b>，因为 $r=2$。<em>被问"基"就先算秩，别数题目给了几个向量。</em>
+  </div>
+
+  <div class="link"><span class="tag">串 · 四组同义词对照表（本章最该贴在墙上的一张）</span>
+    <div class="gridwrap"><table>
+      <tr><th>§五 向量组语言</th><th>§九 向量空间语言</th><th>第 4 章 方程组语言</th></tr>
+      <tr><td>极大线性无关组</td><td><b>基</b></td><td>基础解系（对解空间而言）</td></tr>
+      <tr><td>向量组的秩 $r$</td><td><b>维数</b> $\dim V$</td><td>$n-r(A)$（解空间维数）</td></tr>
+      <tr><td>用极大无关组表示的系数</td><td><b>坐标</b></td><td>通解里的任意常数 $k_1,\cdots,k_{n-r}$</td></tr>
+      <tr><td>向量组等价</td><td>张成<b>同一个空间</b></td><td>方程组<b>同解</b></td></tr>
+    </table></div>
+    <span style="color:var(--teal)"><b>三列是同一件事的三种说法。</b>做题时哪一列顺手就用哪一列——
+    这也正是《线代9讲》敢把方程组放在向量组<b>前面</b>讲的底气：第三列讲透了，前两列自动就有了。</span>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 坐标为什么是"良定义"的——回头看定理 2（挖）</span>
+    <b>书上说</b>：「若 $\alpha_1,\cdots,\alpha_r$ 是 $r$ 维向量空间 $V$ 的一个基，则 $V$ 中任一向量 $\xi$ 都可由这个基<b>唯一地</b>线性表示」；<br>
+    <b>潜台词是</b>：这个"唯一"<b>不是新定理，就是 <a href="#s3">§三定理 2</a> 的表示唯一性</b>——
+    基的两条要求（无关 + 能表示全部）恰好是定理 2 的两个前提。<em>所以"坐标"不是凭空定义出来的，它是定理 2 挣来的。</em><br>
+    <b>所以能考</b>：<b>(i)</b> 一旦看到"基"，就自动获得"坐标唯一"这个可用条件——
+    <a href="#eg-313">例 3.13</a>、<a href="#eg-67">强 6.7</a> 里"设坐标为 $[x_1,x_2,x_3]^{\mathrm T}$ 然后解方程"之所以合法，靠的就是它；
+    <b>(ii)</b> 反过来，若题目给的一组向量<b>没说是基</b>，你就不能直接谈"坐标"，得先验它无关（<a href="#eg-314">例 3.14</a> 第一步做的正是这件事）。
+  </div>
+
+  <h3>9.2　过渡矩阵与坐标变换：两个公式，方向相反</h3>
+  <div class="key"><span class="tag">必记 · 定理 8 与定理 9</span>
+    <b>定理 8（基变换）</b>：设 $\eta_1,\cdots,\eta_n$ 与 $\xi_1,\cdots,\xi_n$ 是 $\mathbf R^n$ 的两个基，若
+    <div class="fml">$$[\eta_1,\eta_2,\cdots,\eta_n]=[\xi_1,\xi_2,\cdots,\xi_n]\,C,$$</div>
+    则称 $C$ 为<b>由基 $\xi$ 到基 $\eta$ 的过渡矩阵</b>。<b>$C$ 的第 $i$ 列 ＝ $\eta_i$ 在基 $\xi$ 下的坐标</b>，且 $C$ 必<b>可逆</b>。<br>
+    <b>定理 9（坐标变换）</b>：设 $\alpha$ 在基 $\xi$ 与基 $\eta$ 下的坐标分别是 $x,y$，即 $\alpha=[\xi]x=[\eta]y$，则
+    <div class="fml">$$\boxed{\,x=Cy\qquad\text{或}\qquad y=C^{-1}x\,}$$</div>
+    <b>推法</b>：$\alpha=[\eta]y=([\xi]C)y=[\xi](Cy)$，与 $\alpha=[\xi]x$ 比较即得。
+  </div>
+
+  <div class="trap"><span class="tag">陷阱 · 本节唯一的送分/送命点：$C$ 写在哪一边</span>
+    书页 70 专门加了四个字：<b>「注意 $C$ 的位置」</b>。<br>
+    「由基 $\xi$ 到基 $\eta$ 的过渡矩阵 $C$」的定义是 <b>$[\eta]=[\xi]C$</b>，即 <b>新基 ＝ 旧基 $\cdot\,C$，$C$ 写在<u>右边</u></b>。
+    写成 $[\eta]=C[\xi]$ 或 $[\xi]=[\eta]C$ 都会让整题全错，<b>而且改不回来</b>（$C$ 会变成 $C^{-1}$ 或转置）。<br>
+    <b>求 $C$ 的公式</b>：$C=[\xi_1,\cdots,\xi_n]^{-1}[\eta_1,\cdots,\eta_n]$ —— <b>「旧的逆 × 新的」</b>，<u>旧在前</u>。
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 为什么基乘 $C$、坐标却乘 $C$ 在另一侧（挖）</span>
+    <b>书上说</b>：$[\eta]=[\xi]C$，而 $x=Cy$（$x$ 是<b>旧</b>基坐标，$y$ 是<b>新</b>基坐标）；<br>
+    <b>潜台词是</b>：<b>基和坐标的变换方向是相反的</b>——基从旧变新要"乘 $C$"，而<b>同一个向量</b>的坐标从新回旧才是"乘 $C$"。
+    直观理解：<em>把尺子刻度变密（基变"多"），同一根棍子量出来的读数就变小</em>，两者必然反向；<br>
+    <b>所以能考</b>：填空题最常见的错法就是把 $x=Cy$ 写成 $y=Cx$。<b>验算办法</b>：取 $\alpha=\eta_1$，它在新基下的坐标是 $y=e_1$，
+    在旧基下的坐标应当是 $C$ 的第 1 列——代进 $x=Cy=Ce_1=C$ 的第 1 列 ✔。<em>五秒钟就能自查。</em>
+  </div>
+
+  <!-- ---------- 交互模块 B：过渡矩阵实验台 ---------- -->
+  <div class="tool" id="lab">
+    <h4>🛠 过渡矩阵与坐标变换 实验台（数一专属）</h4>
+    <div class="hint">
+      本页第二个交互模块，专治「$C$ 写在哪边」和「$x=Cy$ 还是 $y=Cx$」这两个错。
+      左边填<b>旧基</b> $\xi_1,\xi_2,\xi_3$（按列），右边填<b>新基</b> $\eta_1,\eta_2,\eta_3$（按列），
+      下面填一个向量 $\alpha$。系统会实时算出 $C$、两组坐标，并<b>当场校验四个等式</b>：
+      $[\eta]=[\xi]C$、$\alpha=[\xi]x$、$\alpha=[\eta]y$、$x=Cy$。<br>
+      <b>建议动作</b>：① 点「例 3.13 / 强 6.7」装入书上原题，核对答案；
+      ② 点「故意写反」看看 $[\eta]=C[\xi]$ 会得到什么（<b>基本上是另一个矩阵</b>，这就是写反的后果）；
+      ③ 把 $\alpha$ 改成 $\eta_1$（点按钮），观察 $y$ 变成 $e_1$、而 $x$ 恰好是 $C$ 的第 1 列。全部用精确分数。
+    </div>
+    <div class="stepbar">
+      <select id="lb-preset"></select>
+      <button id="lb-eta1">令 $\alpha=\eta_1$</button>
+      <button id="lb-flip">故意写反 $[\eta]=C[\xi]$</button>
+      <button id="lb-reset">复位</button>
+    </div>
+    <div class="oplog" id="lb-note"></div>
+    <div class="lab">
+      <div class="pane"><div class="pt2">旧基 $[\xi_1,\ \xi_2,\ \xi_3]$（按列填）</div><div id="lb-xi"></div></div>
+      <div class="pane"><div class="pt2">新基 $[\eta_1,\ \eta_2,\ \eta_3]$（按列填）</div><div id="lb-eta"></div></div>
+    </div>
+    <div class="lab">
+      <div class="pane"><div class="pt2">向量 $\alpha$</div><div id="lb-a"></div></div>
+      <div class="pane"><div class="pt2">结果</div><div id="lb-out"></div></div>
+    </div>
+    <div class="resbox" id="lb-chk"></div>
+  </div>
+
+  <div class="eg" id="eg-313">
+    <div class="q"><span class="no">基 3.13 ✔ ＝ 强 6.7 的无参版</span><b>解答题</b>　设 $\mathbf R^3$ 中两个基
+      （Ⅰ）$\alpha_1=[1,1,0]^{\mathrm T},\ \alpha_2=[0,1,1]^{\mathrm T},\ \alpha_3=[1,0,1]^{\mathrm T}$，
+      （Ⅱ）$\beta_1=[1,0,0]^{\mathrm T},\ \beta_2=[1,1,0]^{\mathrm T},\ \beta_3=[1,1,1]^{\mathrm T}$。<br>
+      (1) 求由基 $\beta_1,\beta_2,\beta_3$ 到基 $\alpha_1,\alpha_2,\alpha_3$ 的过渡矩阵；<br>
+      (2) 已知 $\xi$ 在基（Ⅱ）下的坐标为 $[1,0,2]^{\mathrm T}$，求 $\xi$ 在基（Ⅰ）下的坐标。</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>第一步永远是把"由 A 到 B"翻译成等式</b>：由 $\beta$ 到 $\alpha$ ⟹ <b>$[\alpha]=[\beta]C$</b>（新的在左、旧的带 $C$ 在右）。写错这一步全盘皆错。</li>
+          <li>由 $[\alpha]=[\beta]C$ 解出 $C=[\beta]^{-1}[\alpha]$——<b>「旧的逆 × 新的」</b>。$[\beta]$ 是上三角，求逆很快。</li>
+          <li>(2) 有两条路：<b>路一</b>用坐标变换公式 $x=Cy$（$y$ 是新基坐标）；<b>路二</b>绕开 $C$，直接 $[\alpha]x=[\beta]y\Rightarrow x=[\alpha]^{-1}[\beta]y$。
+              <b>书上走的是路二</b>，因为本题里 $[\alpha]$ 求逆并不比用 $C$ 麻烦，而且<b>不用担心 $C$ 的方向记反</b>。</li>
+          <li><b>关键决策</b>：考场上若对方向没把握，一律走路二（写出 $\xi$ 的两种表达再解）——<em>路二不需要记任何公式，只需要"同一个向量的两种写法相等"。</em></li>
+        </ol>
+      </div>
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面<span class="score">按 10 分估</span></div>
+        <div class="step"><span class="k">解</span>　<b>(1)</b> 设 $[\alpha_1,\alpha_2,\alpha_3]=[\beta_1,\beta_2,\beta_3]C$，其中 $C$ 是所求过渡矩阵，则
+        $$C=[\beta_1,\beta_2,\beta_3]^{-1}[\alpha_1,\alpha_2,\alpha_3]
+        =\begin{bmatrix}1&1&1\\0&1&1\\0&0&1\end{bmatrix}^{-1}\begin{bmatrix}1&0&1\\1&1&0\\0&1&1\end{bmatrix}
+        =\begin{bmatrix}0&-1&1\\1&0&-1\\0&1&1\end{bmatrix}.$$<span class="pt">⛳ 5 分</span></div>
+        <div class="step"><span class="k">(2)</span>　设 $\xi$ 在基（Ⅰ）下的坐标为 $[x_1,x_2,x_3]^{\mathrm T}$，则
+        $$\xi=[\alpha_1,\alpha_2,\alpha_3]\begin{bmatrix}x_1\\x_2\\x_3\end{bmatrix}=[\beta_1,\beta_2,\beta_3]\begin{bmatrix}1\\0\\2\end{bmatrix},$$
+        于是<span class="pt">⛳ 2 分</span></div>
+        <div class="step">$$\begin{bmatrix}x_1\\x_2\\x_3\end{bmatrix}=[\alpha_1,\alpha_2,\alpha_3]^{-1}[\beta_1,\beta_2,\beta_3]\begin{bmatrix}1\\0\\2\end{bmatrix}
+        =\frac12\begin{bmatrix}1&1&-1\\-1&1&1\\1&-1&1\end{bmatrix}\begin{bmatrix}1&1&1\\0&1&1\\0&0&1\end{bmatrix}\begin{bmatrix}1\\0\\2\end{bmatrix}
+        =\frac12\begin{bmatrix}3\\1\\3\end{bmatrix}.$$<span class="pt">⛳ 2 分</span></div>
+        <div class="fin">故 $\xi$ 在基（Ⅰ）$\alpha_1,\alpha_2,\alpha_3$ 下的坐标为 $\left[\dfrac32,\ \dfrac12,\ \dfrac32\right]^{\mathrm T}$。<span class="pt">⛳ 1 分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（写完对照）</span>
+        <b>①</b> <span class="dock">扣分点</span>：(1) 不写"设 $[\alpha]=[\beta]C$"直接甩出 $C=[\beta]^{-1}[\alpha]$，扣 1 分。<b>过渡矩阵的方向是定义，必须先声明。</b><br>
+        <b>②</b> <b>自查方法（五秒）</b>：算完 $C$，检查 $[\beta]C$ 是不是等于 $[\alpha]$。本题 $[\beta]C=\begin{bmatrix}1&1&1\\0&1&1\\0&0&1\end{bmatrix}\begin{bmatrix}0&-1&1\\1&0&-1\\0&1&1\end{bmatrix}=\begin{bmatrix}1&0&1\\1&1&0\\0&1&1\end{bmatrix}=[\alpha]$ ✔。
+        <em>过渡矩阵的题一定要做这个乘法验算</em>，它比重算一遍快得多。<br>
+        <b>③</b> <b>路一写法（用公式，更短）</b>：由 $x=Cy$ 直接得 $x=\begin{bmatrix}0&-1&1\\1&0&-1\\0&1&1\end{bmatrix}\begin{bmatrix}1\\0\\2\end{bmatrix}=\begin{bmatrix}2\\-1\\2\end{bmatrix}$……
+        <span class="dock">⚠️ 这个结果是错的</span>——因为题给的 $[1,0,2]^{\mathrm T}$ 是<b>基（Ⅱ）$\beta$（即"旧基"）下的坐标</b>，
+        在 $[\alpha]=[\beta]C$ 这个约定下 $\beta$ 是旧、$\alpha$ 是新，故公式应为 <b>$x_\beta=Cx_\alpha$</b>，要求的 $x_\alpha=C^{-1}x_\beta$，不是 $Cx_\beta$。
+        <em>这正是"方向记反"的现场演示——所以我推荐走路二。</em><br>
+        <b>④</b> <b>$[\alpha]^{-1}$ 的那个 $\frac12$ 别丢</b>：$[\alpha_1,\alpha_2,\alpha_3]^{-1}=\frac12\begin{bmatrix}1&1&-1\\-1&1&1\\1&-1&1\end{bmatrix}$，
+        $|[\alpha]|=2$。最终答案带分母 2 是正常的，看到分数不要以为算错。<br>
+        <b>⑤</b> 已 sympy 验：$C$、$[\alpha]^{-1}$、最终坐标 $[3/2,1/2,3/2]^{\mathrm T}$ 三项全部与书一致。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg" id="eg-67">
+    <div class="q"><span class="no">强 6.7 ✔</span><b>解答题 · 基 3.13 的"埋参数"版</b>　设 $\mathbf R^3$ 中的基（Ⅰ）$\beta_1=[1,0,0]^{\mathrm T},\ \beta_2=[1,1,0]^{\mathrm T},\ \beta_3=[1,1,1]^{\mathrm T}$
+      到基（Ⅱ）$\alpha_1=[1,a,0]^{\mathrm T},\ \alpha_2=[0,1,b]^{\mathrm T},\ \alpha_3=[1,0,1]^{\mathrm T}$ 的过渡矩阵为 $\begin{bmatrix}0&-1&1\\1&0&-1\\0&1&1\end{bmatrix}$。<br>
+      (1) 求 $a,b$ 的值；　(2) 已知 $\xi$ 在基（Ⅰ）下的坐标为 $[1,0,2]^{\mathrm T}$，求 $\xi$ 在基（Ⅱ）下的坐标。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(1) $a=b=1$；(2) $\left[\dfrac32,\dfrac12,\dfrac32\right]^{\mathrm T}$</span><br>
+      <span class="lab">与基 3.13 的关系</span><b>把基 3.13 的 $\alpha_1,\alpha_2$ 里挖两个洞，再把答案 $C$ 反过来当条件给你</b>——
+      两题的数字完全一样（$a=b=1$ 代入后 $\alpha_1=[1,1,0]^{\mathrm T},\alpha_2=[0,1,1]^{\mathrm T}$，正是基 3.13 的（Ⅰ)）。
+      <em>这就是"强化 ＝ 基础题 + 埋参数 + 反问"的标准做法</em>，两题并排看一遍，这一类就通了。<br>
+      <span class="lab">(1) 解</span>设 $[\alpha_1,\alpha_2,\alpha_3]=[\beta_1,\beta_2,\beta_3]C$，则
+      $$C=[\beta]^{-1}[\alpha]=\begin{bmatrix}1&1&1\\0&1&1\\0&0&1\end{bmatrix}^{-1}\begin{bmatrix}1&0&1\\a&1&0\\0&b&1\end{bmatrix}
+      =\begin{bmatrix}1&-1&0\\0&1&-1\\0&0&1\end{bmatrix}\begin{bmatrix}1&0&1\\a&1&0\\0&b&1\end{bmatrix}
+      =\begin{bmatrix}1-a&-1&1\\a&1-b&-1\\0&b&1\end{bmatrix}.$$
+      令其等于题给的 $\begin{bmatrix}0&-1&1\\1&0&-1\\0&1&1\end{bmatrix}$，逐位比较得 $1-a=0,\ a=1,\ 1-b=0,\ b=1$，故 <b>$a=b=1$</b>。<br>
+      <span class="lab">(2) 解</span>与基 3.13 第 (2) 问完全相同：$[\alpha]x=[\beta][1,0,2]^{\mathrm T}$，解得 $x=\frac12[3,1,3]^{\mathrm T}$。<br>
+      <span class="lab">要害</span>(1) 的漂亮之处在于<b>不必解方程组</b>——把 $C$ 算成含 $a,b$ 的符号矩阵后<b>逐位比较</b>即可，
+      而且 <b>9 个位置提供了 4 个含参方程（$1-a,a,1-b,b$）却只有 2 个未知数</b>，剩下 5 个位置是<b>自动相符的</b>，正好当验算。
+      <em>若比较后出现矛盾（比如某位置要求 $a=1$ 另一位置要求 $a=2$），说明前面 $C$ 的方向写反了。</em><br>
+      <span class="lab">复核</span>已 sympy 符号求解：由 9 个位置的方程组解出唯一解 $\{a:1,b:1\}$；(2) 的坐标为 $[3/2,1/2,3/2]^{\mathrm T}$，与书一致。
+    </div>
+  </div>
+
+  <!-- ================= s10 施密特 ================= -->
+  <h2 id="s10"><span class="idx">十</span>施密特正交化 · 一张图讲完<span class="layer L-str">仅数学一</span></h2>
+
+  <div class="key"><span class="tag">必记 · 公式（两个向量的情形）</span>
+    <div class="fml">$$\beta_1=\alpha_1,\qquad \beta_2=\alpha_2-\frac{(\alpha_2,\beta_1)}{(\beta_1,\beta_1)}\beta_1,
+    \qquad \gamma_i=\frac{\beta_i}{\|\beta_i\|}.$$</div>
+    三个向量时再加一项：$\beta_3=\alpha_3-\dfrac{(\alpha_3,\beta_1)}{(\beta_1,\beta_1)}\beta_1-\dfrac{(\alpha_3,\beta_2)}{(\beta_2,\beta_2)}\beta_2$。
+    <b>正交化</b>（减投影）与<b>单位化</b>（除模长）是两步，别合并。
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 这个公式是"减去投影"，一张图就够（挖）</span>
+    <b>书上说</b>（书页 107，配图 3-3）：从 $\alpha_2$ 向 $\alpha_1$ 作垂线得向量 $\gamma$，其长度为 $\|\alpha_2\|\cos\theta$、方向为 $\frac{\alpha_1}{\|\alpha_1\|}$，
+    故 $\gamma=\|\alpha_2\|\cos\theta\cdot\frac{\alpha_1}{\|\alpha_1\|}$，于是 $\beta_2=\alpha_2-\gamma$ 就与 $\alpha_1$ 垂直；再把 $\|\alpha_1\|\|\alpha_2\|\cos\theta$ 认成内积 $(\alpha_2,\beta_1)$，就得到公式；<br>
+    <b>潜台词是</b>：<b>那个系数 $\frac{(\alpha_2,\beta_1)}{(\beta_1,\beta_1)}$ 不是硬记的，它就是"$\alpha_2$ 在 $\beta_1$ 方向上的投影长度 ÷ $\beta_1$ 的长度"</b>，
+    分母写成 $(\beta_1,\beta_1)=\|\beta_1\|^2$ 只是为了不出现根号；<br>
+    <b>所以能考</b>：<b>公式记不清时现推</b>——画个直角三角形，"斜边减投影＝垂直分量"，30 秒推回来。
+    <em>第 6 章正交变换化二次型时还要用它一次（把重根对应的特征向量正交化），那时更不能记混。</em>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 为什么"正交化"和"单位化"必须分成两步（挖）</span>
+    <b>书上说</b>：先算 $\beta_1,\beta_2$（正交化），再算 $\gamma_i=\beta_i/\|\beta_i\|$（单位化）；<br>
+    <b>潜台词是</b>：<b>顺序不能反，也不能合并</b>。因为正交化的每一步都要用到<u>前面已经算好的 $\beta$</u>（而不是 $\gamma$），
+    如果边算边开根号，<b>后面每一步的分母里都会滚进根号</b>，三个向量做完能把人算崩；
+    <em>先把所有 $\beta$ 用整数/分数算干净，最后统一除模长，全程只在最后一步出现根号。</em><br>
+    <b>所以能考</b>：<b>(i)</b> 这是纯粹的<b>计算策略</b>，但第 6 章正交化三个特征向量时能不能算对，八成取决于有没有守住它；
+    <b>(ii)</b> 另一个后果是——<b>$\beta_i$ 可以随意乘一个非零常数</b>（正交性不变），
+    所以算出 $\beta_2=[-\frac12,1,\frac12]^{\mathrm T}$ 时可以<b>先乘 2 化成 $[-1,2,1]^{\mathrm T}$ 再单位化</b>，答案一样但心算轻得多。
+  </div>
+
+  <svg class="fig" viewBox="0 0 420 190" width="420" role="img" aria-label="施密特正交化的投影图">
+    <defs>
+      <marker id="ah" markerWidth="9" markerHeight="7" refX="8.5" refY="3.5" orient="auto">
+        <polygon points="0 0, 9 3.5, 0 7" fill="currentColor"/>
+      </marker>
+    </defs>
+    <g style="color:var(--muted)">
+      <line x1="40" y1="150" x2="390" y2="150" stroke="currentColor" stroke-width="1" opacity=".35"/>
+    </g>
+    <g style="color:var(--accent)" stroke="currentColor" stroke-width="2" fill="none" marker-end="url(#ah)">
+      <line x1="40" y1="150" x2="300" y2="150"/>
+    </g>
+    <g style="color:var(--purple)" stroke="currentColor" stroke-width="2" fill="none" marker-end="url(#ah)">
+      <line x1="40" y1="150" x2="235" y2="40"/>
+    </g>
+    <g style="color:var(--green)" stroke="currentColor" stroke-width="2" fill="none" marker-end="url(#ah)">
+      <line x1="240" y1="150" x2="240" y2="48"/>
+    </g>
+    <g style="color:var(--amber)" stroke="currentColor" stroke-width="2.5" fill="none" marker-end="url(#ah)">
+      <line x1="40" y1="150" x2="232" y2="150"/>
+    </g>
+    <line x1="240" y1="150" x2="240" y2="45" stroke="currentColor" stroke-width="1" stroke-dasharray="4 3" style="color:var(--muted)" opacity=".6"/>
+    <line x1="235" y1="40" x2="240" y2="45" stroke="currentColor" stroke-width="1" stroke-dasharray="4 3" style="color:var(--muted)" opacity=".6"/>
+    <path d="M 240 138 L 252 138 L 252 150" fill="none" stroke="currentColor" stroke-width="1.2" style="color:var(--green)"/>
+    <path d="M 70 150 A 30 30 0 0 0 61 133" fill="none" stroke="currentColor" stroke-width="1.2" style="color:var(--muted)"/>
+    <text x="305" y="155" style="fill:var(--accent)">α₁ = β₁</text>
+    <text x="240" y="34" style="fill:var(--purple)">α₂</text>
+    <text x="250" y="95" style="fill:var(--green)">β₂ = α₂ − γ　（⊥ β₁）</text>
+    <text x="130" y="168" style="fill:var(--amber)">γ = 投影</text>
+    <text x="74" y="132" class="mut">θ</text>
+    <text x="40" y="182" class="mut">γ 的长度 = ‖α₂‖·cos θ　　方向 = α₁ ⁄ ‖α₁‖　⟹　γ = [(α₂,β₁)/(β₁,β₁)]·β₁</text>
+  </svg>
+
+  <div class="eg" id="eg-314">
+    <div class="q"><span class="no">基 3.14 ✔</span><b>填空题 · 施密特正交化</b>　设向量空间 $V$ 是由向量
+      $\alpha_1=\begin{bmatrix}1\\0\\1\end{bmatrix},\ \alpha_2=\begin{bmatrix}1\\2\\3\end{bmatrix},\ \alpha_3=\begin{bmatrix}2\\2\\4\end{bmatrix}$ 张成的，
+      即 $V=\mathrm{span}\{\alpha_1,\alpha_2,\alpha_3\}=\{k_1\alpha_1+k_2\alpha_2+k_3\alpha_3\mid k_i\in\mathbf R\}$，
+      则 $V$ 的一个<b>规范正交基</b>为________。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$\dfrac{1}{\sqrt2}\begin{bmatrix}1\\0\\1\end{bmatrix},\ \dfrac{1}{\sqrt6}\begin{bmatrix}-1\\2\\1\end{bmatrix}$（<b>只有两个</b>）</span><br>
+      <span class="lab">第一步（决定成败）</span><b>先算 $V$ 的维数，不要直接对三个向量做施密特。</b>
+      观察到 $\alpha_3=\alpha_1+\alpha_2$，且 $\alpha_1,\alpha_2$ 不成比例，故 $r=2$，<b>$V$ 是 3 维空间中的一张 2 维平面</b>，
+      $\alpha_1,\alpha_2$ 就是 $V$ 的一个基。<br>
+      <span class="lab">第二步 正交化</span>
+      $$\beta_1=\alpha_1=\begin{bmatrix}1\\0\\1\end{bmatrix},\qquad
+      \beta_2=\alpha_2-\frac{(\alpha_2,\beta_1)}{(\beta_1,\beta_1)}\beta_1=\begin{bmatrix}1\\2\\3\end{bmatrix}-\frac{4}{2}\begin{bmatrix}1\\0\\1\end{bmatrix}=\begin{bmatrix}-1\\2\\1\end{bmatrix}.$$
+      <span class="lab">第三步 单位化</span>$\|\beta_1\|=\sqrt2,\ \|\beta_2\|=\sqrt6$，故
+      $\gamma_1=\frac{1}{\sqrt2}[1,0,1]^{\mathrm T},\ \gamma_2=\frac{1}{\sqrt6}[-1,2,1]^{\mathrm T}$。<br>
+      <span class="lab">陷阱</span><span style="color:var(--red)"><b>题给三个向量，答案只有两个。</b></span>
+      书上专门在旁边手写：「<b>这里填两个向量而不是三个向量，这是因为此向量空间的维数是 2</b>」。<br>
+      <b>规范正交基的个数 ＝ 空间的维数 ＝ 秩</b>，<u>不是题目给了几个向量</u>。
+      <em>硬对三个向量做施密特，第三步会算出 $\beta_3=0$——零向量没法单位化（除以 0），这时才发现做错，已经浪费两分钟。</em><br>
+      <span class="lab">自查</span>写完验两件事：① $\gamma_1\cdot\gamma_2=\frac{1}{\sqrt{12}}(-1+0+1)=0$ ✔；② $\|\gamma_1\|=\|\gamma_2\|=1$ ✔。<b>两个内积一算，30 秒验完。</b><br>
+      <span class="lab">复核</span>已 sympy 验：$\alpha_3=\alpha_1+\alpha_2$；$\beta_2=[-1,2,1]^{\mathrm T}$；$\|\beta_1\|=\sqrt2,\|\beta_2\|=\sqrt6$；$\gamma_1\perp\gamma_2$ 且均为单位向量。
+    </div>
+  </div>
+
+  <div class="link"><span class="tag">串 · 施密特正交化在后面两处还要出现</span>
+    <b>① 本章 §一.3 正交矩阵</b>：把一组基施密特化后<b>拼成的方阵就是正交矩阵</b>（列是规范正交基 $\iff A^{\mathrm T}A=E$）；<br>
+    <b>② 第 5 章 实对称矩阵对角化</b>：实对称阵不同特征值的特征向量<b>自动正交</b>（不用施密特），
+    但<b>同一个重特征值对应的多个特征向量不一定正交</b>——<b>这时必须对<u>同一特征值内部</u>的那几个做施密特</b>，才能拼出正交矩阵 $Q$；<br>
+    <b>③ 第 6 章 正交变换化二次型</b>：上一条的 $Q$ 就是这里要用的正交变换阵。<br>
+    <span style="color:var(--teal)"><b>所以施密特这个公式在数一里一共只有三个用处，且集中在"求正交阵 $Q$"这一件事上。</b>
+    记住"只对同一重特征值内部做"，能省掉大量无用计算，也避免把已经正交的向量又算一遍。</span>
+  </div>
+
+  <!-- ================= s11 习题 ================= -->
+  <h2 id="s11"><span class="idx">十一</span>基础习题精练 3.1–3.12 · 全解<span class="layer L-base">基础</span></h2>
+
+  <div class="key"><span class="tag">必记 · 六道选择题的答案与"病根"速查</span>
+    <div class="gridwrap"><table>
+      <tr><th>题</th><th>答案</th><th>考点</th><th>错项的病根</th></tr>
+      <tr><td>3.1</td><td><b>(C)</b></td><td>$|A|=0\iff$ 列（行）向量组相关</td><td>(D) 把"至少有一列"说成"任一列"</td></tr>
+      <tr><td>3.2</td><td><b>(C)</b></td><td>含任意常数的向量组，找<b>恒</b>相关的那组</td><td>其余三组只是"可能相关"，取特殊值即可反驳</td></tr>
+      <tr><td>3.3</td><td><b>(C)</b></td><td>可表示 $\iff$ 方程组有解；行列式为 0 时<b>要回去查秩</b></td><td>只解 $|\cdot|\ne0$ 就下结论，漏掉 $\lambda=1$ 仍可表示</td></tr>
+      <tr><td>3.4</td><td><b>(A)</b></td><td>新组 = 旧组 × 系数阵，看系数阵行列式</td><td>误用 $|\alpha_1,\alpha_2,\alpha_3|$（$n$ 维不是方阵）</td></tr>
+      <tr><td>3.5</td><td><b>(C)</b></td><td>三个秩 $r_1,r_2,r_3$ 的相互制约</td><td>(C) 把 $r_2\le r_1$ 写成了 $r_2\gt r_1$</td></tr>
+      <tr><td>3.6</td><td><b>(C)</b></td><td>矩阵等价（要同型）vs 向量组等价（要同维）</td><td>(A) 漏同型；(B) 只单向；(D) 秩等推不出等价</td></tr>
+    </table></div>
+  </div>
+
+  <div class="eg"><div class="q"><span class="no">习 3.1 ✔</span>设 $A$ 是 4 阶矩阵，且 $|A|=0$，则 $A$ 中（　）。
+    (A) 必有一列元素全为 0　(B) 必有两列元素对应成比例　(C) 必有一列向量是其余列向量的线性组合　(D) 任一列向量是其余列向量的线性组合</div>
+    <div class="s"><span class="lab">答案</span><span class="ans">(C)</span>　
+      对方阵 $A$，$|A|=0\iff A$ 的列（行）向量组<b>线性相关</b>，由相关的必要条件（定理 1）即知 (C) 正确。<br>
+      <span class="lab">辨析</span>(A)(B) 是相关的<b>充分</b>条件不是必要条件（相关不一定长成那样）；
+      <b>(D) 是本题真正的坑</b>——与 <a href="#eg-33">例 3.3(C)</a> 完全同源：<b>相关只保证"至少有一列"能被其余表示，不是"任一列"</b>。
+      反例：$A$ 的第 1 列为零向量、其余三列无关，则第 2 列就<b>不能</b>由其余三列表示。
+    </div></div>
+
+  <div class="eg"><div class="q"><span class="no">习 3.2 ✔</span>设 $\alpha_1=\begin{bmatrix}0\\0\\c_1\end{bmatrix},\ \alpha_2=\begin{bmatrix}0\\1\\c_2\end{bmatrix},\ \alpha_3=\begin{bmatrix}1\\-1\\c_3\end{bmatrix},\ \alpha_4=\begin{bmatrix}-1\\1\\c_4\end{bmatrix}$，
+    其中 $c_1,c_2,c_3,c_4$ 为<b>任意</b>常数，则下列向量组<b>线性相关</b>的为（　）。
+    (A) $\alpha_1,\alpha_2,\alpha_3$　(B) $\alpha_1,\alpha_2,\alpha_4$　(C) $\alpha_1,\alpha_3,\alpha_4$　(D) $\alpha_2,\alpha_3,\alpha_4$</div>
+    <div class="s"><span class="lab">答案</span><span class="ans">(C)</span><br>
+      <span class="lab">审题</span>"$c_i$ 为<b>任意</b>常数"＝要找<b>无论 $c_i$ 取什么都相关</b>的那一组。所以：
+      <b>排除靠举一个特例，选定靠给一个恒等式。</b><br>
+      <span class="lab">排除</span>取 $c_1=1$，$|\alpha_1,\alpha_2,\alpha_3|=-1\ne0$、$|\alpha_1,\alpha_2,\alpha_4|=1\ne0$，排除 (A)(B)；
+      取 $c_2=0,c_3=c_4=1$，$|\alpha_2,\alpha_3,\alpha_4|=-2\ne0$，排除 (D)。故选 (C)。<br>
+      <span class="lab">正面理由（更快）</span>注意 $\alpha_3+\alpha_4=[0,0,c_3+c_4]^{\mathrm T}$，而 $\alpha_1=[0,0,c_1]^{\mathrm T}$——
+      <b>两者共线（前两个分量都是 0）</b>！于是恒有
+      $$(c_3+c_4)\,\alpha_1-c_1(\alpha_3+\alpha_4)=0,$$
+      对任意 $c_1,c_3,c_4$ 都成立，故 $\alpha_1,\alpha_3,\alpha_4$ <b>恒线性相关</b>。<br>
+      <span class="lab">要害</span><b>先看"哪些分量被写死了"</b>：$\alpha_1$ 前两位是 $0,0$，$\alpha_3+\alpha_4$ 前两位也是 $0,0$，
+      <em>参数全被塞在第三个分量上，而第三个分量单独一维、必然共线</em>。看出这一点，题目 10 秒结束，行列式一个都不用算。<br>
+      <span class="lab">复核</span>三个行列式值 $-1,1,-2$ 与恒等式已 sympy 验过（$|\alpha_1,\alpha_3,\alpha_4|$ 化简后<b>恒为 0</b>）。
+    </div></div>
+
+  <div class="eg"><div class="q"><span class="no">习 3.3 ✔</span>设 $\alpha_1=\begin{bmatrix}\lambda\\1\\1\end{bmatrix},\ \alpha_2=\begin{bmatrix}1\\\lambda\\1\end{bmatrix},\ \alpha_3=\begin{bmatrix}1\\1\\\lambda\end{bmatrix},\ \alpha_4=\begin{bmatrix}1\\\lambda\\\lambda^2\end{bmatrix}$。
+    若向量组 $\alpha_1,\alpha_2,\alpha_3$ 可由 $\alpha_1,\alpha_2,\alpha_4$ 线性表示，则 $\lambda$ 的取值范围是（　）。
+    (A) $\{1,-1\}$　(B) $\{\lambda\mid\lambda\ne1\}$　(C) $\{\lambda\mid\lambda\ne-1\}$　(D) $\{\lambda\mid\lambda\ne1,\lambda\ne-1\}$</div>
+    <div class="s"><span class="lab">答案</span><span class="ans">(C)</span><br>
+      <span class="lab">化简题目</span>$\alpha_1,\alpha_2$ 是两边共有的，<b>真正要问的只是 $\alpha_3$ 能否由 $\alpha_1,\alpha_2,\alpha_4$ 表示</b>，
+      即方程组 $x_1\alpha_1+x_2\alpha_2+x_3\alpha_4=\alpha_3$ 是否有解。<br>
+      <span class="lab">解</span>系数行列式
+      $$|\alpha_1,\alpha_2,\alpha_4|=\begin{vmatrix}\lambda&1&1\\1&\lambda&\lambda\\1&1&\lambda^2\end{vmatrix}=(\lambda^2-1)^2.$$
+      <b>① $\lambda\ne1$ 且 $\lambda\ne-1$</b>：行列式 $\ne0$，方程组有唯一解，<b>可表示</b>。<br>
+      <b>② $\lambda=1$</b>：此时 $\alpha_1=\alpha_2=\alpha_3=\alpha_4=[1,1,1]^{\mathrm T}$，显然 $\alpha_3$ <b>仍可</b>表示（$\alpha_3=\alpha_1$）。<br>
+      <b>③ $\lambda=-1$</b>：对增广矩阵作初等行变换
+      $$\bar A=[\alpha_1,\alpha_2,\alpha_4\vdots\alpha_3]=\begin{bmatrix}-1&1&1&\vdots&1\\1&-1&-1&\vdots&1\\1&1&1&\vdots&-1\end{bmatrix}
+      \longrightarrow\begin{bmatrix}1&0&0&\vdots&0\\0&1&1&\vdots&0\\0&0&0&\vdots&1\end{bmatrix},$$
+      $r(A)=2\ne r(\bar A)=3$，<b>不能</b>表示。<br>
+      综上 $\lambda\ne-1$，<b>选 (C)</b>。<br>
+      <span class="lab">陷阱</span><span style="color:var(--red)"><b>行列式为 0 只说明"不能用克拉默法则一步定"，不等于无解。</b></span>
+      $\lambda=1$ 时行列式确实是 0，但方程组照样有（无穷多）解。<b>凡是"行列式含参且能取 0"的题，那些零点必须逐个回代查秩</b>——
+      本题的四个选项就是按"漏不漏 $\lambda=1$"、"漏不漏 $\lambda=-1$"排列组合出来的。<br>
+      <span class="lab">复核</span>已 sympy 验：$|\alpha_1,\alpha_2,\alpha_4|=(\lambda^2-1)^2$；$\lambda=1$ 可表示、$\lambda=-1$ 不可表示（$r=2$ vs $3$）；另取 $\lambda=0,2,3,\frac12,-2$ 均可表示。
+    </div></div>
+
+  <div class="eg" id="eg-x34"><div class="q"><span class="no">习 3.4 ✔</span>设 $n\,(n\ge3)$ 维向量组 $\alpha_1,\alpha_2,\alpha_3$ 线性无关，
+    若向量组 $l\alpha_2-\alpha_1,\ m\alpha_3-2\alpha_2,\ \alpha_1-3\alpha_3$ 线性相关，则 $m,l$ 应满足条件（　）。
+    (A) $lm=6$　(B) $lm=-6$　(C) $l+m=6$　(D) $l+m=-6$</div>
+    <div class="s"><span class="lab">答案</span><span class="ans">(A)</span><br>
+      <span class="lab">解</span>把新组写成"旧组 × 系数阵"：
+      $$[\,l\alpha_2-\alpha_1,\ m\alpha_3-2\alpha_2,\ \alpha_1-3\alpha_3\,]=[\alpha_1,\alpha_2,\alpha_3]\begin{bmatrix}-1&0&1\\l&-2&0\\0&m&-3\end{bmatrix}.$$
+      因 $\alpha_1,\alpha_2,\alpha_3$ 无关，$r([\alpha_1,\alpha_2,\alpha_3])=3$（<b>列满秩</b>），故新组的秩 $=$ 系数阵的秩。
+      新组相关 $\iff$ 系数阵秩 $\lt3$ $\iff$
+      $$\begin{vmatrix}-1&0&1\\l&-2&0\\0&m&-3\end{vmatrix}=lm-6=0\iff lm=6.$$
+      <span class="lab">★ 与例 3.4 的关键差别（书上的注专门讲了这点）</span>
+      <a href="#eg-34">例 3.4</a> 里 $\alpha$ 是 <b>4 维</b>且<b>恰好 4 个</b>，拼起来是方阵，可以取 $|\alpha_1,\cdots,\alpha_4|$；
+      <b>本题 $\alpha$ 是 $n\,(n\ge3)$ 维却只有 3 个</b>，<span style="color:var(--red)"><b>$[\alpha_1,\alpha_2,\alpha_3]$ 不是方阵，写 $|\alpha_1,\alpha_2,\alpha_3|$ 是错的</b></span>。
+      这里必须换成一条更一般的秩结论：
+      <div class="fml">$$\text{若 } r(A_{m\times n})=n\ (\textbf{列满秩}),\ \text{则 } r(A_{m\times n}B_{n\times s})=r(B_{n\times s}).$$</div>
+      <span class="lab">跨章</span>这条"<b>列满秩可左消</b>"来自<a href="线代_第02章_矩阵.html">第 2 章强 4.2</a>（消去律的正确版本）。
+      <em>它是"$|\cdot|$ 只能用于方阵"这个限制的通用替代品</em>——本章凡是"$n$ 维但个数少于 $n$"的题，全靠它。<br>
+      <span class="lab">复核</span>已 sympy 验：$\det=lm-6$；取 $(l,m)=(2,3),(3,2),(6,1),(1,6)$ 均相关，$(1,1),(2,2),(-2,3)$ 均无关。
+    </div></div>
+
+  <div class="eg"><div class="q"><span class="no">习 3.5 ✔</span>设（Ⅰ）$\alpha_1,\cdots,\alpha_s$ 秩为 $r_1$，（Ⅱ）$\beta_1,\cdots,\beta_t$ 秩为 $r_2$，
+    （Ⅲ）$\alpha_1,\cdots,\alpha_s,\beta_1,\cdots,\beta_t$ 秩为 $r_3$，则下列结论<b>不正确</b>的是（　）。<br>
+    (A) 若（Ⅰ）可由（Ⅱ）表示，则 $r_2=r_3$　(B) 若（Ⅱ）可由（Ⅰ）表示，则 $r_1=r_3$　
+    (C) 若 $r_1=r_3$，则 $r_2\gt r_1$　(D) 若 $r_2=r_3$，则 $r_1\le r_2$</div>
+    <div class="s"><span class="lab">答案</span><span class="ans">(C)（不正确的那个）</span><br>
+      <span class="lab">统一原理</span>全题只用一句话：<b>「$X$ 加进 $Y$ 后秩不变」$\iff$「$X$ 能被 $Y$ 表示」</b>（＝<a href="#s8">§八</a>那条翻译）。<br>
+      <b>(A)(B) 正确</b>：(Ⅰ) 能被 (Ⅱ) 表示 ⟹ 把 (Ⅰ) 加进 (Ⅱ) 秩不变 ⟹ $r_3=r_2$。(B) 同理。<br>
+      <b>(D) 正确</b>：$r_2=r_3$ ⟹ (Ⅰ) 能被 (Ⅱ) 表示 ⟹ 由"被表示的秩不大"得 $r_1\le r_2$。<br>
+      <b>(C) 错</b>：$r_1=r_3$ ⟹ (Ⅱ) 能被 (Ⅰ) 表示 ⟹ $r_2\le r_1$，<b>与 (C) 所说的 $r_2\gt r_1$ 恰好相反</b>。
+      （最简反例：(Ⅰ)(Ⅱ) 取同一组向量，则 $r_1=r_2=r_3$，$r_2\gt r_1$ 不成立。）<br>
+      <span class="lab">要害</span>四个选项其实是<b>同一条原理的四次调用</b>，方向各不相同。
+      <em>做这类题不要一个个"想像"，把那句翻译写在草稿纸上，逐条套。</em>
+    </div></div>
+
+  <div class="eg" id="eg-x36"><div class="q"><span class="no">习 3.6 ✔</span>设 $n$ 维向量组（Ⅰ）$\alpha_1,\cdots,\alpha_s$，（Ⅱ）$\beta_1,\cdots,\beta_t$，记 $A=[\alpha_1,\cdots,\alpha_s],\ B=[\beta_1,\cdots,\beta_t]$，则下列结论<b>正确</b>的是（　）。<br>
+    (A) 若 $r(Ⅰ)=r(Ⅱ)$，则 $A\cong B$　(B) 若（Ⅰ）可由（Ⅱ）表示，则（Ⅰ）$\cong$（Ⅱ）　
+    (C) 若 $r(A)=r(B)$，且（Ⅱ）可由（Ⅰ）表示，则（Ⅰ）$\cong$（Ⅱ）　(D) 若 $r(A)=r(B)$，则（Ⅰ）$\cong$（Ⅱ）</div>
+    <div class="s"><span class="lab">答案</span><span class="ans">(C)</span><br>
+      <span class="lab">这是 §八对照表的直接检验，四个选项各踩一个坑</span>
+      <div class="gridwrap"><table>
+        <tr><th>选项</th><th>踩的坑</th><th>说明</th></tr>
+        <tr><td><b>(A)</b></td><td><b>漏了"同型"</b></td><td>$A$ 是 $n\times s$、$B$ 是 $n\times t$，<b>$s$ 未必等于 $t$</b>。矩阵等价的大前提是同型，不同型时"等价"这个词根本无从谈起。</td></tr>
+        <tr><td><b>(B)</b></td><td><b>只有单向</b></td><td>向量组等价要<b>相互</b>表示。仅（Ⅰ）可由（Ⅱ）表示不够（见 <a href="#eg-66">强 6.6</a>，那题恰好构造了单向可表的情形）。</td></tr>
+        <tr><td><b>(C) ✔</b></td><td>——</td><td><b>秩相等 + 可单方向表示</b> ＝ 等价刻画第二条，正是定义。</td></tr>
+        <tr><td><b>(D)</b></td><td><b>秩等推不出等价</b></td><td>书给的反例：$A=\begin{bmatrix}1&0\\0&1\\0&0\end{bmatrix},\ B=\begin{bmatrix}0&1&-1\\0&0&0\\1&1&1\end{bmatrix}$，$r(A)=r(B)=2$，但两组<b>不能相互表示</b>（$A$ 的列都在 $x_3=0$ 平面上，$B$ 的列不在）。</td></tr>
+      </table></div>
+      <span class="lab">(C) 的严格证明（书上给了，值得看一遍）</span>由 $r(A)=r(B)$ 知 $r(Ⅰ)=r(Ⅱ)=:r$。
+      设（Ⅰ）(Ⅱ) 的极大无关组分别为 $\alpha_1,\cdots,\alpha_r$ 与 $\beta_1,\cdots,\beta_r$，记（Ⅲ）为两组合并。
+      由（Ⅱ）可由（Ⅰ）表示，故（Ⅰ）的极大无关组也是（Ⅲ）的极大无关组，$r(Ⅲ)=r$；
+      而<b>任意 $r$ 个线性无关的向量都是（Ⅲ）的极大无关组</b>，故（Ⅱ）的极大无关组也是（Ⅲ）的极大无关组，
+      于是（Ⅰ）中任一向量均可由（Ⅱ）的极大无关组表示，双向成立，（Ⅰ）$\cong$（Ⅱ）。<br>
+      <span class="lab">复核</span>(D) 的反例已 sympy 验：$r(A)=r(B)=2$，而 $r([A,B])=3\gt2$，故不能相互表示。
+    </div></div>
+
+  <div class="eg"><div class="q"><span class="no">习 3.7 ✔</span>设 $\alpha_1=[1,0,-1,2]^{\mathrm T},\ \alpha_2=[2,-1,-2,6]^{\mathrm T},\ \alpha_3=[3,1,t,4]^{\mathrm T}$ 线性无关，则参数 $t$ 满足________。</div>
+    <div class="s"><span class="lab">答案</span><span class="ans">$t\ne-3$</span>　3 个 4 维向量（$m\lt n$），走第三档化阶梯形：
+      $$[\alpha_1,\alpha_2,\alpha_3]=\begin{bmatrix}1&2&3\\0&-1&1\\-1&-2&t\\2&6&4\end{bmatrix}
+      \longrightarrow\begin{bmatrix}1&2&3\\0&1&-1\\0&0&t+3\\0&0&0\end{bmatrix},$$
+      无关 $\iff$ 秩 $=3\iff t+3\ne0\iff t\ne-3$。<br>
+      <span class="lab">提醒</span>填空题问"线性无关"，答案是<b>一个不等式</b>而不是等式。若问"线性相关"则答 $t=-3$。<b>看清问的是哪一个。</b><br>
+      <span class="lab">复核</span>已 sympy 验：$t=-3$ 时秩为 2，$t\in\{-4,-2,0,1,5\}$ 时秩均为 3。
+    </div></div>
+
+  <div class="eg" id="eg-x38">
+    <div class="q"><span class="no">习 3.8 ✔</span><b>解答题</b>　已知 $\alpha_1=[1,0,2,3]^{\mathrm T},\ \alpha_2=[1,1,3,5]^{\mathrm T},\ \alpha_3=[1,-1,a+2,1]^{\mathrm T},\ \alpha_4=[1,2,4,a+8]^{\mathrm T}$ 及 $\beta=[1,1,b+3,5]^{\mathrm T}$。<br>
+      (1) $a,b$ 为何值时，$\beta$ <b>不能</b>表示成 $\alpha_1,\alpha_2,\alpha_3,\alpha_4$ 的线性组合？<br>
+      (2) $a,b$ 为何值时，$\beta$ 有 $\alpha_1,\alpha_2,\alpha_3,\alpha_4$ <b>唯一</b>的线性表示式？并写出该表示式。</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路</span>
+        <ol>
+          <li>与 <a href="#eg-31">例 3.1</a> 是同一个模板（支线①），只是<b>参数 $a$ 出现了两次</b>（在 $\alpha_3$ 与 $\alpha_4$ 里），阶梯形最后两行都会含 $a$。</li>
+          <li>预判：阶梯形第 3 行会是 $[0,0,a+1,0\ \vdots\ b]$，第 4 行是 $[0,0,0,a+1\ \vdots\ 0]$——
+              <b>$a+1$ 同时出现在两行</b>，所以 $a=-1$ 时<b>一次掉两个台阶</b>，这与例 3.1（只掉一个）不同。</li>
+          <li>(2) 问"唯一表示式"，即要 $r=r(\bar A)=4$（未知数个数）。由第 4 行知只要 $a\ne-1$ 就满秩，<b>$b$ 不受限</b>。</li>
+          <li>写表示式要解一个含 $a,b$ 的方程组，<b>回代顺序从下往上</b>：先由第 4 行得 $x_4=0$，再往上逐个解。</li>
+        </ol>
+      </div>
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面<span class="score">按 11 分估</span></div>
+        <div class="step"><span class="k">解</span>　设 $\beta=x_1\alpha_1+x_2\alpha_2+x_3\alpha_3+x_4\alpha_4$，对增广矩阵作初等行变换：
+        $$[\alpha_1,\alpha_2,\alpha_3,\alpha_4\vdots\beta]=\begin{bmatrix}1&1&1&1&\vdots&1\\0&1&-1&2&\vdots&1\\2&3&a+2&4&\vdots&b+3\\3&5&1&a+8&\vdots&5\end{bmatrix}
+        \longrightarrow\begin{bmatrix}1&1&1&1&\vdots&1\\0&1&-1&2&\vdots&1\\0&0&a+1&0&\vdots&b\\0&0&0&a+1&\vdots&0\end{bmatrix}.\tag{1}$$<span class="pt">⛳ 4 分</span></div>
+        <div class="step"><span class="k">(1)</span>　<b>当 $a=-1$ 且 $b\ne0$ 时</b>，由 (1) 式第 3 行得 $0=b\ne0$，方程组无解，
+        此时 $\beta$ 不能表示成 $\alpha_1,\alpha_2,\alpha_3,\alpha_4$ 的线性组合。<span class="pt">⛳ 3 分</span></div>
+        <div class="step"><span class="k">(2)</span>　<b>当 $a\ne-1$ 时</b>，(1) 式的系数矩阵为上三角且对角元全非零，即系数行列式不等于零，
+        故方程组有唯一解，$\beta$ 可由 $\alpha_1,\cdots,\alpha_4$ 唯一表示。回代得
+        $$x_4=0,\quad x_3=\frac{b}{a+1},\quad x_2=\frac{a+b+1}{a+1},\quad x_1=-\frac{2b}{a+1},$$<span class="pt">⛳ 2 分</span></div>
+        <div class="fin">故 $\beta=-\dfrac{2b}{a+1}\,\alpha_1+\dfrac{a+b+1}{a+1}\,\alpha_2+\dfrac{b}{a+1}\,\alpha_3+0\cdot\alpha_4$。<span class="pt">⛳ 2 分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        <b>①</b> <span class="dock">扣分点</span>：(1) 漏写 "$b\ne0$" 只答 $a=-1$，扣 2 分。<b>$a=-1$ 且 $b=0$ 时方程组是有解的</b>（那时秩都降为 2，有无穷多解）。<br>
+        <b>②</b> <b>末项 $0\cdot\alpha_4$ 要不要写</b>：<b>建议写</b>。它是"$x_4=0$"这个结论的显式呈现，也提示阅卷人你确实解出了四个分量。<br>
+        <b>③</b> <b>提速</b>：$a\ne-1$ 时不必真的算行列式，(1) 式已是上三角形，<b>对角元 $1,1,a+1,a+1$ 全非零</b>就够了。<br>
+        <b>④</b> <b>与例 3.1 对照记</b>：例 3.1 是"$a$ 管唯一性、$b$ 管有解性"<b>分工明确</b>；本题是"<b>$a$ 同时管两件事</b>"（$a=-1$ 时两行一起塌），所以 (1) 问里 $a,b$ 是<b>联合</b>条件。<em>做完两题要能说出这个差别。</em><br>
+        <b>⑤</b> 已 sympy 符号求解验证四个系数与书完全一致；并验 $a=-1,b=1$ 无解、$a=-1,b=0$ 有解。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 3.9 ✔</span><b>解答题</b>　求向量组 $\alpha_1=[1,2,-5]^{\mathrm T},\ \alpha_2=[2,-1,2]^{\mathrm T},\ \alpha_3=[4,3,-8]^{\mathrm T},\ \alpha_4=[7,-1,1]^{\mathrm T}$
+      的秩、极大线性无关组，并将其余向量由极大线性无关组线性表示。</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路</span>
+        <ol>
+          <li>三问一体：<b>秩、极大无关组、表示式</b>——这正是 §五「化行最简形」一次交付的三样东西，不要分三次算。</li>
+          <li><b>关键决策：一定要化到行最简形</b>（不能停在阶梯形）。第三问的系数是从最简形的非主元列<b>直接读</b>的，停在阶梯形还得回代。</li>
+          <li>4 个 3 维向量，$m\gt n$，<b>可以预判必相关</b>，秩至多 3。</li>
+        </ol>
+      </div>
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面<span class="score">按 10 分估</span></div>
+        <div class="step"><span class="k">解</span>　将向量组按列合并成矩阵，作初等行变换化为行最简形：
+        $$[\alpha_1,\alpha_2,\alpha_3,\alpha_4]=\begin{bmatrix}1&2&4&7\\2&-1&3&-1\\-5&2&-8&1\end{bmatrix}
+        \longrightarrow\begin{bmatrix}1&2&4&7\\0&1&1&3\\0&0&0&0\end{bmatrix}.\tag{1}$$<span class="pt">⛳ 4 分</span></div>
+        <div class="step">由 (1) 式知 $r(\alpha_1,\alpha_2,\alpha_3,\alpha_4)=2$，主元位于第 1、2 列，故 <b>$\alpha_1,\alpha_2$ 是一个极大线性无关组</b>。<span class="pt">⛳ 3 分</span></div>
+        <div class="fin">由 (1) 式第 3、4 列读出：$\alpha_3=2\alpha_1+\alpha_2$，　$\alpha_4=\alpha_1+3\alpha_2$。<span class="pt">⛳ 3 分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        <b>①</b> 阶梯形 (1) 的第 1 行不是 $[1,0,\ast,\ast]$，还需再消一次才是严格的行最简形；<b>但由于第 2 行首元已是 1，直接回代两步即可读出系数</b>，考场上这样写不扣分。
+        追求稳妥就再消一步化成 $\begin{bmatrix}1&0&2&1\\0&1&1&3\\0&0&0&0\end{bmatrix}$ ——<b>此时第 3 列 $[2,1]^{\mathrm T}$、第 4 列 $[1,3]^{\mathrm T}$ 就是答案，一个字都不用算。</b><br>
+        <b>②</b> <b>30 秒验算</b>：$2\alpha_1+\alpha_2=2[1,2,-5]+[2,-1,2]=[4,3,-8]=\alpha_3$ ✔；$\alpha_1+3\alpha_2=[1,2,-5]+3[2,-1,2]=[7,-1,1]=\alpha_4$ ✔。<b>表示式题一定要代回去验，成本极低。</b><br>
+        <b>③</b> <b>"极大无关组不唯一"要不要声明</b>：题目问"极大线性无关组"（未加"全部"），写出一组即可，可加一句"（不唯一）"更稳妥。<br>
+        <b>④</b> 已 sympy 验：秩为 2，$\alpha_1,\alpha_2$ 无关，两个表示式成立。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 3.10 ✔</span><b>解答题</b>　已知向量组 $\beta_1=\begin{bmatrix}0\\1\\-1\end{bmatrix},\ \beta_2=\begin{bmatrix}a\\2\\1\end{bmatrix},\ \beta_3=\begin{bmatrix}b\\1\\0\end{bmatrix}$
+      与向量组 $\alpha_1=\begin{bmatrix}1\\2\\-3\end{bmatrix},\ \alpha_2=\begin{bmatrix}3\\0\\1\end{bmatrix},\ \alpha_3=\begin{bmatrix}9\\6\\-7\end{bmatrix}$ 具有<b>相同的秩</b>，
+      且 $\beta_3$ 可由 $\alpha_1,\alpha_2,\alpha_3$ 线性表示，求 $a,b$ 的值。</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路</span>
+        <ol>
+          <li><b>两个条件 → 两个方程 → 两个未知数</b>，数目正好对上，说明每个条件恰好贡献一个方程，一个都不能浪费。</li>
+          <li><b>第一件事永远是把"已知的那一组"算清楚</b>：$\alpha$ 组不含参数，先算它的秩。看出 $\alpha_3=3\alpha_1+2\alpha_2$，故 $r(\alpha)=2$。</li>
+          <li>条件一"秩相同" ⟹ $r(\beta)=2\lt3$ ⟹ <b>$|\beta_1,\beta_2,\beta_3|=0$</b>，这是第一个方程。</li>
+          <li>条件二"$\beta_3$ 可由 $\alpha$ 组表示"：由于 $\alpha_1,\alpha_2$ 已是 $\alpha$ 组的极大无关组，
+              <b>等价于 $\beta_3$ 可由 $\alpha_1,\alpha_2$ 表示</b>，即 $\alpha_1,\alpha_2,\beta_3$ 相关，即 <b>$|\alpha_1,\alpha_2,\beta_3|=0$</b>——第二个方程。
+              <em>这一步的化简（三个 $\alpha$ 换成两个）是本题的技巧点。</em></li>
+        </ol>
+      </div>
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面<span class="score">按 11 分估</span></div>
+        <div class="step"><span class="k">解</span>　因为 $\alpha_1,\alpha_2$ 线性无关，且 $\alpha_3=3\alpha_1+2\alpha_2$，所以 $\alpha_1,\alpha_2,\alpha_3$ 线性相关，
+        且 $r(\alpha_1,\alpha_2,\alpha_3)=2$，$\alpha_1,\alpha_2$ 是它的一个极大线性无关组。<span class="pt">⛳ 3 分</span></div>
+        <div class="step">由于 $\beta_1,\beta_2,\beta_3$ 与 $\alpha_1,\alpha_2,\alpha_3$ 具有相同的秩，故 $r(\beta_1,\beta_2,\beta_3)=2\lt3$，
+        即 $\beta_1,\beta_2,\beta_3$ 线性相关，从而
+        $$\begin{vmatrix}0&a&b\\1&2&1\\-1&1&0\end{vmatrix}=0,$$
+        由此解得 $a=3b$。<span class="pt">⛳ 3 分</span></div>
+        <div class="step">又 $\beta_3$ 可由 $\alpha_1,\alpha_2,\alpha_3$ 线性表示，从而可由其极大无关组 $\alpha_1,\alpha_2$ 线性表示，
+        所以 $\alpha_1,\alpha_2,\beta_3$ 线性相关。于是
+        $$\begin{vmatrix}1&3&b\\2&0&1\\-3&1&0\end{vmatrix}=0,$$
+        即 $2b-10=0$，解得 $b=5$。<span class="pt">⛳ 3 分</span></div>
+        <div class="fin">代回 $a=3b$ 得 $a=15$。故 $a=15,\ b=5$。<span class="pt">⛳ 2 分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        <b>①</b> <b>本题的技巧点</b>：把"$\beta_3$ 可由 $\alpha_1,\alpha_2,\alpha_3$ 表示"降级成"可由 $\alpha_1,\alpha_2$ 表示"。
+        <em>因为 $\alpha_3$ 是多余的，带着它只会让矩阵变宽而不增加信息。</em><b>凡是"可由某组表示"，先把那组换成它的极大无关组。</b><br>
+        <b>②</b> <span class="dock">扣分点</span>：不说明"$\alpha_1,\alpha_2$ 是极大无关组"就直接用 $|\alpha_1,\alpha_2,\beta_3|=0$，扣 2 分——<b>为什么可以只用两个 $\alpha$，必须交代。</b><br>
+        <b>③</b> <b>两个行列式都是 3 阶且都有一个 0 元素</b>，按含 0 的那一行/列展开最快：第一个按第 1 列展开，第二个按第 3 列展开。<br>
+        <b>④</b> <b>最后要回代</b>：先得 $b=5$ 再由 $a=3b$ 得 $a=15$，<b>顺序不能反</b>（$a=3b$ 单独定不了值）。<br>
+        <b>⑤</b> 已 sympy 验：$\alpha_3=3\alpha_1+2\alpha_2$ ✔；$|\beta_1,\beta_2,\beta_3|=3b-a$（故 $a=3b$）✔；$|\alpha_1,\alpha_2,\beta_3|=2b-10$ ✔；$a=15,b=5$ 时两组秩均为 2，自洽。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg" id="eg-x311">
+    <div class="q"><span class="no">习 3.11 ✔</span><b>证明题</b>　设 $\alpha_1,\alpha_2,\alpha_3$ 为<b>两两正交</b>的<b>非零</b>向量，证明：$\alpha_1,\alpha_2,\alpha_3$ 线性无关。</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路</span>
+        <ol>
+          <li>证"无关"，起手式固定：<b>写 $k_1\alpha_1+k_2\alpha_2+k_3\alpha_3=0$，再证 $k_i$ 全为 0</b>。</li>
+          <li><b>题给的两个条件各有各的用处</b>：「两两正交」是<b>消项机器</b>（$(\alpha_i,\alpha_j)=0$），「非零」是<b>挡板</b>（保证 $(\alpha_i,\alpha_i)\gt0$ 可以除）。
+              <em>两个条件缺一不可——这就提示了该怎么用。</em></li>
+          <li>怎么让正交派上用场？<b>两边与 $\alpha_1$ 作内积</b>（打法②）：$(\alpha_1,\alpha_2)=(\alpha_1,\alpha_3)=0$ 一乘就把后两项打掉，只剩 $k_1(\alpha_1,\alpha_1)=0$。</li>
+          <li>再用挡板：$\alpha_1\ne0\Rightarrow(\alpha_1,\alpha_1)=\|\alpha_1\|^2\gt0\Rightarrow k_1=0$。同理得 $k_2=k_3=0$。</li>
+        </ol>
+      </div>
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面<span class="score">按 10 分估</span></div>
+        <div class="step"><span class="k">证</span>　设有一组常数 $k_1,k_2,k_3$，使
+        $$k_1\alpha_1+k_2\alpha_2+k_3\alpha_3=0.\tag{1}$$<span class="pt">⛳ 写定义式 2 分</span></div>
+        <div class="step">将 (1) 式两边与 $\alpha_1$ 作内积，由 $(\alpha_1,\alpha_2)=0,\ (\alpha_1,\alpha_3)=0$ 得
+        $$k_1(\alpha_1,\alpha_1)+k_2(\alpha_1,\alpha_2)+k_3(\alpha_1,\alpha_3)=k_1(\alpha_1,\alpha_1)=0.$$<span class="pt">⛳ 3 分</span></div>
+        <div class="step">又因为 $\alpha_1\ne0$，故 $(\alpha_1,\alpha_1)=\|\alpha_1\|^2\gt0$，于是 $k_1=0$。<span class="pt">⛳ 2 分</span></div>
+        <div class="step">同理，将 (1) 式两边分别与 $\alpha_2,\alpha_3$ 作内积，可得 $k_2=0,\ k_3=0$。<span class="pt">⛳ 2 分</span></div>
+        <div class="fin">故只有 $k_1=k_2=k_3=0$ 时 (1) 式成立，即 $\alpha_1,\alpha_2,\alpha_3$ 线性无关。<span class="pt">⛳ 1 分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        <b>①</b> <span class="dock">扣分点</span>：漏写"因为 $\alpha_1\ne0$，故 $(\alpha_1,\alpha_1)\gt0$"，扣 2 分。<b>这是"非零"这个条件唯一的用处，不写等于没用题给条件。</b><br>
+        <b>②</b> <b>结论可推广</b>：<b>任意一组两两正交的非零向量都线性无关</b>（个数不限于 3），证法一字不改。<b>这条结论本身要记住</b>，很多题里可以直接引用而不必重证。<br>
+        <b>③</b> <b>反过来不成立</b>：线性无关的向量<b>未必</b>正交（比如 $[1,0],[1,1]$）。<em>「正交 ⟹ 无关」是单向的，这正是施密特正交化存在的理由——把"无关"升级成"正交"。</em><br>
+        <b>④</b> <b>本题是"打法②作内积"的样板</b>，与 <a href="#eg-64">强 6.4</a>「打法①乘矩阵」构成一对：
+        <em>两者都是"两边同乘某个量，把不想要的项打成 0"，区别只在乘的是矩阵还是向量。</em>
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 3.12 ✔</span><b>解答题</b><span class="layer L-str">仅数一</span>　已知 $\mathbf R^3$ 的两个基
+      $\alpha_1=[1,0,-1]^{\mathrm T},\ \alpha_2=[2,1,1]^{\mathrm T},\ \alpha_3=[1,1,1]^{\mathrm T}$ 与
+      $\beta_1=[0,1,1]^{\mathrm T},\ \beta_2=[-1,1,0]^{\mathrm T},\ \beta_3=[1,2,1]^{\mathrm T}$。<br>
+      (1) 求由基 $\alpha_1,\alpha_2,\alpha_3$ 到基 $\beta_1,\beta_2,\beta_3$ 的过渡矩阵；<br>
+      (2) 求 $\gamma=[9,6,5]^{\mathrm T}$ 在这两个基下的坐标；<br>
+      (3) 求向量 $\delta$，使它在这两个基下有<b>相同</b>的坐标。</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路</span>
+        <ol>
+          <li>(1) 照定义写：由 $\alpha$ 到 $\beta$ ⟹ <b>$[\beta]=[\alpha]C$</b> ⟹ $C=[\alpha]^{-1}[\beta]$（旧的逆 × 新的）。</li>
+          <li>(2) 要两组坐标。<b>省事的做法</b>：先算容易的那一组（本题 $[\beta]y=\gamma$ 的方程组很好解，$\beta_1$ 第一个分量是 0），
+              另一组用 $x=Cy$ 一乘得到，<b>顺便还验证了 (1) 的 $C$ 对不对</b>——一举两得。</li>
+          <li>(3) "两基下坐标相同"是什么意思？设都是 $x$，则 $[\alpha]x=[\beta]x$，即 <b>$([\alpha]-[\beta])x=0$</b>——
+              一个齐次方程组。<b>问"有没有非零的 $\delta$"就是问这个组有没有非零解。</b></li>
+          <li><b>关键决策</b>：(3) 不要去凑，直接把 $\alpha_i-\beta_i$ 三个向量拼成矩阵求它的核。若行列式非零，答案就是"仅零向量"。</li>
+        </ol>
+      </div>
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面<span class="score">按 12 分估</span></div>
+        <div class="step"><span class="k">解</span>　<b>(1)</b> 设从基 $\alpha_1,\alpha_2,\alpha_3$ 到基 $\beta_1,\beta_2,\beta_3$ 的过渡矩阵是 $C$，则 $[\beta_1,\beta_2,\beta_3]=[\alpha_1,\alpha_2,\alpha_3]C$，故
+        $$C=[\alpha_1,\alpha_2,\alpha_3]^{-1}[\beta_1,\beta_2,\beta_3]
+        =\begin{bmatrix}1&2&1\\0&1&1\\-1&1&1\end{bmatrix}^{-1}\begin{bmatrix}0&-1&1\\1&1&2\\1&0&1\end{bmatrix}
+        =\begin{bmatrix}0&1&1\\-1&-3&-2\\2&4&4\end{bmatrix}.$$<span class="pt">⛳ 4 分</span></div>
+        <div class="step"><span class="k">(2)</span>　设 $\gamma$ 在基 $\beta_1,\beta_2,\beta_3$ 下的坐标是 $[y_1,y_2,y_3]^{\mathrm T}$，即 $y_1\beta_1+y_2\beta_2+y_3\beta_3=\gamma$，亦即
+        $$\begin{cases}-y_2+y_3=9,\\y_1+y_2+2y_3=6,\\y_1+y_3=5,\end{cases}\quad\text{解得}\quad y_1=0,\ y_2=-4,\ y_3=5.$$<span class="pt">⛳ 3 分</span></div>
+        <div class="step">设 $\gamma$ 在基 $\alpha_1,\alpha_2,\alpha_3$ 下的坐标是 $[x_1,x_2,x_3]^{\mathrm T}$，按坐标变换公式 $x=Cy$，有
+        $$\begin{bmatrix}x_1\\x_2\\x_3\end{bmatrix}=\begin{bmatrix}0&1&1\\-1&-3&-2\\2&4&4\end{bmatrix}\begin{bmatrix}0\\-4\\5\end{bmatrix}=\begin{bmatrix}1\\2\\4\end{bmatrix}.$$
+        故 $\gamma$ 在这两个基下的坐标分别是 $[1,2,4]^{\mathrm T}$ 与 $[0,-4,5]^{\mathrm T}$。<span class="pt">⛳ 2 分</span></div>
+        <div class="step"><span class="k">(3)</span>　设 $\delta=x_1\alpha_1+x_2\alpha_2+x_3\alpha_3=x_1\beta_1+x_2\beta_2+x_3\beta_3$，即
+        $$x_1(\alpha_1-\beta_1)+x_2(\alpha_2-\beta_2)+x_3(\alpha_3-\beta_3)=0,$$
+        亦即
+        $$\begin{cases}x_1+3x_2=0,\\-x_1-x_3=0,\\-2x_1+x_2=0,\end{cases}\quad\text{解得}\quad x_1=x_2=x_3=0.$$<span class="pt">⛳ 2 分</span></div>
+        <div class="fin">所以，<b>仅零向量</b> $\delta=0$ 在这两个基下有相同的坐标。<span class="pt">⛳ 1 分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        <b>①</b> <b>(2) 的两条路互为验算</b>：算完 $x=Cy=[1,2,4]^{\mathrm T}$ 后，可直接核对 $1\cdot\alpha_1+2\alpha_2+4\alpha_3=[1,0,-1]+[4,2,2]+[4,4,4]=[9,6,5]=\gamma$ ✔。
+        <em>过渡矩阵题必做这个验算，$C$ 一旦方向写反这里立刻暴露。</em><br>
+        <b>②</b> <b>(3) 的本质</b>：条件"两基下坐标相同"$\iff([\alpha]-[\beta])x=0$，而
+        $[\alpha]-[\beta]=\begin{bmatrix}1&3&0\\-1&0&-1\\-2&1&0\end{bmatrix}$，其行列式 $\ne0$，故只有零解。
+        <b>换个说法</b>：由 $[\beta]=[\alpha]C$ 与 $[\alpha]x=[\beta]x$ 得 $[\alpha]x=[\alpha]Cx$，两边左消可逆的 $[\alpha]$ 得 $(C-E)x=0$——
+        <b>$|C-E|\ne0$ 时只有零向量</b>。<em>用 $C$ 的这个写法更本质：答案只取决于 1 是不是 $C$ 的特征值（第 5 章的说法）。</em><br>
+        <b>③</b> <span class="dock">扣分点</span>：(3) 只答"$\delta=0$"不给方程组，扣 2 分——"求向量 $\delta$"要有求解过程。<br>
+        <b>④</b> <b>如果 $|C-E|=0$ 呢？</b>那就有非零解，$\delta$ 是一整族（解空间）。<em>本题答案是"只有零向量"，属于特例，别当成通例背。</em><br>
+        <b>⑤</b> 已 sympy 验：$C$、$y=[0,-4,5]^{\mathrm T}$、$x=[1,2,4]^{\mathrm T}$、$x=Cy$ 成立、$|C-E|\ne0$，五项全部与书一致。
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= outro ================= -->
+  <div class="outro">
+    <h3>📌 读完去做题（本章四件套 · 本地 PDF）</h3>
+    <div class="dolinks">
+      <div class="t">张宇分册 · 线代第 3 章</div>
+      <a href="../../张宇系列_分章易识别版/线性代数/03_向量组/线代_第03章_基础30讲.pdf">基础 30 讲</a>
+      <a href="../../张宇系列_分章易识别版/线性代数/03_向量组/线代_第03章_强化9讲_第6讲_向量组.pdf">线代9讲·第6讲 向量组</a>
+      <a href="../../张宇系列_分章易识别版/线性代数/03_向量组/线代_第03章_1000题_基础_题目.pdf">1000题·基础篇</a>
+      <a href="../../张宇系列_分章易识别版/线性代数/03_向量组/线代_第03章_1000题_强化_题目_第6讲_向量组.pdf">1000题·强化·向量组</a>
+      <div class="note">链接指向本地大 PDF（不推 GitHub，线上 Pages 打不开是正常的）。做错 → 回复盘中心报「1000题·线代第3章·错第X题·卡哪」生成四层错题页。</div>
+    </div>
+
+    <p><b>自测清单（合上页面能不能答出来）</b>：
+    ① 「向量组语言 ↔ 方程组语言 ↔ 秩语言」那张兑换表，四行能默出来吗？<br>
+    ② 定理 6、7 的<b>四句口诀</b>是什么？方向怎么记（相关往哪传、无关往哪传）？<br>
+    ③ 支线①的三种情形（无解/唯一解/无穷多解）分别对应哪三个秩的关系？<b>第三种要多写什么</b>？<br>
+    ④ 判相关性时"个数 vs 维数"三档分别怎么做？为什么这一步值得单独当一个动作？<br>
+    ⑤ 求极大无关组为什么<b>不能</b>行、列变换混用？行变换保住的到底是什么？<br>
+    ⑥ 什么是<b>满秩分解</b>？$G,H$ 分别从哪来？它跟第 2 章求 $A^n$、第 5 章特征值怎么串成一条线？<br>
+    ⑦ 抽象型定义法的<b>四种打法</b>（乘矩阵 / 作内积 / 转齐次组 / 用定理）各配一道本页的题。<br>
+    ⑧ 「证秩<b>等式</b>用什么、证秩<b>不等式</b>用什么」——这两句方法论能说清吗？<br>
+    ⑨ $AB=O\Rightarrow r(A)+r(B)\le n$ 的完整来历（三层语言）能复述吗？<br>
+    ⑩ <b>矩阵等价</b>与<b>向量组等价</b>差在哪？各自的判据是什么？为什么"秩相等"对后者不够？<br>
+    ⑪ 过渡矩阵 $C$ 写在<u>哪一边</u>？$x=Cy$ 里 $x,y$ 各是哪个基下的坐标？<b>五秒自查法</b>是什么？<br>
+    ⑫ 施密特公式里那个系数为什么是 $\frac{(\alpha_2,\beta_1)}{(\beta_1,\beta_1)}$？规范正交基的<b>个数</b>由什么决定？<br>
+    ⑬ <a href="#eg-33">例 3.3</a> 的四个反例能各举一个吗？它们的共同病根是什么？</p>
+
+    <p><b>真题锚点</b>：向量组很少<b>单独</b>出大题，但它是<b>第 4 章解方程组、第 5 章特征值、第 6 章二次型的共用语言</b>——
+    大题里"证明某组向量线性无关"「求极大无关组」「判断两组是否等价」通常是第 (1) 小问，占 4–6 分，<b>丢了后面全崩</b>。<br>
+    本章的 KPI 是三件事：<b>(1) 「向量组 ↔ 方程组 ↔ 秩」三语互译成条件反射；(2) 行最简形一次性交付"秩 + 极大无关组 + 表示系数"三样东西；(3) 抽象题的起手式（写 $\sum k_i\alpha_i=0$ 再找该乘什么）永不犹豫。</b></p>
+
+    <p><b>配套速查</b>：<a href="../卡库_线代秩方程组特征值.html">卡库·线代：秩/方程组/特征值</a> ·
+    <a href="../公式大全_速查与秒杀.html">公式大全</a> · <a href="../知识串联_考纲主线.html">知识串联</a> ·
+    <a href="线代_第02章_矩阵.html">上一章：矩阵</a>。<br>
+    <b>下一章</b>：线代第 4 章 <b>线性方程组</b>（40 页，《线代9讲》第 <b>5</b> 讲）。
+    <span style="color:var(--teal)">本章与 ch4 是<b>成对</b>的：本页所有标 <b style="color:var(--teal)">串</b> 的青色块里，凡提到"解空间维数 $=n-r(A)$"「基础解系」「通解结构」的地方，
+    都是 ch4 要正式补证的位置——写完 ch4 后这里会回填双向锚点，两页互跳。</span><br>
+    本章交付两个模块：<a href="#stepper">极大无关组步进器</a> 与 <a href="#lab">过渡矩阵实验台</a>。</p>
+  </div>
+
+  <footer>由 Claude 维护 · 融合张宇《基础30讲·线代》第 3 讲 +《线代9讲》第 6 讲 · 概念正文为标准线代理论 ·
+  <b>14 道基础例题 + 12 道习题 + 7 道强化例题（共 33 题），以及七大定理、三条秩不等式、伴随矩阵秩三分公式，全部经 sympy 符号复算 / 随机矩阵批量对拍（秩不等式 600 组、$r(A^*)$ 200 组），与原书零分歧</b> ·
+  读图 40/40 页于 2026-08-03 一次性完成，写页全程只读讲义笔记 md</footer>
+</div>
+
+<script>
+/* ===================== 精确分数（两个模块共用） ===================== */
+function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){[a,b]=[b,a%b];}return a||1;}
+function F(n,d){ if(d===undefined)d=1; if(d<0){n=-n;d=-d;} const g=gcd(n,d)||1; return {n:n/g,d:d/g}; }
+const fAdd=(a,b)=>F(a.n*b.d+b.n*a.d, a.d*b.d);
+const fSub=(a,b)=>F(a.n*b.d-b.n*a.d, a.d*b.d);
+const fMul=(a,b)=>F(a.n*b.n, a.d*b.d);
+const fDiv=(a,b)=>F(a.n*b.d, a.d*b.n);
+const fZero=a=>a.n===0;
+function fStr(a){ if(a.n===0)return '0'; return a.d===1? String(a.n) : a.n+'/'+a.d; }
+const cloneM=M=>M.map(r=>r.map(x=>F(x.n,x.d)));
+
+/* ===================== 模块 A：极大无关组步进器 ===================== */
+(function(){
+  const PRESETS=[
+    {name:'基 3.7（4×5，答案 α₁,α₂,α₄）',
+     A:[[1,0,3,1,2],[-1,3,0,-2,1],[2,1,7,2,5],[4,2,14,0,10]]},
+    {name:'基 3.8（4×4，答案 α₁,α₂；B=[α₃,α₂]）',
+     A:[[1,-2,-1,2],[2,-3,-2,3],[2,-2,-2,2],[1,-1,-1,1]]},
+    {name:'强 6.3（a=1 代入，3×5，答案 α₁,α₂）',
+     A:[[1,-1,3,0,-1],[-1,0,-2,-1,-1],[1,1,1,2,3]]},
+    {name:'习 3.9（3×4，答案 α₁,α₂）',
+     A:[[1,2,4,7],[2,-1,3,-1],[-5,2,-8,1]]},
+    {name:'习 3.7（4×3，t=-3 时掉秩）',
+     A:[[1,2,3],[0,-1,1],[-1,-2,-3],[2,6,4]]},
+    {name:'例 3.5 型（范德蒙德 4×4，a=1,2,3,4）',
+     A:[[1,1,1,1],[1,2,3,4],[1,4,9,16],[1,8,27,64]]}
+  ];
+  const sel=document.getElementById('sp-preset');
+  PRESETS.forEach((p,i)=>{const o=document.createElement('option');o.value=i;o.textContent=p.name;sel.appendChild(o);});
+
+  let frames=[], idx=0, pivots=[], origin=null, finalM=null;
+
+  function buildFrames(raw){
+    const m=raw.length, n=raw[0].length;
+    let M=raw.map(r=>r.map(v=>F(v,1)));
+    origin=cloneM(M);
+    const fr=[{M:cloneM(M), op:'初始矩阵：把每个向量按<b>列</b>放进矩阵。', hi:[]}];
+    let row=0; const piv=[];
+    for(let col=0; col<n && row<m; col++){
+      // 找主元
+      let p=-1;
+      for(let i=row;i<m;i++){ if(!fZero(M[i][col])){p=i;break;} }
+      if(p<0){ fr.push({M:cloneM(M), op:'第 '+(col+1)+' 列在第 '+(row+1)+' 行及以下<b>全为 0</b> → 此列<b>没有主元</b>，跳过（它将是"多余"的向量）。', hi:[]}); continue; }
+      if(p!==row){ [M[p],M[row]]=[M[row],M[p]]; fr.push({M:cloneM(M), op:'<b>互换</b> r'+(row+1)+' ↔ r'+(p+1)+'，把非零元换到主元位。', hi:[[row,col],[p,col]]}); }
+      if(!(M[row][col].n===1&&M[row][col].d===1)){
+        const k=M[row][col]; const inv=fDiv(F(1,1),k);
+        for(let j=0;j<n;j++) M[row][j]=fMul(M[row][j],inv);
+        fr.push({M:cloneM(M), op:'<b>倍乘</b> r'+(row+1)+' × ('+fStr(inv)+')，把主元化为 1。', hi:[[row,col]]});
+      }
+      let did=[];
+      for(let i=0;i<m;i++){
+        if(i===row||fZero(M[i][col])) continue;
+        const f=M[i][col];
+        for(let j=0;j<n;j++) M[i][j]=fSub(M[i][j], fMul(f,M[row][j]));
+        did.push('r'+(i+1)+' − ('+fStr(f)+')·r'+(row+1));
+      }
+      if(did.length) fr.push({M:cloneM(M), op:'<b>倍加</b>：'+did.join('，')+' —— 把第 '+(col+1)+' 列主元以外的元素清零。', hi:[[row,col]]});
+      piv.push(col); row++;
+    }
+    fr.push({M:cloneM(M), op:'✅ 已是<b>行最简形</b>。台阶数 r = '+piv.length+'，主元列为第 '+piv.map(c=>c+1).join('、')+' 列。', hi:[]});
+    pivots=piv; finalM=cloneM(M);
+    return fr;
+  }
+
+  function renderM(M, pivCols, showHead, hi){
+    let s='<table class="mx">';
+    if(showHead){ s+='<tr>'; for(let j=0;j<M[0].length;j++) s+='<td class="colhd">α'+(j+1)+'</td>'; s+='</tr>'; }
+    for(let i=0;i<M.length;i++){
+      s+='<tr>';
+      for(let j=0;j<M[0].length;j++){
+        let cls='';
+        if(pivCols){ cls = pivCols.includes(j)?'piv':'free'; }
+        if(hi && hi.some(h=>h[0]===i&&h[1]===j)) cls='hi';
+        s+='<td class="'+cls+'">'+fStr(M[i][j])+'</td>';
+      }
+      s+='</tr>';
+    }
+    return s+'</table>';
+  }
+
+  function draw(){
+    const f=frames[idx];
+    const done = (idx===frames.length-1);
+    document.getElementById('sp-orig').innerHTML=renderM(origin, done?pivots:null, true, null);
+    document.getElementById('sp-cur').innerHTML=renderM(f.M, done?pivots:null, true, f.hi);
+    document.getElementById('sp-log').innerHTML='<b>第 '+idx+' 步：</b>'+f.op;
+    document.getElementById('sp-cnt').textContent=idx+' / '+(frames.length-1);
+    document.getElementById('sp-prev').disabled=(idx===0);
+    document.getElementById('sp-next').disabled=done;
+    const res=document.getElementById('sp-res');
+    if(!done){ res.innerHTML='<div class="ttl">走完全部步骤后，这里会给出极大无关组与表示式。</div>'; return; }
+    const n=finalM[0].length;
+    let html='<div class="ttl">读出的结论</div>';
+    html+='<div class="repline"><span class="badge p">极大无关组</span>'
+        + pivots.map(c=>'α'+(c+1)).join('，')
+        + '　（秩 r = '+pivots.length+'；此组<b>不唯一</b>，但个数唯一）</div>';
+    const frees=[]; for(let j=0;j<n;j++) if(!pivots.includes(j)) frees.push(j);
+    if(frees.length===0){
+      html+='<div class="repline"><span class="badge f">无多余向量</span>每一列都是主元列，该向量组本身就<b>线性无关</b>，极大无关组就是它自己。</div>';
+    }else{
+      html+='<div class="repline"><span class="badge f">多余向量的表示式</span>（系数直接从上面最简形的对应列<b>竖着读</b>下来）</div>';
+      frees.forEach(j=>{
+        let expr='';
+        pivots.forEach((pc,ri)=>{
+          const c=finalM[ri][j];
+          if(fZero(c)) return;
+          const mag=F(Math.abs(c.n), c.d);
+          const coef=(mag.n===1&&mag.d===1)? '' : fStr(mag)+'·';
+          const sign = expr ? (c.n>0?' + ':' − ') : (c.n<0?'−':'');
+          expr += sign+'<span class="cf">'+coef+'α'+(pc+1)+'</span>';
+        });
+        html+='<div class="repline">　　α'+(j+1)+' = '+(expr||'<span class="cf">0</span>')+'</div>';
+      });
+      html+='<div class="repline" style="color:var(--muted);font-size:.83rem;margin-top:6px">'
+          + '↑ 这一步就是<b>满秩分解</b> A = G·H 的来历：G = [主元列原样]，H = [最简形的非零行]。'
+          + '把 α 们的表示式排成矩阵，就是 H。</div>';
+    }
+    res.innerHTML=html;
+  }
+
+  function load(i){ frames=buildFrames(PRESETS[i].A); idx=0; draw(); }
+  sel.onchange=()=>load(+sel.value);
+  document.getElementById('sp-next').onclick=()=>{ if(idx<frames.length-1){idx++;draw();} };
+  document.getElementById('sp-prev').onclick=()=>{ if(idx>0){idx--;draw();} };
+  document.getElementById('sp-all').onclick=()=>{ idx=frames.length-1; draw(); };
+  document.getElementById('sp-reset').onclick=()=>{ idx=0; draw(); };
+  load(0);
+})();
+
+/* ===================== 模块 B：过渡矩阵实验台 ===================== */
+(function(){
+  const PRESETS=[
+    {name:'基 3.13 ＝ 强 6.7（同一组数）：旧基 β、新基 α，α 取书上的 ξ',
+     xi:[[1,1,1],[0,1,1],[0,0,1]], eta:[[1,0,1],[1,1,0],[0,1,1]], a:[3,2,2],
+     note:'书上答案：C=[[0,-1,1],[1,0,-1],[0,1,1]]；ξ 在旧基 β 下坐标 x=[1,0,2]ᵀ（题给），在新基 α 下坐标 y=[3/2,1/2,3/2]ᵀ（所求）。'},
+    {name:'习 3.12：旧基 α、新基 β，α 取 γ=[9,6,5]ᵀ',
+     xi:[[1,2,1],[0,1,1],[-1,1,1]], eta:[[0,-1,1],[1,1,2],[1,0,1]], a:[9,6,5],
+     note:'书上答案：C=[[0,1,1],[-1,-3,-2],[2,4,4]]；γ 在两基下的坐标分别是 x=[1,2,4]ᵀ 与 y=[0,-4,5]ᵀ。'},
+    {name:'自然基 → 旋转基（看坐标怎么变）',
+     xi:[[1,0,0],[0,1,0],[0,0,1]], eta:[[1,-1,0],[1,1,0],[0,0,1]], a:[2,0,1],
+     note:'旧基是自然基，所以 x 就是 α 本身；新基把 xy 平面转了 45° 并放大 √2 倍，看 y 怎么变。'},
+    {name:'退化例：新基第 3 列 = 前两列之和（不是基）',
+     xi:[[1,0,0],[0,1,0],[0,0,1]], eta:[[1,0,1],[0,1,1],[0,0,0]], a:[1,1,1],
+     note:'故意给一组线性相关的"基"，看系统怎么拦。'}
+  ];
+  const sel=document.getElementById('lb-preset');
+  PRESETS.forEach((p,i)=>{const o=document.createElement('option');o.value=i;o.textContent=p.name;sel.appendChild(o);});
+  let flipped=false;
+
+  function inputs(id, M, cols){
+    let s='';
+    for(let i=0;i<3;i++){ for(let j=0;j<cols;j++){ s+='<input id="'+id+'-'+i+'-'+j+'" value="'+M[i][j]+'">'; } s+='<br>'; }
+    return s;
+  }
+  function readM(id, cols){
+    const M=[];
+    for(let i=0;i<3;i++){ const r=[]; for(let j=0;j<cols;j++){
+      const v=document.getElementById(id+'-'+i+'-'+j).value.trim();
+      let f;
+      if(v.includes('/')){ const p=v.split('/'); f=F(parseInt(p[0],10)||0, parseInt(p[1],10)||1); }
+      else { const num=Number(v); if(!isFinite(num)) return null;
+             if(Number.isInteger(num)) f=F(num,1);
+             else { const d=Math.round(1/(num%1===0?1:(num-Math.floor(num)))); f=F(Math.round(num*d),d); } }
+      r.push(f); } M.push(r); }
+    return M;
+  }
+  const mMul=(A,B)=>A.map(r=>B[0].map((_,j)=>r.reduce((s,v,k)=>fAdd(s,fMul(v,B[k][j])),F(0,1))));
+  function mDet(M){
+    return fSub(fAdd(fMul(fMul(M[0][0],M[1][1]),M[2][2]), fAdd(fMul(fMul(M[0][1],M[1][2]),M[2][0]), fMul(fMul(M[0][2],M[1][0]),M[2][1]))),
+                fAdd(fMul(fMul(M[0][2],M[1][1]),M[2][0]), fAdd(fMul(fMul(M[0][0],M[1][2]),M[2][1]), fMul(fMul(M[0][1],M[1][0]),M[2][2]))));
+  }
+  function mInv(M){
+    const d=mDet(M); if(fZero(d)) return null;
+    const c=(i,j)=>{ const r=[0,1,2].filter(x=>x!==i), s=[0,1,2].filter(x=>x!==j);
+      const v=fSub(fMul(M[r[0]][s[0]],M[r[1]][s[1]]), fMul(M[r[0]][s[1]],M[r[1]][s[0]]));
+      return ((i+j)%2)? F(-v.n,v.d): v; };
+    const adj=[[0,1,2],[0,1,2],[0,1,2]].map((_,i)=>[0,1,2].map(j=>fDiv(c(j,i),d)));
+    return adj;
+  }
+  function show(M,cols){
+    let s='<table class="mx">';
+    for(let i=0;i<3;i++){ s+='<tr>'; for(let j=0;j<cols;j++) s+='<td>'+fStr(M[i][j])+'</td>'; s+='</tr>'; }
+    return s+'</table>';
+  }
+  const eqM=(A,B)=>A.every((r,i)=>r.every((v,j)=>v.n===B[i][j].n&&v.d===B[i][j].d));
+
+  function recompute(){
+    const xi=readM('lb-xi',3), eta=readM('lb-eta',3), a=readM('lb-a',1);
+    const out=document.getElementById('lb-out'), chk=document.getElementById('lb-chk');
+    if(!xi||!eta||!a){ out.innerHTML='<span class="warn">输入无法解析（支持整数与 3/2 这样的分数）。</span>'; chk.innerHTML=''; return; }
+    const dxi=mDet(xi), deta=mDet(eta);
+    if(fZero(dxi)||fZero(deta)){
+      out.innerHTML='<span class="warn">⚠ 这不是一组基：'+(fZero(dxi)?'旧基':'新基')+'的行列式为 0（三个向量线性相关，张不成 R³）。</span>'
+        +'<div style="color:var(--muted);font-size:.82rem;margin-top:6px">——顺便说明：<b>只有线性无关的向量组才配当基</b>，这就是 §九定义里第一个条件的意义。</div>';
+      chk.innerHTML=''; return;
+    }
+    const xiInv=mInv(xi), etaInv=mInv(eta);
+    // 正确定义： [eta] = [xi] C  =>  C = xi^{-1} eta ；写反时 C' = eta * xi^{-1}
+    const C = flipped ? mMul(eta, xiInv) : mMul(xiInv, eta);
+    const x = mMul(xiInv, a);   // alpha 在旧基下的坐标
+    const y = mMul(etaInv, a);  // alpha 在新基下的坐标
+    out.innerHTML =
+      '<div style="font-size:.76rem;color:var(--muted);margin-bottom:3px">过渡矩阵 C'
+        + (flipped?'（<span style="color:var(--red)">按写反的定义 [η]=C[ξ] 算</span>）':'（[η]=[ξ]C，正确）')+'</div>'
+      + show(C,3)
+      + '<div style="font-size:.76rem;color:var(--muted);margin:8px 0 3px">α 在<b>旧基 ξ</b> 下的坐标 x　|　在<b>新基 η</b> 下的坐标 y</div>'
+      + '<div class="mxrow" style="margin:0;gap:18px"><div>'+show(x,1)+'</div><div>'+show(y,1)+'</div></div>';
+
+    const c1=eqM(mMul(xi,C), eta);
+    const c2=eqM(mMul(xi,x), a);
+    const c3=eqM(mMul(eta,y), a);
+    const c4=eqM(mMul(C,y), x);
+    const mark=b=>b?'<span class="okmsg">✔ 成立</span>':'<span class="warn">✘ 不成立</span>';
+    chk.innerHTML='<div class="ttl">四个等式的实时校验</div>'
+      +'<div class="eqchk">[ξ]·C = [η]　'+mark(c1)+'　　（过渡矩阵的<b>定义</b>，C 必须写在<b>右边</b>）</div>'
+      +'<div class="eqchk">[ξ]·x = α　　'+mark(c2)+'　　（x 是 α 在旧基下的坐标）</div>'
+      +'<div class="eqchk">[η]·y = α　　'+mark(c3)+'　　（y 是 α 在新基下的坐标）</div>'
+      +'<div class="eqchk">C·y = x　　　'+mark(c4)+'　　（<b>坐标变换公式</b>：注意是 C 乘<b>新</b>坐标得<b>旧</b>坐标）</div>'
+      +(flipped
+        ? '<div class="repline" style="margin-top:8px;color:var(--red)"><b>现在处于「写反」模式</b>：C 按 [η]=C[ξ] 算成了 η·ξ⁻¹。'
+          +'看第 1 行和第 4 行——<b>两个都塌了</b>。这就是把过渡矩阵写在左边的后果：<u>定义式和坐标公式会同时失效</u>，'
+          +'而且算出来的 C 通常<b>不是</b>正确 C 的逆或转置，无法事后补救。</div>'
+        : '<div class="repline" style="margin-top:8px;color:var(--muted);font-size:.83rem">'
+          +'四行全 ✔ 才说明理解无误。试试点「令 α=η₁」：那时 y 应当是 [1,0,0]ᵀ，而 x 恰好是 <b>C 的第 1 列</b>——'
+          +'这正是「C 的第 i 列 = ηᵢ 在旧基 ξ 下的坐标」这句话的现场演示。</div>');
+  }
+
+  function load(i){
+    const p=PRESETS[i];
+    document.getElementById('lb-note').innerHTML='<b>本预设：</b>'+(p.note||'');
+    document.getElementById('lb-xi').innerHTML=inputs('lb-xi',p.xi,3);
+    document.getElementById('lb-eta').innerHTML=inputs('lb-eta',p.eta,3);
+    document.getElementById('lb-a').innerHTML=inputs('lb-a',p.a.map(v=>[v]),1);
+    document.querySelectorAll('#lb-xi input,#lb-eta input,#lb-a input').forEach(el=>el.oninput=recompute);
+    recompute();
+  }
+  sel.onchange=()=>load(+sel.value);
+  document.getElementById('lb-flip').onclick=function(){
+    flipped=!flipped;
+    this.textContent = flipped ? '改回正确定义 [η]=[ξ]C' : '故意写反 [η]=C[ξ]';
+    recompute();
+  };
+  document.getElementById('lb-eta1').onclick=()=>{
+    const eta=readM('lb-eta',3); if(!eta) return;
+    for(let i=0;i<3;i++) document.getElementById('lb-a-'+i+'-0').value=fStr(eta[i][0]);
+    recompute();
+  };
+  document.getElementById('lb-reset').onclick=()=>{ flipped=false;
+    document.getElementById('lb-flip').textContent='故意写反 [η]=C[ξ]';
+    load(+sel.value); };
+  load(0);
+})();
+</script>
+</body>
+</html>

@@ -7,6 +7,7 @@
   --purple:#6d5a8e; --purple-soft:#eeeaf5;
   --red:#b04a3a; --red-soft:#f9e9e6;
   --amber:#a5732a; --amber-soft:#f6ecd8;
+  --teal:#2f7a76; --teal-soft:#e3f0ef;
   --serif:"Georgia","Songti SC",serif;
   --sans:-apple-system,"PingFang SC","Helvetica Neue",sans-serif;
   --mono:"SF Mono","JetBrains Mono","Menlo",monospace;
@@ -20,6 +21,7 @@
     --purple:#a996c8; --purple-soft:#302a3d;
     --red:#d98876; --red-soft:#3d2a26;
     --amber:#d9ad61; --amber-soft:#38301f;
+    --teal:#6fbdb7; --teal-soft:#1f3230;
   }
 }
 *{box-sizing:border-box;margin:0;padding:0}
@@ -66,6 +68,21 @@ em{font-style:normal;background:var(--amber-soft);color:var(--amber);border-radi
 .trap{background:var(--red-soft);border-left:4px solid var(--red);border-radius:0 10px 10px 0;
   padding:12px 16px;margin:16px 0;clear:both}
 .trap .tag{display:block;font-size:.74rem;color:var(--red);letter-spacing:.06em;font-weight:700;margin-bottom:5px}
+
+/* ===== 批注的第二个维度：功能三层「筛 → 挖 → 串」（2026-08-03 立）=====
+   来源三色（.mine 补讲 / .key 必记 / .trap 陷阱）说的是**这句话从哪来**；
+   下面两个类说的是**这句话干什么用**，与来源正交，可以叠加使用：
+   .bg   「筛」——明确标出「这段是铺垫/背景，考试不碰」。一节里没有灰化段 = 没做筛选。
+   .link 「串」——就地标出与前后章、其他科的连接点。密度目标 ≥ 12 处/章。
+   （「挖」用现有的 .mine，但格式固定为「书上说 X → 潜台词是 Y → 所以能考 Z」，密度 ≥ 25 处/章。） */
+.bg{color:var(--muted);font-size:.85rem;line-height:1.8;border-left:2px solid var(--line);
+  padding:6px 0 6px 13px;margin:12px 0;clear:both}
+.bg .tag{font-size:.72rem;font-weight:700;letter-spacing:.06em;color:var(--muted);margin-right:6px}
+.bg b{color:var(--muted);font-weight:600}
+.link{background:var(--teal-soft);border-left:4px solid var(--teal);border-radius:0 10px 10px 0;
+  padding:11px 15px;margin:14px 0;font-size:.87rem;line-height:1.9;clear:both}
+.link .tag{display:block;font-size:.74rem;color:var(--teal);letter-spacing:.06em;font-weight:700;margin-bottom:5px}
+.link a{color:var(--teal)}
 
 /* 强化题型块（张宇三向解题法 / 强化专属题型） */
 .zy{background:var(--green-soft);border-left:4px solid var(--green);border-radius:0 10px 10px 0;
