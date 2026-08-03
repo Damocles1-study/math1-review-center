@@ -96,7 +96,7 @@
     <button class="allbtn" style="margin-left:0" onclick="toggleAll()">全部展开 / 收起</button>
   </div>
 
-  <h2 class="sect" data-g="rank"><span class="n">01</span>秩与方程组<span class="cnt">家族卡 4 + 触发器 2</span></h2>
+  <h2 class="sect" data-g="rank"><span class="n">01</span>秩与方程组<span class="cnt">家族卡 9 + 触发器 7</span></h2>
 
   <div class="cardk" data-g="rank">
     <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">秩的不等式家族(全员报数)</span><span class="arrow">▶</span></div>
@@ -153,6 +153,117 @@
       <div class="row r-when"><b>触发动作</b>方阵系数 → 先算 $|A|$(含参行列式):$|A|\ne0$ 的参数值 → 唯一解(克拉默);$|A|=0$ 的每个参数值<b style="display:inline">逐个代回</b>增广矩阵作初等行变换,比较 $r(A)$ 与 $r(A|b)$ 分「无解/无穷多解」。非方阵直接行变换讨论。</div>
       <div class="row r-conf"><b>易混点</b>行变换只能用「行」(增广矩阵动列会破坏 $b$ 的对应);讨论要<b style="display:inline">穷尽</b>每个使 $|A|=0$ 的参数值,漏一个丢一段分;答题时无穷多解要写出通解(特解+基础解系),别停在判定。</div>
       <div class="row r-src"><b>真题出处</b>大题常年款。待错题页反链。</div>
+    </div>
+  </div>
+
+  <!-- ===== ch3 + ch4 精读版回填（2026-08-03） ===== -->
+
+  <div class="cardk" data-g="rank">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">极大无关组 · 行最简形一次交付三样东西</span><span class="hintline">只能行变换</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论</b>把向量按<b style="display:inline">列</b>拼成矩阵,化<b style="display:inline">行最简形</b>,则:① 台阶数 $=r$;② <b style="display:inline">主元列</b>对应的原向量构成一个极大无关组;③ 非主元列的数字<b style="display:inline">竖着读</b>就是该向量被极大无关组表示的系数。由此得<b style="display:inline">满秩分解</b> $A=GH$:$G=$ 主元列原样,$H=$ 最简形的非零行。</div>
+      <div class="row r-when"><b>何时用</b>求极大无关组、求表示式、求满秩分解(ch2 用 $A=GH$ 降幂求 $A^n$ 的来料)。一次消元三样全出,别分三次算。</div>
+      <div class="row r-conf"><b>易混点</b><b style="display:inline">绝对不能行列变换混用</b>:列变换会改变列向量之间的线性关系,读出来的表示系数全错(求<b style="display:inline">秩</b>时可以混用,求<b style="display:inline">关系</b>时不行);极大无关组<b style="display:inline">不唯一</b>但个数唯一。</div>
+      <div class="row r-src"><b>真题出处</b>精读版 <a href="精读版/线代_第03章_向量组.html#s5">ch3 §五</a>(配步进器)。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="rank">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">$n-r(A)$ 的四个名字 · 与「一物三名」</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论</b>同一个数 $n-r(A)$ 有四个名字:<b style="display:inline">自由变量个数 = 解空间维数 = 基础解系向量个数 = 线性无关解的个数</b>。同一串数 $[x_1,\cdots,x_n]^T$ 也有三个名字:<b style="display:inline">① $\beta$ 被表示的组合系数 ② (数一)在基下的坐标 ③ 方程组的解</b>。<br>基础解系三条件:<b style="display:inline">①是解 ②线性无关 ③个数 $=n-r(A)$</b>。</div>
+      <div class="row r-when"><b>何时用</b>题问"基础解系含几个""解空间维数""最多几个无关解"——三问一个答案。选择题考基础解系时,火力 90% 打在②③上(①通常题目直接给)。</div>
+      <div class="row r-conf"><b>易混点</b>$n$ 是<b style="display:inline">列数(未知量个数)</b>,不是行数,两个方程组的 $n$ 可以不同;问 <b style="display:inline">$Ax=b$</b> 的解里最多几个无关 → 答 $n-r+1$(多的那个 1 是"平移量"$\eta^*$),问 <b style="display:inline">$Ax=0$</b> → 答 $n-r$。</div>
+      <div class="row r-src"><b>真题出处</b>精读版 <a href="精读版/线代_第04章_线性方程组.html#s1">ch4 §一</a>。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="rank">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">同解三判据 + 公共解三法</span><span class="hintline">先分清求交集还是判相等</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论 · 齐次同解(三选一)</b>① $r\left(\begin{bmatrix}A\\B\end{bmatrix}\right)=r(A)=r(B)$(三秩相同,最常用);② $A$ 与 $B$ 的<b style="display:inline">行向量组等价</b>;③ 存在 $P,Q$ 使 $B=PA,\ A=QB$(题给矩阵乘积/分块拼接时用)。<br>
+      <b>非齐次同解</b>(须先设两边<b style="display:inline">均有解</b>):$r\left(\left[\begin{smallmatrix}A&\beta\\B&\gamma\end{smallmatrix}\right]\right)=r\left(\begin{bmatrix}A\\B\end{bmatrix}\right)=r(A)=r(B)$。<br>
+      <b>公共解三法</b>:两组都给<b style="display:inline">系数矩阵</b> → 联立摞起来解;一组给<b style="display:inline">基础解系</b>另一组给矩阵 → 把通解<b style="display:inline">代入</b>(★最省力);两组都给基础解系 → 令两边组合<b style="display:inline">相等</b>配平。</div>
+      <div class="row r-when"><b>何时用</b>题里出现两个方程组:问"都满足的解" → 公共解(交集);问"解完全相同" → 同解(相等)。公共解集 $=V_A\cap V_B$,维数 $=n-r\left(\begin{bmatrix}A\\B\end{bmatrix}\right)$。</div>
+      <div class="row r-conf"><b>易混点</b>非齐次四条等价说法的前提是<b style="display:inline">两边均有解</b>(两个都无解时秩关系会乱);同解题<b style="display:inline">何时可单向验证</b>:仅当一组的方程<b style="display:inline">包含</b>另一组时(加方程型);<b style="display:inline">两组方程完全不同就必须双向</b>,代入求出参数后还要再验一次行最简形一致。</div>
+      <div class="row r-src"><b>真题出处</b>精读版 <a href="精读版/线代_第04章_线性方程组.html#s5">ch4 §五</a><a href="精读版/线代_第04章_线性方程组.html#s6">§六</a>。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="rank">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">(数一)三张平面的八种位置关系</span><span class="hintline">α 判方向 · β 判位置</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论 · 四条生成元</b>($i\ne j$,$\alpha_i$ 为 $A$ 的行=法向量,$\beta_i$ 为 $\bar A$ 的行):$\alpha_i,\alpha_j$ 相关 $\iff$ 平行<b style="display:inline">或</b>重合;无关 $\iff$ 相交;$\beta_i,\beta_j$ 相关 $\iff$ <b style="display:inline">重合</b>;无关 $\iff$ 不重合。<br>
+      <b>有解 4 种</b>:$r=r(\bar A)=3$ 交于一点;$=2$ 且任两 $\beta$ 无关 → 交于一直线;$=2$ 且有两 $\beta$ 相关 → 两面重合第三面相交;$=1$ 三面重合。<br>
+      <b>无解 4 种</b>:$r(A)=2,r(\bar A)=3$ 且任两 $\alpha$ 无关 → 三棱柱;有两 $\alpha$ 相关 → 两面平行第三面相交;$r(A)=1,r(\bar A)=2$ 且任两 $\beta$ 无关 → 三面平行不重合;有两 $\beta$ 相关 → 两面重合第三面平行。</div>
+      <div class="row r-when"><b>何时用</b>数一给图求参数(如三面交于一线求 $a,b$)。<b style="display:inline">八行不用背</b>:先由 $r(A),r(\bar A)$ 定有解/无解,再按下面这句挑字母现推。</div>
+      <div class="row r-conf"><b>易混点</b><b style="display:inline">要分"斜不斜"用 $\alpha$,要分"贴不贴"用 $\beta$</b>——$r(A)=2$ 的两种无解情形分的是平行还是相交(方向问题,用 $\alpha$);$r(A)=1$ 时方向已全部平行,只剩重合与否(位置问题,用 $\beta$)。<b style="display:inline">$\beta$ 相关必推出 $\alpha$ 相关,反之不然</b>。</div>
+      <div class="row r-src"><b>真题出处</b>精读版 <a href="精读版/线代_第04章_线性方程组.html#s7">ch4 §七</a>(配三平面实验台,可输入系数真解真画)。</div>
+    </div>
+  </div>
+
+  <div class="cardk trig" data-g="rank trig">
+    <div class="chead"><span class="badge b-trig">触发器</span><span class="name">见"解的线性组合" → 只数<b style="display:inline">系数和</b></span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-when"><b>触发动作</b>$\eta_i$ 都是 $Ax=b$ 的解时,$A\left(\sum c_i\eta_i\right)=\left(\sum c_i\right)b$,于是:<b style="display:inline">$\sum c_i=0$ ⟹ 是 $Ax=0$ 的解</b>;<b style="display:inline">$\sum c_i=1$ ⟹ 是 $Ax=b$ 的解(可当特解)</b>。给一堆解要凑基础解系时,配系数把和凑成 0;要凑特解,把和凑成 1(如 $\frac12(\eta_1+\eta_2)$)。</div>
+      <div class="row r-conf"><b>易混点</b>系数和只判"落在哪个集合",<b style="display:inline">不判线性无关</b>——造出两个齐次解后仍须单独验证无关且个数 $=n-r$,才配称基础解系。<b style="display:inline">判据管归属,不管资格。</b></div>
+      <div class="row r-src"><b>真题出处</b>精读版 <a href="精读版/线代_第04章_线性方程组.html#eg-49">基 4.9</a> / <a href="精读版/线代_第04章_线性方程组.html#xt-45">习 4.5</a>。</div>
+    </div>
+  </div>
+
+  <div class="cardk trig" data-g="rank trig">
+    <div class="chead"><span class="badge b-trig">触发器</span><span class="name">见"存在两个不同的解" → 无穷多解 → $|A|=0$</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-when"><b>触发动作</b>线性方程组的解只有 <b style="display:inline">0 / 1 / ∞</b> 三种个数,所以"有两个不同解""解不唯一""解集含至少两个元素"<b style="display:inline">全部等价于无穷多解</b> ⟹ $r(A)=r([A,b])\lt n$ ⟹ 方阵时 $|A|=0$。第一刀砍在行列式上,先把参数候选值挖出来。</div>
+      <div class="row r-conf"><b>易混点</b>$|A|=0$ 只保证"不唯一",<b style="display:inline">不保证有解</b>——解出的每个参数候选值都必须<b style="display:inline">逐个代回增广矩阵验有解性</b>,把变成"无解"的那个舍去。漏掉这一步会算出根本不存在的通解,整题全崩。</div>
+      <div class="row r-src"><b>真题出处</b>精读版 <a href="精读版/线代_第04章_线性方程组.html#eg-48">基 4.8</a>($\lambda=1$ 被验掉)。</div>
+    </div>
+  </div>
+
+  <div class="cardk trig" data-g="rank trig">
+    <div class="chead"><span class="badge b-trig">触发器</span><span class="name">见抽象条件 → 翻译成解向量(五条对照)</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-when"><b>触发动作</b>抽象型题没有套路,只有<b style="display:inline">这一张翻译表</b>:<br>
+      ① 向量关系式 $\alpha_1=2\alpha_2+\alpha_3$ → 移项配 0,系数排成列 $[1,-2,-1,0]^T$ 就是 $Ax=0$ 的解;<br>
+      ② $\beta=\alpha_1+2\alpha_2+3\alpha_3+4\alpha_4$ → $[1,2,3,4]^T$ 是 $Ax=\beta$ 的<b style="display:inline">特解</b>;<br>
+      ③ 通解形式 → 反过来读出向量间的表示关系(哪个系数与参数无关,该向量就不可缺席);<br>
+      ④ $AB=O$ → $B$ 的<b style="display:inline">每一列</b>都是 $Ax=0$ 的解(凑够 $n-r$ 个还能升格为基础解系);<br>
+      ⑤ $\alpha\perp\beta$ / $\alpha^T\beta=0$ → $\beta$ 是以 $\alpha$ 为<b style="display:inline">行</b>的齐次组的解。</div>
+      <div class="row r-conf"><b>易混点</b>翻译①时<b style="display:inline">系数为 0 的分量必须补上</b>(解向量维数 $=$ 向量个数);④只说"是解"不够,<b style="display:inline">要数够个数</b>才能说"任一解都能被它们表示"。</div>
+      <div class="row r-src"><b>真题出处</b>精读版 <a href="精读版/线代_第04章_线性方程组.html#s4">ch4 §四</a>(表在这里) · <a href="精读版/线代_第03章_向量组.html#eg-65">ch3 强 6.5</a>。</div>
+    </div>
+  </div>
+
+  <div class="cardk trig" data-g="rank trig">
+    <div class="chead"><span class="badge b-trig">触发器</span><span class="name">秩算不出来时 → <b style="display:inline">夹逼定秩</b></span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-when"><b>触发动作</b>系数矩阵含一堆字母、$r(A)$ 算不出时,<b style="display:inline">上下两头夹</b>:<br>
+      <b style="display:inline">上界</b>从"已知有几个线性无关解"来($k$ 个无关解 ⟹ $n-r\ge k$ ⟹ $r\le n-k$),或从形状来($r\le\min\{m,n\}$);<br>
+      <b style="display:inline">下界</b>从"能一眼看出无关的那几行/列"来(挑<b style="display:inline">字母最少</b>的两行比是否成比例),或从已知乘积来(如 $r(AB)=2\Rightarrow r(A)\ge2$)。<br>
+      两头相等即定死。同一手法还用于 $r(A^*)$:$A$ 有非零 $n-1$ 阶子式 ⟹ $r(A^*)\ge1$,$A^*A=O$ ⟹ $r(A^*)\le1$,夹出 $=1$。</div>
+      <div class="row r-conf"><b>易混点</b><b style="display:inline">只做上界不做下界</b>是高发错:由两个无关解得 $r\le2$ 就断言 $r=2$——万一 $r=1$,基础解系要多一个,答案整段错。</div>
+      <div class="row r-src"><b>真题出处</b>精读版 <a href="精读版/线代_第04章_线性方程组.html#xt-46">习 4.6</a> · <a href="精读版/线代_第04章_线性方程组.html#eg-43">基 4.3</a> · <a href="精读版/线代_第03章_向量组.html#eg-65">ch3 强 6.5</a>。</div>
+    </div>
+  </div>
+
+  <div class="cardk trig" data-g="rank trig">
+    <div class="chead"><span class="badge b-trig">触发器</span><span class="name">见方程组"拼接/乘积"形式 → 提<b style="display:inline">左乘因子</b></span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-when"><b>触发动作</b>两个方程组的系数阵能写成 $\begin{bmatrix}\ast\\ \ast\end{bmatrix}=M\begin{bmatrix}A\\B\end{bmatrix}$ 时:<b style="display:inline">$M$ 可逆 ⟹ 同解</b>($M$ 不可逆则不一定)。判 $M$ 可逆用<b style="display:inline">分块消元</b> $\begin{bmatrix}E&X\\E&Y\end{bmatrix}\to\begin{bmatrix}E&X\\O&Y-X\end{bmatrix}$。<br>
+      口诀:<b style="display:inline">左乘换方程(保解集),右乘换基(保秩)</b>——右乘版本是"新组 $=$ 旧组 $\times C$,$C$ 可逆 ⟺ 仍是基础解系"。</div>
+      <div class="row r-conf"><b>易混点</b>题问"<b style="display:inline">不一定</b>同解"时,只需说明左乘因子不可逆即可,<b style="display:inline">不必真造反例</b>;初等行变换就是左乘初等矩阵——这条原理与"求解只能行变换"是同一件事的两个粒度。</div>
+      <div class="row r-src"><b>真题出处</b>精读版 <a href="精读版/线代_第04章_线性方程组.html#eg-56">强 5.6</a>(与 <a href="精读版/线代_第04章_线性方程组.html#eg-45">基 4.5</a> 右乘版对读)。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="rank">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">等价矩阵 vs 等价向量组 · 五条判据总表</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论 ·「等价」两义</b><b style="display:inline">矩阵等价</b>:要<b style="display:inline">同型</b>,只看秩($A\cong B\iff$ 同型且 $r(A)=r(B)$);<b style="display:inline">向量组等价</b>:要<b style="display:inline">同维</b>,须<b style="display:inline">三秩相同</b>($r(\text{I})=r(\text{II})=r(\text{I},\text{II})$)。<b style="display:inline">秩相等对向量组等价远远不够。</b><br>
+      <b>五条判据总表</b>:① $Ax=0$ 只有零解 ⟹ $r(A)=n$,<b style="display:inline">推不出</b> $Ax=b$ 有解;② $Ax=0$ 有非零解 ⟹ $r(A)\lt n$,<b style="display:inline">同样推不出</b>;③ $A$ <b style="display:inline">行满秩</b> ⟹ $Ax=b$ <b style="display:inline">必有解</b>;④ $Ax=b$ 唯一解 ⟹ $Ax=0$ 只有零解;⑤ $Ax=b$ 无穷多解 ⟹ $Ax=0$ 有非零解。<b style="display:inline">④⑤ 不能倒推。</b></div>
+      <div class="row r-when"><b>何时用</b>选择题看<b style="display:inline">箭头方向</b>先秒杀一半:"齐次 ⟹ 非齐次"一律错(信息量不够,丢的是 $r([A,b])$),"非齐次 ⟹ 齐次"方向对再看内容。</div>
+      <div class="row r-conf"><b>易混点</b>口诀:<b style="display:inline">行满秩管"有没有解",列满秩管"唯不唯一"</b>;$r(A)=m$ 时增广矩阵是给每个行向量<b style="display:inline">加一个分量</b>,仍无关,故必有解。</div>
+      <div class="row r-src"><b>真题出处</b>精读版 <a href="精读版/线代_第04章_线性方程组.html#s8">ch4 §八</a> · <a href="精读版/线代_第03章_向量组.html#s8">ch3 §八</a>。</div>
     </div>
   </div>
 

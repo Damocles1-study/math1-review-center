@@ -1,0 +1,2294 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>精读版 · 线代 第4章 线性方程组</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],ignoredClasses:['nokatex']})"></script>
+<link rel="stylesheet" href="style.css">
+<style>
+/* ===== 本章专属：通解步进器 + 三平面位置关系实验台 ===== */
+.tool{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:20px 0;clear:both}
+.tool h4{margin:0 0 4px;font-size:1rem;color:var(--accent)}
+.tool .hint{color:var(--muted);font-size:.82rem;margin-bottom:12px;line-height:1.7}
+.stepbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:10px 0}
+.stepbar button{font:inherit;font-size:.84rem;padding:4px 14px;border-radius:8px;cursor:pointer;
+  border:1px solid var(--line);background:var(--accent-soft);color:var(--accent)}
+.stepbar button:hover:not(:disabled){filter:brightness(.94)}
+.stepbar button:disabled{opacity:.4;cursor:default}
+.stepbar select{font:inherit;font-size:.84rem;padding:4px 8px;border-radius:8px;max-width:100%;
+  border:1px solid var(--line);background:var(--card);color:var(--ink)}
+.stepbar .cnt{font-family:var(--mono);font-size:.8rem;color:var(--muted);margin-left:auto}
+.mxrow{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-start;justify-content:center;margin:12px 0}
+.mxbox{text-align:center}
+.mxbox .cap{font-size:.74rem;color:var(--muted);margin-bottom:5px}
+table.mx{border-collapse:collapse;margin:0 auto;min-width:0;width:auto;font-size:.9rem;
+  border-left:2px solid var(--ink);border-right:2px solid var(--ink);border-radius:3px}
+table.mx td{border:none;padding:3px 10px;text-align:center;font-family:var(--mono);
+  vertical-align:middle;transition:background .25s}
+table.mx td.piv{background:var(--green-soft);color:var(--green);font-weight:700;border-radius:4px}
+table.mx td.free{background:var(--amber-soft);color:var(--amber);border-radius:4px}
+table.mx td.hi{background:var(--blue-soft);color:var(--blue);border-radius:4px}
+table.mx td.aug{border-left:2px dashed var(--muted)}
+table.mx .colhd{font-size:.7rem;color:var(--muted);font-family:var(--sans);padding:0 10px 2px;border:none}
+.oplog{background:var(--accent-soft);border-radius:8px;padding:8px 12px;margin:10px 0;
+  font-size:.86rem;color:var(--accent);min-height:1.9em}
+.resbox{border-top:1px dashed var(--line);margin-top:12px;padding-top:10px;font-size:.88rem}
+.resbox .ttl{font-size:.74rem;font-weight:700;letter-spacing:.06em;color:var(--muted);margin-bottom:4px}
+.repline{font-size:.88rem;margin:3px 0}
+.repline .cf{color:var(--green);font-weight:700}
+.badge{display:inline-block;font-size:.7rem;font-weight:700;border-radius:5px;padding:1px 8px;margin-right:6px}
+.badge.p{background:var(--green-soft);color:var(--green)}
+.badge.f{background:var(--amber-soft);color:var(--amber)}
+.badge.r{background:var(--red-soft);color:var(--red)}
+
+/* 三平面实验台 */
+.plab{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:16px;margin:12px 0;align-items:start}
+@media(max-width:700px){.plab{grid-template-columns:1fr}}
+.plab .pane{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--bg)}
+.plab .pt2{font-size:.74rem;font-weight:700;color:var(--accent);margin-bottom:6px;letter-spacing:.05em}
+.eqrow{font-family:var(--mono);font-size:.84rem;margin:5px 0;white-space:nowrap;overflow-x:auto}
+.eqrow input{font:inherit;font-family:var(--mono);font-size:.84rem;width:3.2em;text-align:center;
+  border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--ink);padding:2px 0;margin:0 2px}
+.eqrow input:focus{outline:2px solid var(--accent);outline-offset:1px}
+.eqrow .pi{display:inline-block;width:2.4em;font-weight:700}
+.eqrow.p1 .pi{color:var(--blue)} .eqrow.p2 .pi{color:var(--amber)} .eqrow.p3 .pi{color:var(--green)}
+svg.scene{display:block;width:100%;height:auto;background:var(--card);border-radius:10px;border:1px solid var(--line)}
+.verdict{margin-top:10px;font-size:.9rem;line-height:1.85}
+.verdict .big{font-weight:700;font-size:1rem;color:var(--accent)}
+.verdict .rk{font-family:var(--mono);font-size:.85rem;color:var(--muted)}
+.caseline{font-size:.83rem;padding:3px 8px;border-radius:6px;margin:2px 0}
+.caseline.on{background:var(--accent-soft);color:var(--accent);font-weight:700}
+.caseline.off{color:var(--muted)}
+.tabmini{width:100%;border-collapse:collapse;font-size:.8rem;margin:6px 0;min-width:0}
+.tabmini td{border:1px solid var(--line);padding:4px 7px;vertical-align:middle}
+.tabmini tr.on td{background:var(--accent-soft);color:var(--accent);font-weight:700}
+svg.fig{display:block;margin:12px auto;max-width:100%;height:auto}
+svg.fig text{font-family:var(--sans);font-size:12px;fill:var(--ink)}
+svg.fig .mut{fill:var(--muted);font-size:11px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../index.html">← 返回 数学一复盘中心</a>
+  <header>
+    <h1>精读版 · 线代第 4 章　线性方程组</h1>
+    <div class="sub">融合张宇《基础30讲·线代分册》第 4 讲「线性方程组」+《线代9讲》第 <b>5</b> 讲「线性方程组」· 以张宇的<b>三向解题法（理论总结 / 三类问题 / 几何意义）</b>为主干 ·
+    <span class="layer L-base">基础</span> 打地基、<span class="layer L-str">强化</span> 上题型 ·
+    <b>全部 15 道基础例题 + 10 道习题 + 10 道强化例题（共 35 题），以及四秩相同、五条有解判据、八种平面位置关系，均用 sympy 符号复算 / 随机矩阵批量对拍，零分歧</b> ·
+    本章交付两个交互模块：<b>通解步进器</b>（增广矩阵 → 行最简形 → 直接读出特解与基础解系）与 <b>三平面位置关系实验台</b>（数一专属，真解真画）。</div>
+  </header>
+
+  <div class="legend">
+    <b>这一页的两个维度：</b><br>
+    <b>① 来源</b>（这句话从哪来）——
+    <span class="swatch" style="background:var(--blue)"></span><b style="color:var(--blue)">补讲</b>、
+    <span class="swatch" style="background:var(--amber)"></span><b style="color:var(--amber)">必记</b>、
+    <span class="swatch" style="background:var(--red)"></span><b style="color:var(--red)">陷阱</b>、
+    <span class="swatch" style="background:var(--green)"></span><b style="color:var(--green)">强化题型</b>。<br>
+    <b>② 功能</b>（这句话干什么用）——
+    <b style="color:var(--muted)">筛</b>：灰化的一段＝<b>铺垫背景，考试不碰</b>，可以快速滑过；
+    <span class="swatch" style="background:var(--blue)"></span><b style="color:var(--blue)">挖</b>：蓝块里凡带「潜台词」的，格式固定为<b>书上说 X → 潜台词是 Y → 所以能考 Z</b>；
+    <span class="swatch" style="background:var(--teal)"></span><b style="color:var(--teal)">串</b>：青色块＝<b>与前后章的连接点</b>。<br>
+    紫色 <b>例题</b> 卡里，<b>基</b>4.x = 基础30讲例题、<b>习</b>4.x = 基础30讲课后习题、<b>强</b>5.x = 线代9讲第 5 讲例题（三处各自编号，别混）。<b>每题都标 ✔</b> = 答案已被我用程序独立算过一遍，不是照抄扫描件。<br>
+    需要写过程的题按 <b>💭思路 → ✍️考场卷面 → 📌批注</b> 三层排（想 → 写 → 校）；<b>选择填空题不加卷面层</b>，保持教学式排版。
+  </div>
+
+  <nav class="toc">
+    <a href="#s0">定位 · 三向解题法与一物三名</a>
+    <a href="#s1">齐次 · 解的结构</a>
+    <a href="#s2">通法 🛠通解步进器</a>
+    <a href="#s3">非齐次 · 特解 + 导出组</a>
+    <a href="#s4">抽象型 · 系数和判据</a>
+    <a href="#s5">公共解 · 三法对照</a>
+    <a href="#s6">同解 · 三判据与左乘因子</a>
+    <a href="#s7">几何意义 🛠三平面实验台（数一）</a>
+    <a href="#s8">五条判据总表</a>
+    <a href="#s9">习题答案速查</a>
+  </nav>
+
+  <!-- ================= s0 定位 ================= -->
+  <h2 id="s0"><span class="idx">定位</span>这一章到底在学什么 · 三向解题法与「一物三名」</h2>
+
+  <div class="mine"><span class="tag">补讲 · 一句话定位</span>
+    第 3 章把「向量之间有没有多余的」说清楚了，但全是<b>形式</b>上的话。
+    <b>书上说</b>（书页 116 眉批原话）「上一讲向量组已经解决了形式上的问题，这一讲主要<b>落实到求解具体数字</b>」；
+    <b>潜台词是</b>：ch3 教你判断"能不能表示"，ch4 教你把那组表示系数<b>真的算出来</b>，并且在有无穷多组时，
+    用一个<b>有限的式子</b>（通解）把无穷多组一次写完；
+    <b>所以能考</b>：含参讨论（$\lambda$ 取何值有解/无解/无穷多解）、求通解、求公共解、判同解——
+    <em>四类题的第一步全是"对增广矩阵作初等行变换"，这个动作贯穿整门课。</em>
+  </div>
+
+  <div class="key"><span class="tag">必记 · 张宇写在书页 114 页边的总纲</span>
+    「<b>这部分主要考查求解</b>（平时多注意提升计算能力）」；两处求解方法与步骤旁又各写一遍
+    「<b>需要熟练掌握，属于必考知识点</b>」「<b>注重强化计算能力</b>」。<span class="exam">书页 114 原话</span><br>
+    <b>这是全章唯一一处张宇反复写三遍的话</b>：本章不像 ch3 那样靠"看破"取分，它靠<b>手不抖</b>取分。
+    大题里 8–10 分的求通解，错一个分数就是 0 分。
+  </div>
+
+  <div class="zy"><span class="tag">强化题型 · 张宇《线代9讲》第 5 讲的「三向解题法」（本页骨架）</span>
+    拿到一道方程组的题，<b>先认领它属于哪一向</b>：
+    <div class="gridwrap"><table>
+      <tr><th>向</th><th>问的是什么</th><th>张宇编码</th><th>本页位置</th></tr>
+      <tr><td><b>一 · 理论总结</b></td><td>齐次 $Ax=0$ / 非齐次 $Ax=b$ 的<b>有解条件、解的性质、通解结构</b></td><td>D₁ 常规操作</td><td><a href="#s1">§一</a><a href="#s3">§三</a></td></tr>
+      <tr><td><b>二 · 方程组问题</b></td><td>① 一般求解（含参常考）② <b>公共解</b> ③ <b>同解</b></td><td>O₁/O₂/O₃ 盯住目标 + D₁ + D₂₂ 转换等价表述 + P₂ 反证思路</td><td><a href="#s2">§二</a><a href="#s5">§五</a><a href="#s6">§六</a></td></tr>
+      <tr><td><b>三 · 几何意义</b><span class="layer L-str" style="margin-left:6px">仅数一</span></td><td>三张平面的<b>八种位置关系</b>与秩的对应</td><td>O₄ + D₁ + D₂₂ + D₄₃ 数形结合</td><td><a href="#s7">§七</a></td></tr>
+    </table></div>
+    <b>怎么用这张表</b>：考场上先问「题里出现了<b>几个</b>方程组」——
+    <em>一个 → 第一向（求解 / 含参讨论）；两个 → 第二向，再问「求交集还是判相等」（公共解 / 同解）；出现 $x,y,z$ 与"位置关系" → 第三向。</em>
+    本章 95% 的题就这三问分完。
+  </div>
+
+  <div class="link"><span class="tag">串 · 两种读法：ch3 与 ch4 为什么要成对读（与 <a href="线代_第03章_向量组.html#s0">ch3 §定位</a> 对读）</span>
+    <b>《基础30讲》的章序</b>：第 3 讲 <b>向量组</b> → 第 4 讲 <b>线性方程组</b>（先讲向量语言，再用它讲方程组）。<br>
+    <b>《线代9讲》的讲序恰好反过来</b>：第 <b>5</b> 讲 <b>线性方程组</b> → 第 <b>6</b> 讲 <b>向量组</b>（先把方程组讲透，再用方程组的视角统一讲向量组）。<br>
+    <b>你现在读的这一页把两种读法都装进来了</b>：正文按<b>基础章序</b>（承接 ch3 的向量语言）展开，
+    但每一处强化例题都保留张宇「用方程组统一一切」的视角。<br>
+    <span style="color:var(--teal)"><b>ch3 欠下、本章要还的三笔账</b>：
+    ① <a href="#s1">§一</a> 正式补证「解空间维数 $=n-r(A)$」（ch3 §七只借用了结论）；
+    ② <a href="#s4">§四</a> 把 ch3 强 6.5「向量关系式＝齐次解向量」写成可操作的判据；
+    ③ <a href="#s6">§六</a> 的「左乘因子可逆 ⟺ 同解」与 ch3 例 4.5「右乘因子可逆 ⟺ 仍是基础解系」是同一招的左右两侧。</span>
+  </div>
+
+  <div class="key"><span class="tag">必记 · 「一物三名」：本章与 ch3 的总接口（书页 116 的总结格）</span>
+    书上把这件事框成一格总结，<b>并在旁边写了一句</b>「不同场合下，有不同的名字」：
+    $$[x_1,x_2,\cdots,x_n]^{\mathrm T}\ 表示\begin{cases}
+    ①\ 自由项\ \beta\ 被\ \alpha_1,\cdots,\alpha_n\ 线性表示的\textbf{组合系数}\\[2pt]
+    ②\ （仅数学一）\alpha_1,\cdots,\alpha_n\ 在基下的\textbf{坐标}\\[2pt]
+    ③\ 方程组的\textbf{解}\end{cases}$$
+    <b>这三个名字指的是同一串数字。</b>考场上题目用哪个名字问，你就用最好算的那个名字答。
+  </div>
+
+  <div class="mine"><span class="tag">挖 · 「一物三名」的潜台词与考法</span>
+    <b>书上说</b>「方程组问题就是向量组问题，方程组和向量组是同一个问题的两种表现形式，其本质一样，所以解决方法也一样」；<br>
+    <b>潜台词是</b>：<em>凡是 ch3 里"能否表示 / 相关性 / 极大无关组"的题，都可以在三秒内改写成一道方程组的题，反之亦然</em>——
+    而两边的难度往往<b>相差很远</b>（向量组语言里要靠观察，方程组语言里只要化阶梯形）。<br>
+    <b>所以能考</b>：<a href="#eg-410">基 4.10</a>、<a href="#eg-411">基 4.11</a>、<a href="#eg-510">强 5.10</a> 三题就是纯粹的"换语言"题——
+    题面全是 $\alpha$ 与线性表示，一旦翻成 $Ax=\beta$，答案就浮出来了。
+    <b>本页每个概念后面都会跟一句"方程组说法 ↔ 向量组说法"的对照。</b>
+  </div>
+
+  <div class="gridwrap"><table>
+    <tr><th>同一件事</th><th>向量组语言（ch3）</th><th>方程组语言（ch4）</th><th>秩语言（通用）</th></tr>
+    <tr><td>β 能被表示</td><td>$\beta$ 可由 $\alpha_1,\cdots,\alpha_n$ 线性表示</td><td>$Ax=\beta$ <b>有解</b></td><td>$r(A)=r([A,\beta])$</td></tr>
+    <tr><td>表示法唯一</td><td>$\alpha_1,\cdots,\alpha_n$ 线性<b>无关</b>且能表示 β</td><td>$Ax=\beta$ 有<b>唯一解</b></td><td>$r(A)=r([A,\beta])=n$</td></tr>
+    <tr><td>有多余向量</td><td>$\alpha_1,\cdots,\alpha_n$ 线性<b>相关</b></td><td>$Ax=0$ 有<b>非零解</b></td><td>$r(A)\lt n$</td></tr>
+    <tr><td>独立的有几个</td><td>极大无关组含 $r$ 个</td><td>$Ax=0$ 的基础解系含 $n-r$ 个</td><td>$r(A)=r$</td></tr>
+    <tr><td>两组张成同一空间</td><td>两向量组<b>等价</b></td><td>两方程组<b>同解</b>（齐次）</td><td>$r(A)=r(B)=r\!\left(\begin{bmatrix}A\\B\end{bmatrix}\right)$</td></tr>
+  </table></div>
+  <div class="bg"><span class="tag">筛</span>上表第 1、3 行在 ch3 已经用熟了，<b>本章只需记住右两列的新说法</b>；第 4、5 行才是本章要正式建立的东西（基础解系的个数、同解的三秩判据），也是本章大题的取分点。表里没有一行需要背诵——它们都是同一句话「秩＝真实约束的个数」的不同穿着。</div>
+
+  <div class="dolinks">
+    <div class="t">本章体量</div>
+    基础30讲第 4 讲 <b>书页 114–138（25 页）</b> · 线代9讲第 5 讲 <b>书页 49–63（15 页）</b>，共 <b>40 页</b>。
+    例题：基础 15 道 + 习题 10 道 + 强化 10 道 = <b>35 道，本页全收</b>。
+    <div class="note">⚠️ 分章 PDF 的页码换算：基础30讲 <b>PDF 第 n 页 = 印刷书页 n+113</b>；强化第5讲 <b>PDF 第 n 页 = 印刷书页 n+48</b>。（资料索引 md 里写的"121–145 / 60–74"是整册 PDF 页，不是页眉。两处均与 ch3 的结尾页严丝合缝衔接，可交叉验证。）</div>
+  </div>
+
+  <!-- ================= s1 齐次 ================= -->
+  <h2 id="s1"><span class="idx">一</span>齐次线性方程组 · 解的结构<span class="layer L-base">基础</span></h2>
+
+  <div class="bg"><span class="tag">筛</span>$m$ 个方程、$n$ 个未知量的齐次方程组有三种写法：<b>方程组形式</b>（一堆等式）、<b>向量形式</b> $x_1\alpha_1+\cdots+x_n\alpha_n=0$、<b>矩阵形式</b> $A_{m\times n}x=0$。三种写法在考场上互相翻译是基本功，但<b>本身不出题</b>，快速滑过即可——真正出题的是下面「有解的条件」和「基础解系」。<span class="pg">书页 116</span></div>
+
+  <div class="key"><span class="tag">必记 · 有解的条件（两档，书上给②标了五颗星）</span>
+    <b>①</b> 当 $r(A)=n$（$\alpha_1,\cdots,\alpha_n$ 线性<b>无关</b>）时，$Ax=0$ <b>只有唯一零解</b>。<br>
+    <b>②</b> ★★★★★ 当 $r(A)=r\lt n$（$\alpha_1,\cdots,\alpha_n$ 线性<b>相关</b>）时，$Ax=0$ <b>有非零解（无穷多解）</b>，
+    且有 <b>$n-r$ 个线性无关解</b>。<span class="exam">书页 117 眉批：主要考查有非零解的情形</span>
+  </div>
+
+  <div class="mine"><span class="tag">挖 · $n-r(A)$ 这个数字有<b>四个名字</b>（书页 117 眉批链）</span>
+    <b>书上说</b>：「自由变量的个数 $s=n-r(A)$：<u>未知量的个数（也称自由度）</u> − <u>真实约束的个数</u>」，
+    「一个真实约束限制一个变量」，「（仅数学一）也称<b>解空间的维数</b>」，下面画了个双箭头指向「<b>基础解系所含向量的个数</b>」；<br>
+    <b>潜台词是</b>：<em>「方程有 $m$ 个」和「真实约束有 $r$ 个」是两件事</em>——写了 $m$ 行不代表限制了 $m$ 次，
+    重复的、能被别人推出来的方程<b>一个约束都不算</b>。化阶梯形的全部意义就是<b>数出真实约束到底有几个</b>；<br>
+    <b>所以能考</b>：题目问「基础解系含几个向量」「解空间维数是多少」「线性无关的解最多几个」——<b>三问同一个答案 $n-r(A)$</b>；
+    <a href="#eg-43">基 4.3</a> 一题两问（$Ax=0$ 与 $By=0$ 各几个无关解）就是拿这个数字直接考。
+    <em>注意 $n$ 是<b>列数</b>（未知量个数），不是行数——两个方程组的 $n$ 不同是 4.3 的全部机关。</em>
+  </div>
+
+  <div class="link"><span class="tag">串 · 这里正式补上 ch3 欠的证明</span>
+    <a href="线代_第03章_向量组.html#s7">ch3 §七</a> 证 $AB=O\Rightarrow r(A)+r(B)\le n$ 时，用了一句「$B$ 的每一列都是 $Ax=0$ 的解，而解空间维数 $=n-r(A)$」，
+    当时标注为「ch4 补证」。<b>现在补上</b>：$Ax=0$ 的解全体构成 $\mathbf R^n$ 的子空间，
+    基础解系就是它的一组<b>基</b>，基向量个数 $=n-r(A)$ 即维数——
+    于是 $B$ 的 $n_B$ 个列都落在这个 $(n-r(A))$ 维空间里，故 $r(B)\le n-r(A)$，移项即得。
+    <span style="color:var(--teal)"><b>这条路本章还会走三次</b>：<a href="#eg-51">强 5.1</a>（$AB^{\mathrm T}=O$ 反推基础解系）、<a href="#eg-44">基 4.4</a>（$A^*A=O$）、<a href="#eg-53">强 5.3</a>（反证不存在秩为 2 的 $C$）。</span>
+  </div>
+
+  <div class="key"><span class="tag">必记 · 基础解系的三个条件（证"是基础解系"就查这三条）</span>
+    设 $\xi_1,\xi_2,\cdots,\xi_s$ 满足
+    <b>①</b> 是 $Ax=0$ 的<b>解</b>；<b>②</b> 线性<b>无关</b>；<b>③</b> $Ax=0$ 的任一解均可由它们线性表示，即 <b>$s=n-r(A)$</b>，
+    则称它们是 $Ax=0$ 的一个<b>基础解系</b>。<br>
+    <b>通解</b>：$x=k_1\xi_1+k_2\xi_2+\cdots+k_{n-r}\xi_{n-r}$，$k_i$ 为任意常数。<span class="exam">书页 117–118 · 强化书页 51 各写一遍，眉批均标「牢记」</span>
+  </div>
+
+  <div class="mine"><span class="tag">挖 · 三个条件里<b>哪一条最容易忘</b></span>
+    <b>书上说</b>三条并列，且在强化第 5 讲又原样重复一遍；<br>
+    <b>潜台词是</b>：<em>选择题几乎从不考①（"是解"通常题目直接给），90% 的火力都打在②和③上</em>——
+    ②考"这组向量还线性无关吗"，③考"个数对不对"；<br>
+    <b>所以能考</b>：<a href="#eg-45">基 4.5</a>／<a href="#xt-44">习 4.4</a> 是同一道题的两次出现，四个选项全部是解向量，
+    <b>唯一的区别就是线性相关性</b>；<a href="#xt-44">习 4.4</a> 更狠，多给了两个干扰项——
+    "等价向量组"（个数可能多于秩 ⟹ 违反②）与"等秩向量组"（根本不在解空间里 ⟹ 违反①）。
+    <b>验收：默写三条件时，若你只想起"是解 + 无关"，就是漏了最常考的第③条。</b>
+  </div>
+
+  <div class="eg" id="eg-45">
+    <div class="q"><span class="no">基 4.5 ✔</span><b>选择题 · 判断哪组仍是基础解系</b>　设 $\xi_1,\xi_2,\xi_3$ 是 $Ax=0$ 的基础解系，则下列向量组中也是 $Ax=0$ 的基础解系的是（　）。<br>
+      (A) $\xi_1-\xi_2,\ \xi_2-\xi_3,\ \xi_3-\xi_1$　　(B) $\xi_1+\xi_2,\ \xi_2-\xi_3,\ \xi_3+\xi_1$<br>
+      (C) $\xi_1+\xi_2-\xi_3,\ \xi_1+2\xi_2+\xi_3,\ 2\xi_1+3\xi_2$　　(D) $\xi_1+\xi_2,\ \xi_2+\xi_3,\ \xi_3+\xi_1$</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路</span>
+        <ol>
+          <li><b>先用三条件筛一遍</b>：四个选项都是三个向量（③过），都是解向量的线性组合、由解的性质仍是解（①过）——<b>所以只剩②线性无关性可考</b>。张宇的【分析】原文就是这句话。</li>
+          <li>判"新组是否无关"有<b>通法</b>：把新组写成 $[\xi_1,\xi_2,\xi_3]C$，<b>$C$ 可逆 ⟺ 新组无关</b>。不要去凑系数。</li>
+          <li>考场上更快的是<b>反向找一个零组合</b>：三项相加/相减若能凑出 $0$，立刻排除。(A)(B)(C) 都能秒凑。</li>
+        </ol>
+      </div>
+      <div class="s" style="padding:0">
+        <p><span class="lab">答案</span><b class="ans">(D)</b></p>
+        <p><span class="lab">排除</span>
+        $(\xi_1-\xi_2)+(\xi_2-\xi_3)+(\xi_3-\xi_1)=0$；
+        $-(\xi_1+\xi_2)+(\xi_2-\xi_3)+(\xi_3+\xi_1)=0$；
+        $(\xi_1+\xi_2-\xi_3)+(\xi_1+2\xi_2+\xi_3)-(2\xi_1+3\xi_2)=0$。
+        故 (A)(B)(C) 均线性相关。</p>
+        <p><span class="lab">验证 (D)</span>
+        $[\xi_1+\xi_2,\ \xi_2+\xi_3,\ \xi_3+\xi_1]=[\xi_1,\xi_2,\xi_3]\begin{bmatrix}1&0&1\\1&1&0\\0&1&1\end{bmatrix}$，
+        而 $\begin{vmatrix}1&0&1\\1&1&0\\0&1&1\end{vmatrix}=2\ne0$，$C$ 可逆，故 (D) 线性无关。</p>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        <b>①</b> <b>「三项轮换相减必相关」是个可以背的模式</b>：形如 $\alpha-\beta,\ \beta-\gamma,\ \gamma-\alpha$ 的三元组，三者之和恒为 $0$，<u>永远线性相关</u>。选项里一见这种轮换差就直接划掉。<br>
+        <b>②</b> (B) 的伪装最好——它长得像 (D)，只有中间一项是减号。判据：<b>把三项的系数排成矩阵算行列式</b>，(B) 是 $\begin{vmatrix}1&0&1\\1&1&0\\0&-1&1\end{vmatrix}=0$。<span class="dock">考场手滑点</span>：行列式按列写还是按行写要固定，别一会儿一个样。<br>
+        <b>③</b> <b>$C$ 可逆 ⟺ 新组无关</b>——这条在本章还会以"左乘"的形式再出现一次（<a href="#eg-56">强 5.6</a>：$M$ 可逆 ⟺ 两方程组同解）。<b>右乘管向量组，左乘管方程组</b>，是同一招的两侧。<br>
+        <b>④</b> 四个选项的组合阵行列式已用 sympy 逐个算过：(A)(B)(C) 全为 $0$，(D) 为 $2$。
+      </div>
+    </div>
+  </div>
+
+  <div class="mine"><span class="tag">挖 · 「解的性质」这句平淡的话，是<b>整章结构的地基</b></span>
+    <b>书上说</b>「若 $A\xi_1=0,A\xi_2=0$，则 $A(k_1\xi_1+k_2\xi_2)=0$」，眉批补一句「解向量线性组合后形成的新向量仍是该方程组的解」；<br>
+    <b>潜台词是</b>：<em>这条性质在说"解的集合<b>对加法和数乘封闭</b>"——也就是它是一个<b>子空间</b>，
+    而不是一堆散落的点</em>。<b>正因为是子空间，才谈得上"基"（＝基础解系）、"维数"（＝$n-r$）、"用有限个代表写完无穷多个"</b>；<br>
+    <b>所以能考</b>：这条性质本身几乎不单独出题，<u>但它是"为什么可以用基础解系表示全部解"的唯一理由</u>——
+    非齐次组<b>没有</b>这条性质（两个解相加不再是解，见 <a href="#s3">§三</a>），所以非齐次的解集<b>不是</b>子空间，
+    只能写成"特解 + 子空间"。<em>齐次与非齐次全部结构差异，都源于这一条封闭性的有无。</em>
+  </div>
+
+  <div class="zy"><span class="tag">强化题型 · 解的性质与「类消去律」</span>
+    <b>解的性质</b>：若 $A\xi_1=0,\ A\xi_2=0$，则 $A(k_1\xi_1+k_2\xi_2)=0$——<b>齐次组的解做任意线性组合还是解</b>（这正是"解空间"三个字的由来）。<br>
+    <b>类消去律</b>：若 $A_{m\times n}$，$r(A)=n$（<b>列满秩</b>），$AB=AC$，则 $B=C$。<br>
+    <span style="font-size:.87rem">证：$r(A)=n\Rightarrow n-r(A)=0\Rightarrow Ax=0$ 只有零解；由 $AB=AC$ 得 $A(B-C)=O$，即 $B-C$ 的每一列都是 $Ax=0$ 的解，故全为零，$B=C$。</span>
+  </div>
+
+  <div class="mine"><span class="tag">挖 · 类消去律为什么必须"列满秩"</span>
+    <b>书上说</b>「形式上好像在等号两边消去 $A$，故称类消去律」；<br>
+    <b>潜台词是</b>：<em>矩阵不能"约掉"，能约掉的唯一理由是 $Ax=0$ 只有零解</em>——
+    也就是说这条性质<b>本质上不是关于消去的，是关于"零空间是不是只有零"的</b>；<br>
+    <b>所以能考</b>：题目给 $AB=AC$ 问能否推出 $B=C$，答案永远是"要看 $r(A)$ 是否等于 $A$ 的列数"。
+    <em>反例只需 $A=[1\ \ 1]$（$1\times2$，$r=1\lt2$），取 $B=[1,0]^{\mathrm T},C=[0,1]^{\mathrm T}$ 即 $AB=AC=1$ 而 $B\ne C$。</em>
+    <span class="dock">易错</span>：不少人记成"$A$ 可逆才能消"，那是充分不必要——<b>长方阵列满秩就够了</b>。
+  </div>
+
+  <div class="eg" id="eg-43">
+    <div class="q"><span class="no">基 4.3 ✔</span><b>选择题</b>　设 $A=\begin{bmatrix}a_{11}&a_{12}&a_{13}\\a_{21}&a_{22}&a_{23}\end{bmatrix}$，$B=\begin{bmatrix}b_{11}&b_{12}\\b_{21}&b_{22}\\b_{31}&b_{32}\end{bmatrix}$，
+      若 $AB=\begin{bmatrix}1&0\\2&1\end{bmatrix}$，则齐次线性方程组 $Ax=0$、$By=0$ <b>线性无关解的个数</b>分别是（　）。<br>
+      (A) 0, 1　　(B) 1, 0　　(C) 2, 1　　(D) 2, 0</div>
+    <div class="s">
+      <p><span class="lab">答案</span><b class="ans">(B)</b></p>
+      <p><span class="lab">分析</span>（书上原话）应熟知的重要结论：<b>齐次组线性无关解的个数 $s=$ 未知量个数 $-$ 真实约束的个数 $=n-r(\text{系数矩阵})$</b>。</p>
+      <p><span class="lab">解</span> 由 $AB=\begin{bmatrix}1&0\\2&1\end{bmatrix}$ 知 $r(AB)=2$，于是
+      $$2=r(AB)\le\min\{r(A),r(B)\}\le\min\{2,3\}$$
+      因此 $r(A)=r(B)=2$。所以 $Ax=0$（未知量 <b>3</b> 个）无关解个数 $=3-2=1$；$By=0$（未知量 <b>2</b> 个）无关解个数 $=2-2=0$。</p>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        <b>①</b> <b>本题的全部机关在"$n$ 取谁"</b>：$A$ 是 $2\times3$，$Ax=0$ 的 $n=3$；$B$ 是 $3\times2$，$By=0$ 的 $n=2$。<span class="dock">高频错</span>：把两个 $n$ 都当成 3，选成 (C)。<b>$n$ 永远是列数。</b><br>
+        <b>②</b> $r(AB)\le\min\{r(A),r(B)\}$ 是 ch3 §七的三条秩不等式之一，<b>这里用的是它的"夹逼"用法</b>：下界由 $AB$ 给出，上界由形状给出，两头一夹秩就定死了。<a href="#xt-46">习 4.6</a> 会把这招用到抽象方程组上。<br>
+        <b>③</b> $r(B)=2$ 说明 $B$ 列满秩 ⟹ 由上面的<b>类消去律</b>，$By=0$ 只有零解 ⟹ 无关解 0 个。两条路殊途同归。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg" id="eg-44">
+    <div class="q"><span class="no">基 4.4 ✔</span><b>选择题 · 伴随矩阵与基础解系</b>　设 $A=[\alpha_1,\alpha_2,\alpha_3,\alpha_4]$ 是 4 阶矩阵，$A^*$ 为 $A$ 的伴随矩阵，
+      若 $[1,0,1,0]^{\mathrm T}$ 是 $Ax=0$ 的一个<b>基础解系</b>，则 $A^*x=0$ 的基础解系可以为（　）。<br>
+      (A) $\alpha_1,\alpha_3$　(B) $\alpha_1,\alpha_2$　(C) $\alpha_1,\alpha_2,\alpha_3$　(D) $\alpha_2,\alpha_3,\alpha_4$</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路</span>
+        <ol>
+          <li><b>「是基础解系」比「是解」强得多</b>：它同时告诉你 $4-r(A)=1$，即 $r(A)=3$、$|A|=0$。这一步不做，题就没法开。</li>
+          <li>见 $A^*$ 想 $AA^*=A^*A=|A|E$（书上【分析】的原话）。$|A|=0\Rightarrow A^*A=O$，<b>于是 $A$ 的每一列都是 $A^*x=0$ 的解</b>——四个选项全是 $A$ 的列，题面在明示这条路。</li>
+          <li>$r(A^*)$ 用<b>秩三分公式</b>（ch3 已证）：$r(A)=n$ 时 $r(A^*)=n$；$r(A)=n-1$ 时 $r(A^*)=1$；$r(A)\lt n-1$ 时 $r(A^*)=0$。此处 $r(A)=3=4-1$ ⟹ $r(A^*)=1$ ⟹ $A^*x=0$ 的基础解系含 $4-1=3$ 个向量。<b>选项里只剩 (C)(D)。</b></li>
+          <li>最后一步用题给的解向量：$[1,0,1,0]^{\mathrm T}$ 是 $Ax=0$ 的解意味着 $1\alpha_1+0\alpha_2+1\alpha_3+0\alpha_4=0$，即 <b>$\alpha_1,\alpha_3$ 线性相关</b>——含 $\alpha_1$ 和 $\alpha_3$ 的组合必相关，(C) 出局。</li>
+        </ol>
+      </div>
+      <p><span class="lab">答案</span><b class="ans">(D)</b>（$\alpha_1,\alpha_2,\alpha_4$ 同样可以，书上原文也这么写）</p>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        <b>①</b> <b>三个数字连锁</b>：$4-r(A)=1\Rightarrow r(A)=3\Rightarrow r(A^*)=1\Rightarrow$ 基础解系 $3$ 个。<b>这条链子断一环就全错</b>，考前默写一遍。<br>
+        <b>②</b> <span class="dock">扣分/错选点</span>：只做到"$A$ 的列是 $A^*x=0$ 的解"就去选 (A)——那是没数个数。<b>基础解系必须"个数对 + 无关"两条同时满足。</b><br>
+        <b>③</b> $\alpha_1+\alpha_3=0$ 这一步是把<b>解向量翻译成列向量的关系式</b>，正是 <a href="#s4">§四</a>「方程组的解＝描述列向量间数量关系的系数」的第一次亮相。<br>
+        <b>④</b> 已用 sympy 构造具体 4 阶矩阵验证：$r(A)=3$、$r(A^*)=1$、$A^*A=O$、$\alpha_2,\alpha_3,\alpha_4$ 秩为 3 而 $\alpha_1,\alpha_3$ 秩为 1，与结论完全一致。
+      </div>
+    </div>
+  </div>
+
+  <div class="link"><span class="tag">串 · 解与系数的<b>正交</b>关系（强化书页 51，眉批标「此条件较隐蔽，须注意」）</span>
+    设 $\beta=[b_1,\cdots,b_n]^{\mathrm T}$ 是 $Ax=0$ 的解，把 $A$ 的行向量记作 $\alpha_i=[a_{i1},\cdots,a_{in}]$，则
+    $$\alpha_i\beta=0\quad(i=1,2,\cdots,m)\qquad\Longleftrightarrow\qquad \textbf{系数矩阵 }A\textbf{ 的行向量与解向量正交}$$
+    <span style="color:var(--teal)"><b>这条翻译的价值</b>：题面里出现"$\alpha$ 与 $\beta$ 正交""$\alpha^{\mathrm T}\beta=0$"时，
+    立刻改读成"<b>$\beta$ 是以 $\alpha$ 为行的齐次方程组的解</b>"，反过来也一样。
+    <a href="#eg-42">基 4.2</a>（求与两向量都正交的单位向量）整道题就是这一句翻译；
+    <a href="#eg-52">强 5.2</a> 用它证 $P=[\alpha,A\alpha]$ 可逆；ch6 二次型的正交变换、ch5 实对称矩阵不同特征值的特征向量正交，走的都是这条线。</span>
+  </div>
+
+  <div class="eg" id="eg-42">
+    <div class="q"><span class="no">基 4.2 ✔</span><b>填空题</b>　与向量 $\alpha_1=[2,-1,-3],\ \alpha_2=[-3,1,5]$ 都正交的<b>单位</b>向量 $\beta^\circ=$ ______。</div>
+    <div class="s">
+      <p><span class="lab">分析</span>（书上原话）要使 $\beta^\circ$ 与 $\alpha_1,\alpha_2$ 都正交，需满足 $\begin{cases}(\alpha_1,\beta^\circ)=0\\(\alpha_2,\beta^\circ)=0\end{cases}$——<b>正交条件写出来就是一个齐次方程组</b>。</p>
+      <p><span class="lab">解</span> 设 $\beta=[x_1,x_2,x_3]$，则
+      $$\begin{cases}2x_1-x_2-3x_3=0\\-3x_1+x_2+5x_3=0\end{cases}\qquad
+      \begin{bmatrix}2&-1&-3\\-3&1&5\end{bmatrix}\to\begin{bmatrix}-1&0&2\\-3&1&5\end{bmatrix}\to\begin{bmatrix}-1&0&2\\0&1&-1\end{bmatrix}$$
+      $s=3-2=1$，基础解系 $\xi_1=[2,1,1]$，故 $\beta=k[2,1,1]$。取
+      $$\beta^\circ=\frac{\pm\beta}{\|\beta\|}=\boxed{\pm\frac{1}{\sqrt6}[2,1,1]}$$</p>
+      <svg class="fig" viewBox="0 0 420 200" role="img" aria-label="两向量张成的平面与其法向的两个单位向量">
+        <defs><marker id="ah" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L6,3 L0,6 z" fill="var(--accent)"/></marker>
+          <marker id="ah2" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L6,3 L0,6 z" fill="var(--red)"/></marker></defs>
+        <path d="M60,140 L250,140 L360,95 L170,95 Z" fill="var(--accent-soft)" stroke="var(--line)"/>
+        <line x1="180" y1="118" x2="245" y2="103" stroke="var(--accent)" stroke-width="2" marker-end="url(#ah)"/>
+        <line x1="180" y1="118" x2="255" y2="128" stroke="var(--accent)" stroke-width="2" marker-end="url(#ah)"/>
+        <line x1="180" y1="118" x2="180" y2="35" stroke="var(--red)" stroke-width="2" marker-end="url(#ah2)"/>
+        <line x1="180" y1="118" x2="180" y2="185" stroke="var(--red)" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#ah2)"/>
+        <text x="250" y="98" font-size="12">α₁</text><text x="260" y="133" font-size="12">α₂</text>
+        <text x="188" y="40" font-size="12" fill="var(--red)">β°₁ = +β/‖β‖</text>
+        <text x="188" y="182" font-size="12" fill="var(--red)">β°₂ = −β/‖β‖</text>
+        <text x="66" y="158" class="mut">α₁,α₂ 张成的平面（解空间的正交补）</text>
+      </svg>
+      <div class="trap"><span class="tag">陷阱 · 书上专门写了【注】和一句眉批</span>
+        <b>与 $\alpha_1,\alpha_2$ 都正交的单位向量有<u>两个</u>，即 $\beta^\circ=\pm\dfrac{\beta}{\|\beta\|}$。</b>
+        眉批原话：「注意：这里正交的单位向量 $\beta^\circ$ <b>有两个方向，别忘了加正负号</b>。」<br>
+        <span class="dock">丢分点</span>：填空题只写一个方向，按错处理。<b>凡题目出现"单位向量"三个字，先在草稿边上写个 ± 提醒自己。</b>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        <b>①</b> 这道题的三步——<b>正交 → 齐次方程组 → 基础解系 → 单位化</b>——是数一 ch6 求正交矩阵、施密特正交化的最小原型。<br>
+        <b>②</b> $s=3-2=1$ 说明<b>解空间是一条直线</b>（法线），这就是几何上"两个平面交于一条直线"的向量版本，与 <a href="#s7">§七</a> 的表 (a) 第 2 行是同一件事。<br>
+        <b>③</b> 基础解系可以取 $[2,1,1]$ 也可以取 $[-2,-1,-1]$ 或 $k[2,1,1]$——<b>基础解系从来不唯一，唯一的只有个数</b>。但单位化以后只剩 ± 两个。
+      </div>
+    </div>
+  </div>
+  <!-- ================= s2 通法 + 步进器 ================= -->
+  <h2 id="s2"><span class="idx">二</span>求解通法 · 三步走<span class="layer L-base">基础</span><span class="layer L-str">强化</span></h2>
+
+  <div class="key"><span class="tag">必记 · 齐次三步（书页 117–118，眉批：必须是行变换）</span>
+    <b>①</b> 把系数矩阵 $A$ 作<b>初等行变换</b>化成行阶梯形（或行最简形）$B$，<b>阶梯数即 $r(A)$</b>。
+    （$Ax=0$ 与 $Bx=0$ 同解，故只需解 $Bx=0$。）<br>
+    <b>②</b> 按列找出一个<b>秩为 $r$ 的子矩阵</b>，剩余列位置的未知数设为<b>自由变量</b>（共 $n-r$ 个）。<br>
+    <b>③</b> 按基础解系定义求出 $\xi_1,\cdots,\xi_{n-r}$，写出通解 $x=k_1\xi_1+\cdots+k_{n-r}\xi_{n-r}$。
+  </div>
+
+  <div class="mine"><span class="tag">挖 · 为什么<b>只能行变换</b>，列变换一步都不能掺</span>
+    <b>书上说</b>（求解步骤标题旁眉批）「必须是行变换，因为行变换不改变各向量间的系数，<b>属于同解变换</b>」；<br>
+    <b>潜台词是</b>：<em>行变换 = 方程之间加加减减（换了一组等价的方程，解一个不差）；列变换 = 把未知量 $x_i$ 之间互换或缩放（<b>直接篡改了解本身</b>）</em>。
+    所以化到行最简形后，第 $j$ 列读出来的数，仍然是"原来那个 $x_j$"的系数；<br>
+    <b>所以能考</b>：题目若给"对 $A$ 作了若干次初等变换得到 $B$"，先问是行还是列——
+    <b>行变换保解、列变换保秩</b>。求秩两种都能用（ch2 求秩时行列混用是允许的），
+    <u>但一旦要求"解"，混用列变换就全错</u>。<span class="dock">这是本章最贵的一条边界</span>。
+  </div>
+
+  <div class="link"><span class="tag">串 · 与 ch3「求极大无关组只能行变换」是同一条理由</span>
+    <a href="线代_第03章_向量组.html#s5">ch3 §五</a> 求极大无关组时也强调"不能行列混用"，理由同样是"行变换不改变列向量之间的线性关系"。
+    <span style="color:var(--teal)"><b>两章合起来记一句话</b>：<b>行最简形是一台"一次交付三样东西"的机器</b>——
+    ch3 用它读<u>极大无关组 + 表示系数</u>，ch4 用它读<u>秩 + 自由变量 + 基础解系</u>，
+    <b>底层是同一次消元</b>。下面的步进器就是把 ch3 那台引擎接到增广矩阵上。</span>
+  </div>
+
+  <div class="tool" id="stepper">
+    <h4>🛠 通解步进器 —— 增广矩阵 → 行最简形 → 直接读出特解与基础解系</h4>
+    <div class="hint">
+      本章所有求解题的动作是同一个。这里把它<b>逐步拆开</b>：左边是原始增广矩阵，右边是当前步的结果，下面一行说明这一步做了什么。
+      走到最后一步时，<span style="color:var(--green)">绿色＝主元列（非自由变量）</span>、<span style="color:var(--amber)">橙色＝自由变量列</span>，
+      并自动给出<b>特解 η</b>（令自由变量全为 0）与<b>基础解系 ξᵢ</b>（第 i 个自由变量取 1、其余取 0）。<b>全程精确分数，无浮点误差。</b>
+      预设里含本章 6 道原题，可直接与书上答案对照。
+    </div>
+    <div class="stepbar">
+      <select id="sp-preset"></select>
+      <button id="sp-prev">← 上一步</button>
+      <button id="sp-next">下一步 →</button>
+      <button id="sp-all">直接看结果</button>
+      <button id="sp-reset">重来</button>
+      <span class="cnt" id="sp-cnt"></span>
+    </div>
+    <div class="mxrow">
+      <div class="mxbox"><div class="cap">原始增广矩阵 [A ⋮ b]</div><div id="sp-orig"></div></div>
+      <div class="mxbox"><div class="cap">当前</div><div id="sp-cur"></div></div>
+    </div>
+    <div class="oplog" id="sp-log"></div>
+    <div class="resbox" id="sp-res"></div>
+  </div>
+
+  <div class="bg"><span class="tag">筛</span>书页 118 用整整半页画了一个抽象的行阶梯形矩阵 $B$，标出"左边 $r$ 列系数为非自由变量、右边 $n-r$ 列系数为自由变量"，并配一句「矩阵的行向量组的秩与列向量组的秩相等」。<b>这半页是给第一次见阶梯形的人看的铺垫</b>，考试不会考"画出一般阶梯形"。<b>真正要练的只有一件事：把具体矩阵化成阶梯形时手不抖。</b>快速滑过。</div>
+
+  <div class="mine"><span class="tag">挖 · 自由变量的取值为什么"随意但不能成比例"</span>
+    <b>书上说</b>（基 4.1 页边）「自由变量的取值是随意的，但为保证基础解系是线性无关的，故 $x_3,x_5$ 的两次取值须<b>不成比例</b>，且为方便求解其他未知量，一般先定一个为 1、其余为 0」；<br>
+    <b>潜台词是</b>：<em>自由变量那几个分量在两个 $\xi$ 里构成一个 $2\times2$（一般是 $(n-r)\times(n-r)$）的小方阵，<b>整组 $\xi$ 是否无关，完全由这个小方阵是否可逆决定</b></em>——
+    因为主元分量是被自由分量唯一决定的，"跟着走"，不提供额外的独立性；<br>
+    <b>所以能考</b>：题目给出几个解向量问"是否构成基础解系"，<b>只需盯住自由变量所在的那几行</b>——它们排成的方阵可逆就无关。
+    <em>取"一个为 1 其余为 0"，那个小方阵就是单位阵，可逆性一眼可见——这就是标准取法省心的真正原因，不只是"数好算"。</em>
+  </div>
+
+  <div class="link"><span class="tag">串 · 初等行变换 ＝ 左乘初等矩阵（ch2 的老结论，本章天天用）</span>
+    <a href="线代_第02章_矩阵.html">ch2</a> 证过：对 $A$ 作一次初等行变换 $\iff$ 左乘一个可逆的初等矩阵 $P_i$。
+    于是"化行最简形"就是 $B=P_k\cdots P_1A=PA$，其中 <b>$P$ 可逆</b>。
+    <span style="color:var(--teal)"><b>这正是"行变换保解集"的严格理由</b>：$Ax=0\iff PAx=0$（$P$ 可逆，两边可左乘 $P^{-1}$ 还原）。
+    往后走，<a href="#s6">§六</a> 的「左乘因子可逆 ⟺ 同解」就是把这句话从"初等矩阵"推广到"任意可逆矩阵"——
+    <b>同一条原理，两个粒度。</b></span>
+  </div>
+
+  <div class="eg" id="eg-41">
+    <div class="q"><span class="no">基 4.1 ✔</span><b>解答题 · 齐次通解的通法示范</b>　求齐次线性方程组
+      $$\begin{cases}x_1+x_2-3x_4-x_5=0\\ x_1-x_2+2x_3-x_4=0\\ 4x_1-2x_2+6x_3+3x_4-4x_5=0\\ 2x_1+4x_2-2x_3+4x_4-7x_5=0\end{cases}$$
+      的通解。<span class="exam">眉批：注重掌握思路和方法，切忌用中学的消元代入法来做</span></div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看，别直接翻卷面）</span>
+        <ol>
+          <li><b>4 个方程 5 个未知量</b>——未知量多于方程，$r(A)\le4\lt5$，<u>不用算就知道必有非零解</u>。这一句可以写在卷面开头当"定性"。</li>
+          <li><b>切忌消元代入</b>（书上眉批点名）：中学做法在 5 元时会指数级变乱。<b>唯一动作是把系数矩阵化行阶梯形</b>，让阶梯数自己告诉你真实约束有几个。</li>
+          <li>化完阶梯形后<b>先数阶梯数 $r$，再定 $n-r$ 个自由变量</b>。自由变量选<b>哪几个</b>有自由度（书【注】说 $x_2,x_3$ 地位等同、$x_4,x_5$ 地位等同），但<b>个数不能变</b>。</li>
+          <li>自由变量的赋值也有自由度，但两次赋值<b>必须不成比例</b>（否则得到的两个解相关，②条件挂掉）。省事的取法是"一个取 1、其余取 0"。<b>若某个分量会出现分母，可以整体乘掉分母</b>——本题书上取 $x_5=3k_2$ 就是为了消掉 $\frac13$。</li>
+        </ol>
+      </div>
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面<span class="score">按 10 分估</span></div>
+        <div class="step"><span class="k">解</span>　对系数矩阵作初等行变换化为行阶梯形：<span class="pt">⛳ 起手写"对系数矩阵作初等行变换" 1 分</span></div>
+        <div class="step">$$A=\begin{bmatrix}1&1&0&-3&-1\\1&-1&2&-1&0\\4&-2&6&3&-4\\2&4&-2&4&-7\end{bmatrix}
+        \longrightarrow\begin{bmatrix}1&1&0&-3&-1\\0&-2&2&2&1\\0&0&0&3&-1\\0&0&0&0&0\end{bmatrix}=B.\tag{1}$$<span class="pt">⛳ 化阶梯形 3 分</span></div>
+        <div class="step">由 (1) 式知 $r(A)=3\lt5$，故方程组有非零解，基础解系含 $n-r(A)=5-3=2$ 个向量。<span class="pt">⛳ 判秩定个数 2 分</span></div>
+        <div class="step">取 $x_3,x_5$ 为自由未知量。令 $x_3=k_1,\ x_5=3k_2$，由 (1) 式回代得
+        $$x_4=k_2,\qquad x_2=x_3+x_4+\tfrac12x_5=k_1+\tfrac52k_2,\qquad x_1=-x_2+3x_4+x_5=-k_1+\tfrac72k_2.$$<span class="pt">⛳ 回代 2 分</span></div>
+        <div class="step">故通解为
+        $$x=\begin{bmatrix}x_1\\x_2\\x_3\\x_4\\x_5\end{bmatrix}
+        =k_1\begin{bmatrix}-1\\1\\1\\0\\0\end{bmatrix}+k_2\begin{bmatrix}\frac72\\ \frac52\\ 0\\ 1\\ 3\end{bmatrix},$$
+        其中 $k_1,k_2$ 为任意常数。<span class="pt">⛳ 写成 $k_1\xi_1+k_2\xi_2$ 形式 2 分</span></div>
+        <div class="fin">即所求通解为 $x=k_1[-1,1,1,0,0]^{\mathrm T}+k_2\left[\frac72,\frac52,0,1,3\right]^{\mathrm T}$（$k_1,k_2$ 为任意常数）。</div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（写完对照，这些字考场不落笔）</span>
+        <b>①</b> <span class="dock">扣分点</span>：只写出 $\xi_1,\xi_2$ 不写「其中 $k_1,k_2$ 为任意常数」，或漏掉"基础解系含 $5-3=2$ 个"这句判断——<b>各扣 1–2 分</b>。阅卷找的就是「$r=3$」「$n-r=2$」「任意常数」这三个锚点。<br>
+        <b>②</b> <b>书上出现过两组看起来不同的 $\xi_2$，不是印错</b>：正文取 $x_5=3$ 得 $\left[\frac72,\frac52,0,1,3\right]^{\mathrm T}$，页边小表取 $x_5=1$ 得 $\left[\frac76,\frac56,0,\frac13,1\right]^{\mathrm T}$，<b>两者恰好差 3 倍，是同一个基础解系</b>。已用 sympy 验证两者都是解且成比例。<u>考场上写哪个都对，但同一份卷子里别混用。</u><br>
+        <b>③</b> <b>为什么取 $x_5=3k_2$ 而不是 $k_2$</b>：书上这么取是为了让 $\xi_2$ 的分量尽量少出现 $\frac13$。<b>这是允许的</b>——自由变量取值随意，只要两次取值不成比例。<b>提速心算</b>：先按 $x_5=1$ 算一遍，看分母是几，再回头把 $x_5$ 取成那个分母。<br>
+        <b>④</b> 书【注】(1)：由阶梯形知 $x_2,x_3$ 地位等同、$x_4,x_5$ 地位等同，<b>自由未知量也可取 $x_2,x_4$ 或 $x_2,x_5$ 或 $x_3,x_4$</b>——但<u>不能取 $x_2,x_3$</u>（同一个台阶里挑两个会让剩下的解不出来）。<br>
+        <b>⑤</b> 书【注】(2)：回代过程也可以继续用初等行变换实现，即把 $B$ 一路化成<b>行最简形</b>
+        $C=\left[\begin{smallmatrix}1&0&1&0&-7/6\\0&1&-1&0&-5/6\\0&0&0&1&-1/3\\0&0&0&0&0\end{smallmatrix}\right]$，
+        然后直接读。<b>推荐这条路</b>：手算回代最容易符号错，而化最简形是机械动作。上面的<a href="#stepper">步进器</a>走的就是这条路，可对照。<br>
+        <b>⑥</b> $A$ 的秩、两个 $\xi$、$C$ 就是 $A$ 的行最简形，均已 sympy 复算，与书一致。
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= s3 非齐次 ================= -->
+  <h2 id="s3"><span class="idx">三</span>非齐次线性方程组 · 特解 + 导出组<span class="layer L-base">基础</span></h2>
+
+  <div class="key"><span class="tag">必记 · 有解的三档（$Ax=b$，$A$ 为 $m\times n$）</span>
+    <b>①</b> $r(A)\ne r([A,b])$　⟹　<b>无解</b>（$b$ 不能由 $\alpha_1,\cdots,\alpha_n$ 线性表示）<br>
+    <b>②</b> $r(A)=r([A,b])=n$　⟹　<b>唯一解</b>（$\alpha_1,\cdots,\alpha_n$ 无关，而 $\alpha_1,\cdots,\alpha_n,b$ 相关）<br>
+    <b>③</b> $r(A)=r([A,b])=r\lt n$　⟹　<b>无穷多解</b>
+  </div>
+
+  <div class="mine"><span class="tag">挖 · 三档判据其实只有<b>一个</b>比较、一个计数</span>
+    <b>书上说</b>三条并列（无解 / 唯一解 / 无穷多解），每条都写了两个秩；<br>
+    <b>潜台词是</b>：<em>整个判断只做两个动作——<b>第一步比 $r(A)$ 与 $r([A,b])$</b>（不等就无解，到此结束）；
+    <b>第二步拿相等的那个秩去和 $n$ 比</b>（等于 $n$ 唯一解，小于 $n$ 无穷多解）</em>。
+    第一步问的是"$b$ 在不在 $A$ 的列空间里"，第二步问的是"$A$ 的列有没有多余的"——<b>两个问题互不相干，所以必须分两步</b>；<br>
+    <b>所以能考</b>：<a href="#eg-46">基 4.6</a>、<a href="#xt-42">习 4.2</a>、<a href="#xt-41">习 4.1</a> 三道题分别卡在这两步的不同位置——
+    4.6 卡"第一步能不能做"（题没给 $r([A,b])$），4.2 卡"两步能不能倒推"，4.1 卡"第一步的临界值"。
+    <em>验收：拿到任何一道有解性的题，先在草稿上写下这两步，再去看题目给了哪一步的信息。</em>
+  </div>
+
+  <div class="key"><span class="tag">必记 · 通解结构（本章最核心的一句话）</span>
+    设 $r(A)=r\lt n$，$\xi_1,\cdots,\xi_{n-r}$ 是<b>导出组</b> $Ax=0$ 的基础解系，$\eta^*$ 是 $Ax=b$ 的<b>一个特解</b>，则
+    $$x=\eta^*+k_1\xi_1+k_2\xi_2+\cdots+k_{n-r}\xi_{n-r}$$
+    即 <b>「非齐次的通解 ＝ 它的一个特解 ＋ 其导出组的通解」</b>。<span class="exam">书页 123 与强化书页 52 各写一遍，眉批均标「牢记」</span>
+  </div>
+
+  <div class="mine"><span class="tag">挖 · 「特解 + 导出组」为什么是这个形状</span>
+    <b>书上说</b>解的性质两条：$\eta_1-\eta_2$ 是 $Ax=0$ 的解；$k\xi+\eta$ 是 $Ax=b$ 的解；<br>
+    <b>潜台词是</b>：<em>$Ax=b$ 的解集不是子空间（不含零向量），而是把解空间<b>平移</b>了 $\eta^*$ 的一张"仿射平面"</em>——
+    任意两个解一减就落回原点（得到齐次解），任一个解加上齐次解还在这张平面上；<br>
+    <b>所以能考</b>：<u>只给你若干个 $Ax=b$ 的解</u>（不给 $A$ 也不给 $b$），让你求通解——
+    这类题的全部技术就是<b>"减出齐次解、平均出特解"</b>（见 <a href="#s4">§四</a> 的系数和判据与 <a href="#eg-49">基 4.9</a>）。
+    <em>形状决定解法：知道解集是"平移的子空间"，就知道该去<b>找差</b>。</em>
+  </div>
+
+  <div class="key"><span class="tag">必记 · 「广义基础解系」：$Ax=b$ 的解里有几个线性无关的？</span>
+    设 $\eta^*$ 是 $A_{m\times n}x=b\ (b\ne0)$ 的一个解，$\xi_1,\cdots,\xi_{n-r}$ 是导出组的基础解系，$r(A)=r$，则
+    <b>①</b> $\eta^*,\ \eta^*+\xi_1,\ \cdots,\ \eta^*+\xi_{n-r}$ <b>线性无关</b>；
+    <b>②</b> $Ax=b$ 的任一解都可由它们线性表示。<br>
+    <span style="color:var(--accent)"><b>⟹ $Ax=b$ 的解中，线性无关的最多有 $\boxed{n-r(A)+1}$ 个。</b></span>
+    <span class="exam">强化书页 52【注】(3)，眉批直接写「这就是 $Ax=b$ 的"广义基础解系"」「解中有 $n-r(A)+1$ 个线性无关的向量」</span>
+  </div>
+
+  <div class="mine"><span class="tag">挖 · 那个 <b>+1</b> 是从哪冒出来的</span>
+    <b>书上说</b>结论 $n-r(A)+1$，没解释 $+1$；<br>
+    <b>潜台词是</b>：<em>齐次解空间是过原点的 $(n-r)$ 维子空间，只能提供 $n-r$ 个无关方向；
+    而 $Ax=b$ 的解集是被<b>平移开</b>的那张平面，它<b>不过原点</b>，于是"位置向量 $\eta^*$"本身成了一个额外的无关方向</em>——
+    $+1$ 加的就是这个"平移量"；<br>
+    <b>所以能考</b>：给出 $Ax=b$ 的若干个解，问"其中线性无关的最多有几个"「$r(A)$ 至少是多少」——
+    <b>直接套 $n-r+1$</b>。<a href="#xt-46">习 4.6</a> 反过来用：由"有 2 个线性无关的<b>齐次</b>解"夹出 $r(A)\le2$。
+    <span class="dock">易混</span>：问的是 <b>$Ax=b$ 的解</b>（答 $n-r+1$）还是 <b>$Ax=0$ 的解</b>（答 $n-r$），差一个 1，读题看清主语。
+  </div>
+
+  <div class="zy"><span class="tag">强化题型 · 非齐次三步（书页 123）与「特解的标准取法」</span>
+    <b>①</b> 写出导出组 $Ax=0$ 并求其通解 $k_1\xi_1+\cdots+k_{n-r}\xi_{n-r}$；
+    <b>②</b> 求出 $Ax=b$ 的<b>一个</b>特解 $\eta$；
+    <b>③</b>（★★★）通解 $=k_1\xi_1+\cdots+k_{n-r}\xi_{n-r}+\eta$。<br>
+    <b>特解怎么取最省事</b>：把增广矩阵化到<b>行最简形</b>后，<b>令全部自由变量 $=0$</b>，剩下的主元变量直接等于最后一列——
+    书页 124 的示例旁边就写着这句眉批「<b>特解中令自由变量全为 0</b>」。<br>
+    <b>克拉默法则</b>（书页 123【注】(2)）：当未知数个数 $=$ 方程个数且 $|A|\ne0$ 时，$x_i=\dfrac{D_i}{|A|}$。
+    <span style="font-size:.85rem;color:var(--muted)">——考场上几乎只用于 $3\times3$ 且题目明确要"用克拉默法则"时，否则化阶梯形更快。</span>
+  </div>
+
+  <div class="trap"><span class="tag">陷阱 · 书页 124 那个"看起来自相矛盾"的示例</span>
+    书上给了 $[A\ \vdots\ b]=\left[\begin{smallmatrix}1&2&0&\vdots&3\\0&-1&1&\vdots&-2\\0&0&0&\vdots&0\\0&0&0&\vdots&0\end{smallmatrix}\right]$，
+    齐次通解 $k[-2,1,1]^{\mathrm T}$，然后写「求特解 $\eta=[3,0,-2]^{\mathrm T}$」，眉批却是「<b>特解中令自由变量全为 0</b>」。<br>
+    <b>照眉批做会得到别的答案</b>：若把 $x_3$ 当自由变量并令 $x_3=0$，回代得 $x_2=2,\ x_1=-1$，即 $\eta'=[-1,2,0]^{\mathrm T}$，<u>与书上写的不一样</u>。<br>
+    <b>书没错，是它这里把自由变量取成了 $x_2$</b>（令 $x_2=0$ ⟹ $x_3=-2,\ x_1=3$）。由行最简形知 $x_2,x_3$ 地位等同，<b>两个都能当自由变量</b>（同 <a href="#eg-41">基 4.1</a> 的【注】(1)）。
+    已用 sympy 验证：$[3,0,-2]^{\mathrm T}$ 与 $[-1,2,0]^{\mathrm T}$ <b>都是特解</b>，二者之差 $=[4,-2,-2]^{\mathrm T}=-2[-2,1,1]^{\mathrm T}$ 恰是齐次解。<br>
+    <span class="dock">给你的操作规矩</span>：<b>先定死"哪些列是自由变量"，整道题从头到尾不许换</b>。中途换一次，特解和基础解系就会来自两套口径，卷面自相矛盾。
+  </div>
+
+  <div class="bg"><span class="tag">筛</span>克拉默法则（书页 123【注】(2)）在本章只是顺带一提：它要求<b>方程数 $=$ 未知数且 $|A|\ne0$</b>，此时解本来就唯一，用行变换同样能算，而且更快。<b>近十年数一真题中它只作为"证明某解唯一"的理论依据出现，从未要求真的按 $x_i=D_i/|A|$ 算三个行列式。</b>知道有这么个定理、知道它的前提即可，不必练。</div>
+
+  <div class="eg" id="eg-46">
+    <div class="q"><span class="no">基 4.6 ✔</span><b>选择题 · 有解条件辨析</b>　设非齐次线性方程组为 $A_{m\times n}x=b$，则（　）。<br>
+      (A) 当 $r(A)=m$ 时，方程组有解　　(B) 当 $r(A)=n$ 时，方程组有唯一解<br>
+      (C) 当 $m=n$ 时，方程组有唯一解　　(D) 当 $r(A)\lt n$ 时，方程组有无穷多解</div>
+    <div class="s">
+      <p><span class="lab">分析</span>（书上原话）<b>题设条件未提及 $r([A,b])$，这正是要求考生考虑的问题。</b></p>
+      <p><span class="lab">答案</span><b class="ans">(A)</b></p>
+      <p><span class="lab">解</span> $r(A)=m$ 时 $A$ 的<b>行</b>向量组线性无关；增广矩阵是在 $A$ 的基础上<b>增加一列</b>，即每个行向量增加一个分量，<b>仍线性无关</b>，
+      故 $r([A,b])=m=r(A)$，方程组有解。<br>
+      (B)：$r(A)=n$ 时也可能无解；(C)：$m=n$ 时可能无解或无穷多解；(D)：也可能无解。均排除。</p>
+      <div class="key" style="margin:12px 0"><span class="tag">必记 · 从本题提炼的一句口诀</span>
+        <b>行满秩管「有没有解」，列满秩管「唯不唯一」。</b><br>
+        $r(A)=m$（行满秩）⟹ <b>必有解</b>（可能唯一、可能无穷多）；　$r(A)=n$（列满秩）⟹ <b>至多一解</b>（可能唯一、可能无解）。
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        <b>①</b> <b>为什么"加一列不改变行无关性"</b>：行向量变长了，原来的无关关系只会更难成立（在更高维里，投影无关则本身无关）。这一条在证明题里也常用。<br>
+        <b>②</b> 四个选项全部只给了 $r(A)$ 一边的信息，<b>而有解性是 $r(A)$ 与 $r([A,b])$ 的<u>比较</u></b>。看到这种题先问自己："题给的能锁死 $r([A,b])$ 吗？"只有行满秩能锁死。<br>
+        <b>③</b> 这条口诀与 <a href="#s8">§八</a> 的五条判据总表是配套的，那里给出完整的"能推 / 不能倒推"关系。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg" id="eg-47">
+    <div class="q"><span class="no">基 4.7 ✔</span><b>选择题</b>　<span class="exam">书标 ★★★</span>　设 $A$ 是 $m\times n$ <b>实</b>矩阵，则对任意 $m$ 维列向量 $b$，线性方程组 $A^{\mathrm T}Ax=A^{\mathrm T}b$（　）。<br>
+      (A) 无解　(B) 有解　(C) 必有唯一解　(D) 必有无穷多解</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路</span>
+        <ol>
+          <li>"对<b>任意</b> $b$ 都……"——这是在问<b>恒成立</b>的结论，(C)(D) 这种"必有唯一/必有无穷多"通常先怀疑（因为没给 $A$ 的秩）。</li>
+          <li>要证有解，就是要证 $r(A^{\mathrm T}A)=r([A^{\mathrm T}A,\ A^{\mathrm T}b])$。<b>关键观察</b>：右边那个增广矩阵能整体提出 $A^{\mathrm T}$——$[A^{\mathrm T}A\ \vdots\ A^{\mathrm T}b]=A^{\mathrm T}[A\ \vdots\ b]$。</li>
+          <li>再配上 <b>$r(A^{\mathrm T}A)=r(A)$</b>（实矩阵，见 <a href="#eg-415">基 4.15</a>），两头一夹就出来了。</li>
+        </ol>
+      </div>
+      <p><span class="lab">答案</span><b class="ans">(B)</b></p>
+      <p><span class="lab">解</span> 由 $[A^{\mathrm T}A\ \vdots\ A^{\mathrm T}b]=A^{\mathrm T}[A\ \vdots\ b]$ 得
+      $$r([A^{\mathrm T}A,\ A^{\mathrm T}b])\le r(A^{\mathrm T})=r(A)$$
+      又 $r(A)=r(A^{\mathrm T}A)\le r([A^{\mathrm T}A,\ A^{\mathrm T}b])$，两式夹得
+      $r(A^{\mathrm T}A)=r([A^{\mathrm T}A,\ A^{\mathrm T}b])$，故<b>有解</b>。
+      由于不知 $A^{\mathrm T}A$ 是否满秩，(C)(D) 不正确。</p>
+      <div class="link" style="margin:12px 0"><span class="tag">串 · 这就是最小二乘法的<b>正规方程</b></span>
+        当 $Ax=b$ 无解（数据点不共线时的拟合），退而求 $\|Ax-b\|$ 最小，其驻点条件恰是 $A^{\mathrm T}Ax=A^{\mathrm T}b$。
+        <b>本题证明的正是"最小二乘问题永远有解"</b>——这是统计回归、数值计算的地基。
+        <span style="color:var(--teal)">数一考纲不直接考最小二乘，但 <b>ch6 二次型的 $A^{\mathrm T}A$ 半正定</b>、
+        概率论<b>线性回归</b>都靠这块砖；408 里则对应"用矩阵解超定方程组"。</span>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        <b>①</b> <span class="dock">陷阱</span>：漏掉"<b>实</b>矩阵"三个字这题就错。复矩阵时 $r(A^{\mathrm T}A)=r(A)$ 不成立——取 $A=[1,\ \mathrm i]$，则 $AA^{\mathrm T}=1+\mathrm i^2=0$，秩从 1 掉到 0。已用 sympy 验证这个反例。<br>
+        <b>②</b> <b>"整体提出 $A^{\mathrm T}$"是本题唯一的技巧</b>，本质是分块矩阵乘法 $A^{\mathrm T}[A\ \vdots\ b]=[A^{\mathrm T}A\ \vdots\ A^{\mathrm T}b]$。见到增广矩阵两块有公共左因子，就该想到这一步。<br>
+        <b>③</b> 已用 300 组随机实矩阵（各种 $m,n$）批量对拍：$A^{\mathrm T}Ax=A^{\mathrm T}b$ <b>恒有解</b>，且 $r(A)=r(A^{\mathrm T}A)$ 无一例外。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg" id="eg-48">
+    <div class="q"><span class="no">基 4.8 ✔</span><b>解答题 · 含参非齐次</b>　设 $A=\begin{bmatrix}\lambda&1&1\\0&\lambda-1&0\\1&1&\lambda\end{bmatrix}$，$b=\begin{bmatrix}a\\1\\1\end{bmatrix}$，
+      已知线性方程组 $Ax=b$ <b>存在两个不同的解</b>。<br>
+      (1) 求 $\lambda,a$ 的值；　(2) 求方程组 $Ax=b$ 的通解。</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>「存在两个不同的解」是审题信号</b>（书上专门框出来并批注）：线性方程组的解只有 0 / 1 / ∞ 三种个数，<b>有两个不同解 ⟹ 必有无穷多解</b> ⟹ $r(A)=r([A,b])\lt3$ ⟹ <b>$|A|=0$</b>。</li>
+          <li>所以第一刀砍在<b>行列式</b>上（不是先化阶梯形）：$A$ 是方阵且有零行列式的信息，先解 $|A|=0$ 把 $\lambda$ 的候选值挖出来。</li>
+          <li><b>候选值必须逐个回代验证</b>——$|A|=0$ 只保证"不唯一"，不保证"有解"。本题 $\lambda=1$ 就会被验掉（变成无解）。<u>漏掉这一步是本题最大的失分点。</u></li>
+          <li>第 (2) 问接着 (1) 的行最简形直接读，不要重算。</li>
+        </ol>
+      </div>
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面<span class="score">按 11 分估</span></div>
+        <div class="step"><span class="k">解 (1)</span>　因为 $Ax=b$ 有两个不同的解，所以 $Ax=b$ 有无穷多解，从而 $r(A)\lt3$，即系数行列式
+        $$|A|=\begin{vmatrix}\lambda&1&1\\0&\lambda-1&0\\1&1&\lambda\end{vmatrix}=(\lambda-1)^2(\lambda+1)=0,$$
+        解得 $\lambda=-1$ 或 $\lambda=1$。<span class="pt">⛳ 由"两个不同解"推出 $|A|=0$ 并解出 2 分</span></div>
+        <div class="step">　　　<b>当 $\lambda=1$ 时</b>，对增广矩阵作初等行变换：
+        $$[A\ \vdots\ b]=\begin{bmatrix}1&1&1&\vdots&a\\0&0&0&\vdots&1\\1&1&1&\vdots&1\end{bmatrix}
+        \longrightarrow\begin{bmatrix}1&1&1&\vdots&1\\0&0&0&\vdots&1\\0&0&0&\vdots&a-1\end{bmatrix},$$
+        此时 $r(A)=1,\ r([A,b])=2$，方程组<b>无解</b>，故 $\lambda=1$ 舍去。<span class="pt">⛳ 验掉增根 2 分</span></div>
+        <div class="step">　　　<b>当 $\lambda=-1$ 时</b>，
+        $$[A\ \vdots\ b]=\begin{bmatrix}-1&1&1&\vdots&a\\0&-2&0&\vdots&1\\1&1&-1&\vdots&1\end{bmatrix}
+        \longrightarrow\begin{bmatrix}1&1&-1&\vdots&1\\0&2&0&\vdots&-1\\0&0&0&\vdots&a+2\end{bmatrix}=B.\tag{1}$$
+        因方程组有解，故 $a+2=0$，即 $a=-2$。<span class="pt">⛳ 3 分</span></div>
+        <div class="step">　　　综上，$\lambda=-1,\ a=-2$。<span class="pt">⛳ 综上一句 1 分</span></div>
+        <div class="step"><span class="k">(2)</span>　当 $\lambda=-1,\ a=-2$ 时，由 (1) 式继续作初等行变换：
+        $$B\longrightarrow\begin{bmatrix}1&0&-1&\vdots&\frac32\\0&1&0&\vdots&-\frac12\\0&0&0&\vdots&0\end{bmatrix},$$
+        取 $x_3$ 为自由未知量，得导出组的基础解系 $\xi=[1,0,1]^{\mathrm T}$，特解 $\eta=\frac12[3,-1,0]^{\mathrm T}$。<span class="pt">⛳ 2 分</span></div>
+        <div class="step">故 $Ax=b$ 的通解为
+        $$x=\frac12\begin{bmatrix}3\\-1\\0\end{bmatrix}+k\begin{bmatrix}1\\0\\1\end{bmatrix}\quad(k\ \text{为任意常数}).$$<span class="pt">⛳ 1 分</span></div>
+        <div class="fin">即 $\lambda=-1,\ a=-2$，方程组的通解为 $x=\frac12[3,-1,0]^{\mathrm T}+k[1,0,1]^{\mathrm T}$（$k$ 为任意常数）。</div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        <b>①</b> <span class="dock">最大失分点</span>：解出 $\lambda=\pm1$ 后<b>不验证就往下做</b>。$|A|=0$ 只是"不唯一"的必要条件，$\lambda=1$ 时实际<b>无解</b>——若不舍去，第 (2) 问会算出一个根本不存在的通解，两问全崩。<b>凡"由行列式为零解出参数"，一律逐个回代验有解性。</b><br>
+        <b>②</b> <b>为什么中间矩阵要编号 (1)</b>：第 (2) 问直接接着它化最简形，卷面写"由 (1) 式继续作初等行变换"，比重抄一遍矩阵省 30 秒，也让阅卷老师顺着找到采分点。<br>
+        <b>③</b> <b>提速心算</b>：$|A|$ 的第二行只有 $\lambda-1$ 一个非零元，按<b>第二行展开</b>三秒出结果 $(\lambda-1)\cdot(\lambda^2-1)=(\lambda-1)^2(\lambda+1)$，不要硬展开三阶。<br>
+        <b>④</b> 「存在两个不同的解」这类措辞还有同义变体：「解不唯一」「有非零解且不止一个」「解集含至少两个元素」——<b>全部等价于无穷多解</b>。<br>
+        <b>⑤</b> $|A|$ 的因式分解、$\lambda=1$ 无解、$\lambda=-1$ 时 $a=-2$、特解与基础解系，均已 sympy 逐项复算。
+      </div>
+    </div>
+  </div>
+  <!-- ================= s4 抽象型 ================= -->
+  <h2 id="s4"><span class="idx">四</span>抽象型 · 「解＝表示系数」与系数和判据<span class="layer L-base">基础</span><span class="layer L-str">强化</span></h2>
+
+  <div class="key"><span class="tag">必记 · 书页 127 那段五星【注】（本章第二个总纲句）</span>
+    <b>(1) 齐次</b>：$\alpha_1x_1+\cdots+\alpha_nx_n=0$ 的解，是<b>使 $\alpha_1,\cdots,\alpha_n$ 的线性组合为零向量时的组合系数</b>。<br>
+    <b>(2) 非齐次</b>：$\alpha_1x_1+\cdots+\alpha_nx_n=\beta$ 的解，是<b>$\beta$ 由 $\alpha_1,\cdots,\alpha_n$ 线性表示时的表示系数</b>。<br>
+    <span style="color:var(--amber)">★★★★★ 简而言之，<b>「方程组的解就是描述列向量组中各向量之间数量关系的系数。」这个观点对于解题很有用处。</b></span>
+    <span class="exam">书页 127 原话，书上标五星</span>
+  </div>
+
+  <div class="mine"><span class="tag">挖 · 这句话的<b>可操作版本</b>（书上没写成操作，但考场就这么用）</span>
+    <b>书上说</b>「解就是描述列向量之间数量关系的系数」；<br>
+    <b>潜台词是</b>：<em>题面里每出现一个"向量之间的等式"，就等于白送你一个解向量；每求出一个解向量，就等于告诉你一条向量间的等式</em>——<b>两个方向都能走</b>；<br>
+    <b>所以能考</b>（<u>抽象型题的全部套路就这两行</u>）：
+    <div class="gridwrap"><table>
+      <tr><th>题面给的</th><th>立刻翻译成</th><th>本页例题</th></tr>
+      <tr><td>$\alpha_1=2\alpha_2+\alpha_3$（向量关系式）</td><td>$\xi=[1,-2,-1,0]^{\mathrm T}$ 是 $Ax=0$ 的解<br><span style="font-size:.83rem;color:var(--muted)">（把等式移项成 $=0$，系数按下标排好）</span></td><td><a href="#eg-410">基 4.10</a></td></tr>
+      <tr><td>$\beta=\alpha_1+2\alpha_2+3\alpha_3+4\alpha_4$</td><td>$\eta=[1,2,3,4]^{\mathrm T}$ 是 $Ax=\beta$ 的特解</td><td><a href="#eg-410">基 4.10</a></td></tr>
+      <tr><td>通解 $=[2,0,0,1]^{\mathrm T}+k[1,-1,2,0]^{\mathrm T}$</td><td>$\alpha_5=(k+2)\alpha_1-k\alpha_2+2k\alpha_3+\alpha_4$，<br>且 $\alpha_1-\alpha_2+2\alpha_3=0$</td><td><a href="#eg-411">基 4.11</a></td></tr>
+      <tr><td>$AB=O$</td><td>$B$ 的<b>每一列</b>都是 $Ax=0$ 的解</td><td><a href="#eg-51">强 5.1</a>、<a href="#eg-44">基 4.4</a></td></tr>
+      <tr><td>$\alpha\perp\beta$（内积为 0）</td><td>$\beta$ 是以 $\alpha$ 为行的齐次组的解</td><td><a href="#eg-42">基 4.2</a>、<a href="#eg-52">强 5.2</a></td></tr>
+    </table></div>
+    <em>验收：看到抽象题先问「题里的每个条件，翻成解向量是什么？」——四五个条件翻完，题基本就解开了。</em>
+  </div>
+
+  <div class="key"><span class="tag">必记 · <b>系数和判据</b>（本章最快的一个判断，比书上的写法省一半时间）</span>
+    设 $\eta_1,\eta_2,\cdots,\eta_s$ 都是 $Ax=b$ 的解，考察它们的线性组合 $\displaystyle\gamma=\sum_{i=1}^{s}c_i\eta_i$，则
+    $$A\gamma=\Big(\sum c_i\Big)b\quad\Longrightarrow\quad
+    \begin{cases}\sum c_i=0 &\Longrightarrow\ \gamma\ \text{是}\ Ax=0\ \text{的解}\\[3pt]
+    \sum c_i=1 &\Longrightarrow\ \gamma\ \text{是}\ Ax=b\ \text{的解（可当特解）}\end{cases}$$
+    <b>用法</b>：拿到一堆"解的组合"，<b>只看系数相加等于几</b>，不必真去算 $A(\cdots)=6b-6b$。
+  </div>
+
+  <div class="mine"><span class="tag">挖 · 为什么这条判据成立、以及它<b>不能</b>做什么</span>
+    <b>书上说</b>（基 4.9 的解法）「因 $A(\eta_1-\eta_2)=b-b=0$，$A[3(\eta_1+\eta_2)-2(\eta_3+2\eta_2)]=6b-6b=0$」；<br>
+    <b>潜台词是</b>：<em>$A$ 是线性的，$A(\sum c_i\eta_i)=\sum c_iA\eta_i=\sum c_i b=(\sum c_i)b$——
+    所以"是不是齐次解"完全由系数和决定，与 $\eta_i$ 具体长什么样<b>无关</b></em>；<br>
+    <b>所以能考</b>：<a href="#eg-49">基 4.9</a>（系数和 0 造齐次解、系数和 1 造特解）、<a href="#xt-45">习 4.5</a>（$2\alpha_1-(\alpha_2+\alpha_3)$，系数和 $2-1-1=0$）、<a href="#xt-46">习 4.6</a>（$\xi_1-\xi_2$、$\xi_2-\xi_3$）。<b>三道题一个判据通吃。</b><br>
+    <span class="dock">边界</span>：系数和只判"落在哪个集合"，<b>不判线性无关</b>。造出两个齐次解后，仍要单独验证它们无关（且个数 $=n-r$），否则不是基础解系。<em>判据管归属，不管资格。</em>
+  </div>
+
+  <div class="bg"><span class="tag">筛</span>本节反复出现"抽象型"三个字，但<b>它不是一种新题型，只是"题目不给具体数字"的统称</b>。书上没有为它单列方法论，因为方法就是前面那张翻译表。<u>不必去找"抽象型的解题套路"</u>——找不到的，能找到的只有"把条件翻译成解向量"这一件事。</div>
+
+  <div class="mine"><span class="tag">挖 · <b>伴随矩阵秩三分</b>：为什么 $r(A)=n-1$ 时 $r(A^*)$ 恰好是 1（<a href="#eg-44">基 4.4</a> 的隐藏台阶）</span>
+    <b>书上说</b>（基 4.4【分析】）只给了一句"应想到 $AA^*=A^*A=|A|E$"，秩三分公式在 ch3 已证，这里直接用；<br>
+    <b>潜台词是</b>：<em>$r(A)=n-1$ 时，$A$ 至少有一个 $n-1$ 阶子式非零 ⟹ $A^*$ 至少有一个元素非零 ⟹ $r(A^*)\ge1$；
+    又 $A^*A=|A|E=O$ 给出 $r(A^*)+r(A)\le n$ ⟹ $r(A^*)\le1$。<b>两头一夹，恰好是 1。</b></em>
+    <b>这又是一次"夹逼定秩"</b>（与 <a href="#xt-46">习 4.6</a>、<a href="#eg-43">基 4.3</a> 同一手法）；<br>
+    <b>所以能考</b>：凡题面出现 $A^*$ 且暗示 $|A|=0$，<b>第一动作就是判 $r(A)$ 是 $n-1$ 还是更小</b>——
+    这决定了 $r(A^*)$ 是 1 还是 0，进而决定 $A^*x=0$ 的基础解系有 $n-1$ 个还是 $n$ 个。
+    <em>三分公式记不住不要紧，记住"夹逼"这条推法，考场上 30 秒能推出来。</em>
+  </div>
+
+  <div class="eg" id="eg-49">
+    <div class="q"><span class="no">基 4.9 ✔</span><b>填空题 · 只给解的组合求通解</b>　设 $r(A_{4\times4})=2$，$\eta_1,\eta_2,\eta_3$ 是 $Ax=b$ 的 3 个解向量，其中
+      $$\eta_1-\eta_2=[-1,0,3,-4]^{\mathrm T},\quad \eta_1+\eta_2=[3,2,1,-2]^{\mathrm T},\quad \eta_3+2\eta_2=[5,1,0,3]^{\mathrm T},$$
+      则 $Ax=b$ 的通解是 ______。</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路</span>
+        <ol>
+          <li><b>先算出通解的"形状"</b>：$r(A)=2,\ n=4$ ⟹ 基础解系含 $4-2=2$ 个 ⟹ 通解形如 $k_1\xi_1+k_2\xi_2+\eta$。<b>缺口很明确：要凑 2 个齐次解 + 1 个特解。</b></li>
+          <li>题目只给了三个"组合"，不给 $\eta_i$ 本身。<b>用系数和判据去配</b>：找系数和为 0 的组合当 $\xi$，系数和为 1 的当 $\eta$。</li>
+          <li>$\eta_1-\eta_2$ 系数和 $=0$ ✔ 直接就是一个 $\xi_1$。<br>还差一个：手上剩 $\eta_1+\eta_2$（和为 2）与 $\eta_3+2\eta_2$（和为 3），<b>要把 2 和 3 消成 0 ⟹ 取 $3\times$ 前者 $-2\times$ 后者</b>（$3\cdot2-2\cdot3=0$）。</li>
+          <li>特解：$\eta_1+\eta_2$ 的和是 2，<b>除以 2 就是 1</b> ⟹ $\eta=\frac12(\eta_1+\eta_2)$。</li>
+        </ol>
+      </div>
+      <p><span class="lab">答案</span><b class="ans">$k_1[-1,0,3,-4]^{\mathrm T}+k_2[-1,4,3,-12]^{\mathrm T}+\left[\frac32,1,\frac12,-1\right]^{\mathrm T}$</b>（$k_1,k_2$ 为任意常数）</p>
+      <p><span class="lab">过程</span>
+      $\xi_1=\eta_1-\eta_2=[-1,0,3,-4]^{\mathrm T}$；<br>
+      $\xi_2=3(\eta_1+\eta_2)-2(\eta_3+2\eta_2)=[9,6,3,-6]^{\mathrm T}-[10,2,0,6]^{\mathrm T}=[-1,4,3,-12]^{\mathrm T}$，与 $\xi_1$ 显然无关；<br>
+      $\eta=\frac12(\eta_1+\eta_2)=\left[\frac32,1,\frac12,-1\right]^{\mathrm T}$。</p>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        <b>①</b> <b>系数和判据在这里省了多少事</b>：书上写的是 $A[3(\eta_1+\eta_2)-2(\eta_3+2\eta_2)]=6b-6b=0$——要先展开算出 $6b$。用判据只需 $3\times2-2\times3=0$，<b>心算</b>。展开式里的 $3\eta_1-\eta_2-2\eta_3$ 系数和同样是 $3-1-2=0$。<br>
+        <b>②</b> <span class="dock">易漏</span>：凑出两个 $\xi$ 后必须说一句"<b>显然 $\xi_1,\xi_2$ 线性无关</b>"（分量比例不同，一眼可见）。不写这句，基础解系的第②条没交代。<br>
+        <b>③</b> <b>书还给了第二法</b>（【注】）：由 $[\eta_1-\eta_2,\ \eta_1+\eta_2,\ \eta_3+2\eta_2]=[\eta_1,\eta_2,\eta_3]\left[\begin{smallmatrix}1&1&0\\-1&1&2\\0&0&1\end{smallmatrix}\right]$，
+        右乘逆矩阵可<b>直接解出 $\eta_1,\eta_2,\eta_3$ 本身</b>，再写 $k_1(\eta_1-\eta_2)+k_2(\eta_2-\eta_3)+\eta_3$。
+        <em>这条路更"实"但更慢</em>，适合题目还要问 $\eta_i$ 具体值时用。<br>
+        <b>④</b> 已用 sympy 反解出 $\eta_1=[1,1,2,-3]^{\mathrm T},\eta_2=[2,1,-1,1]^{\mathrm T},\eta_3=[1,-1,2,1]^{\mathrm T}$，并<b>真的构造出一个 $r(A)=2$ 的 $4\times4$ 矩阵与 $b$</b>，验证三者确为 $Ax=b$ 的解、通解结构成立——书给的数据自洽。
+      </div>
+    </div>
+  </div>
+
+  <div class="link"><span class="tag">串 · 「系数和判据」在 ch5、ch6 与概率里的同型兄弟</span>
+    <b>本章</b>：$\sum c_i=0$ 造齐次解、$\sum c_i=1$ 造特解。<br>
+    <b>ch5 特征值</b>：同一特征值 $\lambda$ 的特征向量做<b>任意</b>线性组合仍是特征向量（只要非零）——因为特征子空间是齐次组 $(A-\lambda E)x=0$ 的解空间，<b>本章的封闭性直接搬过去</b>。<br>
+    <b>ch6 二次型</b>：合同变换保持正负惯性指数，靠的也是"解空间维数不变"。<br>
+    <b>概率论</b>：$\sum c_i=1$ 且 $c_i\ge0$ 的组合叫<b>凸组合</b>——全概率公式 $P(B)=\sum P(A_i)P(B|A_i)$ 正是这种"系数和为 1"的结构。<br>
+    <span style="color:var(--teal)"><b>把"系数和"当成一个可移植的检查动作</b>：凡遇到"一堆同类对象的线性组合还属不属于原来那类"，先算系数和。</span>
+  </div>
+
+  <div class="eg" id="eg-410">
+    <div class="q"><span class="no">基 4.10 ✔</span><b>填空题 · 抽象型</b>　已知 $A=[\alpha_1,\alpha_2,\alpha_3,\alpha_4]$，其中 $\alpha_i$ 是 4 维列向量，
+      且 $\alpha_1=2\alpha_2+\alpha_3$，$r(A)=3$。若 $\beta=\alpha_1+2\alpha_2+3\alpha_3+4\alpha_4$，则 $Ax=\beta$ 的通解是 ______。</div>
+    <div class="s">
+      <p><span class="lab">答案</span><b class="ans">$k[1,-2,-1,0]^{\mathrm T}+[1,2,3,4]^{\mathrm T}$</b>（$k$ 为任意常数）</p>
+      <p><span class="lab">解</span> 由 $\alpha_1=2\alpha_2+\alpha_3$ 得 $\alpha_1-2\alpha_2-\alpha_3+0\alpha_4=0$，故 $\xi=[1,-2,-1,0]^{\mathrm T}$ 是导出组的非零解；
+      由 $\beta$ 的表达式直接读出特解 $\eta=[1,2,3,4]^{\mathrm T}$；又 $r(A)=3$ ⟹ 基础解系仅含 $4-3=1$ 个向量，故通解 $=k\xi+\eta$。</p>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        <b>①</b> <b>三个条件，三样东西，一一对应</b>：向量关系式 → $\xi$；$\beta$ 的表达式 → $\eta$；$r(A)=3$ → 只需<u>一个</u> $\xi$。<b>题给三个条件一个不多一个不少</b>，这是判断"自己有没有漏读条件"的好办法。<br>
+        <b>②</b> <span class="dock">符号易错</span>：$\alpha_1=2\alpha_2+\alpha_3$ 移项后是 $1\cdot\alpha_1+(-2)\alpha_2+(-1)\alpha_3+0\cdot\alpha_4=0$，<b>$\alpha_4$ 的 0 必须补上</b>（解向量是 4 维），漏掉就成 3 维向量了。<br>
+        <b>③</b> 若题目改成"$r(A)=2$"，则基础解系要 2 个，<b>题给条件就不够了</b>——这时必须另找一条向量关系式。<u>先看 $n-r$ 要几个，再去凑几个</u>，顺序别反。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg" id="eg-411">
+    <div class="q"><span class="no">基 4.11 ✔</span><b>选择题 · 由通解反推表示关系</b>　已知线性方程组 $\alpha_1x_1+\alpha_2x_2+\alpha_3x_3+\alpha_4x_4=\alpha_5$
+      有通解 $[2,0,0,1]^{\mathrm T}+k[1,-1,2,0]^{\mathrm T}$，则下列说法正确的是（　）。<br>
+      (A) $\alpha_5$ 可由 $\alpha_1,\alpha_2,\alpha_3$ 线性表示　　(B) $\alpha_4$ <b>不能</b>由 $\alpha_1,\alpha_2,\alpha_3$ 线性表示<br>
+      (C) $\alpha_5$ <b>不能</b>由 $\alpha_2,\alpha_3,\alpha_4$ 线性表示　　(D) $\alpha_4$ <b>不能</b>由 $\alpha_1,\alpha_2,\alpha_5$ 线性表示</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路</span>
+        <ol>
+          <li><b>通解 = 一整族表示式</b>：把通解展开成 $x=[k+2,\ -k,\ 2k,\ 1]^{\mathrm T}$，即
+          $\alpha_5=(k+2)\alpha_1-k\alpha_2+2k\alpha_3+\alpha_4$，<b>对每个 $k$ 都成立</b>。</li>
+          <li><b>看哪个系数与 $k$ 无关</b>：$\alpha_4$ 的系数<b>恒为 1</b>，永远消不掉 ⟹ $\alpha_5$ 的任何表示式里都必须有 $\alpha_4$ ⟹ (A) 错。<u>这就是本题的题眼。</u></li>
+          <li>其余选项<b>取特殊的 $k$ 造反例</b>：$k=-2$ 消掉 $\alpha_1$，$k=0$ 消掉 $\alpha_2,\alpha_3$。</li>
+          <li>通解含 1 个自由参数 ⟹ $4-r([\alpha_1,\cdots,\alpha_4])=1$ ⟹ <b>$r=3$</b>（书上眉批直接写出这一步），(B) 的证明要用它。</li>
+        </ol>
+      </div>
+      <p><span class="lab">答案</span><b class="ans">(B)</b></p>
+      <p><span class="lab">排除</span> $k=-2$：$\alpha_5=2\alpha_2-4\alpha_3+\alpha_4$ ⟹ 可由 $\alpha_2,\alpha_3,\alpha_4$ 表示，<b>排除 (C)</b>；
+      $k=0$：$\alpha_5=2\alpha_1+\alpha_4$ 即 $\alpha_4=\alpha_5-2\alpha_1+0\alpha_2$ ⟹ <b>排除 (D)</b>；
+      $\alpha_4$ 系数恒为 1 ⟹ <b>排除 (A)</b>。</p>
+      <p><span class="lab">正面证 (B)</span> 由通解知 $r([\alpha_1,\alpha_2,\alpha_3,\alpha_4])=3$。
+      又由 $k$ 项系数得 $\alpha_1-\alpha_2+2\alpha_3=0$，即 $\alpha_1,\alpha_2,\alpha_3$ 已经相关，$r([\alpha_1,\alpha_2,\alpha_3])\le2$。
+      若 $\alpha_4$ 还能由它们表示，则 $r([\alpha_1,\alpha_2,\alpha_3,\alpha_4])\le2$，与 $=3$ <b>矛盾</b>。故 (B) 成立。</p>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        <b>①</b> <b>通解的两个部分各自在说一句话</b>：<u>特解部分</u> $[2,0,0,1]^{\mathrm T}$ 说"$\alpha_5=2\alpha_1+\alpha_4$"；<u>齐次部分</u> $[1,-1,2,0]^{\mathrm T}$ 说"$\alpha_1-\alpha_2+2\alpha_3=0$"。<b>两句话就是本题的全部信息</b>，把它们抄在草稿纸上，四个选项一眼可判。<br>
+        <b>②</b> <b>"某向量系数与 $k$ 无关"是一个可复用的题眼</b>：它意味着这个向量<b>在任何表示式里都不可缺席</b>，反过来说明它不在其余向量张成的空间里。<br>
+        <b>③</b> 参数个数 $\to$ 秩的换算 $4-r=1$ 是本题的隐藏第一步，<b>书上把它写成眉批而不是正文</b>，最容易被跳过。<br>
+        <b>④</b> 四个选项已用 sympy 逐一验证（含 $k=-2,0$ 两个反例的具体系数），与书一致。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg" id="eg-51">
+    <div class="q"><span class="no">强 5.1 ✔</span><b>选择题</b>　设 $A$ 是秩为 2 的 $2\times5$ 矩阵，$B$ 是秩为 3 的 $3\times5$ 矩阵，若 $AB^{\mathrm T}=O$，
+      则对于齐次线性方程组 $Ax=0$ 的<b>任一非零解 $b$</b> 有（　）。<br>
+      (A) $A^{\mathrm T}y=b$ 有唯一解　(B) $A^{\mathrm T}y=b$ 有无穷多解　(C) $B^{\mathrm T}y=b$ 有唯一解　(D) $B^{\mathrm T}y=b$ 有无穷多解</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路</span>
+        <ol>
+          <li><b>见 $AB^{\mathrm T}=O$ 立刻翻译</b>（书上眉批★★★）：<em>见到 $AB=O$，想到 $AX=0$；见到 $|A|=0$，想到 $A^*A=O$、$AA^*=O$</em>。
+          此处即：<b>$B^{\mathrm T}$ 的每一列（也就是 $B$ 的每一行的转置）都是 $Ax=0$ 的解</b>。</li>
+          <li><b>数个数</b>：$Ax=0$ 的解空间维数 $=5-r(A)=3$；而 $B$ 有 3 个线性无关的行 ⟹ 这 3 个解<b>恰好凑满</b> ⟹ 它们就是一个<b>基础解系</b>。</li>
+          <li>题问的 $b$ 是 $Ax=0$ 的任一非零解 ⟹ $b$ 必能由这组基础解系表示 ⟹ <b>$B^{\mathrm T}y=b$ 有解</b>。</li>
+          <li>唯一还是无穷多？$B^{\mathrm T}$ 是 $5\times3$，未知量 $y$ 是 3 维，$r(B^{\mathrm T})=3=$ 未知量个数 ⟹ <b>唯一解</b>。</li>
+        </ol>
+      </div>
+      <p><span class="lab">答案</span><b class="ans">(C)</b></p>
+      <p><span class="lab">排除 (A)(B)</span> 书给出反例：取
+      $A=\begin{bmatrix}1&0&0&0&0\\0&1&0&0&0\end{bmatrix}$，
+      $B=\begin{bmatrix}0&0&1&0&0\\0&0&0&1&0\\0&0&0&0&1\end{bmatrix}$，
+      $b=[0,0,1,0,0]^{\mathrm T}$，则 $r([A^{\mathrm T},b])\ne r(A^{\mathrm T})$，$A^{\mathrm T}y=b$ <b>无解</b>。</p>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        <b>①</b> <b>本题是"$AB=O$ 型"的完整样板</b>：三步——<u>翻译成解</u> → <u>数够个数升格为基础解系</u> → <u>用"能表示"回答有解性</u>。<b>第二步是灵魂</b>：只说"是解"不够，凑满 $n-r$ 个才能说"任一解都能被它们表示"。<br>
+        <b>②</b> <span class="dock">形状易错</span>：$A$ 是 $2\times5$，$Ax=0$ 的未知量是 <b>5</b> 个，解空间维数 $5-2=3$；$B^{\mathrm T}y=b$ 里未知量是 <b>3</b> 个。<b>两个方程组的未知量个数不同</b>，别串。<br>
+        <b>③</b> 眉批那句「见到 $|A|=0$ 想到 $A^*A=O$」正是 <a href="#eg-44">基 4.4</a> 的解法，两题<b>共用同一条件反射</b>。<br>
+        <b>④</b> 书给的反例已 sympy 验证：$AB^{\mathrm T}=O$、$Ab=0$、$b\ne0$、$A^{\mathrm T}y=b$ 无解、$B^{\mathrm T}y=b$ 唯一解，全部成立。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg" id="eg-52">
+    <div class="q"><span class="no">强 5.2 ✔</span><b>选择题 · 反对称 + 分块矩阵</b>　设 2 阶矩阵 $A$ 满足 $a_{ij}+a_{ji}=0\ (i,j=1,2)$。实矩阵 $P=[\alpha,\ A\alpha]$，其中 $A\alpha$ 为非零列向量，则（　）。<br>
+      (A) $\begin{bmatrix}A+A^{\mathrm T}&O\\E&P\end{bmatrix}x=0$ 只有零解　　(B) $\begin{bmatrix}A+E&O\\E&P\end{bmatrix}x=0$ 有非零解<br>
+      (C) $\begin{bmatrix}O&A+A^{\mathrm T}\\P&E\end{bmatrix}x=\begin{bmatrix}\alpha\\A\alpha\end{bmatrix}$ 有无穷多解　　(D) $\begin{bmatrix}O&A+E\\P&E\end{bmatrix}x=\begin{bmatrix}\alpha\\A\alpha\end{bmatrix}$ 有唯一解</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路</span>
+        <ol>
+          <li><b>$a_{ij}+a_{ji}=0$ 就是 $A^{\mathrm T}=-A$（反对称）</b>，这个条件有两个直接后果：$A+A^{\mathrm T}=O$（选项 A、C 的两个分块<b>直接变成零块</b>），以及下一条。</li>
+          <li><b>反对称 ⟹ $\alpha^{\mathrm T}A\alpha=0$</b>：因为 $\alpha^{\mathrm T}A\alpha$ 是 $1\times1$ 的，转置等于自身，而转置又等于 $\alpha^{\mathrm T}A^{\mathrm T}\alpha=-\alpha^{\mathrm T}A\alpha$，<b>只能是 0</b>。
+          翻译一下就是 <b>$\alpha\perp A\alpha$</b>，两个非零正交向量必无关 ⟹ <b>$P=[\alpha,A\alpha]$ 可逆</b>。</li>
+          <li>剩下的就是分块矩阵算行列式/判秩。<b>对角块可逆 ⟹ 整块可逆</b>：$\begin{vmatrix}A+E&O\\E&P\end{vmatrix}=|A+E|\,|P|$。</li>
+          <li>$|A+E|$ 要算：反对称 2 阶矩阵形如 $\begin{bmatrix}0&a\\-a&0\end{bmatrix}$，故 $|A+E|=1+a^2\gt0$，<b>恒不为零</b>。</li>
+        </ol>
+      </div>
+      <p><span class="lab">答案</span><b class="ans">(D)</b></p>
+      <p><span class="lab">逐项</span>
+      <b>(A)</b> $A+A^{\mathrm T}=O$，系数阵成 $\begin{bmatrix}O&O\\E&P\end{bmatrix}$，显然不满秩 ⟹ <b>有无穷多解</b>（不是只有零解），错。<br>
+      <b>(C)</b> 系数阵成 $\begin{bmatrix}O&O\\P&E\end{bmatrix}$，而 $\alpha\ne0$，增广矩阵秩比系数阵大 ⟹ <b>无解</b>，错。<br>
+      <b>(B)</b> $\begin{vmatrix}A+E&O\\E&P\end{vmatrix}=|A+E||P|\ne0$ ⟹ <b>只有零解</b>，错。<br>
+      <b>(D)</b> 同理系数阵行列式非零 ⟹ <b>唯一解</b>，正确。</p>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        <b>①</b> <b>「$\alpha^{\mathrm T}A\alpha$ 是数，转置等于自己」是一个万能小技巧</b>：凡证某个二次型式子为零，先想这一招。ch6 二次型里会反复用。<br>
+        <b>②</b> <b>$1+a^2\ne0$ 用到了"实"</b>——题面写的是"实矩阵 $P$"。<span class="dock">若是复数域这题就塌了</span>，与 <a href="#eg-47">基 4.7</a> 的"实矩阵"边界是同一类。<br>
+        <b>③</b> 眉批标 `D₂₁（观察研究对象），第3讲 矩阵乘法的形状大观`——张宇的意思是：<b>先盯住 $P$ 的形状</b>（$2\times2$、两列分别是 $\alpha$ 与 $A\alpha$），可逆性就是全题的枢纽。<br>
+        <b>④</b> 四个选项已用符号 $a$（$a\ne0$）逐项验证：$|P|=-a(p^2+q^2)\ne0$、$|A+E|=1+a^2$、(A) 系数阵秩 $\lt4$、(C) 增广秩大于系数秩、(D) 行列式非零。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg" id="eg-53">
+    <div class="q"><span class="no">强 5.3 ✔</span><b>解答题 · 构造 + 反证</b>　已知矩阵 $A=\begin{bmatrix}2&1&-1\\1&-1&1\\4&5&-5\end{bmatrix}$。<br>
+      (1) 求一个<b>秩为 1</b> 的 3 阶矩阵 $C$，使得 $AC$ 为零矩阵；<br>
+      (2) <b>证明</b>：不存在秩为 2 的 3 阶矩阵 $C$，使得 $AC$ 为零矩阵。</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路</span>
+        <ol>
+          <li><b>$AC=O$ ⟹ $C$ 的每一列都是 $Ax=0$ 的解</b>（本章的招牌翻译）。所以第 (1) 问就是：<u>求出 $Ax=0$ 的一个非零解，然后把它复制三列拼成 $C$</u>——复制三列保证 $r(C)=1$。</li>
+          <li>所以 (1) 的真正工作量只有"解一个 $3\times3$ 的齐次方程组"。</li>
+          <li><b>(2) 是 (1) 的免费推论</b>：由 (1) 已知 $r(A)=2$；若存在 $r(C)=2$ 使 $AC=O$，由 $AB=O\Rightarrow r(A)+r(C)\le n=3$ 得 $r(A)\le1$，与 $r(A)=2$ 矛盾。<b>标准反证（书上眉批标 P₂ 反证思路）。</b></li>
+          <li><b>写卷面时 (1) 要先声明 $C$ 的形状</b>（"设 $C$ 的三列都等于 $[a,b,c]^{\mathrm T}$"），否则 (2) 引用 $r(A)=2$ 会显得没来由。</li>
+        </ol>
+      </div>
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面<span class="score">按 11 分估</span></div>
+        <div class="step"><span class="k">解 (1)</span>　设 $a,b,c$ 不全为 0，令 $C=\begin{bmatrix}a&a&a\\b&b&b\\c&c&c\end{bmatrix}$，则 $r(C)=1$。
+        由 $AC=O$ 知 $A[a,b,c]^{\mathrm T}=0$，即 $[a,b,c]^{\mathrm T}$ 是 $Ax=0$ 的解。<span class="pt">⛳ 把 $AC=O$ 转成 $Ax=0$ 2 分</span></div>
+        <div class="step">　　　对 $A$ 作初等行变换：
+        $$A=\begin{bmatrix}2&1&-1\\1&-1&1\\4&5&-5\end{bmatrix}\longrightarrow
+        \begin{bmatrix}1&0&0\\0&1&-1\\0&0&0\end{bmatrix},$$
+        故 $r(A)=2$，$Ax=0$ 的基础解系为 $[0,1,1]^{\mathrm T}$。<span class="pt">⛳ 化最简形并求解 3 分</span></div>
+        <div class="step">　　　取 $[a,b,c]^{\mathrm T}=[0,1,1]^{\mathrm T}$，得
+        $$C=\begin{bmatrix}0&0&0\\1&1&1\\1&1&1\end{bmatrix},\qquad r(C)=1,\quad AC=O.$$<span class="pt">⛳ 写出 $C$ 并验证 2 分</span></div>
+        <div class="step"><span class="k">证 (2)</span>　由 (1) 知 $r(A)=2$。假设存在 3 阶矩阵 $C$ 满足 $r(C)=2$ 且 $AC=O$。<span class="pt">⛳ 反证起手 1 分</span></div>
+        <div class="step">　　　由 $AC=O$ 知 $r(A)+r(C)\le 3$，于是 $r(A)\le 3-2=1$，与 $r(A)=2$ 矛盾。<span class="pt">⛳ 用 $AB=O\Rightarrow r(A)+r(B)\le n$ 2 分</span></div>
+        <div class="fin">故不存在秩为 2 的 3 阶矩阵 $C$，使得 $AC$ 为零矩阵。<b>证毕。</b><span class="pt">⛳ 回扣题干 1 分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        <b>①</b> <b>用定理前先点名</b>：卷面第 (2) 步必须写出"由 $AC=O$ 知 $r(A)+r(C)\le3$"这句依据（<a href="线代_第03章_向量组.html#s7">ch3 §七</a>已证）。<span class="dock">直接写"于是 $r(A)\le1$"要扣 2 分</span>——阅卷看的是依据。<br>
+        <b>②</b> <b>(1) 的答案不唯一</b>：$C$ 的三列只要都是 $Ax=0$ 的解、且秩为 1 即可，比如三列取 $[0,1,1]^{\mathrm T},[0,2,2]^{\mathrm T},[0,-1,-1]^{\mathrm T}$ 也行。<u>但复制同一列最省事，也最容易说清 $r(C)=1$。</u><br>
+        <b>③</b> <b>(1) 与 (2) 的关系是本题的设计</b>：(1) 逼你算出 $r(A)=2$，(2) 立刻用它。<b>凡遇到"先求一个，再证不存在另一个"的两问结构，第二问几乎一定要用第一问算出的秩。</b><br>
+        <b>④</b> 从 $r(A)+r(C)\le3$ 还能读出一条<b>更强的结论</b>：满足 $AC=O$ 的 $C$，秩最大只能是 $3-r(A)=1$。所以本题的 (1) 已经取到了<u>秩的上限</u>。<br>
+        <b>⑤</b> $r(A)=2$、零空间基 $\propto[0,1,1]^{\mathrm T}$、$AC=O$、$r(C)=1$ 均已 sympy 验证。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg" id="eg-55">
+    <div class="q"><span class="no">强 5.5 ✔</span><b>选择题 · 秩不等式串联</b>　设 3 阶矩阵 $A,B$ 满足 $r(AB)=r(BA)+1$，则（　）。<br>
+      (A) 方程组 $(A+B)x=0$ 只有零解　　(B) 方程组 $Ax=0$ 与 $Bx=0$ 均只有零解<br>
+      (C) 方程组 $Ax=0$ 与 $Bx=0$ 没有公共非零解　　(D) 方程组 $ABAx=0$ 与 $BABx=0$ 有公共非零解</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路</span>
+        <ol>
+          <li><b>先把条件榨干</b>：$r(AB)=r(BA)+1\le3$ ⟹ $r(BA)\le2$。<b>再排除 $r(BA)=2$</b>：若 $r(BA)=2$ 则 $|BA|=0$，而此时 $r(AB)=3$ 即 $|AB|\ne0$——但 $|AB|=|A||B|=|BA|$，<b>矛盾</b>。故 <b>$r(BA)\le1$</b>。</li>
+          <li>题问"有公共非零解"，即 $\begin{bmatrix}ABA\\BAB\end{bmatrix}x=0$ 有非零解（<a href="#s5">§五</a> 的判据），只需证这个叠起来的矩阵<b>秩 $\lt3$</b>。</li>
+          <li>叠加秩 $\le$ 两块秩之和，而 $ABA$、$BAB$ 都含 $BA$ 作为因子 ⟹ 秩 $\le r(BA)\le1$，加起来 $\le2\lt3$。<b>成了。</b></li>
+          <li>(A)(B)(C) 用<b>同一组反例</b>一次性打掉即可，不必逐个论证。</li>
+        </ol>
+      </div>
+      <p><span class="lab">答案</span><b class="ans">(D)</b></p>
+      <p><span class="lab">正面</span>
+      $$r\!\left(\begin{bmatrix}ABA\\BAB\end{bmatrix}\right)\le r(ABA)+r(BAB)\le r(BA)+r(BA)\le2\lt3,$$
+      故 $\begin{bmatrix}ABA\\BAB\end{bmatrix}x=0$ 有非零解，即两方程组有公共非零解。</p>
+      <p><span class="lab">反例（一次打掉三项）</span> 取
+      $A=\begin{bmatrix}1&0&0\\0&0&0\\0&0&0\end{bmatrix},\ B=\begin{bmatrix}0&0&1\\0&0&0\\0&0&0\end{bmatrix}$，
+      则 $r(AB)=1,\ r(BA)=0$ 满足条件。此时 $r(A+B)=1$（<b>排除 (A)</b>）；$r(A)=r(B)=1$，两组都有非零解（<b>排除 (B)</b>）；
+      联立方程组为 $\begin{cases}x_1=0\\x_3=0\end{cases}$，非零解 $k[0,1,0]^{\mathrm T}$（<b>排除 (C)</b>）。</p>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        <b>①</b> <b>「$|AB|=|BA|$ 但 $r(AB)\ne r(BA)$」是本题的核心张力</b>：行列式一定相等（都等于 $|A||B|$），秩却可以差 1。<b>正是这个不对称让 $r(BA)=2$ 被排除。</b>这一步不做，后面全塌。<br>
+        <b>②</b> <b>$r(ABA)\le r(BA)$ 的理由</b>：$ABA=A\cdot(BA)$，乘一个矩阵秩不增。<u>看出 $ABA$ 和 $BAB$ 都"含有 $BA$"是本题第二个题眼</u>——$BAB=(BA)\cdot B$。<br>
+        <b>③</b> <b>造反例的模板</b>：要让 $r(AB)=r(BA)+1$，最省事的是让 $BA=O$ 而 $AB\ne O$。取两个"错位的"秩 1 矩阵即可。<b>这类"秩条件型"选择题，先花 30 秒造一个满足条件的最简反例，往往能一次排除三个选项。</b><br>
+        <b>④</b> 已用 <b>400 组随机 3 阶整数矩阵</b>对拍：凡满足 $r(AB)=r(BA)+1$ 的，$r\!\left(\left[\begin{smallmatrix}ABA\\BAB\end{smallmatrix}\right]\right)\lt3$ 无一例外。书给的反例也逐项验证通过。
+      </div>
+    </div>
+  </div>
+  <!-- ================= s5 公共解 ================= -->
+  <h2 id="s5"><span class="idx">五</span>两个方程组的公共解 · 三法对照<span class="layer L-base">基础</span><span class="layer L-str">强化</span></h2>
+
+  <div class="key"><span class="tag">必记 · 公共解的判据（齐次 + 非齐次）</span>
+    <b>齐次</b>：$A_{m\times n}x=0$ 与 $B_{s\times n}x=0$ 的公共解 = 满足 $\begin{bmatrix}A\\B\end{bmatrix}x=0$ 的解。
+    二者有<b>公共非零解</b>的充要条件是
+    $$r\!\left(\begin{bmatrix}A\\B\end{bmatrix}\right)\lt n$$
+    <b>非齐次</b>：设 (Ⅰ) $Ax=\beta$ 与 (Ⅱ) $Bx=\gamma$ 均有解，则二者有公共解的充要条件是
+    $$r\!\left(\begin{bmatrix}A\\B\end{bmatrix}\right)=r\!\left(\left[\begin{array}{c:c}A&\beta\\B&\gamma\end{array}\right]\right)$$
+    <span class="exam">强化书页 54，右侧竖排标注「等价表述体系块」</span>
+  </div>
+
+  <div class="mine"><span class="tag">挖 · 「公共解」为什么根本不是新东西</span>
+    <b>书上说</b>（两处，基础书页 128 与强化书页 54）「公共解<b>本质上也是方程组联立解</b>，这个思路一定要记住」；<br>
+    <b>潜台词是</b>：<em>所谓"公共解"，就是把两个方程组的方程<b>全部抄在一起</b>当成一个更大的方程组去解</em>——
+    <b>没有任何新理论，新的只有计算量</b>。张宇在这一节旁边写的是「方程组求解的思路比较简单，但对<b>计算能力</b>要求高，平时要勤做练习」；<br>
+    <b>所以能考</b>：题目不会考"你会不会联立"，而是考"<b>题给的是什么形式</b>，你能不能选对最省力的那条路"——
+    给系数矩阵就联立，给一边基础解系就代入，给两边基础解系就配平。<em>下表三法就是照"题给什么"分的。</em>
+  </div>
+
+  <div class="bg"><span class="tag">筛</span>书页 128 在这一节开头用了半页篇幅铺陈"公共解的定义"与"联立即可"，还专门写了一句"当给出 $A,B,\alpha,\beta$ 的具体表达式时，对考生的<b>计算能力</b>要求较高，<b>理论上没有什么难点</b>"。<b>后半句就是这一节的定性</b>：没有新理论，别指望有巧招。铺陈部分快速滑过，力气全花在下面的三法对照与例题上。</div>
+
+  <div class="mine"><span class="tag">挖 · 齐次公共解为什么"主要着眼于求<b>非零</b>解"</span>
+    <b>书上说</b>（两处重复）「对于 $Ax=0$ 和 $Bx=0$，因其<b>必有零公共解</b>，故求公共解主要着眼于求公共<b>非零</b>解」；<br>
+    <b>潜台词是</b>：<em>两个齐次解空间都过原点，交集<b>永远非空</b>——所以"有没有公共解"是个废问题，真问题是"交集的维数是不是 $\ge1$"</em>；
+    而非齐次的两张"平移平面"可能根本不相交，<b>所以非齐次才需要一个专门的有解判据</b>（$r$ 的等式）；<br>
+    <b>所以能考</b>：齐次问"是否有公共非零解"（<a href="#eg-55">强 5.5</a> 的选项 C、D），非齐次问"是否有公共解"（判据要用增广矩阵）。
+    <em>两种问法的差别不是措辞，是几何形状的差别。看到"非零"两个字，就知道题在问齐次。</em>
+  </div>
+
+  <div class="link"><span class="tag">串 · 公共解 ＝ 两个解空间的<b>交</b>（ch3 向量空间语言）</span>
+    <a href="线代_第03章_向量组.html#s9">ch3 §九</a> 讲过子空间。$Ax=0$ 与 $Bx=0$ 的解空间记作 $V_A,V_B$，则
+    <b>公共解集就是 $V_A\cap V_B$</b>，它仍是一个子空间，维数 $=n-r\!\left(\begin{bmatrix}A\\B\end{bmatrix}\right)$。
+    <span style="color:var(--teal)">于是本节的三种方法有了统一解释：
+    <b>法一</b>是直接算交空间的维数与基；<b>法二</b>是在 $V_A$ 的坐标系里解出"哪些点也落在 $V_B$ 里"；
+    <b>法三</b>是让两组基的线性组合相等（$\dim(V_A\cap V_B)=\dim V_A+\dim V_B-\dim(V_A+V_B)$ 的具体化）。
+    <b>三法不是三个技巧，是同一个交空间的三种坐标写法。</b></span>
+  </div>
+
+  <div class="key"><span class="tag">必记 · 三法对照表（看题给什么，选哪条路）</span>
+    <div class="gridwrap"><table>
+      <tr><th>方法</th><th>题给的形式</th><th>怎么做</th><th>计算量</th></tr>
+      <tr><td><b>法一 · 联立</b></td><td>两组的<b>系数矩阵</b>都给了</td><td>把 $A,B$ 上下摞成 $\begin{bmatrix}A\\B\end{bmatrix}$，一次化最简形</td><td>大（行数翻倍）</td></tr>
+      <tr><td><b>法二 · 代入</b><span style="color:var(--green)"> ★首选</span></td><td>一组给<b>基础解系</b>、另一组给<b>系数矩阵</b></td><td>写出 (Ⅰ) 的通解 $\sum k_i\xi_i$ 代入 (Ⅱ)，解出 $k_i$ 之间的关系，代回</td><td><b>小</b></td></tr>
+      <tr><td><b>法三 · 配平</b></td><td>两组都只给<b>基础解系</b></td><td>令 $\sum k_i\xi_i=\sum l_j\eta_j$，移项成齐次组解出 $k_i$ 或 $l_j$</td><td>中</td></tr>
+    </table></div>
+    <span style="font-size:.86rem;color:var(--muted)">（法二、法三就是书页 129【注】里的①②两个"考查角度"，法一是正文的定义。）</span>
+  </div>
+
+  <div class="eg" id="eg-412">
+    <div class="q"><span class="no">基 4.12 ✔</span><b>解答题 · 公共解（三法并列）</b>　已知线性方程组
+      $$(Ⅰ)\begin{cases}x_1+x_2=0\\ x_2-x_4=0\end{cases}\qquad
+        (Ⅱ)\begin{cases}x_1-x_2+x_3=0\\ x_2-x_3+x_4=0\end{cases}$$
+      (1) 分别求方程组 (Ⅰ)、(Ⅱ) 的基础解系；　(2) 求方程组 (Ⅰ)、(Ⅱ) 的公共解。</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路</span>
+        <ol>
+          <li>第 (1) 问逼着你把<b>两组的基础解系</b>都算出来——那么第 (2) 问天然处在<b>法三（配平）</b>的条件下。但既然系数矩阵也在题面上，<b>法一、法二同样可用</b>。</li>
+          <li><b>考场上选哪条</b>：本题两组各只有 2 个方程，摞起来才 $4\times4$，<b>法一最直接</b>（一次消元出答案，不必二次代入）。若方程再多几行，才轮到法二。</li>
+          <li>不论走哪条，<b>答案必须是 $k\gamma$ 的形式</b>（公共解集也是一个解空间，本题维数为 1）。只写出一个 $\gamma$ 不带 $k$ 要扣分。</li>
+        </ol>
+      </div>
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面（走法一，最省时）<span class="score">按 11 分估</span></div>
+        <div class="step"><span class="k">解 (1)</span>　(Ⅰ) 的系数矩阵 $A=\begin{bmatrix}1&1&0&0\\0&1&0&-1\end{bmatrix}$，$r(A)=2$，基础解系含 $4-2=2$ 个向量：
+        $$\xi_1=[0,0,1,0]^{\mathrm T},\qquad \xi_2=[-1,1,0,1]^{\mathrm T}.$$<span class="pt">⛳ 3 分</span></div>
+        <div class="step">　　　(Ⅱ) 的系数矩阵 $B=\begin{bmatrix}1&-1&1&0\\0&1&-1&1\end{bmatrix}$，$r(B)=2$，基础解系为
+        $$\eta_1=[0,1,1,0]^{\mathrm T},\qquad \eta_2=[-1,-1,0,1]^{\mathrm T}.$$<span class="pt">⛳ 3 分</span></div>
+        <div class="step"><span class="k">(2)</span>　(Ⅰ)、(Ⅱ) 的公共解即联立方程组 $\begin{bmatrix}A\\B\end{bmatrix}x=0$ 的解。对其作初等行变换：
+        $$\begin{bmatrix}A\\B\end{bmatrix}=\begin{bmatrix}1&1&0&0\\0&1&0&-1\\1&-1&1&0\\0&1&-1&1\end{bmatrix}
+        \longrightarrow\begin{bmatrix}1&0&0&1\\0&1&0&-1\\0&0&1&-2\\0&0&0&0\end{bmatrix}.$$<span class="pt">⛳ 联立并化最简形 3 分</span></div>
+        <div class="step">　　　秩为 3，取 $x_4$ 为自由未知量，得公共解
+        $$x=k[-1,1,2,1]^{\mathrm T}\quad(k\ \text{为任意常数}).$$<span class="pt">⛳ 2 分</span></div>
+        <div class="fin">即 (Ⅰ)、(Ⅱ) 的公共解为 $k[-1,1,2,1]^{\mathrm T}$（$k$ 为任意常数）。</div>
+      </div>
+      <div class="zy" style="margin-top:12px"><span class="tag">强化题型 · 另外两条路（书上并列给出，会一条即可，但要认得出题面信号）</span>
+        <b>法二 · 代入</b>：(Ⅰ) 的通解 $k_1\xi_1+k_2\xi_2=[-k_2,\ k_2,\ k_1,\ k_2]^{\mathrm T}$，代入 (Ⅱ) 得
+        $\begin{cases}-k_2-k_2+k_1=0\\ k_2-k_1+k_2=0\end{cases}$，解得 <b>$k_1=2k_2$</b>，代回得公共解 $k_2[-1,1,2,1]^{\mathrm T}$。<br>
+        <b>法三 · 配平</b>：令 $k_1\xi_1+k_2\xi_2=l_1\eta_1+l_2\eta_2$，比较四个分量得 $k_2=l_2$、$k_2=l_1-l_2$、$k_1=l_1$，
+        于是 $k_1=2k_2$（或 $l_1=2l_2$），公共解 $=k_2(2\xi_1+\xi_2)=k_2[-1,1,2,1]^{\mathrm T}$（或 $l_2(2\eta_1+\eta_2)$，<b>同一个答案</b>）。
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        <b>①</b> <b>三法必得同一个 $\gamma$</b>，这是极好的自检：法二算完可以顺手用法三验一遍（$2\eta_1+\eta_2$ 是否等于 $2\xi_1+\xi_2$）。<b>考场上若时间够，这个交叉验证只花 20 秒。</b><br>
+        <b>②</b> <span class="dock">扣分点</span>：第 (2) 问答案漏掉任意常数 $k$，或写成"公共解为 $[-1,1,2,1]^{\mathrm T}$"——<b>公共解是一个解空间，不是一个向量</b>。<br>
+        <b>③</b> <b>公共解空间的维数</b> $=n-r\!\left(\left[\begin{smallmatrix}A\\B\end{smallmatrix}\right]\right)=4-3=1$。注意 $r(A)=r(B)=2$ 但摞起来秩是 3 而不是 4——<b>说明两组的方程有 1 个是重复的（相关的）</b>，这就是它们能有公共非零解的原因。<br>
+        <b>④</b> 两组基础解系、联立零空间、以及法三的两个配平结论，均已 sympy 验证一致。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg" id="eg-54">
+    <div class="q"><span class="no">强 5.4 ✔</span><b>解答题 · 特征多项式重根 + 联立求解</b>　设矩阵 $A=\begin{bmatrix}0&-1&2\\-1&0&2\\-1&-1&a\end{bmatrix}$，已知 $1$ 是 $A$ 的特征多项式的<b>重根</b>。<br>
+      (1) 求 $a$ 的值；　(2) 求所有满足 $A\alpha=\alpha+\beta,\ A^2\alpha=\alpha+2\beta$ 的<b>非零列向量</b> $\alpha,\beta$。</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路</span>
+        <ol>
+          <li>(1) 是 ch5 的前置动作：$1$ 是 $|\lambda E-A|$ 的重根 ⟹ 把 $\lambda=1$ 代入后<b>除掉一个 $(\lambda-1)$ 因子，剩下的部分在 $\lambda=1$ 处仍为零</b>。本题分解后是 $(\lambda-1)[(\lambda-a)(\lambda+1)+4]$，令方括号在 $\lambda=1$ 处为零即可。</li>
+          <li>(2) 给了<b>两个</b>含 $\alpha,\beta$ 的等式——<b>消元</b>：想办法消掉一个未知向量。眉批直接点了 `D₁（常规操作），联立方程组求解是基本方法`。</li>
+          <li><b>法一消 $\beta$</b>：由第一式 $\times2$ 得 $2A\alpha=2\alpha+2\beta$，与第二式相减得 $(A-E)^2\alpha=0$。若 $(A-E)^2=O$，则 $\alpha$ 任意非零。</li>
+          <li><b>法二消 $\alpha$</b>：由两式相减得 $A\beta=\beta$，即 $\beta$ 是 $(A-E)x=0$ 的解；再回头解 $(A-E)\alpha=\beta$ 的可解性。<b>两条路的答案形式不同但等价</b>，见批注。</li>
+        </ol>
+      </div>
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面（走法一）<span class="score">按 11 分估</span></div>
+        <div class="step"><span class="k">解 (1)</span>　$A$ 的特征多项式
+        $$f(\lambda)=|\lambda E-A|=(\lambda-1)\big[(\lambda-a)(\lambda+1)+4\big].$$
+        因 $1$ 是 $f(\lambda)$ 的重根，故 $(1-a)(1+1)+4=0$，解得 $a=3$。<span class="pt">⛳ 3 分</span></div>
+        <div class="step"><span class="k">(2)</span>　由 (1) 知 $A=\begin{bmatrix}0&-1&2\\-1&0&2\\-1&-1&3\end{bmatrix}$。
+        由 $A\alpha=\alpha+\beta$ 得 $2A\alpha=2\alpha+2\beta$，与 $A^2\alpha=\alpha+2\beta$ 相减，得
+        $$2A\alpha-A^2\alpha=\alpha,\qquad\text{即}\qquad (A-E)^2\alpha=0.\tag{1}$$<span class="pt">⛳ 联立消去 $\beta$ 2 分</span></div>
+        <div class="step">　　　直接计算得 $(A-E)^2=O$，故 (1) 式对<b>任意</b>向量 $\alpha$ 成立。
+        设 $\alpha=[a_1,a_2,a_3]^{\mathrm T}$（$a_1,a_2,a_3$ 不全为零），则
+        $$\beta=(A-E)\alpha=\begin{bmatrix}-1&-1&2\\-1&-1&2\\-1&-1&2\end{bmatrix}\begin{bmatrix}a_1\\a_2\\a_3\end{bmatrix}
+        =\begin{bmatrix}2a_3-a_1-a_2\\2a_3-a_1-a_2\\2a_3-a_1-a_2\end{bmatrix}.$$<span class="pt">⛳ 3 分</span></div>
+        <div class="step">　　　又要求 $\beta$ 为<b>非零</b>列向量，故须 $a_1+a_2\ne2a_3$。<span class="pt">⛳ 非零条件 2 分</span></div>
+        <div class="fin">综上，$a=3$；所求向量为 $\alpha=[a_1,a_2,a_3]^{\mathrm T}$，$\beta=[\,2a_3-a_1-a_2,\ 2a_3-a_1-a_2,\ 2a_3-a_1-a_2\,]^{\mathrm T}$，
+        其中 $a_1,a_2,a_3$ 不全为零且 $a_1+a_2\ne2a_3$。<span class="pt">⛳ 1 分</span></div>
+      </div>
+      <div class="zy"><span class="tag">强化题型 · 法二（书上并列给出，答案形式不同）</span>
+        由题设 $\beta=A\alpha-\alpha$ 与 $A^2\alpha-A\alpha=\beta$ 得 $A\beta=\beta$，即 $(A-E)\beta=0$。
+        解 $(E-A)x=0$ 得两个无关解 $[-1,1,0]^{\mathrm T},[2,0,1]^{\mathrm T}$，故 $\beta=[-k+2l,\ k,\ l]^{\mathrm T}$（$k,l$ 不同时为 0）。<br>
+        再由 $\alpha$ 是 $(A-E)x=\beta$ 的非零解，对增广矩阵化简得
+        $[A-E,\ \beta]\to\left[\begin{smallmatrix}-1&-1&2&\vdots&-k+2l\\0&0&0&\vdots&2k-2l\\0&0&0&\vdots&k-l\end{smallmatrix}\right]$，
+        故<b>当且仅当 $k=l\ne0$ 时有非零解</b>。综上
+        $$\beta=[k,k,k]^{\mathrm T},\qquad \alpha=[-k-p+2q,\ p,\ q]^{\mathrm T}\quad(k,p,q\in\mathbf R,\ k\ne0).$$
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        <b>①</b> <b>两法的答案<u>形式完全不同</u>，但描述的是同一个集合</b>——这是本题最容易让人怀疑自己算错的地方。对照关系：法二的 $k$ 就是法一的 $2a_3-a_1-a_2$；法二的 $k\ne0$ 就是法一的 $a_1+a_2\ne2a_3$；法二的 $(p,q)$ 就是法一的 $(a_2,a_3)$。<b>已用 sympy 双向验证两组解互相包含。</b><br>
+        <b>②</b> <b>选哪一法</b>：法一（消 $\beta$）算的是 $(A-E)^2$，一次矩阵乘法；法二（消 $\alpha$）要解两个方程组。<b>考场首选法一</b>，但若 $(A-E)^2\ne O$，法一会退化成解方程组，那时两法工作量相当。<br>
+        <b>③</b> <span class="dock">最易漏</span>：题目要的是<b>非零</b>列向量 $\alpha,\beta$——$\alpha\ne0$ 给出"$a_i$ 不全为零"，$\beta\ne0$ 给出"$a_1+a_2\ne2a_3$"。<b>两个非零条件都要写</b>，只写一个扣 2 分。<br>
+        <b>④</b> $(A-E)^2=O$ 这个现象在 ch5 有名字：$A$ 的特征值 1 对应一个<b>二阶 Jordan 块</b>（$A-E$ 幂零）。<span style="color:var(--teal)">本题 $A\alpha=\alpha+\beta$、$A\beta=\beta$ 正是"$\beta$ 是特征向量、$\alpha$ 是广义特征向量"的写法，即 ch5 的 <b>Jordan 链</b>。</span>本题看似方程组题，实为 ch5 的伏笔。<br>
+        <b>⑤</b> $f(\lambda)$ 的分解、$a=3$、$(A-E)^2=O$、两法解集等价，均已 sympy 复算。
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= s6 同解 ================= -->
+  <h2 id="s6"><span class="idx">六</span>同解方程组 · 三判据与「左乘因子」<span class="layer L-base">基础</span><span class="layer L-str">强化</span></h2>
+
+  <div class="key"><span class="tag">必记 · 齐次同解的<b>三个</b>充要条件（题给什么形状，就用哪一条）</span>
+    $A_{m\times n}x=0$ 与 $B_{s\times n}x=0$ 同解 $\iff$
+    <div class="gridwrap"><table>
+      <tr><th>#</th><th>判据</th><th>什么时候用</th></tr>
+      <tr><td>①</td><td>$r\!\left(\begin{bmatrix}A\\B\end{bmatrix}\right)=r(A)=r(B)$　<b>（三秩相同）</b></td><td>题给<b>具体/含参矩阵</b>，能算秩　<span style="color:var(--green)">★最常用</span></td></tr>
+      <tr><td>②</td><td>$A$ 的<b>行向量组</b>与 $B$ 的<b>行向量组等价</b></td><td>题在讲<b>向量组语言</b></td></tr>
+      <tr><td>③</td><td>存在矩阵 $P,Q$ 使 <b>$B=PA,\ A=QB$</b></td><td>题给<b>矩阵乘积 / 分块拼接</b>（见 <a href="#eg-56">强 5.6</a>）</td></tr>
+    </table></div>
+    <span class="exam">基础书页 130 给①（三秩相同，标 ★★★★），强化书页 56–57 补齐②③并给出完整证明链</span>
+  </div>
+
+  <div class="mine"><span class="tag">挖 · 张宇为什么在这一节旁边写「$D_{22}$ 就成了极为重要的考点」</span>
+    <b>书上说</b>（强化书页 56 眉批，本讲最长的一条）「若对于一个知识点，有多种等价说法，或对于一个命题有多种充要条件，
+    那么这里的 $D_2$（脱胎换骨）就成了<b>极为重要的考点</b>」，并把①②③整块框成「<b>等价表述体系块</b>」；<br>
+    <b>潜台词是</b>：<em>命题人出题时，会<b>故意用你最不熟悉的那个说法</b>来描述条件</em>——
+    你若只背了"三秩相同"，遇到题面写成 $\begin{bmatrix}A-B\\A+AB\end{bmatrix}$ 这种拼接形式就会卡死；<br>
+    <b>所以能考</b>：<a href="#eg-56">强 5.6</a> 全题就建立在"选③而不选①"上（用①要算 $n$ 阶符号矩阵的秩，做不动；用③只需看一个 $2\times2$ 分块阵可不可逆）。
+    <em>验收：默写三条判据时，若你只能想起"三秩相同"，遇到 5.6 就必然做不出。</em>
+  </div>
+
+  <div class="key"><span class="tag">必记 · 「左乘因子」技巧（③的可操作版本，本节最值钱的一招）</span>
+    若两个方程组的系数矩阵能写成
+    $$\begin{bmatrix}\ast\\ \ast\end{bmatrix}=M\begin{bmatrix}A\\B\end{bmatrix}$$
+    则 <b>$M$ 可逆 $\Longrightarrow$ 两方程组同解</b>；$M$ 不可逆则<b>不一定</b>同解。<br>
+    <span style="font-size:.87rem">理由：$M$ 可逆时 $M\begin{bmatrix}A\\B\end{bmatrix}x=0\iff\begin{bmatrix}A\\B\end{bmatrix}x=0$（左乘可逆阵是同解变换，本质就是"若干次初等行变换"）。</span>
+  </div>
+
+  <div class="link"><span class="tag">串 · 左乘 vs 右乘：同一招的两侧（回看 <a href="#eg-45">基 4.5</a>）</span>
+    <b>右乘</b>：新向量组 $=$ 旧向量组 $\times C$，<b>$C$ 可逆 ⟺ 新组仍线性无关（仍是基础解系）</b>——管的是<b>向量组</b>（ch3 与 <a href="#eg-45">基 4.5</a>）。<br>
+    <b>左乘</b>：新系数阵 $=M\times$ 旧系数阵，<b>$M$ 可逆 ⟺ 新方程组与旧方程组同解</b>——管的是<b>方程组</b>（<a href="#eg-56">强 5.6</a>）。<br>
+    <span style="color:var(--teal)"><b>一句话记牢</b>：<b>左乘换方程（保解集），右乘换未知量/换基（保秩）。</b>
+    这也正是 <a href="#s2">§二</a>「只能行变换」的另一种说法——初等<u>行</u>变换 = 左乘初等矩阵。
+    这条线继续往下走，就是 ch5 的相似 $P^{-1}AP$（两边都乘，既换基又保谱）与 ch6 的合同 $C^{\mathrm T}AC$。</span>
+  </div>
+
+  <div class="bg"><span class="tag">筛</span>强化书页 56–59 用两整页给出①⟺②⟺③（齐次）与①⟹②⟹③⟹④⟹①（非齐次）的<b>完整循环证明</b>。这些证明本身是理论闭环，<b>考场上不会要你复述</b>——但值得读一遍，因为它们把"同解 / 等价 / 秩相等 / 存在变换矩阵"四种语言真正焊在了一起。<b>读一遍，然后只记结论表。</b></div>
+
+  <div class="eg" id="eg-56">
+    <div class="q"><span class="no">强 5.6 ✔</span><b>选择题 · 左乘因子的标准用法</b>　设 $A,B$ 为 $n$ 阶矩阵，且 $A$ 满足 $A^2-A=3E$，
+      则与 $\begin{bmatrix}A\\B\end{bmatrix}x=0$ <b>不一定同解</b>的是（　）。<br>
+      (A) $\begin{bmatrix}A-B\\A+AB\end{bmatrix}x=0$　(B) $\begin{bmatrix}A+B\\A+AB-B\end{bmatrix}x=0$
+      (C) $\begin{bmatrix}A-B\\2A+B\end{bmatrix}x=0$　(D) $\begin{bmatrix}A+B\\BA+B^2\end{bmatrix}x=0$</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路</span>
+        <ol>
+          <li><b>三条判据选哪条</b>：题面是抽象的 $n$ 阶矩阵，秩根本算不出来 ⟹ ①②都用不了，<b>只能用③</b>。书上眉批原话：「同解 ⟹ 上述①～③均可，<b>由题干与选项，宜用③</b>」。</li>
+          <li>③的操作版就是<b>把每个选项的系数阵提出左乘因子</b>：例如 $\begin{bmatrix}A-B\\A+AB\end{bmatrix}=\begin{bmatrix}E&-E\\E&A\end{bmatrix}\begin{bmatrix}A\\B\end{bmatrix}$。<b>提因子是全题唯一的技术动作。</b></li>
+          <li>然后只需判断 $2\times2$ 分块阵可不可逆。<b>用分块初等变换消去左下角</b>：$\begin{bmatrix}E&-E\\E&A\end{bmatrix}\to\begin{bmatrix}E&-E\\O&A+E\end{bmatrix}$，可逆性归结为 $A+E$ 是否可逆。</li>
+          <li><b>条件 $A^2-A=3E$ 是干什么的</b>：配方 $(A+E)(A-2E)=A^2-A-2E=3E-2E=E$ ⟹ <b>$A+E$ 与 $A-2E$ 都可逆</b>（且互为逆的常数倍）。这就是题目送的两把钥匙。</li>
+        </ol>
+      </div>
+      <p><span class="lab">答案</span><b class="ans">(D)</b></p>
+      <div class="gridwrap"><table>
+        <tr><th>选项</th><th>左乘因子 $M$</th><th>分块消元后</th><th>可逆？</th><th>结论</th></tr>
+        <tr><td>(A)</td><td>$\begin{bmatrix}E&-E\\E&A\end{bmatrix}$</td><td>$\begin{bmatrix}E&-E\\O&A+E\end{bmatrix}$</td><td>✔（$A+E$ 可逆）</td><td>同解</td></tr>
+        <tr><td>(B)</td><td>$\begin{bmatrix}E&E\\E&A-E\end{bmatrix}$</td><td>$\begin{bmatrix}E&E\\O&A-2E\end{bmatrix}$</td><td>✔（$A-2E$ 可逆）</td><td>同解</td></tr>
+        <tr><td>(C)</td><td>$\begin{bmatrix}E&-E\\2E&E\end{bmatrix}$</td><td>$\begin{bmatrix}E&-E\\O&3E\end{bmatrix}$</td><td>✔（常数阵）</td><td>同解</td></tr>
+        <tr><td><b>(D)</b></td><td>$\begin{bmatrix}E&E\\B&B\end{bmatrix}$</td><td>$\begin{bmatrix}E&E\\O&O\end{bmatrix}$</td><td><b>✘ 不可逆</b></td><td><b>不一定同解</b></td></tr>
+      </table></div>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        <b>①</b> <b>(D) 为什么一眼就该盯上</b>：它的第二行 $BA+B^2=B(A+B)$，<b>整行都是第一行的左倍数</b>——两行"共线"，左乘因子必然掉秩。<b>凡看到某一行能整体提出公因子且提完与另一行相同，直接选它。</b><br>
+        <b>②</b> <span class="dock">措辞陷阱</span>：题问的是"<b>不一定</b>同解"，不是"一定不同解"。(D) 在某些具体 $B$ 下仍可能碰巧同解（比如 $B=O$ 时两组都是 $Ax=0$ 与 $0=0$）——<b>但不能保证</b>，所以选它。<u>这类"不一定"的措辞，答案只需举出反例的可能性，不必真造反例。</u><br>
+        <b>③</b> <b>$A^2-A=3E$ 的配方值得单独记</b>：见到 $A$ 的多项式等于 $kE$，就去<b>因式分解找可逆因子</b>。一般地 $f(A)=O$ 时，$f(\lambda)$ 的每个因子 $(A-\lambda_i E)$ 的可逆性都由 $\lambda_i$ 是否为特征值决定。<span style="color:var(--teal)">这是 ch5「特征值必是 $f(\lambda)=0$ 的根」的前身。</span><br>
+        <b>④</b> 分块消元 $\begin{bmatrix}E&X\\E&Y\end{bmatrix}\to\begin{bmatrix}E&X\\O&Y-X\end{bmatrix}$ 是本题的机械动作，四个选项都这么做。<b>练熟它，本题 90 秒可解。</b><br>
+        <b>⑤</b> 已取满足 $A^2-A=3E$ 的具体矩阵（$A=\frac{1+\sqrt{13}}2E$）验证四个左乘因子的行列式：(A)(B)(C) 分别为 $\frac{(3+\sqrt{13})^2}4$、$\frac{(3-\sqrt{13})^2}4$、$16$，均非零；(D) 恒为 $0$。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg" id="eg-57">
+    <div class="q"><span class="no">强 5.7 ✔</span><b>填空题 · 逆否思路</b>　设矩阵 $A=\begin{bmatrix}4&2&-3\\a&3&-4\\b&5&-7\end{bmatrix}$，
+      若方程组 $A^2x=0$ 与 $Ax=0$ <b>不同解</b>，则 $a-b=$ ______。</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路</span>
+        <ol>
+          <li><b>"不同解"这种否定式条件，正面难做</b>——直接想"什么情况下<b>同解</b>"，再取反。眉批标的正是 `P₄（逆否思路）："A ⟹ B" 转化为 "¬B ⟹ ¬A"`。</li>
+          <li><b>什么时候一定同解</b>：若 $A$ 可逆，则 $A^2x=0\iff Ax=0$（两边左乘 $A^{-1}$），必同解。</li>
+          <li>所以<b>要"不同解"，$A$ 必须不可逆</b>，即 $|A|=0$。（这是必要条件，本题填空只需它。）</li>
+          <li>剩下就是算一个含参三阶行列式，<b>用倍加化简</b>而不是硬展开。</li>
+        </ol>
+      </div>
+      <p><span class="lab">答案</span><b class="ans">$-4$</b></p>
+      <p><span class="lab">解</span> 若 $A^2x=0$ 与 $Ax=0$ 同解，则三秩相等：$r(A)=r(A^2)=r\!\left(\begin{bmatrix}A\\A^2\end{bmatrix}\right)$。
+      <b>$A$ 可逆时三秩显然相等</b>，故要使二者<b>不同解</b>，必有 $A$ 不可逆，即 $|A|=0$。
+      利用行列式的倍加性质：
+      $$|A|=\begin{vmatrix}4&2&-3\\a&3&-4\\b&5&-7\end{vmatrix}
+      =\begin{vmatrix}4&2&-1\\a&3&-1\\b&5&-2\end{vmatrix}
+      =\begin{vmatrix}4&0&-1\\a&1&-1\\b&1&-2\end{vmatrix}=4(-2+1)-(a-b)=-4-(a-b).$$
+      令 $|A|=0$，得 $a-b=-4$。</p>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        <b>①</b> <b>"$A$ 可逆 ⟹ $A^kx=0$ 与 $Ax=0$ 同解"要能一眼看出</b>：两边左乘 $A^{-1}$ 即可。<u>反之 $A$ 不可逆时未必不同解</u>——所以严格说 $|A|=0$ 只是必要条件。<b>填空题只问 $a-b$ 的值，取必要条件足矣</b>；若是解答题问"求所有使不同解的 $a,b$"，还需回代验证。<br>
+        <b>②</b> <b>行列式的化简路线</b>（书未标操作，这里补全）：第一步 $c_3\to c_3+\frac12c_1\cdot?$——实际是把第 3 列加上第 2 列的适当倍数使元素变小；第二步再对第 2 列消元。<b>考场上不必照抄书的路线，直接按第一行展开也只需 20 秒</b>：$|A|=4(-21+20)-2(-7a+4b)+(-3)(5a-3b)=-4-a+b$。<b>已 sympy 验证 $|A|=-a+b-4$，与书一致。</b><br>
+        <b>③</b> $r(A)=r(A^2)$ 这个条件在 ch5 有名字：它等价于"<b>$A$ 的零特征值不产生 Jordan 块的链条</b>"（$\ker A=\ker A^2$）。<span style="color:var(--teal)">数一考纲不要求 Jordan 型，但"$r(A)=r(A^2)$"作为条件在真题里出现过多次。</span><br>
+        <b>④</b> <span class="dock">符号易错</span>：结果是 $a-b=-4$ 不是 $4$。展开式 $-4-(a-b)=0$ 移项时容易掉负号。
+      </div>
+    </div>
+  </div>
+
+  <div class="key"><span class="tag">必记 · 非齐次同解的<b>四个</b>等价说法（强化书页 58–59，循环封闭证明）</span>
+    设 (Ⅰ) $A_{m\times n}x=\beta$ 与 (Ⅱ) $B_{s\times n}x=\gamma$ <b>均有解</b>，则以下四条等价：<br>
+    <b>①</b> (Ⅰ) 与 (Ⅱ) 同解；<br>
+    <b>②</b> $Ax=0$ 与 $Bx=0$ 同解，<b>且</b> (Ⅰ)(Ⅱ) 有<b>公共解</b>；<br>
+    <b>③</b> $r\!\left(\left[\begin{array}{c:c}A&\beta\\B&\gamma\end{array}\right]\right)=r\!\left(\begin{bmatrix}A\\B\end{bmatrix}\right)=r(A)=r(B)$；<br>
+    <b>④</b> $[A,\beta]$ 与 $[B,\gamma]$ 的<b>行向量组等价</b>。
+  </div>
+
+  <div class="mine"><span class="tag">挖 · 第②条为什么要<b>两个</b>条件，缺一不可</span>
+    <b>书上说</b>②是「导出组同解 <b>且</b> 有公共解」；<br>
+    <b>潜台词是</b>：<em>非齐次的解集是"平移了的子空间"（见 <a href="#s3">§三</a>），要让两张平面重合，需要<b>方向一样</b>（导出组同解）<b>加上过同一个点</b>（有公共解）——缺任何一个都不行</em>：
+    方向相同但不过同一点 ⟹ 两张<b>平行</b>的平面，解集不交；过同一点但方向不同 ⟹ 两张<b>相交</b>的平面，只共享一条线；<br>
+    <b>所以能考</b>：题目给"两组有公共解"问是否同解——<b>答不一定</b>，还要看导出组。
+    <span style="color:var(--teal)">这个"方向 + 位置"的二分，正是 <a href="#s7">§七</a> 八种平面位置关系表里 <b>$A$ 管方向、$\bar A$ 管位置</b> 的同一件事（书页 50 的两处眉批原话）。</span>
+  </div>
+
+  <div class="mine"><span class="tag">挖 · 四条等价说法里，「<b>均有解</b>」这个前提为什么不能删</span>
+    <b>书上说</b>开头写着"设 (Ⅰ)(Ⅱ) <b>均有解</b>，则以下四条等价"；<br>
+    <b>潜台词是</b>：<em>两个<b>都无解</b>的方程组，解集都是空集，按集合意义"同解"——但此时秩的关系完全可以乱来</em>
+    （例如 $0x=1$ 与 $0x=2$ 都无解，$r(A)=r(B)=0$ 而 $r([A,\beta])=r([B,\gamma])=1$，③根本不成立）；
+    所以四条的等价性<b>建立在"两边都有解"这个共同地基上</b>；<br>
+    <b>所以能考</b>：含参同解题里，<u>先把参数分成"有解 / 无解"两段</u>，再在有解那一段里用四条判据。
+    <span class="dock">高频失分</span>：直接套 $r$ 的等式而不先验有解性，会把"两边都无解"的参数值也算成同解。
+    <em><a href="#eg-58">强 5.8</a> 第 (2) 问就是先确认两边都有解，才敢比较秩。</em>
+  </div>
+
+  <div class="eg" id="eg-58">
+    <div class="q"><span class="no">强 5.8 ✔</span><b>解答题 · 「(Ⅰ) 的解均为 (Ⅱ) 的解」三步通法</b>　设
+      $A=\begin{bmatrix}1&-1&0&-1\\1&1&0&3\\2&1&2&6\end{bmatrix}$，
+      $B=\begin{bmatrix}1&0&1&2\\1&-1&a&a-1\\2&-3&2&-2\end{bmatrix}$，
+      $\alpha=\begin{bmatrix}0\\2\\3\end{bmatrix}$，$\beta=\begin{bmatrix}1\\0\\-1\end{bmatrix}$。<br>
+      (1) 证明：方程组 $Ax=\alpha$ 的解均为方程组 $Bx=\beta$ 的解；<br>
+      (2) 若方程组 $Ax=\alpha$ 与 $Bx=\beta$ <b>不同解</b>，求 $a$ 的值。</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路</span>
+        <ol>
+          <li><b>(1) 是"解集包含"型，有固定的三步通法</b>（书上在解答左侧用三个"步骤"标签明确标出，并写「一定要掌握」）：
+          <u>① 求出 (Ⅰ) 的通解 → ② 把通解<b>整体代入</b> (Ⅱ) → ③ 验证恒等于右端</u>。<b>注意代入的是含参数 $k$ 的通解，不是某个特解</b>——这样才证明了"任一解"。</li>
+          <li>代入后 $a$ 会自动消掉（否则 (1) 不可能对任意 $a$ 成立），这是本题设计好的。</li>
+          <li><b>(2) 反过来问不同解</b>。由 (1) 已知 (Ⅰ) 的解 $\subseteq$ (Ⅱ) 的解，<b>所以不同解只能是"(Ⅱ) 的解更多"</b> ⟹ 比较两者的解空间维数，即比较 $r(A)$ 与 $r(B)$。</li>
+          <li>含参的 $B$ 要<b>分类讨论</b>：$a\ne1$ 与 $a=1$。</li>
+        </ol>
+      </div>
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面<span class="score">按 12 分估</span></div>
+        <div class="step"><span class="k">证 (1)</span>　<b>第一步，求 $Ax=\alpha$ 的通解。</b>对增广矩阵作初等行变换：
+        $$[A,\alpha]=\left[\begin{array}{cccc:c}1&-1&0&-1&0\\1&1&0&3&2\\2&1&2&6&3\end{array}\right]
+        \longrightarrow\left[\begin{array}{cccc:c}1&0&0&1&1\\0&1&0&2&1\\0&0&1&1&0\end{array}\right],$$
+        故 $r(A)=r([A,\alpha])=3\lt4$，通解为
+        $$x=[1,1,0,0]^{\mathrm T}+k[-1,-2,-1,1]^{\mathrm T}=[1-k,\ 1-2k,\ -k,\ k]^{\mathrm T}\quad(k\ \text{为任意常数}).$$<span class="pt">⛳ 求出 (Ⅰ) 的通解 4 分</span></div>
+        <div class="step">　　　<b>第二步，将该通解代入 $Bx$。</b>
+        $$Bx=\begin{bmatrix}1&0&1&2\\1&-1&a&a-1\\2&-3&2&-2\end{bmatrix}\begin{bmatrix}1-k\\1-2k\\-k\\k\end{bmatrix}
+        =\begin{bmatrix}1\\0\\-1\end{bmatrix}=\beta.$$<span class="pt">⛳ 代入并算出 3 分</span></div>
+        <div class="step">　　　<b>第三步</b>，上式对任意 $k$ 与任意 $a$ 均成立，即 (Ⅰ) 的<b>任一</b>解都满足 (Ⅱ)。<span class="pt">⛳ 点明"对任意 k" 1 分</span></div>
+        <div class="fin">所以方程组 $Ax=\alpha$ 的解均为方程组 $Bx=\beta$ 的解。<b>证毕。</b></div>
+        <div class="step" style="margin-top:14px"><span class="k">解 (2)</span>　对 $[B,\beta]$ 作初等行变换：
+        $$[B,\beta]\longrightarrow\left[\begin{array}{cccc:c}1&0&1&2&1\\0&1&1-a&3-a&1\\0&0&a-1&a-1&0\end{array}\right].\tag{1}$$<span class="pt">⛳ 2 分</span></div>
+        <div class="step">　　　<b>当 $a\ne1$ 时</b>，由 (1) 式继续化简得
+        $\left[\begin{smallmatrix}1&0&0&1&1\\0&1&0&2&1\\0&0&1&1&0\end{smallmatrix}\right]$，
+        与 $[A,\alpha]$ 的行最简形<b>完全相同</b>，故两方程组<b>同解</b>。<span class="pt">⛳ 1 分</span></div>
+        <div class="step">　　　<b>当 $a=1$ 时</b>，由 (1) 式得
+        $[B,\beta]\to\left[\begin{smallmatrix}1&0&1&2&1\\0&1&0&2&1\\0&0&0&0&0\end{smallmatrix}\right]$，
+        此时 $r([B,\beta])=2\ne3=r([A,\alpha])$，故两方程组<b>不同解</b>。<span class="pt">⛳ 1 分</span></div>
+        <div class="fin">综上可知，$a=1$。</div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        <b>①</b> <b>书上把 (1) 的解答称为"常规解法，一定要掌握"</b>（页边眉批原话）。<b>三步的关键是第二步代入的是<u>带 $k$ 的通解</u></b>：<span class="dock">若只代入特解 $[1,1,0,0]^{\mathrm T}$，只证明了"有一个解满足"，证不出"均为"</span>，这是本题最大的扣分点（要扣 4 分以上）。<br>
+        <b>②</b> <b>(2) 的逻辑要说清</b>：由 (1) 知 (Ⅰ) 的解集 $\subseteq$ (Ⅱ) 的解集，故"不同解"$\iff$ 两解集<b>真包含</b>$\iff$ 维数不等 $\iff r(B)\lt r(A)$。$a=1$ 时 $r(B)=2\lt3$，(Ⅱ) 的解<b>多了一维</b>。<br>
+        <b>③</b> <b>为什么 $a$ 在 (1) 里能消掉</b>：代入后第二行是 $(1-k)-(1-2k)+a(-k)+(a-1)k=k-ak+ak-k=0$——<b>含 $a$ 的两项自动抵消</b>。这不是巧合，是题目为了让 (1) 对任意 $a$ 成立而设计的。<br>
+        <b>④</b> 已用 sympy 对 $a=0,1,2,-3,\frac12,5$ 逐一验算：<b>恰在 $a=1$ 时 $r(B)=r([B,\beta])=2$，其余情形均为 3 且与 (Ⅰ) 同解</b>，与书完全一致。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg" id="eg-413">
+    <div class="q"><span class="no">基 4.13 ✔</span><b>解答题 · 添一个方程后仍同解</b>　设线性方程组
+      $$(Ⅰ)\begin{cases}x_1+3x_3+5x_4=0\\ x_1-x_2-2x_3+2x_4=0\\ 2x_1-x_2+x_3+3x_4=0\end{cases}$$
+      在 (Ⅰ) 的基础上添加一个方程 $4x_1+ax_2+bx_3+13x_4=0$ 得 (Ⅱ)。<br>
+      (1) 求方程组 (Ⅰ) 的通解；　(2) $a,b$ 满足什么条件时，(Ⅰ)、(Ⅱ) 是同解方程组？</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路</span>
+        <ol>
+          <li><b>(Ⅱ) 是在 (Ⅰ) 上"加了一行"</b>——这个结构极大地简化了问题：<b>(Ⅱ) 的解自动满足 (Ⅰ)</b>（方程更多，约束更强）。所以<u>只需单向验证</u>：(Ⅰ) 的解是否满足新加的那个方程。</li>
+          <li>而 (Ⅰ) 的解只有一族 $k\xi$，代进去得到一个关于 $a,b,k$ 的等式，<b>要求对任意 $k$ 成立 ⟹ 系数为零</b>。</li>
+          <li>所以本题的全部工作量就是：求出 $\xi$，代入第 4 个方程。<b>不需要算 $r$(Ⅱ)。</b></li>
+        </ol>
+      </div>
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面<span class="score">按 10 分估</span></div>
+        <div class="step"><span class="k">解 (1)</span>　对 (Ⅰ) 的系数矩阵作初等行变换：
+        $$\begin{bmatrix}1&0&3&5\\1&-1&-2&2\\2&-1&1&3\end{bmatrix}
+        \longrightarrow\begin{bmatrix}1&0&3&5\\0&-1&-5&-3\\0&0&0&-4\end{bmatrix},$$
+        故 $r=3$，基础解系含 $4-3=1$ 个向量。取 $x_3=1$ 回代得 $\xi=[-3,-5,1,0]^{\mathrm T}$，
+        故 (Ⅰ) 的通解为 $x=k[-3,-5,1,0]^{\mathrm T}$（$k$ 为任意常数）。<span class="pt">⛳ 求通解 4 分</span></div>
+        <div class="step"><span class="k">(2)</span>　因 (Ⅱ) 的前 3 个方程即为 (Ⅰ)，故 (Ⅱ) 的解必满足 (Ⅰ)；
+        于是 (Ⅰ)、(Ⅱ) 同解 $\iff$ (Ⅰ) 的解满足 (Ⅱ) 的<b>第 4 个方程</b>。<span class="pt">⛳ 说清只需单向验证 2 分</span></div>
+        <div class="step">　　　将 (Ⅰ) 的通解代入第 4 个方程，得
+        $$4(-3k)+a(-5k)+b\cdot k+13\cdot 0=(-12-5a+b)k=0,$$
+        因 $k$ 为任意常数，故 $-12-5a+b=0$。<span class="pt">⛳ 代入并令系数为零 3 分</span></div>
+        <div class="fin">即当 $b-5a=12$ 时，方程组 (Ⅰ) 与 (Ⅱ) 是同解方程组。<span class="pt">⛳ 1 分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        <b>①</b> <b>"$(-12-5a+b)k=0$ 对任意 $k$ 成立"必须写出"因 $k$ 任意"这句话</b>再得系数为零。<span class="dock">直接写 $-12-5a+b=0$ 扣 1 分</span>——这是把"对任意 $k$"降级成了"存在 $k$"。<br>
+        <b>②</b> <b>与 <a href="#xt-410">习 4.10</a> 的关键差别</b>：那里 (Ⅱ) 的方程与 (Ⅰ) <u>完全不同</u>，所以代入求出参数后<b>还必须再验一次两者行最简形一致</b>；这里 (Ⅱ) ⊇ (Ⅰ) 的方程，<b>一个方向自动成立，只验一次即可</b>。<b>做同解题第一件事：看两组方程有没有包含关系。</b><br>
+        <b>③</b> <span class="dock">易错</span>：$\xi$ 的第 4 个分量是 $0$（因为第三行 $-4x_4=0$ 逼出 $x_4=0$），代入时 $13\cdot0=0$ 那一项<b>不能忘了写</b>，虽然结果是 0。<br>
+        <b>④</b> 已对 $a=0,1,-2,3,7$ 取 $b=5a+12$ 验证：$r(Ⅱ)=3$ 恒成立且与 (Ⅰ) 同解；取 $b=5a+13$ 则 $r(Ⅱ)=4$，不同解。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg" id="eg-414">
+    <div class="q"><span class="no">基 4.14 ✔</span><b>证明题</b>　设方程组 $Ax=b$ <b>有解</b>，证明：$A^{\mathrm T}x=0$ 和 $\begin{bmatrix}A^{\mathrm T}\\ b^{\mathrm T}\end{bmatrix}x=0$ 是同解方程组。</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路</span>
+        <ol>
+          <li>证同解的两条常规路：<b>互相验证解</b>，或<b>三秩相同</b>。这里<u>一个方向是白送的</u>（方程更多的那组，解自然满足方程更少的那组），<b>所以只需再补一个"个数相同"</b>——这正是判据①的用法。</li>
+          <li>$Ax=b$ 有解 $\iff r(A)=r([A,b])$。<b>要把它转成带转置的形式</b>：$[A,b]^{\mathrm T}=\begin{bmatrix}A^{\mathrm T}\\ b^{\mathrm T}\end{bmatrix}$，而转置不改变秩，故 $r\!\left(\begin{bmatrix}A^{\mathrm T}\\ b^{\mathrm T}\end{bmatrix}\right)=r([A,b])=r(A)=r(A^{\mathrm T})$。</li>
+          <li>两组的未知量个数相同、秩相同 ⟹ 解空间维数相同；再加上包含关系 ⟹ 相等。</li>
+        </ol>
+      </div>
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面<span class="score">按 10 分估</span></div>
+        <div class="step"><span class="k">证</span>　<b>①</b> 显然 $\begin{bmatrix}A^{\mathrm T}\\ b^{\mathrm T}\end{bmatrix}x=0$ 的解必满足 $A^{\mathrm T}x=0$。<span class="pt">⛳ 白送方向 2 分</span></div>
+        <div class="step">　　<b>②</b> 因 $Ax=b$ 有解，故 $r(A)=r([A,b])$。又
+        $$r\!\left(\begin{bmatrix}A^{\mathrm T}\\ b^{\mathrm T}\end{bmatrix}\right)=r\big([A,b]^{\mathrm T}\big)=r([A,b])=r(A)=r(A^{\mathrm T}),$$
+        故 $A^{\mathrm T}x=0$ 与 $\begin{bmatrix}A^{\mathrm T}\\ b^{\mathrm T}\end{bmatrix}x=0$ 的基础解系中所含解向量个数<b>相等</b>。<span class="pt">⛳ 秩相等 5 分</span></div>
+        <div class="step">　　由 ①② 知：后者的解空间是前者的子空间，且二者维数相同，故两解空间相等。<span class="pt">⛳ 合并两条 2 分</span></div>
+        <div class="fin">所以 $A^{\mathrm T}x=0$ 和 $\begin{bmatrix}A^{\mathrm T}\\ b^{\mathrm T}\end{bmatrix}x=0$ 是同解方程组。<b>证毕。</b></div>
+      </div>
+      <div class="trap"><span class="tag">陷阱 · 书页 132【注】专门写了一整段的易错点</span>
+        <b>$[A,B]^{\mathrm T}=\begin{bmatrix}A^{\mathrm T}\\ B^{\mathrm T}\end{bmatrix}$（竖着摞），<u>而不是</u> $[A^{\mathrm T},B^{\mathrm T}]$（横着拼）。</b>眉批原话：「注意：$[A,B]^{\mathrm T}=\begin{bmatrix}A^{\mathrm T}\\B^{\mathrm T}\end{bmatrix}$，而不是 $[A^{\mathrm T},B^{\mathrm T}]$，<b>易错点</b>」。<br>
+        由此：$r([A,B])=r\!\left(\begin{bmatrix}A^{\mathrm T}\\ B^{\mathrm T}\end{bmatrix}\right)$ <b>恒成立</b>（转置不改变秩），
+        <b>但 $r([A,B])$ 与 $r([A^{\mathrm T},B^{\mathrm T}])$ 不一定相等</b>。书给的反例：
+        $$A=\begin{bmatrix}1&0\\0&0\end{bmatrix},\ B=\begin{bmatrix}0&1\\0&0\end{bmatrix}\ \Longrightarrow\
+        r([A,B])=r\!\begin{bmatrix}1&0&0&1\\0&0&0&0\end{bmatrix}=1,\quad
+        r([A^{\mathrm T},B^{\mathrm T}])=r\!\begin{bmatrix}1&0&0&0\\0&0&1&0\end{bmatrix}=2.$$
+        「究其原因，$[A^{\mathrm T},B^{\mathrm T}]$ 并不是 $[A,B]^{\mathrm T}$，<b>这一点可能会迷惑考生</b>。」<b>反例已 sympy 验证。</b>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        <b>①</b> <b>本题的证法模式值得单独记</b>：<u>证两个解空间相等 = 证"包含" + 证"维数相同"</u>。这比"互相代入验证"省一半力气，凡有明显包含关系时都该用。<br>
+        <b>②</b> 书【注】还给了更一般的版本：若 $r(A)=r([A,B])$（$A_{m\times n},B_{m\times s}$），则 $r(A^{\mathrm T})=r\!\left(\begin{bmatrix}A^{\mathrm T}\\ B^{\mathrm T}\end{bmatrix}\right)$。
+        理由：$r(A)=r([A,B])$ 说明 <b>$B$ 的每列可由 $A$ 的列表示</b> ⟹ 转置后 <b>$B^{\mathrm T}$ 的每行可由 $A^{\mathrm T}$ 的行表示</b> ⟹ 摞起来不涨秩。<br>
+        <b>③</b> <b>$b$ 是列向量这件事在证明里其实没用到</b>——把 $b$ 换成任意矩阵 $B$ 结论照样成立。<u>看出条件的多余部分，是判断自己有没有真懂的标志。</u>
+      </div>
+    </div>
+  </div>
+
+  <div class="eg" id="eg-415">
+    <div class="q"><span class="no">基 4.15 ✔</span><b>证明题</b>　<span class="exam">四秩相同的来源</span>　设 $A$ 是 $n$ 阶<b>实</b>矩阵，$A^{\mathrm T}$ 是 $A$ 的转置。
+      证明：(Ⅰ) $Ax=0$ 和 (Ⅱ) $A^{\mathrm T}Ax=0$ 是同解方程组。</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路</span>
+        <ol>
+          <li><b>一个方向是白送的</b>：$Ax=0$ 两边左乘 $A^{\mathrm T}$ 即得 $A^{\mathrm T}Ax=0$。</li>
+          <li><b>难的是反过来</b>：由 $A^{\mathrm T}Ax=0$ 怎么挤出 $Ax=0$？<b>关键技巧：左乘 $x^{\mathrm T}$</b>，把矩阵等式变成一个<b>数</b>的等式：
+          $x^{\mathrm T}A^{\mathrm T}Ax=(Ax)^{\mathrm T}(Ax)=0$。</li>
+          <li>而 $(Ax)^{\mathrm T}(Ax)$ 就是向量 $Ax$ 的<b>各分量平方和</b>——<u>实数的平方和为零 ⟹ 每一项都是零</u> ⟹ $Ax=0$。<b>"实"字就用在这里。</b></li>
+        </ol>
+      </div>
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面<span class="score">按 10 分估</span></div>
+        <div class="step"><span class="k">证</span>　<b>①</b> 若 $Ax=0$，两端左乘 $A^{\mathrm T}$ 得 $A^{\mathrm T}Ax=0$，故 (Ⅰ) 的解必是 (Ⅱ) 的解。<span class="pt">⛳ 2 分</span></div>
+        <div class="step">　　<b>②</b> 若 $A^{\mathrm T}Ax=0$，两端左乘 $x^{\mathrm T}$，得
+        $$x^{\mathrm T}A^{\mathrm T}Ax=(Ax)^{\mathrm T}(Ax)=0.$$<span class="pt">⛳ 左乘 $x^{\mathrm T}$ 这一步 3 分</span></div>
+        <div class="step">　　　因 $A$ 是<b>实</b>矩阵，故 $Ax$ 是实向量。设 $Ax=[a_1,a_2,\cdots,a_n]^{\mathrm T}$，则
+        $$(Ax)^{\mathrm T}(Ax)=\sum_{i=1}^{n}a_i^2=0\ \Longrightarrow\ a_i=0\ (i=1,2,\cdots,n),$$
+        即 $Ax=0$，故 (Ⅱ) 的解必是 (Ⅰ) 的解。<span class="pt">⛳ 平方和为零推出全零 3 分</span></div>
+        <div class="fin">由 ①② 知，方程组 (Ⅰ) 与 (Ⅱ) 是同解方程组。<b>证毕。</b><span class="pt">⛳ 合并 2 分</span></div>
+      </div>
+      <div class="key" style="margin-top:12px"><span class="tag">必记 · 由本题得到的<b>四秩相同</b>（书上标 ★★★，眉批「经常用到，要牢记」）</span>
+        (1) 若 $A$ 是 $m\times n$ <b>实</b>矩阵，则 $Ax=0$ 与 $A^{\mathrm T}Ax=0$ 也同解（结论对长方阵一样成立）。<br>
+        (2) 由同解得 $\boxed{r(A)=r(A^{\mathrm T}A)}$。<br>
+        (3) 又 $r(A)=r(A^{\mathrm T})$，故
+        $$\boxed{\,r(A)=r(A^{\mathrm T})=r(A^{\mathrm T}A)=r(AA^{\mathrm T})\,}$$
+      </div>
+      <div class="trap"><span class="tag">陷阱 · 「实矩阵」三个字是这条定理的命门</span>
+        复矩阵时平方和为零推不出每项为零。反例：$A=[1,\ \mathrm i]$（$1\times2$），
+        $AA^{\mathrm T}=1+\mathrm i^2=0$，<b>秩从 $r(A)=1$ 掉到 $r(AA^{\mathrm T})=0$</b>。<b>已 sympy 验证。</b><br>
+        <span class="dock">考场提醒</span>：凡要用"四秩相同"，先在卷面上写一句「因 $A$ 为实矩阵」。<u>数一考纲内矩阵默认为实矩阵，但证明题里这句话是采分点。</u>
+      </div>
+      <div class="link"><span class="tag">串 · 「四秩相同」这块砖砌在哪些墙上</span>
+        <b>本章</b>：<a href="#eg-47">基 4.7</a>（$A^{\mathrm T}Ax=A^{\mathrm T}b$ 恒有解）直接用它；<br>
+        <b>ch6 二次型</b>：$A^{\mathrm T}A$ 恒为<b>半正定</b>矩阵，且 $A$ 列满秩 $\iff A^{\mathrm T}A$ <b>正定</b>——判据就是这条秩等式；<br>
+        <b>ch5 特征值</b>：$A^{\mathrm T}A$ 与 $AA^{\mathrm T}$ <b>非零特征值完全相同</b>（奇异值理论的起点）；<br>
+        <b>概率/统计</b>：最小二乘的正规方程可解性（见 <a href="#eg-47">基 4.7</a> 的串）。<br>
+        <span style="color:var(--teal)"><b>本条已用 300 组随机实矩阵（各种形状）批量对拍，四个秩恒等。</b></span>
+      </div>
+    </div>
+  </div>
+  <!-- ================= s7 几何意义 ================= -->
+  <h2 id="s7"><span class="idx">七</span>线性方程组的几何意义 · 八种位置关系<span class="layer L-str">仅数学一</span></h2>
+
+  <div class="key"><span class="tag">必记 · 记号与「方向 / 位置」的分工（强化书页 50 的两处眉批）</span>
+    设三元一次方程组
+    $$\begin{cases}a_1x+b_1y+c_1z=d_1\\ a_2x+b_2y+c_2z=d_2\\ a_3x+b_3y+c_3z=d_3\end{cases}\qquad
+    A=\begin{bmatrix}a_1&b_1&c_1\\a_2&b_2&c_2\\a_3&b_3&c_3\end{bmatrix},\quad
+    \bar A=\begin{bmatrix}a_1&b_1&c_1&d_1\\a_2&b_2&c_2&d_2\\a_3&b_3&c_3&d_3\end{bmatrix}$$
+    <b>$\Pi_i$</b> 表示第 $i$ 张平面；<b>$\alpha_i=[a_i,b_i,c_i]$ 是 $A$ 的行向量，也就是 $\Pi_i$ 的<u>法向量</u></b>；
+    <b>$\beta_i=[a_i,b_i,c_i,d_i]$ 是 $\bar A$ 的行向量</b>。<br>
+    <span style="color:var(--accent)">书上在这两块上各画了一个箭头：
+    指向 $A$ 的三列写「<b>表达平面 $\Pi_i$ 的方向</b>」，指向 $\bar A$ 的第四列 $d_i$ 写「<b>表达确定方向后 $\Pi_i$ 的位置</b>」。</span>
+  </div>
+
+  <div class="mine"><span class="tag">挖 · <b>整节的生成元只有四条</b>，两张八行大表全是它们的组合</span>
+    <b>书上说</b>（书页 60–61 蓝底【注】，以下 $i\ne j$）：<br>
+    ① $\alpha_i,\alpha_j$ 线性<b>相关</b> $\iff$ $\Pi_i$ 与 $\Pi_j$ <b>平行或重合</b>；　② $\alpha_i,\alpha_j$ 线性<b>无关</b> $\iff$ $\Pi_i$ 与 $\Pi_j$ <b>相交</b>；<br>
+    ③ $\beta_i,\beta_j$ 线性<b>相关</b> $\iff$ $\Pi_i$ 与 $\Pi_j$ <b>重合</b>；　④ $\beta_i,\beta_j$ 线性<b>无关</b> $\iff$ $\Pi_i$ 与 $\Pi_j$ <b>不重合</b>；<br>
+    <b>潜台词是</b>：<em>$\alpha$ 只带方向信息，所以它只能区分"平行/相交"，<b>分不出平行还是重合</b>（重合的两面法向量也成比例）；
+    $\beta$ 多带了位置信息 $d_i$，所以它能钉死"重合与否"</em>——
+    <b>两个字母各管一半，合起来才能唯一确定位置关系</b>；<br>
+    <b>所以能考</b>：八行大表<u>不需要背</u>，考场上现推——先由 $r(A),r(\bar A)$ 判"有解/无解"，
+    再用 ①～④ 判"哪两个面重合/平行"。<a href="#eg-59">强 5.9</a> 就是这样一步步推出来的。
+    <em>验收：把下面两张表盖住，只给你 ①～④ 四条，你能否复原出全部八种情形？能，才算学会。</em>
+  </div>
+
+  <div class="key"><span class="tag">必记 · 两张表（书页 61–62，右侧眉批已并入）</span>
+    <b>表 (a)　方程组<u>有解</u>的情形（$r(A)=r(\bar A)$）</b>
+    <div class="gridwrap"><table>
+      <tr><th>#</th><th>几何意义</th><th>代数表达</th><th>解的个数</th></tr>
+      <tr><td>1</td><td>三张平面相交于<b>一点</b></td><td>$r(A)=r(\bar A)=3$</td><td><b>唯一解</b></td></tr>
+      <tr><td>2</td><td>三张平面相交于<b>一条直线</b></td><td>$r(A)=r(\bar A)=2$，且 $\beta_1,\beta_2,\beta_3$ 中<b>任意两个都线性无关</b><br><span style="font-size:.82rem;color:var(--muted)">（眉批：任何两个面都不重合）</span></td><td>无穷多解</td></tr>
+      <tr><td>3</td><td><b>两张平面重合</b>，第三张与之相交</td><td>$r(A)=r(\bar A)=2$，且 $\beta_1,\beta_2,\beta_3$ 中<b>有两个线性相关</b><br><span style="font-size:.82rem;color:var(--muted)">（眉批：存在两个面重合）</span></td><td>无穷多解</td></tr>
+      <tr><td>4</td><td>三张平面<b>重合</b></td><td>$r(A)=r(\bar A)=1$</td><td>无穷多解</td></tr>
+    </table></div>
+    <b>表 (b)　方程组<u>无解</u>的情形（$r(A)\ne r(\bar A)$）</b>
+    <div class="gridwrap"><table>
+      <tr><th>#</th><th>几何意义</th><th>代数表达</th><th>用谁区分</th></tr>
+      <tr><td>5</td><td>三张平面<b>两两相交</b>，且交线相互平行（三棱柱）</td><td>$r(A)=2,\ r(\bar A)=3$，且 <b>$\alpha_1,\alpha_2,\alpha_3$ 中任意两个都线性无关</b></td><td><b>α</b>（任何两面都相交）</td></tr>
+      <tr><td>6</td><td><b>两张平面平行</b>，第三张与它们相交</td><td>$r(A)=2,\ r(\bar A)=3$，且 <b>$\alpha_1,\alpha_2,\alpha_3$ 中有两个线性相关</b></td><td><b>α</b>（存在两面平行但不重合）</td></tr>
+      <tr><td>7</td><td>三张平面<b>相互平行但不重合</b></td><td>$r(A)=1,\ r(\bar A)=2$，且 <b>$\beta_1,\beta_2,\beta_3$ 中任意两个都线性无关</b></td><td><b>β</b>（任何两面都不重合）</td></tr>
+      <tr><td>8</td><td><b>两张平面重合</b>，第三张与它们平行但不重合</td><td>$r(A)=1,\ r(\bar A)=2$，且 <b>$\beta_1,\beta_2,\beta_3$ 中有两个线性相关</b></td><td><b>β</b>（存在两面重合）</td></tr>
+    </table></div>
+  </div>
+
+  <div class="mine"><span class="tag">挖 · 为什么第 5、6 行用 <b>α</b> 区分，而 2、3、7、8 行用 <b>β</b>——这是全表唯一需要理解的地方</span>
+    <b>书上说</b>只在表里写了"用 $\alpha$"还是"用 $\beta$"，没说为什么；<br>
+    <b>潜台词是</b>：<em>看这一行里<b>需要区分的是哪两种情形</b></em>——
+    <b>第 5 / 6 行要分的是「两面相交」还是「两面平行」，这是<u>方向</u>的差别 ⟹ 用只带方向的 $\alpha$</b>；
+    第 2 / 3 行与第 7 / 8 行要分的是「两面重合」还是「不重合」，<u>方向已经一样了</u>（$r(A)$ 已经限死），
+    差别在<u>位置</u> ⟹ 必须用带位置的 $\beta$；<br>
+    <b>所以能考</b>：题目给一张图问参数（<a href="#eg-59">强 5.9</a>）——<b>先由图定 $r(A),r(\bar A)$，再看这一档要用 α 还是 β</b>，用错字母必然算错。
+    <em>一句话：要分"斜不斜"用 α，要分"贴不贴"用 β。</em>
+  </div>
+
+  <div class="bg"><span class="tag">筛</span>书页 60–61 在给出四条判据前，先花了小半页复述"平面的点法式方程""法向量"这些高数上册的内容，还举了 $\Pi_1:x+y+z=1$ 与 $\Pi_2:2x+2y+2z=2$ 这样的入门例子。<b>这段是给忘了空间解析几何的人补课的</b>，本身不出题——只要你记得「$[a,b,c]$ 是法向量、$d$ 决定平面到原点的距离」，就可以直接跳到四条判据。</div>
+
+  <div class="link"><span class="tag">串 · 与高数「空间解析几何」的接口（数一独有的双向便利）</span>
+    <b>高数上册的平面知识在这里是<u>免费的翻译器</u></b>：
+    两平面平行 $\iff$ 法向量平行 $\iff \alpha_i\parallel\alpha_j$；两平面重合 $\iff$ 连 $d$ 一起成比例 $\iff\beta_i\parallel\beta_j$；
+    三平面交于一线 $\iff$ 三个法向量共面（$r(A)=2$）且方程相容。<br>
+    <span style="color:var(--teal)"><b>反过来用更值钱</b>：高数里"求两平面交线""判断三平面位置"的题，
+    用本节的 $r(A),r(\bar A)$ 一秒定性，比按几何定义硬推快得多。
+    <b>数一同时考这两科，这条互通是白送的分。</b>——顺带：解集维数 $3-r(A)$ 就是交集的几何维数（0 点 / 1 直线 / 2 平面）。</span>
+  </div>
+
+  <div class="mine"><span class="tag">挖 · 无解那半张表里，为什么 $r(A)=2$ 用 α 而 $r(A)=1$ 又换回 β</span>
+    <b>书上说</b>表 (b) 前两行的判据写 $\alpha$、后两行写 $\beta$，没有解释这个切换；<br>
+    <b>潜台词是</b>：<em>看 $r(A)$ 就知道"法向量还剩多少自由度"</em>——
+    <b>$r(A)=2$</b> 时三个法向量里<u>至少有两个不平行</u>，所以"有没有两个面平行"仍是未知数，
+    必须用 $\alpha$ 去查；<b>$r(A)=1$</b> 时三个法向量<u>已经全部平行</u>（三面都平行，方向问题已经问完了），
+    剩下唯一的悬念是"这些平行面里有没有两个恰好贴在一起"，那是位置问题，<b>只能用 $\beta$</b>；<br>
+    <b>所以能考</b>：判断题给情形属于第几行时，<b>先看 $r(A)$ 决定"该问方向还是该问位置"，再挑字母</b>。
+    <em>验收：把表 (b) 的第 5、6 行的判据强行改成用 β 写，会发现根本区分不开——因为那两行的 β 一定两两无关（无解时增广秩更大）。
+    这个"试着写错"的动作最能检验有没有真懂。可以在<a href="#planelab">上面的实验台</a>里输入预设⑤⑥直接看两两关系那一栏验证。</em>
+  </div>
+
+  <div class="tool" id="planelab">
+    <h4>🛠 三平面位置关系实验台 —— 输入三个平面方程，<b>真解真画</b></h4>
+    <div class="hint">
+      八种情形不必死记。下面直接输入三个平面 $a_ix+b_iy+c_iz=d_i$ 的系数，页面会
+      <b>①</b> 精确计算 $r(A)$ 与 $r(\bar A)$，<b>②</b> 按书上表 (a)/(b) 判定属于八种中的哪一种并高亮对应行，
+      <b>③</b> 在立方体 $[-1,1]^3$ 内<b>真实求出每张平面的截面并画出来</b>（不是示意图，改一个数字图就跟着变），
+      <b>④</b> 同时列出 $\alpha_i$ 与 $\beta_i$ 两两之间的相关性，让你现场看清"用 α 还是用 β"。
+      预设含<b>全部八种情形</b>与<a href="#eg-59">强 5.9</a> 原题。
+    </div>
+    <div class="stepbar">
+      <select id="pl-preset"></select>
+      <button id="pl-reset">恢复该预设</button>
+    </div>
+    <div class="plab">
+      <div class="pane">
+        <div class="pt2">三个平面的系数（支持整数与 3/2 这样的分数）</div>
+        <div class="eqrow p1"><span class="pi">Π₁:</span><input id="pl-0-0">x +<input id="pl-0-1">y +<input id="pl-0-2">z =<input id="pl-0-3"></div>
+        <div class="eqrow p2"><span class="pi">Π₂:</span><input id="pl-1-0">x +<input id="pl-1-1">y +<input id="pl-1-2">z =<input id="pl-1-3"></div>
+        <div class="eqrow p3"><span class="pi">Π₃:</span><input id="pl-2-0">x +<input id="pl-2-1">y +<input id="pl-2-2">z =<input id="pl-2-3"></div>
+        <div class="verdict" id="pl-verdict"></div>
+        <div class="resbox" id="pl-pairs"></div>
+      </div>
+      <div class="pane">
+        <div class="pt2">立方体 $[-1,1]^3$ 内的真实截面</div>
+        <svg class="scene" id="pl-svg" viewBox="0 0 340 300" role="img" aria-label="三张平面在立方体内的截面"></svg>
+        <div style="font-size:.78rem;color:var(--muted);margin-top:4px">
+          <span style="color:var(--blue)">■</span> Π₁　<span style="color:var(--amber)">■</span> Π₂　<span style="color:var(--green)">■</span> Π₃
+          等距投影；平面完全落在盒子外时不显示（可把 $d_i$ 调小一些）。
+        </div>
+        <div class="resbox" id="pl-table"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="eg" id="eg-59">
+    <div class="q"><span class="no">强 5.9 ✔</span><b>选择题 · 数一几何（配图）</b>　在空间直角坐标系 $O-xyz$ 中，三张平面
+      $$\Pi_1:\ ax+y-z=1,\qquad \Pi_2:\ x+y+bz=a,\qquad \Pi_3:\ x+ay-z=1$$
+      的位置关系<b>如图所示</b>（三张平面交于<b>一条公共直线</b>），则（　）。<br>
+      (A) $a=1,\ b\ne-1$　(B) $a=1,\ b=-1$　(C) $a\ne-2,\ b=2$　(D) $a=-2,\ b=2$
+      <svg class="fig" viewBox="0 0 300 150" role="img" aria-label="三张平面交于一条直线的示意图">
+        <path d="M40,120 L150,60 L260,120 L150,135 Z" fill="var(--accent-soft)" stroke="var(--ink)" stroke-width="1" opacity=".75"/>
+        <path d="M150,20 L215,55 L150,120 L85,85 Z" fill="var(--blue-soft)" stroke="var(--ink)" stroke-width="1" opacity=".75"/>
+        <path d="M150,20 L85,55 L150,120 L215,85 Z" fill="var(--amber-soft)" stroke="var(--ink)" stroke-width="1" opacity=".75"/>
+        <line x1="150" y1="15" x2="150" y2="138" stroke="var(--red)" stroke-width="2"/>
+        <text x="158" y="18" font-size="11" fill="var(--red)">公共交线</text>
+      </svg></div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路</span>
+        <ol>
+          <li><b>先把图翻译成代数</b>：三张平面交于一条直线 ⟹ 落在<b>表 (a) 第 2 行</b> ⟹ 两个条件：
+          <u>$r(A)=r(\bar A)=2$</u>，<b>且</b> <u>$\beta_1,\beta_2,\beta_3$ 任意两个线性无关</u>（任何两面都不重合）。</li>
+          <li>由 <a href="#s7">上面那条"用 α 还是用 β"</a>：这一档要分的是"重合与否" ⟹ <b>用 β</b>。所以主战场是 $4\times3$ 矩阵 $[\beta_1,\beta_2,\beta_3]$。</li>
+          <li><b>求"秩恰为 2"</b>：把 $[\beta_1,\beta_2,\beta_3]$ 化阶梯形，令最后两个非零位置<b>同时为零</b>。</li>
+          <li>别忘了第二个条件：$a=1$ 时会出现 $\beta_1=\beta_3$（两面重合），<b>虽然秩也可能是 2，但图上是"任何两面都不重合"，故排除</b>。这一步就是 (A)(B) 的死因。</li>
+        </ol>
+      </div>
+      <p><span class="lab">答案</span><b class="ans">(D) $a=-2,\ b=2$</b></p>
+      <p><span class="lab">解</span> 记
+      $\alpha_1=\begin{bmatrix}a\\1\\-1\end{bmatrix},\alpha_2=\begin{bmatrix}1\\1\\b\end{bmatrix},\alpha_3=\begin{bmatrix}1\\a\\-1\end{bmatrix}$，
+      $\beta_1=\begin{bmatrix}a\\1\\-1\\1\end{bmatrix},\beta_2=\begin{bmatrix}1\\1\\b\\a\end{bmatrix},\beta_3=\begin{bmatrix}1\\a\\-1\\1\end{bmatrix}$，
+      则须 $r(\alpha_1,\alpha_2,\alpha_3)=r(\beta_1,\beta_2,\beta_3)=2$ 且 $\beta_i$ 两两无关。
+      $$[\beta_1,\beta_2,\beta_3]=\begin{bmatrix}a&1&1\\1&1&a\\-1&b&-1\\1&a&1\end{bmatrix}
+      \longrightarrow\begin{bmatrix}1&1&a\\0&1-a&1-a^2\\0&b+1&a-1\\0&0&2-a^2-a\end{bmatrix}$$
+      <b>① $a=1$ 时</b>，$\beta_1$ 与 $\beta_3$ 线性相关（两面重合），<b>不满足题图</b>，排除 (A)(B)。<br>
+      <b>② $a\ne1$ 时</b>，继续化简得
+      $\begin{bmatrix}1&1&a\\0&1&1+a\\0&0&-b(a+1)-2\\0&0&a+2\end{bmatrix}$，
+      要秩为 2，须 $a+2=0$ <b>且</b> $-b(a+1)-2=0$，解得 $\begin{cases}a=-2\\ b=2\end{cases}$。</p>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        <b>①</b> <span class="dock">最容易漏</span>：只解出"秩 $=2$"就选答案，<b>不检查"两两不重合"</b>。选项 (A)(B) 恰恰是"秩也对但有两面重合"的陷阱——命题人把 $a=1$ 单独设成两个选项，就是在等这个错误。<br>
+        <b>②</b> <b>选 (C) 还是 (D)</b>：两者只差一个符号（$a\ne-2$ 与 $a=-2$）。$a\ne-2$ 时 $a+2\ne0$，秩会变成 3（三面交于一点），<u>与图不符</u>。<b>已用实验台验证：$a=0,b=2$ 时 $r(A)=r(\bar A)=3$，是"交于一点"。</b>
+        可以把 (C)(D) 两组数分别输进<a href="#planelab">上面的实验台</a>，图会直接告诉你哪个对。<br>
+        <b>③</b> <b>为什么可以只算 $[\beta_1,\beta_2,\beta_3]$ 不算 $A$</b>：$r(A)\le r(\bar A)$ 恒成立，而"有解"要求二者相等。本题先按 $r(\bar A)=2$ 求参，再回验 $r(A)=2$——<b>已 sympy 验证 $a=-2,b=2$ 时两者确实都是 2</b>。<br>
+        <b>④</b> 四个选项已逐一 sympy 验秩：(A) $a=1,b=0$ 时 $r=2$ 但 $\beta_1,\beta_3$ 相关；(B) $a=1,b=-1$ 时 $r=1$（三面重合）；(C) 取 $a=0,b=2$ 得 $r=3$；(D) $r(A)=r(\bar A)=2$ 且 $\beta$ 两两无关 ✔。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg" id="eg-510">
+    <div class="q"><span class="no">强 5.10 ✔</span><b>选择题 · 三种语言的收口题</b>　设 $\alpha_1,\alpha_2,\alpha_3,\alpha_4$ 是 $n$ 维列向量，
+      $\alpha_1,\alpha_2$ 线性无关，$\alpha_1,\alpha_2,\alpha_3$ 线性相关，且 $\alpha_1+\alpha_2+\alpha_4=0$。
+      在空间直角坐标系 $O-xyz$ 中，关于 $x,y,z$ 的方程组 $x\alpha_1+y\alpha_2+z\alpha_3=\alpha_4$ 的几何图形是（　）。<br>
+      (A) 过原点的一个平面　(B) 过原点的一条直线　(C) 不过原点的一个平面　(D) 不过原点的一条直线</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路</span>
+        <ol>
+          <li><b>三个条件各管一件事</b>：「$\alpha_1,\alpha_2$ 无关 + $\alpha_1,\alpha_2,\alpha_3$ 相关」⟹ $r(A)=2$；
+          「$\alpha_1+\alpha_2+\alpha_4=0$」⟹ $\alpha_4$ 能被 $\alpha_1,\alpha_2$ 表示 ⟹ $r(\bar A)=2$。</li>
+          <li>$r(A)=r(\bar A)=2\lt3$ ⟹ <b>有无穷多解，且解集维数 $=3-2=1$ ⟹ 是一条<u>直线</u></b>（不是平面）。<b>"平面还是直线"由 $n-r$ 决定，与图无关。</b></li>
+          <li><b>"过不过原点"单独判</b>：过原点 $\iff x=y=z=0$ 是解 $\iff \alpha_4=0$。而由 $\alpha_1+\alpha_2+\alpha_4=0$，若 $\alpha_4=0$ 则 $\alpha_1+\alpha_2=0$，与 $\alpha_1,\alpha_2$ 无关<b>矛盾</b> ⟹ <b>不过原点</b>。</li>
+        </ol>
+      </div>
+      <p><span class="lab">答案</span><b class="ans">(D) 不过原点的一条直线</b></p>
+      <p><span class="lab">书的补充说法</span> 由 $r(A)=r(\bar A)=2$，$x\alpha_1+y\alpha_2+z\alpha_3=\alpha_4$ 不妨设为
+      $\begin{cases}a_{11}x+a_{12}y+a_{13}z=a_{14}\\ a_{21}x+a_{22}y+a_{23}z=a_{24}\end{cases}$——
+      <b>两张平面交于一条直线</b>（对应表 (a) 第 2 行），且不过原点。</p>
+      <div class="link" style="margin:12px 0"><span class="tag">串 · 本题是全章的<b>收口</b>：三种语言各出场一次</span>
+        题面是纯<b>向量组语言</b>（无关/相关/线性组合，ch3）→ 中间转成<b>方程组语言</b>（$r(A)$、$r(\bar A)$、解集维数，本章 §一§三）
+        → 答案落在<b>几何语言</b>（直线/平面、过不过原点，本节）。
+        <span style="color:var(--teal)"><b>ch3 与 ch4 的互链就挂在这道题上</b>：它证明了"两种读法"最终会合流——
+        无论你从向量组进还是从方程组进，出口是同一个几何图形。<a href="线代_第03章_向量组.html#s0">回看 ch3 的两种读法 →</a></span>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        <b>①</b> <b>"平面 vs 直线"和"过不过原点"是<u>两个独立的判断</u></b>，分别由 $n-r$ 和 $\alpha_4$ 是否为零决定。四个选项正是这两个二值判断的组合。<b>看到这种 $2\times2$ 结构的选项，就该分两条线走。</b><br>
+        <b>②</b> <span class="dock">易错</span>：把"$n$ 维列向量"的 $n$ 当成未知量个数。<b>未知量是 $x,y,z$ 共 3 个</b>，与 $\alpha_i$ 的维数 $n$ 无关——解集是 $\mathbf R^3$ 里的图形，维数 $3-r(A)=1$。<br>
+        <b>③</b> <b>齐次组永远过原点</b>（$x=y=z=0$ 恒是解），所以选项里凡"过原点"的，只可能出现在 $\alpha_4=0$ 即齐次的情形。<b>题目一给非齐次，(A)(B) 基本可以先划掉一半</b>——但仍要验证 $\alpha_4\ne0$。<br>
+        <b>④</b> 已用具体向量（$\alpha_1=e_1,\alpha_2=e_2,\alpha_3=e_1+e_2,\alpha_4=-(e_1+e_2)$）验证：$r(A)=r(\bar A)=2$、解集为一维、$\alpha_4\ne0$，通解形如 $(-t-1,-t-1,t)$，确为不过原点的直线。
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= s8 五条判据总表 ================= -->
+  <h2 id="s8"><span class="idx">八</span>五条判据总表 · 哪些能推、哪些不能倒推<span class="layer L-base">基础</span></h2>
+
+  <div class="key"><span class="tag">必记 · 书页 134【注】的五条（本章选择题的判据总表）</span>
+    <div class="gridwrap"><table>
+      <tr><th>#</th><th>已知</th><th>能推出</th><th>能否定 $Ax=b$ 的解？</th></tr>
+      <tr><td>(1)</td><td>$Ax=0$ 只有零解</td><td>$r(A)=n$（<b>列满秩</b>）</td><td><b>不能</b>——推不出 $r([A,b])=n$，$Ax=b$ 可能有解可能无解</td></tr>
+      <tr><td>(2)</td><td>$Ax=0$ 有非零解</td><td>$r(A)\lt n$（列不满秩）</td><td><b>不能</b>——推不出 $r(A)=r([A,b])$，可能有解可能无解</td></tr>
+      <tr><td>(3)</td><td>$A$ <b>行满秩</b></td><td>$r(A)=r([A,b])$</td><td><b>能</b>——$Ax=b$ <b>必有解</b></td></tr>
+      <tr><td>(4)</td><td>$Ax=b$ 有唯一解</td><td>$r(A)=r([A,b])=A$ 的列数</td><td>$Ax=0$ <b>只有零解</b></td></tr>
+      <tr><td>(5)</td><td>$Ax=b$ 有无穷多解</td><td>$r(A)=r([A,b])\lt A$ 的列数</td><td>$Ax=0$ <b>有非零解</b></td></tr>
+    </table></div>
+    <span style="color:var(--amber)"><b>由 (1)(2) 可知，(4)(5) 不能倒推。</b></span>
+  </div>
+
+  <div class="mine"><span class="tag">挖 · 这张表其实只在说<b>一件事</b></span>
+    <b>书上说</b>五条并列，最后加一句"(4)(5) 不能倒推"；<br>
+    <b>潜台词是</b>：<em>齐次组只认识 $r(A)$ 一个数，非齐次组要看 $r(A)$ 与 $r([A,b])$ <b>两个</b>数——
+    <b>信息量少的一边推不出信息量多的一边</b></em>；<br>
+    <b>所以能考</b>：<u>凡选择题从"$Ax=0$ 的解"推"$Ax=b$ 的解"，一律是错的</u>（除非另给了 $b$ 的信息）；
+    <u>反方向（从 $Ax=b$ 推 $Ax=0$）一律是对的</u>。
+    <b><a href="#xt-42">习 4.2</a> 的四个选项正是按这个方向差设计的</b>：(A)(B) 从齐次推非齐次（错），(C)(D) 从非齐次推齐次（(D) 对）。
+    <em>验收：遇到这类题先看箭头方向，方向不对直接排除，能省一半时间。</em>
+  </div>
+
+  <div class="bg"><span class="tag">筛</span>这张表的五条在书上是作为<b>习题 4.2 的解答附注</b>出现的，不是正文定理。它们没有一条是新知识——全都是"$r(A)$ 与 $r([A,b])$ 谁知道谁"的重新排列。<b>不要背这五条</b>，背下面那句箭头方向的话就够了。</div>
+
+  <div class="mine"><span class="tag">挖 · 为什么恰好是 (4)(5) 不能倒推，而不是别的组合</span>
+    <b>书上说</b>结论"由 (1)(2) 可知，(4)(5) 不能倒推"；<br>
+    <b>潜台词是</b>：<em>(4)(5) 的左边（$Ax=b$ 的解情况）<b>同时包含了两个秩的信息</b>，右边（$Ax=0$ 的解情况）<b>只保留了 $r(A)$ 与 $n$ 的比较</b>——
+    信息在传递中<b>丢了一半</b>，丢掉的正是 $r([A,b])$</em>。丢掉的信息无法从结论里找回来，所以不能倒推；<br>
+    <b>所以能考</b>：这解释了为什么 (1)(2) 的表述里都带"<b>不能</b>推出"——它们正是被丢掉那一半信息造成的两个缺口。
+    <em>验收：能不能自己举出一个 $r(A)=n$ 但 $Ax=b$ 无解的例子？（取 $A=[1,0]^{\mathrm T}$ 这样的 $2\times1$ 矩阵，$b=[0,1]^{\mathrm T}$ 即可。）
+    举得出来，这张表就不用背了。</em>
+  </div>
+
+  <div class="link"><span class="tag">串 · 「行满秩 / 列满秩」这对概念的全书地图</span>
+    <b>行满秩 $r(A)=m$</b>：$Ax=b$ <b>必有解</b>（本章 <a href="#eg-46">基 4.6</a>）；$A$ 的行向量组无关（ch3）；$AA^{\mathrm T}$ 可逆（ch2 + <a href="#eg-415">基 4.15</a>）。<br>
+    <b>列满秩 $r(A)=n$</b>：$Ax=0$ <b>只有零解</b>；<b>类消去律</b>成立（<a href="#s1">§一</a>）；$A^{\mathrm T}A$ 可逆、<b>正定</b>（ch6）；$A$ 的列向量组无关（ch3）。<br>
+    <span style="color:var(--teal)"><b>一句话</b>：<b>行满秩 ⟹ 方程"够宽松"（总有解）；列满秩 ⟹ 未知量"够独立"（解不多）。</b>
+    方阵时两者合一，就是"可逆"。这条线在 ch5（相似对角化的可逆 $P$）与 ch6（合同的可逆 $C$）继续用。</span>
+  </div>
+  <!-- ================= s9 习题 ================= -->
+  <h2 id="s9"><span class="idx">九</span>课后习题 4.1–4.10 · 全收<span class="layer L-base">基础</span></h2>
+
+  <div class="bg"><span class="tag">筛</span>这 10 道习题里，<b>4.4 与例 4.5 是同一道题</b>（只多了两个干扰项）、<b>4.8 是例 4.1 的非齐次版</b>、<b>4.10 是例 4.13 的加强版</b>——三道可以快速过。真正要慢做的是 <b>4.3</b>（一次 rref 判四个选项的技巧）、<b>4.6</b>（夹逼定秩）、<b>4.9</b>（含参消元的行列式）。</div>
+
+  <div class="eg" id="xt-41">
+    <div class="q"><span class="no">习 4.1 ✔</span><b>选择</b>　设线性方程组 $\begin{cases}x_1+2x_2+\lambda x_3=\mu+1\\ x_1-4x_3=\mu-1\\ x_1+2x_2-2x_3=0\end{cases}$ <b>无解</b>，则 $\lambda,\mu$ 应满足（　）。<br>
+      (A) $\lambda=-2,\ \mu\ne-1$　(B) $\mu=0,\ \lambda\ne0$　(C) $\lambda=0,\ \mu\ne1$　(D) $\lambda=0,\ \mu\ne-1$</div>
+    <div class="s">
+      <p><span class="lab">答案</span><b class="ans">(A)</b></p>
+      <p><span class="lab">解</span> 对增广矩阵作初等行变换：
+      $$[A\ \vdots\ b]\longrightarrow\begin{bmatrix}1&2&\lambda&\vdots&\mu+1\\0&1&\frac\lambda2+2&\vdots&1\\0&0&2+\lambda&\vdots&\mu+1\end{bmatrix}$$
+      无解 $\iff r([A,b])\ne r(A)$ $\iff$ 末行左边为零而右边非零 $\iff\ \lambda=-2$ 且 $\mu\ne-1$。</p>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        <b>①</b> <b>含参无解题的固定读法</b>：化到<b>阶梯形的最后一行</b>，读成"$0\cdot x=\ast$"——<b>左边为零、右边非零就是无解</b>。<u>本题末行是 $(2+\lambda)x_3=\mu+1$</u>，两个参数各管一边，非常干净。<br>
+        <b>②</b> <span class="dock">易错</span>：只写 $\lambda=-2$ 忘了 $\mu\ne-1$。$\lambda=-2,\mu=-1$ 时末行是 $0=0$，方程组<b>反而有解</b>（无穷多解）。<b>已 sympy 验证这一点。</b><br>
+        <b>③</b> 选项 (C)(D) 的 $\lambda=0$：此时 $2+\lambda=2\ne0$，秩为 3，<b>不论 $\mu$ 取何值都有唯一解</b>，一定不是答案。<b>已验证。</b>
+      </div>
+    </div>
+  </div>
+
+  <div class="eg" id="xt-42">
+    <div class="q"><span class="no">习 4.2 ✔</span><b>选择</b>　设 $A$ 是 $m\times n$ 矩阵，$Ax=0$ 是 $Ax=b$ 所对应的齐次组，则下列正确的是（　）。<br>
+      (A) 若 $Ax=0$ 仅有零解，则 $Ax=b$ 有唯一解　　(B) 若 $Ax=0$ 有非零解，则 $Ax=b$ 有无穷多解<br>
+      (C) 若 $Ax=b$ 有无穷多解，则 $Ax=0$ 仅有零解　　(D) 若 $Ax=b$ 有无穷多解，则 $Ax=0$ 有非零解</div>
+    <div class="s">
+      <p><span class="lab">答案</span><b class="ans">(D)</b></p>
+      <p><span class="lab">解</span>（<a href="#s8">§八 五条判据总表</a>的直接应用）
+      (A)：$r(A)=n$ 时 $r([A,b])$ 可能是 $n$ 也可能是 $n+1$，<b>可能无解</b>；
+      (B)：$r(A)\lt n$ 时 $r([A,b])$ 可能不等于 $r(A)$，<b>可能无解</b>；
+      (C)：$Ax=b$ 无穷多解 ⟹ $r(A)=r([A,b])\lt n$ ⟹ $Ax=0$ <b>有无穷多解</b>（不是仅有零解）。故选 (D)。</p>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        <b>①</b> <b>看箭头方向就能秒杀</b>：(A)(B) 是"齐次 ⟹ 非齐次"（信息量不够，<u>必错</u>），(C)(D) 是"非齐次 ⟹ 齐次"（<u>方向对</u>，再看内容）。<b>这道题不需要真算。</b><br>
+        <b>②</b> 本题就是 <a href="#s8">§八</a> 那张表的出处，<b>五条【注】原样附在书上这道题的解答后面</b>——足见张宇认为这是本章选择题的地基。<br>
+        <b>③</b> <b>与 <a href="#eg-46">基 4.6</a> 配对</b>：4.6 考"给 $r(A)$ 能否定有解性"，4.2 考"给解的情况能否反推"。<b>两题合起来把 $r(A)$、$r([A,b])$、$m$、$n$ 四个量的关系考全了。</b>
+      </div>
+    </div>
+  </div>
+
+  <div class="eg" id="xt-43">
+    <div class="q"><span class="no">习 4.3 ✔</span><b>选择</b>　已知 $A_{4\times4}x=0$ 有基础解系
+      $\xi_1=[1,2,-3,0]^{\mathrm T},\ \xi_2=[2,-1,0,1]^{\mathrm T},\ \xi_3=[1,0,-2,1]^{\mathrm T}$，
+      则下列向量是该方程组的解的是（　）。<br>
+      (A) $[-1,5,3,7]^{\mathrm T}$　(B) $[0,4,-9,1]^{\mathrm T}$　(C) $[1,2,-3,1]^{\mathrm T}$　(D) $[2,-1,-2,0]^{\mathrm T}$</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路</span>
+        <ol>
+          <li><b>"是解" $\iff$ "能由基础解系线性表示"</b>（基础解系的第③条）。所以问题变成：四个 $\beta_i$ 里哪个落在 $\xi_1,\xi_2,\xi_3$ 张成的空间里。</li>
+          <li><b>不要逐个解四次方程组</b>——把四个 $\beta$ <b>一起</b>放进增广部分，<b>一次 rref 同时判四个</b>：
+          $[\xi_1,\xi_2,\xi_3\ \vdots\ \beta_1,\beta_2,\beta_3,\beta_4]$。</li>
+          <li>化到阶梯形后<b>看最后一行</b>：哪一列在末行位置是 $0$，哪个 $\beta$ 就有解。</li>
+        </ol>
+      </div>
+      <p><span class="lab">答案</span><b class="ans">(B)</b></p>
+      <p><span class="lab">解</span>
+      $$[\xi_1,\xi_2,\xi_3\ \vdots\ \beta_1,\beta_2,\beta_3,\beta_4]=
+      \begin{bmatrix}1&2&1&\vdots&-1&0&1&2\\2&-1&0&\vdots&5&4&2&-1\\-3&0&-2&\vdots&3&-9&-3&-2\\0&1&1&\vdots&7&1&1&0\end{bmatrix}
+      \longrightarrow\begin{bmatrix}1&2&1&\vdots&-1&0&1&2\\0&1&-1&\vdots&7&-5&0&-1\\0&0&-1&\vdots&42&-3&3&-7\\0&0&0&\vdots&\mathbf{84}&\mathbf 0&\mathbf 7&\mathbf{-13}\end{bmatrix}$$
+      末行为 $[84,\ \mathbf 0,\ 7,\ -13]$，<b>只有第 2 列为 0</b>，故只有 $\beta_2$ 可由 $\xi_1,\xi_2,\xi_3$ 表示。</p>
+      <div class="key" style="margin:12px 0"><span class="tag">必记 · 「一次 rref 判多个选项」的技巧</span>
+        判 $k$ 个向量能否被同一组向量表示时，<b>把它们全部横着拼进增广部分</b>，只做<u>一次</u>消元。
+        末行（或秩之外的行）哪一列为零，哪个就有解。<b>比逐个求解快 $k$ 倍</b>，且不会因反复消元而算错。
+      </div>
+      <div class="trap"><span class="tag">陷阱 · 原书这道题的选项 (D) 被排到了版心之外</span>
+        分章 PDF 与整册 PDF 里，(D) 都只印出 $[2,-1,-2,$ 就断了——<b>不是切割失误，是原书排版本身超出了版心</b>。<br>
+        <b>缺失的第 4 个分量可以从解答页复原</b>：解答里的增广矩阵最后一列是 $[2,-1,-2,0]^{\mathrm T}$，
+        且四个选项与该矩阵右侧四列一一对应（前三个完全吻合），故 <b>(D) $=[2,-1,-2,0]^{\mathrm T}$</b>。
+        <b>已 sympy 验证：该向量确实不能由 $\xi_1,\xi_2,\xi_3$ 表示，与答案 (B) 自洽。</b>
+      </div>
+    </div>
+  </div>
+
+  <div class="eg" id="xt-44">
+    <div class="q"><span class="no">习 4.4 ✔</span><b>选择</b>　设 $\xi_1,\xi_2,\xi_3$ 是 $Ax=0$ 的基础解系，则该方程组的基础解系还可以表示成（　）。<br>
+      (A) $\xi_1,\xi_2,\xi_3$ 的一个<b>等价</b>向量组　　(B) $\xi_1,\xi_2,\xi_3$ 的一个<b>等秩</b>向量组<br>
+      (C) $\xi_1+\xi_2,\ \xi_2+\xi_3,\ \xi_3+\xi_1$　　(D) $\xi_1-\xi_2,\ \xi_2-\xi_3,\ \xi_3-\xi_1$</div>
+    <div class="s">
+      <p><span class="lab">答案</span><b class="ans">(C)</b></p>
+      <p><span class="lab">解</span>
+      <b>(A) 错</b>：与 $\xi_1,\xi_2,\xi_3$ <b>等价</b>的向量组不一定线性无关（<u>此时向量个数可能大于秩</u>），违反基础解系第②条；<br>
+      <b>(B) 错</b>：与它们<b>等秩</b>的向量组中的向量<b>不一定是解向量</b>（秩相同但可能根本不在解空间里），违反第①条；<br>
+      <b>(D) 错</b>：$(\xi_1-\xi_2)+(\xi_2-\xi_3)+(\xi_3-\xi_1)=0$，线性相关；<br>
+      <b>(C) 对</b>：$[\xi_1+\xi_2,\xi_2+\xi_3,\xi_3+\xi_1]=[\xi_1,\xi_2,\xi_3]\left[\begin{smallmatrix}1&0&1\\1&1&0\\0&1&1\end{smallmatrix}\right]$，行列式 $=2\ne0$。</p>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        <b>①</b> <b>本题相对 <a href="#eg-45">例 4.5</a> 的增量全在 (A)(B) 两个干扰项上</b>，它们分别打<u>第②条</u>和<u>第①条</u>：
+        <b>「等价 ⇏ 线性无关」</b>（等价只保证互相能表示，个数可以多）、<b>「等秩 ⇏ 是解」</b>（秩是个数字，不管你在哪个空间里）。<br>
+        <b>②</b> <b>这两个反例值得各记一个</b>：与 $\{\xi_1,\xi_2,\xi_3\}$ 等价的 $\{\xi_1,\xi_2,\xi_3,\xi_1+\xi_2\}$——四个向量，相关；
+        与之等秩的 $\{e_1,e_2,e_3\}$（若 $e_i$ 不在解空间里）——秩也是 3，但一个解都不是。<br>
+        <b>③</b> <b>三条件的检验顺序建议</b>：先数<u>个数</u>（最快）→ 再看<u>是不是解</u> → 最后判<u>无关性</u>（最慢）。本题按这个顺序，(A) 卡在个数、(B) 卡在是不是解、(D) 卡在无关性，<b>正好一条一个</b>。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg" id="xt-45">
+    <div class="q"><span class="no">习 4.5 ✔</span><b>选择</b>　设 $\alpha_1,\alpha_2,\alpha_3$ 是四元非齐次方程组 $Ax=b$ 的三个解向量，且 $r(A)=3$，
+      $\alpha_1=[1,2,3,4]^{\mathrm T}$，$\alpha_2+\alpha_3=[0,1,2,3]^{\mathrm T}$，$C$ 表示任意常数，则通解 $x=$（　）。<br>
+      (A) $[1,2,3,4]^{\mathrm T}+C[1,1,1,1]^{\mathrm T}$　(B) $[1,2,3,4]^{\mathrm T}+C[0,1,2,3]^{\mathrm T}$<br>
+      (C) $[1,2,3,4]^{\mathrm T}+C[2,3,4,5]^{\mathrm T}$　(D) $[1,2,3,4]^{\mathrm T}+C[3,4,5,6]^{\mathrm T}$</div>
+    <div class="s">
+      <p><span class="lab">答案</span><b class="ans">(C)</b></p>
+      <p><span class="lab">解</span> $r(A)=3$，$n=4$ ⟹ 基础解系只含 $4-3=1$ 个向量。
+      由 <b>系数和判据</b>：$2\alpha_1-(\alpha_2+\alpha_3)$ 的系数和 $=2-1-1=0$，故它是 $Ax=0$ 的解：
+      $$2\alpha_1-(\alpha_2+\alpha_3)=2[1,2,3,4]^{\mathrm T}-[0,1,2,3]^{\mathrm T}=[2,3,4,5]^{\mathrm T}$$
+      又 $\alpha_1$ 是特解，故通解为 $[1,2,3,4]^{\mathrm T}+C[2,3,4,5]^{\mathrm T}$。</p>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        <b>①</b> <b>书上的写法是</b> $A\left(\alpha_1-\frac{\alpha_2+\alpha_3}{2}\right)=0$，再乘 2 得 $[2,3,4,5]^{\mathrm T}$。<b>用系数和判据可以直接写 $2\alpha_1-\alpha_2-\alpha_3$</b>，省掉分数。<u>凡遇"$\alpha_2+\alpha_3$ 打包给出"，就配一个 $2\alpha_1$ 去配平系数和。</u><br>
+        <b>②</b> <span class="dock">选项设计</span>：(A) 是 $\alpha_1$ 与 $\alpha_2+\alpha_3$ 之差 $[1,1,1,1]^{\mathrm T}$（系数和 $1-1=0$？<u>不对</u>——它是 $\alpha_1-(\alpha_2+\alpha_3)$，系数和 $=1-2=-1\ne0$，不是齐次解）；(D) 是 $\alpha_1+(\alpha_2+\alpha_3)$（和 $=3$）。<b>四个选项就是在考你会不会数系数和。</b><br>
+        <b>③</b> 通解里必须带任意常数 $C$，且<b>特解可以换成任何一个解</b>（比如 $\alpha_2$），答案形式不唯一但解集相同——选择题按给定选项走即可。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg" id="xt-46">
+    <div class="q"><span class="no">习 4.6 ✔</span><b>填空 · 夹逼定秩</b>　已知 $\xi_1=[-9,1,2,11]^{\mathrm T},\ \xi_2=[1,-5,13,0]^{\mathrm T},\ \xi_3=[-7,-9,24,11]^{\mathrm T}$
+      是方程组 $\begin{cases}2x_1+a_2x_2+3x_3+a_4x_4=d_1\\ 3x_1+b_2x_2+2x_3+b_4x_4=4\\ 9x_1+4x_2+x_3+c_4x_4=d_3\end{cases}$ 的三个解，则此方程组的通解为 ______。</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路</span>
+        <ol>
+          <li>系数矩阵里一堆字母，<b>根本算不出 $r(A)$</b>——但通解结构 $\eta+\sum k_i\xi_i$ 需要知道基础解系的个数 $4-r(A)$。<b>所以第一件事是把 $r(A)$ 夹出来。</b></li>
+          <li><b>上界</b>：$A$ 是 $3\times4$，$r(A)\le3$；<b>再收紧</b>：由三个解<b>两两作差</b>得到齐次解 $\eta_1=\xi_1-\xi_2$、$\eta_2=\xi_2-\xi_3$（系数和均为 0），
+          若它们线性无关，则 $4-r(A)\ge2$ ⟹ <b>$r(A)\le2$</b>。</li>
+          <li><b>下界</b>：观察系数矩阵的<b>第 2、3 行</b>（$[3,b_2,2,b_4]$ 与 $[9,4,1,c_4]$）——<u>第 1、3 列的比例分别是 $3$ 与 $\frac12$，不成比例</u> ⟹ 这两行无关 ⟹ $r(A)\ge2$。</li>
+          <li>上下夹得 <b>$r(A)=2$</b>，于是基础解系恰好 2 个，就是刚才那两个 $\eta$。特解取任一个 $\xi_i$ 即可。</li>
+        </ol>
+      </div>
+      <p><span class="lab">答案</span><b class="ans">$[-9,1,2,11]^{\mathrm T}+k_1[-10,6,-11,11]^{\mathrm T}+k_2[8,4,-11,-11]^{\mathrm T}$</b>（$k_1,k_2$ 任意常数）</p>
+      <p><span class="lab">解</span> $\eta_1=\xi_1-\xi_2=[-10,6,-11,11]^{\mathrm T}$，$\eta_2=\xi_2-\xi_3=[8,4,-11,-11]^{\mathrm T}$，二者线性无关，
+      故 $4-r(A)\ge2$ 即 $r(A)\le2$；又 $A$ 的第 2、3 行不成比例，$r(A)\ge2$。故 $r(A)=2$，基础解系即 $\eta_1,\eta_2$，取特解 $\xi_1$，得上述通解。</p>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        <b>①</b> <b>「夹逼定秩」是抽象方程组题的核心手法</b>，值得单独立卡：
+        <u>下界从"能看出无关的那几行/列"来，上界从"已知的无关解个数"来</u>。本章 <a href="#eg-43">基 4.3</a>（$r(AB)$ 夹 $r(A),r(B)$）也是夹逼，只是夹的方向不同。<br>
+        <b>②</b> <span class="dock">最易漏</span>：只做上界（由两个无关解得 $r\le2$）就断言 $r=2$。<b>必须补下界</b>——万一 $r(A)=1$，基础解系就有 3 个，答案要多一项。<b>书上专门写了"由于 $A$ 中第 2、3 行不成比例，故 $r(A)\ge2$"这句话。</b><br>
+        <b>③</b> <b>为什么下界要看第 2、3 行而不是第 1 行</b>：第 1 行含 $a_2,a_4$ 两个字母，第 3 行只有 $c_4$ 一个，<b>第 2、3 行的已知元素最多</b>（$3,2$ 与 $9,4,1$），最容易判无关。<u>挑字母最少的两行去比</u>，是这类题的操作要点。<br>
+        <b>④</b> $\eta_1,\eta_2$ 的计算与无关性已 sympy 验证。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg" id="xt-47">
+    <div class="q"><span class="no">习 4.7 ✔</span><b>填空</b>　设 $\xi_1=[1,3,-2]^{\mathrm T},\ \xi_2=[2,-1,3]^{\mathrm T}$ 是 $Ax=0$ 的基础解系，
+      已知 $\eta=[2,a,b]^{\mathrm T}$ 是方程组 $\begin{cases}Ax=0\\ x_1+2x_2+x_3=-2\end{cases}$ 的解，则 $\eta=$ ______。</div>
+    <div class="s">
+      <p><span class="lab">答案</span><b class="ans">$[2,-6,8]^{\mathrm T}$</b></p>
+      <p><span class="lab">解</span> 题给两个条件，各出一个方程：<br>
+      <b>条件一</b>（$\eta$ 满足第二个方程）：$2+2a+b=-2$。<br>
+      <b>条件二</b>（$\eta$ 也是 $Ax=0$ 的解）：故 $\eta$ 能由 $\xi_1,\xi_2$ 线性表示，于是 $\xi_1,\xi_2,\eta$ <b>线性相关</b>：
+      $$|\xi_1,\xi_2,\eta|=\begin{vmatrix}1&2&2\\3&-1&a\\-2&3&b\end{vmatrix}=0\ \Longrightarrow\ a+b-2=0.$$
+      联立解得 $a=-6,\ b=8$，故 $\eta=[2,-6,8]^{\mathrm T}$。</p>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        <b>①</b> <b>两个未知数需要两个方程</b>——题给的两个条件恰好各出一个。<u>做这类题先数"未知数几个、条件几个"，对不上就是漏读了条件。</u><br>
+        <b>②</b> <b>"$\eta$ 是 $Ax=0$ 的解"怎么用</b>：不能直接代（$A$ 未知），只能翻译成"<b>$\eta$ 在解空间里</b>" ⟹ "$\eta$ 可由基础解系表示" ⟹ "$\xi_1,\xi_2,\eta$ 相关" ⟹ <b>行列式为零</b>。这条转换链是本题的全部技术。<br>
+        <b>③</b> 行列式展开结果 sympy 算得 $-7a-7b+14=-7(a+b-2)$，<b>与书的结论 $a+b-2=0$ 一致</b>（差一个非零常数因子，不影响解）。<br>
+        <b>④</b> <b>已验证</b>：$[2,-6,8]^{\mathrm T}$ 确实落在 $\xi_1,\xi_2$ 张成的空间里（$r=2$ 不变），且满足 $2+2(-6)+8=-2$ ✔。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg" id="xt-48">
+    <div class="q"><span class="no">习 4.8 ✔</span><b>解答</b>　求解非齐次线性方程组
+      $$\begin{cases}x_1+5x_2-x_3-x_4=-1\\ x_1-2x_2+x_3+3x_4=3\\ 3x_1+8x_2-x_3+x_4=1\\ x_1-9x_2+3x_3+7x_4=7\end{cases}$$
+      并用对应齐次组的基础解系表示通解。</div>
+    <div class="s">
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面<span class="score">按 10 分估</span></div>
+        <div class="step"><span class="k">解</span>　对增广矩阵作初等行变换化为阶梯形：
+        $$[A\ \vdots\ b]=\begin{bmatrix}1&5&-1&-1&\vdots&-1\\1&-2&1&3&\vdots&3\\3&8&-1&1&\vdots&1\\1&-9&3&7&\vdots&7\end{bmatrix}
+        \longrightarrow\begin{bmatrix}1&5&-1&-1&\vdots&-1\\0&-7&2&4&\vdots&4\\0&0&0&0&\vdots&0\\0&0&0&0&\vdots&0\end{bmatrix}.\tag{1}$$<span class="pt">⛳ 化阶梯形 4 分</span></div>
+        <div class="step">由 (1) 式知 $r(A)=r([A,b])=2\lt4$，方程组有无穷多解，基础解系含 $4-2=2$ 个向量。<span class="pt">⛳ 判秩 2 分</span></div>
+        <div class="step">取 $x_3=k_1,\ x_4=k_2$ 为自由未知量，回代得
+        $$x_2=-\tfrac17(4-2k_1-4k_2)=-\tfrac47+\tfrac27k_1+\tfrac47k_2,\qquad
+        x_1=-1+k_1+k_2-5x_2=\tfrac{13}{7}-\tfrac37k_1-\tfrac{13}{7}k_2.$$<span class="pt">⛳ 回代 2 分</span></div>
+        <div class="step">故通解为
+        $$x=\begin{bmatrix}\frac{13}{7}\\ -\frac47\\ 0\\ 0\end{bmatrix}
+        +k_1\begin{bmatrix}-\frac37\\ \frac27\\ 1\\ 0\end{bmatrix}
+        +k_2\begin{bmatrix}-\frac{13}{7}\\ \frac47\\ 0\\ 1\end{bmatrix},$$
+        其中 $k_1,k_2$ 为任意常数。<span class="pt">⛳ 2 分</span></div>
+        <div class="fin">即特解 $\eta=\left[\frac{13}{7},-\frac47,0,0\right]^{\mathrm T}$，对应齐次组的基础解系为 $\left[-\frac37,\frac27,1,0\right]^{\mathrm T},\left[-\frac{13}{7},\frac47,0,1\right]^{\mathrm T}$。</div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        <b>①</b> <b>四个方程只剩两个真实约束</b>（后两行全零）——这正是 <a href="#s1">§一</a>「写了 $m$ 行不代表限制了 $m$ 次」的现场例子。<b>看到阶梯形出现全零行，先确认右端也是零</b>（否则无解）。<br>
+        <b>②</b> <b>分母 7 无法避免</b>（主元是 $-7$）。<span class="dock">手滑高发区</span>：$x_1$ 的回代要用到 $x_2$ 的三项，共 6 次分数运算。<b>建议先把 $x_2$ 单独写完整、画横线，再代入算 $x_1$</b>，不要在心里合并。<br>
+        <b>③</b> <b>自检 30 秒</b>：把 $\eta$ 代回<u>原方程组的第 1 个方程</u>：$\frac{13}7+5\cdot(-\frac47)-0-0=\frac{13-20}7=-1$ ✔。<b>特解只需验一个方程就能挡住大部分计算错。</b><br>
+        <b>④</b> 特解与两个基础解系向量均已 sympy 验证（$A\eta=b$、$A\xi_i=0$、$\xi_1,\xi_2$ 无关且个数 $=4-2$）。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg" id="xt-49">
+    <div class="q"><span class="no">习 4.9 ✔</span><b>解答 · 含参消元</b>　设 $A=\begin{bmatrix}1&-1&-1\\-1&1&1\\0&-4&-2\end{bmatrix}$，$\xi_1=\begin{bmatrix}-1\\1\\-2\end{bmatrix}$。<br>
+      (1) 求满足 $A\xi_2=\xi_1$，$A^2\xi_3=\xi_1$ 的<b>所有</b>向量 $\xi_2,\xi_3$；<br>
+      (2) 对 (1) 中的<b>任意</b>向量 $\xi_2,\xi_3$，证明 $\xi_1,\xi_2,\xi_3$ 线性无关。</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路</span>
+        <ol>
+          <li>(1) 是两个非齐次方程组 $Ax=\xi_1$ 与 $A^2x=\xi_1$，<b>各求一次通解</b>即可。注意题目要"<b>所有</b>"，答案必须带任意常数。</li>
+          <li>$A^2$ 要先算出来。观察 $A$ 的前两行互为相反数 ⟹ $r(A)=2$，<b>$A^2$ 的秩会更低</b>（本题 $r(A^2)=1$），所以 $\xi_3$ 会带<b>两个</b>参数。</li>
+          <li>(2) 要证的是"<b>对任意参数取值</b>都线性无关"——所以行列式算出来必须是一个<b>与 $C_1,C_2,C_3$ 无关的非零常数</b>。<b>这正是本题的精彩处</b>：参数会在行列式里自动消掉。</li>
+          <li>消参靠<b>列变换/行变换</b>：把含 $C_1$ 的那一列减去 $C_1\times$（某个已知列），参数就没了。</li>
+        </ol>
+      </div>
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面<span class="score">按 12 分估</span></div>
+        <div class="step"><span class="k">解 (1)</span>　对 $[A\ \vdots\ \xi_1]$ 作初等行变换：
+        $$[A\ \vdots\ \xi_1]=\begin{bmatrix}1&-1&-1&\vdots&-1\\-1&1&1&\vdots&1\\0&-4&-2&\vdots&-2\end{bmatrix}
+        \longrightarrow\begin{bmatrix}1&-1&-1&\vdots&-1\\0&2&1&\vdots&1\\0&0&0&\vdots&0\end{bmatrix},$$
+        故基础解系为 $[1,-1,2]^{\mathrm T}$，一特解为 $\left[-\frac12,\frac12,0\right]^{\mathrm T}$，于是
+        $$\xi_2=\left[-\tfrac12,\tfrac12,0\right]^{\mathrm T}+C_1[1,-1,2]^{\mathrm T}
+        =\left[-\tfrac12+C_1,\ \tfrac12-C_1,\ 2C_1\right]^{\mathrm T}\ (C_1\ 任意).$$<span class="pt">⛳ 4 分</span></div>
+        <div class="step">　　　其次 $A^2=\begin{bmatrix}2&2&0\\-2&-2&0\\4&4&0\end{bmatrix}$，对 $[A^2\ \vdots\ \xi_1]$ 作初等行变换：
+        $$\begin{bmatrix}2&2&0&\vdots&-1\\-2&-2&0&\vdots&1\\4&4&0&\vdots&-2\end{bmatrix}
+        \longrightarrow\begin{bmatrix}1&1&0&\vdots&-\frac12\\0&0&0&\vdots&0\\0&0&0&\vdots&0\end{bmatrix},$$
+        故基础解系为 $[-1,1,0]^{\mathrm T},[0,0,1]^{\mathrm T}$，一特解为 $\left[-\frac12,0,0\right]^{\mathrm T}$，于是
+        $$\xi_3=\left[-\tfrac12-C_2,\ C_2,\ C_3\right]^{\mathrm T}\ (C_2,C_3\ 任意).$$<span class="pt">⛳ 4 分</span></div>
+        <div class="step"><span class="k">证 (2)</span>　只需证 $|\xi_1,\xi_2,\xi_3|\ne0$。事实上
+        $$|\xi_1,\xi_2,\xi_3|=\begin{vmatrix}-1&-\frac12+C_1&-\frac12-C_2\\ 1&\frac12-C_1&C_2\\ -2&2C_1&C_3\end{vmatrix}
+        \xlongequal{c_2+C_1c_1,\ c_3+C_2c_1}\begin{vmatrix}-1&-\frac12&-\frac12\\ 1&\frac12&0\\ -2&0&C_3\end{vmatrix}$$
+        <span style="font-size:.86rem">（第 2 列加第 1 列的 $C_1$ 倍、第 3 列加第 1 列的 $C_2$ 倍，<b>参数 $C_1,C_2$ 被消去</b>）</span><span class="pt">⛳ 消参 2 分</span></div>
+        <div class="step">　　　再将第 1 行加上第 2 行，得
+        $$\begin{vmatrix}0&0&-\frac12\\ 1&\frac12&0\\ -2&0&C_3\end{vmatrix}
+        =-\tfrac12\cdot\begin{vmatrix}1&\frac12\\ -2&0\end{vmatrix}=-\tfrac12\cdot 1=-\tfrac12\ne0.$$<span class="pt">⛳ 算出定值 1 分</span></div>
+        <div class="fin">行列式恒为 $-\frac12$，与 $C_1,C_2,C_3$ <b>无关</b>，故对 (1) 中的任意 $\xi_2,\xi_3$，向量组 $\xi_1,\xi_2,\xi_3$ 线性无关。<b>证毕。</b><span class="pt">⛳ 1 分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        <b>①</b> <b>(2) 的关键认识</b>：$\xi_2,\xi_3$ 里的参数部分<b>都是 $\xi_1$ 的倍数</b>（$C_1[1,-1,2]^{\mathrm T}=-C_1\xi_1$，$C_2[-1,1,0]^{\mathrm T}$ 虽不是 $\xi_1$ 倍但可由列变换吸收）。<u>行列式对"某列加上另一列的倍数"不变</u>，所以参数必然消掉。<b>看穿这一点，(2) 只需两次列变换。</b><br>
+        <b>②</b> <span class="dock">扣分点</span>：只对某一组具体的 $C_i$（比如全取 0）验证行列式非零——那只证了"存在"，题目要的是"<b>对任意</b>"。<b>必须把 $C_i$ 带在行列式里做符号运算</b>，最后说明结果与 $C_i$ 无关。<br>
+        <b>③</b> <b>$C_3$ 为什么留到最后也没关系</b>：展开时它落在被 0 消掉的位置上（第一行只剩 $-\frac12$ 一个非零元，按第一行展开时 $C_3$ 所在的余子式与它不相乘）。<b>已 sympy 对符号 $C_1,C_2,C_3$ 直接展开，结果恒为 $-\frac12$。</b><br>
+        <b>④</b> <b>本题的 ch5 味道</b>：$A\xi_2=\xi_1$、$A^2\xi_3=\xi_1$ 说明 $\xi_1,\xi_2,\xi_3$ 构成一条<b>链</b>，而"链上向量线性无关"是 Jordan 块理论的基本引理。<span style="color:var(--teal)">与 <a href="#eg-54">强 5.4</a> 是同一个结构，可对读。</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="eg" id="xt-410">
+    <div class="q"><span class="no">习 4.10 ✔</span><b>解答 · 同解求参（三参数）</b>　已知方程组
+      $$(Ⅰ)\begin{cases}x_1+x_2-2x_4=-6\\ 4x_1-x_2-x_3-x_4=1\\ 3x_1-x_2-x_3=3\end{cases}\qquad
+        (Ⅱ)\begin{cases}x_1+mx_2-x_3-x_4=-5\\ nx_2-x_3-2x_4=-11\\ x_3-2x_4=1-t\end{cases}$$
+      (1) 求解方程组 (Ⅰ)；　(2) 求 $m,n,t$ 为何值时，方程组 (Ⅰ) 与 (Ⅱ) 同解。</div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路</span>
+        <ol>
+          <li>(1) 是常规求通解。</li>
+          <li>(2) 的操作是<b>把 (Ⅰ) 的通解代入 (Ⅱ) 的每个方程</b>，得到三个含 $C$ 与参数的恒等式，<b>要求对任意 $C$ 成立</b> ⟹ $C$ 的系数与常数项<b>都为零</b>。</li>
+          <li><b>⚠️ 与 <a href="#eg-413">基 4.13</a> 的关键差别</b>：那里 (Ⅱ) 包含 (Ⅰ) 的全部方程，反向自动成立；<b>这里两组方程完全不同</b>，代入只保证 (Ⅰ) 的解 $\subseteq$ (Ⅱ) 的解，<u>必须再验一次反向</u>——书上最后确实把 $m,n,t$ 代回去，重新化了一遍 (Ⅱ) 的行最简形。<b>这一步不是多余的。</b></li>
+        </ol>
+      </div>
+      <div class="paper">
+        <div class="phead">✍️ 考场卷面<span class="score">按 11 分估</span></div>
+        <div class="step"><span class="k">解 (1)</span>　对 (Ⅰ) 的增广矩阵作初等行变换：
+        $$\bar A=\begin{bmatrix}1&1&0&-2&\vdots&-6\\4&-1&-1&-1&\vdots&1\\3&-1&-1&0&\vdots&3\end{bmatrix}
+        \longrightarrow\begin{bmatrix}1&0&0&-1&\vdots&-2\\0&1&0&-1&\vdots&-4\\0&0&1&-2&\vdots&-5\end{bmatrix},$$
+        故 $r=3$，取 $x_4$ 为自由未知量，通解为
+        $$[x_1,x_2,x_3,x_4]^{\mathrm T}=C[1,1,2,1]^{\mathrm T}+[-2,-4,-5,0]^{\mathrm T}\quad(C\ \text{为任意常数}).$$<span class="pt">⛳ 4 分</span></div>
+        <div class="step"><span class="k">(2)</span>　由 (1) 知 $x_1=C-2,\ x_2=C-4,\ x_3=2C-5,\ x_4=C$，代入 (Ⅱ) 的各方程整理得
+        $$\begin{cases}(m-2)C+(8-4m)=0\\ (n-4)C+(16-4n)=0\\ t-6=0\end{cases}$$
+        因对任意 $C$ 成立，令 $C=0$ 并结合 $C$ 的系数为零，解得 $m=2,\ n=4,\ t=6$。<span class="pt">⛳ 代入求参 4 分</span></div>
+        <div class="step">　　　<b>回代验证</b>：当 $m=2,n=4,t=6$ 时，(Ⅱ) 的增广矩阵化为
+        $$\begin{bmatrix}1&2&-1&-1&\vdots&-5\\0&4&-1&-2&\vdots&-11\\0&0&1&-2&\vdots&-5\end{bmatrix}
+        \longrightarrow\begin{bmatrix}1&0&0&-1&\vdots&-2\\0&1&0&-1&\vdots&-4\\0&0&1&-2&\vdots&-5\end{bmatrix},$$
+        与 (Ⅰ) 的行最简形<b>完全相同</b>。<span class="pt">⛳ 反向验证 2 分</span></div>
+        <div class="fin">由此可知，当 $m=2,\ n=4,\ t=6$ 时，方程组 (Ⅰ) 与 (Ⅱ) 同解。<span class="pt">⛳ 1 分</span></div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+        <b>①</b> <span class="dock">本章最贵的一个扣分点</span>：代入求出 $m,n,t$ 就收笔。<b>代入只证了"(Ⅰ) 的解都是 (Ⅱ) 的解"</b>；若 (Ⅱ) 的解更多（秩更低），两者仍不同解。<b>必须补最后那次行最简形比对</b>，这一步值 2 分。<br>
+        <b>②</b> <b>什么时候可以省掉反向验证</b>：只有当 (Ⅱ) 的方程<b>包含</b> (Ⅰ) 的全部方程时（如 <a href="#eg-413">基 4.13</a>）。<b>做题第一眼就该判断这个包含关系。</b><br>
+        <b>③</b> <b>"对任意 $C$ 成立"的两种落笔法</b>：① 令 $C$ 的系数与常数项分别为零（严谨）；② 代两个不同的 $C$ 值（如 $C=0,1$）解方程组（快）。<b>书用的是②的变体（令 $C=0$）</b>，但卷面上最好补一句"因 $C$ 任意，故系数与常数项均为零"。<br>
+        <b>④</b> 三个恒等式与最终的两个行最简形完全一致，均已 sympy 符号验算。
+      </div>
+    </div>
+  </div>
+
+  <div class="mine"><span class="tag">挖 · 这 10 道习题的<b>命题人视角</b>：每一道都在堵一个特定的漏</span>
+    <b>书上说</b>只是把它们并列为"基础习题精练"，不分类；<br>
+    <b>潜台词是</b>：<em>十道题<b>没有一道是重复的</b>，每道各堵一个洞</em>——
+    4.1 堵"含参无解的临界值"、4.2 堵"推理方向"、4.3 堵"逐个验算的低效"、4.4 堵"三条件里的①②"、
+    4.5 堵"系数和"、4.6 堵"只做上界不做下界"、4.7 堵"抽象条件不会翻译"、4.8 堵"分数手算"、
+    4.9 堵"只验一组参数就说任意"、4.10 堵"同解只验单向"；<br>
+    <b>所以能考</b>：<u>做错哪一道，就说明哪个洞还在</u>。比起"再刷十道同类题"，
+    <b>回到对应的漏洞去补，效率高得多</b>。
+    <em>建议做法：先合上答案做一遍，错哪道就回上面对应的挖/必记块重读一次，再重做。</em>
+  </div>
+
+  <div class="key"><span class="tag">必记 · 习题答案速查（合上页面自测用）</span>
+    <div class="gridwrap"><table>
+      <tr><th>题</th><th>答案</th><th>考点</th></tr>
+      <tr><td>4.1</td><td><b>(A)</b> $\lambda=-2,\mu\ne-1$</td><td>含参无解：末行"左零右非零"</td></tr>
+      <tr><td>4.2</td><td><b>(D)</b></td><td>齐次 ⇏ 非齐次；非齐次 ⟹ 齐次</td></tr>
+      <tr><td>4.3</td><td><b>(B)</b> $[0,4,-9,1]^{\mathrm T}$</td><td>一次 rref 判四个选项</td></tr>
+      <tr><td>4.4</td><td><b>(C)</b> $\xi_1+\xi_2,\xi_2+\xi_3,\xi_3+\xi_1$</td><td>等价 ⇏ 无关；等秩 ⇏ 是解</td></tr>
+      <tr><td>4.5</td><td><b>(C)</b> $\alpha_1+C[2,3,4,5]^{\mathrm T}$</td><td>系数和判据</td></tr>
+      <tr><td>4.6</td><td>$\xi_1+k_1[-10,6,-11,11]^{\mathrm T}+k_2[8,4,-11,-11]^{\mathrm T}$</td><td><b>夹逼定秩</b></td></tr>
+      <tr><td>4.7</td><td>$\eta=[2,-6,8]^{\mathrm T}$</td><td>"是解"⟹ 相关 ⟹ 行列式为零</td></tr>
+      <tr><td>4.8</td><td>$\eta=\left[\frac{13}7,-\frac47,0,0\right]^{\mathrm T}$，基础解系 $\left[-\frac37,\frac27,1,0\right]^{\mathrm T},\left[-\frac{13}7,\frac47,0,1\right]^{\mathrm T}$</td><td>非齐次求通解</td></tr>
+      <tr><td>4.9</td><td>$\xi_2=\left[-\frac12+C_1,\frac12-C_1,2C_1\right]^{\mathrm T}$，$\xi_3=\left[-\frac12-C_2,C_2,C_3\right]^{\mathrm T}$；$|\xi_1,\xi_2,\xi_3|=-\frac12$</td><td>含参消元 + 链上向量无关</td></tr>
+      <tr><td>4.10</td><td>(Ⅰ) 通解 $C[1,1,2,1]^{\mathrm T}+[-2,-4,-5,0]^{\mathrm T}$；$m=2,n=4,t=6$</td><td>同解必须<b>双向</b>验证</td></tr>
+    </table></div>
+  </div>
+
+  <div class="outro">
+    <h3>📌 读完去做题（本章四件套 · 本地 PDF）</h3>
+    <div class="dolinks">
+      <div class="t">张宇分册 · 线代第 4 章</div>
+      <a href="../../张宇系列_分章易识别版/线性代数/04_线性方程组/线代_第04章_基础30讲.pdf">基础 30 讲</a>
+      <a href="../../张宇系列_分章易识别版/线性代数/04_线性方程组/线代_第04章_强化9讲_第5讲_线性方程组.pdf">线代9讲·第5讲 线性方程组</a>
+      <a href="../../张宇系列_分章易识别版/线性代数/04_线性方程组/线代_第04章_1000题_基础_题目.pdf">1000题·基础篇</a>
+      <a href="../../张宇系列_分章易识别版/线性代数/04_线性方程组/线代_第04章_1000题_强化_题目_第5讲_线性方程组.pdf">1000题·强化·线性方程组</a>
+      <div class="note">链接指向本地大 PDF（不推 GitHub，线上 Pages 打不开是正常的）。做错 → 回复盘中心报「1000题·线代第4章·错第X题·卡哪」生成四层错题页。</div>
+    </div>
+
+    <p><b>自测清单（合上页面能不能答出来）</b>：
+    ① 「一物三名」是哪三个名字？为什么说方程组和向量组是同一件事？<br>
+    ② $n-r(A)$ 的<b>四个名字</b>能不能一口气说全？其中的 $n$ 指的是行数还是列数？<br>
+    ③ 基础解系的<b>三个条件</b>是什么？哪一条最常被考、哪一条最容易忘？<br>
+    ④ 为什么求解方程组<b>只能行变换</b>？列变换破坏了什么？<br>
+    ⑤ 「特解 + 导出组通解」这个形状背后的几何图像是什么？$Ax=b$ 的解里线性无关的最多几个，那个 <b>+1</b> 从哪来？<br>
+    ⑥ <b>系数和判据</b>怎么用？它能判什么、<b>不能</b>判什么？<br>
+    ⑦ 求公共解的<b>三种方法</b>各在什么题面信号下用？哪个最省力？<br>
+    ⑧ 齐次同解的<b>三条判据</b>是什么？<a href="#eg-56">强 5.6</a> 为什么必须用第③条？<br>
+    ⑨ <b>左乘因子可逆 ⟺ 同解</b>与<b>右乘因子可逆 ⟺ 仍是基础解系</b>，两者分别管什么？<br>
+    ⑩ 八种平面位置关系里，<b>哪几行用 α 区分、哪几行用 β 区分</b>？为什么？<br>
+    ⑪ <b>四秩相同</b>是哪四个秩？证明的关键一步是什么？为什么必须是<b>实</b>矩阵？<br>
+    ⑫ 五条判据总表里，<b>哪两条不能倒推</b>？方向反了会怎样？<br>
+    ⑬ 做同解题时，什么情况下<b>只需单向验证</b>，什么情况下<b>必须双向</b>？（对比 <a href="#eg-413">基 4.13</a> 与 <a href="#xt-410">习 4.10</a>）</p>
+
+    <p><b>真题锚点</b>：线性方程组是线代<b>大题的主战场</b>——数一近十年几乎每年都有一道 11 分左右的解答题落在
+    「含参讨论 + 求通解」「同解 / 公共解」「解的结构反推」三类里，且常与 ch5 特征值合并出题（如 <a href="#eg-54">强 5.4</a> 那种"方程组皮、特征值骨"的题）。<br>
+    本章的 KPI 是三件事：<b>(1) 增广矩阵化行最简形<u>手不抖</u>（分数运算是主要失分源，不是思路）；(2) 通解永远写成"特解 + $\sum k_i\xi_i$ + 任意常数"三件套，一个都不漏；(3) 拿到两个方程组，先分清是求<u>交集</u>（公共解）还是判<u>相等</u>（同解），再选判据。</b></p>
+
+    <p><b>配套速查</b>：<a href="../卡库_线代秩方程组特征值.html">卡库·线代：秩/方程组/特征值</a> ·
+    <a href="../公式大全_速查与秒杀.html">公式大全</a> · <a href="../知识串联_考纲主线.html">知识串联</a> ·
+    <a href="线代_第03章_向量组.html">上一章：向量组</a>。<br>
+    <b>下一章</b>：线代第 5 章 <b>特征值与特征向量</b>（《线代9讲》第 7、8 讲）。
+    <span style="color:var(--teal)">本章埋下的三处伏笔会在那里兑现：<a href="#eg-54">强 5.4</a> 的 $(A-E)^2\alpha=0$（Jordan 链）、
+    <a href="#xt-49">习 4.9</a> 的"链上向量无关"、<a href="#eg-57">强 5.7</a> 的 $r(A)=r(A^2)$。</span><br>
+    本章交付两个模块：<a href="#stepper">通解步进器</a> 与 <a href="#planelab">三平面位置关系实验台</a>。</p>
+  </div>
+
+  <footer>由 Claude 维护 · 融合张宇《基础30讲·线代》第 4 讲 +《线代9讲》第 5 讲 · 概念正文为标准线代理论 ·
+  <b>15 道基础例题 + 10 道习题 + 10 道强化例题（共 35 题），以及四秩相同、五条有解判据、八种平面位置关系，全部经 sympy 符号复算 / 随机矩阵批量对拍（$r(AB)$ 型 400 组、四秩相同 300 组、正规方程 300 组），与原书零分歧</b> ·
+  读图 40/40 页于 2026-08-03 一次性完成，写页全程只读讲义笔记 md</footer>
+</div>
+
+<script>
+/* ===================== 精确分数（两个模块共用） ===================== */
+function gcd(a,b){a=Math.abs(a);b=Math.abs(b);while(b){[a,b]=[b,a%b];}return a||1;}
+function F(n,d){ if(d===undefined)d=1; if(d<0){n=-n;d=-d;} const g=gcd(n,d)||1; return {n:n/g,d:d/g}; }
+const fAdd=(a,b)=>F(a.n*b.d+b.n*a.d, a.d*b.d);
+const fSub=(a,b)=>F(a.n*b.d-b.n*a.d, a.d*b.d);
+const fMul=(a,b)=>F(a.n*b.n, a.d*b.d);
+const fDiv=(a,b)=>F(a.n*b.d, a.d*b.n);
+const fZero=a=>a.n===0;
+const fNum=a=>a.n/a.d;
+function fStr(a){ if(a.n===0)return '0'; return a.d===1? String(a.n) : a.n+'/'+a.d; }
+const cloneM=M=>M.map(r=>r.map(x=>F(x.n,x.d)));
+function parseF(v){
+  v=String(v).trim();
+  if(v==='') return F(0,1);
+  if(v.includes('/')){ const p=v.split('/'); const a=parseInt(p[0],10), b=parseInt(p[1],10);
+    if(!isFinite(a)||!isFinite(b)||b===0) return null; return F(a,b); }
+  const num=Number(v); if(!isFinite(num)) return null;
+  if(Number.isInteger(num)) return F(num,1);
+  // 小数 -> 分数（最多 6 位）
+  const d=1000000; return F(Math.round(num*d), d);
+}
+/* 通用：分数矩阵求秩（不改原矩阵） */
+function rankF(M){
+  if(!M.length) return 0;
+  const A=cloneM(M), m=A.length, n=A[0].length;
+  let row=0;
+  for(let col=0; col<n && row<m; col++){
+    let p=-1; for(let i=row;i<m;i++) if(!fZero(A[i][col])){p=i;break;}
+    if(p<0) continue;
+    if(p!==row) [A[p],A[row]]=[A[row],A[p]];
+    for(let i=0;i<m;i++){
+      if(i===row||fZero(A[i][col])) continue;
+      const f=fDiv(A[i][col],A[row][col]);
+      for(let j=0;j<n;j++) A[i][j]=fSub(A[i][j], fMul(f,A[row][j]));
+    }
+    row++;
+  }
+  return row;
+}
+
+/* ===================== 模块 A：通解步进器 ===================== */
+(function(){
+  const PRESETS=[
+    {name:'基 4.1（齐次 4×5，答案 ξ₁=[-1,1,1,0,0]ᵀ, ξ₂=[7/2,5/2,0,1,3]ᵀ）', aug:false,
+     A:[[1,1,0,-3,-1],[1,-1,2,-1,0],[4,-2,6,3,-4],[2,4,-2,4,-7]]},
+    {name:'基 4.8（λ=-1,a=-2 代入；答案 η=(1/2)[3,-1,0]ᵀ, ξ=[1,0,1]ᵀ）', aug:true,
+     A:[[-1,1,1,-2],[0,-2,0,1],[1,1,-1,1]]},
+    {name:'习 4.8（非齐次 4×4，答案 η=[13/7,-4/7,0,0]ᵀ）', aug:true,
+     A:[[1,5,-1,-1,-1],[1,-2,1,3,3],[3,8,-1,1,1],[1,-9,3,7,7]]},
+    {name:'习 4.10 方程组(Ⅰ)（答案 C[1,1,2,1]ᵀ+[-2,-4,-5,0]ᵀ）', aug:true,
+     A:[[1,1,0,-2,-6],[4,-1,-1,-1,1],[3,-1,-1,0,3]]},
+    {name:'基 4.13 方程组(Ⅰ)（齐次，答案 ξ=[-3,-5,1,0]ᵀ）', aug:false,
+     A:[[1,0,3,5],[1,-1,-2,2],[2,-1,1,3]]},
+    {name:'基 4.12 联立 [A;B]（齐次，答案 k[-1,1,2,1]ᵀ）', aug:false,
+     A:[[1,1,0,0],[0,1,0,-1],[1,-1,1,0],[0,1,-1,1]]},
+    {name:'强 5.8 [A,α]（非齐次，答案 [1,1,0,0]ᵀ+k[-1,-2,-1,1]ᵀ）', aug:true,
+     A:[[1,-1,0,-1,0],[1,1,0,3,2],[2,1,2,6,3]]},
+    {name:'无解示例（末行 0=1，看系统如何报告）', aug:true,
+     A:[[1,1,1,3],[2,2,2,7],[1,0,1,1]]}
+  ];
+  const sel=document.getElementById('sp-preset');
+  PRESETS.forEach((p,i)=>{const o=document.createElement('option');o.value=i;o.textContent=p.name;sel.appendChild(o);});
+
+  let frames=[], idx=0, pivots=[], origin=null, finalM=null, isAug=false, nVar=0;
+
+  function buildFrames(raw, aug){
+    const m=raw.length, ncols=raw[0].length;
+    nVar = aug? ncols-1 : ncols;
+    let M=raw.map(r=>r.map(v=>F(v,1)));
+    origin=cloneM(M);
+    const fr=[{M:cloneM(M), op:'初始'+(aug?'<b>增广</b>':'')+'矩阵。'+(aug?'虚线右侧是自由项 b。':'齐次组，右端全为 0，可以省略不写。'), hi:[]}];
+    let row=0; const piv=[];
+    for(let col=0; col<nVar && row<m; col++){
+      let p=-1;
+      for(let i=row;i<m;i++){ if(!fZero(M[i][col])){p=i;break;} }
+      if(p<0){ fr.push({M:cloneM(M), op:'第 '+(col+1)+' 列在第 '+(row+1)+' 行及以下<b>全为 0</b> → 此列没有主元，<b>$x_{'+(col+1)+'}$ 将是自由变量</b>。', hi:[]}); continue; }
+      if(p!==row){ [M[p],M[row]]=[M[row],M[p]]; fr.push({M:cloneM(M), op:'<b>互换</b> r'+(row+1)+' ↔ r'+(p+1)+'，把非零元换到主元位。', hi:[[row,col],[p,col]]}); }
+      if(!(M[row][col].n===1&&M[row][col].d===1)){
+        const k=M[row][col]; const inv=fDiv(F(1,1),k);
+        for(let j=0;j<ncols;j++) M[row][j]=fMul(M[row][j],inv);
+        fr.push({M:cloneM(M), op:'<b>倍乘</b> r'+(row+1)+' × ('+fStr(inv)+')，把主元化为 1。', hi:[[row,col]]});
+      }
+      let did=[];
+      for(let i=0;i<m;i++){
+        if(i===row||fZero(M[i][col])) continue;
+        const f=M[i][col];
+        for(let j=0;j<ncols;j++) M[i][j]=fSub(M[i][j], fMul(f,M[row][j]));
+        did.push('r'+(i+1)+' − ('+fStr(f)+')·r'+(row+1));
+      }
+      if(did.length) fr.push({M:cloneM(M), op:'<b>倍加</b>：'+did.join('，')+' —— 把第 '+(col+1)+' 列主元以外的元素清零。', hi:[[row,col]]});
+      piv.push(col); row++;
+    }
+    fr.push({M:cloneM(M), op:'✅ 已是<b>行最简形</b>。主元列（非自由变量）为第 '+(piv.length?piv.map(c=>c+1).join('、'):'—')+' 列，$r=' + piv.length + '$，自由变量 '+(nVar-piv.length)+' 个。', hi:[]});
+    pivots=piv; finalM=cloneM(M); isAug=aug;
+    return fr;
+  }
+
+  function renderM(M, pivCols, showHead, hi){
+    const ncols=M[0].length;
+    let s='<table class="mx">';
+    if(showHead){ s+='<tr>';
+      for(let j=0;j<ncols;j++){
+        const lab = (isAug && j===ncols-1)? 'b' : ('x'+(j+1));
+        s+='<td class="colhd">'+lab+'</td>'; }
+      s+='</tr>'; }
+    for(let i=0;i<M.length;i++){
+      s+='<tr>';
+      for(let j=0;j<ncols;j++){
+        let cls=[];
+        if(isAug && j===ncols-1) cls.push('aug');
+        if(pivCols && !(isAug&&j===ncols-1)){ cls.push(pivCols.includes(j)?'piv':'free'); }
+        if(hi && hi.some(h=>h[0]===i&&h[1]===j)) cls=[cls.includes('aug')?'aug':'', 'hi'].filter(Boolean);
+        s+='<td class="'+cls.join(' ')+'">'+fStr(M[i][j])+'</td>';
+      }
+      s+='</tr>';
+    }
+    return s+'</table>';
+  }
+
+  function vecStr(v){ return '['+v.map(fStr).join(', ')+']<sup>T</sup>'; }
+
+  function draw(){
+    const f=frames[idx];
+    const done = (idx===frames.length-1);
+    document.getElementById('sp-orig').innerHTML=renderM(origin, null, true, null);
+    document.getElementById('sp-cur').innerHTML=renderM(f.M, done?pivots:null, true, f.hi);
+    document.getElementById('sp-log').innerHTML='<b>第 '+idx+' 步：</b>'+f.op;
+    document.getElementById('sp-cnt').textContent=idx+' / '+(frames.length-1);
+    document.getElementById('sp-prev').disabled=(idx===0);
+    document.getElementById('sp-next').disabled=done;
+    const res=document.getElementById('sp-res');
+    if(!done){ res.innerHTML='<div class="ttl">走完全部步骤后，这里会给出秩、特解与基础解系。</div>'; return; }
+
+    const m=finalM.length, ncols=finalM[0].length, r=pivots.length;
+    let html='<div class="ttl">读出的结论</div>';
+
+    // 无解检查（增广时：存在一行 前 nVar 全零而 b 非零）
+    if(isAug){
+      let bad=false;
+      for(let i=0;i<m;i++){
+        let allz=true;
+        for(let j=0;j<nVar;j++) if(!fZero(finalM[i][j])) {allz=false;break;}
+        if(allz && !fZero(finalM[i][nVar])) {bad=true;break;}
+      }
+      if(bad){
+        html+='<div class="repline"><span class="badge r">无解</span>出现了形如 <b>0·x = 非零</b> 的一行，'
+            +'即 $r(A)\\lt r([A,b])$，方程组<b>无解</b>。</div>';
+        res.innerHTML=html; if(window.renderMathInElement) renderMathInElement(res,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});
+        return;
+      }
+    }
+
+    const frees=[]; for(let j=0;j<nVar;j++) if(!pivots.includes(j)) frees.push(j);
+    html+='<div class="repline"><span class="badge p">秩</span>$r(A)='+r+'$'
+        +(isAug?'，$r([A,b])='+r+'$（相等 ⟹ <b>有解</b>）':'')
+        +'　未知量 $n='+nVar+'$　⟹　基础解系含 <b>'+(nVar-r)+'</b> 个向量。</div>';
+
+    if(isAug){
+      const eta=new Array(nVar).fill(F(0,1));
+      pivots.forEach((pc,ri)=>{ eta[pc]=finalM[ri][nVar]; });
+      html+='<div class="repline"><span class="badge f">特解 η</span>令自由变量全为 0 ⟹ η = <span class="cf">'+vecStr(eta)+'</span></div>';
+    }
+    if(frees.length===0){
+      html+='<div class="repline"><span class="badge f">基础解系</span>没有自由变量，$Ax=0$ <b>只有零解</b>'
+          +(isAug?'，故原方程组<b>有唯一解</b>。':'。')+'</div>';
+    }else{
+      html+='<div class="repline"><span class="badge f">基础解系</span>第 $i$ 个自由变量取 1、其余取 0：</div>';
+      frees.forEach((fc,k)=>{
+        const xi=new Array(nVar).fill(F(0,1));
+        xi[fc]=F(1,1);
+        pivots.forEach((pc,ri)=>{ xi[pc]=F(-finalM[ri][fc].n, finalM[ri][fc].d); });
+        html+='<div class="repline">　　ξ<sub>'+(k+1)+'</sub>（取 $x_{'+(fc+1)+'}=1$）= <span class="cf">'+vecStr(xi)+'</span></div>';
+      });
+      html+='<div class="repline" style="color:var(--muted);font-size:.83rem;margin-top:6px">'
+          +'↑ 主元变量的值 = <b>最简形中该自由变量所在列的对应元素取负号</b>——这就是"回代"被行变换一次性做完的结果。'
+          +'<b>若某分量出现分母，可整体乘掉分母</b>（基础解系可差非零倍数），例如 基 4.1 书上把 $x_5$ 取成 3 就是为此。</div>';
+    }
+    res.innerHTML=html;
+    if(window.renderMathInElement) renderMathInElement(res,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});
+  }
+
+  function load(i){ frames=buildFrames(PRESETS[i].A, PRESETS[i].aug); idx=0; draw(); }
+  sel.onchange=()=>load(+sel.value);
+  document.getElementById('sp-next').onclick=()=>{ if(idx<frames.length-1){idx++;draw();} };
+  document.getElementById('sp-prev').onclick=()=>{ if(idx>0){idx--;draw();} };
+  document.getElementById('sp-all').onclick=()=>{ idx=frames.length-1; draw(); };
+  document.getElementById('sp-reset').onclick=()=>{ idx=0; draw(); };
+  load(0);
+})();
+
+/* ===================== 模块 B：三平面位置关系实验台 ===================== */
+(function(){
+  const PRESETS=[
+    {name:'① 有解：三面交于一点（r(A)=r(Ā)=3）',            M:[[1,0,0,0],[0,1,0,0],[0,0,1,0]]},
+    {name:'② 有解：三面交于一条直线（任两 β 无关）',          M:[[1,0,-1,0],[0,1,-1,0],[1,1,-2,0]]},
+    {name:'③ 有解：两面重合，第三面与之相交（有两 β 相关）',   M:[[1,0,0,0],[2,0,0,0],[0,1,0,0]]},
+    {name:'④ 有解：三面完全重合（r=1）',                    M:[[1,1,1,1],[2,2,2,2],[3,3,3,3]]},
+    {name:'⑤ 无解：两两相交、交线互相平行（三棱柱）',         M:[[1,0,0,0],[0,1,0,0],[1,1,0,1]]},
+    {name:'⑥ 无解：两面平行，第三面与它们相交（有两 α 相关）', M:[[1,0,0,0],[1,0,0,1],[0,1,0,0]]},
+    {name:'⑦ 无解：三面互相平行且都不重合（任两 β 无关）',     M:[[1,0,0,'-1/2'],[1,0,0,0],[1,0,0,'1/2']]},
+    {name:'⑧ 无解：两面重合，第三面与它们平行不重合',         M:[[1,0,0,0],[2,0,0,0],[1,0,0,'1/2']]},
+    {name:'强 5.9 · 选项(D) a=-2,b=2 —— 应为②交于一直线',   M:[[-2,1,-1,1],[1,1,2,-2],[1,-2,-1,1]]},
+    {name:'强 5.9 · 选项(C) 取 a=0,b=2 —— 应为①交于一点',   M:[[0,1,-1,1],[1,1,2,0],[1,0,-1,1]]},
+    {name:'强 5.9 · 选项(A) 取 a=1,b=0 —— Π₁,Π₃ 重合',      M:[[1,1,-1,1],[1,1,0,1],[1,1,-1,1]]},
+    {name:'强 5.9 · 选项(B) a=1,b=-1 —— r 更低',            M:[[1,1,-1,1],[1,1,-1,1],[1,1,-1,1]]}
+  ];
+  const sel=document.getElementById('pl-preset');
+  PRESETS.forEach((p,i)=>{const o=document.createElement('option');o.value=i;o.textContent=p.name;sel.appendChild(o);});
+
+  const COLORS=['var(--blue)','var(--amber)','var(--green)'];
+  const FILLS=['var(--blue-soft)','var(--amber-soft)','var(--green-soft)'];
+
+  function readM(){
+    const M=[];
+    for(let i=0;i<3;i++){ const r=[];
+      for(let j=0;j<4;j++){ const f=parseF(document.getElementById('pl-'+i+'-'+j).value); if(!f) return null; r.push(f); }
+      M.push(r); }
+    return M;
+  }
+  /* 两个向量（分数数组）是否线性相关 */
+  function dep2(u,v){
+    // 相关 <=> 所有 2x2 子式为 0
+    for(let i=0;i<u.length;i++) for(let j=i+1;j<u.length;j++){
+      const d=fSub(fMul(u[i],v[j]), fMul(u[j],v[i]));
+      if(!fZero(d)) return false;
+    }
+    return true;
+  }
+  const isZeroVec=u=>u.every(fZero);
+
+  /* ---------- 几何：平面在立方体内的截面 ---------- */
+  function sectionPoly(a,b,c,d){
+    const n=[a,b,c], L=Math.hypot(a,b,c);
+    if(L<1e-12) return null;
+    const p0=[a*d/(L*L), b*d/(L*L), c*d/(L*L)];
+    // 平面内两个正交方向
+    let t=[1,0,0];
+    if(Math.abs(a)>=Math.abs(b)&&Math.abs(a)>=Math.abs(c)) t=[0,1,0];
+    const u=[n[1]*t[2]-n[2]*t[1], n[2]*t[0]-n[0]*t[2], n[0]*t[1]-n[1]*t[0]];
+    const lu=Math.hypot(...u); if(lu<1e-12) return null;
+    const U=u.map(x=>x/lu);
+    const v=[n[1]*U[2]-n[2]*U[1], n[2]*U[0]-n[0]*U[2], n[0]*U[1]-n[1]*U[0]];
+    const lv=Math.hypot(...v); const V=v.map(x=>x/lv);
+    const R=4;
+    let poly=[
+      [p0[0]-R*U[0]-R*V[0], p0[1]-R*U[1]-R*V[1], p0[2]-R*U[2]-R*V[2]],
+      [p0[0]+R*U[0]-R*V[0], p0[1]+R*U[1]-R*V[1], p0[2]+R*U[2]-R*V[2]],
+      [p0[0]+R*U[0]+R*V[0], p0[1]+R*U[1]+R*V[1], p0[2]+R*U[2]+R*V[2]],
+      [p0[0]-R*U[0]+R*V[0], p0[1]-R*U[1]+R*V[1], p0[2]-R*U[2]+R*V[2]]
+    ];
+    // 用 6 个半空间裁剪：x<=1, -x<=1, y<=1, ...
+    const planes=[[1,0,0,1],[-1,0,0,1],[0,1,0,1],[0,-1,0,1],[0,0,1,1],[0,0,-1,1]];
+    for(const pl of planes){
+      const f=p=>pl[0]*p[0]+pl[1]*p[1]+pl[2]*p[2]-pl[3];  // <=0 保留
+      const out=[];
+      for(let i=0;i<poly.length;i++){
+        const A=poly[i], B=poly[(i+1)%poly.length];
+        const fa=f(A), fb=f(B);
+        if(fa<=1e-9) out.push(A);
+        if((fa>1e-9&&fb< -1e-9)||(fa< -1e-9&&fb>1e-9)){
+          const t=fa/(fa-fb);
+          out.push([A[0]+t*(B[0]-A[0]), A[1]+t*(B[1]-A[1]), A[2]+t*(B[2]-A[2])]);
+        }
+      }
+      poly=out;
+      if(poly.length===0) return null;
+    }
+    return poly;
+  }
+  const CX=170, CY=155, S=52;
+  function proj(p){
+    const [x,y,z]=p;
+    return [CX + (x-y)*0.866*S, CY + ((x+y)*0.5 - z)*S];
+  }
+  function drawScene(M){
+    const svg=document.getElementById('pl-svg');
+    let s='';
+    // 立方体边框
+    const V=[[-1,-1,-1],[1,-1,-1],[1,1,-1],[-1,1,-1],[-1,-1,1],[1,-1,1],[1,1,1],[-1,1,1]];
+    const E=[[0,1],[1,2],[2,3],[3,0],[4,5],[5,6],[6,7],[7,4],[0,4],[1,5],[2,6],[3,7]];
+    E.forEach(e=>{
+      const p=proj(V[e[0]]), q=proj(V[e[1]]);
+      s+='<line x1="'+p[0].toFixed(1)+'" y1="'+p[1].toFixed(1)+'" x2="'+q[0].toFixed(1)+'" y2="'+q[1].toFixed(1)+'" stroke="var(--line)" stroke-width="1"/>';
+    });
+    // 三个平面截面，按深度排序（远的先画）
+    const items=[];
+    for(let i=0;i<3;i++){
+      const a=fNum(M[i][0]),b=fNum(M[i][1]),c=fNum(M[i][2]),d=fNum(M[i][3]);
+      const poly=sectionPoly(a,b,c,d);
+      if(!poly||poly.length<3) continue;
+      const depth=poly.reduce((s,p)=>s+(p[0]+p[1]-p[2]),0)/poly.length;
+      items.push({i,poly,depth});
+    }
+    items.sort((x,y)=>x.depth-y.depth);
+    items.forEach(it=>{
+      const pts=it.poly.map(p=>{const q=proj(p);return q[0].toFixed(1)+','+q[1].toFixed(1);}).join(' ');
+      s+='<polygon points="'+pts+'" fill="'+FILLS[it.i]+'" fill-opacity="0.72" stroke="'+COLORS[it.i]+'" stroke-width="1.6"/>';
+    });
+    // 坐标轴标签
+    const ax=[[1.35,0,0,'x'],[0,1.35,0,'y'],[0,0,1.3,'z']];
+    ax.forEach(a=>{ const p=proj([a[0],a[1],a[2]]);
+      s+='<text x="'+p[0].toFixed(1)+'" y="'+p[1].toFixed(1)+'" font-size="11" fill="var(--muted)" text-anchor="middle">'+a[3]+'</text>'; });
+    if(items.length===0) s+='<text x="170" y="150" font-size="12" fill="var(--muted)" text-anchor="middle">三张平面都落在盒子外，试试把等号右边的数调小</text>';
+    svg.innerHTML=s;
+  }
+
+  function classify(M){
+    const A=M.map(r=>r.slice(0,3));
+    const rA=rankF(A), rAb=rankF(M);
+    const al=[0,1,2].map(i=>A[i]), be=[0,1,2].map(i=>M[i]);
+    const pairs=[[0,1],[0,2],[1,2]];
+    const alDep=pairs.map(([i,j])=>dep2(al[i],al[j]));
+    const beDep=pairs.map(([i,j])=>dep2(be[i],be[j]));
+    const anyBeDep=beDep.some(Boolean), anyAlDep=alDep.some(Boolean);
+    let idx=-1, txt='';
+    if(rA===rAb){
+      if(rA===3){ idx=1; txt='三张平面相交于<b>一点</b>（唯一解）'; }
+      else if(rA===2){ if(anyBeDep){ idx=3; txt='<b>两张平面重合</b>，第三张与之相交（无穷多解）'; }
+                        else { idx=2; txt='三张平面相交于<b>一条直线</b>（无穷多解）'; } }
+      else if(rA===1){ idx=4; txt='三张平面<b>完全重合</b>（无穷多解）'; }
+      else { idx=0; txt='系数全为零的退化情形'; }
+    }else{
+      if(rA===2){ if(anyAlDep){ idx=6; txt='<b>两张平面平行</b>，第三张与它们相交（无解）'; }
+                   else { idx=5; txt='三张平面<b>两两相交，交线互相平行</b>（三棱柱，无解）'; } }
+      else if(rA===1){ if(anyBeDep){ idx=8; txt='<b>两张平面重合</b>，第三张与它们平行但不重合（无解）'; }
+                        else { idx=7; txt='三张平面<b>互相平行但都不重合</b>（无解）'; } }
+      else { idx=0; txt='退化情形（某些方程系数全为零）'; }
+    }
+    return {rA,rAb,idx,txt,alDep,beDep,pairs};
+  }
+
+  function recompute(){
+    const M=readM();
+    const vd=document.getElementById('pl-verdict');
+    if(!M){ vd.innerHTML='<span class="warn">输入无法解析（支持整数与 3/2 这样的分数）。</span>';
+            document.getElementById('pl-pairs').innerHTML=''; document.getElementById('pl-table').innerHTML=''; return; }
+    const R=classify(M);
+    vd.innerHTML='<div class="big">'+R.txt+'</div>'
+      +'<div class="rk">r(A) = '+R.rA+'　　r(Ā) = '+R.rAb+'　⟹　'
+      +(R.rA===R.rAb?'<b style="color:var(--green)">有解</b>':'<b style="color:var(--red)">无解</b>')+'　'
+      +(R.rA===R.rAb? (R.rA===3?'（唯一解）':'（无穷多解，解集维数 '+(3-R.rA)+'）') : '')+'</div>';
+
+    const nm=['Π₁,Π₂','Π₁,Π₃','Π₂,Π₃'];
+    let ph='<div class="ttl">两两关系（α 判方向 · β 判位置）</div>';
+    for(let k=0;k<3;k++){
+      const a=R.alDep[k], b=R.beDep[k];
+      const rel = b? '<b style="color:var(--red)">重合</b>' : (a? '<b>平行不重合</b>' : '相交');
+      ph+='<div class="repline">'+nm[k]+'：α '+(a?'相关':'无关')+'，β '+(b?'相关':'无关')+'　⟹　'+rel+'</div>';
+    }
+    ph+='<div class="repline" style="color:var(--muted);font-size:.82rem;margin-top:5px">'
+      +'注意：<b>β 相关 ⟹ α 必相关</b>（重合的两面法向自然平行），反之不然——这正是"α 分不出平行与重合"的原因。</div>';
+    document.getElementById('pl-pairs').innerHTML=ph;
+
+    const ROWS=[
+      ['1','三面交于一点','r(A)=r(Ā)=3'],
+      ['2','三面交于一条直线','r=2，任两 β 无关'],
+      ['3','两面重合，第三面与之相交','r=2，有两 β 相关'],
+      ['4','三面重合','r(A)=r(Ā)=1'],
+      ['5','两两相交，交线平行','r(A)=2, r(Ā)=3，任两 α 无关'],
+      ['6','两面平行，第三面相交','r(A)=2, r(Ā)=3，有两 α 相关'],
+      ['7','三面平行不重合','r(A)=1, r(Ā)=2，任两 β 无关'],
+      ['8','两面重合，第三面平行','r(A)=1, r(Ā)=2，有两 β 相关']
+    ];
+    let th='<div class="ttl">对照书上两张表（当前命中行已高亮）</div><table class="tabmini">';
+    ROWS.forEach(r=>{ th+='<tr class="'+(String(R.idx)===r[0]?'on':'')+'"><td>'+r[0]+'</td><td>'+r[1]+'</td><td>'+r[2]+'</td></tr>'; });
+    th+='</table>';
+    document.getElementById('pl-table').innerHTML=th;
+
+    drawScene(M);
+  }
+
+  function load(i){
+    const M=PRESETS[i].M;
+    for(let r=0;r<3;r++) for(let c=0;c<4;c++) document.getElementById('pl-'+r+'-'+c).value=M[r][c];
+    recompute();
+  }
+  document.querySelectorAll('.eqrow input').forEach(el=>el.oninput=recompute);
+  sel.onchange=()=>load(+sel.value);
+  document.getElementById('pl-reset').onclick=()=>load(+sel.value);
+  load(0);
+})();
+</script>
+</body>
+</html>
