@@ -81,7 +81,7 @@
   <a class="back" href="index.html">◀ 返回数学复盘中心</a>
   <header>
     <h1>线代:秩 · 方程组 · 特征值</h1>
-    <div class="sub">16 张卡 · 线代的主线只有一条:秩 → 解的结构 → 特征值 → 对角化 → 二次型,环环相扣</div>
+    <div class="sub">35 张卡 · 线代的主线只有一条:秩 → 解的结构 → 特征值 → 对角化 → 二次型,环环相扣</div>
   </header>
 
   <div class="usage"><b>自测用法:</b>先看标题默写内容再点开核对。「秩的不等式家族」「对角化条件链」「正定判定」是三张核心硬背卡;「三关系对照表」管选择题;触发器卡管大题第一步。</div>
@@ -267,7 +267,7 @@
     </div>
   </div>
 
-  <h2 class="sect" data-g="eig"><span class="n">02</span>特征值与二次型<span class="cnt">家族卡 5 + 总表 1 + 触发器 4</span></h2>
+  <h2 class="sect" data-g="eig"><span class="n">02</span>特征值与二次型<span class="cnt">家族卡 10 + 总表 1 + 触发器 8</span></h2>
 
   <div class="cardk" data-g="eig">
     <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">特征值基本功:定义 · 两恒等式 · 函数搬运表</span><span class="arrow">▶</span></div>
@@ -333,6 +333,56 @@
     </div>
   </div>
 
+  <div class="cardk" data-g="eig">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">秩 1 矩阵全家桶(见秩1就一次交出四件事)</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论</b>$r(A)=1\iff A=\alpha\beta^T$($\alpha,\beta$ 非零列向量)。此时:① 特征值 <b style="display:inline">$\text{tr}(A),0,\dots,0$</b>;② $A^2=\text{tr}(A)\cdot A$,故 $A^n=[\text{tr}(A)]^{n-1}A$;③ $|A|=0$($n\ge2$);④ <b style="display:inline">可对角化 $\iff\text{tr}(A)\ne0$</b>。其中 $\text{tr}(A)=\beta^T\alpha$。</div>
+      <div class="row r-when"><b>何时用</b>看到「各行成比例」「$A=\alpha\beta^T$」「所有 2 阶子式为 0」——三句话是同一句,立刻把四件事全写出来。求 $A^n$ 时这是「五道闸」的第一闸,比对角化快得多。</div>
+      <div class="row r-conf"><b>易混点</b>$\text{tr}(A)=0$ 时特征值<b style="display:inline">全为 0 但 $A\ne O$</b>,此时<b style="display:inline">必不可对角化</b>(否定条件:特征值全为 $k$ 但 $A\ne kE$);$\lambda=0$ 的几何重数恒为 $n-1$,与 $\text{tr}$ 无关。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="eig">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">归零准则一二 + 可对角化的五条充分条件、两条否定条件</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论</b><b style="display:inline">准则一</b>:$f(A)=O\Rightarrow$ 每个特征值满足 $f(\lambda)=0$。<b style="display:inline">准则二(凯莱–哈密顿)</b>:特征多项式 $f(\lambda)=|\lambda E-A|$ 必有 $f(A)=O$。充分条件五条:① 实对称;② $n$ 个互异特征值;③ <b style="display:inline">$A^k=E$</b>;④ <b style="display:inline">$(A-k_1E)(A-k_2E)=O$ 且 $k_1\ne k_2$</b>;⑤ <b style="display:inline">$r(A)=1$ 且 $\text{tr}(A)\ne0$</b>。否定条件两条:① $A\ne O$ 但 $A^k=O$;② 特征值全为 $k$ 但 $A\ne kE$。必要条件:$A\sim\Lambda\Rightarrow r(A)=$ 非零特征值个数。</div>
+      <div class="row r-when"><b>何时用</b>题目只给矩阵等式、不给具体数字时的唯一入口。一句话判据:<b style="display:inline">把 $A$ 归零的最低次多项式有没有重根</b>——无重根必可对角化,有重根才可能亏欠。</div>
+      <div class="row r-conf"><b>易混点</b>准则一解出的 $\lambda$ 只是<b style="display:inline">取值范围</b>:$A^2=E\Rightarrow\lambda=\pm1$,但可能全为 1、全为 $-1$、或两者都有(三个对角阵实证)。<b style="display:inline">不要武断说 $\lambda_1=1,\lambda_2=-1$</b>;准则二白送一个等式,主要用于降幂与求逆,考研极少直接考。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="eig">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">相似的六条必要条件 + 「三同一不同」</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论</b>$A\sim B\Rightarrow$ ① $|A|=|B|$;② $r(A)=r(B)$;③ $\text{tr}(A)=\text{tr}(B)$;④ 特征多项式相同;⑤ <b style="display:inline">$r(\lambda E-A)=r(\lambda E-B)$</b>(即同一 $\lambda$ 的无关特征向量个数相同);⑥ 各阶主子式之和分别相等。「三同一不同」:若 $P^{-1}AP=B$,则 <b style="display:inline">$f(A),A^{-1},A^*$ 与对应的 $f(B),B^{-1},B^*$ 用<u>同一个</u> $P$</b>,可任意线性组合;但 <b style="display:inline">$A^T\sim B^T$ 用的是 $(P^T)^{-1}$</b>,不能与前三者相加。</div>
+      <div class="row r-when"><b>何时用</b>选择题「哪个与 $A$ 相似」→ 用①②③排除(成本从低到高);选择题「哪个结论错」→ 找含 $A^T$ 且与别项<b style="display:inline">相加</b>的那个。解答题证相似→走传递法,不用这六条。</div>
+      <div class="row r-conf"><b>易混点</b>六条<b style="display:inline">全部成立也不一定相似</b>(书页152 有 4 阶反例,差在 Jordan 块排布 $2+2$ vs $3+1$);但<b style="display:inline">$A,B$ 均为实对称时,特征值相同就是充要条件</b>。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="eig">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">谱分解 $A=\sum\lambda_i\xi_i\xi_i^T$(实对称专属)</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论</b>$A$ 实对称、$\xi_1,\dots,\xi_n$ 是<b style="display:inline">单位正交</b>特征向量 $\Rightarrow A=\lambda_1\xi_1\xi_1^T+\cdots+\lambda_n\xi_n\xi_n^T$(由 $A=Q\Lambda Q^T$ 展开)。每个 $\xi_i\xi_i^T$ 是<b style="display:inline">往 $\xi_i$ 方向的投影矩阵</b>(秩 1),$\lambda_i$ 是该方向的拉伸倍数;同理 $f(A)=\sum f(\lambda_i)\xi_i\xi_i^T$。</div>
+      <div class="row r-when"><b>何时用</b>求 $A^n$ 的<b style="display:inline">第三法(最快)</b>:当只有一个特征值与众不同时,$A^n-cE$ 退化成秩 1 阵,直接写成 $(\lambda^n-c)\eta\eta^T$,<b style="display:inline">不必求 $P^{-1}$、也不必求出其余特征向量</b>。</div>
+      <div class="row r-conf"><b>易混点</b>公式要求 $\xi_i$ <b style="display:inline">单位化且两两正交</b>(不是随便一组特征向量);非实对称矩阵没有这个分解。张宇的设问「$\lambda_1=100$ 而其余 $\lt0.1$ 时,$A$ 的主要成分是 $\lambda_1\xi_1\xi_1^T$」——这就是 PCA 的一句话原理。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="eig">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">正交矩阵:一串等价说法 + $a_{ij}=A_{ij}$ 的隐藏身份</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论</b>$A^TA=E\iff A^{-1}=A^T\iff A$ 由规范正交基组成 $\iff A^T,A^{-1},A^*,-A$ 都是正交阵。① 同阶正交阵之积仍正交,<b style="display:inline">但和未必</b>(对比:正定阵之和仍正定、积未必);② 实特征值只能取 $\pm1$;③ <b style="display:inline">$A\ne O$ 且 $a_{ij}=A_{ij}$(每个元素等于自己的代数余子式)$\Rightarrow A^T=A^*,AA^T=E,|A|=1$</b>;若 $a_{ij}=-A_{ij}$ 则 $|A|=-1$。</div>
+      <div class="row r-when"><b>何时用</b>「$A$ 是正交阵」是极强的条件:<b style="display:inline">每行每列长度为 1</b>——已知某个元素为 $\pm1$ 就能推出该行该列其余元素全为 0;求 $A^{-1}$ 一律换成 $A^T$。</div>
+      <div class="row r-conf"><b>易混点</b>③ 的证明枢纽是 $|A|=a_{i1}A_{i1}+\cdots+a_{in}A_{in}=a_{i1}^2+\cdots+a_{in}^2\gt0$(用到 $A\ne O$),<b style="display:inline">不写这一步就定不了号</b>;反过来正交阵未必满足 $a_{ij}=A_{ij}$,只考正向。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
   <div class="cardk trig" data-g="eig trig">
     <div class="chead"><span class="badge b-trig">触发器</span><span class="name">见抽象矩阵等式求特征值 → 凑 $A\alpha=\lambda\alpha$ / 零化多项式</span><span class="arrow">▶</span></div>
     <div class="cbody">
@@ -369,7 +419,43 @@
     </div>
   </div>
 
-  <footer>数学一卡库 · 线代:秩·方程组·特征值 · 16 张 · 由 Claude 编写,真题出处随错题页生成逐步反链</footer>
+  <div class="cardk trig" data-g="eig trig">
+    <div class="chead"><span class="badge b-trig">触发器</span><span class="name">见「只有一个线性无关的特征向量」→ 唯一特征值 + $n$ 重 + Jordan 链</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-when"><b>触发动作</b>① 立刻断定 <b style="display:inline">$A$ 只有一个特征值且它是 $n$ 重根</b>(否则 $m$ 个不同特征值至少给 $m$ 个无关特征向量);② 若题目还给了 $B$ 是 Jordan 块并要求 $P^{-1}AP=B$,就写 $AP=PB$ <b style="display:inline">逐列读</b>,得链式方程组 $(A-\lambda E)x_1=0,\ (A-\lambda E)x_2=x_1,\ (A-\lambda E)x_3=x_2$,逐级解(后两个是非齐次,右端来自上一步);③ <b style="display:inline">最后算 $|P|$ 并令其非零</b>,定出参数约束(典型结果 $|P|=k_1^3\Rightarrow k_1\ne0$)。</div>
+      <div class="row r-conf"><b>易混点</b>$AP=PB$ <b style="display:inline">不等于</b> $P^{-1}AP=B$——差的就是可逆性,漏掉最后一步等于没做完;$k_2,k_3$ 完全自由(沿链方向平移不改张成空间),唯一致命的是链的起点 $x_1=0$。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk trig" data-g="eig trig">
+    <div class="chead"><span class="badge b-trig">触发器</span><span class="name">见 $\sum A_{ii}$ / $k$ 阶主子式之和 → $\text{tr}(A^*)$ 与「任意 $k$ 个特征值乘积之和」</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-when"><b>触发动作</b>通式:<b style="display:inline">$k$ 阶主子式之和 $=$ 任意 $k$ 个特征值乘积之和</b>。三阶时:$\sum a_{ii}=\sum\lambda_i$;<b style="display:inline">$A_{11}+A_{22}+A_{33}=\lambda_1\lambda_2+\lambda_1\lambda_3+\lambda_2\lambda_3=\text{tr}(A^*)$</b>;$|A|=\lambda_1\lambda_2\lambda_3$。所以「已知三个特征值求 $\sum A_{ii}$」一步到位,<b style="display:inline">全程不必求出 $A$</b>。</div>
+      <div class="row r-conf"><b>易混点</b>$A_{ii}$ 是<b style="display:inline">代数余子式</b>不是元素 $a_{ii}$,一字之差答案完全不同;$A^*$ 的特征值写成<b style="display:inline">「去掉一个 $\lambda_i$ 后其余之积」</b>比写 $\frac{|A|}{\lambda_i}$ 更安全(后者在 $\lambda_i=0$ 时失效)。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk trig" data-g="eig trig">
+    <div class="chead"><span class="badge b-trig">触发器</span><span class="name">见「每行(列)元素之和为 $k$」→ 白送一组 $(\lambda,\xi)$ 并连锁到 $A^{-1},A^n$</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-when"><b>触发动作</b>$A$ 每行和为 $k$ $\Rightarrow A(1,\dots,1)^T=k(1,\dots,1)^T$,即 <b style="display:inline">$k$ 是特征值、$(1,\dots,1)^T$ 是特征向量</b>;连锁三条:$A$ 可逆时 $A^{-1}$ 每行和为 $\frac1k$;$A^n$ 每行和为 $k^n$;$A^*$ 的对应特征值为 $\frac{|A|}{k}$(特征向量仍是全 1 列)。</div>
+      <div class="row r-conf"><b>易混点</b>给的是<b style="display:inline">每列</b>之和时要写 $(1,\dots,1)A=k(1,\dots,1)$,结论仍是「$k$ 是 $A$ 的特征值」(因 $\lambda_{A^T}=\lambda_A$),<b style="display:inline">但特征向量不再是全 1 列</b>——$A^T$ 的特征向量要单独算。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <div class="cardk trig" data-g="eig trig">
+    <div class="chead"><span class="badge b-trig">触发器</span><span class="name">见矩阵等式($AB=O$ / $AP=PB$ / $CA^T=2C$ / 每行和)→ 按列分块,$A$ 必须在左边</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-when"><b>触发动作</b>统一动作:<b style="display:inline">把等式化成「$A\cdot$某矩阵 $=$ 同一矩阵$\cdot$某数(或某矩阵)」再按列分块</b>。① $(A+2E)B=O$ → 先展开成 <b style="display:inline">$AB=-2B$</b>,则 $B$ 的非零列都是 $\lambda=-2$ 的特征向量;② $AB=O$ → $B$ 的非零列是 $\lambda=0$ 的特征向量;③ $AP=PB$ 且 $P$ 可逆 → $A\sim B$;④ 任意 $\xi$ 都满足 $(\lambda E-A)\xi=0$ → $A=\lambda E$。</div>
+      <div class="row r-conf"><b>易混点</b>⚠️<b style="display:inline">$CA^T=2C$ 这类 $A$ 在右边的,必须先整体转置</b>成 $AC^T=2C^T$ 才能分块,不转置就白给;分块后还要<b style="display:inline">数一数这些列里有几个线性无关</b>(常有列成比例),它决定几何重数,进而定重数。</div>
+      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+    </div>
+  </div>
+
+  <footer>数学一卡库 · 线代:秩·方程组·特征值 · 35 张 · 由 Claude 编写,真题出处随错题页生成逐步反链</footer>
 </div>
 
 <script>
