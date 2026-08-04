@@ -137,6 +137,8 @@ em{font-style:normal;background:var(--amber-soft);color:var(--amber);border-radi
 
 .gridwrap{overflow-x:auto}
 table{width:100%;border-collapse:collapse;font-size:.87rem;margin:12px 0;min-width:520px}
+/* 交互模块里的小表格（矩阵展示 / 迷你对照表）不吃上面那个 520px 下限，否则会顶出面板 */
+table.mx,table.tabmini{min-width:0}
 th,td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top}
 th{background:var(--accent-soft);color:var(--accent);white-space:nowrap}
 

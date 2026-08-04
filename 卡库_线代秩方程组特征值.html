@@ -81,15 +81,16 @@
   <a class="back" href="index.html">◀ 返回数学复盘中心</a>
   <header>
     <h1>线代:秩 · 方程组 · 特征值</h1>
-    <div class="sub">35 张卡 · 线代的主线只有一条:秩 → 解的结构 → 特征值 → 对角化 → 二次型,环环相扣</div>
+    <div class="sub">46 张卡 · 线代的主线只有一条:秩 → 解的结构 → 特征值 → 对角化 → 二次型,环环相扣<br><span style="font-size:.85em">03 组是 ch6 二次型收官后新增的 11 张(形状化归 / 配方纪律 / 伪配方法 / 两跳 / 重要结论 / 曲面速查 / 五个触发器)</span></div>
   </header>
 
-  <div class="usage"><b>自测用法:</b>先看标题默写内容再点开核对。「秩的不等式家族」「对角化条件链」「正定判定」是三张核心硬背卡;「三关系对照表」管选择题;触发器卡管大题第一步。</div>
+  <div class="usage"><b>自测用法:</b>先看标题默写内容再点开核对。「秩的不等式家族」「对角化条件链」「正定判定」是三张核心硬背卡;「伪配方法」「两跳求过渡矩阵」是 ch6 最易翻车的两张;「三关系对照表」管选择题;触发器卡管大题第一步。</div>
 
   <div class="toolbar">
     <button class="fbtn on" data-f="all">全部</button>
     <button class="fbtn" data-f="rank">秩与方程组</button>
     <button class="fbtn" data-f="eig">特征值与二次型</button>
+    <button class="fbtn" data-f="quad">二次型专项</button>
     <button class="fbtn" data-f="trig">触发器卡</button>
     <button class="fbtn" data-f="table">对比总表</button>
     <button class="allbtn" style="margin-left:auto" onclick="drawCards(5)" title="随机抽5张,点「全部」恢复">🎲 抽 5 张自测</button>
@@ -304,8 +305,8 @@
     <div class="cbody">
       <div class="row r-concl"><b>结论</b>$f=x^TAx$($A$ 取实对称写法):①<b style="display:inline">正交变换法</b> $x=Qy$:$f=\sum\lambda_iy_i^2$,系数就是特征值——保长度、保几何形状,涉及「距离/曲面类型/在 $\|x\|=1$ 上的最值」<b style="display:inline">必须</b>用它;②<b style="display:inline">配方法</b>(可逆线性变换):系数一般不是特征值,但正负个数不变;③ 惯性定理:无论怎样的可逆变换,正、负惯性指数 $(p,q)$ 不变;规范形 $z_1^2+\cdots+z_p^2-\cdots-z_{p+q}^2$ 唯一。</div>
       <div class="row r-when"><b>何时用</b>标准形只问正负个数 → 配方/求特征值符号即可;要写变换矩阵或有几何背景 → 正交变换法全流程。</div>
-      <div class="row r-conf"><b>易混点</b>二次型矩阵必须写成<b style="display:inline">对称</b>的(交叉项系数减半分两边);配方时若没有平方项、只有交叉项,先做 $x_1=y_1+y_2,x_2=y_1-y_2$ 造出平方项;正交变换下标准形系数=特征值,配方法下<b style="display:inline">不是</b>——选择题拿这个设坑。</div>
-      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+      <div class="row r-conf"><b>易混点</b>二次型矩阵必须写成<b style="display:inline">对称</b>的(交叉项系数减半分两边);配方时若没有平方项、只有交叉项,先做 $x_1=y_1+y_2,x_2=y_1-y_2$ 造出平方项;正交变换下标准形系数=特征值,配方法下<b style="display:inline">不是</b>——选择题拿这个设坑;⚠️<b style="display:inline">正交变换只能化标准形,化不出规范形</b>(除非特征值都是 $0,\pm1$),要规范形只能配方。</div>
+      <div class="row r-src"><b>真题出处</b>精读版 <a href="精读版/线代_第06章_二次型.html#s2">ch6 §二 两法对比总表</a> · <a href="精读版/线代_第06章_二次型.html#tool-cmp">🛠 配方⇄正交对拍台</a>(同一个 $A$ 两栏并排,亲眼看 $d_i$ 不是特征值而 $(p,q)$ 分毫不差) · <a href="精读版/线代_第06章_二次型.html#eg-62">基 6.2</a> / <a href="精读版/线代_第06章_二次型.html#eg-64">基 6.4</a>。</div>
     </div>
   </div>
 
@@ -314,8 +315,8 @@
     <div class="cbody">
       <div class="row r-concl"><b>结论</b>$A$ 实对称,以下等价:① $\forall x\ne0,\ x^TAx\gt0$;② 特征值全 $\gt0$;③ 各阶<b style="display:inline">顺序主子式</b>全 $\gt0$;④ 正惯性指数 $p=n$;⑤ 存在可逆 $D$ 使 $A=D^TD$;⑥ $A$ 与 $E$ 合同。必要条件(验坑用):$a_{ii}\gt0$、$|A|\gt0$。</div>
       <div class="row r-when"><b>何时用</b>数字题用顺序主子式最快;抽象题(如证 $A^TA+kE$ 正定)用定义:算 $x^T(\cdot)x=\|Ax\|^2+k\|x\|^2\gt0$;含参讨论正定 → 顺序主子式列不等式组。</div>
-      <div class="row r-conf"><b>易混点</b>顺序主子式判别法只适用于<b style="display:inline">实对称</b>矩阵;「特征值全 $\gt0$」别弱化成「$|A|\gt0$」($|A|\gt0$ 可能是两负相乘);$A,B$ 正定 $\Rightarrow A+B$ 正定(定义直接加),但 $AB$ <b style="display:inline">未必</b>(可能不对称)。</div>
-      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+      <div class="row r-conf"><b>易混点</b>顺序主子式判别法只适用于<b style="display:inline">实对称</b>矩阵;「特征值全 $\gt0$」别弱化成「$|A|\gt0$」($|A|\gt0$ 可能是两负相乘);$A,B$ 正定 $\Rightarrow A+B$ 正定(定义直接加),但 $AB$ <b style="display:inline">未必</b>(可能不对称,<b style="display:inline">$AB$ 正定 $\iff AB=BA$</b>);⑤ 里的「<b style="display:inline">可逆</b>」不能丢——去掉只剩半正定(反例 $C=\begin{pmatrix}1&1\\0&0\end{pmatrix}$);「负惯性指数为零」也<b style="display:inline">不是</b>正定(可能有零特征值,只是半正定)。</div>
+      <div class="row r-src"><b>真题出处</b>精读版 <a href="精读版/线代_第06章_二次型.html#s8">ch6 §八 五通道势力范围表</a> · <a href="精读版/线代_第06章_二次型.html#tool-pd">🛠 五通道判定器</a> · <a href="精读版/线代_第06章_二次型.html#eg-610">基 6.10(五法同题)</a> / <a href="精读版/线代_第06章_二次型.html#eg-612">基 6.12(三个反例)</a>。</div>
     </div>
   </div>
 
@@ -329,7 +330,8 @@
         <tr><td>合同</td><td>$B=C^TAC$($C$ 可逆)</td><td>(实对称)正负惯性指数相同</td><td>$(p,q)$、秩</td></tr>
       </table></div>
       <div class="row r-when"><b>用法</b>判断题流程:先比<b style="display:inline">不变量</b>排除(tr 不同必不相似;$(p,q)$ 不同必不合同);实对称阵:相似 $\Rightarrow$ 合同 $\Rightarrow$ 等价,一路单向。正交变换 $Q^TAQ$ 同时是相似<b style="display:inline">和</b>合同——正交对角化两头通吃的原因。</div>
-      <div class="row r-conf"><b>易混点</b>「特征值相同 $\Rightarrow$ 相似」对一般矩阵<b style="display:inline">不成立</b>(如 $\begin{pmatrix}0&1\\0&0\end{pmatrix}$ 与 $O$),对实对称成立;相似必等价,合同必等价,相似与合同互不包含(非对称时)。</div>
+      <div class="row r-conf"><b>易混点</b>「特征值相同 $\Rightarrow$ 相似」对一般矩阵<b style="display:inline">不成立</b>(如 $\begin{pmatrix}0&1\\0&0\end{pmatrix}$ 与 $O$),对实对称成立;相似必等价,合同必等价,相似与合同互不包含(非对称时)。<b style="display:inline">实对称时:相似 $\Rightarrow$ 合同,反之不成立</b>——$\mathrm{diag}(1,1)$ 与 $\mathrm{diag}(2,3)$ 合同却特征值全不同。</div>
+      <div class="row r-src"><b>真题出处</b>精读版 <a href="精读版/线代_第06章_二次型.html#s0">ch6 §定位 三条分界线</a> · <a href="精读版/线代_第06章_二次型.html#tool-tri">🛠 三分判定器</a>(输入两个矩阵,逐格点亮相似/合同/等价) · <a href="精读版/线代_第06章_二次型.html#eg-911">★★★强 9.11</a>(同一考点的开放式问法)。</div>
     </div>
   </div>
 
@@ -405,8 +407,8 @@
     <div class="chead"><span class="badge b-trig">触发器</span><span class="name">见 $\|x\|=1$ 上求 $x^TAx$ 最值 → 最大/最小特征值</span><span class="arrow">▶</span></div>
     <div class="cbody">
       <div class="row r-when"><b>触发动作</b>$\max_{\|x\|=1}x^TAx=\lambda_{\max}$,$\min=\lambda_{\min}$,取到的 $x$ 是对应的单位特征向量。原理:正交变换 $x=Qy$ 保 $\|x\|=\|y\|$,化成 $\sum\lambda_iy_i^2$ 一眼定界。不限长度时 $x^TAx$ 的正负性由特征值符号(惯性指数)定。</div>
-      <div class="row r-conf"><b>易混点</b>约束是 $\|x\|=1$ 才有此结论;若约束是别的二次型($y^TBy=1$)那是广义特征值问题,考研不涉及——见到就说明读错题了。</div>
-      <div class="row r-src"><b>真题出处</b>待错题页反链。</div>
+      <div class="row r-conf"><b>易混点</b>约束是 $\|x\|=1$(或求 $\frac{x^TAx}{x^Tx}$)才能直接套;<b style="display:inline">⚠️更新:分母换成另一个二次型 $x^TBx$($B$ 正定)时并非"不涉及"</b>——张宇《线代9讲》例 9.15 把它作为新命制题收入,做法是 $B=D^TD$、令 $z=Dx$ 化归回 $\frac{z^TMz}{z^Tz}$($M=(D^{-1})^TAD^{-1}$),答案是 $M$ 的最大特征值。</div>
+      <div class="row r-src"><b>真题出处</b>精读版 <a href="精读版/线代_第06章_二次型.html#s9">ch6 §九 瑞利商</a> · <a href="精读版/线代_第06章_二次型.html#tool-pd">🛠 瑞利商实验台</a>(2000 个随机 $x$ 全部落在 $[\lambda_{\min},\lambda_{\max}]$ 内) · <a href="精读版/线代_第06章_二次型.html#eg-915">强 9.15</a>。</div>
     </div>
   </div>
 
@@ -455,7 +457,124 @@
     </div>
   </div>
 
-  <footer>数学一卡库 · 线代:秩·方程组·特征值 · 35 张 · 由 Claude 编写,真题出处随错题页生成逐步反链</footer>
+
+  <h2 class="sect" data-g="quad"><span class="n">03</span>二次型专项(ch6 增量)<span class="cnt">家族卡 5 + 总表 1 + 触发器 5</span></h2>
+
+  <div class="cardk" data-g="quad">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">形状不标准的二次型 → 一律掰成 $x^TAx$(三种来料)</span><span class="hintline">$A=\frac{B+B^T}{2}$</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论</b>① 给<b style="display:inline">非对称</b> $B$:$f=x^TBx$ <b style="display:inline">是</b>二次型但 $B$ <b style="display:inline">不是</b>它的矩阵,真正的矩阵是 $A=\frac{B+B^T}{2}$(理由:$x^TBx$ 是 $1\times1$ 矩阵,转置不变);② 给<b style="display:inline">内积平方和</b> $f=\sum_i(\alpha_i,x)^2$:$A=\sum_i\alpha_i\alpha_i^T$,且 $f$ 正定 $\iff r([\alpha_1,\cdots,\alpha_m])=n$;③ 给<b style="display:inline">行列式</b> $f=|xA+yB|$($A,B$ 为 2 阶):必是 $x,y$ 的二次齐次式,三个系数可代 $(1,0)(0,1)(1,1)$ 三次取出。</div>
+      <div class="row r-when"><b>何时用</b>题面里的式子不长成 $x^T\square x$ 的样子时,第一动作永远是掰正。掰正之后才谈得上秩、惯性指数、正定。</div>
+      <div class="row r-conf"><b>易混点</b>拿非对称的 $B$ 直接算顺序主子式判正定<b style="display:inline">是错的</b>(反例 $B=\begin{pmatrix}1&4\\0&1\end{pmatrix}$ 顺序主子式全正,而 $A=\begin{pmatrix}1&2\\2&1\end{pmatrix}$ 不正定);②里别忘了 $\alpha\alpha^T$ 是秩 1 阵,$|A|=|P|^2$ 必是完全平方。</div>
+      <div class="row r-src"><b>真题出处</b>精读版 <a href="精读版/线代_第06章_二次型.html#s1">ch6 §一</a> · <a href="精读版/线代_第06章_二次型.html#eg-91">强 9.1</a> / <a href="精读版/线代_第06章_二次型.html#eg-92">强 9.2</a> / <a href="精读版/线代_第06章_二次型.html#eg-912">强 9.12</a> / <a href="精读版/线代_第06章_二次型.html#ex-68">习 6.8</a>。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="quad">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">配方法:两个分支 · 一条纪律 · 五样副产品</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论 · 两分支</b>有平方项 → 选一个 $x_i^2$,把<b style="display:inline">所有含 $x_i$ 的混合项一次配完</b>,余下递归;无平方项 → 先作 $x_1=y_1+y_2,\ x_2=y_1-y_2,\ x_3=y_3$ 造出平方项(平方差,变换矩阵行列式恒 $-2\ne0$)。<br><b>一条纪律</b>「一次配完、每步恰好消掉一个变量」——它保证变换矩阵是<b style="display:inline">对角线全 1 的三角阵</b>,$|C|=1$ 天然可逆;<b style="display:inline">平方项少于变量个数时,缺的变量必须原样抄成新变量</b>($y_3=x_3$),否则 $C$ 不是方阵。<br><b>五样副产品</b>①可逆变换 $C$ ②合同对角阵 $\Lambda$ ③秩 $r$ ④$(p,q)$ ⑤是否正定。</div>
+      <div class="row r-when"><b>何时用</b>具体数字题、含参数题的<b style="display:inline">首选</b>(参数会自然被挤到最后一个平方项的系数里,只剩一个不等式);三次方程试不出根、算不动特征值时的<b style="display:inline">退路</b>。</div>
+      <div class="row r-conf"><b>易混点</b>题目问「所作的可逆线性变换」要答 <b style="display:inline">$x=Cy$</b> 不是 $y=Cx$(配方直接得到的是后者,<b style="display:inline">必须再求一次逆</b>);两次换元要<b style="display:inline">复合成一个</b> $C$,先作的写在左边;配方次序不同 ⟹ $C$ 与标准形都不唯一,但 $r,p,q$ 唯一。</div>
+      <div class="row r-src"><b>真题出处</b>精读版 <a href="精读版/线代_第06章_二次型.html#s3">ch6 §三</a> · <a href="精读版/线代_第06章_二次型.html#eg-62">基 6.2(有平方项)</a> / <a href="精读版/线代_第06章_二次型.html#eg-63">基 6.3(无平方项)</a> / <a href="精读版/线代_第06章_二次型.html#eg-94">强 9.4</a>。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="quad">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">★伪配方法:见「平方和式」先别信,查系数矩阵的秩</span><span class="hintline">两个方向都会坑</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论</b>$f=(a_1x_1+a_2x_2+a_3x_3)^2+(b_1x_1+\cdots)^2+(c_1x_1+\cdots)^2$ 写成 $f=\|Mx\|^2=x^T(M^TM)x$,其中 $M$ 是三个括号的系数矩阵。于是<b style="display:inline">一切结论只看 $r(M)$</b>:$$r(f)=r(M^TM)=r(M),\qquad f\ \text{正定}\iff r(M)=n\iff|M|\ne0$$判据落地:令 $f=0$ 得齐次方程组 $Mx=0$,<b style="display:inline">$|M|\ne0\Rightarrow$ 只有零解 $\Rightarrow f$ 正定;$|M|=0\Rightarrow$ 有非零解使 $f=0\Rightarrow$ 不正定</b>。</div>
+      <div class="row r-when"><b>何时用</b>见到"若干个完全平方之和"就用。<b style="display:inline">两个方向都常考</b>:正向问"正定时参数范围"(基 6.11:$|M|=a+1\ne0\Rightarrow a\ne-1$);反向问"秩是几"(习 6.5:三个平方看着秩 3,实际 $r(M)=2$)。</div>
+      <div class="row r-conf"><b>易混点</b>⚠️<b style="display:inline">"$f\ge0$" 不等于 "$f$ 正定"</b>,差的就是"$f=0$ 时 $x$ 只能为零";⚠️平方和式<b style="display:inline">不是</b>拉格朗日配方法的产物,<b style="display:inline">不能</b>直接读秩和惯性指数;几何解释:$|M|=0$ 时那个变换把一整条直线压成一点,$f=1$ 从封闭的椭球退化成无限延伸的柱面。</div>
+      <div class="row r-src"><b>真题出处</b>精读版 <a href="精读版/线代_第06章_二次型.html#eg-611">基 6.11 ＝ 强 9.6</a> / <a href="精读版/线代_第06章_二次型.html#ex-65">习 6.5</a> / <a href="精读版/线代_第06章_二次型.html#eg-610">基 6.10 方法四</a>。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="quad">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">★「两跳」求过渡矩阵:正交版与合同版,存在性条件不同</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论</b>题目要"直接连接 $A$ 与 $B$ 的那个矩阵",<b style="display:inline">直连没有公式,各自连到中转站有公式</b>:<br>①<b style="display:inline">正交版</b>(要求 $A\sim B$):$Q_1^TAQ_1=\Lambda=Q_2^TBQ_2\Rightarrow \boxed{Q=Q_1Q_2^T}$,中转站是<b style="display:inline">特征值对角阵</b>;<br>②<b style="display:inline">合同版</b>(只要求 $(p,q)$ 相同):各自<b style="display:inline">配方</b>到同一个标准形(必要时伸缩系数凑齐),$D_1x=D_2y\Rightarrow\boxed{D=D_2^{-1}D_1}$,中转站是<b style="display:inline">任何两边都到得了的标准形</b>(选规范形最省事)。</div>
+      <div class="row r-when"><b>何时用</b>题面是"$f$ 经变换化为 $g$,求那个变换矩阵"。<b style="display:inline">先看要不要正交</b>:要正交就<b style="display:inline">必须先验 $A\sim B$</b>(查 $\mathrm{tr}$),不相似则<b style="display:inline">正交阵不存在</b>,只能给可逆的。</div>
+      <div class="row r-conf"><b>易混点</b>顺序不能反($Q=Q_1Q_2^T$ 不是 $Q_2^TQ_1$);$Q_1,Q_2$ 的列<b style="display:inline">必须按同一个 $\Lambda$ 的顺序排</b>,否则中间接不上且看不出错;方向靠"谁是自变量"定:要 $A=D^TBD$ 就说明 $Dx$ 扮演 $g$ 的自变量,故 $y=Dx$。<b style="display:inline">验算信号</b>:两个 $\frac1{\sqrt5}$ 相乘会把根号消掉,算出的 $Q$ 若还带根号多半错了。</div>
+      <div class="row r-src"><b>真题出处</b>精读版 <a href="精读版/线代_第06章_二次型.html#eg-66">基 6.6(二元)</a> / <a href="精读版/线代_第06章_二次型.html#eg-97">强 9.7(三元,$Q$ 为整数阵)</a> / <a href="精读版/线代_第06章_二次型.html#eg-99">强 9.9(合同版)</a> / <a href="精读版/线代_第06章_二次型.html#eg-911">★★★强 9.11</a>。</div>
+    </div>
+  </div>
+
+  <div class="cardk" data-g="quad">
+    <div class="chead"><span class="badge b-fam">家族卡</span><span class="name">正定的「重要结论」三条(强化专属,抽象题弹药库)</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-concl"><b>结论</b>① $A$ 正定 $\Rightarrow$ <b style="display:inline">$A^{-1},\ A^*,\ A^m(m\in\mathbf{Z}^+),\ kA(k\gt0),\ C^TAC(C\text{ 可逆})$ 均正定</b>;<br>② $A,B$ 正定 $\Rightarrow$ <b style="display:inline">$A+B$ 正定</b>,$\begin{pmatrix}A&O\\O&B\end{pmatrix}$ 正定;<br>③ $A,B$ 正定 $\Rightarrow$ <b style="display:inline">$AB$ 正定 $\iff AB=BA$</b>(交换性是为了让 $AB$ <b style="display:inline">对称</b>:$(AB)^T=BA$)。<br>配套记忆:<b style="display:inline">正定对加法封闭、对乘法不封闭;正交对乘法封闭、对加法不封闭</b>——定义式里出现"$\gt0$"(可加)还是"$Q^TQ=E$"(可乘),决定了对哪种运算封闭。</div>
+      <div class="row r-when"><b>何时用</b>抽象正定题:「$aE+A$ 何时正定」→ 只卡<b style="display:inline">最小特征值</b> $a\gt-\lambda_1$;「$E+\varepsilon A$」→ $\lambda_1\ge0$ 时任意 $\varepsilon\gt0$,$\lambda_1\lt0$ 时 $0\lt\varepsilon\lt-\frac1{\lambda_1}$(<b style="display:inline">必须分类讨论</b>)。</div>
+      <div class="row r-conf"><b>易混点</b>$A^*$ 正定是 $A$ 正定的<b style="display:inline">必要不充分</b>条件——奇数阶时负定阵的伴随反而正定(反例 $A=-E_3$,$A^*=E$);偶数阶该反例不成立。判正定前<b style="display:inline">第一句永远是"$A$ 实对称"</b>,不写这句后面全是空中楼阁。</div>
+      <div class="row r-src"><b>真题出处</b>精读版 <a href="精读版/线代_第06章_二次型.html#s8">ch6 §八「重要结论」</a> · <a href="精读版/线代_第06章_二次型.html#eg-612">基 6.12</a> / <a href="精读版/线代_第06章_二次型.html#ex-613">习 6.13</a>。</div>
+    </div>
+  </div>
+
+  <div class="cardk table" data-g="quad table">
+    <div class="chead"><span class="badge b-table">对比总表</span><span class="name">二次曲面速查:$(p,q)$ → $f=1$ 是什么图形(数一)</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="tblwrap"><table>
+        <tr><th>$(p,q)$</th><th>符号</th><th>$f=1$ 的图形</th><th>封闭?</th></tr>
+        <tr><td>$(3,0)$</td><td>$+\,+\,+$</td><td><b>椭球面</b></td><td>✅(正定)</td></tr>
+        <tr><td>$(2,1)$</td><td>$+\,+\,-$</td><td><b>单叶双曲面</b></td><td>❌</td></tr>
+        <tr><td>$(1,2)$</td><td>$+\,-\,-$</td><td><b>双叶双曲面</b></td><td>❌</td></tr>
+        <tr><td>$(0,3)$</td><td>$-\,-\,-$</td><td>无图形(空集)</td><td>—</td></tr>
+        <tr><td>$(2,0)$</td><td>$+\,+\,0$</td><td><b>椭圆柱面</b></td><td>❌</td></tr>
+        <tr><td>$(1,1)$</td><td>$+\,-\,0$</td><td><b>双曲柱面</b></td><td>❌</td></tr>
+        <tr><td>$(1,0)$</td><td>$+\,0\,0$</td><td>两张平行平面</td><td>❌</td></tr>
+      </table></div>
+      <div class="row r-when"><b>用法</b>两条口诀:<b style="display:inline">「$q$ 是几就叫几叶」</b>($q=0$ 椭球 / $q=1$ 单叶 / $q=2$ 双叶);<b style="display:inline">「有几个 0 就降几维成柱面」</b>($r=3$ 真曲面 / $r=2$ 柱面 / $r=1$ 平面对)。<b style="display:inline">只数符号,不必求出特征值的具体值</b>——$\mathrm{tr}$、$|A|$、秩三个数常常就够定号。</div>
+      <div class="row r-conf"><b>易混点</b>「柱面」出现在选项里 = 在问 $|A|$ 是不是 0;带根号的特征值<b style="display:inline">必须估数值定号</b>(如 $\frac{-3+\sqrt{17}}4$:$\sqrt{17}\gt3$ 所以是正的,判错就从单叶变双叶);正定 $\iff$ 图形封闭 $\iff$ 高斯公式能用,这是线代给高数 ch18 供货的唯一接口。</div>
+      <div class="row r-src"><b>真题出处</b>精读版 <a href="精读版/线代_第06章_二次型.html#s7">ch6 §七 速查表</a> · <a href="精读版/线代_第06章_二次型.html#tool-conic">🛠 二次曲线主轴演示器</a> · <a href="精读版/线代_第06章_二次型.html#eg-95">强 9.5</a> / <a href="精读版/线代_第06章_二次型.html#ex-610">习 6.10</a>。</div>
+    </div>
+  </div>
+
+  <div class="cardk trig" data-g="quad trig">
+    <div class="chead"><span class="badge b-trig">触发器</span><span class="name">见"正交变换" → 立刻多拿一层条件(相似)</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-when"><b>触发动作</b>题面写"<b style="display:inline">经正交变换 $x=Qy$</b>"⟹ $Q^T=Q^{-1}$ ⟹ $Q^TAQ=B$ <b style="display:inline">同时是合同和相似</b> ⟹ 立刻免费得到 $\mathrm{tr}(A)=\mathrm{tr}(B)$、$|A|=|B|$、<b style="display:inline">标准形系数就是特征值</b>。反之题面只写"<b style="display:inline">可逆线性变换 / 化成 $g$ / 合同</b>"⟹ <b style="display:inline">只能</b>用 $(p,q,r)$,用迹就是越权。</div>
+      <div class="row r-conf"><b>易混点</b>⚠️卷面上"<b style="display:inline">因为 $Q$ 是正交矩阵,$Q^T=Q^{-1}$,所以 $A$ 与 $B$ 相似</b>"这句话<b style="display:inline">是采分点,必须写</b>,不能直接跳到"迹相等";强 9.3 就是同一对 $A,B$、第 (1) 问只给合同(答案是<b style="display:inline">区间</b>)、第 (2) 问加正交(答案是<b style="display:inline">一个点</b>)。</div>
+      <div class="row r-src"><b>真题出处</b>精读版 <a href="精读版/线代_第06章_二次型.html#eg-93">强 9.3(两问两强度)</a> / <a href="精读版/线代_第06章_二次型.html#eg-65">基 6.5</a> / <a href="精读版/线代_第06章_二次型.html#eg-66">基 6.6</a>。</div>
+    </div>
+  </div>
+
+  <div class="cardk trig" data-g="quad trig">
+    <div class="chead"><span class="badge b-trig">触发器</span><span class="name">见"是否存在正交变换把 $f$ 化成 $g$" → 先赌不存在,查 $\mathrm{tr}$</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-when"><b>触发动作</b>"是否存在"型开放问题:<b style="display:inline">否定只需一个不变量对不上,肯定要构造出整个 $Q$</b>(工作量差 10 倍)。所以<b style="display:inline">先赌不存在</b>,按 $\mathrm{tr}\to|A|\to r$ 的顺序试;$\mathrm{tr}$ 一眼可得,试完不等就直接收工。相等再考虑真去构造。</div>
+      <div class="row r-conf"><b>易混点</b>⚠️理由必须落在"<b style="display:inline">$A$ 与 $B$ 不相似</b>"上,<b style="display:inline">不能</b>写"$f$ 与 $g$ 不合同"——这类题里两者往往<b style="display:inline">恰恰是合同的</b>(前一问刚证完);题面的翻译:「用可逆变换化成 $g$」=合同,「用正交变换化成 $g$」=相似,「有相同规范形」=合同。</div>
+      <div class="row r-src"><b>真题出处</b>精读版 <a href="精读版/线代_第06章_二次型.html#eg-911">★★★强 9.11 第 (2) 问</a> · <a href="精读版/线代_第06章_二次型.html#eg-99">强 9.9 的【注】</a> · <a href="精读版/线代_第06章_二次型.html#tool-tri">🛠 三分判定器</a>。</div>
+    </div>
+  </div>
+
+  <div class="cardk trig" data-g="quad trig">
+    <div class="chead"><span class="badge b-trig">触发器</span><span class="name">见"$\Lambda$ 被题目指定" → 配方后把系数"借"成指定的对角元</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-when"><b>触发动作</b>题目给定 $\Lambda=\mathrm{diag}(d_1,\cdots,d_n)$ 要求 $C^TAC=\Lambda$:<b style="display:inline">配方 → 提系数 → 换元 → 求逆</b>四步。提系数的机械做法:$1\cdot u^2=c\cdot\left(\frac{u}{\sqrt c}\right)^2$,<b style="display:inline">要什么系数,括号里就除以它的平方根</b>。同一手法也用于"两个二次型凑成同一个标准形"(合同版两跳)。</div>
+      <div class="row r-conf"><b>易混点</b>只有 $c\gt0$ 才能这么提;$\Lambda$ 里有负数要写成 $-c\left(\frac{u}{\sqrt c}\right)^2$,<b style="display:inline">符号必须与原平方项一致</b>否则合同不成立(说明 $(p,q)$ 对不上,题本身无解);最后别忘 $C=P^{-1}$——配方直接给的是 $y=Px$。</div>
+      <div class="row r-src"><b>真题出处</b>精读版 <a href="精读版/线代_第06章_二次型.html#eg-98">强 9.8</a> / <a href="精读版/线代_第06章_二次型.html#eg-99">强 9.9</a> / <a href="精读版/线代_第06章_二次型.html#eg-913">强 9.13(Cholesky,反过来读出 $D$)</a>。</div>
+    </div>
+  </div>
+
+  <div class="cardk trig" data-g="quad trig">
+    <div class="chead"><span class="badge b-trig">触发器</span><span class="name">见"$C^2=B$ / 矩阵开方 / $D^TD$ 反解" → 谱分解</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-when"><b>触发动作</b>① <b style="display:inline">开方</b>:$B$ 实对称、特征值全 $\ge0$ ⟹ $B=P\Lambda P^T$,取 $C=P\sqrt{\Lambda}P^T$ 则 $C^2=B$;要 $C$ <b style="display:inline">正定</b>就取正平方根,此时 $C$ <b style="display:inline">唯一</b>。推广:任何函数 $g(A)=P\,g(\Lambda)\,P^T$。<br>② <b style="display:inline">已知 $D^TD$ 求 $D$</b>(格拉姆矩阵 / Cholesky):严格按 $x_1,x_2,x_3$ 顺序配方成平方和,<b style="display:inline">三个括号的系数按行抄下来就是 $D$</b>(自动上三角),连矩阵乘法都不用做。</div>
+      <div class="row r-conf"><b>易混点</b>$D$ <b style="display:inline">不唯一</b>(任取正交 $U$,$UD$ 也行),但"上三角+对角元为正"的那个唯一,考场给它最保险;开方时若取 $\mathrm{diag}(-2,2,1)$ 也满足 $C^2=B$ 但<b style="display:inline">不正定</b>——题目说"正定矩阵"正是为了钉唯一。<b style="display:inline">提速</b>:二重根+单根时用 $\sum\eta_i\eta_i^T=E$ 把二重那两项合并,只算一个 $\eta_3\eta_3^T$。</div>
+      <div class="row r-src"><b>真题出处</b>精读版 <a href="精读版/线代_第06章_二次型.html#eg-914">强 9.14(一行合并出答案)</a> / <a href="精读版/线代_第06章_二次型.html#eg-913">强 9.13</a>。</div>
+    </div>
+  </div>
+
+  <div class="cardk trig" data-g="quad trig">
+    <div class="chead"><span class="badge b-trig">触发器</span><span class="name">见"对角 $a$、其余全 $b$" → $(a-b)E+bJ$,特征值 5 秒出</span><span class="arrow">▶</span></div>
+    <div class="cbody">
+      <div class="row r-when"><b>触发动作</b>$n$ 阶矩阵主对角线全是 $a$、其余全是 $b$ ⟹ 写成 $A=(a-b)E+bJ$($J$ 为全 1 阵,秩 1,特征值 $n,0,\cdots,0$)⟹ <b style="display:inline">$A$ 的特征值是 $\{a+(n-1)b,\ \underbrace{a-b,\cdots,a-b}_{n-1}\}$</b>,特征向量 $[1,1,\cdots,1]^T$ 与 $J$ 的零空间。三阶常见款:$\begin{pmatrix}2&1&1\\1&2&1\\1&1&2\end{pmatrix}\to\{4,1,1\}$;$\begin{pmatrix}2&-1&-1\\-1&2&-1\\-1&-1&2\end{pmatrix}\to\{0,3,3\}$。</div>
+      <div class="row r-conf"><b>易混点</b>这类矩阵<b style="display:inline">每行和相等</b>,所以 $[1,\cdots,1]^T$ 一定是特征向量,对应特征值就是那个行和 $a+(n-1)b$;行列式随手可得 $|A|=[a+(n-1)b](a-b)^{n-1}$,比三行相加提公因子还快。二次型章出现频率极高(基 6.1 / 基 6.10 / 强 9.10 都是)。</div>
+      <div class="row r-src"><b>真题出处</b>精读版 <a href="精读版/线代_第06章_二次型.html#eg-610">基 6.10 批注②</a> / <a href="精读版/线代_第06章_二次型.html#eg-910">强 9.10 挖</a>。</div>
+    </div>
+  </div>
+
+  <footer>数学一卡库 · 线代:秩·方程组·特征值 · 46 张 · 由 Claude 编写,真题出处随错题页生成逐步反链</footer>
 </div>
 
 <script>

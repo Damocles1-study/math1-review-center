@@ -33,7 +33,7 @@
 .mxrow{display:flex;flex-wrap:wrap;gap:18px;align-items:center;justify-content:center;margin:12px 0}
 .mxbox{text-align:center}
 .mxbox .cap{font-size:.74rem;color:var(--muted);margin-bottom:5px}
-table.mx{border-collapse:collapse;margin:0 auto;width:auto;font-size:.88rem;
+table.mx{border-collapse:collapse;margin:0 auto;width:auto;min-width:0;font-size:.88rem;
   border-left:2px solid var(--ink);border-right:2px solid var(--ink);border-radius:3px}
 table.mx td{border:none;padding:3px 10px;text-align:center;font-family:var(--mono)}
 table.mx td.piv{background:var(--green-soft);color:var(--green);font-weight:700;border-radius:4px}
@@ -64,7 +64,7 @@ svg.fig .mut{fill:var(--muted);font-size:11px}
 .barrow .nm{width:5.6em;flex:none;color:var(--muted)}
 .barrow .vl{width:5.2em;flex:none;text-align:right}
 input[type=range]{width:100%;accent-color:var(--accent)}
-.tabmini{width:100%;border-collapse:collapse;font-size:.8rem;margin:6px 0}
+.tabmini{width:100%;min-width:0;border-collapse:collapse;font-size:.8rem;margin:6px 0}
 .tabmini td,.tabmini th{border:1px solid var(--line);padding:4px 7px;vertical-align:middle}
 .tabmini tr.on td{background:var(--accent-soft);color:var(--accent);font-weight:700}
 .ninegrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;margin:12px 0}
@@ -916,7 +916,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
       两条<b>虚线</b>是 $A$ 的两个特征方向——<b>只有当 $x$ 落在虚线上时，$Ax$ 才与 $x$ 共线</b>（此时红蓝箭头重合方向，长度比就是 $\lambda$）；
       离开虚线，$Ax$ 立刻偏转。右图：单位圆在 $A$ 作用下变成椭圆，<b>特征方向上的点被纯拉伸，其余点被"拧"了一下</b>。
       切到<b>实对称</b>预设时，两条特征方向<b>互相垂直</b>，椭圆的长短轴恰好落在它们上面——这就是
-      <a href="#eg-518">基 5.18</a> 那张"$x=Qy$ 正交旋转"图的动态版，也是 ch6 二次型化标准形的几何原型。
+      <a href="#eg-518">基 5.18</a> 那张"$x=Qy$ 正交旋转"图的动态版，也是 ch6 二次型化标准形的几何原型（<a href="线代_第06章_二次型.html#tool-conic">→ ch6 二次曲线主轴演示器</a>）。
     </div>
     <div class="stepbar">
       <label>预设</label><select id="ge-preset"></select>
@@ -1002,7 +1002,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
     <b>这与 $r(\lambda_iE-A)\lt n$ 矛盾</b>，故 $A$ 只能有一个 $\lambda_k$，且它是 $n$ 重特征值。<br>
     <b>潜台词是</b>：<em>这条结论的力量在于它<b>反向推出了特征值的个数</b>——一般题目里"特征向量的个数"是结果、"特征值"是原因，
     这里反过来了。</em>推理链是：<br>
-    <span class="nokatex">「$\lambda_i$ 是特征值」⟹「$r(\lambda_iE-A)\lt n$」⟹「至少有 1 个无关特征向量」</span>，
+    <span>「$\lambda_i$ 是特征值」⟹「$r(\lambda_iE-A)\lt n$」⟹「至少有 1 个无关特征向量」</span>，
     所以 <b>$m$ 个不同特征值至少贡献 $m$ 个无关特征向量</b>；总数只有 1 个 ⟹ <b>$m=1$</b>；
     再由 $n$ 个特征值全等 ⟹ 它是 $n$ 重根。<br>
     <b>所以能考</b>：<a href="#eg-810">强8 8.10</a>（整章最深的一题）第 (1) 问的开头就是
@@ -2413,7 +2413,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
       </div>
       <div class="notekeep"><span class="nh">📌 批注</span>
         <b>①</b> <b>书的【分析】给了一句几何解释</b>：「显然 $A^{\mathrm T}=A$。将对称矩阵 $A$ 进行 $Q^{\mathrm T}AQ$ 这样的处理，
-        在几何意义上<b>实现了正交旋转</b>。」并配了下面这张图——<b>它是 ch6 二次型"用正交变换化标准形"的预告</b>：
+        在几何意义上<b>实现了正交旋转</b>。」并配了下面这张图——<b>它是 ch6 二次型"用正交变换化标准形"的预告</b>（<a href="线代_第06章_二次型.html#s7">→ ch6 已把它做成可拖的主轴演示器</a>）：
         <svg class="fig" viewBox="20 -20 590 272" role="img" aria-label="正交旋转：斜椭圆经 x=Qy 变为正椭圆">
           <g stroke="var(--muted)" stroke-width="1.2" fill="none">
             <line x1="30" y1="120" x2="230" y2="120"/><line x1="130" y1="30" x2="130" y2="196"/>
@@ -2729,7 +2729,7 @@ input[type=range]{width:100%;accent-color:var(--accent)}
     加法则毫无理由（$E+E=2E$ 就不正交）。<br>
     <b>正定</b>的定义是<b>加法式</b> $x^{\mathrm T}Ax>0$，所以对<b>加法</b>封闭：$x^{\mathrm T}(A+B)x=x^{\mathrm T}Ax+x^{\mathrm T}Bx>0$ ✔；
     乘法则连"$AB$ 还对不对称"都不能保证。</em><br>
-    <b>所以能考</b>：<em>这条对照是 <b>ch6 二次型的预告</b>，也是一个可迁移的方法论——<b>看一个矩阵类对什么运算封闭，就去看它的定义式是乘法型还是加法型</b>。</em>
+    <b>所以能考</b>：<em>这条对照是 <b>ch6 二次型的预告</b>（<a href="线代_第06章_二次型.html#s8">→ 已兑现</a>），也是一个可迁移的方法论——<b>看一个矩阵类对什么运算封闭，就去看它的定义式是乘法型还是加法型</b>。</em>
     同理可推：对称阵对加法封闭、对乘法不封闭；可逆阵对乘法封闭、对加法不封闭。
   </div>
 
@@ -2976,16 +2976,17 @@ input[type=range]{width:100%;accent-color:var(--accent)}
   </div>
 
   <div class="outro">
-    <h3>下一章预告 · 第 6 章 二次型</h3>
-    <b>本章埋给 ch6 的三条线，到那里逐个兑现：</b><br>
+    <h3>下一章 · <a href="线代_第06章_二次型.html">第 6 章 二次型</a>（<b>已上线</b>，线代收官章）</h3>
+    <b>本章埋给 ch6 的三条线，均已在那里兑现：</b><br>
     <b>①</b> <a href="#eg-518">基 5.18</a> 的那张「$x=Qy$ 正交旋转」图——ch6 的"用正交变换化二次型为标准形"就是它的正式版，
-    $Q$ 的列仍是特征向量、$\Lambda$ 的对角元仍是特征值，<b>整套流程与本章 <a href="#s7">§七</a> 一字不差</b>。<br>
+    $Q$ 的列仍是特征向量、$\Lambda$ 的对角元仍是特征值，<b>整套流程与本章 <a href="#s7">§七</a> 一字不差</b>。<a href="线代_第06章_二次型.html#s7">→ ch6 §七 图 6-1 / 6-2 与主轴演示器</a><br>
     <b>②</b> <a href="#s7">§七</a> 那条「<b>正交对乘法封闭、正定对加法封闭</b>」的对照——ch6 会正面讲正定，
-    到时回头看这一条，"为什么 $A+B$ 正定而 $AB$ 未必"就是白送的。<br>
+    到时回头看这一条，"为什么 $A+B$ 正定而 $AB$ 未必"就是白送的。<a href="线代_第06章_二次型.html#s8">→ ch6 §八「重要结论」三条</a><br>
     <b>③</b> <b>合同</b>是与"等价""相似"并列的第三种关系（$C^{\mathrm T}AC=B$）。三者的分界线：
     <em>等价只要 $P,Q$ 可逆；相似要 $Q=P^{-1}$；<b>合同要 $Q=P^{\mathrm T}$</b></em>——
-    而<b>实对称阵的正交对角化恰好同时是相似与合同</b>（因为 $Q^{-1}=Q^{\mathrm T}$），这就是 ch6 能用本章全套工具的原因。<br>
+    而<b>实对称阵的正交对角化恰好同时是相似与合同</b>（因为 $Q^{-1}=Q^{\mathrm T}$），这就是 ch6 能用本章全套工具的原因。<a href="线代_第06章_二次型.html#s0">→ ch6 §定位 三种关系的分界线总表</a> · <a href="线代_第06章_二次型.html#tool-tri">🛠 三分判定器</a><br>
     <a href="线代_第04章_线性方程组.html">← 上一章：线代第 4 章 线性方程组</a>
+    <a href="线代_第06章_二次型.html">下一章：线代第 6 章 二次型 →</a>
     <a href="../index.html">返回复盘中心 →</a>
   </div>
 </div>
