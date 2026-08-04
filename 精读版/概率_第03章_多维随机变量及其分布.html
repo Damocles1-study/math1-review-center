@@ -1,0 +1,2371 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>精读版 · 概率第3章 多维随机变量及其分布</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],ignoredClasses:['nokatex']})"></script>
+<link rel="stylesheet" href="style.css">
+<style>
+/* ===== 本章专属：三个交互模块 ===== */
+.tool{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:20px 0}
+.tool h4{margin:0 0 4px;font-size:1rem;color:var(--accent)}
+.tool .hint{color:var(--muted);font-size:.82rem;margin-bottom:12px;line-height:1.7}
+.tool table{min-width:0}
+.ctrl{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;margin:10px 0}
+.ctrl label{font-size:.83rem;color:var(--muted);display:flex;align-items:center;gap:6px;min-width:0}
+.ctrl select,.ctrl button,.ctrl input[type=number]{font:inherit;font-size:.83rem;padding:4px 10px;border-radius:8px;
+  border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+.ctrl input[type=number]{width:5.4em;cursor:text}
+.ctrl input[type=range]{accent-color:var(--accent);min-width:120px;flex:1}
+.ctrl .v{font-family:var(--mono);font-size:.78rem;color:var(--muted);width:4.2em;text-align:right}
+.ctrl button.go{background:var(--accent-soft);color:var(--accent)}
+.ctrl button.go:hover{filter:brightness(.94)}
+.presets{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 0}
+.presets button{font:inherit;font-size:.78rem;padding:3px 10px;border-radius:999px;cursor:pointer;
+  border:1px solid var(--line);background:var(--card);color:var(--ink)}
+.presets button:hover{border-color:var(--accent);color:var(--accent)}
+.cvwrap{overflow-x:auto;margin:10px 0}
+.cvwrap canvas{border:1px solid var(--line);border-radius:8px;background:transparent;max-width:100%;height:auto;display:block}
+.readout{border-radius:8px;padding:9px 13px;margin:10px 0 0;font-size:.86rem;line-height:1.85;background:var(--accent-soft);color:var(--accent)}
+.readout.ok{background:var(--green-soft);color:var(--green)}
+.readout.warn{background:var(--red-soft);color:var(--red)}
+.rtab{width:100%;border-collapse:collapse;font-size:.79rem;margin:10px 0 0;min-width:0}
+.rtab th,.rtab td{border:1px solid var(--line);padding:3px 6px;text-align:center;white-space:nowrap}
+.rtab td.y{background:var(--green-soft);color:var(--green);font-weight:700}
+.rtab td.bad{background:var(--red-soft);color:var(--red);font-weight:700}
+.rtab td.mut{color:var(--muted)}
+.rtab input{font:inherit;font-family:var(--mono);font-size:.78rem;width:4.6em;padding:2px 4px;border-radius:6px;
+  border:1px solid var(--line);background:var(--card);color:var(--ink);text-align:center}
+.twocv{display:flex;flex-wrap:wrap;gap:14px}
+.twocv > div{flex:1 1 300px;min-width:0;text-align:center}
+.twocv canvas{max-width:100%;height:auto;border:1px solid var(--line);border-radius:8px;background:transparent}
+.twocv .cap{font-size:.76rem;color:var(--muted);margin-top:5px}
+.tabwrap{overflow-x:auto}
+@media (max-width:560px){ .ctrl label{width:100%} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../index.html">← 返回 数学一复盘中心</a>
+  <header>
+    <h1>精读版 · 概率第 3 章　多维随机变量及其分布</h1>
+    <div class="sub">融合张宇《基础30讲·概率论与数理统计分册》第 3 讲（<b>41 页，全科最厚的一讲</b>）+《概率论与数理统计9讲》<b>第 4 讲（7 页）与第 5 讲（11 页）</b>——强化这一章又要吃<b>两讲</b>，"函数的分布"仍然是独立的一讲，共 59 页 · <span class="layer L-base">基础</span> 打地基、<span class="layer L-str">强化</span> 上题型 · <b>基础 12 例 + 18 习题 + 强化 13 例，43 处编号去重后共 41 道，答案全部由程序独立复算（sympy 解析 153 项 + 蒙特卡洛 $10^7$ 样本 48 项，全部通过）</b> · 本章交付三个交互模块：<b>📐 二维积分区域画板</b>（本章头号错因是"定限画错"，这里把 $D\cap\{g(x,y)\le z\}$ 画出来，$F_Z(z)$ 用网格求积与蒙特卡洛双算对拍，$f_Z$ 的<b>折点</b>就是你要分的段）、<b>🎲 联合分布律工作台</b>（填一张表，边缘/条件/独立判定/协方差/$X+Y,XY,\max,\min$ 的分布律一次算完）、<b>🔔 二维正态实验台</b>（拖 $\rho$ 看等高线椭圆转向，同时反向验证"配方还原五参数"的 $\rho=-\frac{c}{2\sqrt{ab}}$）。</div>
+  </header>
+
+  <div class="legend">
+    <b>这一页的三层结构：</b>
+    <span class="layer L-base">基础</span>= 定义、公式与两种二维分布（基础30讲的地基，放心背）；
+    <span class="layer L-str">强化</span>= 《概率9讲》第 4、5 讲的<b>三向解题法</b>与<b>按「几维 → 几维」重排的解题地图</b>（基础讲没有、真题真考的）。批注色块：
+    <span class="swatch" style="background:var(--blue)"></span><b style="color:var(--blue)">补讲</b>（书上说 X → 潜台词是 Y → 所以能考 Z）、
+    <span class="swatch" style="background:var(--amber)"></span><b style="color:var(--amber)">必记</b>、
+    <span class="swatch" style="background:var(--red)"></span><b style="color:var(--red)">陷阱</b>、
+    <span class="swatch" style="background:var(--green)"></span><b style="color:var(--green)">强化题型</b>、
+    <span class="swatch" style="background:var(--purple)"></span><b style="color:var(--purple)">串联</b>（就地标出与前面章节 / 后面章节 / 408 的连接）、
+    <span class="swatch" style="background:var(--muted)"></span><b style="color:var(--muted)">背景</b>（这段是铺垫，考试不碰，<b>灰掉的地方就别花时间</b>）。<br>
+    紫色 <b>例题</b> 卡里，<b>基</b>3.x = 基础30讲例题、<b>习</b>3.x = 基础30讲课后习题、<b>强</b>4.x / <b>强</b>5.x = 概率9讲第4/第5讲例题（三套各自编号，别混）。<b>每题都标 ✔</b> = 答案已被我用程序独立算过一遍，不是照抄扫描件。<b>两处重题已合并成一张卡并双标</b>（强 4.3＝基 3.12、强 5.7＝基 3.10）。<br>
+    <b>📝 需要写过程的大题按「想 → 写 → 校」分三层</b>，对应做题的三个动作，<b>请按这个顺序用</b>：<br>
+    <b>💭 思路</b>＝<u>动手前</u>看：审题信号、为什么往这条路走、卡在哪里怎么破。<b>看完这层就合上页面自己写，别直接翻卷面。</b><br>
+    <b>✍️ 考场卷面</b>＝<u>写完对照</u>：可以照着抄上考场的完整解答，只写真要落笔的字，每个采分点标 <span class="pt" style="margin-left:0">⛳</span> 及分值。<br>
+    <b>📌 批注</b>＝<u>对照完校对</u>：定理边界、扣分点、排版理由、提速技巧。<br>
+    选择填空题<b>不加卷面层</b>——考场上本就不写过程，保留"答案 → 分析 → 要害"的教学式排版。
+  </div>
+
+  <div class="toc">
+    <b>本页导航（按"先建立对象、再研究关系、最后求函数分布"的顺序排）</b>
+    <div class="dolinks">
+      <a href="#s0">§0 本章地图</a>
+      <a href="#s1">§1 联合分布函数与四条性质</a>
+      <a href="#s2">§2 二维离散型（联合·边缘·条件）</a>
+      <a href="#s3">§3 二维连续型（★求边缘口诀）</a>
+      <a href="#s4">§4 二维均匀 &amp; 二维正态（★配方还原五参数）</a>
+      <a href="#s5">§5 独立性：三个刻画 + 不独立的证明</a>
+      <a href="#s6">§6 函数分布：分布函数法 &amp; ★换元法</a>
+      <a href="#s7">§7 卷积公式群（和差积商）</a>
+      <a href="#s8">§8 max/min 与 $[F]^n$、可加性</a>
+      <a href="#s9">§9 混合型：全集分解 + 全概率</a>
+      <a href="#s10">§10 综合题与"不相关但不独立"</a>
+      <a href="#s11">§11 三个交互模块</a>
+      <a href="#s12">§12 收网清单</a>
+    </div>
+  </div>
+
+  <!-- ================= s0 本章地图 ================= -->
+  <h2 id="s0"><span class="idx">〇</span>本章地图：一维学过的东西，全部再做一遍二维版　<span class="layer L-base">基础</span><span class="layer L-str">强化</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/概率论与数理统计/03_多维随机变量及其分布/概率_第03章_基础30讲.pdf">📄 基础30讲 p.62</a>
+  <a class="pg" href="../../张宇系列_分章易识别版/概率论与数理统计/03_多维随机变量及其分布/概率_第03章_强化9讲_第4讲_多维随机变量及其分布.pdf">📄 强化9讲第4讲 p.29</a>
+  <a class="pg" href="../../张宇系列_分章易识别版/概率论与数理统计/03_多维随机变量及其分布/概率_第03章_强化9讲_第5讲_多维随机变量函数的分布.pdf">📄 强化9讲第5讲 p.36</a>
+
+  <div class="mine"><span class="tag">补讲 · 一句话定位：这一章是"一维的平移"，但平移中<b>凭空长出两样新东西</b></span>
+    <b>书上说</b>（结构图旁的眉批原话）：结构与一维一致，但需找到多维（二维）与一维的<b>联系与区别</b>。<br>
+    <b>潜台词是</b>：$F(x,y)$、$p_{ij}$、$f(x,y)$ 都只是把一维的 $F(x)$、$p_i$、$f(x)$ 加一个下标，<b>这部分你不用重新学</b>。真正新的只有两样：<br>
+    ① <b>边缘分布</b>——一维没有这个概念，因为一维只有一个变量，无所谓"边缘"。有了它才有"从联合看单个"的方向；<br>
+    ② <b>独立性</b>——一维只有事件的独立（第 1 章），到这里才升级成<b>随机变量的独立</b>，而它正是把二维<b>拆回</b>一维的唯一通道。<br>
+    <b>所以能考</b>：本章 41 道题，<b>凡是"能做出来"的题，都是靠这两样把二维打回一维</b>：要么用边缘把一个变量积掉（$f_X(x)=\int f\mathrm dy$），要么用独立把联合拆成乘积（$f=f_Xf_Y$）。<b>做不动的时候，先问自己：这两条通道我用了哪一条？</b>
+  </div>
+
+  <div class="key"><span class="tag">必记 · 一维 ↔ 二维 全景对照表（本章骨架，先背这一张）</span>
+    <div class="gridwrap"><table>
+      <tr><th>#</th><th>一维（第 2 章）</th><th>二维（本章）</th><th>新增的东西</th></tr>
+      <tr><td>①</td><td>$X\sim F(x)=P\{X\le x\}$</td><td>$(X,Y)\sim F(x,y)=P\{X\le x,Y\le y\}$</td><td>性质从 3 条变 <b>4 条</b>（多"非负性"）</td></tr>
+      <tr><td>②</td><td>—</td><td>$F_X(x)=F(x,+\infty)$，$F_Y(y)=F(+\infty,y)$</td><td><b>边缘分布</b>（一维没有）</td></tr>
+      <tr><td>③</td><td>$p_i=P\{X=x_i\}$</td><td>$p_{ij}=P\{X=x_i,Y=y_j\}$，用<b>表格</b>装</td><td>行和 $p_{i\cdot}$、列和 $p_{\cdot j}$</td></tr>
+      <tr><td>④</td><td>$F(x)=\int_{-\infty}^x f$</td><td>$F(x,y)=\int_{-\infty}^{y}\!\mathrm dv\!\int_{-\infty}^{x}\! f(u,v)\mathrm du$</td><td>$\dfrac{\partial^2F}{\partial x\partial y}=f$（二阶混合偏导）</td></tr>
+      <tr><td>⑤</td><td>—</td><td>$f_X(x)=\int_{-\infty}^{+\infty}f(x,y)\mathrm dy$</td><td><b>边缘密度</b>（★口诀：求谁不积谁）</td></tr>
+      <tr><td>⑥</td><td>—</td><td>$f_{Y\mid X}(y\mid x)=\dfrac{f(x,y)}{f_X(x)}$</td><td><b>条件密度</b>（一维只有条件<u>概率</u>）</td></tr>
+      <tr><td>⑦</td><td>事件独立 $P(AB)=P(A)P(B)$</td><td>变量独立：$F=F_XF_Y\Leftrightarrow p_{ij}=p_{i\cdot}p_{\cdot j}\Leftrightarrow f=f_Xf_Y$</td><td><b>三个等价刻画</b>（考试重点）</td></tr>
+      <tr><td>⑧</td><td>$Y=g(X)$ 的分布</td><td>$Z=g(X,Y)$ 的分布</td><td>分布函数法 / <b>换元法（雅可比）</b> / 卷积</td></tr>
+    </table></div>
+    <b>看这张表的正确方式</b>：左列你在第 2 章全会了，中列只是加下标，<b>真正要花时间的是右列那 5 个"新增"</b>——②⑤⑥⑦⑧。本页 80% 的篇幅都在这 5 格上。
+  </div>
+
+  <div class="link"><span class="tag">串联 · 这一章往前接谁、往后被谁用（本章是概率论的"枢纽章"）</span>
+    <b>往前接（第 1 章）</b>：条件分布 $\frac{p_{ij}}{p_{\cdot j}}$ 就是<b>条件概率</b> $\frac{P(AB)}{P(B)}$ 换了身衣服；本章反复用的<b>全集分解 + 全概率公式</b>（<a href="#s9">§9</a> 的 基 3.10、强 5.8、习 3.15）是第 1 章的原装工具；<b>事件独立 → 变量独立</b>是同一个乘法式子的升级。<br>
+    <b>往前接（第 2 章）</b>：一维的 $F,p_i,f$ 全部原样进入；<a href="#s8">$\max/\min$ 的 $[F]^n$</a> 是第 2 章埋的伏笔在这里兑现；<b>条件分布</b>与 <b>2001 年班车真题</b>这两个坑也是第 2 章预告过的。<br>
+    <b>往前接（高数，本章依赖度最高的一章）</b>：$\iint_D f\mathrm dx\mathrm dy$ 是<b>二重积分</b>；$f_X=\int f\mathrm dy$ 是<b>累次积分定限</b>（"求谁不积谁"就是"先对谁积分谁的限先定"）；<a href="#s6">换元法</a>直接搬<b>二重积分换元 + 雅可比行列式</b>；<a href="#s10">基 3.12</a> 用<b>极坐标</b>；$\frac{\partial^2F}{\partial x\partial y}=f$ 是<b>二阶混合偏导</b>。<b>本章做不动，八成是二重积分定限没过关，不是概率没学会。</b><br>
+    <b>往后被谁用</b>：第 4 章 $E(XY)=\iint xyf\mathrm dx\mathrm dy$、$\mathrm{Cov}$、$\rho$ 全部建立在本章的联合分布上（<b>没有本章就没有协方差</b>）；第 5 章大数定律/中心极限定理要用<b>独立同分布</b>与<b>可加性</b>；第 6 章数理统计的<b>样本</b>就是"$n$ 个独立同分布的随机变量"，$\chi^2,t,F$ 分布全部由本章的独立正态派生，<a href="#s8">强 5.6</a> 的 $\max/\min$ 就是统计里的<b>次序统计量</b>。
+  </div>
+
+  <div class="zy"><span class="tag">强化题型 · 《9讲》给了两张地图，第 4 讲按"对象"分，第 5 讲按"维数"分</span>
+    <b>第 4 讲（多维随机变量及其分布）——按研究对象分四向：</b>
+    <div class="gridwrap"><table>
+      <tr><th>向</th><th>问的是</th><th>本页位置</th></tr>
+      <tr><td>$O_1$ <b>离散型问题</b></td><td>联合分布律 $p_{ij}$ 的表格操作</td><td><a href="#s2">§2</a></td></tr>
+      <tr><td>$O_2$ <b>连续型问题</b></td><td>二维均匀、二维正态（含<b>配方还原五参数</b>）</td><td><a href="#s4">§4</a></td></tr>
+      <tr><td>$O_3$ <b>边缘 / 条件 / 独立性</b></td><td>口诀"<b>边缘 · 条件 ＝ 联合</b>"</td><td><a href="#s3">§3</a><a href="#s5">§5</a></td></tr>
+      <tr><td>$O_4$ <b>用分布求概率及反问题</b></td><td>$P\{(X,Y)\in D\}$；已知概率反求参数</td><td><a href="#s2">§2</a><a href="#s3">§3</a></td></tr>
+    </table></div>
+    <b>第 5 讲（多维随机变量函数的分布）——按"几维 → 几维"分三类，这是基础讲完全没有的组织方式：</b>
+    <div class="gridwrap"><table>
+      <tr><th>类</th><th>形态</th><th>方法</th><th>本页位置</th></tr>
+      <tr><td rowspan="3"><b>1. 多维 → 一维</b></td><td>1.1（离散,离散）→ 离散</td><td>列举 + 合并同值</td><td><a href="#s2">§2</a></td></tr>
+      <tr><td>1.2（连续,连续）→ 连续</td><td><b>分布函数法 / 换元法 / 最值公式</b></td><td><a href="#s6">§6</a><a href="#s8">§8</a></td></tr>
+      <tr><td>1.3（离散,连续）→ 连续</td><td><b>全集分解 + 全概率公式</b></td><td><a href="#s9">§9</a></td></tr>
+      <tr><td><b>2. 一维 → 多维</b></td><td>$X\to(U,V)$，$U=g(X),V=h(X)$</td><td>常规操作（往往人为制造指示变量）</td><td><a href="#s9">§9</a></td></tr>
+      <tr><td><b>3. 多维 → 多维</b></td><td>$(X,Y)\to(U,V)$</td><td>离散列表 / 连续用换元法</td><td><a href="#s6">§6</a><a href="#s9">§9</a></td></tr>
+    </table></div>
+    <b>$D$ 编号是《9讲》全书通用的"动作词典"</b>，本页凡引用都写全名：$D_1$ 常规操作、$D_{21}$ 观察研究对象、$D_{22}$ <b>转换等价表述</b>、$D_{23}$ <b>化归经典形式</b>、$D_{41}$ 试取特殊情形、$P_4$ 逆否思路。
+  </div>
+
+  <div class="trap"><span class="tag">陷阱 · 本章三条"开工前就该知道"的失分线</span>
+    ① <b>定限画错</b>——本章头号错因。凡是连续型，<b>先画区域再写积分</b>，不画图直接写限的，十次错八次。<a href="#s11">§11 的画板</a>就是专治这个。<br>
+    ② <b>边缘分布定不出联合分布</b>——两个边缘都是正态，联合<b>未必</b>是二维正态（<a href="#s4">习 3.6</a> 就是这个反例）；$\mathrm{Cov}=0$ 也<b>推不出</b>独立（<a href="#s10">基 3.12</a>）。<b>"联合 ⟹ 边缘"是单向箭头，反过来要额外条件（独立 / 二维正态）。</b><br>
+    ③ <b>条件概率与条件密度混用</b>——连续型时 $P\{X=x\}=0$，<b>不能</b>直接写 $P\{Y\lt b\mid X=a\}=\frac{P\{Y\lt b,X=a\}}{P\{X=a\}}$（分母是 0）。必须走 $f_{Y\mid X}$（<a href="#s6">强 5.3(2)</a> 把这一步单独出成一问）。
+  </div>
+
+  <!-- ================= s1 联合分布函数 ================= -->
+  <h2 id="s1"><span class="idx">一</span>联合分布函数：四条性质，只有第 ④ 条是新的　<span class="layer L-base">基础</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/概率论与数理统计/03_多维随机变量及其分布/概率_第03章_基础30讲.pdf">📄 基础 p.63–65</a>
+
+  <div class="bg"><span class="tag">背景 · $n$ 维随机变量的严格定义（读一遍就够，考试从不考定义本身）</span>
+    若 $X_1,\dots,X_n$ 是定义在<b>同一个样本空间</b> $\Omega$ 上的 $n$ 个随机变量，则称 $(X_1,\dots,X_n)$ 为 <b>$n$ 维随机变量</b>（或 $n$ 维随机向量），$X_i$ 称第 $i$ 个<b>分量</b>。$n=2$ 时称 $(X,Y)$ 为二维随机变量。<br>
+    书上举的例子：体检时"身高、体重、血压"是同一个人的多个指标，自然构成一个多维向量。<b>"同一个样本空间"这五个字是唯一有信息量的地方</b>——它保证了 $\{X\le x\}$ 与 $\{Y\le y\}$ 能取交集，$P\{X\le x,Y\le y\}$ 才有意义。<br>
+    书上明说：<b>主要考 $n=2$</b>，$n=3,4$ 也需准备。<b>这一段花 30 秒读完就翻过去。</b>
+  </div>
+
+  <div class="bg"><span class="tag">背景 · "随机向量"这个别名，以及为什么 $n=3,4$ 也要准备</span>
+    书上说 $(X_1,\dots,X_n)$ "习惯称"为 $n$ 维随机变量，也叫 $n$ 维<b>随机向量</b>——两个名字完全等价，考试两种写法都出现过。<br>
+    书上明确交代考查重心：<b>"主要考 $n=2$，但 $n=3,n=4$ 也需要准备；学习时主要是二维和 $n$ 维。"</b>——$n$ 维的用处几乎只在第 6 章数理统计（样本 $X_1,\dots,X_n$），本章不必在 $n$ 维上花时间。<b>这一整段读一遍即可。</b>
+  </div>
+
+  <div class="key"><span class="tag">必记 · 联合分布函数与四条性质（★第 ④ 条是二维独有，也是唯一考点）</span>
+    <b>定义</b>：$F(x,y)=P\{X\le x,\;Y\le y\}$，记 $(X,Y)\sim F(x,y)$。
+    它是<b>两个事件同时发生</b>的概率，几何上是"以 $(x,y)$ 为顶点、向<b>左下方</b>无限延伸的那块区域"的概率。
+    <div class="gridwrap"><table>
+      <tr><th>#</th><th>性质</th><th>写法</th><th>与一维的关系</th></tr>
+      <tr><td>①</td><td><b>单调不减</b></td><td>固定 $y$，$x_1\lt x_2\Rightarrow F(x_1,y)\le F(x_2,y)$；对 $y$ 同理</td><td>一维原样搬（<b>固定一个看另一个</b>，像偏导）</td></tr>
+      <tr><td>②</td><td><b>右连续</b></td><td>$F(x_0+0,y)=F(x_0,y)$，$F(x,y_0+0)=F(x,y_0)$</td><td>一维原样搬</td></tr>
+      <tr><td>③</td><td><b>有界性</b></td><td>$F(-\infty,y)=F(x,-\infty)=F(-\infty,-\infty)=0$，$F(+\infty,+\infty)=1$</td><td>一维原样搬</td></tr>
+      <tr><td>④</td><td><b>非负性（★二维独有）</b></td><td>$x_1\lt x_2,\;y_1\lt y_2$ 时 $$P\{x_1\lt X\le x_2,\,y_1\lt Y\le y_2\}=F(x_2,y_2)-F(x_2,y_1)-F(x_1,y_2)+F(x_1,y_1)\ge0$$</td><td><b>一维没有</b></td></tr>
+    </table></div>
+    ①②③ 书上原话是"<b>与一维类似</b>"，④ 才是新的：它说的是<b>任意小矩形上的概率非负</b>。
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 第 ④ 条为什么必须单列——它是"容斥原理"在分布函数上的化身</span>
+    <b>书上说</b>：$P\{x_1\lt X\le x_2,y_1\lt Y\le y_2\}=F(x_2,y_2)-F(x_2,y_1)-F(x_1,y_2)+F(x_1,y_1)\ge0$。<br>
+    <b>潜台词是</b>：$F$ 只会算"左下角那一大块"，要抠出中间一个<b>小矩形</b>，必须用<b>加减容斥</b>：大块减去下面一条、减去左边一条、左下角被减了两次要<b>加回来一次</b>。这就是第 1 章 $P(A\cup B)=P(A)+P(B)-P(AB)$ 的二维版。<br>
+    <b>为什么单调 + 右连续 + 两端极限还不够？</b>因为一维时"$F$ 单调不减"已经保证了区间概率 $F(b)-F(a)\ge0$；二维时"分别关于 $x$、$y$ 单调不减"<b>推不出</b>矩形概率非负——存在满足①②③却使某个小矩形概率为负的函数，它就不是任何随机变量的联合分布函数。<b>所以四条缺一不可，判定题必须查完四条。</b><br>
+    <b>所以能考</b>：① 直接给 $F(x,y)$ 让你算 $P\{a\lt X\le b,c\lt Y\le d\}$（<b>四项加减，符号别写反：同角同号，异角异号</b>）；② 给一个函数问它是不是联合分布函数（<b>专门在第 ④ 条上设陷阱</b>）；③ 给含参 $F$ 用 ③ 定参数（<a href="#s5">习 3.5</a> 就是取两次极限）。<br>
+    <span class="dock">扣分点</span>：四项的符号记法——<b>两个下标都取"大"或都取"小"的项取正号，一大一小的取负号</b>。写成 $F(x_2,y_2)+F(x_1,y_1)-F(x_1,y_2)-F(x_2,y_1)$ 一眼就能自查。
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 性质 ①"固定一个看另一个"，是本章的通用思维方式</span>
+    <b>书上说</b>：对任意固定的 $y$，$F(x,y)$ 关于 $x$ 单调不减；眉批"类似'偏'导数，<b>固定一个字母，看另一个字母的变化</b>""必固定 $y=y_0$，一刀切进去"。<br>
+    <b>潜台词是</b>：二维对象没法整体研究，<b>唯一的办法就是"切片"</b>——固定一个变量，把二维问题压成一维问题，用第 2 章的全套工具处理，再让那个固定的变量动起来。<br>
+    <b>所以能考</b>：这个动作在本章出现了<b>四次</b>，每次换一个名字：<br>
+    ① 性质 ①：固定 $y$ 看 $x$ 的单调性；<br>
+    ② <a href="#s3">边缘密度</a>：固定 $x$ 沿 $y$ 积分（"$x$ 不动，累加 $y$"）；<br>
+    ③ <a href="#s3">条件密度</a>：固定 $x=x_0$ 切一刀，把那条截线归一化；<br>
+    ④ <a href="#s9">全集分解</a>：固定离散变量的取值，把二维劈成若干一维。<br>
+    <b>四者是同一个动作的四种用法。做不动的时候问自己："我该固定谁？"</b>
+  </div>
+
+  <div class="key"><span class="tag">必记 · 边缘分布函数：把另一个变量推到 $+\infty$</span>
+    $$F_X(x)=P\{X\le x\}=P\{X\le x,\;Y\lt+\infty\}=\lim_{y\to+\infty}F(x,y)=F(x,+\infty),\qquad F_Y(y)=F(+\infty,y).$$
+    书上眉批点破了原理：$\{Y\lt+\infty\}$ 就是<b>必然事件 $\Omega$</b>，而 $P(A)=P(A\Omega)$。所以"求边缘"本质上是<b>给缺失的那个变量补上 $\Omega$</b>。<br>
+    <b>书上还提醒</b>："直接写，不需要中间的过程"——考场上写 $F_X(x)=F(x,+\infty)$ 就够了，不必展开极限。
+  </div>
+
+  <div class="link"><span class="tag">串联 · "补 $\Omega$" 这个动作，本章会反复出现三次</span>
+    ① 这里：$F_X(x)=P\{X\le x,Y\lt+\infty\}$——<b>补 $\Omega$ 求边缘</b>；<br>
+    ② <a href="#s2">§2 离散型</a>：$P\{X=x_i\}=P\{X=x_i,\Omega\}=\sum_j p_{ij}$——<b>补 $\Omega$ 后拆成全集分解</b>，这就是"行相加"的来历；<br>
+    ③ <a href="#s9">§9 全概率公式</a>：$P(A)=P(A\Omega)=\sum_j P(AB_j)$——<b>补 $\Omega$ 后按离散变量的取值劈开</b>，这是本章大题的通用起手式（基 3.10、强 5.8、习 3.15 全靠它）。<br>
+    <b>三处是同一个动作</b>：看到"少一个变量"就补 $\Omega$，看到 $\Omega$ 就想能不能劈成完备事件组。<b>把这三处串起来，本章的"求边缘"和"求混合型分布"就是一件事。</b>
+  </div>
+
+  <!-- ================= s2 二维离散型 ================= -->
+  <h2 id="s2"><span class="idx">二</span>二维离散型：一张表格装下联合、边缘、条件三件事　<span class="layer L-base">基础</span><span class="layer L-str">强化</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/概率论与数理统计/03_多维随机变量及其分布/概率_第03章_基础30讲.pdf">📄 基础 p.65–67</a>
+  <a class="pg" href="../../张宇系列_分章易识别版/概率论与数理统计/03_多维随机变量及其分布/概率_第03章_强化9讲_第4讲_多维随机变量及其分布.pdf">📄 强化第4讲 p.29</a>
+
+  <div class="key"><span class="tag">必记 · 联合分布律表格：三件事各占表格的一个方位</span>
+    $p_{ij}=P\{X=x_i,\,Y=y_j\}$，充要条件 $p_{ij}\ge0$ 且 $\sum_i\sum_j p_{ij}=1$。
+    <div class="tabwrap"><table>
+      <tr><th>$X\backslash Y$</th><th>$y_1$</th><th>$y_2$</th><th>$\cdots$</th><th>$p_{i\cdot}=P\{X=x_i\}$</th></tr>
+      <tr><td>$x_1$</td><td>$p_{11}$</td><td>$p_{12}$</td><td>$\cdots$</td><td><b>行和</b> $p_{1\cdot}$</td></tr>
+      <tr><td>$x_2$</td><td>$p_{21}$</td><td>$p_{22}$</td><td>$\cdots$</td><td><b>行和</b> $p_{2\cdot}$</td></tr>
+      <tr><td>$p_{\cdot j}=P\{Y=y_j\}$</td><td><b>列和</b></td><td><b>列和</b></td><td>$\cdots$</td><td><b>1</b></td></tr>
+    </table></div>
+    <b>三件事在表格上的位置</b>：<br>
+    <b>联合</b> = 表内格子 $p_{ij}$；　<b>边缘</b> = 最右列（行和 $p_{i\cdot}=\sum_j p_{ij}$）与最下行（列和 $p_{\cdot j}=\sum_i p_{ij}$）；<br>
+    <b>条件</b> = 把某一行（或列）<b>除以它自己的和</b>做归一化：
+    $$P\{Y=y_j\mid X=x_i\}=\frac{p_{ij}}{p_{i\cdot}},\qquad P\{X=x_i\mid Y=y_j\}=\frac{p_{ij}}{p_{\cdot j}}.$$
+    书上眉批一句话记分母：<b>"看谁在竖子后边，分母就是谁"</b>。
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · "联合 ＝ 边缘 × 条件"是本章唯一的乘法结构，也是"三知二求一"的来源</span>
+    <b>书上说</b>：条件分布 ＝ 联合分布 / 边缘分布；联合分布 ＝ 边缘分布 · 条件分布；<b>"三知二求一"易考</b>。<br>
+    <b>潜台词是</b>：$p_{ij}=p_{i\cdot}\cdot P\{Y=y_j\mid X=x_i\}$ 里有三个量，命题人可以<b>任挑两个给你、让你求第三个</b>，于是同一条公式能出三种题：<br>
+    ① 给联合，求边缘和条件——最基础，表格加减除即可（<a href="#s2b">基 3.1</a>）；<br>
+    ② 给<b>边缘 + 条件</b>，求联合——这是连续型里的大题起手式（<a href="#s3">基 3.4</a>、<a href="#s4">基 3.5</a> 都是这一型，题干说"$X$ 服从…，在 $X=x$ 条件下 $Y$ 服从…"，你要写出 $f(x,y)$）；<br>
+    ③ 给联合的<b>一部分</b> + 一个独立性/事件条件，反求缺的格子（<a href="#s2b">基 3.2</a>、<a href="#s5">强 4.1</a>、<a href="#s5">习 3.9</a>）。<br>
+    <b>所以能考</b>：拿到离散题先在草稿纸上<b>画出那张带行和列和的表</b>，题目问什么就在表上指哪个方位——<b>本章所有离散题都能被这张表吞掉</b>。<br>
+    <span class="dock">扣分点</span>：条件分布算完<b>必须归一化检验</b>（该行的条件概率加起来 $=1$）。$\frac{p_{ij}}{p_{i\cdot}}$ 写成 $\frac{p_{ij}}{p_{\cdot j}}$ 是本节最高频的低级错误，一验就能抓出来。
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 书上那句"离散型出现的频率很低"，要反着读</span>
+    <b>书上说</b>（p.66 注）：<b>"离散型问题相对来讲不难，考试为了有区分度，出现的频率很低，但要注意与连续型对比。"</b><br>
+    <b>潜台词是</b>：这句话不是让你少花时间，而是告诉你<b>离散型的考法变了</b>——它极少<u>单独</u>成题，而是<b>混进别的知识点里当零件</b>：<br>
+    ① 与<b>事件独立</b>复合（<a href="#s5b">基 3.2</a>、<a href="#s5b">强 4.1</a>）；② 与<b>第 4 章的 $\mathrm{Cov}$</b> 复合（<a href="#s5b">强 4.1</a>）；③ 与<b>一个连续变量</b>混成混合型（<a href="#s9">§9</a> 的五道题）；④ 作为<b>指示变量</b>把连续问题离散化（<a href="#s9">强 5.9</a>）。<br>
+    <b>所以能考</b>：<b>纯离散题基本是送分，但"离散作为零件"的题占本章大题的一半以上。</b>练离散不是练算术，是练<b>把复杂事件翻译成格子</b>的能力——$\{\max=2\}$、$\{X+Y=1\}$、$\{X_1X_2=0\}$ 这些翻译，才是真正的失分点。<br>
+    <span class="dock">扣分点</span>：<b>翻译完要回头数一遍格子数</b>。$\{\min\{X,Y\}=1\}$ 在 $2\times3$ 表里只占 2 格，写成 4 格就多算了一倍。
+  </div>
+
+  <div class="link"><span class="tag">串联 · 这张"行和列和"的表，你在别的地方见过</span>
+    <b>接第 1 章</b>：$p_{i\cdot}=\sum_j p_{ij}$ 就是<b>全概率公式</b>（按 $Y$ 的取值做完备事件组分解），书上眉批把这一步写全了：$P\{X=x_1\}=P\{X=x_1,(Y=y_1\cup Y=y_2)\}=p_{11}+p_{12}$。<br>
+    <b>接第 4 章</b>：$E(XY)=\sum_i\sum_j x_iy_jp_{ij}$ 就是在这张表上做<b>加权双重求和</b>；$\mathrm{Cov}$、$\rho$ 全从这张表出（<a href="#s5">强 4.1</a> 就是"填完表算 Cov"的复合题）。<br>
+    <b>接线性代数</b>：<a href="#s5">§5 的"每行成比例判独立"</a>说的是——<b>独立 $\Leftrightarrow$ 这张矩阵是秩 1 矩阵</b>（$p_{ij}=p_{i\cdot}p_{\cdot j}$ 就是列向量 × 行向量的<b>外积</b>）。<br>
+    <b>接 408（组成原理 / 操作系统）</b>：这张"行列边缘"的表和 <b>Cache 组相联的"组号 × 块号"二维索引</b>、<b>页表的"页号 × 页内偏移"</b>是同一种思维——<b>把一个整体按两个正交维度切开，再沿一个维度求和把它压回一维</b>。408 里叫"分块与映射"，概率里叫"边缘分布"。
+  </div>
+
+  <div class="key"><span class="tag">必记 ★★★ · 强化独有：两个<b>独立</b>离散型的三个求和公式（书上标"这是重点"）</span>
+    设 $X\sim p_k$，$Y\sim q_k$，$X,Y$ <b>独立且取非负整数</b>（$D_{22}$ 转换等价表述）：
+    <div class="gridwrap"><table>
+      <tr><th>$Z$</th><th>公式</th><th>怎么"扫"</th></tr>
+      <tr><td>$X+Y$</td><td>$P\{Z=k\}=p_0q_k+p_1q_{k-1}+\cdots+p_kq_0=\displaystyle\sum_{i=0}^{k}p_iq_{k-i}$</td><td>沿<b>反对角线</b>扫（下标之和 $=k$）</td></tr>
+      <tr><td>$\max\{X,Y\}$</td><td>$P\{Z=k\}=p_kq_k+p_kq_{k-1}+\cdots+p_kq_0+p_{k-1}q_k+\cdots+p_0q_k$</td><td>扫第 $k$ 行与第 $k$ 列中<b>下标 $\le k$</b> 的部分（"$\Gamma$"形）</td></tr>
+      <tr><td>$\min\{X,Y\}$（$0\le X,Y\le l$）</td><td>$P\{Z=k\}=p_kq_k+p_kq_{k+1}+\cdots+p_kq_l+p_{k+1}q_k+\cdots+p_lq_k$</td><td>扫第 $k$ 行与第 $k$ 列中<b>下标 $\ge k$</b> 的部分（反向"$\Gamma$"）</td></tr>
+    </table></div>
+    <b>★ 三条公式唯一的坑：$p_kq_k$（拐角那一项）<u>只能数一遍</u></b>——它同时属于"第 $k$ 行"和"第 $k$ 列"，写两遍就多算了。
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 这三个公式不用背，画一张"下标网格"当场读出来</span>
+    <b>书上说</b>：$X\sim p_k$，$Y\sim q_k$，独立且取值在某一集合，可考 $Z=X+Y,XY,\max,\min$ 等，<b>这是重点</b>。<br>
+    <b>潜台词是</b>：三条公式看着长，其实是<b>同一张二维下标网格上的三种扫法</b>。在平面上画出所有 $(i,j)$ 格点，每格权重 $p_iq_j$（独立才能这样写），那么：<br>
+    ① $\{X+Y=k\}$ 是<b>反对角线</b> $i+j=k$；② $\{\max=k\}$ 是<b>以 $(k,k)$ 为拐角、朝左下开口的 $\Gamma$ 形</b>；③ $\{\min=k\}$ 是<b>朝右上开口的 $\Gamma$ 形</b>。<b>画出图形，公式自己就写出来了。</b><br>
+    <b>所以能考</b>：① 泊松 + 两点分布的乘积（<a href="#s2c">强 5.1</a>）；② 两个独立几何分布取 $\min$（几何分布的 $\min$ 仍是几何分布，是经典结论）；③ 与第 2 讲的<b>可加性</b>连考（$X+Y$ 那条公式对二项、泊松展开后正好化出可加性）。<br>
+    <span class="dock">扣分点</span>：三条公式都<b>要求独立</b>（用了 $P\{X=i,Y=j\}=p_iq_j$）。不独立时只能回到联合分布律 $p_{ij}$ 逐格加，<b>不能套公式</b>。
+  </div>
+
+  <h3 id="s2c">独立离散型例题</h3>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 5.1 ✔</span>设随机变量 $X$ 与 $Y$ 相互独立，且 $X$ 服从参数为 $\lambda$ 的<b>泊松分布</b>，$Y\sim\begin{pmatrix}-1&amp;1\\ \frac14&amp;\frac34\end{pmatrix}$，求 $Z=XY$ 的概率分布。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$P\{Z=0\}=\mathrm e^{-\lambda}$；$P\{Z=k\}=\dfrac34\cdot\dfrac{\lambda^k}{k!}\mathrm e^{-\lambda}$，$P\{Z=-k\}=\dfrac14\cdot\dfrac{\lambda^k}{k!}\mathrm e^{-\lambda}$（$k=1,2,3,\dots$）</span>（sympy 符号复算；蒙特卡洛 $10^7$（$\lambda=1.5$）实测 $P\{Z=0\}=0.22315$、$P\{Z=2\}=0.18823$、$P\{Z=-2\}=0.06276$，与解析值 $0.22313,0.18824,0.06275$ 一致）
+      <span class="lab">分析</span>$D_{22}$ <b>转换等价表述</b>：$Y$ 只取 $\pm1$，所以 $Z=XY$ 的可能取值是 $0,\pm1,\pm2,\dots$。逐个翻译：<br>
+      <b>$Z=0$</b>：$XY=0$ 只能靠 $X=0$（$Y$ 取不到 0），故 $P\{Z=0\}=P\{X=0\}=\mathrm e^{-\lambda}$；<br>
+      <b>$Z=k\gt0$</b>：必须 $X=k$ 且 $Y=1$，独立 ⟹ $P=\dfrac{\lambda^k}{k!}\mathrm e^{-\lambda}\cdot\dfrac34$；<br>
+      <b>$Z=-k\lt0$</b>：必须 $X=k$ 且 $Y=-1$，$P=\dfrac{\lambda^k}{k!}\mathrm e^{-\lambda}\cdot\dfrac14$。<br>
+      <span class="lab">要害 ★</span><b>$Z=0$ 这一项<u>不要</u>再乘 $Y$ 的概率</b>。很多人写成 $P\{X=0\}(\frac14+\frac34)$——虽然结果一样（因为括号 $=1$），但思路是错的：<b>$X=0$ 时无论 $Y$ 取什么 $Z$ 都是 0，所以是"$Y$ 全体"而不是某一支</b>。若把 $Y$ 改成"可以取 0"，这一项就要重算。<br>
+      <span class="lab">自查</span>总概率 $=\mathrm e^{-\lambda}+\left(\frac34+\frac14\right)\sum_{k\ge1}\frac{\lambda^k}{k!}\mathrm e^{-\lambda}=\mathrm e^{-\lambda}+(1-\mathrm e^{-\lambda})=1$ ✓。<b>无穷分布的题，收尾必须把级数加一遍。</b><br>
+      <span class="lab">串联</span>$Z$ 的分布关于 0 <b>不对称</b>（正侧权重 $\frac34$、负侧 $\frac14$），所以 $EZ=\left(\frac34-\frac14\right)EX=\frac\lambda2\gt0$（第 4 章）。<b>把"$Y$ 是一个带偏的符号开关"这个图像记住，第 4 章算 $E(XY)=EX\cdot EY$ 时就是一眼的事。</b>
+    </div>
+  </div>
+
+  <h3 id="s2b">离散型例题 · 从"造表"到"读表"</h3>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 3.1 ✔</span>将两封信投入 3 个信箱，设 $X_1,X_2$ 分别表示第一个和第二个信箱投进的信的数量，求：<br>
+    (1) $(X_1,X_2)$ 的分布律、边缘分布；(2) 在条件 $X_2=1$ 下，$X_1$ 的条件分布。<br>
+    <span style="color:var(--muted);font-size:.86rem">（书上眉批补了 (3)：$X_1$ 与 $X_2$ 是否独立？——见下方批注）</span></div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">见下表；$X_1\mid X_2=1\;\sim\begin{pmatrix}0&amp;1\\ \frac12&amp;\frac12\end{pmatrix}$；$X_1$ 与 $X_2$ <b>不独立</b></span>（已用程序枚举 $3^2=9$ 个样本点复算，9 个格子与两组边缘全部一致）
+
+      <div class="think"><span class="th">💭 思路 · 拿到题先想什么</span>
+        <ol>
+          <li><b>先把"样本点"定义清楚，再决定怎么数。</b>两封信各自可进 3 个箱，样本点是"（第一封信去哪、第二封信去哪）"，共 $3^2=9$ 个<b>等可能</b>样本点——<b>这是第 1 章的古典概型</b>，本题第 (1) 问的实质是古典概型，不是新知识。</li>
+          <li><b>$X_1,X_2$ 的取值范围要先定死</b>：各自可取 $0,1,2$，但<b>受约束 $X_1+X_2\le2$</b>（总共只有两封信）。所以表格右下角那几格必然是 0——$p_{12}=p_{21}=p_{22}=0$。<b>先把这几个 0 填上，剩下 6 格才是真要数的。</b></li>
+          <li>数格子用<b>组合数</b>：$p_{01}=P\{X_1=0,X_2=1\}$ 意思是"第 2 箱恰好 1 封、第 1 箱 0 封"，那另一封只能去第 3 箱，选哪一封做第 2 箱的那封有 $C_2^1=2$ 种，故 $\frac29$。</li>
+          <li>(2) 问条件分布，<b>先看竖线后面是谁</b>——是 $X_2=1$，所以分母是<b>列和</b> $p_{\cdot1}$，不是行和。</li>
+          <li>(3) 判独立只需<b>找一个反例格子</b>：$p_{00}=\frac19$，而 $p_{0\cdot}p_{\cdot0}=\frac49\cdot\frac49=\frac{16}{81}\ne\frac19$。<b>验证方法很多，找一个就行</b>（书上眉批原话）。</li>
+        </ol>
+      </div>
+
+      <div class="paper"><span class="phead">✍️ 考场卷面（按 10 分估）</span>
+        <div class="step"><b>解</b>　(1) $X_1,X_2$ 的可能取值均为 $0,1,2$，样本点总数为 $3^2=9$，各样本点等可能。<span class="pt">⛳ 1分</span></div>
+        <div class="step">由古典概型，
+        $$p_{00}=\tfrac19,\quad p_{01}=\tfrac29,\quad p_{02}=\tfrac19,\quad p_{10}=\tfrac29,\quad p_{11}=\tfrac29,\quad p_{20}=\tfrac19,\quad p_{12}=p_{21}=p_{22}=0. \tag{1}$$<span class="pt">⛳ 3分</span></div>
+        <div class="step">于是 $(X_1,X_2)$ 的分布律与边缘分布为
+        <div class="tabwrap"><table>
+          <tr><th>$X_1\backslash X_2$</th><th>0</th><th>1</th><th>2</th><th>$p_{i\cdot}$</th></tr>
+          <tr><td>0</td><td>$\frac19$</td><td>$\frac29$</td><td>$\frac19$</td><td>$\frac49$</td></tr>
+          <tr><td>1</td><td>$\frac29$</td><td>$\frac29$</td><td>0</td><td>$\frac49$</td></tr>
+          <tr><td>2</td><td>$\frac19$</td><td>0</td><td>0</td><td>$\frac19$</td></tr>
+          <tr><td>$p_{\cdot j}$</td><td>$\frac49$</td><td>$\frac49$</td><td>$\frac19$</td><td>1</td></tr>
+        </table></div><span class="pt">⛳ 3分</span></div>
+        <div class="step">(2) 由条件分布的定义 $P\{X_1=i\mid X_2=1\}=\dfrac{p_{i1}}{p_{\cdot1}}$，而 $p_{\cdot1}=\dfrac49$，故
+        $$P\{X_1=0\mid X_2=1\}=\frac{2/9}{4/9}=\frac12,\quad P\{X_1=1\mid X_2=1\}=\frac12,\quad P\{X_1=2\mid X_2=1\}=0. \tag{2}$$<span class="pt">⛳ 2分</span></div>
+        <div class="fin">所以在条件 $X_2=1$ 下，$X_1$ 的条件分布为 $X_1\sim\begin{pmatrix}0&amp;1\\[2pt] \frac12&amp;\frac12\end{pmatrix}$。<span class="pt">⛳ 1分</span></div>
+      </div>
+
+      <div class="notekeep"><span class="nh">📌 批注 · 对照完再看这层</span>
+        <b>① 表格必须带行和列和</b>。阅卷按采分点给分，"分布律"和"边缘分布"是<b>两个</b>采分点，画在同一张表里既省时间又两分都拿到。<span class="dock">扣分点</span>：只写 9 个 $p_{ij}$ 不写边缘，(1) 的后半问 0 分。<br>
+        <b>② $p_{12}=p_{21}=p_{22}=0$ 要写出来</b>，不能因为是 0 就省略——它体现了你意识到 $X_1+X_2\le2$ 这个约束。<br>
+        <b>③ 关于 (3) 的独立性</b>：这是书上眉批补的一问，强化第 4 讲把它明确写成 <b>"由于 $p_{00}\ne p_{0\cdot}p_{\cdot0}$，故 $X_1$ 与 $X_2$ 不独立"</b>。判不独立<b>只要一个反例</b>，别傻乎乎去验九个格子。<br>
+        <b>④ 提速心算</b>：本题的联合分布其实是<b>三项分布</b> $(X_1,X_2,X_3)\sim\mathrm{Multinomial}(2;\frac13,\frac13,\frac13)$ 的前两个分量，$p_{ij}=\frac{2!}{i!j!(2-i-j)!}(\frac13)^2$。知道这一点，9 个格子可以一秒写完。<b>但卷面上还是老老实实用古典概型数——多项分布不在大纲内，写了阅卷老师未必认。</b><br>
+        <b>⑤ 这道题会被反复调用</b>：<a href="#s6">基 3.7</a>（求 $X_1+X_2$、$X_1-X_2$ 的分布）直接用这张表，<b>本章唯一被三次调用的题</b>。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 3.2 ✔</span>二维随机变量 $(X,Y)$ 的概率分布为
+    <div class="tabwrap"><table>
+      <tr><th>$X\backslash Y$</th><th>0</th><th>1</th></tr>
+      <tr><td>0</td><td>0.4</td><td>$a$</td></tr>
+      <tr><td>1</td><td>$b$</td><td>0.1</td></tr>
+    </table></div>
+    若随机事件 $\{X=0\}$ 与 $\{X+Y=1\}$ 相互独立，则（　）。<br>
+    (A) $a=0.2,b=0.3$　(B) $a=0.1,b=0.4$　(C) $a=0.3,b=0.2$　(D) $a=0.4,b=0.1$</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(D) $a=0.4,\;b=0.1$</span>（已用 sympy 解方程组独立复算）
+      <span class="lab">分析</span>两个未知数就要<b>两个方程</b>：一个来自<b>归一性</b>，一个来自<b>独立性</b>。这是"反问题"（$O_4$）的固定配方。<br>
+      归一性：$0.4+a+b+0.1=1\Rightarrow a+b=0.5$。<br>
+      把两个事件翻译成格子：$\{X=0\}$ 是<b>第一行</b>，$P=0.4+a$；$\{X+Y=1\}$ 是<b>反对角线</b>，$P=p_{01}+p_{10}=a+b=0.5$；两者的<b>交</b>是格子 $(0,1)$，$P\{X=0,X+Y=1\}=P\{X=0,Y=1\}=a$。<br>
+      独立性：$a=(0.4+a)\times0.5\Rightarrow 0.5a=0.2\Rightarrow a=0.4$，$b=0.1$。<br>
+      <span class="lab">要害</span><b>"事件独立"不是"变量独立"。</b>题目说的是两个<b>事件</b> $\{X=0\}$ 与 $\{X+Y=1\}$ 独立，用的是第 1 章的 $P(AB)=P(A)P(B)$；<b>不要</b>去写 $p_{ij}=p_{i\cdot}p_{\cdot j}$。事实上代回 (D) 后 $p_{00}=0.4$ 而 $p_{0\cdot}p_{\cdot0}=0.8\times0.5=0.4$……<b>恰好也相等</b>，但 $p_{01}=0.4\ne p_{0\cdot}p_{\cdot1}=0.8\times0.5=0.4$——也相等。<b>本题的 (D) 恰好使 $X,Y$ 也独立，这是巧合，不能当解法。</b><br>
+      <span class="lab">法二（秒杀）</span>注意 $\{X+Y=1\}$ 的概率恒为 $a+b=0.5$（与 $a,b$ 具体值无关），独立式变成 $a=0.5(0.4+a)$，<b>一步得 $a=0.4$，只需 5 秒</b>。选择题看到"某事件概率恒定"要立刻用上。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 3.2 ✔</span>设随机变量 $X_i\sim\begin{pmatrix}-1&amp;0&amp;1\\ \frac14&amp;\frac12&amp;\frac14\end{pmatrix}\;(i=1,2)$，且满足 $P\{X_1X_2=0\}=1$，则 $P\{X_1=X_2\}$ 等于（　）。<br>
+    (A) 0　(B) $\frac14$　(C) $\frac12$　(D) 1</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(A) 0</span>（已用程序按"边缘固定 + 四角为 0"重建整张表复算）
+      <span class="lab">分析</span>$P\{X_1X_2=0\}=1\Rightarrow P\{X_1X_2\ne0\}=0$，即<b>四个角</b>（$X_1,X_2$ 都取 $\pm1$）的格子全是 0：$a=c=g=k=0$。剩下的格子由<b>边缘</b>唯一定死：
+      <div class="tabwrap"><table>
+        <tr><th>$X_1\backslash X_2$</th><th>$-1$</th><th>0</th><th>1</th><th>$p_{i\cdot}$</th></tr>
+        <tr><td>$-1$</td><td>0</td><td>$\frac14$</td><td>0</td><td>$\frac14$</td></tr>
+        <tr><td>0</td><td>$\frac14$</td><td><b>0</b></td><td>$\frac14$</td><td>$\frac12$</td></tr>
+        <tr><td>1</td><td>0</td><td>$\frac14$</td><td>0</td><td>$\frac14$</td></tr>
+        <tr><td>$p_{\cdot j}$</td><td>$\frac14$</td><td>$\frac12$</td><td>$\frac14$</td><td>1</td></tr>
+      </table></div>
+      推导顺序：第 1 行只剩中间一格 $\Rightarrow b=\frac14$；第 3 行同理 $h=\frac14$；第 1 列只剩中间 $\Rightarrow d=\frac14$；第 3 列 $\Rightarrow f=\frac14$；最后中心格 $e=\frac12-(b+h)=\frac12-\frac12=0$。<br>
+      于是 $P\{X_1=X_2\}=p_{(-1,-1)}+p_{(0,0)}+p_{(1,1)}=0+0+0=0$。<br>
+      <span class="lab">要害</span><b>"某个概率等于 1"是最强的条件</b>——它等价于"补事件概率为 0"，能<b>一次性把一批格子清零</b>。本题清掉四个角后，表格<b>被边缘完全决定</b>，一个未知数都不剩。<br>
+      <span class="lab">别踩</span>看到"边缘相同 + 某种对称"就以为 $X_1,X_2$ 独立。这里恰恰相反：$p_{00}=0\ne p_{0\cdot}p_{\cdot0}=\frac12\cdot\frac12=\frac14$，<b>两者高度相依</b>（一个取 0 另一个就不能取 0）。<b>本题是"边缘完全相同却极度相依"的标准反例</b>，和 <a href="#s4">习 3.6</a> 是一对：一个是离散版，一个是连续版。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 3.10 ✔</span>袋中有编号为 1, 1, 2, 3 的四个球，现从中<b>无放回</b>地取两次，每次任取一个，设 $X_1,X_2$ 分别为第一次、第二次取到的球的号码，求：<br>
+    (1) $(X_1,X_2)$ 的分布律，并判断 $X_1$ 与 $X_2$ 的独立性；(2) 在 $X_2=2$ 的条件下，$X_1$ 的条件分布；(3) 随机变量 $Y=X_1X_2$ 的分布。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">见下表，$X_1,X_2$ <b>不独立</b>；$X_1\mid X_2=2\sim\begin{pmatrix}1&amp;3\\ \frac23&amp;\frac13\end{pmatrix}$；$Y\sim\begin{pmatrix}1&amp;2&amp;3&amp;6\\ \frac16&amp;\frac13&amp;\frac13&amp;\frac16\end{pmatrix}$</span>（已用程序枚举 $A_4^2=12$ 个有序排列复算，全部一致）
+
+      <div class="think"><span class="th">💭 思路 · 拿到题先想什么</span>
+        <ol>
+          <li><b>"两个 1 号球"是本题唯一的机关。</b>四个球里有<b>两个</b>编号 1，所以 $P\{X_1=1\}=\frac24=\frac12$，而 $P\{X_1=2\}=P\{X_1=3\}=\frac14$。<b>先把这个不均匀的边缘算出来，后面才不会想当然按均匀算。</b></li>
+          <li><b>无放回 ⟹ 用乘法公式逐步走</b>：$p_{ij}=P\{X_1=i\}P\{X_2=j\mid X_1=i\}$。第二步的分母恒为 3（拿走一个还剩三个），分子看还剩几个 $j$ 号球。</li>
+          <li><b>对角线要单独想</b>：$p_{11}=\frac24\times\frac13=\frac16$（拿走一个 1 号，还剩<b>一个</b> 1 号），但 $p_{22}=p_{33}=0$（2 号、3 号各只有一个，无放回不可能连取两次）。<b>这一步是本题最容易漏的地方。</b></li>
+          <li>(3) 求 $Y=X_1X_2$：<b>列出所有乘积值再合并同值项</b>。$1\cdot1=1$，$1\cdot2=2\cdot1=2$，$1\cdot3=3\cdot1=3$，$2\cdot3=3\cdot2=6$；$2\cdot2,3\cdot3$ 概率为 0 不用管。</li>
+        </ol>
+      </div>
+
+      <div class="paper"><span class="phead">✍️ 考场卷面（按 11 分估）</span>
+        <div class="step"><b>解</b>　(1) $X_1,X_2$ 的可能取值均为 $1,2,3$。由乘法公式 $p_{ij}=P\{X_1=i\}P\{X_2=j\mid X_1=i\}$（无放回，第二次在剩下 3 个球中等可能取），得
+        $$p_{11}=\tfrac24\cdot\tfrac13=\tfrac16,\quad p_{12}=p_{13}=\tfrac24\cdot\tfrac13=\tfrac16,\quad p_{21}=p_{31}=\tfrac14\cdot\tfrac23=\tfrac16,$$
+        $$p_{23}=p_{32}=\tfrac14\cdot\tfrac13=\tfrac1{12},\qquad p_{22}=p_{33}=0. \tag{1}$$<span class="pt">⛳ 4分</span></div>
+        <div class="step">于是 $(X_1,X_2)$ 的分布律为
+        <div class="tabwrap"><table>
+          <tr><th>$X_1\backslash X_2$</th><th>1</th><th>2</th><th>3</th><th>$p_{i\cdot}$</th></tr>
+          <tr><td>1</td><td>$\frac16$</td><td>$\frac16$</td><td>$\frac16$</td><td>$\frac12$</td></tr>
+          <tr><td>2</td><td>$\frac16$</td><td>0</td><td>$\frac1{12}$</td><td>$\frac14$</td></tr>
+          <tr><td>3</td><td>$\frac16$</td><td>$\frac1{12}$</td><td>0</td><td>$\frac14$</td></tr>
+          <tr><td>$p_{\cdot j}$</td><td>$\frac12$</td><td>$\frac14$</td><td>$\frac14$</td><td>1</td></tr>
+        </table></div><span class="pt">⛳ 2分</span></div>
+        <div class="step">因为 $p_{11}=\dfrac16$，而 $p_{1\cdot}\,p_{\cdot1}=\dfrac12\times\dfrac12=\dfrac14\ne\dfrac16$，即 $p_{11}\ne p_{1\cdot}p_{\cdot1}$，所以 $X_1$ 与 $X_2$ <b>不相互独立</b>。<span class="pt">⛳ 1分</span></div>
+        <div class="step">(2) 由 $P\{X_1=i\mid X_2=2\}=\dfrac{p_{i2}}{p_{\cdot2}}$，$p_{\cdot2}=\dfrac14$，得
+        $$P\{X_1=1\mid X_2=2\}=\frac{1/6}{1/4}=\frac23,\quad P\{X_1=2\mid X_2=2\}=0,\quad P\{X_1=3\mid X_2=2\}=\frac{1/12}{1/4}=\frac13. \tag{2}$$
+        故 $X_1\sim\begin{pmatrix}1&amp;3\\[2pt] \frac23&amp;\frac13\end{pmatrix}$。<span class="pt">⛳ 2分</span></div>
+        <div class="step">(3) $Y=X_1X_2$ 的可能取值为 $1,2,3,6$，由 (1) 式合并同值项：
+        $$P\{Y=1\}=p_{11}=\tfrac16,\quad P\{Y=2\}=p_{12}+p_{21}=\tfrac13,\quad P\{Y=3\}=p_{13}+p_{31}=\tfrac13,\quad P\{Y=6\}=p_{23}+p_{32}=\tfrac16.$$<span class="pt">⛳ 1分</span></div>
+        <div class="fin">所以随机变量 $Y=X_1X_2$ 的分布为 $Y\sim\begin{pmatrix}1&amp;2&amp;3&amp;6\\[2pt] \frac16&amp;\frac13&amp;\frac13&amp;\frac16\end{pmatrix}$。<span class="pt">⛳ 1分</span></div>
+      </div>
+
+      <div class="notekeep"><span class="nh">📌 批注 · 对照完再看这层</span>
+        <b>① 判独立必须点名用的是哪条判据</b>，并且<b>把不等式两边的数都算出来</b>。只写"显然不独立"给 0 分。<br>
+        <b>② $p_{22}=p_{33}=0$ 是本题的分水岭</b>。写上它，说明你理解了"无放回 + 只有一个 2 号球"；漏掉它，表格归一性立刻不成立（会多出 $\frac16$），是自查的最好抓手——<b>收尾把整张表加一遍，必须等于 1</b>。<br>
+        <b>③ 对称性可以省一半计算</b>：本题的表关于主对角线<b>对称</b>（$p_{ij}=p_{ji}$），因为"第一次取 $i$ 第二次取 $j$"与"第一次取 $j$ 第二次取 $i$"的排列数相同。<b>卷面上算完一半后写"由对称性同理"是可以的</b>，但初学阶段建议全算，别省。<br>
+        <b>④ 无放回 vs 有放回的分界</b>：若改成<b>有放回</b>，则 $X_1,X_2$ <b>独立</b>，表格立刻变成外积 $p_{ij}=p_{i\cdot}p_{\cdot j}$，$p_{22}=\frac1{16}\ne0$。<b>"无放回"三个字是本题不独立的唯一来源</b>——这也是 <a href="#s5">§5</a> 那条"每行成比例"判别法的绝佳练习：本题第 1 行 $(\frac16,\frac16,\frac16)$ 与第 2 行 $(\frac16,0,\frac1{12})$ <b>显然不成比例</b>，一眼判不独立。<br>
+        <b>⑤ 提速</b>：(3) 问只需在 (1) 的九个数上做<b>合并同值</b>，<b>不要重新数样本点</b>。这是"多维 → 一维（离散,离散）"的标准动作。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 3.11 ✔</span>已知 $(X,Y)$ 的概率分布为
+    <div class="tabwrap"><table>
+      <tr><th>$X\backslash Y$</th><th>$-1$</th><th>1</th></tr>
+      <tr><td>$-1$</td><td>$\frac16$</td><td>$\frac16$</td></tr>
+      <tr><td>0</td><td>$\frac13$</td><td>$\frac16$</td></tr>
+      <tr><td>1</td><td>0</td><td>$\frac16$</td></tr>
+    </table></div>
+    (1) 求 $Z=X-Y$ 的概率分布；(2) 设 $U_1=XY,\;V_1=\dfrac XY$，求 $(U_1,V_1)$ 的概率分布；<br>
+    (3) 设 $U_2=\max\{X,Y\},\;V_2=\min\{X,Y\}$，求 $(U_2,V_2)$ 的概率分布，$U_2V_2$ 的概率分布。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">见下方三张表（已用程序对 6 个样本点逐一映射复算，四组分布全部一致）</span>
+      <span class="lab">★ 通用模板</span><b>离散型"多维 → 多维"的唯一正确做法：把所有样本点排成一行，每种函数占一行，做成一张"函数值表"，之后所有小问都从这张表取数——不要每问重新算一次。</b>
+      <div class="tabwrap"><table>
+        <tr><th>$p_{ij}$</th><td>$\frac16$</td><td>$\frac16$</td><td>$\frac13$</td><td>$\frac16$</td><td>$0$</td><td>$\frac16$</td></tr>
+        <tr><th>$(X,Y)$</th><td>$(-1,-1)$</td><td>$(-1,1)$</td><td>$(0,-1)$</td><td>$(0,1)$</td><td>$(1,-1)$</td><td>$(1,1)$</td></tr>
+        <tr><th>$Z=X-Y$</th><td>0</td><td>$-2$</td><td>1</td><td>$-1$</td><td>2</td><td>0</td></tr>
+        <tr><th>$U_1=XY$</th><td>1</td><td>$-1$</td><td>0</td><td>0</td><td>$-1$</td><td>1</td></tr>
+        <tr><th>$V_1=X/Y$</th><td>1</td><td>$-1$</td><td>0</td><td>0</td><td>$-1$</td><td>1</td></tr>
+        <tr><th>$U_2=\max$</th><td>$-1$</td><td>1</td><td>0</td><td>1</td><td>1</td><td>1</td></tr>
+        <tr><th>$V_2=\min$</th><td>$-1$</td><td>$-1$</td><td>$-1$</td><td>0</td><td>$-1$</td><td>1</td></tr>
+        <tr><th>$U_2V_2$</th><td>1</td><td>$-1$</td><td>0</td><td>0</td><td>$-1$</td><td>1</td></tr>
+      </table></div>
+      <span class="lab">(1)</span>$Z=X-Y$：把值相同的列的概率相加。
+      <div class="tabwrap"><table>
+        <tr><th>$Z$</th><td>$-2$</td><td>$-1$</td><td>0</td><td>1</td></tr>
+        <tr><th>$P$</th><td>$\frac16$</td><td>$\frac16$</td><td>$\frac13$</td><td>$\frac13$</td></tr>
+      </table></div>
+      （$P\{Z=0\}=\frac16+\frac16=\frac13$；$P\{Z=1\}=\frac13$ 来自 $(0,-1)$ 这一列；$P\{Z=2\}=0$ 故不列。）
+      <span class="lab">(2)</span>$(U_1,V_1)$：注意 $U_1$ 与 $V_1$ 在<b>每一列取值完全相同</b>（因为 $Y=\pm1$ 时 $\frac XY=XY$），所以联合分布<b>集中在对角线上</b>：
+      <div class="tabwrap"><table>
+        <tr><th>$U_1\backslash V_1$</th><th>$-1$</th><th>0</th><th>1</th></tr>
+        <tr><td>$-1$</td><td>$\frac16$</td><td>0</td><td>0</td></tr>
+        <tr><td>0</td><td>0</td><td>$\frac12$</td><td>0</td></tr>
+        <tr><td>1</td><td>0</td><td>0</td><td>$\frac13$</td></tr>
+      </table></div>
+      <span class="lab">(3)</span>$(U_2,V_2)$ 与 $U_2V_2$：
+      <div class="tabwrap"><table>
+        <tr><th>$U_2\backslash V_2$</th><th>$-1$</th><th>0</th><th>1</th></tr>
+        <tr><td>$-1$</td><td>$\frac16$</td><td>0</td><td>0</td></tr>
+        <tr><td>0</td><td>$\frac13$</td><td>0</td><td>0</td></tr>
+        <tr><td>1</td><td>$\frac16$</td><td>$\frac16$</td><td>$\frac16$</td></tr>
+      </table></div>
+      <div class="tabwrap"><table>
+        <tr><th>$U_2V_2$</th><td>$-1$</td><td>0</td><td>1</td></tr>
+        <tr><th>$P$</th><td>$\frac16$</td><td>$\frac12$</td><td>$\frac13$</td></tr>
+      </table></div>
+      <span class="lab">要害</span>① <b>$p_{(1,-1)}=0$ 这一列必须写进表里但概率为 0</b>，它参与"列举"却不参与"求和"。漏写它不影响答案，但少了它你就不知道 $U_2=1$ 那一行为什么是三格；<br>
+      ② <b>$U_2V_2=\max\cdot\min=XY$ 恒成立</b>（两个数的最大值乘最小值就是它们的乘积），所以 (3) 的最后一问<b>和 (2) 的 $U_1$ 完全一样</b>，可以直接抄。<b>看出这一点能省一半时间</b>；<br>
+      ③ 同理 $\max+\min=X+Y$、$\max-\min=|X-Y|$——<b>这三条恒等式在 <a href="#s6">强 5.4</a> 里就是整道题的题眼</b>。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 3.7 ✔</span>将两封信投入 3 个信箱，设 $X_1,X_2$ 分别表示第一个和第二个信箱投进的信的数量，求随机变量 $Y_1=X_1+X_2$ 和 $Y_2=X_1-X_2$ 的分布。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$Y_1\sim\begin{pmatrix}0&amp;1&amp;2\\ \frac19&amp;\frac49&amp;\frac49\end{pmatrix}$，$Y_2\sim\begin{pmatrix}-2&amp;-1&amp;0&amp;1&amp;2\\ \frac19&amp;\frac29&amp;\frac13&amp;\frac29&amp;\frac19\end{pmatrix}$</span>（已用程序在基 3.1 的九格表上合并同值复算）
+      <span class="lab">分析</span>直接用 <a href="#s2b">基 3.1</a> 的表，做<b>合并同值项</b>：<br>
+      $Y_1=X_1+X_2$ 可能取 $0,1,2,3,4$，但<b>概率为 0 的可以去掉</b>（书上分析原话）：$P\{Y_1=0\}=p_{00}=\frac19$；$P\{Y_1=1\}=p_{01}+p_{10}=\frac29+\frac29=\frac49$；$P\{Y_1=2\}=p_{02}+p_{11}+p_{20}=\frac19+\frac29+\frac19=\frac49$。<br>
+      $Y_2=X_1-X_2$ 可能取 $-2,\dots,2$：$P\{Y_2=-2\}=p_{02}=\frac19$，$P\{Y_2=-1\}=p_{01}=\frac29$，$P\{Y_2=0\}=p_{00}+p_{11}=\frac19+\frac29=\frac13$，$P\{Y_2=1\}=p_{10}=\frac29$，$P\{Y_2=2\}=p_{20}=\frac19$。<br>
+      <span class="lab">要害</span><b>$Y_1$ 的实际含义是"前两个信箱一共收到几封信"</b>，所以 $Y_1\sim B(2,\frac23)$：$P\{Y_1=k\}=C_2^k(\frac23)^k(\frac13)^{2-k}$，即 $\frac19,\frac49,\frac49$——<b>与逐格相加完全一致，这是最好的自查</b>。<br>
+      <span class="lab">别踩</span>先写"可能取值 $0,1,2,3,4$"再逐个算是<b>对的</b>（书上就这么分析），但<b>答案里只保留概率非零的取值</b>。写一堆概率为 0 的取值不扣分，但浪费时间也显得没想清楚约束 $X_1+X_2\le2$。<br>
+      <span class="lab">串联</span>$Y_2$ 的分布关于 0 <b>对称</b>——因为 $X_1$ 与 $X_2$ 地位对称（同分布），故 $X_1-X_2$ 与 $X_2-X_1$ 同分布。<b>"对称的量必有对称的分布"是最快的验算手段</b>，<a href="#s6">强 5.4</a> 的 $|X_1-X_2|$ 用的也是这个对称性。
+    </div>
+  </div>
+
+  <!-- ================= s3 二维连续型 ================= -->
+  <h2 id="s3"><span class="idx">三</span>二维连续型：一条口诀吃掉"求边缘密度"　<span class="layer L-base">基础</span><span class="layer L-str">强化</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/概率论与数理统计/03_多维随机变量及其分布/概率_第03章_基础30讲.pdf">📄 基础 p.67–75</a>
+  <a class="pg" href="../../张宇系列_分章易识别版/概率论与数理统计/03_多维随机变量及其分布/概率_第03章_强化9讲_第4讲_多维随机变量及其分布.pdf">📄 强化第4讲 p.32–33</a>
+
+  <div class="key"><span class="tag">必记 · 联合密度、边缘密度、条件密度（三层递进，一层比一层常考）</span>
+    <b>联合密度</b>：若 $F(x,y)=\displaystyle\int_{-\infty}^{y}\mathrm dv\int_{-\infty}^{x}f(u,v)\mathrm du$，称 $(X,Y)$ 为二维连续型，$f$ 为概率密度，记 $(X,Y)\sim f(x,y)$。<br>
+    <b>充要条件</b>：$f(x,y)\ge0$ 且 $\displaystyle\int_{-\infty}^{+\infty}\!\!\mathrm dy\int_{-\infty}^{+\infty}\! f(x,y)\mathrm dx=1$。（改变有限个点的值仍是密度。）<br>
+    <b>四条基本关系</b>：
+    <div class="gridwrap"><table>
+      <tr><th>#</th><th>关系</th><th>一句话</th></tr>
+      <tr><td>a</td><td>$F(x,y)=\displaystyle\int_{-\infty}^{y}\!\mathrm dv\int_{-\infty}^{x}\! f(u,v)\mathrm du$</td><td>密度积出分布函数（$F$ 是二元<b>连续</b>函数）</td></tr>
+      <tr><td>b</td><td>$P\{(X,Y)\in G\}=\displaystyle\iint_G f(x,y)\mathrm dx\mathrm dy$</td><td><b>体积对应概率</b>——本章最常用的一条</td></tr>
+      <tr><td>c</td><td>$\dfrac{\partial^2F(x,y)}{\partial x\partial y}=f(x,y)$（$f$ 连续处）</td><td>分布函数求<b>二阶混合偏导</b>得密度</td></tr>
+      <tr><td>d</td><td><b>边缘密度</b>：$f_X(x)=\displaystyle\int_{-\infty}^{+\infty}\!\! f(x,y)\mathrm dy$，$f_Y(y)=\displaystyle\int_{-\infty}^{+\infty}\!\! f(x,y)\mathrm dx$</td><td><b>★口诀：求谁不积谁</b></td></tr>
+      <tr><td>e</td><td><b>条件密度</b>：$f_{Y\mid X}(y\mid x)=\dfrac{f(x,y)}{f_X(x)}$，$f_{X\mid Y}(x\mid y)=\dfrac{f(x,y)}{f_Y(y)}$（分母 $\gt0$）</td><td>联合 / 边缘（与离散型同构）</td></tr>
+      <tr><td>f</td><td><b>乘法公式</b>：$f(x,y)=f_X(x)f_{Y\mid X}(y\mid x)=f_Y(y)f_{X\mid Y}(x\mid y)$</td><td><b>由条件反推联合</b>（大题起手式）</td></tr>
+    </table></div>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · $\dfrac{\partial^2F}{\partial x\partial y}=f$ 的那句"若 $f$ 连续"，是有考点的</span>
+    <b>书上说</b>：c. 若 $f(x,y)$ 在点 $(x,y)$ 处<b>连续</b>，则 $\frac{\partial^2F}{\partial x\partial y}=f(x,y)$；d. 若 $F$ 连续且可导，则 $(X,Y)$ 是连续型。眉批补了一维的类比：<b>$F'(x)=f(x)$，$F$ 不一定处处可导，但一定连续；在不可导的地方给 $f$ 赋值即可，一般赋值为 0</b>。<br>
+    <b>潜台词是</b>：$F$ 与 $f$ 的关系<b>只在 $f$ 的连续点成立</b>。而本章的 $f$ 几乎全是<b>分段常数或分段初等函数</b>——在区域<b>边界</b>上必然不连续。<b>那些边界点上 $f$ 取什么值？随便，一般取 0。</b>这就是书上另一句注的来源：<b>"改变 $f(x,y)$ 有限个点的值（仍取非负值），$f(x,y)$ 仍然是概率密度。"</b><br>
+    <b>所以能考</b>：① 这解释了为什么本章所有答案里"$0\lt x\lt1$"和"$0\le x\le1$"<b>都算对</b>（书上眉批原话：<b>等号归哪里都可以</b>）；② 反过来，若题目给 $F(x,y)$ 让你求 $f$，就要<b>先分区域再分别求二阶混合偏导</b>，边界处直接补 0；③ 判"是不是连续型"时，看 $F$ 是否处处连续——<b>有跳跃就是混合型或离散型</b>（<a href="#s9">习 3.18</a> 正是这一型）。<br>
+    <span class="dock">扣分点</span>：分段函数求 $\frac{\partial^2F}{\partial x\partial y}$ 时，<b>必须在每个区域内部单独求</b>，不能跨区域一次求完。
+  </div>
+
+  <div class="key"><span class="tag">必记 ★★★ · 求边缘概率密度的五句口诀（书上眉批原文，本章最高频操作）</span>
+    <div class="fml" style="font-size:1.02rem;line-height:2.1">
+      <b>求谁不积谁，<br>不积先定限，<br>限内画条线，<br>先变写下限，<br>后变写上限。</b>
+    </div>
+    <b>逐句翻译</b>：<br>
+    <b>「求谁不积谁」</b>——求 $f_X(x)$ 就<b>不</b>对 $x$ 积分，对 $y$ 积；<br>
+    <b>「不积先定限」</b>——被固定的那个变量（这里是 $x$）的<b>取值范围要先分段定下来</b>，这决定了你要分几段；<br>
+    <b>「限内画条线」</b>——在区域 $D$ 里过点 $x$ 画一条<b>竖直线</b>（平行于积分变量 $y$ 的轴）；<br>
+    <b>「先变写下限，后变写上限」</b>——竖线<b>先穿过</b>的那条边界是<b>下限</b>，<b>后穿出</b>的那条是<b>上限</b>。<br>
+    <b>同一条口诀在 <a href="#s7">§7 卷积公式</a>里改一个字就能用</b>：「求 $z$ 不积 $z$，不积先定限……」——因为它们本来就是同一件事：<b>累次积分的定限</b>。
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 为什么"边缘密度"这一步是本章的分水岭——它是二维打回一维的<b>唯一</b>通道</span>
+    <b>书上说</b>：$f_X(x)=\int_{-\infty}^{+\infty}f(x,y)\mathrm dy$，眉批"曲面的面积""$x$ 不动，累加 $y$"。<br>
+    <b>潜台词是</b>：$f_X$ 就是把三维曲面沿着 $y$ 方向<b>压扁</b>成一条曲线。压扁之后你手上又只剩一个变量了，第 2 章学的全套工具（求概率、求分布函数、求 $Y=g(X)$ 的分布）<b>立刻全部可用</b>。<b>没有这一步，二维问题永远是二维问题。</b><br>
+    <b>所以能考</b>：书上直接点名<b>"由联合概率密度求边缘概率密度几乎必考"</b>。它的三种考法：<br>
+    ① 单独问 $f_X,f_Y$（<a href="#s3b">基 3.3</a>、<a href="#s3b">习 3.12</a>）；<br>
+    ② 作为<b>判独立的必经一步</b>——要验 $f=f_Xf_Y$ 就得先把 $f_X,f_Y$ 算出来（<a href="#s10">基 3.12</a>）；<br>
+    ③ 作为<b>求条件密度的分母</b>（<a href="#s3b">基 3.3(2)</a>、<a href="#s6">强 5.3(2)</a>）。<br>
+    <span class="dock">扣分点</span>：<b>算完边缘密度必须验归一性 $\int f_X=1$。</b>定限错了这个积分几乎必然不是 1，<b>十秒钟能抓出本章最常见的错</b>。基 3.3 里 $\int_0^1x\mathrm dx+\int_1^2(2-x)\mathrm dx=\frac12+\frac12=1$ ✓。
+  </div>
+
+  <div class="link"><span class="tag">串联 · "求谁不积谁"这条口诀，在高数里你叫它别的名字</span>
+    <b>接高数（二重积分）</b>：这就是<b>累次积分定限</b>的标准流程——"$X$ 型区域"（先 $y$ 后 $x$）与"$Y$ 型区域"（先 $x$ 后 $y$）。<b>求 $f_X$ 用的是 $X$ 型定限、求 $f_Y$ 用的是 $Y$ 型定限</b>，一字不差。<br>
+    <b>接高数（含参积分）</b>：$f_X(x)=\int_{\varphi_1(x)}^{\varphi_2(x)}f(x,y)\mathrm dy$ 是<b>含参变量积分</b>，$x$ 既在被积函数里又在积分限里——这正是它需要<b>分段</b>的原因（$\varphi_1,\varphi_2$ 在不同 $x$ 区间上是不同的函数）。<br>
+    <b>接第 4 章</b>：$EX=\int xf_X(x)\mathrm dx=\iint xf(x,y)\mathrm dx\mathrm dy$——<b>两种算法必须相等</b>，这是第 4 章检验边缘密度算对没有的免费手段。<br>
+    <b>接 408（数据结构）</b>："固定一维、扫另一维"就是<b>二维数组的行/列遍历</b>；"边缘 = 沿某维求和"就是<b>矩阵的行和/列和</b>。你在 408 里写 <code>for i: for j: sum += a[i][j]</code> 时做的事，和这里算 $p_{i\cdot}$ 是同一件事——<b>区别只是把求和换成积分。</b>
+  </div>
+
+  <div class="trap"><span class="tag">陷阱 · 分段是被区域<b>逼</b>出来的，不是你想不想分</span>
+    $f_X(x)$ 要分几段，取决于<b>竖线穿过 $D$ 时，进出的边界会不会换</b>。<br>
+    <b>基 3.3</b> 的三角形 $D$（顶点 $(0,0),(2,0),(1,1)$）：$0\lt x\lt1$ 时竖线从 $y=0$ 穿到 $y=x$；$1\lt x\lt2$ 时从 $y=0$ 穿到 $y=2-x$——<b>上边界从 $y=x$ 换成了 $y=2-x$，所以必须分两段</b>，分界点 $x=1$ 就是两条斜边的交点。<br>
+    <b>反过来</b>：$f_Y(y)$ 只要一段（$y\le x\le2-y$，左右边界一路不变），<b>所以求 $f_Y$ 比求 $f_X$ 省一半功夫</b>。<br>
+    <span class="dock">扣分点</span>：<b>拿到区域先看"横切"和"竖切"哪个不用分段，能选就选不分段的方向。</b>这不是投机，这是二重积分换序的基本功。<br>
+    另一句书上眉批：<b>"等号归哪里都可以"</b>——$0\lt x\lt1$ 写成 $0\le x\le1$ 不影响答案（连续型改变有限个点不改变概率）。<b>但同一份答案里要前后一致，别一段带等号一段不带。</b>
+  </div>
+
+  <h3 id="s3b">连续型例题 · 从"画区域"到"写限"</h3>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 3.3 ✔</span>已知二维随机变量 $(X,Y)$ 在 $G$ 上服从均匀分布，$G$ 由直线 $x-y=0$，$x+y=2$ 与 $y=0$ 围成，求：<br>
+    (1) 边缘概率密度 $f_X(x)$ 和 $f_Y(y)$；(2) 条件概率密度 $f_{X\mid Y}(x\mid y)$。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$f_X(x)=\begin{cases}x,&amp;0\lt x\lt1\\ 2-x,&amp;1\lt x\lt2\\ 0,&amp;其他\end{cases}$；$f_Y(y)=\begin{cases}2-2y,&amp;0\lt y\lt1\\ 0,&amp;其他\end{cases}$；$f_{X\mid Y}(x\mid y)=\begin{cases}\frac1{2-2y},&amp;y\le x\le2-y\\ 0,&amp;其他\end{cases}\;(0\lt y\lt1)$</span>（已用 sympy 复算并验归一性；蒙特卡洛 $10^7$ 拒绝采样按每格质量对拍，总变差 $\lt4\times10^{-3}$）
+
+      <div class="think"><span class="th">💭 思路 · 拿到题先想什么</span>
+        <ol>
+          <li><b>"均匀分布"四个字等价于"密度是常数 $\frac1{S_G}$"</b>，所以第一件事是<b>画图 + 求面积</b>，不是写积分。三条直线 $y=x$、$x+y=2$、$y=0$ 围成的三角形顶点是 $(0,0)$、$(2,0)$、$(1,1)$，底 2 高 1，$S_G=\frac12\cdot2\cdot1=1$。<b>面积恰好是 1，所以 $f\equiv1$——这是出题人故意给的方便。</b></li>
+          <li><b>把区域写成"不等式组"</b>，这一步决定后面所有的限。用 $y$ 当外层最省事：$0\le y\le1$，$y\le x\le2-y$。（用 $x$ 当外层要分两段，见下。）</li>
+          <li>(1) 求 $f_X$ 用口诀：<b>求 $x$ 不积 $x$</b> ⟹ 对 $y$ 积。竖线在 $0\lt x\lt1$ 与 $1\lt x\lt2$ 时上边界不同 ⟹ <b>分两段</b>。求 $f_Y$ 时横线左右边界一路是 $x=y$ 与 $x=2-y$ ⟹ <b>一段搞定</b>。</li>
+          <li>(2) 条件密度 = 联合 / 边缘，<b>看竖线后面是 $y$，分母就用 $f_Y$</b>。算完别忘了<b>写 $x$ 的范围</b>——条件密度是关于 $x$ 的一元密度，范围随 $y$ 变，这正是它"条件"的体现。</li>
+        </ol>
+      </div>
+
+      <div class="paper"><span class="phead">✍️ 考场卷面（按 11 分估）</span>
+        <div class="step"><b>解</b>　$G$ 由 $y=x$、$x+y=2$、$y=0$ 围成，是以 $(0,0),(2,0),(1,1)$ 为顶点的三角形，其面积 $S_G=\dfrac12\times2\times1=1$。由 $(X,Y)$ 在 $G$ 上服从<b>均匀分布</b>，得
+        $$f(x,y)=\begin{cases}1,&amp;0\le y\le1,\;y\le x\le2-y,\\ 0,&amp;\text{其他}.\end{cases} \tag{1}$$<span class="pt">⛳ 3分</span></div>
+        <div class="step">(1) 由边缘概率密度公式 $f_X(x)=\displaystyle\int_{-\infty}^{+\infty}f(x,y)\mathrm dy$：<br>
+        当 $0\lt x\lt1$ 时，$f_X(x)=\displaystyle\int_0^x1\,\mathrm dy=x$；<br>
+        当 $1\lt x\lt2$ 时，$f_X(x)=\displaystyle\int_0^{2-x}1\,\mathrm dy=2-x$；其余 $f_X(x)=0$。故
+        $$f_X(x)=\begin{cases}x,&amp;0\lt x\lt1,\\ 2-x,&amp;1\le x\lt2,\\ 0,&amp;\text{其他}.\end{cases} \tag{2}$$<span class="pt">⛳ 3分</span></div>
+        <div class="step">由 $f_Y(y)=\displaystyle\int_{-\infty}^{+\infty}f(x,y)\mathrm dx$：当 $0\lt y\lt1$ 时 $f_Y(y)=\displaystyle\int_y^{2-y}1\,\mathrm dx=2-2y$；其余为 0。故
+        $$f_Y(y)=\begin{cases}2-2y,&amp;0\lt y\lt1,\\ 0,&amp;\text{其他}.\end{cases} \tag{3}$$<span class="pt">⛳ 2分</span></div>
+        <div class="step">(2) 当 $0\lt y\lt1$ 时 $f_Y(y)=2-2y\gt0$，由条件概率密度的定义
+        $$f_{X\mid Y}(x\mid y)=\frac{f(x,y)}{f_Y(y)}=\frac1{2-2y},\qquad y\le x\le2-y. \tag{4}$$<span class="pt">⛳ 2分</span></div>
+        <div class="fin">所以在 $Y=y\;(0\lt y\lt1)$ 的条件下，$X$ 的条件概率密度为
+        $f_{X\mid Y}(x\mid y)=\begin{cases}\dfrac1{2-2y},&amp;y\le x\le2-y,\\ 0,&amp;\text{其他}.\end{cases}$<span class="pt">⛳ 1分</span></div>
+      </div>
+
+      <div class="notekeep"><span class="nh">📌 批注 · 对照完再看这层</span>
+        <b>① 卷面第一步必须先算 $S_G$ 并写出 $f(x,y)$</b>。很多人直接开始积分，$f$ 都没写出来——阅卷点就在这里，写出 (1) 式就是 3 分。<br>
+        <b>② 分段点 $x=1$ 从哪来</b>：两条斜边 $y=x$ 与 $x+y=2$ 的交点。<b>卷面上不必解释，但草稿上要明确</b>——这是你分段的唯一依据。<br>
+        <b>③ 自查（十秒）</b>：$\int_0^1x\mathrm dx+\int_1^2(2-x)\mathrm dx=\frac12+\frac12=1$ ✓；$\int_0^1(2-2y)\mathrm dy=1$ ✓。<b>两个边缘各自归一，基本就不会错了。</b><br>
+        <b>④ $f_X$ 的形状是个三角形（帐篷）</b>，$f_Y$ 是条下降的直线。这有个漂亮解释：$f_X(x)$ 的值就是<b>竖线在 $G$ 内的长度</b>（因为 $f\equiv1$），$f_Y(y)$ 就是<b>横线的长度</b>。<b>均匀分布的边缘密度 = 截线长度 / 总面积</b>——记住这句，$f\equiv\frac1{S}$ 型的题可以直接<b>看图写答案，不用积分</b>。<br>
+        <b>⑤ 条件密度的形状</b>：$\frac1{2-2y}$ 在 $y\le x\le2-y$ 上是<b>常数</b>——说明"给定 $Y=y$ 后 $X$ 在那条横截线上仍是均匀分布"。<b>这是二维均匀分布的通性：条件分布仍均匀。</b>与 <a href="#s4">二维正态"条件分布仍正态"</a>是同一类结论，可以对着记。<br>
+        <span class="dock">扣分点</span>：(2) 问漏写 $x$ 的范围 $y\le x\le2-y$，扣分。条件密度<b>必须带范围</b>，否则它不是一个密度。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 3.4 ✔</span>已知随机变量 $X$ 在区间 $[0,1]$ 上服从均匀分布，在 $X=x\;(0\lt x\lt1)$ 的条件下，随机变量 $Y$ 在区间 $[0,x]$ 上服从均匀分布，求：<br>
+    (1) $(X,Y)$ 的概率密度；(2) $Y$ 的概率密度；(3) 概率 $P\{X+Y\gt1\}$。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$f(x,y)=\begin{cases}\frac1x,&amp;0\lt y\lt x\lt1\\ 0,&amp;其他\end{cases}$；$f_Y(y)=\begin{cases}-\ln y,&amp;0\lt y\lt1\\ 0,&amp;其他\end{cases}$；$P\{X+Y\gt1\}=1-\ln2\approx0.3069$</span>（sympy 解析 + 蒙特卡洛 $10^7$：$P$ 实测 $0.30684$，误差 $\lt10^{-3}$）
+
+      <div class="think"><span class="th">💭 思路 · 拿到题先想什么</span>
+        <ol>
+          <li><b>题干的措辞就是答案的路线图。</b>"$X$ 服从…"给的是<b>边缘</b> $f_X$；"在 $X=x$ 的条件下 $Y$ 服从…"给的是<b>条件</b> $f_{Y\mid X}$。要求联合，就用 <b>联合 ＝ 边缘 × 条件</b>：$f(x,y)=f_X(x)f_{Y\mid X}(y\mid x)$。<b>这是本章最标准的"由条件反推联合"起手式，看到这种措辞不用想第二条路。</b></li>
+          <li><b>最容易错的是范围的合并。</b>$f_X$ 要求 $0\lt x\lt1$，$f_{Y\mid X}$ 要求 $0\lt y\lt x$——两个范围<b>取交</b>得 $0\lt y\lt x\lt1$。这个"三重不等式"就是区域 $D$：$y=x$ 下方、$x\lt1$ 左侧的直角三角形。<b>画出来，后面两问全在这张图上做。</b></li>
+          <li>注意书上眉批点破的一处细节：$f_{Y\mid X}(y\mid x)=\frac1x$ 里的 $\frac1x$ 是<b>一元</b>的（$x$ 是给定的常数），而写进 $f(x,y)=\frac1x$ 后它是<b>二元</b>的（$x$ 是变量）。<b>"相同的表达式含义不同"</b>——这句提醒不是废话，它决定了下一步你对谁积分。</li>
+          <li>(2) 求 $f_Y$：口诀"求 $y$ 不积 $y$" ⟹ 对 $x$ 积。横线在 $D$ 内从 $x=y$ 到 $x=1$，故 $f_Y(y)=\int_y^1\frac1x\mathrm dx=-\ln y$。<b>$-\ln y$ 在 $y\to0^+$ 时趋于 $+\infty$——这是一个"无界密度"，完全合法（密度不必有界，只要可积）。</b></li>
+          <li>(3) 求 $P\{X+Y\gt1\}$：这是"<b>用分布求概率</b>"，直接 $\iint_{D\cap\{x+y\gt1\}}f$。画出直线 $x+y=1$ 与 $D$ 的交，<b>交点是 $(\frac12,\frac12)$</b>，所以 $x$ 从 $\frac12$ 到 1，$y$ 从 $1-x$ 到 $x$。</li>
+        </ol>
+      </div>
+
+      <div class="paper"><span class="phead">✍️ 考场卷面（按 12 分估）</span>
+        <div class="step"><b>解</b>　(1) 由题设，$X$ 的边缘概率密度为 $f_X(x)=\begin{cases}1,&amp;0\lt x\lt1,\\ 0,&amp;\text{其他};\end{cases}$
+        在 $X=x\;(0\lt x\lt1)$ 的条件下，$Y$ 的条件概率密度为 $f_{Y\mid X}(y\mid x)=\begin{cases}\dfrac1x,&amp;0\lt y\lt x,\\ 0,&amp;\text{其他}.\end{cases}$<span class="pt">⛳ 3分</span></div>
+        <div class="step">由概率密度的<b>乘法公式</b> $f(x,y)=f_X(x)f_{Y\mid X}(y\mid x)$，当 $0\lt y\lt x\lt1$ 时 $f(x,y)=1\cdot\dfrac1x=\dfrac1x$，故
+        $$f(x,y)=\begin{cases}\dfrac1x,&amp;0\lt y\lt x\lt1,\\ 0,&amp;\text{其他}.\end{cases} \tag{1}$$<span class="pt">⛳ 2分</span></div>
+        <div class="step">(2) 由 (1) 式，$(X,Y)$ 的正概率密度区域为 $D=\{(x,y)\mid 0\lt y\lt x\lt1\}$。当 $0\lt y\lt1$ 时
+        $$f_Y(y)=\int_{-\infty}^{+\infty}f(x,y)\mathrm dx=\int_y^1\frac1x\mathrm dx=-\ln y;$$
+        当 $y\le0$ 或 $y\ge1$ 时 $f_Y(y)=0$。从而
+        $$f_Y(y)=\begin{cases}-\ln y,&amp;0\lt y\lt1,\\ 0,&amp;\text{其他}.\end{cases} \tag{2}$$<span class="pt">⛳ 3分</span></div>
+        <div class="step">(3) 由 $P\{(X,Y)\in D_0\}=\displaystyle\iint_{D_0}f(x,y)\mathrm dx\mathrm dy$，其中 $D_0=D\cap\{x+y\gt1\}$。直线 $x+y=1$ 与 $y=x$ 交于 $\left(\frac12,\frac12\right)$，故
+        $$P\{X+Y\gt1\}=\int_{\frac12}^{1}\mathrm dx\int_{1-x}^{x}\frac1x\mathrm dy=\int_{\frac12}^{1}\frac{2x-1}{x}\mathrm dx=\int_{\frac12}^{1}\Big(2-\frac1x\Big)\mathrm dx. \tag{3}$$<span class="pt">⛳ 3分</span></div>
+        <div class="fin">$$P\{X+Y\gt1\}=\Big(2x-\ln x\Big)\Big|_{\frac12}^{1}=2-\big(1-\ln\tfrac12\big)=1-\ln2 .$$<span class="pt">⛳ 1分</span></div>
+      </div>
+
+      <div class="notekeep"><span class="nh">📌 批注 · 对照完再看这层</span>
+        <b>① 书上的"注"专门强调了一处严谨性</b>：$f(x,y)=f_X(x)f_{Y\mid X}(y\mid x)$ 只在 $f_X(x)\gt0$ 时成立，所以<b>最终结果要补上 $f_X(x)=0$ 时的定义</b>，一般归到分段表达式的"其他"里写 0。<b>卷面上写全 $\begin{cases}\cdot\\0,\text{其他}\end{cases}$ 就等于把这句话说了。</b><br>
+        <b>② 交点 $(\frac12,\frac12)$ 是本题唯一的计算关口</b>。求错它，(3) 的下限就错。<b>凡是"区域被一条直线切开"的题，先解交点、写在草稿最显眼处。</b><br>
+        <b>③ 定限方向的选择</b>：(3) 用<b>先 $y$ 后 $x$</b>（外层 $x$ 从 $\frac12$ 到 1）只需一段；若用先 $x$ 后 $y$，横线的左端点在 $y\lt\frac12$ 时是 $x=1-y$、在 $y\gt\frac12$ 时是 $x=y$，<b>要分两段，工作量翻倍</b>。<span class="dock">扣分点</span>：不是错，是慢——考场上慢就是丢分。<b>先看哪个方向不用分段。</b><br>
+        <b>④ $\int\frac{2x-1}{x}\mathrm dx$ 一定要先拆成 $2-\frac1x$ 再积</b>，不要试图整体换元。<br>
+        <b>⑤ 数值感</b>：$1-\ln2\approx0.307$。直觉自查——$D$ 的面积是 $\frac12$，而 $D_0$（靠右上那块）只占其中一小部分，概率应当明显小于 $\frac12$ 但不至于很小，<b>0.31 合理</b>。<b>算完对着图估一眼数量级，是最省时的防错。</b><br>
+        <b>⑥ 这道题的结构在真题里反复出现</b>：题干给"边缘 + 条件"，三问依次是"求联合 / 求另一个边缘 / 求某区域概率"。<b>记住这个三问模板，见到就知道要写什么。</b>
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 3.12 ✔</span>求以下给出概率密度的 $(X,Y)$ 的边缘概率密度 $f_X(x)$ 和 $f_Y(y)$：<br>
+    (1) $f_1(x,y)=\begin{cases}\mathrm e^{-y},&amp;0\lt x\lt y\\ 0,&amp;其他\end{cases}$　　(2) $f_2(x,y)=\begin{cases}\frac54(x^2+y),&amp;0\lt y\lt1-x^2\\ 0,&amp;其他\end{cases}$</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(1) $f_X(x)=\mathrm e^{-x}\,(x\gt0)$——<b>正是指数分布 $E(1)$</b>；$f_Y(y)=y\mathrm e^{-y}\,(y\gt0)$。<br>
+      (2) $f_X(x)=\frac58(1-x^4)\,(-1\lt x\lt1)$；$f_Y(y)=\frac56\sqrt{1-y}\,(1+2y)\,(0\lt y\lt1)$</span>（sympy 复算，并验两组归一性均为 1）
+      <span class="lab">分析 (1)</span>区域是"$y=x$ 上方、第一象限"的无界角形。<b>求 $f_X$</b>：竖线从 $y=x$ 一路向上到 $+\infty$，$f_X(x)=\int_x^{+\infty}\mathrm e^{-y}\mathrm dy=\mathrm e^{-x}$。<b>求 $f_Y$</b>：横线从 $x=0$ 到 $x=y$，被积函数 $\mathrm e^{-y}$ <b>与 $x$ 无关</b>，直接乘长度：$f_Y(y)=y\mathrm e^{-y}$。<br>
+      <span class="lab">分析 (2)</span>区域是抛物线 $y=1-x^2$ 与 $x$ 轴围成的拱形（$-1\le x\le1$）。<b>求 $f_X$</b>：竖线 $0\to1-x^2$，
+      $\int_0^{1-x^2}\frac54(x^2+y)\mathrm dy=\frac54x^2(1-x^2)+\frac58(1-x^2)^2=\frac58(1-x^2)\big[2x^2+(1-x^2)\big]=\frac58(1-x^4)$。<br>
+      <b>求 $f_Y$</b>：横线从 $x=-\sqrt{1-y}$ 到 $x=+\sqrt{1-y}$，$\int\frac54x^2\mathrm dx=\frac5{12}x^3$ 代入得 $\frac56(1-y)^{3/2}$，$\int\frac54y\mathrm dx=\frac52y\sqrt{1-y}$，合并 $=\frac56\sqrt{1-y}\,(1+2y)$。<br>
+      <span class="lab">要害</span>(1) 里 <b>$f_X$ 恰好是 $E(1)$、$f_Y$ 恰好是 $\Gamma(2,1)$</b>——这不是巧合：$0\lt x\lt y$ 上的 $\mathrm e^{-y}$ 正是"两个独立 $E(1)$ 之和的联合结构"。<b>把它记成一个"典范例子"</b>，<a href="#s6">§6</a> 与 <a href="#s9">习 3.14</a> 都会再遇到这个 $f$。<br>
+      <span class="lab">别踩</span>(2) 的 $f_Y$ 定限时<b>横线是双侧对称的</b>（$\pm\sqrt{1-y}$），漏掉负半边会得到一半的答案。<b>拱形、圆形这类"左右对称"的区域，对 $x$ 积分时上下限必须成对出现。</b><br>
+      <span class="lab">提速</span>(2) 求 $f_Y$ 时，$\frac54x^2$ 是偶函数、$\frac54y$ 是常数，可以写成 $2\int_0^{\sqrt{1-y}}$ 再算，少一半符号错误的机会。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 3.13 ✔</span>设 $(X,Y)$ 的概率密度为 $f(x,y)=\begin{cases}k,&amp;0\lt x^2\lt y\lt x\lt1\\ 0,&amp;其他\end{cases}$<br>
+    (1) 求常数 $k$；(2) 求 $P\{X\gt\frac12\}$ 和 $P\{Y\lt\frac12\}$。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$k=6$；$P\{X\gt\frac12\}=\frac12$；$P\{Y\lt\frac12\}=\sqrt2-\frac34\approx0.6642$</span>（sympy 复算；蒙特卡洛 $10^7$ 拒绝采样实测 $0.5000$ 与 $0.6641$）
+      <span class="lab">分析</span><b>区域是 $y=x$ 与 $y=x^2$ 之间的"月牙"</b>（$0\lt x\lt1$ 时 $x^2\lt x$）。<br>
+      (1) 归一性：$k\int_0^1\mathrm dx\int_{x^2}^{x}\mathrm dy=k\int_0^1(x-x^2)\mathrm dx=k\big(\frac12-\frac13\big)=\frac k6=1\Rightarrow k=6$。<br>
+      (2) $P\{X\gt\frac12\}=6\int_{1/2}^{1}(x-x^2)\mathrm dx=6\big(\frac12x^2-\frac13x^3\big)\Big|_{1/2}^{1}=6\big[(\frac12-\frac13)-(\frac18-\frac1{24})\big]=6\big(\frac16-\frac1{12}\big)=\frac12$。<br>
+      $P\{Y\lt\frac12\}$：<b>这次必须换方向</b>——固定 $y$，横线从 $x=y$（左边界 $y=x$）到 $x=\sqrt y$（右边界 $y=x^2$），故
+      $6\int_0^{1/2}(\sqrt y-y)\mathrm dy=6\big(\frac23y^{3/2}-\frac12y^2\big)\Big|_0^{1/2}=6\big(\frac23\cdot\frac1{2\sqrt2}-\frac18\big)=\frac{2}{\sqrt2}\cdot2-\frac34=\sqrt2-\frac34$。<br>
+      <span class="lab">要害 ★</span><b>同一个区域，两问必须用两个相反的积分方向。</b>问 $X$ 就固定 $x$ 竖切，问 $Y$ 就固定 $y$ 横切——<b>硬用一个方向要解出反函数、要分段，费时且易错</b>。这是本题的全部技术含量。<br>
+      <span class="lab">别踩</span>横切时左右边界要<b>把 $y=x^2$ 反解成 $x=\sqrt y$</b>（取正根，因为 $0\lt x\lt1$）。写成 $x=\pm\sqrt y$ 或搞反左右（$y$ 在左、$\sqrt y$ 在右，因为 $0\lt y\lt1$ 时 $y\lt\sqrt y$）是最常见的两个错。<b>代一个具体值验一下：$y=\frac14$ 时左端 $0.25$、右端 $0.5$ ✓。</b><br>
+      <span class="lab">数值感</span>$P\{X\gt\frac12\}=\frac12$ 恰好一半，是巧合还是必然？<b>是巧合</b>——$\int_0^1(x-x^2)$ 与 $\int_{1/2}^1(x-x^2)$ 的比恰为 2。但它给了你一个免费的验算：<b>如果算出的不是 $\frac12$，回头查。</b>
+    </div>
+  </div>
+
+  <!-- ================= s4 二维均匀 & 二维正态 ================= -->
+  <h2 id="s4"><span class="idx">四</span>大纲只要两种二维分布：均匀 &amp; 正态（★配方还原五参数）　<span class="layer L-base">基础</span><span class="layer L-str">强化</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/概率论与数理统计/03_多维随机变量及其分布/概率_第03章_基础30讲.pdf">📄 基础 p.70–71</a>
+  <a class="pg" href="../../张宇系列_分章易识别版/概率论与数理统计/03_多维随机变量及其分布/概率_第03章_强化9讲_第4讲_多维随机变量及其分布.pdf">📄 强化第4讲 p.30–31</a>
+
+  <div class="mine"><span class="tag">补讲 · 大纲只要两种二维分布，这句话本身就是最大的信息</span>
+    <b>书上说</b>：《考试大纲》中，二维离散的未要求特殊记忆，<b>二维连续的需掌握均匀与正态这两种分布</b>。<br>
+    <b>潜台词是</b>：连续型二维题的<b>出题素材被锁死在一个很窄的池子里</b>——要么是"某区域上均匀"（此时 $f$ 是常数，全部难度转移到<b>画区域、定限</b>），要么是"二维正态"（此时 $f$ 是那个固定的指数式，全部难度转移到<b>七条结论与参数识别</b>）。<b>剩下那些形如 $8xy$、$\frac2\pi(x^2+y^2)$、$2-x-y$ 的密度，都是命题人临时造的，不属于"分布"，只是"一个函数"。</b><br>
+    <b>所以能考</b>：<b>拿到连续型题先分三类</b>——① 均匀 ⟹ 立刻画图算面积，边缘密度用"截线长度/面积"看图写；② 二维正态 ⟹ 立刻套七条结论，别去积分；③ 临时造的密度 ⟹ 老实定限积分，此时<b>唯一的技术是二重积分</b>。<b>三类的应对策略完全不同，先分类再动手能省一半时间。</b><br>
+    <b>本章的实际分布</b>：均匀 4 道（基 3.3、基 3.4、基 3.9、基 3.11＝习 3.17），二维正态 3 道（基 3.5、强 4.2、习 3.6），临时密度 8 道。
+  </div>
+
+  <div class="key"><span class="tag">必记 · 二维均匀分布（一句话就完）</span>
+    $$f(x,y)=\begin{cases}\dfrac1{S_D},&amp;(x,y)\in D,\\ 0,&amp;\text{其他},\end{cases}\qquad S_D=D\text{ 的面积}$$
+    称 $(X,Y)$ 在<b>平面有界区域 $D$ 上服从均匀分布</b>。书上眉批："不画图直接算面积也可以"。<br>
+    <b>对照一维</b>：$f(x)=\frac1{b-a}$ 是"区间长度的倒数"，二维就是"<b>区域面积的倒数</b>"——一维量长度，二维量面积。<br>
+    <b>三条随手可用的推论</b>（<a href="#s3b">基 3.3</a> 的批注④已经用过）：<br>
+    ① $P\{(X,Y)\in G\}=\dfrac{S_{G\cap D}}{S_D}$——<b>概率 = 面积比，退化成第 1 章的几何概型</b>；<br>
+    ② 边缘密度 $f_X(x)=\dfrac{\text{竖线在 }D\text{ 内的长度}}{S_D}$——<b>看图就能写，不用积分</b>；<br>
+    ③ 条件分布仍是<b>均匀分布</b>（在那条截线上）。
+  </div>
+
+  <div class="link"><span class="tag">串联 · 二维均匀 ↔ 二维正态：两种分布的"条件分布"结论要对着记</span>
+    <b>本章两种大纲分布，各有一条"条件分布"的漂亮结论，形式完全平行</b>：<br>
+    <b>二维均匀</b>：条件分布<b>仍是均匀分布</b>（在那条截线上），密度 = $\frac1{\text{截线长度}}$——<a href="#s3b">基 3.3(2)</a> 算出的 $\frac1{2-2y}$ 正是"截线 $[y,2-y]$ 长度的倒数"。<br>
+    <b>二维正态</b>：条件分布<b>仍是正态分布</b>（结论 ⑦），$Y\mid X=x\sim N\left(\mu_2+\rho\frac{\sigma_2}{\sigma_1}(x-\mu_1),\;\sigma_2^2(1-\rho^2)\right)$——<b>均值随 $x$ 线性移动，方差恒定且比 $\sigma_2^2$ 小</b>（知道了 $X$ 就减少了 $Y$ 的不确定性，减少的比例正是 $\rho^2$）。<br>
+    <b>共同点</b>：<b>"切一刀之后还是同族分布"</b>——这是这两种分布被大纲选中的根本原因，也是它们好算的原因。<br>
+    <b>接第 4 章</b>：$E(Y\mid X=x)=\mu_2+\rho\frac{\sigma_2}{\sigma_1}(x-\mu_1)$ 是一条<b>直线</b>，叫<b>回归直线</b>；斜率里的 $\rho$ 正是相关系数——<b>"相关系数度量线性关系"这句话，在这条公式里第一次变得具体。</b>可以在 <a href="#s11">§11 模块三</a>拖 $x_0$ 亲眼看这条均值线性移动。
+  </div>
+
+  <div class="key"><span class="tag">必记 ★★★ · 二维正态分布（5 个参数，书上说"记住结论即可，不必看证明"）</span>
+    $$f(x,y)=\frac{1}{2\pi\sigma_1\sigma_2\sqrt{1-\rho^2}}\exp\left\{-\frac{1}{2(1-\rho^2)}\left[\Big(\frac{x-\mu_1}{\sigma_1}\Big)^2-2\rho\Big(\frac{x-\mu_1}{\sigma_1}\Big)\Big(\frac{y-\mu_2}{\sigma_2}\Big)+\Big(\frac{y-\mu_2}{\sigma_2}\Big)^2\right]\right\}$$
+    其中 $\mu_1,\mu_2\in\mathbf R$，$\sigma_1,\sigma_2\gt0$，$-1\lt\rho\lt1$，记 $(X,Y)\sim N(\mu_1,\mu_2;\sigma_1^2,\sigma_2^2;\rho)$。<br>
+    <b>强化讲眉批：注意参数的位置顺序</b>——前两个是<b>期望</b>，中间两个是<b>方差</b>（不是标准差！），最后一个是<b>相关系数</b>。<br>
+    <b>$\rho=0$ 时</b>密度退化为
+    $$f(x,y)=\frac1{2\pi\sigma_1\sigma_2}\mathrm e^{-\frac12\left[\left(\frac{x-\mu_1}{\sigma_1}\right)^2+\left(\frac{y-\mu_2}{\sigma_2}\right)^2\right]}=f_X(x)\,f_Y(y)$$
+    ——<b>联合密度等于两个边缘密度的乘积，即 $X$ 与 $Y$ 独立</b>。
+  </div>
+
+  <div class="bg"><span class="tag">背景 · 二维正态密度的推导（书上明说"不必看证明"）</span>
+    书上在二维正态标题旁直接标注：<b>"记住以下结论即可，不必看证明。"</b>这个密度可以由"两个独立标准正态经线性变换"推出，也可以由特征函数得到——<b>推导过程从未考过</b>。<br>
+    真正要背的只有三样：<b>① 记号里五个参数的位置顺序</b>（期望、期望、方差、方差、相关系数）；<b>② $\rho=0$ 时因式分解成 $f_Xf_Y$</b>；<b>③ 下面那七条结论。</b>密度表达式本身<b>只需要认得出来</b>（看到 $\exp\{-\frac1{2(1-\rho^2)}[\cdots]\}$ 就知道是二维正态），<b>不需要默写</b>。
+  </div>
+
+  <div class="key"><span class="tag">必记 ★★★ · 二维正态的七条结论（强化第4讲，全书最该背的一页）</span>
+    <div class="gridwrap"><table>
+      <tr><th>#</th><th>结论</th><th>用在哪</th></tr>
+      <tr><td>①</td><td>$(X_1,X_2)\sim N(\mu_1,\mu_2;\sigma_1^2,\sigma_2^2;\rho)\Rightarrow X_1\sim N(\mu_1,\sigma_1^2),\;X_2\sim N(\mu_2,\sigma_2^2)$</td><td><b>联合 ⟹ 边缘</b>（单向）</td></tr>
+      <tr><td>②</td><td>$X_1\sim N,\;X_2\sim N$ 且<b>相互独立</b> $\Rightarrow(X_1,X_2)\sim N(\mu_1,\mu_2;\sigma_1^2,\sigma_2^2;0)$</td><td>反向要<b>加"独立"</b>才成立</td></tr>
+      <tr><td>③</td><td>$(X_1,X_2)\sim N\Rightarrow k_1X_1+k_2X_2\sim N$（$k_1,k_2$ 不全为 0）</td><td><b>线性组合仍正态</b>（<a href="#s4b">强 4.2</a>）</td></tr>
+      <tr><td>④</td><td>$Y_1=a_1X_1+a_2X_2,\;Y_2=b_1X_1+b_2X_2$，若 $\begin{vmatrix}a_1&amp;a_2\\ b_1&amp;b_2\end{vmatrix}\ne0$，则 $(Y_1,Y_2)\sim N$</td><td><b>可逆线性变换</b>保持二维正态</td></tr>
+      <tr><td>⑤</td><td>$X_1,X_2$ 独立同分布于 $N(\mu,\sigma^2)$，$Y_1=aX_1+bX_2,\;Y_2=aX_1-bX_2$：<br>$EY_1=(a+b)\mu$，$EY_2=(a-b)\mu$，$DY_1=DY_2=(a^2+b^2)\sigma^2$，<br>$\mathrm{Cov}(Y_1,Y_2)=(a^2-b^2)\sigma^2$，$\rho_{Y_1Y_2}=\dfrac{a^2-b^2}{a^2+b^2}$</td><td><b>成品公式</b>，第 4 章直接用</td></tr>
+      <tr><td>⑥</td><td>$(X_1,X_2)\sim N$ 时：<b>相互独立 $\Leftrightarrow$ 不相关（$\rho=0$）</b></td><td><b>二维正态下两者等价</b>；一般分布只有 $\Rightarrow$</td></tr>
+      <tr><td>⑦</td><td>$(X,Y)\sim N$ 的<b>条件分布仍是正态分布</b></td><td>与二维均匀"条件仍均匀"对照记</td></tr>
+    </table></div>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 第 ⑥ 条是整个概率论里最值钱的一句话，也是最容易被滥用的一句话</span>
+    <b>书上说</b>：$(X_1,X_2)\sim N\Rightarrow X_1,X_2$ 相互独立 $\Leftrightarrow$ $X_1,X_2$ 不相关。<br>
+    <b>潜台词是</b>：一般情况下"独立 $\Rightarrow$ 不相关"是<b>单向</b>的（书上眉批说得很清楚：相关性指的是<b>线性</b>相关的程度，不相关只是没有线性关系，<b>可能还有非线性关系</b>，故不相关未必独立）。而<b>只有在二维正态这个特殊结构下，这个箭头才变成双向</b>——因为二维正态密度里 $\rho$ 一旦为 0，指数中的交叉项 $-2\rho(\cdot)(\cdot)$ 直接消失，密度<b>当场因式分解</b>成 $f_X\cdot f_Y$。<b>是"密度能分解"给了它双向，不是"不相关"本身有这个能力。</b><br>
+    <b>所以能考</b>：三种考法——<br>
+    ① 给 $(X,Y)\sim N$ 和 $\rho=0$，让你<b>断定独立</b>（送分）；<br>
+    ② 给一个<b>非正态</b>的分布，$\mathrm{Cov}=0$ 却<b>不独立</b>，考你会不会滥用第 ⑥ 条（<a href="#s10">基 3.12</a> 就是这道题，$f=\frac2\pi(x^2+y^2)$ 在单位圆上，$\mathrm{Cov}=0$ 但 $f\ne f_Xf_Y$）；<br>
+    ③ 给<b>两个边缘都正态</b>但联合不是二维正态的反例，考你会不会滥用第 ①② 条（<a href="#s4b">习 3.6</a>：$f=\frac{1+\sin x\sin y}{2\pi}\mathrm e^{-(x^2+y^2)/2}$，两个边缘都是 $N(0,1)$，联合却不是二维正态，$X,Y$ 也不独立）。<br>
+    <span class="dock">扣分点</span><b>用第 ⑥ 条之前必须先确认"$(X,Y)$ 服从二维正态"这个前提，并在卷面上写出来</b>。题干只说"$X\sim N,Y\sim N$"是<b>不够</b>的——那只是两个边缘正态，联合未必正态（结论 ② 的反向需要独立）。<b>这是本章最高级也最常见的"隐含条件"陷阱。</b>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 结论 ③④⑤ 说的是同一件事：正态族对<b>线性变换</b>封闭</span>
+    <b>书上说</b>：③ 线性组合 $k_1X_1+k_2X_2\sim N$；④ 可逆线性变换 $(Y_1,Y_2)\sim N$；⑤ 给出 $aX_1\pm bX_2$ 的四个数字特征。<br>
+    <b>潜台词是</b>：正态分布在所有分布里最特殊的一点，就是<b>"线性进、线性出"</b>——把正态向量乘一个矩阵、加一个常向量，出来的<b>还是正态向量</b>，只是参数按线性代数的规则变（均值向量左乘矩阵，协方差矩阵变成 $C\Sigma C^{\mathrm T}$）。③ 是一行的情形，④ 是两行的情形，⑤ 是 $C=\begin{bmatrix}a&amp;b\\ a&amp;-b\end{bmatrix}$ 的具体计算。<b>三条是同一条定理的三种切片。</b><br>
+    <b>所以能考</b>：① 只要看到"独立正态的线性组合"，<b>直接写 $N(\text{均值线性组合},\;\text{方差平方加权和})$，不要去做卷积</b>（<a href="#s4b">强 4.2</a>）；② 结论 ⑤ 的 $\rho_{Y_1Y_2}=\frac{a^2-b^2}{a^2+b^2}$ 是第 4 章的直接送分公式，<b>注意 $a=b$ 时 $\rho=0$，此时 $X_1+X_2$ 与 $X_1-X_2$ 独立</b>——这是数理统计里 $\bar X$ 与 $S^2$ 独立的雏形；③ ④ 里的 $\det C\ne0$ 若不满足（如 $Y_1=X_1+X_2,\;Y_2=2X_1+2X_2$），$(Y_1,Y_2)$ 会退化到一条直线上，<b>没有二维密度</b>。<br>
+    <span class="dock">扣分点</span>：$D(aX+bY)=a^2DX+b^2DY$ <b>只在独立（或不相关）时成立</b>，一般要写 $+2ab\,\mathrm{Cov}(X,Y)$。
+  </div>
+
+  <div class="key"><span class="tag">必记 ★★★ · 配方还原五参数（$D_{23}$ 化归经典形式）——基础讲完全没有，强化独有</span>
+    题目给你一坨指数 $f(x,y)=k_0\mathrm e^{-(ax^2+by^2+cxy+dx+ey+f)}$，问 $\mu_1,\mu_2,\sigma_1,\sigma_2,\rho$。<b>不要展开标准式去比对，用下面这套。</b><br>
+    <b>第一步（最值钱的一步，可以直接秒杀选择题）</b>：
+    $$\boxed{\rho=-\frac{c}{2\sqrt{ab}}}$$
+    <b>第二步</b>：由 $a=\dfrac1{2(1-\rho^2)\sigma_1^2}$、$b=\dfrac1{2(1-\rho^2)\sigma_2^2}$ 解出 $\sigma_1,\sigma_2$。<br>
+    <b>第三步</b>：设配方为 $a(x+m)^2+b(y+n)^2+c(x+m)(y+n)$，比较一次项系数得
+    $$\begin{cases}2am+cn=d,\\ 2bn+cm=e,\end{cases}\qquad 则\quad \mu_1=-m,\;\;\mu_2=-n.$$
+    <b>第四步（验算，别跳）</b>：常数项必须满足 $am^2+bn^2+cmn=f$，且 $k_0=\dfrac1{2\pi\sigma_1\sigma_2\sqrt{1-\rho^2}}$。<b>书上眉批明说"此式不独立"</b>——它由前面推出，所以它<b>只能</b>拿来验算，不能拿来解参数。
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强化例（书 p.30–31） ✔</span>设 $f(x,y)=\dfrac1{2\pi}\mathrm e^{-\left(x^2+\frac{y^2}2+xy-11x-7y+\frac{65}2\right)}$，求 $(X,Y)$ 服从的分布。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$(X,Y)\sim N\left(4,\,3;\,1,\,2;\,-\dfrac{\sqrt2}{2}\right)$</span>（sympy 逐参数复算并通过常数项与 $k_0$ 双重验算）
+      <span class="lab">四步走</span>读系数：$a=1,\;b=\frac12,\;c=1,\;d=-11,\;e=-7,\;f=\frac{65}2,\;k_0=\frac1{2\pi}$。<br>
+      <b>① $\rho$</b>：$\rho=-\dfrac{c}{2\sqrt{ab}}=-\dfrac{1}{2\sqrt{1\cdot\frac12}}=-\dfrac1{\sqrt2}=-\dfrac{\sqrt2}2$，故 $1-\rho^2=\frac12$。<br>
+      <b>② $\sigma$</b>：$a=\frac1{2\cdot\frac12\cdot\sigma_1^2}=\frac1{\sigma_1^2}=1\Rightarrow\sigma_1=1$；$b=\frac1{\sigma_2^2}=\frac12\Rightarrow\sigma_2=\sqrt2$（<b>所以方差是 $\sigma_2^2=2$</b>）。<br>
+      <b>③ $\mu$</b>：$\begin{cases}2m+n=-11\\ m+n=-7\end{cases}\Rightarrow m=-4,\;n=-3\Rightarrow\mu_1=4,\;\mu_2=3$。<br>
+      <b>④ 验算</b>：$am^2+bn^2+cmn=16+\frac12\cdot9+(-4)(-3)=16+4.5+12=32.5=\frac{65}2$ ✓；
+      $k_0=\frac1{2\pi\cdot1\cdot\sqrt2\cdot\sqrt{1/2}}=\frac1{2\pi}$ ✓。<b>两处都对，参数就锁死了。</b><br>
+      <span class="lab">要害</span><b>$\rho$ 的符号来自 $c$ 的符号取反</b>：标准式里交叉项是 $-2\rho(\cdot)(\cdot)$，前面还有一个整体负号，两负相消后 $xy$ 的系数与 $\rho$ <b>反号</b>。这里 $c=+1\gt0\Rightarrow\rho\lt0$——<b>$X$ 与 $Y$ 负相关，等高线椭圆的长轴向左上方倾斜</b>（可以在 <a href="#s11">§11 模块三</a>里拖 $\rho$ 亲眼看这个转向）。<br>
+      <span class="lab">别踩</span>记成 $(X,Y)\sim N(4,3;1,\sqrt2;-\frac{\sqrt2}2)$ 是<b>错的</b>——记号里第三、四位是<b>方差</b> $\sigma_1^2=1,\sigma_2^2=2$。<b>$\sigma_2=\sqrt2$ 而 $\sigma_2^2=2$，这一格填错整道题作废。</b><br>
+      <span class="lab">提速</span>选择题只问 $\rho$ 时，<b>看一眼 $x^2,y^2,xy$ 三个系数、套 $\rho=-\frac{c}{2\sqrt{ab}}$，五秒出结果</b>，后面三步全部不用做。
+    </div>
+  </div>
+
+  <div class="link"><span class="tag">串联 · 二维正态的"椭圆"，是线代二次型的原班人马</span>
+    <b>接线性代数</b>：密度指数里的 $\left(\frac{x-\mu_1}{\sigma_1}\right)^2-2\rho(\cdot)(\cdot)+\left(\frac{y-\mu_2}{\sigma_2}\right)^2$ 是一个<b>二次型</b>，矩阵为 $\begin{bmatrix}1&amp;-\rho\\ -\rho&amp;1\end{bmatrix}$。$-1\lt\rho\lt1$ 保证它<b>正定</b>（顺序主子式 $1\gt0$、$1-\rho^2\gt0$）——<b>正定才使等高线是椭圆而不是双曲线，密度才可积</b>。<b>"$|\rho|\lt1$"这个限制不是随便写的，它就是正定条件。</b><br>
+    <b>接线代（合同变换）</b>：配方 $ax^2+by^2+cxy=a(x+m)^2+\cdots$ 就是<b>配方法化二次型为标准形</b>——你在线代第 6 章做过一模一样的事。<b>$\rho=-\frac{c}{2\sqrt{ab}}$ 本质上是在读二次型矩阵的非对角元。</b><br>
+    <b>接第 6 章</b>：$n$ 维正态的协方差矩阵 $\Sigma$ 必须<b>正定</b>；$\Sigma$ 是对角阵 $\Leftrightarrow$ 各分量两两独立——<b>结论 ⑥ 的 $n$ 维版</b>。<br>
+    <b>接 <a href="#s11">§11 模块三</a></b>：拖动 $\rho$ 时椭圆的<b>转向</b>，就是二次型矩阵<b>特征向量方向</b>的变化；$\rho=0$ 时特征向量是坐标轴，椭圆<b>正着放</b>，此时密度可分离变量 ⟹ 独立。<b>"椭圆正不正"和"独不独立"是同一件事。</b>
+  </div>
+
+  <h3 id="s4b">正态相关例题</h3>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 3.5 ✔</span>设随机变量 $X\sim N(0,1)$，在 $X=x$ 的条件下，随机变量 $Y\sim N(x,1)$，则 $(X,Y)$ 的概率密度 $f(x,y)=$＿＿。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$f(x,y)=\dfrac1{2\pi}\mathrm e^{-\frac{2x^2+y^2-2xy}{2}}$</span>（sympy 对指数逐项展开比对通过）
+      <span class="lab">分析</span>又是"边缘 + 条件 ⟹ 联合"（与 <a href="#s3b">基 3.4</a> 同一起手式）：
+      $f_X(x)=\frac1{\sqrt{2\pi}}\mathrm e^{-\frac{x^2}2}$，$f_{Y\mid X}(y\mid x)=\frac1{\sqrt{2\pi}}\mathrm e^{-\frac{(y-x)^2}2}$（<b>均值是 $x$，方差是 1</b>）。相乘：
+      $$f(x,y)=\frac1{2\pi}\mathrm e^{-\frac{x^2+(y-x)^2}{2}}=\frac1{2\pi}\mathrm e^{-\frac{2x^2-2xy+y^2}{2}}.$$
+      <span class="lab">要害 ★ 反向验证</span>用上面的<b>配方还原</b>倒查这个答案：$a=1,b=\frac12,c=-1$（注意指数里 $-2xy/2=-xy$，故 $c=-1$），
+      $\rho=-\frac{-1}{2\sqrt{1/2}}=\frac{\sqrt2}{2}$，$1-\rho^2=\frac12$，$\sigma_1^2=\frac1{2\cdot\frac12\cdot1}=1$，$\sigma_2^2=\frac1{2\cdot\frac12\cdot\frac12}=2$，一次项全为 0 故 $\mu_1=\mu_2=0$。
+      即 $(X,Y)\sim N\left(0,0;1,2;\frac{\sqrt2}2\right)$——<b>与题设完全自洽</b>：$Y=X+\varepsilon$（$\varepsilon\sim N(0,1)$ 独立），故 $DY=1+1=2$ ✓，$\mathrm{Cov}(X,Y)=DX=1$，$\rho=\frac1{1\cdot\sqrt2}=\frac{\sqrt2}2$ ✓。<br>
+      <b>把"求出来的 $f$"再用配方法还原一遍，是这类填空题的最强验算——两分钟换一个确定的答案。</b><br>
+      <span class="lab">书上的注</span>"考题中不会单独考查这一点，会结合其他知识点一起命题"——它通常是大题的第 (1) 问，后面接着问边缘、条件或 $Z=X+Y$ 的分布。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 4.2 ✔</span>设随机变量 $X,Y$ 相互独立，且 $X\sim N(0,2)$，$Y\sim N(-2,2)$。若 $P\{2X+Y\lt a\}=P\{X\gt Y\}$，则 $a=$（　）。<br>
+    (A) $-2-\sqrt{10}$　(B) $-2+\sqrt{10}$　(C) $-2-\sqrt6$　(D) $-2+\sqrt6$</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(B) $a=\sqrt{10}-2$</span>（sympy 解方程 + 蒙特卡洛 $10^7$：两边概率实测均为 $0.8413$，一致）
+      <span class="lab">分析</span>用结论 ③（<b>独立正态的线性组合仍正态</b>），把两边都<b>化归成标准正态</b>（$D_{23}$）：<br>
+      左边：$E(2X+Y)=2\cdot0+(-2)=-2$，$D(2X+Y)=4DX+DY=4\times2+2=10$（<b>独立才能这样加方差</b>），故 $2X+Y\sim N(-2,10)$，
+      $$P\{2X+Y\lt a\}=P\left\{\frac{2X+Y+2}{\sqrt{10}}\lt\frac{a+2}{\sqrt{10}}\right\}=\Phi\Big(\frac{a+2}{\sqrt{10}}\Big).$$
+      右边：$X-Y\sim N(0-(-2),\,2+2)=N(2,4)$，
+      $$P\{X\gt Y\}=P\{X-Y\gt0\}=P\left\{\frac{X-Y-2}{2}\gt\frac{0-2}{2}\right\}=1-\Phi(-1)=\Phi(1).$$
+      令 $\frac{a+2}{\sqrt{10}}=1$，得 $a=\sqrt{10}-2$。<br>
+      <span class="lab">要害</span>① <b>$N(0,2)$ 里的 2 是方差不是标准差</b>，$\sigma=\sqrt2$。$D(2X)=4DX=8$ 不是 $2\times2$。<b>这是本题唯一的坑。</b><br>
+      ② <b>$D(X-Y)=DX+DY$（不是相减！）</b>——独立时 $D(X\pm Y)=DX+DY$，方差永远相加。<br>
+      ③ <b>$\{X\gt Y\}$ 要先移项成 $\{X-Y\gt0\}$ 再标准化</b>，不要试图算二重积分。<br>
+      <span class="lab">数值感</span>$\Phi(1)\approx0.8413$，$\sqrt{10}-2\approx1.162$。选项里只有 (B) 在正数区间——<b>由 $P=\Phi(1)\gt\frac12$ 可知 $\frac{a+2}{\sqrt{10}}\gt0$ 即 $a\gt-2$，(A)(C) 当场排除；再由方差 $10$（不是 6）排除 (D)。三秒选出 (B)，一步计算都不用。</b>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 3.6 ✔</span>设 $(X,Y)$ 的概率密度为 $f(x,y)=\dfrac{1+\sin x\sin y}{2\pi}\mathrm e^{-\frac12(x^2+y^2)}\;(-\infty\lt x,y\lt+\infty)$，则两个边缘概率密度 $f_X(x),f_Y(y)$ 分别为＿＿。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$f_X(x)=\dfrac1{\sqrt{2\pi}}\mathrm e^{-\frac{x^2}2}$，$f_Y(y)=\dfrac1{\sqrt{2\pi}}\mathrm e^{-\frac{y^2}2}$——<b>两个边缘都是标准正态</b></span>（sympy 复算通过）
+      <span class="lab">分析</span>拆成两项积分：
+      $$f_X(x)=\frac1{2\pi}\mathrm e^{-\frac{x^2}2}\underbrace{\int_{-\infty}^{+\infty}\mathrm e^{-\frac{y^2}2}\mathrm dy}_{=\sqrt{2\pi}}+\frac{\sin x}{2\pi}\mathrm e^{-\frac{x^2}2}\underbrace{\int_{-\infty}^{+\infty}\sin y\cdot\mathrm e^{-\frac{y^2}2}\mathrm dy}_{=0\;(\text{奇函数在对称区间})}=\frac1{\sqrt{2\pi}}\mathrm e^{-\frac{x^2}2}.$$
+      由对称性 $f_Y$ 同理。<br>
+      <span class="lab">要害 ★★★ 这是本章最重要的反例</span><b>两个边缘都是 $N(0,1)$，但联合分布不是二维正态</b>（二维正态的密度里不可能出现 $\sin x\sin y$ 因子），而且 <b>$X$ 与 $Y$ 不独立</b>（$f(x,y)\ne f_X(x)f_Y(y)$，差了 $\frac{\sin x\sin y}{2\pi}\mathrm e^{-\frac12(x^2+y^2)}$ 这一项）。<br>
+      <b>它一次性击碎两个想当然</b>：① "两个正态的联合就是二维正态"——<b>错</b>（结论 ② 必须加"独立"）；② "边缘定得出联合"——<b>错</b>，边缘只是联合的影子，同一组边缘对应无穷多个联合分布。<br>
+      <span class="lab">串联</span>与 <a href="#s2b">习 3.2</a>（离散版：边缘完全相同却极度相依）和 <a href="#s10">基 3.12</a>（$\mathrm{Cov}=0$ 却不独立）构成<b>"反例三件套"</b>——<b>本章凡是要你判断"能不能反推"的题，答案八成是"不能"，请先想这三个反例。</b><br>
+      <span class="lab">提速</span>看到 $\int\text{奇函数}\cdot\mathrm e^{-y^2/2}\mathrm dy$ 在 $(-\infty,+\infty)$ 上，<b>直接判 0，不要动笔算</b>。$\sin y$ 奇、$\mathrm e^{-y^2/2}$ 偶，乘积奇。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 4.4 ✔</span>设随机变量 $X$ 与 $Y$ 相互独立，且 $X\sim B\left(1,\frac13\right)$，$Y\sim B\left(2,\frac12\right)$，则 $P\{X=Y\}=$＿＿。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$P\{X=Y\}=\dfrac13$</span>（sympy + 蒙特卡洛 $10^7$ 实测 $0.33331$）
+      <span class="lab">分析</span>$D_{22}$ <b>转换等价表述</b>：$\{X=Y\}$ 不是一个格子，要拆成"取值相同"的<b>所有</b>情形的并。
+      $X$ 只能取 $0,1$：$X\sim\begin{pmatrix}0&amp;1\\ \frac23&amp;\frac13\end{pmatrix}$；$Y$ 取 $0,1,2$：$Y\sim\begin{pmatrix}0&amp;1&amp;2\\ \frac14&amp;\frac12&amp;\frac14\end{pmatrix}$。
+      $$P\{X=Y\}=P\{X=0,Y=0\}+P\{X=1,Y=1\}\overset{\text{独立}}=\frac23\cdot\frac14+\frac13\cdot\frac12=\frac16+\frac16=\frac13 .$$
+      <span class="lab">要害</span><b>$Y=2$ 那一列不参与</b>——因为 $X$ 取不到 2。<b>拆并集时以"取值范围较小的那个变量"为准</b>，能少写一半项，也不会漏项。<br>
+      <span class="lab">别踩</span>$B(2,\frac12)$ 的分布律是 $C_2^k(\frac12)^2$，即 $\frac14,\frac12,\frac14$——<b>中间那项是 $\frac12$ 不是 $\frac14$</b>（$C_2^1=2$）。漏掉组合数是这里唯一的失分点。<br>
+      <span class="lab">串联</span>"两个独立离散变量取值相同的概率" $=\sum_k p_kq_k$，这正是 <a href="#s8">§8</a> 里 $\max/\min$ 求和公式中<b>对角项只数一遍</b>的那一项。
+    </div>
+  </div>
+
+  <!-- ================= s5 独立性 ================= -->
+  <h2 id="s5"><span class="idx">五</span>独立性：三个等价刻画 + 证"不独立"的三种取法　<span class="layer L-base">基础</span><span class="layer L-str">强化</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/概率论与数理统计/03_多维随机变量及其分布/概率_第03章_基础30讲.pdf">📄 基础 p.75–79</a>
+  <a class="pg" href="../../张宇系列_分章易识别版/概率论与数理统计/03_多维随机变量及其分布/概率_第03章_强化9讲_第4讲_多维随机变量及其分布.pdf">📄 强化第4讲 p.33</a>
+
+  <div class="key"><span class="tag">必记 ★★★ · 二维随机变量独立的三个等价刻画（书上蓝框"考试重点"）</span>
+    $$X,Y\ \text{相互独立}\;\overset{\text{定义}}\Longleftrightarrow\;F(x,y)=F_X(x)F_Y(y)\quad(\forall x,y)$$
+    $$\overset{\text{离散型}}\Longleftrightarrow\;p_{ij}=p_{i\cdot}\,p_{\cdot j}\quad(\forall i,j)\qquad\qquad
+      \overset{\text{连续型}}\Longleftrightarrow\;f(x,y)=f_X(x)f_Y(y)\quad(\forall x,y)$$
+    书上分别标注：离散型那条"<b>虽然简单，但经常考</b>"，连续型那条"<b>几乎必考</b>"。<br>
+    <b>独立的三条性质</b>：<br>
+    ① <b>整体独立 ⟹ 部分独立</b>（书上眉批类比线代：整体向量组线性无关 ⟹ 部分向量组线性无关）；<br>
+    ② 独立 ⟹ <b>条件分布 = 边缘分布</b>：$P\{X=x_i\mid Y=y_j\}=P\{X=x_i\}$，$f_{X\mid Y}(x\mid y)=f_X(x)$——"$Y$ 取什么值不影响 $X$ 的概率"；<br>
+    ③ 独立 ⟹ <b>各自的连续函数也独立</b>：$X_1,\dots,X_n$ 独立、$g_i$ 连续 $\Rightarrow g_1(X_1),\dots,g_n(X_n)$ 独立。<br>
+    <b>③ 的"分组版"</b>（书上眉批：分成若干组，<b>变量不重叠</b>）：$g_1(X_{11},\dots,X_{1t_1}),\dots,g_n(X_{n1},\dots,X_{nt_n})$ 也相互独立。<b>"变量不重叠"五个字是全部条件</b>。
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 性质 ③ 的"变量不重叠"，是第 6 章数理统计的地基</span>
+    <b>书上说</b>：若 $X_1,\dots,X_n$ 相互独立，$g_i$ 为连续函数，则 $g_1(X_1),\dots,g_n(X_n)$ 相互独立；分组时要求<b>变量不重叠</b>。<br>
+    <b>潜台词是</b>：独立性可以<b>穿过任意函数</b>——$X\perp Y\Rightarrow X^2\perp\mathrm e^Y\Rightarrow\sin X\perp(Y^3+1)$，随便套。但一旦两组用了<b>同一个</b> $X_i$，独立性立刻失效。<br>
+    <b>所以能考</b>：① $\bar X=\frac1n\sum X_i$ 与 $S^2$ 的独立性（第 6 章的核心定理）靠的就是这条；② $\chi^2(n)+\chi^2(m)=\chi^2(n+m)$ 要求两组样本<b>不重叠</b>；③ 本章 <a href="#s5b">基 3.6</a> 恰恰是它的<b>反例方向</b>：$X$ 与 $|X|$ 用的是<b>同一个</b> $X$，变量完全重叠，所以<b>必然不独立</b>——<b>不用算就知道答案，算只是为了拿分。</b><br>
+    <span class="dock">扣分点</span>：证明题里写"由性质③，$X$ 与 $|X|$ 独立"是<b>致命错误</b>——性质 ③ 要的是 $g_1(X)$ 与 $g_2(Y)$——括号里必须是<b>两个不同</b>的变量。
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 三个等价刻画里，为什么"定义"那条几乎不用，另两条却必考</span>
+    <b>书上说</b>：定义是 $F=F_XF_Y$，离散型那条"虽然简单，但经常考"，连续型那条"几乎必考"。<br>
+    <b>潜台词是</b>：三条虽等价，但<b>可操作性天差地别</b>。$F(x,y)$ 通常题目<u>不给</u>（给的是 $p_{ij}$ 或 $f$），要先积出来才能验，成本最高；而 $p_{ij}$ 与 $f$ 是<b>题目直接给的东西</b>，一眼就能比。<br>
+    <b>所以能考</b>：<b>定义那条只在两种场合出场</b>——① <b>证"不独立"</b>时（因为它只需要<u>一个</u>点，而 $p_{ij}$/$f$ 那两条要验所有点，用来证否反而麻烦；见 <a href="#s5b">基 3.6</a>）；② 遇到<b>没有密度也没有分布律</b>的怪东西（如 $(X,|X|)$ 这种奇异分布），<b>只有 $F$ 存在</b>。<b>剩下 90% 的场合用 $p_{ij}$ 或 $f$。</b><br>
+    <b>一句话决策</b>：<b>要证独立 ⟹ 用 $p_{ij}=p_{i\cdot}p_{\cdot j}$ 或 $f=f_Xf_Y$（全体验证）；要证不独立 ⟹ 用 $F(x_0,y_0)\ne F_X(x_0)F_Y(y_0)$（一个反例）。</b>方向反了，工作量翻十倍。
+  </div>
+
+  <div class="key"><span class="tag">必记 ★★★ · 强化独有：离散型"每行元素对应成比例"判独立（提速神器）</span>
+    设联合分布律表中所有 $p_{ij}\ne0$。由 $p_{ij}=p_{i\cdot}p_{\cdot j}$ 可写成矩阵外积
+    $$\begin{bmatrix}p_{1\cdot}\\ p_{2\cdot}\end{bmatrix}\begin{bmatrix}p_{\cdot1}&amp;p_{\cdot2}&amp;p_{\cdot3}\end{bmatrix}
+    =\begin{bmatrix}p_{11}&amp;p_{12}&amp;p_{13}\\ p_{21}&amp;p_{22}&amp;p_{23}\end{bmatrix}
+    \quad\Longleftrightarrow\quad \frac{p_{11}}{p_{21}}=\frac{p_{12}}{p_{22}}=\frac{p_{13}}{p_{23}} .$$
+    以上过程<b>可逆</b>，故有重要结论：<br>
+    <b>当 $p_{ij}\ne0$ 时，$X,Y$ 独立 $\Leftrightarrow$ 联合分布律的<u>每行元素对应成比例</u>。</b><br>
+    <b>用法</b>：拿到表，<b>不算边缘，直接横着看两行成不成比例</b>。成比例 → 独立；不成 → 不独立。<b>一眼的事。</b>
+  </div>
+
+  <div class="link"><span class="tag">串联 · "成比例"就是线代的秩 1，也是 408 里的"可分解"</span>
+    <b>接线性代数</b>：$p_{ij}=p_{i\cdot}p_{\cdot j}$ 说的是<b>联合分布律矩阵 $P$ 是一个列向量乘行向量的外积</b>，即 $\mathrm{rank}(P)=1$。"每行成比例"正是秩 1 矩阵的行判据。<b>所以"独立"在矩阵语言里就是"秩 1"</b>——你在线代第 3 章学的"向量组线性相关"在这里直接复用。<br>
+    <b>接连续型</b>：$f(x,y)=f_X(x)f_Y(y)$ 是同一件事的连续版——<b>二元函数能分离变量</b>。所以判连续型独立还有一个更快的口诀：<b>先看 $f$ 能不能写成"只含 $x$ 的因子 × 只含 $y$ 的因子"，再看正概率区域是不是矩形</b>（两者缺一不可，见下方陷阱）。<br>
+    <b>接 408（数据结构 / 组成原理）</b>："能分解成两个一维的乘积"和<b>二维数组的行主序寻址 $\mathrm{Loc}(i,j)=\mathrm{Loc}(0,0)+(i\cdot n+j)\cdot L$</b>、<b>页式存储把地址劈成"页号 + 页内偏移"</b>是同构的想法：<b>两个维度互不干扰时，整体信息 = 各维度信息的直积</b>。独立性就是概率世界里的"维度可分离"。
+  </div>
+
+  <div class="trap"><span class="tag">陷阱 · 连续型判独立：$f$ 能因式分解<b>还不够</b>，区域必须是"矩形"</span>
+    考虑 <a href="#s6">强 5.3</a> 的 $f(x,y)=8xy$ 在 $0\lt x\lt y\lt1$ 上。被积函数 $8xy=(8x)\cdot(y)$ <b>明明能分离变量</b>，但 $X,Y$ <b>不独立</b>！<br>
+    原因：正概率区域 $\{0\lt x\lt y\lt1\}$ 是<b>三角形</b>不是矩形——<b>"$x$ 的取值范围依赖于 $y$"本身就是一种依赖关系</b>。<br>
+    <b>正确的两步判据</b>：<br>
+    <b>① 区域必须是"矩形"</b>（可以无界，如 $x\gt0,y\gt0$），即 $x$ 的范围与 $y$ 无关、$y$ 的范围与 $x$ 无关；<br>
+    <b>② 在该矩形上 $f$ 能分离成 $g(x)h(y)$。</b><br>
+    <b>两条都满足才独立，缺一不可。</b>反过来，<b>只要区域不是矩形（三角形、圆、月牙、拱形），立刻可判不独立，一秒结论。</b><br>
+    <span class="dock">扣分点</span>：本章的 <a href="#s3b">基 3.3</a>（三角形）、<a href="#s3b">基 3.4</a>（三角形）、<a href="#s3b">习 3.12(1)</a>（角形）、<a href="#s3b">习 3.13</a>（月牙）、<a href="#s10">基 3.12</a>（圆）<b>全部不独立</b>，靠的就是这一条。<b>而 <a href="#s6">基 3.8</a> 的区域 $x\gt0,0\lt y\lt1$ 是矩形、$f=2y\mathrm e^{-x}$ 可分离，所以独立</b>——本章唯一的正面例子。
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 独立性性质 ② 的实用价值：它把"条件"这个麻烦东西直接抹掉</span>
+    <b>书上说</b>：独立时 $P\{X=x_i\mid Y=y_j\}=P\{X=x_i\}$、$f_{X\mid Y}(x\mid y)=f_X(x)$；眉批"$Y$ 的取值不影响 $X$ 的概率"。<br>
+    <b>潜台词是</b>：<b>独立性是一张"免条件卡"</b>。本章大题里凡是出现 $P\{\cdots\mid X_3=0\}$ 这样的条件概率，<b>只要能说出"由独立性"，条件就能直接删掉</b>——<a href="#s9">基 3.10</a> 的卷面上，这一步单独占 3 分。<br>
+    <b>所以能考</b>：① 全概率公式的每一支都靠它化简（<a href="#s9">§9</a> 五道题全部用到）；② 反过来，若题目<b>没说独立</b>，条件就<b>删不掉</b>，必须老实算条件分布——<b>看到"独立"两个字要立刻在草稿上圈出来，它值 3 分</b>；③ 判独立的第四条等价说法：<b>"条件分布 = 边缘分布"也可以拿来判独立</b>（<a href="#s5b">习 3.9</a> 的验算就用了这个）。<br>
+    <span class="dock">扣分点</span>：写"$P\{A\mid X_3=0\}=P(A)$"时<b>必须点名"由 $X_3$ 与 $X_1,X_2$ 相互独立"</b>。不写理由等于凭空丢条件，这是本章大题最常见的整段扣分。
+  </div>
+
+  <div class="key"><span class="tag">必记 ★★★ · 证明"不独立"的标准套路（$P_4$ 逆否 + $D_{41}$ 试取特殊情形）</span>
+    $X,Y$ <b>不</b>独立 $\Leftrightarrow$ <b>存在</b> $x_0,y_0$ 使 $F(x_0,y_0)\ne F_X(x_0)F_Y(y_0)$。<b>只要找到一组反例即可，不必对所有点验证。</b><br>
+    <b>怎么"找"？书上给了三种取法（$D_{41}$ 试取特殊情形），取 $x_0,y_0$ 使 $0\lt P\{X\le x_0\},P\{Y\le y_0\}\lt1$，同时满足下列之一：</b>
+    <div class="gridwrap"><table>
+      <tr><th>取法</th><th>构造</th><th>为什么一击必杀</th></tr>
+      <tr><td>①</td><td>$\{X\le x_0\}\subseteq\{Y\le y_0\}$</td><td>此时 $P\{X\le x_0,Y\le y_0\}=P\{X\le x_0\}$，而右边 $=P\{X\le x_0\}\cdot\underbrace{P\{Y\le y_0\}}_{\lt1}$ <b>严格更小</b></td></tr>
+      <tr><td>②</td><td>$\{Y\le y_0\}\subseteq\{X\le x_0\}$</td><td>同理（把两者角色对调）</td></tr>
+      <tr><td>③</td><td>$\{X\le x_0,Y\le y_0\}=\varnothing$</td><td>此时左边 $=0$，而右边是<b>两个正数的乘积 $\gt0$</b></td></tr>
+    </table></div>
+    <b>三种取法的共同点：都是让"交事件"退化</b>——要么退化成其中一个（包含），要么退化成空集。<b>退化了就一定不等于两个真分数的乘积。</b>
+  </div>
+
+  <h3 id="s5b">独立性例题</h3>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 3.6 ✔</span>设随机变量 $X$ 的概率密度为 $f(x)=\dfrac12\mathrm e^{-|x|},\;x\in(-\infty,+\infty)$，证明：$X$ 与 $|X|$ <b>不独立</b>。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">取 $x_0=1$，由 $\{|X|\le1\}\subset\{X\le1\}$ 得 $P\{X\le1,|X|\le1\}=1-\mathrm e^{-1}\ne\left(1-\frac12\mathrm e^{-1}\right)\left(1-\mathrm e^{-1}\right)=P\{X\le1\}P\{|X|\le1\}$</span>（sympy 复算两个概率并验证不等；蒙特卡洛 $10^7$：$P\{X\le1\}=0.81606$、$P\{|X|\le1\}=0.63212$、联合 $=0.63212$，与解析一致）
+
+      <div class="think"><span class="th">💭 思路 · 拿到题先想什么</span>
+        <ol>
+          <li><b>先确认这题"必然不独立"，再考虑怎么写。</b>$X$ 与 $|X|$ 用的是<b>同一个</b>随机变量——知道了 $X$ 就完全知道 $|X|$，依赖到了极致。<b>所以本题不是"判断"，是"证明"，你要提供的是一个能写在卷面上的严格反例。</b></li>
+          <li><b>先想有几条路，再挑最短的。</b>书上分析给了三条：① 求 $|X|$ 的分布函数再验 $F(x,y)\ne F_XF_Y$；② 求联合概率密度；③ <b>直接按定义找 $x_0$</b>。<b>书上明说"本题最优解法是根据定义找 $x_0$"</b>——前两条要算新分布，第三条只用算两个数。</li>
+          <li><b>怎么找 $x_0$？用"取法①"：让一个事件包含另一个。</b>注意 $\{|X|\le a\}=\{-a\le X\le a\}\subset\{X\le a\}$ 对<b>任何 $a\gt0$</b> 都成立——包含关系是<b>白送</b>的，取 $x_0=1$ 只是为了数字好看。</li>
+          <li>剩下的就是算两个一元积分。$\frac12\mathrm e^{-|x|}$ 要<b>分段去绝对值</b>：$x\lt0$ 时是 $\frac12\mathrm e^{x}$，$x\gt0$ 时是 $\frac12\mathrm e^{-x}$。算 $P\{|X|\le1\}$ 时用<b>偶函数对称性</b>可以少算一半。</li>
+        </ol>
+      </div>
+
+      <div class="paper"><span class="phead">✍️ 考场卷面（按 10 分估）</span>
+        <div class="step"><b>证</b>　取 $x_0=1$。<span class="pt">⛳ 1分</span></div>
+        <div class="step">由 $f(x)=\dfrac12\mathrm e^{-|x|}$ 得
+        $$P\{X\le1\}=\frac12\int_{-\infty}^{1}\mathrm e^{-|x|}\mathrm dx=\frac12\int_{-\infty}^{0}\mathrm e^{x}\mathrm dx+\frac12\int_{0}^{1}\mathrm e^{-x}\mathrm dx=\frac12+\frac12(1-\mathrm e^{-1})=1-\frac12\mathrm e^{-1}. \tag{1}$$<span class="pt">⛳ 3分</span></div>
+        <div class="step">又 $\mathrm e^{-|x|}$ 为<b>偶函数</b>，故
+        $$P\{|X|\le1\}=\frac12\int_{-1}^{1}\mathrm e^{-|x|}\mathrm dx=\int_0^1\mathrm e^{-x}\mathrm dx=1-\mathrm e^{-1}. \tag{2}$$<span class="pt">⛳ 2分</span></div>
+        <div class="step">因事件 $\{|X|\le1\}\subset\{X\le1\}$，即 $\{|X|\le1\}\cap\{X\le1\}=\{|X|\le1\}$，由 $A\subset B\Rightarrow P(A\cap B)=P(A)$ 得
+        $$P\{X\le1,\;|X|\le1\}=P\{|X|\le1\}=1-\mathrm e^{-1}. \tag{3}$$<span class="pt">⛳ 2分</span></div>
+        <div class="step">而由 (1)(2)，
+        $$P\{X\le1\}\cdot P\{|X|\le1\}=\Big(1-\frac12\mathrm e^{-1}\Big)(1-\mathrm e^{-1}). \tag{4}$$
+        因 $0\lt1-\dfrac12\mathrm e^{-1}\lt1$，故 (4) 式 $\lt1-\mathrm e^{-1}=$ (3) 式，即
+        $$P\{X\le1,\;|X|\le1\}\ne P\{X\le1\}\cdot P\{|X|\le1\}.$$<span class="pt">⛳ 1分</span></div>
+        <div class="fin">由随机变量相互独立的定义，<b>$X$ 与 $|X|$ 不独立</b>，证毕。<span class="pt">⛳ 1分</span></div>
+      </div>
+
+      <div class="notekeep"><span class="nh">📌 批注 · 对照完再看这层</span>
+        <b>① 开头"取 $x_0=1$"这一句必须写</b>。证"不独立"是证<b>存在性</b>，卷面第一句就要把这个"存在的东西"亮出来。<b>书上的注还补了一句：本题中 $x_0$ 可取任意正数</b>——但卷面上只需给一个。<br>
+        <b>② 用了 $A\subset B\Rightarrow P(AB)=P(A)$ 要点名</b>（第 1 章的性质）。这是本题的<b>核心一步</b>，跳过去写等号，阅卷看不出你在用什么。<br>
+        <b>③ 最后的"$\ne$"要给理由</b>，不能只写"显然不等"。理由是 $1-\frac12\mathrm e^{-1}$ 是个<b>严格小于 1 的正数</b>，一个正数乘上它必然变小。<b>书上的"口算法"就是这个：$P\{X\le1\}P\{|X|\le1\}$ 显然是 $P\{|X|\le1\}$ 乘上一个小于 1 的正数，故必然不等。作为选择题可以口算，作为证明题要把这句话写出来。</b><br>
+        <b>④ 偶函数对称性用在 (2)</b>：$\frac12\int_{-1}^1\mathrm e^{-|x|}\mathrm dx=\frac12\cdot2\int_0^1\mathrm e^{-x}\mathrm dx$。<b>不用它也能做，但要分两段，多写两行。</b><br>
+        <b>⑤ 数值自查</b>：$P\{X\le1\}\approx0.816$，$P\{|X|\le1\}\approx0.632$，乘积 $\approx0.516$，而联合 $=0.632$。<b>差了 0.12，不是舍入误差量级——放心下结论。</b><br>
+        <b>⑥ 这个 $f$ 是"拉普拉斯分布"（双侧指数）</b>，书上配图旁的眉批提醒：$\int_{-\infty}^0\mathrm e^x\mathrm dx=1$ <b>最好记住</b>，本章多处要用。<br>
+        <span class="dock">扣分点</span>：把"证明不独立"写成"验证 $f(x,y)\ne f_X f_Y$"——<b>$(X,|X|)$ 根本没有联合概率密度</b>（它的概率全部集中在 $y=|x|$ 这条<u>零面积</u>的折线上，是<b>奇异分布</b>）。<b>沿着"求联合密度"这条路走会彻底走死</b>，这就是书上说"最优解法是找 $x_0$"的真正原因。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 4.1 ✔</span>设二维随机变量 $(X,Y)$ 的概率分布为
+    <div class="tabwrap"><table>
+      <tr><th>$X\backslash Y$</th><th>0</th><th>1</th><th>2</th></tr>
+      <tr><td>$-1$</td><td>0.1</td><td>0.1</td><td>$b$</td></tr>
+      <tr><td>1</td><td>$a$</td><td>0.1</td><td>0.1</td></tr>
+    </table></div>
+    若事件 $\{\max\{X,Y\}=2\}$ 与事件 $\{\min\{X,Y\}=1\}$ 相互独立，则 $\mathrm{Cov}(X,Y)=$（　）。<br>
+    (A) $-0.6$　(B) $-0.36$　(C) 0　(D) 0.48</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(B) $\mathrm{Cov}(X,Y)=-0.36$（此时 $a=0.2,\;b=0.4$）</span>（sympy 解方程 + 逐格求和复算 $EX=-0.2,\;EY=1.2,\;E(XY)=-0.6$）
+      <span class="lab">分析</span>三步：<b>翻译事件 → 解参数 → 算协方差</b>。<br>
+      <b>① 翻译（$D_{22}$ 转换等价表述）</b>——把 $\max/\min$ 落到具体格子上：<br>
+      　$\{\max\{X,Y\}=2\}$：要出现 2，只能是 $Y=2$（$X$ 取不到 2），故 $=\{(-1,2)\}\cup\{(1,2)\}$，$P=b+0.1$；<br>
+      　$\{\min\{X,Y\}=1\}$：最小值是 1 意味着<b>两个都 $\ge1$ 且至少一个 $=1$</b>。$X=-1$ 的整行出局，只剩 $(1,1)$ 与 $(1,2)$，$P=0.1+0.1=0.2$；<br>
+      　两事件的<b>交</b>：$\max=2$ 且 $\min=1$ ⟹ 只有 $(1,2)$，$P=0.1$。<br>
+      <b>② 解参数</b>：独立 $\Rightarrow0.2(b+0.1)=0.1\Rightarrow b=0.4$；归一性 $0.4+a+b=1\Rightarrow a=0.2$。<br>
+      <b>③ 算协方差</b>：
+      $E(XY)=(-1)(1)(0.1)+(-1)(2)(0.4)+(1)(1)(0.1)+(1)(2)(0.1)=-0.1-0.8+0.1+0.2=-0.6$；<br>
+      $EX=(-1)(0.6)+(1)(0.4)=-0.2$；　$EY=0\cdot0.3+1\cdot0.2+2\cdot0.5=1.2$；<br>
+      $\mathrm{Cov}(X,Y)=E(XY)-EX\cdot EY=-0.6-(-0.2)(1.2)=-0.6+0.24=-0.36$。<br>
+      <span class="lab">要害 ★</span>$\{\min=1\}$ 的翻译是全题唯一的门槛。<b>"$\min\{X,Y\}=1$"不等于"$X=1$ 或 $Y=1$"</b>——若 $X=-1,Y=1$ 则 $\min=-1\ne1$。<b>正确读法：$\min=k$ ⟺ 两者都 $\ge k$ 且至少一个 $=k$。</b>同理 $\max=k$ ⟺ 两者都 $\le k$ 且至少一个 $=k$。<b>这两条读法请当公式背。</b><br>
+      <span class="lab">别踩</span>$EX$ 里 $X=-1$ 的行概率是 $0.1+0.1+b=0.6$（<b>要先把 $b$ 代进去</b>），不是 $0.2$。很多人算 $EX$ 时忘了参数已解出。<br>
+      <span class="lab">数值感</span>$X$ 与 $Y$ <b>负相关</b>（$\mathrm{Cov}\lt0$）：看表就明白——$X=-1$ 那行的概率往<b>右</b>（$Y$ 大）偏（$0.1,0.1,0.4$），$X=1$ 那行往<b>左</b>偏（$0.2,0.1,0.1$）。<b>"$X$ 大时 $Y$ 小"就是负相关。算完抬头看一眼表，符号错了立刻发现。</b><br>
+      <span class="lab">串联</span>协方差是第 4 章内容，本题是<b>典型的跨章复合题</b>：第 3 章的表格 + 第 1 章的事件独立 + 第 4 章的 $\mathrm{Cov}$。<b>真题的选择题很喜欢这样三章合一。</b>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 3.9 ✔</span>设 $X$ 与 $Y$ <b>相互独立</b>，下表是 $X$ 与 $Y$ 的联合分布律以及两个边缘分布律中的部分数值，请将其余数值填入表中空白处。
+    <div class="tabwrap"><table>
+      <tr><th>$X\backslash Y$</th><th>$y_1$</th><th>$y_2$</th><th>$y_3$</th><th>$P\{X=x_i\}$</th></tr>
+      <tr><td>$x_1$</td><td></td><td>$\frac18$</td><td></td><td></td></tr>
+      <tr><td>$x_2$</td><td>$\frac18$</td><td></td><td></td><td></td></tr>
+      <tr><td>$P\{Y=y_j\}$</td><td>$\frac16$</td><td></td><td></td><td>1</td></tr>
+    </table></div></div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">见下表（加粗为填入值）</span>（sympy 按推导链复算 8 个数值，全部一致）
+      <div class="tabwrap"><table>
+        <tr><th>$X\backslash Y$</th><th>$y_1$</th><th>$y_2$</th><th>$y_3$</th><th>$p_{i\cdot}$</th></tr>
+        <tr><td>$x_1$</td><td><b>$\frac1{24}$</b></td><td>$\frac18$</td><td><b>$\frac1{12}$</b></td><td><b>$\frac14$</b></td></tr>
+        <tr><td>$x_2$</td><td>$\frac18$</td><td><b>$\frac38$</b></td><td><b>$\frac14$</b></td><td><b>$\frac34$</b></td></tr>
+        <tr><td>$p_{\cdot j}$</td><td>$\frac16$</td><td><b>$\frac12$</b></td><td><b>$\frac13$</b></td><td>1</td></tr>
+      </table></div>
+      <span class="lab">★ 推导链（顺序不能乱，每一步都只能用"已经填好的"）</span>
+      <div class="gridwrap"><table>
+        <tr><th>步</th><th>算什么</th><th>用什么</th><th>结果</th></tr>
+        <tr><td>1</td><td>$p_{11}$</td><td>列和：$p_{11}=p_{\cdot1}-p_{21}=\frac16-\frac18$</td><td>$\frac1{24}$</td></tr>
+        <tr><td>2</td><td>$p_{1\cdot}$</td><td><b>独立性</b>：$p_{11}=p_{1\cdot}p_{\cdot1}\Rightarrow p_{1\cdot}=\frac{p_{11}}{p_{\cdot1}}=\frac1{24}\div\frac16$</td><td>$\frac14$</td></tr>
+        <tr><td>3</td><td>$p_{2\cdot}$</td><td>行和归一：$1-p_{1\cdot}$</td><td>$\frac34$</td></tr>
+        <tr><td>4</td><td>$p_{\cdot2}$</td><td><b>独立性</b>：$p_{\cdot2}=\frac{p_{12}}{p_{1\cdot}}=\frac18\div\frac14$</td><td>$\frac12$</td></tr>
+        <tr><td>5</td><td>$p_{\cdot3}$</td><td>列和归一：$1-p_{\cdot1}-p_{\cdot2}$</td><td>$\frac13$</td></tr>
+        <tr><td>6–8</td><td>$p_{22},p_{13},p_{23}$</td><td><b>独立性</b>（外积）：$p_{2\cdot}p_{\cdot2},\;p_{1\cdot}p_{\cdot3},\;p_{2\cdot}p_{\cdot3}$</td><td>$\frac38,\;\frac1{12},\;\frac14$</td></tr>
+      </table></div>
+      <span class="lab">要害 ★</span><b>本题的机关是"从哪一格下手"。</b>表里只给了三个数，其中 <b>$p_{21}$ 与 $p_{\cdot1}$ 在同一列</b>——这是唯一能立刻做减法的地方，所以第一步必须是求 $p_{11}$。<b>凡是"填表题"，先扫一遍哪一行/哪一列的已知数最多，从那里开刀。</b><br>
+      <span class="lab">别踩</span>第 2 步用的是<b>独立性</b>（$p_{11}=p_{1\cdot}p_{\cdot1}$），不是行和——因为 $x_1$ 那一行只知道两个格子中的一个，做不了加法。<b>题干里"相互独立"四个字是全题的钥匙，没有它这张表填不出来。</b><br>
+      <span class="lab">收尾必做</span>填完<b>验两遍</b>：① 六个格子加起来 $=\frac1{24}+\frac18+\frac1{12}+\frac18+\frac38+\frac14=1$ ✓；② <b>每行成比例</b>：$\frac{1/24}{1/8}=\frac{1/8}{3/8}=\frac{1/12}{1/4}=\frac13$ ✓——三个比值全等于 $\frac13$，正好验证了独立性（也验证了 $\frac{p_{1\cdot}}{p_{2\cdot}}=\frac{1/4}{3/4}=\frac13$）。<b>这就是 §5 那条"每行成比例"判别法的正面用法。</b>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 3.1 ✔</span>设二维随机变量 $(X_1,Y_1)$ 和 $(X_2,Y_2)$ 的概率密度分别为 $f_1(x,y)$ 与 $f_2(x,y)$，令 $f(x,y)=af_1(x,y)+bf_2(x,y)$，若 $f(x,y)$ 是某二维连续型随机变量的概率密度，则 $a,b$ 满足条件（　）。<br>
+    (A) $a+b=1$　(B) $a\gt0$ 且 $b\gt0$　(C) $0\le a\le1,\;0\le b\le1$　(D) $a\ge0,\;b\ge0$ 且 $a+b=1$</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(D)</span>
+      <span class="lab">分析</span>密度的<b>充要条件是两条</b>，两条各管一个选项：<br>
+      <b>非负性</b> $f\ge0$：由 $f_1,f_2\ge0$，要保证对<b>任意</b>这样的 $f_1,f_2$ 都成立，必须 $a\ge0,\;b\ge0$；<br>
+      <b>归一性</b> $\iint f=a\iint f_1+b\iint f_2=a+b=1$。<br>
+      两条合起来正是 (D)。<br>
+      <span class="lab">要害</span>(A) 只有归一性、(B)(C) 只有非负性，<b>都是"必要不充分"</b>。<b>凡是问"充要条件"的选择题，先把定义里的条数数清楚（这里是 2 条），再看哪个选项恰好覆盖全部条数——不多不少。</b><br>
+      <span class="lab">别踩</span>(B) 写的是<b>严格</b>大于 0，把 $a=0$（即 $f=f_2$）排除掉了，<b>反而更窄</b>；(C) 允许 $a=b=0$，那 $f\equiv0$ 积分为 0，不是密度。<b>四个选项两两互不包含，只有 (D) 正好。</b><br>
+      <span class="lab">串联</span>这就是第 2 章"判分布形式大观"里"<b>密度只能做凸组合、不能随便相加</b>"的二维版——<b>$f$ 能凸组合，$F$ 也能凸组合，但 $\sqrt{f_1f_2}$ 不行、$f_1f_2$ 也不行</b>（$F$ 倒是可以相乘：$F_1F_2$ 仍是分布函数，因为它就是 $\max$ 的分布）。<b>把第 2 章那张表调出来对着看。</b>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 3.5 ✔</span>如果二维随机变量 $(X,Y)$ 的分布函数为
+    $$F(x,y)=\begin{cases}1-\mathrm e^{-\lambda_1x}-\mathrm e^{-\lambda_2y}+\mathrm e^{-\lambda_1x-\lambda_2y-\lambda_{12}\max\{x,y\}},&amp;x\gt0,\;y\gt0,\\ 0,&amp;\text{其他},\end{cases}$$
+    其中 $\lambda_1,\lambda_2,\lambda_{12}\gt0$，则 $X$ 和 $Y$ 的边缘分布函数分别为＿＿。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$F_X(x)=\begin{cases}1-\mathrm e^{-\lambda_1x},&amp;x\gt0\\ 0,&amp;其他\end{cases}$，$F_Y(y)=\begin{cases}1-\mathrm e^{-\lambda_2y},&amp;y\gt0\\ 0,&amp;其他\end{cases}$——<b>两个边缘都是指数分布</b></span>（sympy 取极限复算）
+      <span class="lab">分析</span>边缘 = 把另一个变量推到 $+\infty$：
+      $$F_X(x)=F(x,+\infty)=\lim_{y\to+\infty}\Big(1-\mathrm e^{-\lambda_1x}-\underbrace{\mathrm e^{-\lambda_2y}}_{\to0}+\underbrace{\mathrm e^{-\lambda_1x-\lambda_2y-\lambda_{12}\max\{x,y\}}}_{\to0}\Big)=1-\mathrm e^{-\lambda_1x}.$$
+      同理 $F_Y(y)=F(+\infty,y)=1-\mathrm e^{-\lambda_2y}$。<br>
+      <span class="lab">要害</span>第四项里 $y\to+\infty$ 时 $\max\{x,y\}=y$，指数是 $-\lambda_1x-(\lambda_2+\lambda_{12})y\to-\infty$，<b>整项趋于 0</b>。<b>不要被 $\max\{x,y\}$ 吓住——取极限时它就是那个趋于无穷的变量。</b><br>
+      <span class="lab">背景 · 这是什么分布</span>它叫 <b>Marshall–Olkin 二元指数分布</b>，实际背景是"两个元件受三种独立冲击：只打 1 号（率 $\lambda_1$）、只打 2 号（率 $\lambda_2$）、<b>同时打两个</b>（率 $\lambda_{12}$）"。$\lambda_{12}$ 就是<b>共同冲击</b>，也正是 $X,Y$ 相依的来源。<b>$\lambda_{12}=0$ 时 $F=F_XF_Y$，两者独立。</b><br>
+      <span class="lab">要害 ★</span><b>本题是"边缘看不出相依"的又一个例子</b>：两个边缘干干净净是 $E(\lambda_1),E(\lambda_2)$，完全看不到 $\lambda_{12}$ 的影子——<b>$\lambda_{12}$ 只活在联合分布里</b>。这和 <a href="#s4b">习 3.6</a>、<a href="#s2b">习 3.2</a> 是同一个道理，<b>"反例三件套"其实是四件</b>。<br>
+      <span class="lab">串联 · 408</span>"共同冲击导致相依"在 408 里叫<b>共享资源导致的耦合</b>：两个进程各自的等待时间看起来独立，但一旦共用同一把锁（共同冲击），它们的阻塞时间就相依了。<b>建模时最容易漏掉的正是这个 $\lambda_{12}$。</b>
+    </div>
+  </div>
+
+  <!-- ================= s6 函数分布 ================= -->
+  <h2 id="s6"><span class="idx">六</span>$Z=g(X,Y)$ 的分布：三条路，选对了省一半时间　<span class="layer L-base">基础</span><span class="layer L-str">强化</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/概率论与数理统计/03_多维随机变量及其分布/概率_第03章_基础30讲.pdf">📄 基础 p.79–86</a>
+  <a class="pg" href="../../张宇系列_分章易识别版/概率论与数理统计/03_多维随机变量及其分布/概率_第03章_强化9讲_第5讲_多维随机变量函数的分布.pdf">📄 强化第5讲 p.38–41</a>
+
+  <div class="key"><span class="tag">必记 · 三条路的分工（拿到题先选路，选错就是白算）</span>
+    <div class="gridwrap"><table>
+      <tr><th>路</th><th>公式</th><th>什么时候用</th><th>代价</th></tr>
+      <tr><td><b>① 分布函数法（定义法）</b></td><td>$F_Z(z)=P\{g(X,Y)\le z\}=\displaystyle\iint_{g(x,y)\le z}\!\!f(x,y)\mathrm dx\mathrm dy$，$f_Z=F_Z'$</td><td><b>任何时候都能用</b>；$g$ 不是加减乘除时<b>只能</b>用它</td><td>要<b>按 $z$ 分类讨论区域形状</b>，最费时</td></tr>
+      <tr><td><b>② 换元法（雅可比）</b></td><td>$f_{U,V}(u,v)=f[x(u,v),y(u,v)]\cdot|J|$，再积掉一个</td><td>$g$ 是<b>可逆变换</b>时最快；<b>要求 $(U,V)$ 联合密度时唯一的路</b></td><td>要凑一个"配角" $v$，要算 $J$</td></tr>
+      <tr><td><b>③ 卷积公式</b></td><td>$f_Z(z)=\int f(x,z-x)\mathrm dx$ 等四组（<a href="#s7">§7</a>）</td><td>$g$ 恰好是 $X\pm Y,XY,\frac XY$ 且<b>独立</b>时</td><td>公式要背，且<b>仍要定限</b></td></tr>
+    </table></div>
+    <b>书上的态度很明确</b>（$\S$四·3 注2 原话）：<b>"卷积公式均可由换元法经简单计算得出，无须再记卷积公式，也省去了使用卷积公式后关于变量和区域的复杂讨论。"</b><br>
+    结构图旁的眉批更直接：<b>"有了二重积分换元法，卷积公式不用再记，可用二重积分换元法推出所有卷积公式。"</b>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 三条路怎么选：看题目"问什么"，不是看"给什么"</span>
+    <b>书上说</b>：求概率密度前一般先求分布函数 $F(z)$，再求导得到 $f(z)$。<br>
+    <b>潜台词是</b>：选路的依据<b>不是 $g$ 长什么样，而是题目最终要什么</b>：<br>
+    ① 问 <b>$F_Z(z)$</b> ⟹ 走<b>分布函数法</b>（直接算，不用再积回去）；<br>
+    ② 问 <b>$f_Z(z)$</b> 且 $g$ 是加减乘除且独立 ⟹ 走<b>卷积</b>（一步到位）；<br>
+    ③ 问 <b>$(U,V)$ 的联合密度</b>，或 $g$ 是别的形状 ⟹ <b>只能换元</b>；<br>
+    ④ 有<b>离散变量</b>掺和 ⟹ 只能<b>全集分解</b>（<a href="#s9">§9</a>）。<br>
+    <b>所以能考</b>：<a href="#s6b">基 3.8</a> 与 <a href="#s6b">基 3.9</a> 书上各给了三种解法，就是要你<b>比较代价</b>。我在两题的批注里都列了行数对照——<b>同一道题，选错路要多写三到五行，考场上这就是一道选择题的时间。</b><br>
+    <span class="dock">扣分点</span>：走分布函数法时，<b>$f_Z=F_Z'$ 这一步不能忘</b>。答到 $F_Z$ 就停笔，后面的分全丢。
+  </div>
+
+  <div class="key"><span class="tag">必记 ★★★ · 换元法总公式（本章方法论核心，书 p.80）</span>
+    设 $(X,Y)\sim f(x,y)$，$\begin{cases}u=u(x,y)\\ v=v(x,y)\end{cases}$ 具有一阶连续偏导数，且存在<b>唯一</b>的反函数 $\begin{cases}x=x(u,v)\\ y=y(u,v)\end{cases}$，
+    $$J=\frac{\partial(x,y)}{\partial(u,v)}=\begin{vmatrix}\dfrac{\partial x}{\partial u}&amp;\dfrac{\partial x}{\partial v}\\[6pt] \dfrac{\partial y}{\partial u}&amp;\dfrac{\partial y}{\partial v}\end{vmatrix}=\left[\frac{\partial(u,v)}{\partial(x,y)}\right]^{-1}\ne0,$$
+    则 $\begin{cases}U=U(X,Y)\\ V=V(X,Y)\end{cases}$ 的<b>联合</b>概率密度为
+    $$\boxed{f_{U,V}(u,v)=f\big[x(u,v),\,y(u,v)\big]\cdot|J|}$$
+    再积掉一个变量得<b>边缘</b>：
+    $$f_U(u)=\int_{-\infty}^{+\infty}f[x(u,v),y(u,v)]\,|J|\,\mathrm dv,\qquad f_V(v)=\int_{-\infty}^{+\infty}f[x(u,v),y(u,v)]\,|J|\,\mathrm du.$$
+    <b>操作三步</b>：<b>凑配角 → 反解 + 算 $|J|$ → 换区域后积掉配角。</b>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 换元法为什么必须"凑一个配角 $v$"——因为换元要<b>保维数</b></span>
+    <b>书上说</b>（强 5.4 旁的眉批）：换元法保证两边同维；保证二重积分换元，<b>二元到二元、几元到几元，元不够，凑</b>；类似线性代数中二次型，换元保证维数相同。<br>
+    <b>潜台词是</b>：你真正想要的只有 $U=g(X,Y)$ 一个量，但二重积分的换元定理要求<b>两个新变量换两个旧变量</b>（否则雅可比行列式不是方阵，根本写不出来）。所以必须<b>随便再造一个 $V$</b> 把维数补齐，算完再把 $V$ <b>积掉</b>。<b>$V$ 是脚手架，用完就拆。</b><br>
+    <b>怎么凑 $V$？三条原则</b>：<br>
+    ① <b>最省事的选择是 $v=y$（或 $v=x$）</b>——本章所有例题都这么凑，此时 $J$ 的第二行是 $(0,1)$，行列式一眼可得；<br>
+    ② 保证<b>反解唯一</b>（这是定理的硬条件）；<br>
+    ③ 让<b>新区域好描述</b>——<a href="#s6b">强 5.3</a> 里凑 $u=\frac xy,v=y$ 后，三角形区域 $0\lt x\lt y\lt1$ 恰好变成<b>单位正方形</b> $0\lt u,v\lt1$，积分限直接是常数，这就是"凑得好"。<br>
+    <b>所以能考</b>：① 直接考 $Z=\frac XY$、$Z=XY$ 这类<b>非加减</b>的函数（卷积公式要背四组，换元法一套走天下）；② 考<b>求 $(U,V)$ 的联合密度</b>（<b>此时卷积公式完全无能为力，只能换元</b>）；③ 考 $|J|$ 算错的符号陷阱——<b>$J$ 要取绝对值，因为密度非负</b>。<br>
+    <span class="dock">扣分点</span>：$J=\frac{\partial(x,y)}{\partial(u,v)}$ 是<b>老变量对新变量</b>求导。写成 $\frac{\partial(u,v)}{\partial(x,y)}$ 会得到倒数，答案差一个 $J^2$ 因子。<b>记法：换元后 $\mathrm dx\mathrm dy=|J|\mathrm du\mathrm dv$，$J$ 在哪边就是哪边的"面积伸缩率"。</b>
+  </div>
+
+  <div class="link"><span class="tag">串联 · 雅可比在你学过的地方全部出现过，这里只是第四次</span>
+    <b>高数（二重积分换元）</b>：$\iint_D f(x,y)\mathrm dx\mathrm dy=\iint_{D'}f[x(u,v),y(u,v)]|J|\mathrm du\mathrm dv$——<b>本节的公式一字未改，只是把 $f$ 解释成密度</b>。极坐标 $J=r$ 就是它的特例（<a href="#s10">基 3.12(3)</a> 用的正是极坐标）。<br>
+    <b>高数（一元换元）</b>：$\mathrm dx=|\varphi'(t)|\mathrm dt$ 是一维的雅可比。<b>第 2 章一维函数分布的公式 $f_Y(y)=f_X[h(y)]|h'(y)|$ 就是 $n=1$ 的本节公式</b>——两者是同一个定理。<br>
+    <b>线性代数</b>：当变换是线性的 $\binom uv=C\binom xy$ 时，$J=\frac1{\det C}$。<b>结论 ④（可逆线性变换保持二维正态）要求 $\det C\ne0$，正是要 $J$ 存在。</b>"可逆"在概率里叫"反函数唯一"，在线代里叫"矩阵满秩"，<b>是同一个条件</b>。<br>
+    <b>408（组成原理）</b>：$|J|$ 是"从一个坐标系到另一个坐标系<b>几何度量上的伸缩系数</b>"（书上眉批原话）。这与<b>存储器地址映射</b>里"逻辑地址空间 → 物理地址空间"的<b>比例因子</b>是同一个概念——换一套坐标，度量要跟着换。
+  </div>
+
+  <h3 id="s6b">函数分布例题 · 三条路各走一遍</h3>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 3.8 ✔</span>设随机变量 $X,Y$ 相互独立，它们的概率密度分别为
+    $$f_X(x)=\begin{cases}\mathrm e^{-x},&amp;x\gt0\\ 0,&amp;\text{其他}\end{cases}\qquad f_Y(y)=\begin{cases}2y,&amp;0\lt y\lt1\\ 0,&amp;\text{其他}\end{cases}$$
+    (1) 求 $(X,Y)$ 的概率密度；(2) 求 $Z=X+Y$ 的概率密度。<br>
+    <span style="color:var(--muted);font-size:.86rem">（本题在书上给了<b>三种解法</b>：卷积公式、换元法、分布函数法——是本章的"方法对照标本"）</span></div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$f(x,y)=\begin{cases}2y\mathrm e^{-x},&amp;x\gt0,\;0\lt y\lt1\\ 0,&amp;其他\end{cases}$；　$f_Z(z)=\begin{cases}2z+2\mathrm e^{-z}-2,&amp;0\lt z\lt1\\ 2\mathrm e^{-z},&amp;z\gt1\\ 0,&amp;其他\end{cases}$</span>（sympy 三法各算一遍结果一致，并验 $\int f_Z=1$；蒙特卡洛 $10^7$ 按每格质量对拍，总变差 $\lt4\times10^{-3}$）
+
+      <div class="think"><span class="th">💭 思路 · 拿到题先想什么</span>
+        <ol>
+          <li><b>(1) 是白送的，但它在给 (2) 铺路。</b>独立 ⟹ $f=f_Xf_Y$，注意<b>把两个范围写在一起</b>：$x\gt0$ <b>且</b> $0\lt y\lt1$——这是一个<b>无界的横条</b>（矩形），<b>不是三角形</b>。书上眉批提醒："现在考题不会这样送分"，即真题里 (1) 一般不给，要你自己意识到独立可以拆。</li>
+          <li><b>(2) 选路。</b>$Z=X+Y$ 且独立 ⟹ 三条路都能走。<b>推荐顺序：卷积（最直接）→ 换元（最稳）→ 分布函数（最慢但最保险）。</b>三条路的<b>难点其实是同一个：定限</b>。</li>
+          <li><b>卷积三部曲（书上眉批的"三部曲"）</b>：<b>① 换字母</b>——把 $f_X(x)f_Y(z-x)$ 的两个非零条件写出来：$x\gt0$ 且 $0\lt z-x\lt1$，解得 $x\gt0$ 且 $z-1\lt x\lt z$；<b>② 换区域</b>——在 $xOz$ 平面上，这是夹在 $z=x$ 与 $z=x+1$ 之间的<b>斜带</b>；<b>③ 背口诀</b>——"求 $z$ 不积 $z$，不积先定限……"</li>
+          <li><b>分段点在哪？</b>看 $x$ 的下限：$\max\{0,z-1\}$。<b>$z\lt1$ 时下限是 0，$z\gt1$ 时下限是 $z-1$</b>——分段点 $z=1$ 就是这么来的。<b>"下限/上限里出现 $\max$ 或 $\min$，就是要分段的信号。"</b></li>
+          <li>若走换元法：凑 $v=y$，$\begin{cases}u=x+y\\v=y\end{cases}\Rightarrow\begin{cases}x=u-v\\y=v\end{cases}$，$|J|=1$。新区域由 $u-v\gt0,\;0\lt v\lt1$ 定出，即 $0\lt v\lt1$ 且 $v\lt u$。<b>再对 $v$ 积分，同样分 $u\lt1$ 与 $u\gt1$ 两段。</b></li>
+        </ol>
+      </div>
+
+      <div class="paper"><span class="phead">✍️ 考场卷面（按 12 分估；主线走卷积公式）</span>
+        <div class="step"><b>解</b>　(1) 因 $X$ 与 $Y$ 相互独立，故
+        $$f(x,y)=f_X(x)f_Y(y)=\begin{cases}2y\mathrm e^{-x},&amp;x\gt0,\;0\lt y\lt1,\\ 0,&amp;\text{其他}.\end{cases} \tag{1}$$<span class="pt">⛳ 2分</span></div>
+        <div class="step">(2) 由 $X,Y$ 相互独立，用卷积公式 $f_Z(z)=\displaystyle\int_{-\infty}^{+\infty}f_X(x)f_Y(z-x)\mathrm dx$，其中
+        $$f_X(x)f_Y(z-x)=\begin{cases}2(z-x)\mathrm e^{-x},&amp;x\gt0,\;0\lt z-x\lt1,\\ 0,&amp;\text{其他},\end{cases}$$
+        即被积函数非零的条件为 $x\gt0$ 且 $z-1\lt x\lt z$。<span class="pt">⛳ 3分</span></div>
+        <div class="step">当 $z\le0$ 时，上述条件无解，$f_Z(z)=0$；<span class="pt">⛳ 1分</span></div>
+        <div class="step">当 $0\lt z\lt1$ 时，$x$ 的范围为 $0\lt x\lt z$，
+        $$f_Z(z)=\int_0^z2(z-x)\mathrm e^{-x}\mathrm dx=2z\int_0^z\mathrm e^{-x}\mathrm dx-2\int_0^zx\mathrm e^{-x}\mathrm dx=2z+2\mathrm e^{-z}-2; \tag{2}$$<span class="pt">⛳ 3分</span></div>
+        <div class="step">当 $z\gt1$ 时，$x$ 的范围为 $z-1\lt x\lt z$，令 $t=z-x$ 得
+        $$f_Z(z)=\int_{z-1}^{z}2(z-x)\mathrm e^{-x}\mathrm dx=2\mathrm e^{-z}\int_0^1t\mathrm e^{t}\mathrm dt=2\mathrm e^{-z}. \tag{3}$$<span class="pt">⛳ 2分</span></div>
+        <div class="fin">综上，$Z=X+Y$ 的概率密度为
+        $f_Z(z)=\begin{cases}2z+2\mathrm e^{-z}-2,&amp;0\lt z\lt1,\\ 2\mathrm e^{-z},&amp;z\gt1,\\ 0,&amp;\text{其他}.\end{cases}$<span class="pt">⛳ 1分</span></div>
+      </div>
+
+      <div class="notekeep"><span class="nh">📌 批注 · 对照完再看这层</span>
+        <b>① 三条路的完整对照（书上全给了，值得各写一遍）</b>：
+        <div class="gridwrap"><table>
+          <tr><th>路</th><th>关键一步</th><th>行数</th></tr>
+          <tr><td>卷积</td><td>$x\gt0,\;z-1\lt x\lt z$，分 $z\lessgtr1$</td><td>约 6 行</td></tr>
+          <tr><td>换元</td><td>$u=x+y,v=y$，$|J|=1$，区域 $0\lt v\lt1,\;v\lt u$，$f_U(u)=\int_0^{\min\{u,1\}}\mathrm e^{-(u-v)}2v\,\mathrm dv$</td><td>约 7 行</td></tr>
+          <tr><td>分布函数</td><td>$F_Z(z)=\iint_{x+y\le z}f$，<b>三种区域形态</b>：$z\lt0$、$0\le z\lt1$、$z\ge1$；$0\le z\lt1$ 时 $F_Z=z^2-2z-2\mathrm e^{-z}+2$，$z\ge1$ 时 $F_Z=1-2\mathrm e^{-z}$，再求导</td><td>约 9 行</td></tr>
+        </table></div>
+        <b>三条路答案完全一致</b>（我已用 sympy 三算比对）。<b>考场首选卷积；但若题目问的是 $F_Z(z)$ 而不是 $f_Z(z)$，直接走分布函数法，省掉"再积回去"。</b><br>
+        <b>② $\int_0^z x\mathrm e^{-x}\mathrm dx=1-(1+z)\mathrm e^{-z}$</b> 要能秒写（分部积分）。这是本节最高频的小积分。<br>
+        <b>③ $z\gt1$ 时的换元 $t=z-x$ 是提速关键</b>：换完积分限变成 $0$ 到 $1$（<b>与 $z$ 无关</b>），$\mathrm e^{-z}$ 直接提到积分号外，剩下 $\int_0^1t\mathrm e^t\mathrm dt=1$。<b>不换元硬算也对，但要多算两个含 $z$ 的分部积分，极易出错。</b><br>
+        <b>④ 自查（必做）</b>：$\int_0^1(2z+2\mathrm e^{-z}-2)\mathrm dz+\int_1^{+\infty}2\mathrm e^{-z}\mathrm dz=(1-2\mathrm e^{-1}+2-2)+2\mathrm e^{-1}=1$ ✓。<b>还有一个更快的检查：$f_Z$ 在 $z=1$ 处应当<u>连续</u></b>（因为 $f_X,f_Y$ 都连续），左极限 $2+2\mathrm e^{-1}-2=2\mathrm e^{-1}$，右极限 $2\mathrm e^{-1}$ ✓。<b>分段函数在分段点对不上，就是定限错了。</b><br>
+        <b>⑤ 为什么正概率区域是矩形本题就独立</b>：见 <a href="#s5">§5 陷阱</a>——<b>本章唯一一道 $X,Y$ 真独立的连续型题</b>，其余全是三角形/圆/月牙，全都不独立。
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 3.9 ✔</span>设二维随机变量 $(X,Y)$ 在矩形区域 $D=\{(x,y)\mid 0\le x\le2,\;0\le y\le1\}$ 上服从均匀分布，求边长为 $X$ 和 $Y$ 的<b>矩形面积</b> $Z$ 的概率密度。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$f_Z(z)=\begin{cases}\dfrac12(\ln2-\ln z),&amp;0\lt z\lt2\\ 0,&amp;其他\end{cases}$</span>（sympy 三法一致并验归一性；蒙特卡洛 $10^7$ 按格质量对拍通过）
+      <span class="lab">分析（换元法，最短）</span>$f(x,y)=\frac1{S_D}=\frac12$ 于 $D$ 上。令 $\begin{cases}u=xy\\ v=y\end{cases}\Rightarrow\begin{cases}x=\frac uv\\ y=v\end{cases}$（$v\ne0$），
+      $$J=\begin{vmatrix}\frac1v&amp;-\frac u{v^2}\\ 0&amp;1\end{vmatrix}=\frac1v,\qquad f_{U,V}(u,v)=\frac12\cdot\frac1{|v|}=\frac1{2v}\quad(v\gt0).$$
+      新区域：$0\le\frac uv\le2,\;0\le v\le1\Rightarrow \frac u2\le v\le1$（且 $0\lt u\lt2$）。故
+      $$f_U(u)=\int_{u/2}^{1}\frac1{2v}\mathrm dv=\frac12\ln v\Big|_{u/2}^{1}=\frac12(\ln2-\ln u),\quad0\lt u\lt2 .$$
+      <span class="lab">法二（卷积三部曲）</span>用积的卷积公式 $f_Z(z)=\int\frac1{|x|}f\big(x,\frac zx\big)\mathrm dx$：<b>① 换字母</b> $0\lt x\lt2,\;0\le\frac zx\le1\Rightarrow0\lt x\lt2,\;0\le z\le x$；<b>② 换区域</b>（$xOy$ 的矩形变成 $xOz$ 的三角形，边界 $x=z$ 与 $x=2$）；<b>③ 定限</b>：$f_Z(z)=\frac12\int_z^2\frac1x\mathrm dx=\frac12(\ln2-\ln z)$。<br>
+      <span class="lab">法三（分布函数法）</span>$F_Z(z)=P\{XY\le z\}$，区域被双曲线 $xy=z$ 切成两块：
+      $F_Z(z)=\int_0^z\mathrm dx\int_0^1\frac12\mathrm dy+\int_z^2\mathrm dx\int_0^{z/x}\frac12\mathrm dy=\frac12z(1-\ln z+\ln2)$，求导得同一 $f_Z$。<br>
+      <span class="lab">要害 ★</span><b>$f_Z(z)\to+\infty$ 当 $z\to0^+$</b>——密度在 0 附近发散但仍可积（$\int_0^2\frac12(\ln2-\ln z)\mathrm dz=1$ ✓）。<b>看到答案里有 $\ln$ 且趋于无穷，不要以为自己算错了</b>：$XY$ 在 0 附近堆积是必然的（两个因子只要有一个接近 0，乘积就接近 0）。<b>这与 <a href="#s3b">基 3.4</a> 的 $f_Y=-\ln y$ 是同一现象。</b><br>
+      <span class="lab">别踩</span>换元后 <b>$v\gt0$ 才能去掉绝对值</b>写成 $\frac1{2v}$。忘了这一点在 $v\lt0$ 时会得到负密度。<b>凡是 $|J|$ 里含变量，先确定该变量的符号。</b><br>
+      <span class="lab">法选择建议</span><b>本题换元法最短（4 行）</b>，卷积次之，分布函数法要处理"双曲线切矩形"的两块区域最长。<b>但如果题目改问"$F_Z(z)$"，分布函数法反而最短。看问什么再选路。</b>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 5.3 ✔</span>设 $(X,Y)\sim f(x,y)=\begin{cases}8xy,&amp;0\lt x\lt y\lt1\\ 0,&amp;\text{其他}\end{cases}$，记 $Z=\dfrac XY$。<br>
+    (1) 求 $Z$ 的概率密度 $f_Z(z)$；(2) 求 $P\left\{Y\lt\dfrac23\;\middle|\;X=\dfrac12\right\}$。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$f_Z(z)=\begin{cases}2z,&amp;0\lt z\lt1\\ 0,&amp;其他\end{cases}$；　$P\left\{Y\lt\frac23\mid X=\frac12\right\}=\dfrac7{27}\approx0.2593$</span>（sympy 复算；蒙特卡洛 $10^7$ 拒绝采样：$Z$ 按格质量对拍通过，条件概率实测 $0.2591$）
+      <span class="lab">(1) 分析（换元法，且这次凑得极漂亮）</span>令 $\begin{cases}u=\frac xy\\ v=y\end{cases}\Rightarrow\begin{cases}x=uv\\ y=v\end{cases}$，$J=\begin{vmatrix}v&amp;u\\ 0&amp;1\end{vmatrix}=v$，
+      $$f_{U,V}(u,v)=8\,uv\cdot v\cdot|v|=8uv^3\quad(0\lt uv\lt v\lt1).$$
+      <b>关键一步</b>：$0\lt uv\lt v\lt1$ 且 $v\gt0$ $\Rightarrow$ <b>$0\lt u\lt1$ 且 $0\lt v\lt1$</b>——<b>三角形区域被换成了单位正方形，积分限全是常数</b>。于是
+      $$f_U(u)=8u\int_0^1v^3\mathrm dv=8u\cdot\frac14=2u,\quad0\lt u\lt1\;\Longrightarrow\;f_Z(z)=2z\;(0\lt z\lt1).$$
+      <span class="lab">(2) 分析 ★★★ 本题的题眼</span><b>$P\{X=\frac12\}=0$，所以<u>不能</u>直接用条件概率公式</b>（书上原话），必须走<b>条件概率密度</b>：<br>
+      先求边缘 $f_X(x)=\int_x^18xy\,\mathrm dy=4x(1-x^2)$（$0\lt x\lt1$），代 $x=\frac12$ 得 $f_X(\frac12)=4\cdot\frac12\cdot\frac34=\frac32$；<br>
+      $$f_{Y\mid X}\Big(y\;\Big|\;\tfrac12\Big)=\frac{f(\frac12,y)}{f_X(\frac12)}=\frac{8\cdot\frac12\cdot y}{3/2}=\frac83y,\qquad \frac12\lt y\lt1;$$
+      $$P\Big\{Y\lt\tfrac23\;\Big|\;X=\tfrac12\Big\}=\int_{1/2}^{2/3}\frac83y\,\mathrm dy=\frac43\Big(\frac49-\frac14\Big)=\frac43\cdot\frac{7}{36}=\frac7{27}.$$
+      <span class="lab">要害</span>① <b>条件密度的<u>范围</u>要跟着 $x=\frac12$ 走</b>：原区域是 $x\lt y\lt1$，代入 $x=\frac12$ 得 $\frac12\lt y\lt1$。<b>范围写成 $0\lt y\lt1$ 是最常见的错，答案会变成 $\frac{8}{3}\cdot\frac12\cdot\frac49=\frac{16}{27}$。</b><br>
+      ② 积分下限用 $\frac12$（不是 0），上限用 $\frac23$（题目给的）——<b>两个都要卡在条件范围内</b>。<br>
+      ③ <b>自查</b>：$\int_{1/2}^{1}\frac83y\,\mathrm dy=\frac43(1-\frac14)=1$ ✓ 条件密度归一。<b>这一步 10 秒，能挡住上面两个错。</b><br>
+      <span class="lab">串联</span>本题的 $f=8xy$ 在 $0\lt x\lt y\lt1$ 上，正是 <a href="#s6">§6 换元法</a>那条眉批里说的<b>"记一个典范例子"</b>——书上把它当作换元法的样板题反复引用。<b>把这道题连同"$u=\frac xy,v=y$ ⟹ 单位正方形"一起背下来，考场上见到 $\frac XY$ 直接套。</b><br>
+      <span class="lab">别踩</span>$f=8xy$ 虽然<b>能分离变量</b>，但区域是<b>三角形</b>，所以 $X,Y$ <b>不独立</b>（见 <a href="#s5">§5 陷阱</a>）——因此<b>不能</b>用商的卷积公式的"独立版" $\int|y|f_X(yz)f_Y(y)\mathrm dy$。<b>要用也只能用一般版 $\int|y|f(yz,y)\mathrm dy$。</b>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 5.4 ✔</span>设随机变量 $X_1$ 与 $X_2$ 相互独立且同分布，其概率密度为 $f(x)=\begin{cases}ax,&amp;0\lt x\lt1\\ 0,&amp;\text{其他}\end{cases}$<br>
+    (1) 求 $a$ 的值；(2) 求 $Z=\max\{X_1,X_2\}-\min\{X_1,X_2\}$ 的概率密度。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$a=2$；　$f_Z(z)=\begin{cases}\dfrac43z^3-4z+\dfrac83,&amp;0\lt z\lt1\\ 0,&amp;其他\end{cases}$</span>（sympy 复算并验 $\int_0^1f_Z=1$；蒙特卡洛 $10^7$ 按格质量对拍通过）
+      <span class="lab">(1)</span>归一性 $\int_0^1ax\,\mathrm dx=\frac a2=1\Rightarrow a=2$。
+      <span class="lab">(2) 题眼 ★★★（$D_{23}$ 化归经典形式）</span>
+      $$Z=\max\{X_1,X_2\}-\min\{X_1,X_2\}=\frac{X_1+X_2+|X_1-X_2|}{2}-\frac{X_1+X_2-|X_1-X_2|}{2}=\boxed{|X_1-X_2|}$$
+      <b>把"$\max-\min$"化归成"$|$差$|$"，整道题的难度立刻从"求两个次序统计量的联合分布"塌缩成"求一个差的分布"。不做这一步，这题基本做不动。</b><br>
+      <span class="lab">解</span>先求 $U=X_1-X_2$：令 $\begin{cases}u=x_1-x_2\\ v=x_2\end{cases}\Rightarrow\begin{cases}x_1=u+v\\ x_2=v\end{cases}$，$J=1$，$f_{U,V}(u,v)=2(u+v)\cdot2v=4(u+v)v$，区域 $0\lt u+v\lt1,\;0\lt v\lt1$。
+      $$f_U(u)=\begin{cases}\displaystyle\int_{-u}^{1}4(u+v)v\,\mathrm dv=-\frac23u^3+2u+\frac43,&amp;-1\lt u\lt0,\\[4pt]
+      \displaystyle\int_{0}^{1-u}4(u+v)v\,\mathrm dv=\frac23u^3-2u+\frac43,&amp;0\lt u\lt1,\\[4pt] 0,&amp;\text{其他}.\end{cases}$$
+      再由 $Z=|U|$：当 $0\lt z\lt1$ 时 $F_Z(z)=P\{-z\le U\le z\}=F_U(z)-F_U(-z)$，故
+      $$f_Z(z)=f_U(z)+f_U(-z)=\Big(\tfrac23z^3-2z+\tfrac43\Big)+\Big(\tfrac23z^3-2z+\tfrac43\Big)=\frac43z^3-4z+\frac83 .$$
+      <span class="lab">要害</span>① <b>$f_U$ 是偶函数</b>（因为 $X_1,X_2$ 同分布，$U$ 与 $-U$ 同分布）——把 $-z$ 代进上一段确实得到与下一段相同的值，<b>这是免费的验算</b>；因此 $f_Z(z)=2f_U(z)$，可以少写一半。<br>
+      ② <b>$|U|$ 的密度是"两侧折叠相加"</b>：$f_{|U|}(z)=f_U(z)+f_U(-z)$（$z\gt0$）。这是第 2 章"一维函数分布"的现成结论，<b>本章直接调用</b>。<br>
+      ③ <b>自查</b>：$\int_0^1(\frac43z^3-4z+\frac83)\mathrm dz=\frac13-2+\frac83=1$ ✓。<b>另外 $f_Z(0)=\frac83\gt0$、$f_Z(1)=\frac43-4+\frac83=0$ ✓</b>——$Z=1$ 意味着两个数一个是 0 一个是 1，概率密度当然趋于 0。<b>端点值符合直觉，是最好的定性检查。</b><br>
+      <span class="lab">串联</span>那三条恒等式 $\max+\min=X+Y$、$\max\cdot\min=XY$、<b>$\max-\min=|X-Y|$</b> 在 <a href="#s2b">习 3.11</a> 的离散表里已经出现过一次。<b>本题是它们的连续版，也是它们唯一一次成为整道题的题眼。</b>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 5.5 ✔</span>设随机变量 $X\sim U(1,2)$，在 $X=x$ 的条件下，$Y$ 的条件分布为 $E(x)$，则 $D(XY)=$（　）。<br>
+    (A) 1　(B) 2　(C) $x$　(D) $2x$</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(A) $D(XY)=1$——因为 <b>$XY\sim E(1)$</b></span>（sympy 复算 $f_U(u)=\mathrm e^{-u}$；蒙特卡洛 $10^7$：$XY$ 的经验分布与 $E(1)$ 按格质量对拍通过，方差实测 $0.9997$）
+      <span class="lab">分析</span>又是"边缘 + 条件 ⟹ 联合"：$f(x,y)=f_X(x)f_{Y\mid X}(y\mid x)=1\cdot x\mathrm e^{-xy}$，$1\lt x\lt2,\;y\gt0$。<br>
+      令 $\begin{cases}u=xy\\ v=y\end{cases}\Rightarrow\begin{cases}x=\frac uv\\ y=v\end{cases}$，$J=\begin{vmatrix}\frac1v&amp;-\frac u{v^2}\\ 0&amp;1\end{vmatrix}=\frac1v$，
+      $$f_{U,V}(u,v)=\frac uv\mathrm e^{-u}\cdot\frac1v=\frac{u}{v^2}\mathrm e^{-u},\qquad 1\lt\frac uv\lt2,\;v\gt0\;\Longleftrightarrow\;\frac u2\lt v\lt u,\;u\gt0 .$$
+      $$f_U(u)=\int_{u/2}^{u}\frac{u}{v^2}\mathrm e^{-u}\mathrm dv=u\mathrm e^{-u}\Big[-\frac1v\Big]_{u/2}^{u}=u\mathrm e^{-u}\Big(\frac2u-\frac1u\Big)=\mathrm e^{-u},\quad u\gt0 .$$
+      故 $XY\sim E(1)$，$D(XY)=\dfrac1{1^2}=1$。<br>
+      <span class="lab">要害 ★ 一个漂亮结论</span><b>$X\sim U(1,2)$、$Y\mid X\sim E(X)$ ⟹ $XY\sim E(1)$，且这个结论与 $X$ 的具体分布无关</b>：只要 $Y\mid X=x\sim E(x)$，则 $XY$ 的条件分布恒为 $E(1)$（因为 $E(x)$ 的随机变量乘以 $x$ 就是 $E(1)$），<b>所以无条件分布也是 $E(1)$</b>。<b>这一句话可以让你 10 秒选出 (A)，一个积分都不用算。</b><br>
+      <span class="lab">秒杀路径</span>$Y\mid X=x\sim E(x)$ 意味着 $xY\mid X=x\sim E(1)$。由于对<b>每一个</b> $x$ 条件分布都是同一个 $E(1)$，全概率一平均还是 $E(1)$。<b>"条件分布与条件无关 ⟹ 无条件分布 = 该分布，且与条件变量独立"，这是条件分布最有用的一条推论。</b><br>
+      <span class="lab">别踩</span>选项里的 (C)(D) 带 $x$——<b>$D(XY)$ 是一个数，不可能含有变量 $x$</b>。<b>不做任何计算就能排除两个选项。</b>看到选项里混着"数"和"含变量的式子"，先排除后者。<br>
+      <span class="lab">串联</span>$E(\lambda)$ 的方差是 $\frac1{\lambda^2}$（第 4 章）。本章只需知道"$XY$ 服从什么分布"，方差是第 4 章的事——<b>又一道跨章题</b>。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 3.14 ✔</span>已知随机变量 $(X,Y)$ 的概率密度 $f(x,y)=\begin{cases}A\mathrm e^{-y},&amp;0\lt x\lt y\\ 0,&amp;\text{其他}\end{cases}$，求常数 $A$，并计算概率 $P\{X+Y\ge1\}$，$P\left\{\dfrac XY\le\dfrac12\right\}$。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$A=1$；$P\{X+Y\ge1\}=2\mathrm e^{-1/2}-\mathrm e^{-1}\approx0.8451$；$P\left\{\frac XY\le\frac12\right\}=\dfrac12$</span>（sympy 复算；蒙特卡洛 $10^7$ 实测 $0.84507$ 与 $0.50004$）
+      <span class="lab">分析</span>区域是 $y\gt x\gt0$ 的<b>角形</b>（与 <a href="#s3b">习 3.12(1)</a> 同一个 $f$）。<br>
+      <b>求 $A$</b>：$1=\int_0^{+\infty}\mathrm dx\int_x^{+\infty}A\mathrm e^{-y}\mathrm dy=A\int_0^{+\infty}\mathrm e^{-x}\mathrm dx=A\Rightarrow A=1$。<br>
+      <b>$P\{X+Y\ge1\}$：用<u>补事件</u>更省事。</b>$\{X+Y\lt1\}$ 与角形的交是一个小三角形（$y=x$、$x+y=1$、$x$ 轴围成，交点 $(\frac12,\frac12)$）：
+      $$P\{X+Y\lt1\}=\int_0^{1/2}\mathrm dx\int_x^{1-x}\mathrm e^{-y}\mathrm dy=\int_0^{1/2}\big(\mathrm e^{-x}-\mathrm e^{x-1}\big)\mathrm dx=1+\mathrm e^{-1}-2\mathrm e^{-1/2},$$
+      故 $P\{X+Y\ge1\}=1-\big(1+\mathrm e^{-1}-2\mathrm e^{-1/2}\big)=2\mathrm e^{-1/2}-\mathrm e^{-1}$。<br>
+      <b>$P\{\frac XY\le\frac12\}$</b>：$\frac xy\le\frac12\Leftrightarrow y\ge2x$（$y\gt0$），与原区域 $y\gt x$ 取交后就是 $y\ge2x$：
+      $$P=\int_0^{+\infty}\mathrm dx\int_{2x}^{+\infty}\mathrm e^{-y}\mathrm dy=\int_0^{+\infty}\mathrm e^{-2x}\mathrm dx=\frac12 .$$
+      <span class="lab">要害</span>① <b>"$\ge$"型概率优先算补事件</b>：$\{X+Y\ge1\}$ 是<b>无界</b>区域，$\{X+Y\lt1\}$ 是<b>有界三角形</b>——<b>永远积有界的那一块</b>。<br>
+      ② <b>$\frac XY\le\frac12$ 必须先化成 $y\ge2x$</b> 再画图，不要直接对 $\frac xy$ 积分。<b>分式不等式化成线性不等式时要注意分母符号</b>，这里 $y\gt0$ 所以不等号方向不变。<br>
+      ③ <b>$P\{\frac XY\le\frac12\}=\frac12$ 恰好一半</b>，是巧合吗？<b>不是</b>：$\frac XY$ 的分布可以算出来（本题的 $f$ 使 $\frac XY\sim U(0,1)$，与 $Y$ 独立），<b>所以 $P\{\frac XY\le t\}=t$ 对任何 $t\in(0,1)$ 成立</b>。<b>这个结构与 <a href="#s6b">强 5.3</a> 的 $\frac XY$ 是一家人。</b><br>
+      <span class="lab">别踩</span>算 $P\{X+Y\lt1\}$ 时上限是 $x=\frac12$ <b>不是 1</b>——超过 $\frac12$ 后直线 $x+y=1$ 已经跑到 $y=x$ 下面去了，交集为空。<b>交点坐标是这类题的生命线。</b>
+    </div>
+  </div>
+
+  <!-- ================= s7 卷积公式群 ================= -->
+  <h2 id="s7"><span class="idx">七</span>卷积公式群：四组公式 + 一句口诀（会换元的可以只当查表用）　<span class="layer L-base">基础</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/概率论与数理统计/03_多维随机变量及其分布/概率_第03章_基础30讲.pdf">📄 基础 p.81–82</a>
+
+  <div class="key"><span class="tag">必记 · 四组卷积公式（左列是一般式，右列是<b>独立</b>时的形式）</span>
+    <div class="gridwrap"><table>
+      <tr><th>$Z$</th><th>一般 $(X,Y)\sim f(x,y)$</th><th>$X,Y$ 独立时</th><th>换元法怎么凑</th></tr>
+      <tr><td><b>和</b> $X+Y$</td><td>$f_Z(z)=\displaystyle\int_{-\infty}^{+\infty}\!\! f(x,z-x)\mathrm dx=\displaystyle\int_{-\infty}^{+\infty}\!\! f(z-y,y)\mathrm dy$</td><td>$\displaystyle\int f_X(x)f_Y(z-x)\mathrm dx$</td><td>$u=x+y,\;v=y$，$|J|=1$</td></tr>
+      <tr><td><b>差</b> $X-Y$</td><td>$f_Z(z)=\displaystyle\int_{-\infty}^{+\infty}\!\! f(x,x-z)\mathrm dx=\displaystyle\int_{-\infty}^{+\infty}\!\! f(y+z,y)\mathrm dy$</td><td>$\displaystyle\int f_X(x)f_Y(x-z)\mathrm dx$</td><td>$u=x-y,\;v=y$，$|J|=1$</td></tr>
+      <tr><td><b>积</b> $XY$</td><td>$f_Z(z)=\displaystyle\int_{-\infty}^{+\infty}\!\!\frac1{|x|}f\Big(x,\frac zx\Big)\mathrm dx=\displaystyle\int_{-\infty}^{+\infty}\!\!\frac1{|y|}f\Big(\frac zy,y\Big)\mathrm dy$</td><td>$\displaystyle\int\frac1{|x|}f_X(x)f_Y\Big(\frac zx\Big)\mathrm dx$</td><td>$u=xy,\;v=y$，$|J|=\frac1{|v|}$</td></tr>
+      <tr><td><b>商</b> $\dfrac XY$</td><td>$f_Z(z)=\displaystyle\int_{-\infty}^{+\infty}\!\!|y|\,f(yz,\,y)\mathrm dy$</td><td>$\displaystyle\int|y|\,f_X(yz)f_Y(y)\mathrm dy$</td><td>$u=\frac xy,\;v=y$，$|J|=|v|$</td></tr>
+    </table></div>
+    <b>更一般的线性组合</b>（书上注2）：$Z=aX+bY\;(ab\ne0)$，令 $u=ax+by,\;v=y$，$J=\frac1a$，得
+    $f_Z(z)=\displaystyle\int_{-\infty}^{+\infty}f_X\Big(\frac{z-bv}{a}\Big)f_Y(v)\frac1{|a|}\mathrm dv$。<b>不用背，现推 20 秒。</b>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 四组公式里，"积"与"商"多出来的 $\frac1{|x|}$ 和 $|y|$ 是从哪冒出来的</span>
+    <b>书上说</b>：口诀"积谁不换谁，<b>换完求偏导</b>"。<br>
+    <b>潜台词是</b>：那个因子就是<b>雅可比</b>——一维版的 $\left|\frac{\partial(\text{被换掉的变量})}{\partial z}\right|$。<br>
+    <b>和/差</b>：$y=z-x$，$\left|\frac{\partial y}{\partial z}\right|=1$ ⟹ <b>没有因子</b>；<br>
+    <b>积</b>：$y=\frac zx$，$\left|\frac{\partial y}{\partial z}\right|=\frac1{|x|}$ ⟹ 因子 $\frac1{|x|}$；<br>
+    <b>商</b>：$x=yz$（对 $y$ 积分），$\left|\frac{\partial x}{\partial z}\right|=|y|$ ⟹ 因子 $|y|$。<br>
+    <b>所以能考</b>：① <b>绝对值不能丢</b>——密度必须非负，丢了绝对值在负半轴会得到负密度（<a href="#s6b">基 3.9</a> 的批注就栽在这一点上）；② 这四个因子<b>不需要背</b>，考场上现推 10 秒；③ 它同时解释了为什么 $\frac XY$ 的密度里会出现 $|y|$ 这种"看起来很怪"的权重——<b>越大的 $y$，同样的 $\mathrm dz$ 对应越大的 $\mathrm dx$，所以要加权。</b><br>
+    <span class="dock">扣分点</span>：写积/商的卷积公式时<b>积分变量与因子里的变量必须一致</b>。对 $x$ 积分就配 $\frac1{|x|}$，对 $y$ 积分就配 $\frac1{|y|}$，配错整道题作废。
+  </div>
+
+  <div class="key"><span class="tag">必记 · 两句口诀（书上给的记忆法，会换元的可以不背，但要看得懂）</span>
+    <div class="fml" style="font-size:1.02rem;line-height:2"><b>「积谁不换谁，换完求偏导。」</b></div>
+    以 $Z=X-Y$ 的 $f_Z(z)=\int f(x,x-z)\mathrm dx$ 为例：<br>
+    <b>「积谁不换谁」</b>——对 $x$ 积分，$x$ 就<b>不换</b>，写成 $f(x,\square)$；剩下那个位置由 $y=x-z$ 换进去，得 $f(x,x-z)$；<br>
+    <b>「换完求偏导」</b>——$\dfrac{\partial(x-z)}{\partial z}=-1$，密度非负要加绝对值，得因子 $|-1|=1$。<br>
+    <b>验证积的公式</b>：$Z=XY$ 对 $x$ 积分 ⟹ $y=\frac zx$，$\frac{\partial}{\partial z}\big(\frac zx\big)=\frac1x$，取绝对值得 $\frac1{|x|}$ ✓——<b>四组公式全能这样现推。</b><br>
+    <b>书上眉批的态度</b>：<b>"会了二重积分换元，将不再需要（背这个口诀）。"</b>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 为什么"卷积公式"这个名字会误导你——它的难点从来不是公式，是<b>定限</b></span>
+    <b>书上说</b>：卷积公式均可由换元法得出，无须再记，<b>也省去了使用卷积公式后关于变量和区域的复杂讨论</b>。<br>
+    <b>潜台词是</b>：$f_Z(z)=\int f_X(x)f_Y(z-x)\mathrm dx$ 这个式子本身只有一行，<b>但那个 $\int$ 的上下限才是全部工作量</b>。被积函数非零要求 $x\in\mathrm{supp}(f_X)$ <b>且</b> $z-x\in\mathrm{supp}(f_Y)$，两个条件<b>取交</b>，交出来的区间端点随 $z$ 变——<b>这就是分段的来源</b>。<br>
+    <b>所以能考</b>：本章所有"求 $f_Z$"的题，<b>失分点 90% 在分段而不在积分</b>。<a href="#s6b">基 3.8</a> 分两段（$z\lessgtr1$）、<a href="#s6b">基 3.9</a> 分一段但边界是双曲线、<a href="#s7b">习 3.8</a> 分两段、<a href="#s7b">习 3.16</a> 不分段（区域是第一象限，取交后恒为 $y\gt0$）。<b>拿到题第一件事：把两个支撑集的交在 $z$ 变化时画一遍。</b><br>
+    <b>"三部曲"是书上给的定限流程（眉批原文）</b>：<b>① 换字母 ② 换区域 ③ 背口诀</b>。翻译成人话：<br>
+    ① 把 $f$ 里两个位置的非零条件写成关于（积分变量，$z$）的<b>不等式组</b>；<br>
+    ② 在<b>新坐标平面</b>（如 $xOz$）上把这个不等式组<b>画出来</b>；<br>
+    ③ 用"求 $z$ 不积 $z$，不积先定限，限内画条线，先变写下限，后变写上限"读出限。<br>
+    <span class="dock">扣分点</span><b>分段点必须写成"$z=$ 某个数"并交代来源</b>。卷面上直接跳到"当 $0\lt z\lt1$ 时"而不说为什么是 1，阅卷会认为你在背答案。
+  </div>
+
+  <div class="link"><span class="tag">串联 · "卷积"这个词你在 408 和高数里都见过，它们是同一个运算</span>
+    <b>接高数（拉普拉斯变换 / 傅里叶变换）</b>：$\int f(x)g(z-x)\mathrm dx$ 正是<b>卷积</b> $f*g$。变换域里"卷积变乘积"——对应到概率就是：<b>独立随机变量之和的<u>特征函数</u>等于各自特征函数之积</b>。<b>正态、泊松、二项的可加性，用这条一行就证完了</b>（大纲不要求，但知道来龙去脉能记得更牢）。<br>
+    <b>接第 5 章</b>：中心极限定理讲的是"$n$ 个独立同分布之和"，本质上是<b>同一个密度卷积自己 $n$ 次</b>——<b>卷积 $n$ 次后必然趋于正态</b>，这就是 CLT 的直观来源。<br>
+    <b>接 408（数字信号 / 组成原理）</b>：卷积是<b>线性时不变系统</b>的输出公式。本章的"$f_Z=f_X*f_Y$"和"输出 = 输入 ∗ 冲激响应"是<b>字面上同一个积分</b>。<br>
+    <b>接 408（数据结构）</b>：离散版卷积 $P\{Z=k\}=\sum_i p_iq_{k-i}$ 就是<b>多项式乘法的系数</b>——你在算法题里写过的"两个数组的卷积"，就是本章 <a href="#s2c">强 5.1</a> 那个求和公式。
+  </div>
+
+  <h3 id="s7b">卷积例题</h3>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 5.2 ✔</span>设随机变量 $X,Y$ 相互独立，且均服从参数为 $\lambda$ 的<b>指数分布</b>，令 $Z=|X-Y|$，则下列随机变量中与 $Z$ <b>同分布</b>的是（　）。<br>
+    (A) $X+Y$　(B) $\dfrac{X+Y}{2}$　(C) $2X$　(D) $X$</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(D) $X$——即 <b>$Z=|X-Y|\sim E(\lambda)$</b>，与单个 $X$ 同分布</span>（sympy 复算 $F_Z(z)=1-\mathrm e^{-\lambda z}$；蒙特卡洛 $10^7$（$\lambda=1.3$）按格质量与 $E(1.3)$ 对拍通过）
+      <span class="lab">分析</span>独立 ⟹ $f(x,y)=\lambda^2\mathrm e^{-\lambda(x+y)}$（$x,y\gt0$）。用<b>分布函数法</b>，并利用 $x,y$ 地位<b>对称</b>只算一半：
+      $$F_Z(z)=P\{-z\le X-Y\le z\}=2P\{0\le X-Y\le z\}=2\int_0^{+\infty}\lambda\mathrm e^{-\lambda y}\int_y^{y+z}\lambda\mathrm e^{-\lambda x}\mathrm dx\,\mathrm dy$$
+      $$=2\int_0^{+\infty}\lambda\mathrm e^{-\lambda y}\big[\mathrm e^{-\lambda y}-\mathrm e^{-\lambda(y+z)}\big]\mathrm dy=2\big(1-\mathrm e^{-\lambda z}\big)\int_0^{+\infty}\lambda\mathrm e^{-2\lambda y}\mathrm dy=1-\mathrm e^{-\lambda z}\;(z\ge0).$$
+      所以 $Z\sim E(\lambda)$，与 $X$ 同分布，选 (D)。<br>
+      <span class="lab">要害 ★ 为什么是"无记忆性"</span>指数分布的<b>无记忆性</b> $P\{X\gt s+t\mid X\gt s\}=P\{X\gt t\}$ 在这里表现为：<b>先发生的那一个"用掉"的时间不影响剩余等待</b>，所以"两个独立指数之差的绝对值"就是"从早的那个时刻起，再等晚的那个"的等待时间——<b>仍是同参数指数</b>。<b>记住这个图像，本题可以零计算作答。</b><br>
+      <span class="lab">排除法（更快）</span>$E(\lambda)$ 的均值是 $\frac1\lambda$。(A) $E(X+Y)=\frac2\lambda$、(C) $E(2X)=\frac2\lambda$ ——<b>均值不对，直接出局</b>；(B) 均值虽然对（$\frac1\lambda$）但 $\frac{X+Y}{2}$ 是 $\Gamma$ 分布不是指数（密度在 0 处为 0，而指数密度在 0 处取最大值 $\lambda$）。<b>先比均值再比形状，10 秒选出 (D)。</b><br>
+      <span class="lab">别踩</span>那个因子 <b>2</b> 来自对称性 $P\{-z\le U\le z\}=2P\{0\le U\le z\}$（$U=X-Y$ 的分布关于 0 对称）。<b>漏掉它得到 $\frac12(1-\mathrm e^{-\lambda z})$，不是分布函数（极限不为 1），一眼能查出来。</b><br>
+      <span class="lab">串联</span>本题若改成"求 $Z=|X-Y|$ 的密度"，答案是 $\lambda\mathrm e^{-\lambda z}$；若改成"$\min\{X,Y\}$ 的分布"，由 <a href="#s8">§8 生存函数相乘</a>得 $E(2\lambda)$。<b>两个独立指数的 $\min$、差的绝对值，都还是指数——这是指数分布最"顽固"的一族性质。</b>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 3.8 ✔</span>设二维随机变量 $(X,Y)$ 的概率密度为 $f(x,y)=\begin{cases}2-x-y,&amp;0\lt x\lt1,\;0\lt y\lt1\\ 0,&amp;\text{其他}\end{cases}$，则 $Z=X+Y$ 的概率密度 $f_Z(z)=$＿＿。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$f_Z(z)=\begin{cases}z(2-z),&amp;0\lt z\lt1\\ (2-z)^2,&amp;1\le z\lt2\\ 0,&amp;其他\end{cases}$</span>（sympy 复算并验 $\int_0^2f_Z=1$；蒙特卡洛 $10^7$ 拒绝采样按格质量对拍通过）
+      <span class="lab">分析</span><b>注意：这里 $X,Y$ 不独立</b>（$2-x-y$ 不能分离变量），所以要用<b>一般版</b>卷积公式 $f_Z(z)=\int f(x,z-x)\mathrm dx$。<br>
+      <b>① 换字母</b>：$f(x,z-x)=2-x-(z-x)=\boxed{2-z}$——<b>被积函数与 $x$ 无关！</b>非零条件：$0\lt x\lt1$ 且 $0\lt z-x\lt1$，即 $\max\{0,z-1\}\lt x\lt\min\{1,z\}$。<br>
+      <b>② 定限分段</b>：$z\lt1$ 时区间是 $(0,z)$，长度 $z$；$1\le z\lt2$ 时是 $(z-1,1)$，长度 $2-z$。<br>
+      <b>③ 结果</b>：$f_Z(z)=(2-z)\times$区间长度：
+      $$0\lt z\lt1:\;f_Z=(2-z)\cdot z;\qquad 1\le z\lt2:\;f_Z=(2-z)\cdot(2-z)=(2-z)^2 .$$
+      <span class="lab">要害 ★</span><b>"被积函数与积分变量无关"是本题的最大便宜</b>——$f_Z$ 直接等于"常数 × 区间长度"，<b>一个积分号都不用写</b>。<b>凡是 $f(x,y)$ 只依赖 $x+y$（本题就是），做和的卷积时必然出现这个便利。</b><br>
+      <span class="lab">别踩</span>$\max\{0,z-1\}$ 与 $\min\{1,z\}$ 是<b>正方形区域被斜线切</b>的标准形态。分段点 $z=1$ 来自正方形的对角线。<b>把单位正方形和直线 $x+y=z$ 画出来，$z$ 从 0 滑到 2，切出的线段先变长后变短——这就是 $f_Z$ 先升后降的原因。</b><br>
+      <span class="lab">自查</span>$\int_0^1z(2-z)\mathrm dz+\int_1^2(2-z)^2\mathrm dz=(1-\frac13)+\frac13=1$ ✓。<br>
+      <b>连续性检查</b>：$z=1$ 处左值 $1\cdot1=1$，右值 $1^2=1$ ✓。<b>两秒钟，值回票价。</b><br>
+      <span class="lab">串联</span>若把 $f$ 换成均匀分布 $f\equiv1$，$f_Z$ 就是经典的<b>三角形分布</b>（$z$ 与 $2-z$）。本题的 $2-x-y$ 是"带一点倾斜的均匀"，结果就成了 $z(2-z)$ 与 $(2-z)^2$——<b>不对称了，因为密度本身偏向原点。</b>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 3.16 ✔</span>设随机变量 $X,Y$ 相互独立，且都服从指数分布，它们的概率密度分别为
+    $f_X(x)=\begin{cases}\lambda\mathrm e^{-\lambda x},&amp;x\ge0\\ 0,&amp;\text{其他}\end{cases}$，$f_Y(y)=\begin{cases}\lambda\mathrm e^{-\lambda y},&amp;y\ge0\\ 0,&amp;\text{其他}\end{cases}$，求 $Z=\dfrac XY$ 的概率密度。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$f_Z(z)=\begin{cases}\dfrac1{(1+z)^2},&amp;z\gt0\\ 0,&amp;其他\end{cases}$——<b>与 $\lambda$ 无关！</b></span>（sympy 复算并验 $\int_0^{+\infty}f_Z=1$；蒙特卡洛 $10^7$ 对拍通过）
+      <span class="lab">分析</span>独立 ⟹ $f(x,y)=\lambda^2\mathrm e^{-\lambda(x+y)}$（$x\ge0,y\ge0$）。用商的卷积公式：
+      $$f_Z(z)=\int_{-\infty}^{+\infty}|y|f(yz,y)\mathrm dy .$$
+      <b>① 换字母</b>：$yz\ge0,\;y\ge0\Rightarrow y\ge0,\;z\ge0$——<b>取交后恒成立，不用分段</b>（这是本题比 <a href="#s7b">习 3.8</a> 简单的地方：区域是第一象限，商变换把它映成第一象限）。<br>
+      <b>② 积分</b>（$z\gt0$）：
+      $$f_Z(z)=\int_0^{+\infty}y\lambda^2\mathrm e^{-\lambda(yz+y)}\mathrm dy=\lambda^2\int_0^{+\infty}y\mathrm e^{-\lambda(1+z)y}\mathrm dy
+      \overset{t=\lambda(1+z)y}=\frac1{(1+z)^2}\int_0^{+\infty}t\mathrm e^{-t}\mathrm dt=\frac1{(1+z)^2}.$$
+      <span class="lab">要害 ★</span><b>$\lambda$ 消失了</b>——这不是巧合：$\frac XY$ 是<b>无量纲的比值</b>，而 $\lambda$ 是"单位"（$\frac1\lambda$ 是平均寿命）。<b>换单位不改变比值，所以 $\frac XY$ 的分布必然与 $\lambda$ 无关。</b>算出来带 $\lambda$ 就一定错了——<b>这是本题最快的自查。</b><br>
+      <span class="lab">别踩</span>① 换元 $t=\lambda(1+z)y$ 后 $\mathrm dy=\frac{\mathrm dt}{\lambda(1+z)}$、$y=\frac t{\lambda(1+z)}$，<b>两处都要换</b>，凑出 $\frac{\lambda^2}{\lambda^2(1+z)^2}$；<br>
+      ② $\int_0^{+\infty}t\mathrm e^{-t}\mathrm dt=\Gamma(2)=1!=1$。<b>这个积分和 $\int_0^{+\infty}t^n\mathrm e^{-t}\mathrm dt=n!$ 要能秒写</b>，指数分布相关题目里出现率极高。<br>
+      <span class="lab">数值感</span>$P\{Z\le1\}=\int_0^1\frac{\mathrm dz}{(1+z)^2}=\frac12$——<b>正好一半</b>，符合直觉：$X,Y$ 同分布，$P\{X\lt Y\}=P\{X\gt Y\}=\frac12$。<b>再一次免费验算。</b><br>
+      <span class="lab">串联</span>$f_Z(z)=\frac1{(1+z)^2}$ 的期望 $\int_0^\infty\frac z{(1+z)^2}\mathrm dz$ <b>发散</b>——<b>$\frac XY$ 没有数学期望</b>！这在第 4 章会以"期望不存在的分布"出现（与柯西分布同类）。<b>"两个独立指数之比"是最好记的一个"无期望"例子。</b>
+    </div>
+  </div>
+
+  <!-- ================= s8 max/min 与可加性 ================= -->
+  <h2 id="s8"><span class="idx">八</span>$\max/\min$ 与 $[F]^n$、常见分布的可加性　<span class="layer L-base">基础</span><span class="layer L-str">强化</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/概率论与数理统计/03_多维随机变量及其分布/概率_第03章_基础30讲.pdf">📄 基础 p.83–84</a>
+  <a class="pg" href="../../张宇系列_分章易识别版/概率论与数理统计/03_多维随机变量及其分布/概率_第03章_强化9讲_第5讲_多维随机变量函数的分布.pdf">📄 强化第5讲 p.41–42</a>
+
+  <div class="key"><span class="tag">必记 ★★★ · $\max/\min$ 分布公式全家桶（第 2 章埋的伏笔在此兑现）</span>
+    <b>一般情形</b>（$(X,Y)\sim F(x,y)$，<b>不要求独立</b>）：
+    $$F_{\max}(z)=P\{X\le z,\;Y\le z\}=F(z,z),\qquad F_{\min}(z)=F_X(z)+F_Y(z)-F(z,z).$$
+    <b>独立时</b>：
+    $$F_{\max}(z)=F_X(z)F_Y(z),\qquad F_{\min}(z)=1-[1-F_X(z)][1-F_Y(z)].$$
+    <b>$n$ 个独立同分布（同 $F,f$）时——这四条是数理统计的入场券：</b>
+    $$\boxed{F_{\max}(z)=[F(z)]^n,\quad f_{\max}(z)=n[F(z)]^{n-1}f(z)}$$
+    $$\boxed{F_{\min}(z)=1-[1-F(z)]^n,\quad f_{\min}(z)=n[1-F(z)]^{n-1}f(z)}$$
+  </div>
+
+  <div class="bg"><span class="tag">背景 · $\max/\min$ 推广到 $n$ 个变量（书上眉批"一般不考，或放数理统计里考"）</span>
+    书上在 $n$ 个独立变量的推广公式旁写了一句眉批：<b>"一般不考，或放数理统计里考。"</b>——本章只需掌握 <b>$n=2$</b> 与 <b>iid 时的 $[F]^n$</b>；那种"$n$ 个不同分布的变量取 $\max$"的一般公式 $\prod_i F_{X_i}(z)$，理解即可，<b>不必刻意记</b>。<br>
+    真正会在第 6 章反复用的是 <b>iid 版的四条</b>（$[F]^n$、$n[F]^{n-1}f$、$1-[1-F]^n$、$n[1-F]^{n-1}f$），它们是<b>次序统计量</b>与<b>极大似然估计</b>的基础（<a href="#s8b">强 5.6</a> 已经是这个用法）。
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · $\min$ 的公式别背加法版，背"生存函数"版——一步到位且永不记错</span>
+    <b>书上说</b>：$F_{\min}(z)=P\{\{X\le z\}\cup\{Y\le z\}\}=F_X+F_Y-F(z,z)$（加法公式）。<b>书上眉批同时给了第二条路</b>：
+    $$F_{\min}(z)=1-P\{\min\gt z\}=1-P\{X\gt z,\,Y\gt z\}\overset{\text{独立}}=1-[1-F_X(z)][1-F_Y(z)].$$
+    <b>潜台词是</b>：$\max$ 与 $\min$ 的<b>非对称</b>只是表象——把 $\min$ 翻到<b>补事件</b>那一侧，它和 $\max$ 就完全对称了：<br>
+    <b>$\max\le z$ ⟺ 全部 $\le z$；　$\min\gt z$ ⟺ 全部 $\gt z$。</b><br>
+    $1-F(z)$ 有个名字叫<b>生存函数</b> $S(z)=P\{X\gt z\}$。于是两条公式变成一句话：<br>
+    <b>"$\max$ 的分布函数是各自分布函数之积；$\min$ 的<u>生存</u>函数是各自<u>生存</u>函数之积。"</b><br>
+    <b>所以能考</b>：① 直接给独立同分布让你写 $f_{\max}/f_{\min}$（<a href="#s8b">基 3.11</a>、<a href="#s8b">习 3.17</a>、<a href="#s8b">强 5.6</a>）；② 选择题考 $F^2(z)$ 与 $1-[1-F(z)]^2$ 的区分（<a href="#s8b">习 3.4</a>）；③ 与"事件独立"混合出题（<a href="#s5b">强 4.1</a> 的 $\max=2,\min=1$）。<br>
+    <b>实际意义（这样记最牢）</b>：$n$ 个元件<b>串联</b>（一个坏就全坏）⟹ 系统寿命 $=\min$；<b>并联</b>（全坏才坏）⟹ 系统寿命 $=\max$。<b>串联要求"全部活着"，所以是生存函数相乘。</b><br>
+    <span class="dock">扣分点</span>：$f_{\max}=n[F]^{n-1}f$ 里那个 $f$ <b>不能漏</b>（复合函数求导的链式因子）。写成 $n[F(z)]^{n-1}$ 是最高频错误。
+  </div>
+
+  <div class="key"><span class="tag">必记 · 常见分布的可加性（四种，其余分布都<b>不可加</b>）</span>
+    <b>设 $X$ 与 $Y$ 相互独立</b>（这四条对 $n$ 个独立变量同样成立）：
+    <div class="gridwrap"><table>
+      <tr><th>分布</th><th>可加性</th><th>加的是什么</th><th>限制</th></tr>
+      <tr><td><b>二项</b></td><td>$B(n,p)+B(m,p)=B(n+m,\,p)$</td><td><b>次数相加</b></td><td><b>$p$ 必须相同</b></td></tr>
+      <tr><td><b>泊松</b></td><td>$P(\lambda_1)+P(\lambda_2)=P(\lambda_1+\lambda_2)$</td><td><b>强度相加</b></td><td>无</td></tr>
+      <tr><td><b>正态</b></td><td>$N(\mu_1,\sigma_1^2)+N(\mu_2,\sigma_2^2)=N(\mu_1+\mu_2,\;\sigma_1^2+\sigma_2^2)$</td><td>期望、<b>方差</b>各自相加</td><td>无</td></tr>
+      <tr><td><b>$\chi^2$</b></td><td>$\chi^2(n)+\chi^2(m)=\chi^2(n+m)$</td><td><b>自由度相加</b></td><td>第 6 讲再讲</td></tr>
+    </table></div>
+    <b>★ 反面清单（考得更多）</b>：<b>均匀分布不可加</b>（$U(0,1)+U(0,1)$ 是三角形分布，不是均匀）；<b>指数分布不可加</b>（$E(\lambda)+E(\lambda)=\Gamma(2,\lambda)$，即 <a href="#s3b">习 3.12(1)</a> 的 $y\mathrm e^{-y}$）；<b>几何分布不可加</b>（变成负二项）。<br>
+    <b>正态的"减法版"</b>：$X-Y\sim N(\mu_1-\mu_2,\;\sigma_1^2+\sigma_2^2)$——<b>期望相减，方差仍相加</b>（<a href="#s4b">强 4.2</a> 就靠这一条）。
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 可加性表的正确用法：它是"能不能一步写答案"的白名单</span>
+    <b>书上说</b>：有些相互独立且服从同类型分布的随机变量，其和的分布也是同类型的，<b>它们是二项、泊松、正态与 $\chi^2$</b>。<br>
+    <b>潜台词是</b>：这是一张<b>白名单</b>——名单上的四种，看到 $X+Y$ <b>直接写结果，一个积分都不用算</b>；<b>名单外的一律要老实做卷积</b>。<b>清单的价值全在"不在清单上"的那一半。</b><br>
+    <b>所以能考</b>：① 送分题——$X\sim P(2),Y\sim P(3)$ 独立，问 $P\{X+Y=1\}$，直接用 $P(5)$；② <b>陷阱题</b>——"$X\sim B(n,p_1),Y\sim B(m,p_2)$ 独立，$X+Y$ 服从什么分布？"答案是<b>不服从二项分布</b>（$p$ 不同就不可加）；③ <b>更狠的陷阱</b>——"两个均匀分布之和还是均匀吗？"答案是<b>不是</b>（是三角形分布，<a href="#s7b">习 3.8</a> 的邻居）；④ "两个指数之和"是 $\Gamma$ 分布，正是 <a href="#s3b">习 3.12(1)</a> 的 $y\mathrm e^{-y}$——<b>本章已经算出来给你看了。</b><br>
+    <span class="dock">扣分点</span>：<b>可加性一律要求"相互独立"</b>。题目不说独立就套可加性，是本节最典型的隐含条件失误。
+  </div>
+
+  <h3 id="s8b">最值分布例题</h3>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 3.11 ✔ ＋ 习 3.17 ✔</span>设随机变量 $X,Y$ 相互独立，且都在区间 $[a,b]$ 上服从均匀分布，求 <b>(基 3.11)</b> $Z=\max\{X,Y\}$ 与 <b>(习 3.17)</b> $Z=\min\{X,Y\}$ 的概率密度。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$f_{\max}(z)=\begin{cases}\dfrac{2(z-a)}{(b-a)^2},&amp;a\le z\le b\\ 0,&amp;其他\end{cases}$　　$f_{\min}(z)=\begin{cases}\dfrac{2(b-z)}{(b-a)^2},&amp;a\le z\le b\\ 0,&amp;其他\end{cases}$</span>（sympy 复算；蒙特卡洛 $10^7$（取 $a=1,b=4$）按格质量对拍通过）
+      <span class="lab">法一（套公式，30 秒）</span>$F(x)=\frac{x-a}{b-a}$（$a\le x\lt b$），$f(x)=\frac1{b-a}$，$n=2$：
+      $$f_{\max}(z)=2F(z)f(z)=2\cdot\frac{z-a}{b-a}\cdot\frac1{b-a}=\frac{2(z-a)}{(b-a)^2};$$
+      $$f_{\min}(z)=2[1-F(z)]f(z)=2\cdot\frac{b-z}{b-a}\cdot\frac1{b-a}=\frac{2(b-z)}{(b-a)^2}.$$
+      <span class="lab">法二（从定义走，书上的方法二，考场更稳）</span>独立 ⟹ $f(x,y)=\frac1{(b-a)^2}$ 于正方形 $[a,b]^2$。当 $a\le z\le b$：
+      $$F_{\max}(z)=P\{X\le z,Y\le z\}=\iint_{x\le z,\,y\le z}\!\!\frac{\mathrm dx\mathrm dy}{(b-a)^2}=\frac{(z-a)^2}{(b-a)^2}\;\;(\text{小正方形面积／大正方形面积});$$
+      $$F_{\min}(z)=1-P\{X\gt z,Y\gt z\}=1-\frac{(b-z)^2}{(b-a)^2},$$
+      求导即得。<b>几何意义一目了然：$\max\le z$ 就是落在左下小正方形里，$\min\gt z$ 就是落在右上小正方形里。</b><br>
+      <span class="lab">要害</span>两个答案<b>恰成镜像</b>（$z\leftrightarrow a+b-z$）——因为均匀分布关于中点对称，$\max$ 与 $\min$ 的角色可以对调。<b>算完一个，另一个直接写，别重算。</b><br>
+      <span class="lab">自查</span>$\int_a^b\frac{2(z-a)}{(b-a)^2}\mathrm dz=\frac{(b-a)^2}{(b-a)^2}=1$ ✓；<b>$f_{\max}$ 在 $z=a$ 处为 0、在 $z=b$ 处最大</b>——符合"最大值倾向于取大值"的直觉 ✓。<br>
+      <span class="lab">串联</span>$E[\max]=\frac{a+2b}{3}$，$E[\min]=\frac{2a+b}{3}$（第 4 章会算）——<b>两点把 $[a,b]$ 三等分</b>，这是一个值得记住的结论。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 3.4 ✔</span>设随机变量 $X$ 和 $Y$ 独立同分布，且 $X$ 的分布函数为 $F(x)$，则 $Z=\max\{X,Y\}$ 的分布函数为（　）。<br>
+    (A) $F^2(z)$　(B) $F(x)F(y)$　(C) $1-[1-F(z)]^2$　(D) $[1-F(x)][1-F(y)]$</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(A) $F^2(z)$</span>
+      <span class="lab">分析</span>$F_Z(z)=P\{\max\{X,Y\}\le z\}=P\{X\le z,\;Y\le z\}\overset{\text{独立}}=P\{X\le z\}P\{Y\le z\}\overset{\text{同分布}}=F^2(z)$。<br>
+      <span class="lab">要害 ★ 三层排除法</span><b>(B)(D) 一眼出局</b>——$Z$ 是<b>一元</b>随机变量，它的分布函数只能是<b>一个</b>自变量 $z$ 的函数，出现 $x,y$ 两个字母的<b>形式就错了</b>，根本不用看内容。<b>这类"自变量对不对"的排除法在选择题里极其好用。</b><br>
+      剩下 (A)(C)：<b>(C) 是 $\min$ 的答案</b>。区分靠一句话：<b>$\max$ 是"全部 $\le z$"（分布函数相乘），$\min$ 是"全部 $\gt z$"（生存函数相乘）。</b><br>
+      <span class="lab">别踩</span>用"$F^2$ 与 $1-(1-F)^2$ 哪个更大"来验：$\max\ge\min$，所以 $F_{\max}(z)\le F_{\min}(z)$（分布函数越大说明越靠左）。$F^2\le1-(1-F)^2$ 对 $F\in[0,1]$ 恒成立 ✓——<b>连公式都不用记，用大小关系反推。</b><br>
+      <span class="lab">串联</span>把 $n=2$ 换成一般的 $n$，(A) 变 $[F(z)]^n$，(C) 变 $1-[1-F(z)]^n$。<b><a href="#s8b">强 5.6</a> 就是 $n=3$ 的版本。</b>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 5.6 ✔</span>设总体 $X$ 服从 $[0,\theta]$ 上的均匀分布，$\theta$ 为正常数，$X_1,X_2,X_3$ 是取自 $X$ 的一个<b>样本</b>，求 $Y=\max\{X_1,X_2,X_3\}$，$Z=\min\{X_1,X_2,X_3\}$ 的分布函数和概率密度。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$F_Y(y)=\left(\frac y\theta\right)^3$，$f_Y(y;\theta)=\dfrac{3y^2}{\theta^3}$（$0\le y\lt\theta$）；　$F_Z(z)=1-\left(1-\frac z\theta\right)^3$，$f_Z(z;\theta)=\dfrac3\theta\left(1-\frac z\theta\right)^2$（$0\le z\lt\theta$）</span>（sympy 复算；蒙特卡洛 $10^7$（$\theta=2.5$）按格质量对拍通过）
+      <span class="lab">分析</span>$F(x)=\frac x\theta$，$f(x)=\frac1\theta$（$0\le x\lt\theta$），$n=3$，直接套四条公式：
+      $$F_Y(y)=[F(y)]^3=\Big(\frac y\theta\Big)^3,\qquad f_Y=3[F(y)]^2f(y)=3\Big(\frac y\theta\Big)^2\cdot\frac1\theta;$$
+      $$F_Z(z)=1-[1-F(z)]^3=1-\Big(1-\frac z\theta\Big)^3,\qquad f_Z=3[1-F(z)]^2f(z)=3\Big(1-\frac z\theta\Big)^2\cdot\frac1\theta .$$
+      <span class="lab">要害 ★ 这道题为什么放在概率论而不是数理统计</span>题干用了"<b>总体</b>""<b>样本</b>"这两个统计学词汇，还把参数写成 $f_Y(y;\theta)$ 的形式（<b>分号后面是待估参数</b>）——<b>这是第 6 章"$\theta$ 的极大似然估计"的前置准备</b>：$\hat\theta_{\mathrm{MLE}}=\max\{X_i\}$，而它的分布正是本题的 $F_Y$。<b>看到"总体 / 样本 / 分号参数"，就知道这道题的下一问在第 6 章。</b><br>
+      <span class="lab">别踩</span>"样本"两个字<b>就是"独立同分布"的代名词</b>——不用题目再说"相互独立"，可以直接用 $[F]^n$。<b>反过来，如果题目没说"样本"也没说"独立"，$[F]^n$ 不能用</b>，只能写 $F(z,z)$。<br>
+      <span class="lab">自查</span>$F_Y(\theta)=1$ ✓、$F_Z(\theta)=1-0=1$ ✓、$F_Z(0)=0$ ✓；$\int_0^\theta\frac{3y^2}{\theta^3}\mathrm dy=1$ ✓。<br>
+      <span class="lab">数值感</span>$E[\max]=\frac34\theta$，$E[\min]=\frac14\theta$（$n=3$ 时四等分点）——<b>与 <a href="#s8b">基 3.11</a> 的"三等分"是同一个规律：$n$ 个 $[0,\theta]$ 上的独立均匀，第 $k$ 小的期望是 $\frac{k}{n+1}\theta$。</b>记住这条，第 4 章能省很多积分。
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 3.3 ✔</span>设随机变量 $X,Y$ 相互独立，且均服从标准正态分布 $N(0,1)$，则（　）。<br>
+    (A) $P\{X+Y\ge1\}=\frac12$　(B) $P\{X-Y\ge1\}=\frac12$　(C) $P\{\max\{X,Y\}\ge0\}=\frac14$　(D) $P\{\min\{X,Y\}\ge0\}=\frac14$</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(D)</span>（蒙特卡洛 $10^7$：四个概率实测 $0.2398,\;0.2398,\;0.7501,\;0.2500$，只有 (D) 等于 $\frac14$）
+      <span class="lab">分析</span><b>(A)(B) 用可加性排除</b>：$X+Y\sim N(0,2)$，$X-Y\sim N(0,2)$，两者<b>关于 0 对称</b>，故 $P\{\ge1\}\ne\frac12$（$P\{\ge0\}$ 才是 $\frac12$）。实测 $\approx0.24$。<br>
+      <b>(C)(D) 用 $\max/\min$ 公式</b>：
+      $$P\{\max\{X,Y\}\ge0\}=1-P\{\max\lt0\}=1-P\{X\lt0\}P\{Y\lt0\}=1-\tfrac12\cdot\tfrac12=\tfrac34\ne\tfrac14;$$
+      $$P\{\min\{X,Y\}\ge0\}=P\{X\ge0,\;Y\ge0\}=\tfrac12\cdot\tfrac12=\tfrac14\;\checkmark$$
+      <span class="lab">要害</span><b>$\min\ge0$ ⟺ 两个都 $\ge0$，一步到位；$\max\ge0$ 要先翻补事件</b>（$\max\lt0$ ⟺ 两个都 $\lt0$）。<b>记住："$\max$ 配 $\le$，$\min$ 配 $\gt$，反着来就先取补。"</b><br>
+      <span class="lab">别踩</span>(A)(B) 里的"1"是个<b>诱饵</b>：很多人看到标准正态的对称性就条件反射填 $\frac12$，忘了阈值不是 0 而是 1。<b>正态题里先看阈值是不是等于均值。</b><br>
+      <span class="lab">提速</span>本题<b>不用算任何积分</b>：四个选项全靠对称性与独立性口算，20 秒完事。<b>看到 $N(0,1)$ + 独立 + $\max/\min$，直接想"四个象限各占 $\frac14$"。</b>
+    </div>
+  </div>
+
+  <!-- ================= s9 混合型 ================= -->
+  <h2 id="s9"><span class="idx">九</span>一离散一连续：全集分解 + 全概率公式（大题的主战场）　<span class="layer L-base">基础</span><span class="layer L-str">强化</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/概率论与数理统计/03_多维随机变量及其分布/概率_第03章_基础30讲.pdf">📄 基础 p.79、87–88</a>
+  <a class="pg" href="../../张宇系列_分章易识别版/概率论与数理统计/03_多维随机变量及其分布/概率_第03章_强化9讲_第5讲_多维随机变量函数的分布.pdf">📄 强化第5讲 p.42–46</a>
+
+  <div class="mine"><span class="tag">补讲 · 强化讲把这一型标成"考研最后一个大题"，这句话要当真</span>
+    <b>书上说</b>（基础讲）："如果 $X,Y$ 其中一个是离散型的，另一个是非离散型的，将事件对离散型的一切可能值进行全集分解，而后应用全概率公式求得 $Z$ 的分布"，眉批标<b>"很重要"</b>；（强化讲）例 3.10 旁标注<b>"此类型为考研最后一个大题，但不难"</b>。<br>
+    <b>潜台词是</b>：<b>"最后一个大题"＝概率论那道 11 分解答题的常见落点；"但不难"＝步骤固定、可以刻意练成条件反射。</b>这两句合起来是在说：<b>这是本章性价比最高的一块——分值大、方法唯一、变化少。</b><br>
+    <b>所以能考</b>：翻近年真题，"离散开关 + 连续变量"的组合反复出现（2018、2020 都考过同构的题）。<b>它之所以受青睐，是因为它能同时考查：第 1 章的全概率、第 2 章的一维分布函数、第 3 章的独立性与联合分布——一道题串三章。</b><br>
+    <b>练法建议</b>：把 <a href="#s9">基 3.10</a> 的<u>五步流程</u>（写 $F(x,y)$ → 找完备事件组 → 全概率展开 → 代入化简 + 去条件 → 取交集/取极限）默写三遍，然后闭卷做 <a href="#s9">强 5.8</a>。<b>能独立做出强 5.8，本章大题就稳了。</b><br>
+    <span class="dock">扣分点</span>：全概率展开时<b>每一支的条件概率都要写完整</b>（连着 $\{X_1\le x\}$ 一起），不能只写 $Y$ 那一半。
+  </div>
+
+  <div class="key"><span class="tag">必记 ★★★ · 混合型的唯一解法（书上标"很重要"，强化标"考研最后一个大题"）</span>
+    设 $X\sim p_i$（<b>离散</b>），$Y\sim f_Y(y)$（<b>连续</b>），求 $Z=g(X,Y)$ 的分布。<b>此时既没有 $p_{ij}$ 也没有 $f(x,y)$</b>，前面所有工具（卷积、换元）<b>全部失效</b>。唯一的路：
+    $$F_Z(z)=P\{g(X,Y)\le z\}=\sum_i \underbrace{P\{X=x_i\}}_{\text{离散的每个原子}}\cdot\underbrace{P\{g(X,Y)\le z\mid X=x_i\}}_{\text{代入后变成一维问题}}$$
+    <b>三步走</b>：<br>
+    <b>① 补 $\Omega$</b>：把 $\Omega$ 按<b>离散变量的一切可能值</b>劈成完备事件组 $\{X=x_1\},\{X=x_2\},\dots$；<br>
+    <b>② 全概率</b>：$P(A)=\sum_i P\{X=x_i\}P(A\mid X=x_i)$；<br>
+    <b>③ 代入化简</b>：在 $\{X=x_i\}$ 条件下，$g(X,Y)$ 里的 $X$ <b>变成常数</b> $x_i$，问题降成一维；再用<b>独立性</b>把条件去掉。<br>
+    强化讲的补充：<b>$X,Y$ 独立时可用分布函数法及全概率公式；$X,Y$ 不独立时只能用分布函数法。</b>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · "全集分解"为什么是本章大题的通用起手式——它把"不会做"变成"会做"</span>
+    <b>书上说</b>（基 3.10 的注）：本题较简单，考研题不会考这么单一，<b>但核心都是全集分解思想，热点题型</b>。<br>
+    <b>潜台词是</b>：混合型问题的困难<b>不在计算，在于"没有可用的联合密度"</b>。全集分解做的事情是：<b>把一个"没有工具"的二维问题，劈成有限个"有工具"的一维问题</b>。劈完之后每一块都是第 2 章的家常菜。<br>
+    <b>识别信号（看到就用它）</b>：<br>
+    ① 题目里出现<b>两点分布 / 0–1 分布 / 有限取值的离散变量</b>与连续变量混在一个式子里（基 3.10 的 $X_3$、强 5.8 的 $X$ 的原子部分、习 3.15 的 $Y$、习 3.18 的 $Y$）；<br>
+    ② 出现形如 $Z=X_3X_1+(1-X_3)X_2$ 的"<b>开关式</b>"结构——离散变量在<b>当开关</b>，$X_3=1$ 走一路、$X_3=0$ 走另一路；<br>
+    ③ 出现 $Z=XY$ 或 $Z=X+Y$ 而其中一个只取有限个值。<br>
+    <b>所以能考</b>：本章 <b>5 道</b>题走这条路（基 3.10＝强 5.7、强 5.8、强 5.9、习 3.15、习 3.18），<b>其中 3 道是解答题</b>。强化讲直接标注"<b>此类型为考研最后一个大题，但不难</b>"——<b>意思是：这是可以稳拿的分，别放过。</b><br>
+    <span class="dock">扣分点</span>：全概率公式那一步<b>必须把 $\{X=x_i\}$ 的完备性写出来</b>（$\sum_i P\{X=x_i\}=1$），否则阅卷认为你在凑。写法："由于 $\{X_3=0\}\cup\{X_3=1\}=\Omega$ 且互不相容，由全概率公式……"
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 混合型题的三种"离散零件"，形态不同但套路一样</span>
+    <b>潜台词是</b>：本章五道混合型题里，那个离散变量扮演的角色只有三种，<b>认出角色就知道怎么劈</b>：<br>
+    ① <b>开关</b>（选哪一路）：$Y=X_3X_1+(1-X_3)X_2$ ——<a href="#s9">基 3.10</a>；<br>
+    ② <b>符号 / 系数</b>（乘上去或加上去）：$Z=XY$、$Z=X-Y$ 而 $Y\in\{-1,1\}$ ——<a href="#s9">习 3.15</a>、<a href="#s9">习 3.18</a>、<a href="#s2c">强 5.1</a>；<br>
+    ③ <b>自身就是混合型</b>（既有原子又有密度）：<a href="#s9">强 5.8</a> 的 $X$ ——<b>这一型最难，要劈成三块</b>。<br>
+    <b>所以能考</b>：三种角色的<b>劈法完全相同</b>（按离散取值做完备事件组），差别只在"劈成几块"和"每块里剩下什么"。<b>①②劈两块，③劈三块。</b><br>
+    <b>一个能救命的判断</b>：劈完之后，<b>每一块里那个离散变量都应该变成常数</b>。如果某一块里它还在，说明你劈错了地方。<br>
+    <span class="dock">扣分点</span>：角色 ② 里最容易错的是<b>不等式两边乘负数忘了变号</b>（<a href="#s9">习 3.15</a> 的 $-X\le2$）。
+  </div>
+
+  <div class="link"><span class="tag">串联 · "开关变量"这个套路，在 408 和数学里到处都是</span>
+    <b>接第 1 章</b>：全概率公式 $P(A)=\sum P(B_i)P(A\mid B_i)$ 与贝叶斯公式的完备事件组——<b>本节只是把 $B_i$ 具体化为 $\{X=x_i\}$</b>。<br>
+    <b>接第 5 章</b>：混合分布是"<b>随机选一个总体再抽样</b>"的模型，中心极限定理里的混合正态就是这个结构。<br>
+    <b>接 408（操作系统）</b>：$Z=X_3X_1+(1-X_3)X_2$ 就是一个<b>二路选择器（MUX）</b>——$X_3$ 是选择信号，$X_1,X_2$ 是两路输入。<b>组成原理里的多路选择器、指令流水线的分支预测（走 taken 还是 not-taken 两条路径，各有自己的时延分布），数学模型完全一样</b>：总时延的分布 = 各分支概率 × 各分支条件分布之和。<b>这正是"平均 CPI = ∑(指令占比 × 该类指令周期数)"的连续版。</b><br>
+    <b>接 408（组成原理 · Cache）</b>：命中/缺失是一个 0–1 开关，平均访存时间 $=p\cdot T_{\text{hit}}+(1-p)\cdot T_{\text{miss}}$——<b>这就是全概率公式，一字不差</b>。你在 408 里算了一百遍的公式，就是这里的"混合型分布"。
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 3.10 ✔ ＝ 强 5.7 ✔（两讲重题）</span>设随机变量 $X_1,X_2,X_3$ 相互独立，其中 $X_1$ 与 $X_2$ 均服从标准正态分布，$X_3$ 的概率分布为 $P\{X_3=0\}=P\{X_3=1\}=\dfrac12$，$Y=X_3X_1+(1-X_3)X_2$。<br>
+    (1) 求二维随机变量 $(X_1,Y)$ 的分布函数，结果用标准正态分布函数 $\Phi(x)$ 表示；<br>
+    (2) 证明随机变量 $Y$ 服从标准正态分布。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$F(x,y)=\dfrac12\Phi(x)\Phi(y)+\dfrac12\Phi(\min\{x,y\})$；$Y\sim N(0,1)$</span>（结构式已用蒙特卡洛 $10^7$ 在多组 $(x,y)$ 上验证；$Y$ 的经验分布与 $\Phi$ 按格质量对拍通过）
+
+      <div class="think"><span class="th">💭 思路 · 拿到题先想什么（本题是"混合型"的标杆，必须彻底吃透）</span>
+        <ol>
+          <li><b>先读懂 $Y$ 是什么。</b>$X_3$ 只取 0 和 1：<b>$X_3=1$ 时 $Y=X_1$；$X_3=0$ 时 $Y=X_2$</b>。所以书上眉批说得很直白——<b>"$Y$ 有一半的概率取 $X_1$，有一半的概率取 $X_2$"</b>。$X_3$ 是个<b>开关</b>，$Y$ 是"随机挑一路"的结果。<b>把这句话想明白，整道题就通了。</b></li>
+          <li><b>为什么 (1) 要求"联合"而不是各自？</b>因为 $X_1$ 与 $Y$ <b>不独立</b>——有一半的时候 $Y$ <u>就是</u> $X_1$！这是全题的趣味所在：$Y$ 单看是标准正态，但它和 $X_1$ 之间有很强的依赖。<b>命题人就是要考这个"边缘正常、联合诡异"的现象。</b></li>
+          <li><b>事件太复杂 ⟹ 全集分解。</b>$\{X_1\le x,\;X_3X_1+(1-X_3)X_2\le y\}$ 里混着三个变量，直接算无从下手。按 $X_3$ 的两个取值劈开，每一支里 $X_3$ 变成常数，事件立刻塌缩成两个变量的问题。</li>
+          <li><b>塌缩后的关键一步：$X_3=1$ 那支变成 $P\{X_1\le x,\;X_1\le y\}$——<u>同一个变量出现两次</u>！</b>这时不能当独立处理，而要<b>取交集</b>：$\{X_1\le x\}\cap\{X_1\le y\}=\{X_1\le\min\{x,y\}\}$。<b>$\min$ 就是这么冒出来的，不是硬凑的。</b></li>
+          <li>(2) 求边缘就是<b>取极限</b>：$F_Y(y)=\lim_{x\to+\infty}F(x,y)$。注意 $\Phi(x)\to1$、$\min\{x,y\}\to y$。</li>
+        </ol>
+      </div>
+
+      <div class="paper"><span class="phead">✍️ 考场卷面（按 12 分估）</span>
+        <div class="step"><b>解</b>　(1) 记 $(X_1,Y)$ 的分布函数为 $F(x,y)$，则对任意实数 $x,y$，
+        $$F(x,y)=P\{X_1\le x,\;Y\le y\}=P\{X_1\le x,\;X_3X_1+(1-X_3)X_2\le y\}.$$<span class="pt">⛳ 1分</span></div>
+        <div class="step">由于 $\{X_3=0\}\cup\{X_3=1\}=\Omega$ 且两者互不相容，构成<b>完备事件组</b>，由<b>全概率公式</b>
+        $$F(x,y)=P\{X_3=0\}P\{X_1\le x,\,X_3X_1+(1-X_3)X_2\le y\mid X_3=0\}+P\{X_3=1\}P\{\cdots\mid X_3=1\}. \tag{1}$$<span class="pt">⛳ 3分</span></div>
+        <div class="step">在 $\{X_3=0\}$ 下 $Y=X_2$，在 $\{X_3=1\}$ 下 $Y=X_1$，又 $P\{X_3=0\}=P\{X_3=1\}=\dfrac12$，故 (1) 式
+        $$=\frac12P\{X_1\le x,\,X_2\le y\mid X_3=0\}+\frac12P\{X_1\le x,\,X_1\le y\mid X_3=1\}.$$
+        由 $X_1,X_2,X_3$ <b>相互独立</b>，条件可以去掉：
+        $$=\frac12P\{X_1\le x,\;X_2\le y\}+\frac12P\{X_1\le x,\;X_1\le y\}. \tag{2}$$<span class="pt">⛳ 3分</span></div>
+        <div class="step">对 (2) 式第一项，再由 $X_1$ 与 $X_2$ 独立得 $P\{X_1\le x,X_2\le y\}=\Phi(x)\Phi(y)$；<br>
+        对第二项，<b>取交集</b> $\{X_1\le x\}\cap\{X_1\le y\}=\{X_1\le\min\{x,y\}\}$，故 $P\{X_1\le x,X_1\le y\}=\Phi(\min\{x,y\})$。<span class="pt">⛳ 3分</span></div>
+        <div class="fin">所以 $(X_1,Y)$ 的分布函数为
+        $$F(x,y)=\frac12\Phi(x)\Phi(y)+\frac12\Phi(\min\{x,y\}).$$<span class="pt">⛳ 1分</span></div>
+        <div class="step"><b>证</b>　(2) 由 (1) 知，$Y$ 的分布函数为 $Y$ 的<b>边缘分布函数</b>，即令 $x\to+\infty$：
+        $$F_Y(y)=\lim_{x\to+\infty}F(x,y)=\lim_{x\to+\infty}\Big[\frac12\Phi(x)\Phi(y)+\frac12\Phi(\min\{x,y\})\Big]=\frac12\cdot1\cdot\Phi(y)+\frac12\Phi(y)=\Phi(y).$$<span class="pt">⛳ 1分</span></div>
+        <div class="fin">因 $F_Y(y)=\Phi(y)$ 对一切实数 $y$ 成立，故<b>随机变量 $Y$ 服从标准正态分布</b>，证毕。</div>
+      </div>
+
+      <div class="notekeep"><span class="nh">📌 批注 · 对照完再看这层</span>
+        <b>① "完备事件组"四个字要写出来</b>，并说明互不相容。全概率公式的前提没交代，这一步的 3 分会被扣。<br>
+        <b>② "由独立性去掉条件"是第二个采分点</b>：$P\{A\mid X_3=0\}=P(A)$ 成立的<u>唯一</u>理由是 $X_3$ 与 $X_1,X_2$ 独立。<b>不写理由直接去掉条件，等于凭空丢条件。</b><br>
+        <b>③ $\{X_1\le x\}\cap\{X_1\le y\}=\{X_1\le\min\{x,y\}\}$ 必须单独成行</b>。这是本题唯一的"技巧点"，也是最容易被写成 $\Phi(x)\Phi(y)$（<b>错！同一个变量不能当独立拆</b>）的地方。<span class="dock">扣分点</span><b>看到同一个随机变量出现两次，第一反应是取交，不是相乘。</b><br>
+        <b>④ 结论的诡异之处值得回味</b>：$X_1\sim N(0,1)$、$Y\sim N(0,1)$，两个边缘都是标准正态，<b>但 $(X_1,Y)$ 绝不是二维正态</b>——二维正态的分布函数不可能带 $\Phi(\min\{x,y\})$ 这种项。<b>这又是一个"边缘正态、联合非正态"的反例，与 <a href="#s4b">习 3.6</a> 遥相呼应。</b><br>
+        <b>⑤ 顺手能算的</b>：$\mathrm{Cov}(X_1,Y)=E(X_1Y)=\frac12E(X_1^2)+\frac12E(X_1X_2)=\frac12\cdot1+0=\frac12$，故 $\rho=\frac12$。<b>如果真题加一问"求 $\rho$"，这就是答案。</b><br>
+        <b>⑥ 书上的注</b>："本题较简单，考研题不会考这么单一，但<b>核心都是全集分解思想，热点题型</b>。" ——<b>把这道题的五步流程背下来，遇到变形直接套。</b>
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 5.8 ✔</span>设随机变量 $X$ 满足 $|X|\le1$，$P\{X=-1\}=P\{X=1\}=\dfrac14$，当 $|X|\lt1$ 时 $X$ 服从 $(-1,1)$ 上的均匀分布，$Y$ 服从参数为 1 的指数分布，$X,Y$ 独立，令 $Z=X+Y$。求：<br>
+    (1) $X$ 的分布函数 $F_X(x)$；(2) $Z$ 的分布函数 $F_Z(z)$。<br>
+    <span style="color:var(--red);font-size:.86rem"><b>⚠️ 书上页末注：这是作者新命制的考题，这种考法尚未出现过，应重视。</b></span></div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$F_X(x)=\begin{cases}0,&amp;x\lt-1\\ \dfrac{2+x}{4},&amp;-1\le x\lt1\\ 1,&amp;x\ge1\end{cases}$　　$F_Z(z)=\begin{cases}0,&amp;z\lt-1\\ \dfrac{1+z}{4},&amp;-1\le z\lt1\\ 1-\dfrac12\mathrm e^{1-z},&amp;z\ge1\end{cases}$</span>（sympy 复算：中段与高段化简后<b>指数项全部抵消</b>，并验 $F_Z$ 在 $z=\pm1$ 处连续；蒙特卡洛 $10^7$ 按格质量对拍通过）
+
+      <div class="think"><span class="th">💭 思路 · 拿到题先想什么（本题是全章计算量最大的一道）</span>
+        <ol>
+          <li><b>先把 $X$ 看清楚：它是一个"混合型"随机变量。</b>总概率 1 被劈成三块：$x=-1$ 处一个<b>原子</b>（$\frac14$）、$x=1$ 处一个<b>原子</b>（$\frac14$）、中间 $(-1,1)$ 上一段<b>连续</b>部分（总共 $\frac12$，均匀摊开 ⟹ 密度 $=\frac12\div2=\frac14$）。<b>三块加起来 $\frac14+\frac14+\frac12=1$ ✓ —— 这个检查要第一时间做。</b></li>
+          <li><b>(1) 的难点是"条件均匀"怎么翻译成 $F_X$。</b>题目说的是<b>条件分布</b>："当 $|X|\lt1$ 时服从 $U(-1,1)$"，即 $P\{X\le x\mid |X|\lt1\}=\frac{x+1}{2}$。要还原成无条件的 $F_X$，<b>又要用全概率公式</b>（$D_{23}$ 化归经典形式）：$P\{-1\lt X\le x\}=P\{\cdot\mid A\}P(A)=\frac{x+1}{2}\cdot\frac12=\frac{x+1}{4}$。</li>
+          <li><b>捷径</b>：其实可以跳过条件概率，直接写出"密度 + 原子"的混合形式：$F_X(x)=\underbrace{\frac14}_{x=-1\text{ 的原子}}+\underbrace{\frac{x+1}{4}}_{(-1,x]\text{ 上的连续部分}}=\frac{2+x}{4}$（$-1\le x\lt1$）。<b>卷面上两种写法都给分，但要能看懂书上那条严谨的条件概率推法。</b></li>
+          <li><b>(2) 必须再用一次全集分解</b>，这次按 $X$ 的<b>三块结构</b>劈：$\{X=-1\}$、$\{X=1\}$、$\{-1\lt X\lt1\}$。前两块里 $X$ 是常数，$Z=Y\pm1$ 直接查指数分布；第三块是二重积分。</li>
+          <li><b>分段点在哪？</b>$Z=X+Y$，$X\in[-1,1]$、$Y\gt0$ ⟹ $Z\gt-1$。而第三块的积分区域在 $z\lt1$ 与 $z\ge1$ 时形状不同（$x$ 的上限从 $z$ 变成 1）。<b>所以分段点是 $z=-1$ 和 $z=1$。</b></li>
+        </ol>
+      </div>
+
+      <div class="paper"><span class="phead">✍️ 考场卷面（按 12 分估）</span>
+        <div class="step"><b>解</b>　(1) 当 $x\lt-1$ 时 $F_X(x)=0$；当 $x=-1$ 时 $F_X(-1)=P\{X=-1\}=\dfrac14$。<span class="pt">⛳ 1分</span></div>
+        <div class="step">当 $-1\lt x\lt1$ 时，记 $A=\{-1\lt X\lt1\}$，则 $P(A)=1-\dfrac14-\dfrac14=\dfrac12$，且在 $A$ 下 $X\sim U(-1,1)$，故
+        $$P\{-1\lt X\le x\}=P\{-1\lt X\le x\mid A\}P(A)=\frac{x-(-1)}{1-(-1)}\cdot\frac12=\frac{x+1}{4},$$
+        从而 $F_X(x)=P\{X\le-1\}+P\{-1\lt X\le x\}=\dfrac14+\dfrac{x+1}{4}=\dfrac{2+x}{4}$。<span class="pt">⛳ 3分</span></div>
+        <div class="step">当 $x\ge1$ 时 $F_X(x)=1$。综上
+        $$F_X(x)=\begin{cases}0,&amp;x\lt-1,\\[2pt] \dfrac{2+x}{4},&amp;-1\le x\lt1,\\[2pt] 1,&amp;x\ge1.\end{cases} \tag{1}$$<span class="pt">⛳ 1分</span></div>
+        <div class="step">(2) 由 (1)，$X$ 在 $(-1,1)$ 上的密度为 $\dfrac14$。按 $X$ 的取值作<b>全集分解</b>：
+        $$F_Z(z)=P\{X+Y\le z\}=\underbrace{P\{X=-1\}P\{Y\le z+1\}}_{①}+\underbrace{P\{X=1\}P\{Y\le z-1\}}_{②}+\underbrace{P\{X+Y\le z,\,-1\lt X\lt1\}}_{③}, \tag{2}$$
+        其中已用 $X$ 与 $Y$ 相互独立。又 $Y\sim E(1)$，故 $P\{Y\le t\}=1-\mathrm e^{-t}\;(t\ge0)$，否则为 0。<span class="pt">⛳ 3分</span></div>
+        <div class="step">对 ③：当 $z\lt-1$ 时为 0；当 $-1\le z\lt1$ 时
+        $$③=\int_{-1}^{z}\mathrm dx\int_0^{z-x}\frac14\mathrm e^{-y}\mathrm dy=\frac14\int_{-1}^{z}\big(1-\mathrm e^{x-z}\big)\mathrm dx=\frac14(z+1)-\frac14\big(1-\mathrm e^{-1-z}\big)=\frac14\big(z+\mathrm e^{-1-z}\big); \tag{3}$$
+        当 $z\ge1$ 时
+        $$③=\int_{-1}^{1}\mathrm dx\int_0^{z-x}\frac14\mathrm e^{-y}\mathrm dy=\frac14\int_{-1}^{1}\big(1-\mathrm e^{x-z}\big)\mathrm dx=\frac12-\frac14\big(\mathrm e^{1-z}-\mathrm e^{-1-z}\big). \tag{4}$$<span class="pt">⛳ 3分</span></div>
+        <div class="fin">代入 (2)：当 $-1\le z\lt1$ 时 $F_Z(z)=\dfrac14\big[1-\mathrm e^{-(z+1)}\big]+0+\dfrac14\big(z+\mathrm e^{-(z+1)}\big)=\dfrac{1+z}{4}$；
+        当 $z\ge1$ 时 $F_Z(z)=\dfrac14\big[1-\mathrm e^{-(z+1)}\big]+\dfrac14\big[1-\mathrm e^{-(z-1)}\big]+\dfrac12-\dfrac14\big(\mathrm e^{1-z}-\mathrm e^{-1-z}\big)=1-\dfrac12\mathrm e^{1-z}$。所以
+        $$F_Z(z)=\begin{cases}0,&amp;z\lt-1,\\[2pt] \dfrac{1+z}{4},&amp;-1\le z\lt1,\\[2pt] 1-\dfrac12\mathrm e^{1-z},&amp;z\ge1.\end{cases}$$<span class="pt">⛳ 1分</span></div>
+      </div>
+
+      <div class="notekeep"><span class="nh">📌 批注 · 对照完再看这层</span>
+        <b>① 化简中<u>指数项全部抵消</u>，这是本题最漂亮也最容易崩的一步。</b>$-1\le z\lt1$ 段：$-\frac14\mathrm e^{-(z+1)}+\frac14\mathrm e^{-1-z}=0$（注意 $\mathrm e^{-(z+1)}$ 与 $\mathrm e^{-1-z}$ <b>是同一个东西</b>，别被写法骗了）。$z\ge1$ 段：$-\frac14\mathrm e^{-(z+1)}+\frac14\mathrm e^{-1-z}=0$，剩下 $-\frac14\mathrm e^{-(z-1)}-\frac14\mathrm e^{1-z}=-\frac12\mathrm e^{1-z}$。<b>算完发现答案这么干净，说明你对了；答案里还挂着零碎的指数，回头查。</b><br>
+        <b>② 收尾必做的连续性检查</b>：$z=-1$ 处：$\frac{1+(-1)}4=0$ ✓ 与左段接上；$z=1$ 处：左极限 $\frac{1+1}{4}=\frac12$，右值 $1-\frac12\mathrm e^0=\frac12$ ✓。<b>$F_Z$ 处处连续</b>——<b>这不是巧合，是必然</b>：$X$ 虽有两个原子，但加上一个<b>连续</b>的 $Y$ 之后，原子被"抹平"了（连续型 + 任何独立随机变量 = 连续型）。<b>这一句可以当作本题的定性预判：算之前就该知道 $F_Z$ 一定连续。</b><br>
+        <b>③ ② 项在 $-1\le z\lt1$ 时为 0</b>：因为 $P\{Y\le z-1\}$ 中 $z-1\lt0$ 而 $Y\gt0$。<b>漏掉这个判断会多算一项。</b><br>
+        <b>④ 中段结果 $\frac{1+z}{4}$ 的直观解释</b>：在 $-1\le z\lt1$ 时，能使 $X+Y\le z$ 的只有"$X$ 落在 $[-1,z]$ 且 $Y$ 很小"这一类，最终恰好线性。<b>$F_Z$ 在这段是直线，说明 $Z$ 在 $(-1,1)$ 上的密度是常数 $\frac14$——与 $X$ 的连续部分密度相同。</b><br>
+        <b>⑤ 为什么"应重视"</b>：常规的混合型题（如基 3.10）里离散变量是<b>纯离散</b>的；本题的 $X$ <b>自身就是混合型</b>（既有原子又有密度），全集分解要劈成<b>三</b>块而不是两块。<b>这是难度的真正来源，也是"尚未出现过的考法"的含义。</b><br>
+        <span class="dock">扣分点</span>：把 $X$ 的连续部分密度写成 $\frac12$（$U(-1,1)$ 的密度）是<b>致命错误</b>——那是<b>条件</b>密度，无条件密度要再乘上 $P(A)=\frac12$，即 $\frac14$。<b>"条件密度 × 条件概率 = 无条件密度贡献"，这一步乘漏了整道题全错。</b>
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 3.15 ✔</span>已知随机变量 $X$ 与 $Y$ 相互独立，$X$ 服从参数为 $\lambda$ 的指数分布，$P\{Y=-1\}=\dfrac14$，$P\{Y=1\}=\dfrac34$，求概率 $P\{X-Y\le1\}$，$P\{XY\le2\}$。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$P\{X-Y\le1\}=\dfrac34\left(1-\mathrm e^{-2\lambda}\right)$；　$P\{XY\le2\}=1-\dfrac34\mathrm e^{-2\lambda}$</span>（sympy 复算；蒙特卡洛 $10^7$（$\lambda=2$）实测 $0.74999$ 与 $0.98626$，与解析值 $0.75000$、$0.98626$ 一致）
+      <span class="lab">分析</span>书上的解题说明写得很好：<b>"由于 $Y$ 是离散型随机变量，$X$ 与 $Y$ 相互独立，因此计算与 $X,Y$ 有关的事件 $A$ 的概率时，自然想到将 $A$ 对 $Y$ 的可能值作全集分解，应用全概率公式计算 $P(A)$。"</b><br>
+      <b>$P\{X-Y\le1\}$</b>：
+      $$=P\{X-Y\le1,Y=1\}+P\{X-Y\le1,Y=-1\}=P\{X\le2\}P\{Y=1\}+\underbrace{P\{X\le0\}}_{=0}P\{Y=-1\}=\frac34\big(1-\mathrm e^{-2\lambda}\big).$$
+      <b>$P\{XY\le2\}$</b>：
+      $$=P\{X\le2,Y=1\}+P\{-X\le2,Y=-1\}=\frac34P\{X\le2\}+\frac14\underbrace{P\{X\ge-2\}}_{=1}=\frac34\big(1-\mathrm e^{-2\lambda}\big)+\frac14=1-\frac34\mathrm e^{-2\lambda}.$$
+      <span class="lab">要害 ★</span><b>两个"平凡分支"是本题的全部得分点</b>：<br>
+      ① $Y=-1$ 时 $X-Y\le1$ 变成 $X\le0$，而 $X\gt0$ ⟹ <b>概率 0</b>；<br>
+      ② $Y=-1$ 时 $XY\le2$ 变成 $-X\le2$ 即 $X\ge-2$，而 $X\gt0$ 恒成立 ⟹ <b>概率 1</b>。<br>
+      <b>这两个分支不用算积分，一眼判 0 或 1。看到"负号 + 只取正值的分布"，先判平凡。</b><br>
+      <span class="lab">别踩</span>$Y$ 取 $-1$ 时 <b>$XY=-X$ 是负数，必然 $\le2$</b>——很多人机械地写 $P\{X\le-2\}$（把不等式两边同除负数忘了变号），得到 0，答案就少了 $\frac14$。<b>不等式两边乘除负数要变号，这个小学知识在这里丢分最多。</b><br>
+      <span class="lab">数值感</span>$\lambda$ 越大 ⟹ $X$ 越集中在 0 附近 ⟹ 两个概率都越接近上界（$\frac34$ 与 1）。<b>令 $\lambda\to+\infty$ 检查：$P\{X-Y\le1\}\to\frac34$（只剩 $Y=1$ 那支）✓、$P\{XY\le2\}\to1$ ✓。取极限验答案，五秒。</b>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 3.18 ✔</span>设随机变量 $X$ 与 $Y$ 相互独立，且 $X$ 服从标准正态分布 $N(0,1)$，$Y$ 的概率分布为 $P\{Y=0\}=P\{Y=1\}=\dfrac12$，记 $F_Z(z)$ 为随机变量 $Z=XY$ 的分布函数，求函数 $F_Z(z)$ 的<b>间断点</b>。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$F_Z(z)=\begin{cases}\frac12\Phi(z),&amp;z\lt0\\[2pt] \frac12\left[1+\Phi(z)\right],&amp;z\ge0\end{cases}$，<b>唯一间断点 $z=0$</b>（跳跃度 $\frac12$）</span>（蒙特卡洛 $10^7$：$P\{Z=0\}$ 实测 $0.49998$，$P\{Z\lt0\}$ 实测 $0.25004$，与 $\frac12,\frac14$ 一致）
+      <span class="lab">分析</span>全集分解（按 $Y$ 的两个取值）：
+      $$F_Z(z)=P\{XY\le z\mid Y=0\}P\{Y=0\}+P\{XY\le z\mid Y=1\}P\{Y=1\}=\frac12\Big(\underbrace{P\{0\le z\}}_{\text{示性函数}}+\underbrace{P\{X\le z\}}_{\Phi(z)}\Big).$$
+      <b>关键在第一项</b>：$Y=0$ 时 $Z=0$（<b>恒等于 0，不是随机的</b>），所以 $P\{0\le z\}$ 是一个<b>示性函数</b>：$z\lt0$ 时为 <b>0</b>，$z\ge0$ 时为 <b>1</b>。<b>这个 0 → 1 的阶跃，就是间断的唯一来源。</b><br>
+      $$F_Z(z)=\begin{cases}\frac12\Phi(z),&amp;z\lt0,\\ \frac12[1+\Phi(z)],&amp;z\ge0.\end{cases}$$
+      在 $z=0$：左极限 $\frac12\Phi(0)=\frac14$，函数值 $\frac12[1+\frac12]=\frac34$，<b>跳跃度 $\frac34-\frac14=\frac12=P\{Z=0\}$</b>。<br>
+      <span class="lab">要害 ★★★ 为什么这道题问"间断点"</span>因为它考的是第 2 章那条铁律：<b>$F$ 的跳跃高度 $=P\{Z=$ 该点$\}$</b>。$Z=XY$ 有<b>一半的概率恰好等于 0</b>（只要 $Y=0$），所以 $Z$ 是<b>混合型</b>随机变量：一半概率是原子（在 0 点），一半概率连续摊在 $N(0,1)$ 上。<b>"离散变量取到 0" ⟹ "乘积必为 0" ⟹ "分布函数必有跳跃"</b>——<b>看到 $Z=XY$ 且某个因子能取 0，立刻断定 $z=0$ 是间断点，不用算。</b><br>
+      <span class="lab">别踩</span>① $F_Z$ 右连续，所以 $z=0$ 处取<b>上面</b>那个值 $\frac34$（区间写成 $z\ge0$ 而不是 $z\gt0$）；<br>
+      ② $\Phi(0)=\frac12$ 要能秒填；<br>
+      ③ 除了 $z=0$，其余各点 $\Phi$ 连续 ⟹ <b>"唯一"间断点</b>，答案要写"唯一"。<br>
+      <span class="lab">串联</span>与 <a href="#s9">强 5.8</a> 对照着看会非常有启发：<b>强 5.8 里"离散 + 独立连续"把原子<u>抹平</u>了（$F_Z$ 连续），本题里"离散 × 独立连续"却把原子<u>造了出来</u>（$F_Z$ 跳跃）。</b>区别在于运算：<b>加法把原子平移摊开，乘法在 $Y=0$ 时把整支塌缩到一个点。</b>——<b>这一对比是本章最值得记住的一处结构性洞察。</b>
+    </div>
+  </div>
+
+  <div class="link"><span class="tag">串联 · 加法"抹平"原子、乘法"制造"原子——这一对现象串起本章与第 2 章</span>
+    <b>接第 2 章（$F$ 的跳跃 = 点概率）</b>：<a href="#s9">强 5.8</a> 里 $X$ 有两个原子，加上独立连续的 $Y$ 后 $F_Z$ <b>处处连续</b>（原子被抹平）；<a href="#s9">习 3.18</a> 里 $Y$ 只是个 0–1 变量，乘上连续的 $X$ 后 $F_Z$ 在 0 处<b>跳了 $\frac12$</b>（原子被造出来）。<b>同样是"离散 + 连续"，加法和乘法的结果截然相反。</b><br>
+    <b>为什么</b>：加法把每个原子<b>平移</b>后与连续分布卷积，卷积必然把点摊开；乘法在 $Y=0$ 时把<b>整支塌缩到一个点</b>，塌缩就产生原子。<b>"运算是否可逆"决定了原子的命运</b>——加法可逆（知道 $Z$ 和 $Y$ 能还原 $X$），乘以 0 不可逆。<br>
+    <b>接第 4 章</b>：混合型的期望要写成 $\sum x_ip_i+\int xf(x)\mathrm dx$（离散部分 + 连续部分）——<b>本章的"劈块"思想在第 4 章直接复用</b>。<br>
+    <b>接 408（组成原理）</b>："乘以 0 造出原子"在数值计算里叫<b>下溢塌缩</b>，在 Cache 里叫<b>冷启动全部落到同一状态</b>——<b>不可逆操作会把大量不同的输入映到同一个输出，这就是"原子"的物理含义。</b>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">强 5.9 ✔</span>已知随机变量 $X$ 与 $Y$ 相互独立，$X\sim\begin{pmatrix}0&amp;1\\ \frac14&amp;\frac34\end{pmatrix}$，$Y$ 服从参数为 1 的指数分布，记
+    $$U=\begin{cases}0,&amp;X\lt Y\\ 1,&amp;X\ge Y\end{cases}\qquad V=\begin{cases}0,&amp;X\lt2Y\\ 1,&amp;X\ge2Y\end{cases}$$
+    求 $(U,V)$ 的分布律。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">见下表</span>（sympy 复算；蒙特卡洛 $10^7$：四格实测 $0.52590,\;0.09701,\;0,\;0.37709$，与解析值 $0.52590,\;0.09702,\;0,\;0.37708$ 一致）
+      <div class="tabwrap"><table>
+        <tr><th>$V\backslash U$</th><th>0</th><th>1</th><th>$p_{\cdot j}$</th></tr>
+        <tr><td>0</td><td>$\frac14+\frac34\mathrm e^{-1}$</td><td>$\frac34\mathrm e^{-\frac12}-\frac34\mathrm e^{-1}$</td><td>$\frac14+\frac34\mathrm e^{-\frac12}$</td></tr>
+        <tr><td>1</td><td><b>0</b></td><td>$\frac34-\frac34\mathrm e^{-\frac12}$</td><td>$\frac34-\frac34\mathrm e^{-\frac12}$</td></tr>
+        <tr><td>$p_{i\cdot}$</td><td>$\frac14+\frac34\mathrm e^{-1}$</td><td>$\frac34-\frac34\mathrm e^{-1}$</td><td>1</td></tr>
+      </table></div>
+      <span class="lab">★ 三步走</span><b>① 算两条边缘</b>（这是"一维 → 多维"，$U,V$ 都是 $X,Y$ 造出来的指示变量）：
+      $$P\{U=0\}=P\{X\lt Y\}=P\{X=0\}\underbrace{P\{Y\gt0\}}_{=1}+P\{X=1\}\underbrace{P\{Y\gt1\}}_{\mathrm e^{-1}}=\frac14+\frac34\mathrm e^{-1};$$
+      $$P\{V=0\}=P\{X\lt2Y\}=\frac14\cdot1+\frac34\underbrace{P\Big\{Y\gt\tfrac12\Big\}}_{\mathrm e^{-1/2}}=\frac14+\frac34\mathrm e^{-\frac12}.$$
+      <b>② 找那个"必为 0"的格子</b>：$P\{U=0,V=1\}=P\{X\lt Y,\;X\ge2Y\}$。若两者同时成立则 $2Y\le X\lt Y$，即 $2Y\lt Y$，而 $Y\gt0$ ⟹ <b>矛盾，概率为 0</b>。<br>
+      <b>③ 用边缘倒推其余三格</b>：$p_{11}=P\{V=1\}-0=\frac34-\frac34\mathrm e^{-\frac12}$；$p_{10}=P\{U=1\}-p_{11}=\frac34\mathrm e^{-\frac12}-\frac34\mathrm e^{-1}$；$p_{00}=P\{U=0\}$（因为 $U=0$ 那一列另一格是 0）。<br>
+      <span class="lab">要害 ★</span><b>"两条边缘 + 一个 0" 就能定死整张 $2\times2$ 表</b>——因为 $2\times2$ 表有 4 个未知数，边缘给 2 个独立方程 + 归一性 1 个 + 那个 0，恰好 4 个。<b>凡是 $2\times2$ 的联合分布题，先找有没有"逻辑上不可能"的格子，找到就赢了一半。</b><br>
+      <span class="lab">别踩</span>① $U=1$ 与 $V=1$ 是<b>包含关系</b>：$X\ge2Y\Rightarrow X\ge Y$（因 $Y\gt0$），故 $\{V=1\}\subset\{U=1\}$——<b>这正是 $p_{01}=0$ 的另一种说法</b>，也解释了为什么 $P\{V=1\}\le P\{U=1\}$（$\frac34-\frac34\mathrm e^{-1/2}\approx0.2953\lt\frac34-\frac34\mathrm e^{-1}\approx0.4741$ ✓）。<br>
+      ② $P\{Y\gt\frac12\}=\mathrm e^{-1/2}$ 不是 $\mathrm e^{-2}$——<b>$E(1)$ 的生存函数是 $\mathrm e^{-t}$，代 $t=\frac12$。</b>$X\ge2Y\Leftrightarrow Y\le\frac X2$，$X=1$ 时是 $Y\le\frac12$。<br>
+      <span class="lab">串联</span>$U,V$ 都是<b>0–1 指示变量</b>，这正是强化讲说的"<b>（离散型,离散型）往往人为制造，如伯努利计数变量</b>"。<b>用指示变量把连续问题离散化，是数理统计（第 6 章）和 408 里"用计数器统计事件"的共同手法。</b>
+    </div>
+  </div>
+
+  <!-- ================= s10 综合题 ================= -->
+  <h2 id="s10"><span class="idx">十</span>综合题：$\mathrm{Cov}=0$ 却不独立（本章最重要的一道题）　<span class="layer L-base">基础</span><span class="layer L-str">强化</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/概率论与数理统计/03_多维随机变量及其分布/概率_第03章_基础30讲.pdf">📄 基础 p.89–91</a>
+  <a class="pg" href="../../张宇系列_分章易识别版/概率论与数理统计/03_多维随机变量及其分布/概率_第03章_强化9讲_第4讲_多维随机变量及其分布.pdf">📄 强化第4讲 p.33–34</a>
+
+  <div class="mine"><span class="tag">补讲 · 为什么"综合题"这一节只放了两道题，却是整章的落点</span>
+    <b>潜台词是</b>：基础讲把 <a href="#s10">基 3.12</a> 单列成"综合题举例"，强化讲又把同一题原样收进第 4 讲——<b>张宇两次点名的题，全书只有这一道</b>。它综合了本章<u>全部</u>四个动作：<br>
+    ① <b>求边缘密度</b>（(2) 问要算 $f_X,f_Y$）；② <b>判独立</b>（且是反例方向）；③ <b>求函数分布</b>（(3) 问的 $Z=X^2+Y^2$）；④ <b>跨到第 4 章</b>（(1) 问的 $\mathrm{Cov}$）。<br>
+    <b>所以能考</b>：<b>真题的概率大题就是这个结构</b>——一道题串三到四个动作，前一问的结果是后一问的输入。<b>练这一道，等于练完整章。</b><br>
+    <b>另一道 <a href="#s10">习 3.7</a></b> 则是"<b>先分组再计算</b>"的唯一正面样例，考的是 <a href="#s5">§5 性质③</a>——<b>本章唯一一道"用独立性去<u>简化</u>而不是去<u>判断</u>"的题。</b><br>
+    <span class="dock">扣分点</span>：多问题目里，<b>前一问算错会连累后面全错</b>。所以 (1)(2) 这种"送分小问"务必<b>当场验算</b>（归一性、对称性），别指望后面能发现。
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">基 3.12 ✔ ＝ 强 4.3 ✔（两讲重题）</span>设二维随机变量 $(X,Y)$ 的概率密度为
+    $$f(x,y)=\begin{cases}\dfrac2\pi(x^2+y^2),&amp;x^2+y^2\le1,\\ 0,&amp;\text{其他}.\end{cases}$$
+    (1) 求 $X$ 与 $Y$ 的协方差；(2) $X$ 与 $Y$ 是否相互独立？(3) 求 $Z=X^2+Y^2$ 的概率密度。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(1) $\mathrm{Cov}(X,Y)=0$；(2) <b>不相互独立</b>；(3) $f_Z(z)=\begin{cases}2z,&amp;0\lt z\lt1\\ 0,&amp;其他\end{cases}$</span>（sympy 复算三问并验归一性；蒙特卡洛 $10^7$ 拒绝采样：$\mathrm{Cov}$ 实测 $\lt10^{-4}$，$Z$ 按格质量对拍通过，且条件分布随 $x$ 显著变化（$0.55$ vs $0.39$）直接证实不独立）
+
+      <div class="think"><span class="th">💭 思路 · 拿到题先想什么</span>
+        <ol>
+          <li><b>先看密度的形状：$f$ 只依赖 $r^2=x^2+y^2$</b>——这是一个<b>旋转对称</b>（各向同性）的密度。<b>看到 $x^2+y^2$ 成团出现，立刻想极坐标。</b>(1) 和 (3) 都能因此秒杀。</li>
+          <li><b>(1) 不要真算三个二重积分。</b>$x\cdot f$ 关于 $x$ 是<b>奇函数</b>而区域关于 $y$ 轴对称 ⟹ $EX=0$；同理 $EY=0$；$xy\cdot f$ 关于 $x$ 奇、区域对称 ⟹ $E(XY)=0$。<b>三个 0 全靠对称性，一个积分不用写。</b></li>
+          <li><b>(2) 千万别用"$\mathrm{Cov}=0$ ⟹ 独立"</b>——那是<b>错的</b>，而且本题就是专门为了打这个错设计的。要判独立必须<b>老实算 $f_X,f_Y$ 再比较</b>。</li>
+          <li><b>秒杀 (2) 的另一条路</b>：<a href="#s5">§5 陷阱</a>那条判据——<b>正概率区域是圆盘，不是矩形，所以必然不独立</b>。<b>选择题可以一秒作答；解答题仍要把 $f_X,f_Y$ 写出来才给分。</b></li>
+          <li><b>(3) 认清 $Z=X^2+Y^2=r^2$</b>。$P\{Z\le z\}$ 就是"落在半径 $\sqrt z$ 的圆盘内"，<b>用极坐标一步到位</b>。注意 $Z$ 的取值范围是 $[0,1]$。</li>
+        </ol>
+      </div>
+
+      <div class="paper"><span class="phead">✍️ 考场卷面（按 12 分估）</span>
+        <div class="step"><b>解</b>　(1) 由于被积函数 $x\cdot\dfrac2\pi(x^2+y^2)$ 关于 $x$ 为<b>奇函数</b>，而积分区域 $\{x^2+y^2\le1\}$ 关于 $y$ 轴<b>对称</b>，故
+        $$EX=\iint_{x^2+y^2\le1}x\cdot\frac2\pi(x^2+y^2)\mathrm dx\mathrm dy=0 .$$
+        同理 $EY=0$；又 $xy\cdot\dfrac2\pi(x^2+y^2)$ 关于 $x$ 为奇函数，故 $E(XY)=0$。<span class="pt">⛳ 3分</span></div>
+        <div class="fin">所以 $\mathrm{Cov}(X,Y)=E(XY)-EX\cdot EY=0-0\times0=0$。<span class="pt">⛳ 1分</span></div>
+        <div class="step">(2) 当 $x\ge1$ 或 $x\le-1$ 时 $f_X(x)=0$；当 $-1\lt x\lt1$ 时
+        $$f_X(x)=\int_{-\sqrt{1-x^2}}^{\sqrt{1-x^2}}\frac2\pi(x^2+y^2)\mathrm dy=\frac2\pi\Big[2x^2\sqrt{1-x^2}+\frac23(1-x^2)^{\frac32}\Big]=\frac4{3\pi}(1+2x^2)\sqrt{1-x^2}. \tag{1}$$
+        由 $f(x,y)$ 关于 $x,y$ 的<b>对称性</b>，同理 $f_Y(y)=\dfrac4{3\pi}(1+2y^2)\sqrt{1-y^2}\;(-1\lt y\lt1)$。<span class="pt">⛳ 4分</span></div>
+        <div class="fin">由于 $f(x,y)\ne f_X(x)f_Y(y)$（例如取 $x=y=0$：左边 $=0$，右边 $=\dfrac4{3\pi}\cdot\dfrac4{3\pi}\ne0$），
+        所以 <b>$X$ 与 $Y$ 不相互独立</b>。<span class="pt">⛳ 1分</span></div>
+        <div class="step">(3) 记 $Z$ 的分布函数为 $F_Z(z)$。因 $P\{0\le Z\le1\}=1$，故 $z\lt0$ 时 $F_Z(z)=0$，$z\ge1$ 时 $F_Z(z)=1$。当 $0\le z\lt1$ 时，用<b>极坐标</b>
+        $$F_Z(z)=P\{X^2+Y^2\le z\}=\iint_{x^2+y^2\le z}\frac2\pi(x^2+y^2)\mathrm dx\mathrm dy=\int_0^{2\pi}\mathrm d\theta\int_0^{\sqrt z}\frac2\pi r^2\cdot r\,\mathrm dr=z^2 . \tag{2}$$<span class="pt">⛳ 2分</span></div>
+        <div class="fin">故 $f_Z(z)=F_Z'(z)=\begin{cases}2z,&amp;0\lt z\lt1,\\ 0,&amp;\text{其他}.\end{cases}$<span class="pt">⛳ 1分</span></div>
+      </div>
+
+      <div class="notekeep"><span class="nh">📌 批注 · 对照完再看这层</span>
+        <b>① 本题的地位：它是"不相关 $\nRightarrow$ 独立"的<u>标准反例</u></b>，几乎每本教材都会讲。<b>记住它的密度形式 $\frac2\pi(x^2+y^2)$ 在单位圆上</b>，考场上被问到"举一个不相关但不独立的例子"可以直接写。<br>
+        <b>② 为什么 $\mathrm{Cov}=0$ 而不独立？</b>因为<b>相关系数只度量<u>线性</u>关系</b>。这里 $X$ 与 $Y$ 之间没有任何线性趋势（旋转对称），但有<b>强烈的非线性关系</b>：$X^2+Y^2\le1$ 意味着<b>$|X|$ 大时 $|Y|$ 必然小</b>。<b>$\mathrm{Cov}$ 看不见这种"平方层面"的依赖。</b><br>
+        <b>③ 判不独立时"举一个反例点"最省事</b>：取 $x=y=0$，$f(0,0)=0$ 而 $f_X(0)f_Y(0)=(\frac4{3\pi})^2\gt0$。<b>不必对所有 $(x,y)$ 论证，写一个点即可。</b>（也可以说"正概率区域是圆盘不是矩形"，但解答题最好给具体的数。）<br>
+        <b>④ $f_X$ 的化简是本题唯一的计算难点</b>：$\frac2\pi\big[2x^2\sqrt{1-x^2}+\frac23(1-x^2)^{3/2}\big]$，提出 $\frac{2}{\pi}\cdot\frac23\sqrt{1-x^2}$ 得 $\frac4{3\pi}\sqrt{1-x^2}\big[3x^2+(1-x^2)\big]=\frac4{3\pi}(1+2x^2)\sqrt{1-x^2}$。<b>关键是把 $\sqrt{1-x^2}$ 提出来。</b><b>自查：$\int_{-1}^{1}f_X=1$ ✓（我已用 sympy 验过）。</b><br>
+        <b>⑤ (3) 的漂亮结论</b>：$Z=X^2+Y^2\sim f_Z=2z$ 在 $(0,1)$ 上，即 <b>$Z$ 的分布函数是 $z^2$</b>，等价于 <b>$\sqrt Z\sim U(0,1)$</b>——半径 $R=\sqrt Z$ 均匀分布在 $[0,1]$！<b>这是"密度正比于 $r^2$"的必然结果</b>（面积元 $r\mathrm dr$ 与 $r^2$ 相乘得 $r^3$，积分得 $r^4$……等等，$F_R(r)=r^4$，$F_Z(z)=F_R(\sqrt z)=z^2$ ✓）。<b>用两条路算出同一个 $z^2$，是最强的验算。</b><br>
+        <b>⑥ 这道题被两讲重复收录</b>（基础第 12 例 + 强化第 4 讲第 3 例），<b>张宇本人两次点名，说明它在他的体系里是本章的压舱题。务必彻底掌握。</b><br>
+        <span class="dock">扣分点</span>：(1) 用对称性时<b>必须写清"被积函数关于 $x$ 是奇函数"且"区域关于 $y$ 轴对称"两句话</b>。只写"由对称性得 0"，阅卷可能不给分——<b>对称性有两半，函数的奇偶 + 区域的对称，缺一不可。</b>
+      </div>
+    </div>
+  </div>
+
+  <div class="eg">
+    <div class="q"><span class="no">习 3.7 ✔</span>设随机变量 $X_1,X_2,X_3,X_4$ 相互独立且同分布，$P\{X_i=0\}=0.6$，$P\{X_i=1\}=0.4$，$i=1,2,3,4$，则行列式 $X=\begin{vmatrix}X_1&amp;X_2\\ X_3&amp;X_4\end{vmatrix}$ 的概率分布为＿＿。</div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$X\sim\begin{pmatrix}-1&amp;0&amp;1\\ 0.1344&amp;0.7312&amp;0.1344\end{pmatrix}$</span>（sympy 按 $Z_1,Z_2$ 独立同分布复算）
+      <span class="lab">分析 ★ 关键在"先分组"</span>$X=X_1X_4-X_2X_3$。令 $Z_1=X_1X_4$，$Z_2=X_2X_3$。<br>
+      <b>由独立性的性质③（分组版，"变量不重叠"）</b>：$\{X_1,X_4\}$ 与 $\{X_2,X_3\}$ <b>不重叠</b>，故 $Z_1$ 与 $Z_2$ <b>相互独立</b>；又四个变量同分布，故 $Z_1,Z_2$ <b>同分布</b>：
+      $$P\{Z_1=1\}=P\{X_1=1,X_4=1\}=0.4^2=0.16,\qquad P\{Z_1=0\}=1-0.16=0.84 .$$
+      于是 $X=Z_1-Z_2$ 只能取 $-1,0,1$：
+      $$P\{X=-1\}=P\{Z_1=0,Z_2=1\}=0.84\times0.16=0.1344,$$
+      $$P\{X=1\}=P\{Z_1=1,Z_2=0\}=0.16\times0.84=0.1344,$$
+      $$P\{X=0\}=1-2\times0.1344=0.7312 .$$
+      <span class="lab">要害 ★★★</span><b>本题就是 <a href="#s5">§5 性质③</a>"分组独立"的唯一一道正面应用题。</b>如果不先分组、直接对 $2^4=16$ 个样本点逐一算行列式，也能做，但要数 16 项。<b>分组后只需算两个数（0.16 与 0.84），三行完事。</b><br>
+      <b>为什么能分组</b>：$Z_1$ 只用了 $X_1,X_4$，$Z_2$ 只用了 $X_2,X_3$——<b>没有共用任何一个变量</b>。这正是"变量不重叠"。<br>
+      <span class="lab">别踩</span>① <b>$X=0$ 用"1 减去两边"最快</b>，硬算 $P\{Z_1=Z_2\}=0.16^2+0.84^2=0.0256+0.7056=0.7312$ ✓ 也对但慢；<br>
+      ② <b>对称性验算</b>：$X$ 与 $-X$ 同分布（转置行列式变号，而 $Z_1,Z_2$ 地位对称），故 $P\{X=-1\}=P\{X=1\}$ ✓。<b>算出来两边不相等，立刻回头查。</b><br>
+      <span class="lab">串联 · 线性代数</span>$X\ne0$ 意味着<b>矩阵可逆</b>。所以本题的实际含义是：<b>随机 0–1 矩阵可逆的概率是 $0.2688$</b>。$P\{X=0\}=0.7312$ 说明<b>大多数时候这个 $2\times2$ 的 0–1 矩阵是奇异的</b>——因为 $0.6$ 的概率取 0，容易出现全 0 行/列。<b>"随机矩阵的秩"是线代与概率的交叉地带，考研偶尔会出。</b>
+    </div>
+  </div>
+
+  <!-- ================= s11 交互模块 ================= -->
+  <h2 id="s11"><span class="idx">十一</span>三个交互模块：把本章最容易错的三件事变成看得见的　<span class="layer L-str">强化</span></h2>
+
+  <div class="tool">
+    <h4>📐 模块一 · 二维积分区域画板（治本章头号错因：定限画错）</h4>
+    <div class="hint">
+      选一个区域 $D$ 和一个函数 $Z=g(X,Y)$，拖动 $z$：<b>左图</b>画出 $D$（浅色）与 $\{g(x,y)\le z\}$ 的<b>交集</b>（深色）——那块深色就是你要写累次积分的区域；<b>右图</b>是 $F_Z(z)$ 与 $f_Z(z)$ 的曲线，<b>$f_Z$ 的折点就是你必须分段的地方</b>。<br>
+      $F_Z(z)$ 用<b>两种独立方法</b>算：网格求积（确定性）与蒙特卡洛（随机）。<b>两者一致 ⟹ 你看到的这块区域是对的。</b>把你手推的分段结果与右图折点位置对一下，错在哪一段一目了然。
+    </div>
+    <div class="ctrl">
+      <label>区域 $D$：
+        <select id="m1reg">
+          <option value="tri">三角形 (0,0),(2,0),(1,1) — 基 3.3</option>
+          <option value="lower">三角形 0&lt;y&lt;x&lt;1 — 基 3.4</option>
+          <option value="strip">带形 x&gt;0, 0&lt;y&lt;1 — 基 3.8</option>
+          <option value="rect21">矩形 [0,2]×[0,1] — 基 3.9</option>
+          <option value="sq">单位正方形 — 习 3.8</option>
+          <option value="moon">月牙 x²&lt;y&lt;x — 习 3.13</option>
+          <option value="wedge">角形 0&lt;x&lt;y — 习 3.12(1) / 3.14</option>
+          <option value="disk">单位圆盘 — 基 3.12</option>
+          <option value="upper">三角形 0&lt;x&lt;y&lt;1 — 强 5.3</option>
+        </select>
+      </label>
+      <label>函数 $Z=$
+        <select id="m1g">
+          <option value="add">X + Y</option>
+          <option value="sub">X − Y</option>
+          <option value="mul">X · Y</option>
+          <option value="div">X / Y</option>
+          <option value="max">max{X, Y}</option>
+          <option value="min">min{X, Y}</option>
+          <option value="r2">X² + Y²</option>
+        </select>
+      </label>
+    </div>
+    <div class="ctrl">
+      <label style="flex:1">$z=$ <input type="range" id="m1z" min="0" max="100" value="40"><span class="v" id="m1zv">—</span></label>
+      <button class="go" id="m1mc">🎲 重跑蒙特卡洛</button>
+    </div>
+    <div class="twocv">
+      <div><canvas id="m1cv" width="380" height="380"></canvas><div class="cap">$xOy$ 平面：浅色 = 区域 $D$，深色 = $D\cap\{g\le z\}$</div></div>
+      <div><canvas id="m1cv2" width="380" height="380"></canvas><div class="cap">上：$F_Z(z)$　下：$f_Z(z)$（<b>折点 = 分段点</b>，已用竖虚线标出）</div></div>
+    </div>
+    <div class="readout" id="m1out">初始化中…</div>
+  </div>
+
+  <div class="tool">
+    <h4>🎲 模块二 · 联合分布律工作台（一张表算完本章所有离散题）</h4>
+    <div class="hint">
+      填入 $X,Y$ 的取值与联合分布律（空格按 0 处理），下面立刻给出：<b>两条边缘</b>、<b>独立性判定</b>（同时用"$p_{ij}=p_{i\cdot}p_{\cdot j}$"与强化讲的"<b>每行成比例</b>"两条判据）、<b>$\mathrm{Cov}$ 与 $\rho$</b>、以及 <b>$X+Y$、$XY$、$\max$、$\min$、$X-Y$</b> 五个函数的分布律。<br>
+      <b>这替代的学习动作</b>：把"填表 → 求边缘 → 判独立 → 合并同值"这套本章反复要做的手工活跑通一遍，你只需负责<b>看结果对不对</b>。预设按钮里装着本章的五道原题。
+    </div>
+    <div class="presets" id="m2pre"></div>
+    <div class="ctrl"><label>行数 <select id="m2r"><option>2</option><option selected>3</option></select></label>
+      <label>列数 <select id="m2c"><option>2</option><option selected>3</option></select></label>
+      <button class="go" id="m2norm">↻ 归一化</button></div>
+    <div class="tabwrap"><table class="rtab" id="m2tab"></table></div>
+    <div class="readout" id="m2out">—</div>
+    <div class="tabwrap"><table class="rtab" id="m2fun"></table></div>
+  </div>
+
+  <div class="tool">
+    <h4>🔔 模块三 · 二维正态实验台（拖 ρ 看椭圆转向 + 反向验证配方公式）</h4>
+    <div class="hint">
+      左图是联合密度的<b>等高线</b>（椭圆）与样本散点，右图是两条<b>边缘密度</b>和一条<b>条件密度</b> $f_{Y\mid X=x_0}$。<br>
+      <b>三件事一次看清</b>：① $\rho$ 从 $-0.9$ 拖到 $0.9$，椭圆<b>从左上-右下转到左下-右上</b>；② 无论 $\rho$ 怎么变，<b>两条边缘密度纹丝不动</b>（这就是"边缘定不出联合"的动画版）；③ 条件密度<b>始终是正态</b>（结论 ⑦），其均值 $\mu_2+\rho\frac{\sigma_2}{\sigma_1}(x_0-\mu_1)$ 随 $x_0$ 线性移动、方差恒为 $\sigma_2^2(1-\rho^2)$。<br>
+      下方读数栏把密度<b>展开成 $k_0\mathrm e^{-(ax^2+by^2+cxy+dx+ey+f)}$ 的六个系数</b>，并当场用 $\rho=-\frac{c}{2\sqrt{ab}}$ 反算回去——<b>这就是强化讲那道"配方还原五参数"的自动对拍。</b>
+    </div>
+    <div class="presets" id="m3pre"></div>
+    <div class="ctrl">
+      <label>$\mu_1$ <input type="range" id="m3u1" min="-3" max="6" step="0.25" value="0"><span class="v" id="m3u1v"></span></label>
+      <label>$\mu_2$ <input type="range" id="m3u2" min="-3" max="6" step="0.25" value="0"><span class="v" id="m3u2v"></span></label>
+    </div>
+    <div class="ctrl">
+      <label>$\sigma_1$ <input type="range" id="m3s1" min="0.5" max="2.5" step="0.02" value="1"><span class="v" id="m3s1v"></span></label>
+      <label>$\sigma_2$ <input type="range" id="m3s2" min="0.5" max="2.5" step="0.02" value="1"><span class="v" id="m3s2v"></span></label>
+    </div>
+    <div class="ctrl">
+      <label style="flex:1">$\rho$ <input type="range" id="m3rho" min="-0.95" max="0.95" step="0.01" value="0"><span class="v" id="m3rhov"></span></label>
+      <label style="flex:1">$x_0$ <input type="range" id="m3x0" min="-3" max="6" step="0.1" value="0"><span class="v" id="m3x0v"></span></label>
+    </div>
+    <div class="twocv">
+      <div><canvas id="m3cv" width="380" height="380"></canvas><div class="cap">联合密度等高线 + 竖线 $x=x_0$（条件密度取自这条线）</div></div>
+      <div><canvas id="m3cv2" width="380" height="380"></canvas><div class="cap">上：两条边缘密度（<b>与 $\rho$ 无关</b>）　下：条件密度 $f_{Y\mid X=x_0}$</div></div>
+    </div>
+    <div class="readout" id="m3out">—</div>
+  </div>
+
+  <!-- ================= s12 收网 ================= -->
+  <h2 id="s12"><span class="idx">十二</span>收网清单：这一章考完你必须能条件反射的东西</h2>
+
+  <div class="mine"><span class="tag">补讲 · 这一章真正的难度，不在概率而在"二重积分的熟练度"</span>
+    <b>潜台词是</b>：回头数一遍本章 41 道题的失分来源，会发现<b>概率概念本身几乎不出错</b>——出错的是：定限（分几段、限写什么）、换序（先 $x$ 还是先 $y$）、交点（两条曲线交在哪）、反解（$y=x^2$ 反解成 $x=\sqrt y$ 还是 $-\sqrt y$）、极坐标（什么时候该换）。<b>这五样全部是高数第 14 章（二重积分）的内容。</b><br>
+    <b>所以能考</b>：这意味着<b>提分的最短路径不是再看一遍概率定义，而是回去把二重积分的定限练熟</b>。具体来说，本章要求的二重积分能力清单：<br>
+    ① 给区域写出两种<b>累次积分</b>并互相转换（本章 <a href="#s3b">习 3.13</a> 两问必须用两个方向）；<br>
+    ② 会判断<b>哪个方向不用分段</b>（<a href="#s3b">基 3.4</a> 的 (3) 问选错方向工作量翻倍）；<br>
+    ③ 圆域/拱形<b>换极坐标</b>（<a href="#s10">基 3.12</a>）；<br>
+    ④ 利用<b>对称性 + 奇偶性</b>直接判 0（<a href="#s10">基 3.12(1)</a>、<a href="#s4b">习 3.6</a>）；<br>
+    ⑤ <b>换元 + 雅可比</b>（<a href="#s6">§6</a> 整节）。<br>
+    <b>这五条你在高数第 14 章都学过。本章没有教你任何新的积分技术，只是给了它们一个概率解释。</b><br>
+    <span class="dock">扣分点</span>：把"我概率没学好"误判成"我要再背一遍公式"。<b>正确的补救是拿一张纸，把本章九个区域（三角形、月牙、拱形、圆盘、角形、带形、矩形……）各写一遍两种累次积分。半小时，比背十遍公式管用。</b>
+  </div>
+
+  <div class="key"><span class="tag">必记 · 一页纸总表（考前只看这一张）</span>
+    <div class="gridwrap"><table>
+      <tr><th>看到什么</th><th>立刻做什么</th><th>本页位置</th></tr>
+      <tr><td>联合分布函数 $F(x,y)$，问性质 / 求矩形概率</td><td>四条性质，<b>④ 用容斥四项加减</b>（同角正、异角负）</td><td><a href="#s1">§1</a></td></tr>
+      <tr><td>给了表格</td><td><b>先补行和列和</b>，联合 / 边缘 / 条件各在一个方位</td><td><a href="#s2">§2</a></td></tr>
+      <tr><td>给了 $f(x,y)$ 求边缘</td><td><b>求谁不积谁，不积先定限，限内画条线，先变写下限，后变写上限</b></td><td><a href="#s3">§3</a></td></tr>
+      <tr><td>题干说"$X$ 服从…，在 $X=x$ 条件下 $Y$ 服从…"</td><td><b>联合 = 边缘 × 条件</b>，写完范围取交</td><td><a href="#s3b">基 3.4</a><a href="#s4b">基 3.5</a></td></tr>
+      <tr><td>问 $P\{Y\lt b\mid X=a\}$ 而 $X$ 连续</td><td><b>不能用条件概率！</b>走 $f_{Y\mid X}$，范围随 $a$ 变</td><td><a href="#s6b">强 5.3(2)</a></td></tr>
+      <tr><td>一坨指数 $k_0\mathrm e^{-(ax^2+by^2+cxy+\cdots)}$</td><td>$\rho=-\dfrac{c}{2\sqrt{ab}}$ 先算，再解 $\sigma$、$\mu$，最后用常数项<b>验算</b></td><td><a href="#s4">§4</a></td></tr>
+      <tr><td>判独立（离散）</td><td><b>看每行是否成比例</b>（秩 1），或找一个 $p_{ij}\ne p_{i\cdot}p_{\cdot j}$</td><td><a href="#s5">§5</a></td></tr>
+      <tr><td>判独立（连续）</td><td><b>区域是不是矩形</b>（不是 ⟹ 直接判不独立）+ $f$ 能否分离变量</td><td><a href="#s5">§5 陷阱</a></td></tr>
+      <tr><td>证"不独立"</td><td>找 $x_0,y_0$ 使两事件<b>包含</b>或<b>互斥</b>，三种取法</td><td><a href="#s5b">基 3.6</a></td></tr>
+      <tr><td>$Z=g(X,Y)$，$g$ 是加减乘除</td><td>卷积公式；<b>难在定限不在积分</b>，三部曲：换字母 → 换区域 → 定限</td><td><a href="#s7">§7</a></td></tr>
+      <tr><td>$g$ 不是加减乘除 / 要求 $(U,V)$ 联合密度</td><td><b>换元法</b>：凑配角 $v=y$ → 反解算 $|J|$ → 换区域积掉 $v$</td><td><a href="#s6">§6</a></td></tr>
+      <tr><td>$\max/\min$</td><td>$\max$ 用分布函数相乘，$\min$ 用<b>生存函数</b>相乘；iid 时 $[F]^n$ 与 $1-[1-F]^n$</td><td><a href="#s8">§8</a></td></tr>
+      <tr><td>一个离散一个连续混在一起</td><td><b>全集分解 + 全概率公式</b>（本章大题主战场）</td><td><a href="#s9">§9</a></td></tr>
+      <tr><td>问"$\mathrm{Cov}=0$ 能否推独立"</td><td><b>不能</b>（除非二维正态）；反例 = 单位圆上 $\frac2\pi(x^2+y^2)$</td><td><a href="#s10">基 3.12</a></td></tr>
+      <tr><td>问"两个边缘正态能否推联合正态"</td><td><b>不能</b>（除非独立）；反例 = $\frac{1+\sin x\sin y}{2\pi}\mathrm e^{-(x^2+y^2)/2}$</td><td><a href="#s4b">习 3.6</a></td></tr>
+    </table></div>
+  </div>
+
+  <div class="link"><span class="tag">串联 · 本章往后三章的"接口清单"（现在标好，后面翻回来就不用重读）</span>
+    <div class="gridwrap"><table>
+      <tr><th>本章的东西</th><th>在后面变成什么</th><th>去哪一章</th></tr>
+      <tr><td>$p_{ij}$ 与 $f(x,y)$</td><td>$E(XY)=\sum\sum x_iy_jp_{ij}$ 与 $\iint xyf\mathrm dx\mathrm dy$</td><td>第 4 章</td></tr>
+      <tr><td>$\mathrm{Cov}=0$ 却不独立（<a href="#s10">基 3.12</a>）</td><td>"不相关 $\nRightarrow$ 独立"的标准反例</td><td>第 4 章</td></tr>
+      <tr><td>二维正态七条结论之 ⑤</td><td>$\mathrm{Cov}(aX_1+bX_2,aX_1-bX_2)=(a^2-b^2)\sigma^2$ 直接用</td><td>第 4 章</td></tr>
+      <tr><td>结论 ⑦ 的条件期望</td><td><b>回归直线</b> $E(Y\mid X=x)$</td><td>第 4 章</td></tr>
+      <tr><td>独立同分布 + 可加性</td><td>大数定律、中心极限定理的前提</td><td>第 5 章</td></tr>
+      <tr><td>卷积（和的分布）</td><td>$n$ 次卷积 $\to$ 正态（CLT 的直观来源）</td><td>第 5 章</td></tr>
+      <tr><td>"样本"＝ iid（<a href="#s8b">强 5.6</a>）</td><td>样本、统计量、抽样分布</td><td>第 6 章</td></tr>
+      <tr><td>$[F]^n$ 与 $1-[1-F]^n$</td><td><b>次序统计量</b>；$\max\{X_i\}$ 是 $\theta$ 的极大似然估计</td><td>第 6 章</td></tr>
+      <tr><td>独立性性质 ③（变量不重叠）</td><td>$\bar X$ 与 $S^2$ 独立的定理</td><td>第 6 章</td></tr>
+      <tr><td>$\chi^2$ 可加性</td><td>$\chi^2,t,F$ 三大抽样分布</td><td>第 6 章</td></tr>
+    </table></div>
+    <b>这张表的用法</b>：学到第 4–6 章卡住时，回来看这一列"本章的东西"——<b>八成是本章某个结论没吃透，而不是新章节难。</b>
+  </div>
+
+  <div class="trap"><span class="tag">陷阱 · 本章"反例四件套"（选择题最爱考，必须能背出反例本身）</span>
+    <div class="gridwrap"><table>
+      <tr><th>错误的想当然</th><th>反例</th><th>在哪</th></tr>
+      <tr><td>$\mathrm{Cov}(X,Y)=0\Rightarrow X,Y$ 独立</td><td>单位圆上 $f=\frac2\pi(x^2+y^2)$</td><td><a href="#s10">基 3.12</a></td></tr>
+      <tr><td>两个边缘正态 $\Rightarrow$ 联合二维正态</td><td>$f=\frac{1+\sin x\sin y}{2\pi}\mathrm e^{-\frac12(x^2+y^2)}$</td><td><a href="#s4b">习 3.6</a></td></tr>
+      <tr><td>边缘相同 $\Rightarrow$ 联合相同</td><td>离散版：$X_i$ 同分布但 $P\{X_1X_2=0\}=1$ 强制相依</td><td><a href="#s2b">习 3.2</a></td></tr>
+      <tr><td>边缘"干净" $\Rightarrow$ 变量无关</td><td>Marshall–Olkin：两边缘是指数，$\lambda_{12}$ 只活在联合里</td><td><a href="#s5b">习 3.5</a></td></tr>
+    </table></div>
+    <b>共同教训：<u>联合 ⟹ 边缘</u> 是单向的。边缘是联合的影子，影子相同的物体可以千差万别。</b>
+  </div>
+
+  <div class="outro">
+    <b>本章交付清单</b>：基础30讲第 3 讲 41 页（书 62–102）+ 概率9讲第 4 讲 7 页（书 29–35）+ 第 5 讲 11 页（书 36–46），<b>共 59 页全部逐页转录</b>；
+    基础例 3.1–3.12（12 道）+ 基础习题 3.1–3.18（18 道）+ 强化例 4.1–4.4、5.1–5.9（13 道）＝ <b>43 处编号，去重后 41 道题全部落位</b>（强 4.3＝基 3.12、强 5.7＝基 3.10）；
+    答案由 <b>sympy 解析复算 153 项 + 蒙特卡洛 $10^7$ 样本对拍 48 项，全部通过</b>；<b>7 张大题按"想 → 写 → 校"三层卷面</b>（基 3.1、基 3.3、基 3.4、基 3.6、基 3.8、基 3.10＝强 5.7、强 5.8）；三个交互模块均可离线运行。<br>
+    <b>下一章预告（第 4 章 随机变量的数字特征）</b>：本章的 $p_{ij}$ 与 $f(x,y)$ 会直接变成 $E(XY)=\sum\sum x_iy_jp_{ij}$ 与 $\iint xyf\mathrm dx\mathrm dy$；
+    本章反复出现却"欠着没算"的 <b>$\mathrm{Cov}$、$\rho$</b> 到那里正式登场（<a href="#s5b">强 4.1</a>、<a href="#s10">基 3.12</a> 已经提前用过）；
+    <a href="#s4">二维正态七条结论</a>里的第 ⑤ 条（$\mathrm{Cov}(Y_1,Y_2)=(a^2-b^2)\sigma^2$）是第 4 章的成品公式；
+    <a href="#s8b">强 5.6</a> 的次序统计量则一路通到第 6 章的极大似然估计。<b>本章是概率论的枢纽，学扎实了后面三章都省力。</b>
+  </div>
+</div>
+
+<script>
+(function(){
+'use strict';
+function cssv(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim()||'#888';}
+function fmt(x,d){d=d===undefined?4:d; if(!isFinite(x))return '—'; return x.toFixed(d);}
+
+/* ==================== 模块一：二维积分区域画板 ==================== */
+var REG={
+ tri:{name:'三角形 (0,0),(2,0),(1,1)',bb:[0,2,0,1],verts:[[0,0],[2,0],[1,1]],inside:function(x,y){return y>=0&&y<=1&&x>=y&&x<=2-y;},dens:function(){return 1;}},
+ lower:{name:'三角形 0<y<x<1（f=1/x）',bb:[0,1,0,1],verts:[[0,0],[1,0],[1,1]],inside:function(x,y){return y>0&&y<x&&x<1;},dens:function(x){return 1/x;}},
+ strip:{name:'带形 x>0,0<y<1（f=2y e^{-x}）',bb:[0,8,0,1],verts:[[0,0],[0,1]],inside:function(x,y){return x>0&&y>0&&y<1;},dens:function(x,y){return 2*y*Math.exp(-x);}},
+ rect21:{name:'矩形 [0,2]×[0,1]',bb:[0,2,0,1],verts:[[0,0],[2,0],[0,1],[2,1]],inside:function(x,y){return x>=0&&x<=2&&y>=0&&y<=1;},dens:function(){return 0.5;}},
+ sq:{name:'单位正方形（f=2-x-y）',bb:[0,1,0,1],verts:[[0,0],[1,0],[0,1],[1,1]],inside:function(x,y){return x>0&&x<1&&y>0&&y<1;},dens:function(x,y){return 2-x-y;}},
+ moon:{name:'月牙 x²<y<x（f=6）',bb:[0,1,0,1],verts:[[0,0],[1,1]],inside:function(x,y){return x>0&&x<1&&y>x*x&&y<x;},dens:function(){return 6;}},
+ wedge:{name:'角形 0<x<y（f=e^{-y}）',bb:[0,8,0,8],verts:[[0,0]],inside:function(x,y){return x>0&&y>x;},dens:function(x,y){return Math.exp(-y);}},
+ disk:{name:'单位圆盘（f=2(x²+y²)/π）',bb:[-1,1,-1,1],verts:[],inside:function(x,y){return x*x+y*y<=1;},dens:function(x,y){return 2*(x*x+y*y)/Math.PI;}},
+ upper:{name:'三角形 0<x<y<1（f=8xy）',bb:[0,1,0,1],verts:[[0,0],[0,1],[1,1]],inside:function(x,y){return x>0&&x<y&&y<1;},dens:function(x,y){return 8*x*y;}}
+};
+var GF={add:function(x,y){return x+y;},sub:function(x,y){return x-y;},mul:function(x,y){return x*y;},
+        div:function(x,y){return y===0?1e9:x/y;},max:function(x,y){return Math.max(x,y);},
+        min:function(x,y){return Math.min(x,y);},r2:function(x,y){return x*x+y*y;}};
+var GN={add:'X+Y',sub:'X−Y',mul:'XY',div:'X/Y',max:'max{X,Y}',min:'min{X,Y}',r2:'X²+Y²'};
+var m1={reg:'tri',g:'add',zt:0.4,zlo:0,zhi:1,mcF:null,curve:null};
+var M1N=260;
+
+function m1range(){
+  var R=REG[m1.reg],G=GF[m1.g],lo=Infinity,hi=-Infinity;
+  var b=R.bb,n=90;
+  for(var i=0;i<=n;i++)for(var j=0;j<=n;j++){
+    var x=b[0]+(b[1]-b[0])*i/n, y=b[2]+(b[3]-b[2])*j/n;
+    if(!R.inside(x,y))continue;
+    var v=G(x,y); if(!isFinite(v))continue;
+    if(v<lo)lo=v; if(v>hi)hi=v;
+  }
+  if(!isFinite(lo)){lo=0;hi=1;}
+  if(hi-lo<1e-9)hi=lo+1;
+  if(m1.g==='div'&&hi>20)hi=20;
+  m1.zlo=lo; m1.zhi=hi;
+}
+function m1build(){ /* 一次扫描建表：把所有网格格点按 g 值排序 + 前缀和，之后任意 z 都能 O(log n) 取值 */
+  var R=REG[m1.reg],G=GF[m1.g],b=R.bb,n=420;
+  var dx=(b[1]-b[0])/n, dy=(b[3]-b[2])/n;
+  var pts=[],tot=0;
+  for(var i=0;i<n;i++){var x=b[0]+(i+0.5)*dx;
+    for(var j=0;j<n;j++){var y=b[2]+(j+0.5)*dy;
+      if(!R.inside(x,y))continue;
+      var w=R.dens(x,y)*dx*dy, v=G(x,y);
+      if(!isFinite(w)||!isFinite(v))continue;
+      pts.push([v,w]); tot+=w;}}
+  pts.sort(function(a,c){return a[0]-c[0];});
+  var gs=new Float64Array(pts.length), cum=new Float64Array(pts.length), acc=0;
+  for(var k=0;k<pts.length;k++){gs[k]=pts[k][0]; acc+=pts[k][1]; cum[k]=acc;}
+  m1.tab={g:gs,cum:cum,tot:tot,n:pts.length};
+}
+function m1grid(z){
+  var T=m1.tab; if(!T||!T.n)return {F:0,tot:0};
+  var lo=0,hi=T.n-1,ans=-1;
+  while(lo<=hi){var mid=(lo+hi)>>1; if(T.g[mid]<=z){ans=mid;lo=mid+1;}else hi=mid-1;}
+  return {F:ans<0?0:T.cum[ans]/T.tot, tot:T.tot};
+}
+function m1mc(z,N){ /* 蒙特卡洛：bbox 取样 + 密度加权（与网格求积互为独立证据链） */
+  var R=REG[m1.reg],G=GF[m1.g],b=R.bb,s=0,tot=0;
+  for(var k=0;k<N;k++){
+    var x=b[0]+Math.random()*(b[1]-b[0]), y=b[2]+Math.random()*(b[3]-b[2]);
+    if(!R.inside(x,y))continue;
+    var w=R.dens(x,y); if(!isFinite(w))continue;
+    tot+=w; if(G(x,y)<=z)s+=w;
+  }
+  return tot>0?s/tot:0;
+}
+function m1curve(){
+  /* f_Z 用<b>直方图</b>直接从已排序的格点质量得到（不做数值微分，避免差分噪声）；F_Z 用前缀和 */
+  var K=110,T=m1.tab,h=(m1.zhi-m1.zlo)/K;
+  var zs=[],F=[],f=[],mass=new Float64Array(K);
+  if(T&&T.n){
+    for(var k=0;k<T.n;k++){
+      var bi=Math.floor((T.g[k]-m1.zlo)/h);
+      if(bi<0)bi=0; if(bi>=K)bi=K-1;
+      mass[bi]+=(k===0?T.cum[0]:T.cum[k]-T.cum[k-1]);
+    }
+  }
+  var acc=0;
+  for(var i=0;i<K;i++){
+    zs.push(m1.zlo+(i+0.5)*h);
+    f.push(T&&T.tot>0?mass[i]/h/T.tot:0);
+    acc+=mass[i]; F.push(T&&T.tot>0?acc/T.tot:0);
+  }
+  /* 分段点用<b>几何判据</b>（不是数值探测）：累次积分的限在 g 的等值线扫过区域"角点"时才会换公式，
+     所以分段点 = g 在 D 各顶点上的取值（落在 z 值域内部的那些）。这与教材里"分段点来自区域顶点"完全一致。 */
+  var R=REG[m1.reg],G=GF[m1.g],vs=R.verts||[],kinks=[],eps=(m1.zhi-m1.zlo)*0.02;
+  for(var q=0;q<vs.length;q++){
+    var vv=G(vs[q][0],vs[q][1]);
+    if(!isFinite(vv)||Math.abs(vv)>1e8)continue;
+    if(vv<=m1.zlo+eps||vv>=m1.zhi-eps)continue;
+    var dup=false;
+    for(var t=0;t<kinks.length;t++)if(Math.abs(kinks[t]-vv)<eps)dup=true;
+    if(!dup)kinks.push(vv);
+  }
+  kinks.sort(function(x,y){return x-y;});
+  return {zs:zs,F:F,f:f,kinks:kinks.slice(0,4),nover:(REG[m1.reg].verts||[]).length===0};
+}
+function m1draw(){
+  var cv=document.getElementById('m1cv'),ct=cv.getContext('2d');
+  var W=cv.width,H=cv.height,R=REG[m1.reg],G=GF[m1.g],b=R.bb;
+  var z=m1.zlo+(m1.zhi-m1.zlo)*m1.zt;
+  ct.clearRect(0,0,W,H);
+  var pad=34, w=W-pad-14, h=H-pad-14;
+  var sx=function(x){return pad+(x-b[0])/(b[1]-b[0])*w;},
+      sy=function(y){return H-pad-(y-b[2])/(b[3]-b[2])*h;};
+  var acc=cssv('--accent'),line=cssv('--line'),mut=cssv('--muted'),grn=cssv('--green');
+  /* 像素填充 */
+  var N=170;
+  for(var i=0;i<N;i++)for(var j=0;j<N;j++){
+    var x=b[0]+(i+0.5)/N*(b[1]-b[0]), y=b[2]+(j+0.5)/N*(b[3]-b[2]);
+    if(!R.inside(x,y))continue;
+    var inz=G(x,y)<=z;
+    ct.fillStyle=inz?acc:line;
+    ct.globalAlpha=inz?0.55:0.28;
+    ct.fillRect(sx(x)-w/N/2-0.6,sy(y)-h/N/2-0.6,w/N+1.2,h/N+1.2);
+  }
+  ct.globalAlpha=1;
+  /* 坐标轴 */
+  ct.strokeStyle=mut;ct.lineWidth=1;ct.beginPath();
+  var y0=Math.max(b[2],Math.min(b[3],0)),x0=Math.max(b[0],Math.min(b[1],0));
+  ct.moveTo(pad,sy(y0));ct.lineTo(W-10,sy(y0));ct.moveTo(sx(x0),H-pad);ct.lineTo(sx(x0),10);ct.stroke();
+  ct.fillStyle=mut;ct.font='11px system-ui';
+  ct.fillText('x',W-18,sy(y0)+14); ct.fillText('y',sx(x0)+6,16);
+  ct.fillText(b[0].toFixed(1),pad-8,H-pad+14); ct.fillText(b[1].toFixed(1),W-30,H-pad+14);
+  ct.fillText(b[3].toFixed(1),4,16);
+  /* 边界曲线 g=z */
+  ct.strokeStyle=grn;ct.lineWidth=1.8;
+  for(var i=0;i<N;i++){var xa=b[0]+(i+0.5)/N*(b[1]-b[0]);
+    for(var j=0;j<N-1;j++){
+      var ya=b[2]+(j+0.5)/N*(b[3]-b[2]), yb=b[2]+(j+1.5)/N*(b[3]-b[2]);
+      var va=G(xa,ya)-z, vb=G(xa,yb)-z;
+      if(va*vb<0){ct.beginPath();ct.arc(sx(xa),sy((ya+yb)/2),0.9,0,7);ct.fill();ct.fillStyle=grn;}
+    }}
+  /* 右图 */
+  var cv2=document.getElementById('m1cv2'),c2=cv2.getContext('2d');
+  var W2=cv2.width,H2=cv2.height; c2.clearRect(0,0,W2,H2);
+  var C=m1.curve; if(!C)return;
+  var half=(H2-40)/2, p2=36;
+  function panel(top,arr,ymaxIn,label){
+    var ymax=ymaxIn; if(!ymax){ymax=0;for(var i=0;i<arr.length;i++)if(isFinite(arr[i]))ymax=Math.max(ymax,arr[i]); ymax=ymax*1.15||1;}
+    var X=function(k){return p2+k/(arr.length-1)*(W2-p2-12);},
+        Y=function(v){return top+half-Math.max(0,Math.min(1,v/ymax))*(half-14);};
+    c2.strokeStyle=cssv('--line');c2.lineWidth=1;c2.beginPath();
+    c2.moveTo(p2,top+half);c2.lineTo(W2-10,top+half);c2.moveTo(p2,top+half);c2.lineTo(p2,top+6);c2.stroke();
+    /* 折点竖虚线 */
+    c2.save();c2.setLineDash([4,3]);c2.strokeStyle=cssv('--red');c2.lineWidth=1;
+    for(var q=0;q<C.kinks.length;q++){
+      var kk=(C.kinks[q]-m1.zlo)/(m1.zhi-m1.zlo)*(arr.length-1);
+      c2.beginPath();c2.moveTo(X(kk),top+6);c2.lineTo(X(kk),top+half);c2.stroke();
+    }
+    c2.restore();
+    c2.strokeStyle=cssv('--accent');c2.lineWidth=2;c2.beginPath();
+    for(var i=0;i<arr.length;i++){var v=isFinite(arr[i])?arr[i]:0; if(i===0)c2.moveTo(X(i),Y(v));else c2.lineTo(X(i),Y(v));}
+    c2.stroke();
+    /* 当前 z 的位置 */
+    var kz=m1.zt*(arr.length-1);
+    c2.fillStyle=cssv('--green');c2.beginPath();c2.arc(X(kz),Y(arr[Math.round(kz)]||0),3.5,0,7);c2.fill();
+    c2.fillStyle=cssv('--muted');c2.font='11px system-ui';
+    c2.fillText(label,p2+2,top+12); c2.fillText(fmt(ymax,2),4,top+12);
+    c2.fillText(fmt(m1.zlo,2),p2-8,top+half+13); c2.fillText(fmt(m1.zhi,2),W2-38,top+half+13);
+  }
+  panel(8,C.F,1.05,'F_Z(z)');
+  panel(8+half+22,C.f,0,'f_Z(z)');
+}
+function m1upd(recompute){
+  var R=REG[m1.reg];
+  if(recompute){m1range();m1build();m1.curve=m1curve();m1.mcF=null;}
+  var z=m1.zlo+(m1.zhi-m1.zlo)*m1.zt;
+  document.getElementById('m1zv').textContent=fmt(z,3);
+  m1draw();
+  var g=m1grid(z), mc=(m1.mcF===null)?m1mc(z,400000):m1.mcF;
+  m1.mcF=null;
+  var err=Math.abs(g.F-mc);
+  var ks=m1.curve.kinks.map(function(v){return fmt(v,3);}).join('、')||
+    (m1.curve.nover?'（该区域边界光滑、无顶点，分段点须由<b>相切</b>位置判断，本图不自动给出）':'<b>无内部分段点 —— 这道题不用分段</b>');
+  var o=document.getElementById('m1out');
+  o.className='readout'+(err<0.01?' ok':' warn');
+  o.innerHTML='区域：<b>'+R.name+'</b>　函数：<b>Z = '+GN[m1.g]+'</b>　当前 <b>z = '+fmt(z,3)+'</b><br>'+
+   'F<sub>Z</sub>(z) 网格求积 = <b>'+fmt(g.F,5)+'</b>　蒙特卡洛（40 万点）= <b>'+fmt(mc,5)+'</b>　偏差 = <b>'+fmt(err,5)+'</b>'+
+   (err<0.01?'　✅ 两法一致，图上这块深色区域就是你要写累次积分的区域':'　⚠️ 偏差偏大，点"重跑蒙特卡洛"再看')+
+   '<br>Z 的取值范围 ≈ <b>['+fmt(m1.zlo,3)+', '+fmt(m1.zhi,3)+']</b>　密度归一性检验：∬f = <b>'+fmt(g.tot,4)+'</b>（应为 1）'+
+   '<br><b>分段点（由 g 在区域顶点上的取值算出）：'+ks+'</b> —— 把它和你手推的分段界比一比；右下图 f<sub>Z</sub> 曲线在这些位置的折角就是它的图形证据。';
+}
+['m1reg','m1g'].forEach(function(id){document.getElementById(id).addEventListener('change',function(){
+  m1.reg=document.getElementById('m1reg').value; m1.g=document.getElementById('m1g').value; m1upd(true);});});
+document.getElementById('m1z').addEventListener('input',function(){m1.zt=(+this.value)/100;m1upd(false);});
+document.getElementById('m1mc').addEventListener('click',function(){
+  var z=m1.zlo+(m1.zhi-m1.zlo)*m1.zt; m1.mcF=m1mc(z,1500000); m1upd(false);});
+
+/* ==================== 模块二：联合分布律工作台 ==================== */
+var m2={xs:[0,1,2],ys:[0,1,2],p:[[1/9,2/9,1/9],[2/9,2/9,0],[1/9,0,0]]};
+var M2PRE=[
+ {n:'基 3.1 两封信投3信箱',xs:[0,1,2],ys:[0,1,2],p:[[1/9,2/9,1/9],[2/9,2/9,0],[1/9,0,0]]},
+ {n:'基 3.2（代入 D：a=.4,b=.1）',xs:[0,1],ys:[0,1],p:[[0.4,0.4],[0.1,0.1]]},
+ {n:'强 4.1（代入 a=.2,b=.4）',xs:[-1,1],ys:[0,1,2],p:[[0.1,0.1,0.4],[0.2,0.1,0.1]]},
+ {n:'习 3.2（X₁X₂=0 必然）',xs:[-1,0,1],ys:[-1,0,1],p:[[0,0.25,0],[0.25,0,0.25],[0,0.25,0]]},
+ {n:'习 3.10 袋中1,1,2,3无放回',xs:[1,2,3],ys:[1,2,3],p:[[1/6,1/6,1/6],[1/6,0,1/12],[1/6,1/12,0]]},
+ {n:'习 3.11',xs:[-1,0,1],ys:[-1,1],p:[[1/6,1/6],[1/3,1/6],[0,1/6]]},
+ {n:'习 3.9 独立（答案表）',xs:[1,2],ys:[1,2,3],p:[[1/24,1/8,1/12],[1/8,3/8,0.25]]}
+];
+function m2build(){
+  var t=document.getElementById('m2tab'),R=m2.p.length,C=m2.p[0].length,h='';
+  h+='<tr><th>X＼Y</th>';
+  for(var j=0;j<C;j++)h+='<th><input id="m2y'+j+'" value="'+m2.ys[j]+'"></th>';
+  h+='<th>p<sub>i·</sub></th></tr>';
+  for(var i=0;i<R;i++){
+    h+='<tr><th><input id="m2x'+i+'" value="'+m2.xs[i]+'"></th>';
+    for(var j=0;j<C;j++)h+='<td><input id="m2p'+i+'_'+j+'" value="'+(+m2.p[i][j].toFixed(6))+'"></td>';
+    h+='<td id="m2ri'+i+'" class="mut">—</td></tr>';
+  }
+  h+='<tr><th>p<sub>·j</sub></th>';
+  for(var j=0;j<C;j++)h+='<td id="m2cj'+j+'" class="mut">—</td>';
+  h+='<td id="m2sum" class="mut">—</td></tr>';
+  t.innerHTML=h;
+  t.querySelectorAll('input').forEach(function(el){el.addEventListener('input',m2read);});
+}
+function m2read(){
+  var R=m2.p.length,C=m2.p[0].length;
+  for(var i=0;i<R;i++){m2.xs[i]=parseFloat(document.getElementById('m2x'+i).value)||0;
+    for(var j=0;j<C;j++){var v=parseFloat(document.getElementById('m2p'+i+'_'+j).value); m2.p[i][j]=isFinite(v)?v:0;}}
+  for(var j=0;j<C;j++)m2.ys[j]=parseFloat(document.getElementById('m2y'+j).value)||0;
+  m2calc();
+}
+function m2calc(){
+  var R=m2.p.length,C=m2.p[0].length,ri=[],cj=[],S=0;
+  for(var i=0;i<R;i++){var s=0;for(var j=0;j<C;j++)s+=m2.p[i][j];ri.push(s);S+=s;}
+  for(var j=0;j<C;j++){var s=0;for(var i=0;i<R;i++)s+=m2.p[i][j];cj.push(s);}
+  for(var i=0;i<R;i++)document.getElementById('m2ri'+i).textContent=fmt(ri[i],4);
+  for(var j=0;j<C;j++)document.getElementById('m2cj'+j).textContent=fmt(cj[j],4);
+  var se=document.getElementById('m2sum'); se.textContent=fmt(S,4);
+  se.className=Math.abs(S-1)<1e-6?'y':'bad';
+  /* 独立性 */
+  var indep=true,bad=null;
+  for(var i=0;i<R;i++)for(var j=0;j<C;j++){
+    if(Math.abs(m2.p[i][j]-ri[i]*cj[j])>1e-9){indep=false; if(!bad)bad=[i,j];}}
+  /* 每行成比例（对非零表） */
+  var anyzero=false; for(var i=0;i<R;i++)for(var j=0;j<C;j++)if(m2.p[i][j]===0)anyzero=true;
+  var ratio='—';
+  if(!anyzero&&R>=2){
+    var rs=[];for(var j=0;j<C;j++)rs.push(m2.p[0][j]/m2.p[1][j]);
+    ratio=rs.map(function(v){return fmt(v,4);}).join(' : ');
+  }
+  /* 期望协方差 */
+  var EX=0,EY=0,EXY=0,EX2=0,EY2=0;
+  for(var i=0;i<R;i++)for(var j=0;j<C;j++){var p=m2.p[i][j],x=m2.xs[i],y=m2.ys[j];
+    EX+=x*p;EY+=y*p;EXY+=x*y*p;EX2+=x*x*p;EY2+=y*y*p;}
+  var DX=EX2-EX*EX,DY=EY2-EY*EY,cov=EXY-EX*EY;
+  var rho=(DX>1e-12&&DY>1e-12)?cov/Math.sqrt(DX*DY):NaN;
+  var o=document.getElementById('m2out');
+  o.className='readout'+(Math.abs(S-1)<1e-6?'':' warn');
+  o.innerHTML=(Math.abs(S-1)<1e-6?'':'⚠️ <b>总和不等于 1</b>（当前 '+fmt(S,4)+'），先点"归一化"。<br>')+
+   '<b>独立性</b>：'+(indep?'<b style="color:var(--green)">相互独立</b>（所有 p<sub>ij</sub>=p<sub>i·</sub>p<sub>·j</sub>）'
+     :'<b style="color:var(--red)">不独立</b>　反例格：p<sub>'+(bad[0]+1)+(bad[1]+1)+'</sub>='+fmt(m2.p[bad[0]][bad[1]],4)+
+      ' 而 p<sub>i·</sub>p<sub>·j</sub>='+fmt(ri[bad[0]]*cj[bad[1]],4))+
+   '<br><b>每行成比例判据</b>（强化第4讲，仅当无零格时可用）：第1行÷第2行 = '+ratio+
+   (anyzero?'　<span style="color:var(--muted)">（表中有 0，此判据不适用，请用左边的反例格）</span>':(indep?'　✅ 全等 ⟹ 秩1 ⟹ 独立':'　❌ 不全等 ⟹ 不独立'))+
+   '<br><b>数字特征</b>：EX='+fmt(EX,4)+'　EY='+fmt(EY,4)+'　E(XY)='+fmt(EXY,4)+'　DX='+fmt(DX,4)+'　DY='+fmt(DY,4)+
+   '　<b>Cov(X,Y)='+fmt(cov,4)+'</b>　ρ='+fmt(rho,4)+
+   (Math.abs(cov)<1e-9&&!indep?'　<b style="color:var(--red)">⚠️ Cov=0 但不独立——这正是本章的反例现象</b>':'');
+  /* 函数分布 */
+  var funs={'X+Y':function(x,y){return x+y;},'X−Y':function(x,y){return x-y;},'XY':function(x,y){return x*y;},
+            'max{X,Y}':Math.max,'min{X,Y}':Math.min};
+  var html='';
+  Object.keys(funs).forEach(function(k){
+    var m={};
+    for(var i=0;i<R;i++)for(var j=0;j<C;j++){
+      var v=+funs[k](m2.xs[i],m2.ys[j]).toFixed(6);
+      m[v]=(m[v]||0)+m2.p[i][j];}
+    var ks=Object.keys(m).map(Number).sort(function(a,b){return a-b;}).filter(function(v){return m[v]>1e-12;});
+    html+='<tr><th>'+k+'</th>'+ks.map(function(v){return '<td>'+(+v.toFixed(4))+'</td>';}).join('')+'</tr>';
+    html+='<tr><th class="mut">P</th>'+ks.map(function(v){return '<td>'+fmt(m[v],4)+'</td>';}).join('')+'</tr>';
+  });
+  document.getElementById('m2fun').innerHTML='<tr><th colspan="9" style="text-align:left">五个函数的分布律（概率为 0 的取值已略去）</th></tr>'+html;
+}
+document.getElementById('m2norm').addEventListener('click',function(){
+  var S=0,R=m2.p.length,C=m2.p[0].length;
+  for(var i=0;i<R;i++)for(var j=0;j<C;j++)S+=m2.p[i][j];
+  if(S>0){for(var i=0;i<R;i++)for(var j=0;j<C;j++)m2.p[i][j]/=S;}
+  m2build();m2calc();});
+['m2r','m2c'].forEach(function(id){document.getElementById(id).addEventListener('change',function(){
+  var R=+document.getElementById('m2r').value,C=+document.getElementById('m2c').value;
+  var np=[],nx=[],ny=[];
+  for(var i=0;i<R;i++){np.push([]);nx.push(m2.xs[i]!==undefined?m2.xs[i]:i);
+    for(var j=0;j<C;j++)np[i].push((m2.p[i]&&m2.p[i][j]!==undefined)?m2.p[i][j]:0);}
+  for(var j=0;j<C;j++)ny.push(m2.ys[j]!==undefined?m2.ys[j]:j);
+  m2.p=np;m2.xs=nx;m2.ys=ny;m2build();m2calc();});});
+(function(){var box=document.getElementById('m2pre');
+  M2PRE.forEach(function(P){var b=document.createElement('button');b.textContent=P.n;
+    b.addEventListener('click',function(){
+      m2.xs=P.xs.slice();m2.ys=P.ys.slice();m2.p=P.p.map(function(r){return r.slice();});
+      document.getElementById('m2r').value=P.p.length;document.getElementById('m2c').value=P.p[0].length;
+      m2build();m2calc();});
+    box.appendChild(b);});})();
+
+/* ==================== 模块三：二维正态实验台 ==================== */
+var m3={u1:0,u2:0,s1:1,s2:1,rho:0,x0:0};
+var M3PRE=[
+ {n:'标准 ρ=0（独立）',u1:0,u2:0,s1:1,s2:1,rho:0,x0:0},
+ {n:'强化例 N(4,3;1,2;−√2/2)',u1:4,u2:3,s1:1,s2:1.41421356,rho:-0.70710678,x0:4},
+ {n:'基 3.5 反算 N(0,0;1,2;√2/2)',u1:0,u2:0,s1:1,s2:1.41421356,rho:0.70710678,x0:0},
+ {n:'强正相关 ρ=0.9',u1:0,u2:0,s1:1,s2:1,rho:0.9,x0:1},
+ {n:'强负相关 ρ=−0.9',u1:0,u2:0,s1:1,s2:1,rho:-0.9,x0:1}
+];
+function m3get(){
+  ['u1','u2','s1','s2','rho','x0'].forEach(function(k){
+    m3[k]=parseFloat(document.getElementById('m3'+k).value);
+    document.getElementById('m3'+k+'v').textContent=m3[k].toFixed(2);});
+}
+function m3set(){ /* 预设：滑块位置取最近档，但 m3 保留精确值（避免 step 静默吸附把 −√2/2 变成 −0.70） */
+  ['u1','u2','s1','s2','rho','x0'].forEach(function(k){
+    document.getElementById('m3'+k).value=m3[k];});
+  m3lab();
+}
+function m3lab(){
+  ['u1','u2','s1','s2','rho','x0'].forEach(function(k){
+    document.getElementById('m3'+k+'v').textContent=(Math.abs(m3[k])<10?m3[k].toFixed(3):m3[k].toFixed(2));});
+}
+function npdf2(x,y){
+  var u1=m3.u1,u2=m3.u2,s1=m3.s1,s2=m3.s2,r=m3.rho,q=1-r*r;
+  var a=(x-u1)/s1,b=(y-u2)/s2;
+  return Math.exp(-(a*a-2*r*a*b+b*b)/(2*q))/(2*Math.PI*s1*s2*Math.sqrt(q));
+}
+function m3draw(){
+  var cv=document.getElementById('m3cv'),ct=cv.getContext('2d'),W=cv.width,H=cv.height;
+  ct.clearRect(0,0,W,H);
+  var span=3.4*Math.max(m3.s1,m3.s2);
+  var xa=m3.u1-span,xb=m3.u1+span,ya=m3.u2-span,yb=m3.u2+span;
+  var pad=32,w=W-pad-12,h=H-pad-12;
+  var sx=function(x){return pad+(x-xa)/(xb-xa)*w;},sy=function(y){return H-pad-(y-ya)/(yb-ya)*h;};
+  var N=150,peak=npdf2(m3.u1,m3.u2);
+  for(var i=0;i<N;i++)for(var j=0;j<N;j++){
+    var x=xa+(i+0.5)/N*(xb-xa),y=ya+(j+0.5)/N*(yb-ya);
+    var v=npdf2(x,y)/peak;
+    if(v<0.008)continue;
+    ct.fillStyle=cssv('--accent');ct.globalAlpha=Math.min(0.85,v*0.9);
+    ct.fillRect(sx(x)-w/N/2-0.6,sy(y)-h/N/2-0.6,w/N+1.2,h/N+1.2);
+  }
+  ct.globalAlpha=1;
+  /* 等高线（3 条） */
+  ct.strokeStyle=cssv('--green');ct.lineWidth=1.4;
+  [0.6,0.3,0.1].forEach(function(lv){
+    ct.beginPath();
+    var q=1-m3.rho*m3.rho, c=-2*q*Math.log(lv);
+    for(var t=0;t<=64;t++){
+      var th=t/64*2*Math.PI;
+      /* 椭圆参数化：解 a²-2ρab+b²=c */
+      var ca=Math.cos(th),sa=Math.sin(th);
+      var k=Math.sqrt(c/(ca*ca-2*m3.rho*ca*sa+sa*sa));
+      var X=m3.u1+m3.s1*k*ca, Y=m3.u2+m3.s2*k*sa;
+      if(t===0)ct.moveTo(sx(X),sy(Y));else ct.lineTo(sx(X),sy(Y));
+    }
+    ct.closePath();ct.stroke();
+  });
+  /* x0 竖线 */
+  ct.save();ct.setLineDash([5,4]);ct.strokeStyle=cssv('--red');ct.lineWidth=1.6;
+  ct.beginPath();ct.moveTo(sx(m3.x0),12);ct.lineTo(sx(m3.x0),H-pad);ct.stroke();ct.restore();
+  ct.strokeStyle=cssv('--muted');ct.lineWidth=1;ct.beginPath();
+  ct.moveTo(pad,sy(Math.max(ya,Math.min(yb,0))));ct.lineTo(W-8,sy(Math.max(ya,Math.min(yb,0))));
+  ct.moveTo(sx(Math.max(xa,Math.min(xb,0))),H-pad);ct.lineTo(sx(Math.max(xa,Math.min(xb,0))),8);ct.stroke();
+  ct.fillStyle=cssv('--muted');ct.font='11px system-ui';
+  ct.fillText('x₀='+m3.x0.toFixed(2),sx(m3.x0)+4,20);
+  ct.fillText(xa.toFixed(1),pad-6,H-pad+13);ct.fillText(xb.toFixed(1),W-32,H-pad+13);
+
+  /* 右图 */
+  var cv2=document.getElementById('m3cv2'),c2=cv2.getContext('2d'),W2=cv2.width,H2=cv2.height;
+  c2.clearRect(0,0,W2,H2);
+  var half=(H2-40)/2,p2=34;
+  function curve(top,f,lo,hi,col,label,extra){
+    var K=140,vals=[],mx=0;
+    for(var i=0;i<=K;i++){var t=lo+(hi-lo)*i/K;var v=f(t);vals.push(v);if(isFinite(v))mx=Math.max(mx,v);}
+    mx=mx*1.18||1;
+    var X=function(i){return p2+i/K*(W2-p2-12);},Y=function(v){return top+half-Math.max(0,Math.min(1,v/mx))*(half-14);};
+    c2.strokeStyle=cssv('--line');c2.lineWidth=1;c2.beginPath();
+    c2.moveTo(p2,top+half);c2.lineTo(W2-10,top+half);c2.stroke();
+    c2.strokeStyle=col;c2.lineWidth=2;c2.beginPath();
+    for(var i=0;i<=K;i++){if(i===0)c2.moveTo(X(i),Y(vals[i]));else c2.lineTo(X(i),Y(vals[i]));}
+    c2.stroke();
+    c2.fillStyle=cssv('--muted');c2.font='11px system-ui';
+    c2.fillText(label,p2+2,top+12);
+    c2.fillText(lo.toFixed(1),p2-6,top+half+13);c2.fillText(hi.toFixed(1),W2-32,top+half+13);
+    if(extra)extra(X,Y,K,mx);
+    return mx;
+  }
+  var lo1=m3.u1-3.6*m3.s1,hi1=m3.u1+3.6*m3.s1;
+  var lo2=m3.u2-3.6*m3.s2,hi2=m3.u2+3.6*m3.s2;
+  var LO=Math.min(lo1,lo2),HI=Math.max(hi1,hi2);
+  curve(8,function(t){return Math.exp(-Math.pow((t-m3.u1)/m3.s1,2)/2)/(Math.sqrt(2*Math.PI)*m3.s1);},LO,HI,cssv('--accent'),'f_X（蓝）与 f_Y（绿）—— 与 ρ 无关');
+  (function(){ /* 叠加 f_Y */
+    var K=140,top=8,mx=0,vals=[];
+    for(var i=0;i<=K;i++){var t=LO+(HI-LO)*i/K;
+      vals.push(Math.exp(-Math.pow((t-m3.u2)/m3.s2,2)/2)/(Math.sqrt(2*Math.PI)*m3.s2));}
+    var mxA=0;for(var i=0;i<=K;i++){var t=LO+(HI-LO)*i/K;
+      mxA=Math.max(mxA,Math.exp(-Math.pow((t-m3.u1)/m3.s1,2)/2)/(Math.sqrt(2*Math.PI)*m3.s1));}
+    for(var i=0;i<=K;i++)mxA=Math.max(mxA,vals[i]);
+    mxA=mxA*1.18;
+    var X=function(i){return p2+i/K*(W2-p2-12);},Y=function(v){return top+half-Math.max(0,Math.min(1,v/mxA))*(half-14);};
+    c2.strokeStyle=cssv('--green');c2.lineWidth=2;c2.beginPath();
+    for(var i=0;i<=K;i++){if(i===0)c2.moveTo(X(i),Y(vals[i]));else c2.lineTo(X(i),Y(vals[i]));}
+    c2.stroke();
+  })();
+  var cm=m3.u2+m3.rho*(m3.s2/m3.s1)*(m3.x0-m3.u1), cs=m3.s2*Math.sqrt(1-m3.rho*m3.rho);
+  curve(8+half+22,function(t){return Math.exp(-Math.pow((t-cm)/cs,2)/2)/(Math.sqrt(2*Math.PI)*cs);},lo2-1,hi2+1,cssv('--red'),
+        'f_{Y|X=x₀} —— 仍是正态，均值 '+cm.toFixed(2)+'，标准差 '+cs.toFixed(3));
+}
+function m3upd(fromSlider){
+  if(fromSlider!==false) m3get(); else m3lab();
+  m3draw();
+  var u1=m3.u1,u2=m3.u2,s1=m3.s1,s2=m3.s2,r=m3.rho,q=1-r*r;
+  var a=1/(2*q*s1*s1), b=1/(2*q*s2*s2), c=-r/(q*s1*s2);
+  var m=-u1,n=-u2;
+  var d=2*a*m+c*n, e=2*b*n+c*m, f=a*m*m+b*n*n+c*m*n;
+  var k0=1/(2*Math.PI*s1*s2*Math.sqrt(q));
+  var rback=-c/(2*Math.sqrt(a*b));
+  var s1back=Math.sqrt(1/(2*(1-rback*rback)*a)), s2back=Math.sqrt(1/(2*(1-rback*rback)*b));
+  var ok=Math.abs(rback-r)<1e-9&&Math.abs(s1back-s1)<1e-9&&Math.abs(s2back-s2)<1e-9;
+  var o=document.getElementById('m3out');o.className='readout'+(ok?' ok':' warn');
+  o.innerHTML='<b>当前分布</b>：(X,Y) ~ N('+u1.toFixed(2)+', '+u2.toFixed(2)+'; '+(s1*s1).toFixed(3)+', '+(s2*s2).toFixed(3)+'; '+r.toFixed(3)+')'+
+   '　<span style="opacity:.75">（记号里第 3、4 位是<b>方差</b>）</span>'+
+   '<br><b>把密度展开成 k₀·e^{−(ax²+by²+cxy+dx+ey+f)}</b>：a='+fmt(a,5)+'　b='+fmt(b,5)+'　c='+fmt(c,5)+'　d='+fmt(d,4)+'　e='+fmt(e,4)+'　f='+fmt(f,4)+'　k₀='+fmt(k0,5)+
+   '<br><b>反向还原（强化第4讲的 D₂₃）</b>：ρ = −c/(2√(ab)) = <b>'+fmt(rback,5)+'</b>　σ₁ = '+fmt(s1back,5)+'　σ₂ = '+fmt(s2back,5)+
+   '　由 2am+cn=d、2bn+cm=e 解得 μ₁ = '+fmt(-m,3)+'，μ₂ = '+fmt(-n,3)+
+   (ok?'　✅ <b>与原参数完全一致，配方公式验证通过</b>':'　⚠️ 数值误差')+
+   '<br><b>条件分布</b>：Y | X=x₀ ~ N('+fmt(u2+r*(s2/s1)*(m3.x0-u1),4)+', '+fmt(s2*s2*q,4)+')　'+
+   '<span style="opacity:.85">均值随 x₀ <b>线性</b>移动（斜率 ρσ₂/σ₁ = '+fmt(r*s2/s1,4)+'），方差恒为 σ₂²(1−ρ²)，<b>与 x₀ 无关</b> —— 这就是结论 ⑦</span>'+
+   '<br><b>独立性</b>：'+(Math.abs(r)<1e-9?'<b style="color:var(--green)">ρ=0 ⟹ 二维正态下 X 与 Y 相互独立</b>（结论 ⑥；注意这一步只有二维正态能走）':'<b style="color:var(--red)">ρ≠0 ⟹ 不独立</b>（此时联合密度无法分解为 f_X·f_Y）');
+}
+['m3u1','m3u2','m3s1','m3s2','m3rho','m3x0'].forEach(function(id){
+  document.getElementById(id).addEventListener('input',m3upd);});
+(function(){var box=document.getElementById('m3pre');
+  M3PRE.forEach(function(P){var b=document.createElement('button');b.textContent=P.n;
+    b.addEventListener('click',function(){['u1','u2','s1','s2','rho','x0'].forEach(function(k){m3[k]=P[k];});m3set();m3upd(false);});
+    box.appendChild(b);});})();
+
+/* 初始化 */
+m1upd(true);
+m2build();m2calc();
+m3upd();
+window.addEventListener('resize',function(){m1draw();m3draw();});
+})();
+</script>
+</body>
+</html>
