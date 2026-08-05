@@ -1,0 +1,2177 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>精读版 · 概率第4章 随机变量的数字特征</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],ignoredClasses:['nokatex']})"></script>
+<link rel="stylesheet" href="style.css">
+<style>
+/* ===== 本章专属：三个交互模块 ===== */
+.tool{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:20px 0}
+.tool h4{margin:0 0 4px;font-size:1rem;color:var(--accent)}
+.tool .hint{color:var(--muted);font-size:.82rem;margin-bottom:12px;line-height:1.7}
+.tool table{min-width:0}
+.ctrl{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;margin:10px 0}
+.ctrl label{font-size:.83rem;color:var(--muted);display:flex;align-items:center;gap:6px;min-width:0}
+.ctrl select,.ctrl button,.ctrl input[type=number]{font:inherit;font-size:.83rem;padding:4px 10px;border-radius:8px;
+  border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+.ctrl input[type=number]{width:5.4em;cursor:text}
+.ctrl input[type=range]{accent-color:var(--accent);min-width:120px;flex:1}
+.ctrl .v{font-family:var(--mono);font-size:.78rem;color:var(--muted);width:4.6em;text-align:right}
+.ctrl button.go{background:var(--accent-soft);color:var(--accent)}
+.ctrl button.go:hover{filter:brightness(.94)}
+.presets{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 0}
+.presets button{font:inherit;font-size:.78rem;padding:3px 10px;border-radius:999px;cursor:pointer;
+  border:1px solid var(--line);background:var(--card);color:var(--ink)}
+.presets button:hover{border-color:var(--accent);color:var(--accent)}
+.cvwrap{overflow-x:auto;margin:10px 0}
+.cvwrap canvas{border:1px solid var(--line);border-radius:8px;background:transparent;max-width:100%;height:auto;display:block}
+.readout{border-radius:8px;padding:9px 13px;margin:10px 0 0;font-size:.86rem;line-height:1.85;background:var(--accent-soft);color:var(--accent)}
+.readout.ok{background:var(--green-soft);color:var(--green)}
+.readout.warn{background:var(--red-soft);color:var(--red)}
+.rtab{width:100%;border-collapse:collapse;font-size:.79rem;margin:10px 0 0;min-width:0}
+.rtab th,.rtab td{border:1px solid var(--line);padding:3px 6px;text-align:center;white-space:nowrap}
+.rtab td.y{background:var(--green-soft);color:var(--green);font-weight:700}
+.rtab td.bad{background:var(--red-soft);color:var(--red);font-weight:700}
+.rtab td.mut{color:var(--muted)}
+.twocv{display:flex;flex-wrap:wrap;gap:14px}
+.twocv > div{flex:1 1 300px;min-width:0;text-align:center}
+.twocv canvas{max-width:100%;height:auto;border:1px solid var(--line);border-radius:8px;background:transparent}
+.twocv .cap{font-size:.76rem;color:var(--muted);margin-top:5px}
+.tabwrap{overflow-x:auto}
+svg.fig{display:block;max-width:100%;height:auto;margin:10px auto}
+@media (max-width:560px){ .ctrl label{width:100%} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../index.html">← 返回 数学一复盘中心</a>
+  <header>
+    <h1>精读版 · 概率第 4 章　随机变量的数字特征</h1>
+    <div class="sub">融合张宇《基础30讲·概率论与数理统计分册》第 4 讲（<b>22 页</b>）+《概率论与数理统计9讲》<b>第 6 讲（10 页）</b>——本章<b>只吃一个强化讲</b>，共 32 页，是概率论最轻的一章之一 · <span class="layer L-base">基础</span> 打地基、<span class="layer L-str">强化</span> 上题型 · <b>基础 12 例 + 14 习题 + 强化 10 例＝ 36 道，零重题，答案全部由程序独立复算（sympy 解析 113 项 + 蒙特卡洛 $10^7$ 样本 37 项，全部通过）</b> · 本章交付三个交互模块：<b>📉 相关系数实验室</b>（把"$\rho=0$ 却高度相依"的四个教科书反例画成散点，一眼看清 $\rho$ 只测<u>线性</u>）、<b>⚖️ 切比雪夫松紧台</b>（真实概率与 $DX/\varepsilon^2$ 上界同屏，看清这个界有多松、什么时候才紧到等号）、<b>🧮 线性组合沙盘</b>（输入 $DX,DY,\rho$ 与系数，实时展开 $D(aX+bY)$ 与 $\rho_{UV}$ 并蒙特卡洛对拍，例 6.6/6.7/6.8、习 4.2 全在里面）。</div>
+  </header>
+
+  <div class="legend">
+    <b>这一页的三层结构：</b>
+    <span class="layer L-base">基础</span>= 期望、方差、协方差、相关系数四个定义与全部性质（基础30讲的地基，放心背）；
+    <span class="layer L-str">强化</span>= 《概率9讲》第 6 讲的 <b>三向解题法 $O_1$–$O_5$</b> 与 <b>$D_{23}$ 化归经典形式</b>（基础讲没有、真题真考的）。批注色块：
+    <span class="swatch" style="background:var(--blue)"></span><b style="color:var(--blue)">补讲</b>（书上说 X → 潜台词是 Y → 所以能考 Z）、
+    <span class="swatch" style="background:var(--amber)"></span><b style="color:var(--amber)">必记</b>、
+    <span class="swatch" style="background:var(--red)"></span><b style="color:var(--red)">陷阱</b>、
+    <span class="swatch" style="background:var(--green)"></span><b style="color:var(--green)">强化题型</b>、
+    <span class="swatch" style="background:var(--purple)"></span><b style="color:var(--purple)">串联</b>（就地标出与前面章节 / 后面章节 / 408 的连接）、
+    <span class="swatch" style="background:var(--muted)"></span><b style="color:var(--muted)">背景</b>（这段是铺垫，考试不碰，<b>灰掉的地方就别花时间</b>）。<br>
+    紫色 <b>例题</b> 卡里，<b>基</b>4.x = 基础30讲例题、<b>习</b>4.x = 基础30讲课后习题、<b>强</b>6.x = 概率9讲第 6 讲例题（三套各自编号，别混）。<b>每题都标 ✔</b> = 答案已被我用程序独立算过一遍，不是照抄扫描件。<b>本章零重题</b>，36 道各占一张卡。<br>
+    <b>📝 需要写过程的大题按「想 → 写 → 校」分三层</b>，对应做题的三个动作，<b>请按这个顺序用</b>：<br>
+    <b>💭 思路</b>＝<u>动手前</u>看：审题信号、为什么往这条路走、卡在哪里怎么破。<b>看完这层就合上页面自己写，别直接翻卷面。</b><br>
+    <b>✍️ 考场卷面</b>＝<u>写完对照</u>：可以照着抄上考场的完整解答，只写真要落笔的字，每个采分点标 <span class="pt" style="margin-left:0">⛳</span> 及分值。<br>
+    <b>📌 批注</b>＝<u>对照完校对</u>：定理边界、扣分点、排版理由、提速技巧。<br>
+    选择填空题<b>不加卷面层</b>——考场上本就不写过程，保留"答案 → 分析 → 要害"的教学式排版。
+  </div>
+
+  <div class="toc">
+    <b>本页导航（按《9讲》的五个"盯住目标"排，这正是考场上"题目问什么"的顺序）</b>
+    <div class="dolinks">
+      <a href="#s0">§0 本章地图：四个数、五个目标</a>
+      <a href="#s1">§1 $O_1$ 数学期望（含无穷级数与反常积分）</a>
+      <a href="#s2">§2 $O_2$ 方差与七个常用分布表</a>
+      <a href="#s3">§3 二维：$E[g(X,Y)]$ 与 $\mathrm{Cov}$、$\rho$</a>
+      <a href="#s4">$O_3$ §4 协方差双线性：本章的计算引擎</a>
+      <a href="#s5">§5 $O_4$ 独立 vs 不相关（★判定流程图）</a>
+      <a href="#s6">§6 $O_5$ 切比雪夫不等式</a>
+      <a href="#s7">§7 强化专属：最值恒等式 · 分解法 · 绝对值方差</a>
+      <a href="#s8">§8 综合题（跨到第 6 章）</a>
+      <a href="#s9">§9 三个交互模块</a>
+      <a href="#s10">§10 收网清单</a>
+    </div>
+  </div>
+
+  <!-- ================= s0 ================= -->
+  <h2 id="s0"><span class="idx">〇</span>本章地图：把随机变量压缩成<b>几个数</b>　<span class="layer L-base">基础</span><span class="layer L-str">强化</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/概率论与数理统计/04_随机变量的数字特征/概率_第04章_基础30讲.pdf">📄 基础30讲 p.103</a>
+  <a class="pg" href="../../张宇系列_分章易识别版/概率论与数理统计/04_随机变量的数字特征/概率_第04章_强化9讲_第6讲_数字特征.pdf">📄 强化9讲第6讲 p.47</a>
+
+  <div class="mine"><span class="tag">补讲 · 一句话定位：前三章都在求"整个分布"，本章第一次<b>主动扔掉信息</b></span>
+    <b>书上说</b>（结构图旁的眉批原话）：「明确这四个数字特征反映的是什么，并会计算这些数字特征」。<br>
+    <b>潜台词是</b>：第 1–3 章你干的全是"把分布求全"——分布函数、分布律、密度、联合、边缘、条件，一个不落。
+    到本章，方向<b>倒过来</b>了：分布太重、记不住也用不上，于是<b>只留几个数</b>——
+    $EX$ 留"中心在哪"，$DX$ 留"散得多开"，$\mathrm{Cov}$ 留"两个变量同向还是反向动"，$\rho$ 留"这种同向有多接近一条直线"。
+    这是一次<b>有意的信息损失</b>：换来的是可加、可线性运算、可估计。<br>
+    <b>所以能考</b>：本章题目的形态因此彻底变了——前三章问"求 $F$、求 $f$、求分布律"，本章问"求 $EX$、判独立、估概率"。
+    <b>最关键的一条：很多题不需要求出分布就能作答</b>（<a href="#eg-x410">习 4.10</a> 用 $\max+\min=X+Y$、<a href="#eg-s63">强 6.3</a> 用 $X=Y+Z$、<a href="#eg-s67">强 6.7</a> 全程只用 $\mathrm{Cov}$ 的双线性）。
+    看到题目要"分布"你才去求分布；只要"数字特征"，<b>求分布往往就是走了弯路</b>。
+  </div>
+
+  <div class="key"><span class="tag">必记 · 四个数字特征的分工表（本章骨架，先背这一张）</span>
+    <div class="gridwrap"><table>
+      <tr><th>特征</th><th>定义</th><th>回答什么问题</th><th>量纲</th><th>矩的身份</th></tr>
+      <tr><td><b>$EX$</b></td><td>$\sum x_ip_i$ ／ $\int xf\mathrm dx$</td><td>取值的<b>中心位置</b>在哪</td><td>与 $X$ 同</td><td>一阶<b>原点</b>矩</td></tr>
+      <tr><td><b>$DX$</b></td><td>$E[(X-EX)^2]=E(X^2)-(EX)^2$</td><td>围绕中心<b>散得多开</b></td><td>$X$ 的平方</td><td>二阶<b>中心</b>矩</td></tr>
+      <tr><td>$\sigma(X)$</td><td>$\sqrt{DX}$</td><td>同上，但化回原量纲</td><td>与 $X$ 同</td><td>—</td></tr>
+      <tr><td><b>$\mathrm{Cov}(X,Y)$</b></td><td>$E[(X-EX)(Y-EY)]=E(XY)-EXEY$</td><td>两者<b>同向/反向</b>波动</td><td>$X$ 与 $Y$ 量纲之积</td><td>二阶<b>混合中心</b>矩</td></tr>
+      <tr><td><b>$\rho_{XY}$</b></td><td>$\dfrac{\mathrm{Cov}(X,Y)}{\sqrt{DX}\sqrt{DY}}$</td><td>这种同向<b>有多像一条直线</b></td><td><b>无量纲</b>（量纲为 1）</td><td>标准化后的协方差</td></tr>
+    </table></div>
+    <b>四者的血缘关系（这条线索比死记四个定义有用得多）</b>：
+    $\mathrm{Cov}(X,X)=E[(X-EX)^2]=DX$ —— <b>方差是协方差的特例</b>；
+    $\rho_{XY}=\mathrm{Cov}(X^*,Y^*)$，其中 $X^*=\frac{X-EX}{\sqrt{DX}}$ —— <b>相关系数是标准化之后的协方差</b>。
+    所以全章真正独立的定义<b>只有两个</b>：$EX$ 与 $\mathrm{Cov}$，其余两个都是它们的派生。
+  </div>
+
+  <div class="zy"><span class="tag">强化题型 · 《9讲》第 6 讲：把整章重排成"五个盯住目标"$O_1$–$O_5$</span>
+    基础版按"一维 / 二维"分节，强化版<b>按"题目要求什么"分</b>——后者才是考场上的检索方式：
+    <div class="gridwrap"><table>
+      <tr><th>目标</th><th>题目长什么样</th><th>核心动作</th><th>本页位置</th></tr>
+      <tr><td><b>$O_1$</b> 数学期望</td><td>求 $EX$、$E[g(X)]$、$E[g(X,Y)]$</td><td>识别是级数还是积分；能分解就分解</td><td><a href="#s1">§1</a>、<a href="#s7">§7</a></td></tr>
+      <tr><td><b>$O_2$</b> 方差</td><td>求 $DX$、$D[g(X)]$</td><td>一律走公式法 $E(X^2)-(EX)^2$</td><td><a href="#s2">§2</a></td></tr>
+      <tr><td><b>$O_3$</b> 协方差与相关系数</td><td>求 $\mathrm{Cov}$、$\rho$；给一个 $\rho$ 求另一个</td><td><b>用双线性硬拆</b>，不碰分布</td><td><a href="#s4">§4</a></td></tr>
+      <tr><td><b>$O_4$</b> 独立与不相关的判定</td><td>四个选项写着"相关/不相关 × 独立/不独立"</td><td>先算 $\mathrm{Cov}$，再按流程图走</td><td><a href="#s5">§5</a></td></tr>
+      <tr><td><b>$O_5$</b> 切比雪夫不等式</td><td>估 $P\{|\cdot|\ge\varepsilon\}$ 的上界</td><td><b>认出"那个随机变量"是谁</b></td><td><a href="#s6">§6</a></td></tr>
+    </table></div>
+    <b>贯穿全讲的唯一方法：$D_{23}$（化归经典形式）</b>——把陌生的东西凑成已知分布 / 已知级数 / 已知积分。
+    第 6 讲十道例题里它出现了 <b>6 次</b>（<a href="#eg-s61">强 6.1</a> 两处、<a href="#eg-s62">强 6.2</a>、<a href="#eg-s65">强 6.5</a>、<a href="#eg-s67">强 6.7</a> 两处）。
+    <b>这不是"一种技巧"，这是本章的主旋律：你手上的公式表只对经典分布有效，所以第一步永远是"把它变成表里有的那个"。</b>
+  </div>
+
+  <div class="link"><span class="tag">串联 · 本章往前接谁、往后被谁用（本章是概率论的"总闸"）</span>
+    <b>往前接（第 1 章）</b>：<a href="#eg-x413">习 4.13</a> 从 $P(A),P(B|A),P(A|B)$ 推联合分布，用的是<b>乘法公式 + 加法公式 + 对偶律</b>，一步概率论的新东西都没有——本章的题<b>常常前半段是第 1 章</b>。<br>
+    <b>往前接（第 2 章）</b>：七个常用分布的 $EX,DX$ 表全部建立在第 2 章的分布律/密度上；<a href="#eg-44">基 4.4</a>「$A\mathrm e^{-ax^2+bx+c}$ 凑正态」是第 2 章配方法的直接延用；<a href="#eg-45">基 4.5</a> 靠"归一性定 $C$"也是第 2 章的老动作。<br>
+    <b>往前接（第 3 章，依赖最深）</b>：$E(XY)=\iint xyf(x,y)\mathrm dx\mathrm dy$、$\mathrm{Cov}$、$\rho$ <b>全部建立在联合分布之上</b>——没有第 3 章就没有本章后半。<a href="#eg-48">基 4.8</a> 要用<b>二重积分分区域</b>，<a href="#eg-x410">习 4.10</a> 要用<b>二维正态的 $\mathrm{Cov}=\rho\sigma_1\sigma_2$</b>，<a href="#eg-s68">强 6.8</a> 要用<b>二维正态的边缘仍正态</b>。<br>
+    <b>往前接（高数）</b>：$\int_{-\infty}^{+\infty}$ 的<b>反常积分收敛性</b>（<a href="#eg-43">基 4.3</a> 柯西分布期望不存在，靠的就是 $\int\frac{|x|}{1+x^2}$ 发散）；<a href="#eg-s61">强 6.1</a> 求 $\sum k(k-1)x^{k-2}$ 直接用<b>幂级数逐项求导</b>（第 16 章）；方差性质⑥ 的证明是<b>一元函数求最值</b>（第 5 章）。<br>
+    <b>往后被谁用（本章是后两章的地基）</b>：第 5 章<b>大数定律</b>就是"$\bar X\to EX$"、<b>中心极限定理</b>就是"$\frac{\sum X_i-n\mu}{\sqrt n\sigma}\to N(0,1)$"——两条定理的主角都是本章的 $EX$ 与 $DX$，而<b>切比雪夫不等式正是弱大数定律的证明工具</b>；第 6 章<b>矩估计</b>就是"样本矩 = 总体矩"，<b>无偏性</b> $E\hat\theta=\theta$、<b>有效性</b> 比的是 $D\hat\theta$——<a href="#eg-s610">强 6.10</a> 已经把这两件事提前考了一遍。
+  </div>
+
+  <div class="link"><span class="tag">串联 · 跨科：期望与方差在<u>另外三科</u>里的同名兄弟</span>
+    <b>→ 408 计算机</b>：<b>平均查找长度 ASL</b> 就是查找次数的<b>数学期望</b>（$\text{ASL}=\sum p_i c_i$，与 $EX=\sum x_ip_i$ 逐字对应）；
+    <b>散列表的平均查找长度</b>、<b>页面置换的平均访存时间</b> $\text{EAT}=(1-p)t_{\text{mem}}+p\,t_{\text{fault}}$、
+    <b>CPI</b>（每指令平均周期数）、<b>Huffman 编码的平均码长</b> 全是同一个加权平均公式。<b>408 里凡是出现"平均"两个字，写的都是本章第一行的式子。</b><br>
+    <b>→ 排队与调度</b>：进程调度的平均周转时间、磁盘调度的平均寻道时间——也是期望；而"<b>为什么 SJF 平均周转最短</b>"的证明思路，和本章方差性质⑥「$c=EX$ 使 $E[(X-c)^2]$ 最小」是同一类<b>最优点在中心</b>的结论。<br>
+    <b>→ 高数第 5 章</b>：方差性质⑥ 的证明（令 $g(c)=E[(X-c)^2]$，求 $g'(c)=0$ 得 $c=EX$，$g''=2>0$）就是一道<b>标准的一元函数最值题</b>，只是变量叫 $c$。<br>
+    <b>→ 线性代数</b>：<a href="#eg-s68">强 6.8</a> 的"事实上"用<b>可逆矩阵作用下二维正态保持不变</b>来断言独立——那正是线代的<b>线性变换</b>在概率论里的第一次正式露面，第 6 章的 $\chi^2$ 分解会大量用它。
+  </div>
+
+  <div class="bg"><span class="tag">背景</span>书上引入方差时讲的那个「A、B 两名射击运动员平均都是 9.6 环，选谁参赛」的故事，
+    以及「最早研究波动时用的是 $|X-EX|$，因绝对值不便计算才改用平方」这两段——<b>了解即可，考试不考</b>。
+    有用的只有一句：<b>平方是为了可算</b>，代价是量纲变成平方，所以才要再开方回来得到标准差。</div>
+
+  <!-- ================= s1 ================= -->
+  <h2 id="s1"><span class="idx">壹</span>$O_1$ 数学期望：加权平均，难点全在"权重之后"　<span class="layer L-base">基础</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/概率论与数理统计/04_随机变量的数字特征/概率_第04章_基础30讲.pdf">📄 基础30讲 p.104</a>
+
+  <div class="fml">
+    <b>离散型</b>：$p_i=P\{X=x_i\}$，若 $\sum_{i=1}^{\infty}x_ip_i$ <b>绝对收敛</b>，则
+    $$EX=\sum_{i=1}^{\infty}x_ip_i;\qquad E[g(X)]=\sum_{i=1}^{\infty}g(x_i)p_i.$$
+    <b>连续型</b>：密度 $f(x)$，若 $\int_{-\infty}^{+\infty}xf(x)\mathrm dx$ <b>绝对收敛</b>，则
+    $$EX=\int_{-\infty}^{+\infty}xf(x)\mathrm dx;\qquad E[g(X)]=\int_{-\infty}^{+\infty}g(x)f(x)\mathrm dx.$$
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · $E[g(X)]$ 公式里"不必求 $Y$ 的分布"这件事，书上用一张图交代了理由</span>
+    <b>书上说</b>：眉批画了 $g(X)=Y\sim\begin{pmatrix}g(x_1)&g(x_2)&\cdots\\ p_1&p_2&\cdots\end{pmatrix}$，并批「<b>概率取值没变</b>」。<br>
+    <b>潜台词是</b>：$X$ 取到 $x_1$ 这件事，和 $Y$ 取到 $g(x_1)$ 这件事，是<u>同一个事件</u>，所以概率一模一样。
+    变的只是"贴在这个概率上的数值"，从 $x_1$ 变成了 $g(x_1)$。因此加权平均时<b>只换数、不换权</b>。<br>
+    <b>所以能考</b>：这是本章使用频率最高的一条——凡是问 $E[g(X)]$、$E[g(X,Y)]$，<b>一律不要去求 $g$ 的分布</b>。
+    对比 <a href="#eg-46">基 4.6</a> 的方法二（老老实实求 $F(x)$ 再分段讨论）与方法一（直接认出 $F(X)\sim U(0,1)$），
+    书上自己都批了一句「<b>显然方法二解法比较复杂</b>」。<br>
+    ⚠️ <b>唯一的例外</b>：如果题目<u>本身</u>要求"求 $Z$ 的概率密度"（如 <a href="#eg-412">基 4.12</a>(2)），那才必须求分布——
+    但注意它 (3) 问 $E(X/Y)$ 时又回到了"不求分布"的路子。<b>一道题里两种做法并存，正是在教你区分。</b>
+  </div>
+
+  <div class="key"><span class="tag">必记 · 期望的三条性质，第②条是全章使用频率最高的一句话</span>
+    ① $Ea=a$（常数的期望是它自己），$E(EX)=EX$（$EX$ 已经是个<b>数</b>，再取期望不变）。<br>
+    ② <b>线性性</b>：$E(aX+bY)=aEX+bEY$，一般地 $E\left(\sum_{i=1}^n a_iX_i\right)=\sum_{i=1}^n a_iEX_i$。<br>
+    ③ 若 $X,Y$ <b>相互独立</b>，则 $E(XY)=EX\cdot EY$。
+    <div style="margin-top:8px;padding:8px 12px;border-radius:8px;background:var(--card)">
+      <b>书上给②批了三个字：「无条件打开」。这三个字要刻进脑子——</b><br>
+      $E(X+Y)=EX+EY$ <b>永远成立</b>，不需要独立、不需要同分布、甚至不需要 $X,Y$ 有联合密度。<br>
+      而 ③ 的 $E(XY)=EXEY$ <b>需要独立</b>，$D(X+Y)=DX+DY$ <b>需要不相关</b>。<br>
+      <b>⟹ 一句话：期望的"和"无条件，期望的"积"与方差的"和"都有条件。</b>
+    </div>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 书上那张"离散 ↔ 连续对应图"，讲的是全章唯一一次"翻译规则"</span>
+    <b>书上说</b>：在期望定义之后画了一张图——左边是离散型，在 $x_i$ 处竖起高度 $p_i$ 的杆；
+    右边是连续型，在 $[x,x+\Delta x]$ 上截一小条；中间标着「对应」，并写明 $p_i\longleftrightarrow f(x)\mathrm dx$。<br>
+    <b>潜台词是</b>：<b>整本概率论的离散/连续两套公式，其实只有<u>一条</u>翻译规则</b>——
+    把 $\sum_i$ 换成 $\int$，把 $p_i$ 换成 $f(x)\mathrm dx$，其余原样照抄。
+    $EX=\sum x_ip_i\to\int xf\mathrm dx$、$DX=\sum(x_i-EX)^2p_i\to\int(x-EX)^2f\mathrm dx$、
+    $\mathrm{Cov}=\sum\sum(x_i-EX)(y_j-EY)p_{ij}\to\iint(x-EX)(y-EY)f\mathrm dx\mathrm dy$ ——<b>一条规则，三对公式。</b><br>
+    <b>所以能考</b>：<b>本章的公式表只需要背离散那一半</b>，连续那一半现场翻译。
+    这对考场很实际：紧张时记不清 $\int xf(x)\mathrm dx$ 里 $x$ 是否要平方，回想"离散是 $\sum x_ip_i$"就立刻确定。
+    <b>反向也成立</b>：<a href="#eg-45">基 4.5</a> 那种"级数硬算"和 <a href="#eg-x49">习 4.9</a> 那种"积分硬算"，
+    <u>动作完全一致</u>——先把 $g$ 写清楚，再决定用求和号还是积分号。
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · "权重"这两个字批在 $p_i$ 头上，是在提醒你 $EX$ 不是"平均值"</span>
+    <b>书上说</b>：$EX=\sum x_ip_i$ 的式子上方，$x_i$ 标「数」、$p_i$ 标「<b>权重</b>」。<br>
+    <b>潜台词是</b>：$EX$ <b>不是"所有可能取值的算术平均"</b>，而是<b>按概率加权的平均</b>。
+    这个区别在考场上会现形：$X\sim\begin{pmatrix}0&100\\0.99&0.01\end{pmatrix}$ 的算术平均是 50，而 $EX=1$。
+    <b>"期望"这个中文名反而误导——它不是"最可能出现的值"（那是众数），也不是"中间那个值"（那是中位数）。</b><br>
+    <b>所以能考</b>：<b>①</b> 期望可以是随机变量<u>永远取不到</u>的值（掷骰子 $EX=3.5$）；
+    <b>②</b> 期望可以<u>不存在</u>（<a href="#eg-43">基 4.3</a>）；
+    <b>③</b> 加权的观念直接支撑第 1 章的<b>全概率公式</b>——
+    $P(B)=\sum P(A_i)P(B|A_i)$ 就是"以 $P(A_i)$ 为权重对条件概率加权"，
+    而<b>全期望公式</b> $EX=\sum P(A_i)E(X|A_i)$ 是它的孪生兄弟（数一不作要求，但真题里出现过用它秒杀的场合）。
+  </div>
+
+  <div class="trap"><span class="tag">陷阱 · "绝对收敛"不是废话，它是一道<u>真的会考</u>的选项</span>
+    定义里那句「若级数（或积分）<b>绝对</b>收敛」，九成的人读过就忘。但 <a href="#eg-43">基 4.3</a> 就是专门为它出的：
+    柯西分布 $f(x)=\frac1{\pi(1+x^2)}$，$\int_{-\infty}^{+\infty}\frac{x}{\pi(1+x^2)}\mathrm dx$ 在<b>主值意义下</b>等于 0，
+    可 $\int_{-\infty}^{+\infty}\frac{|x|}{\pi(1+x^2)}\mathrm dx=+\infty$ 发散，<b>所以 $EX$ 不存在</b>，答案选"不存在"而不是"等于 0"。<br>
+    <b>识别信号</b>：密度的尾巴衰减得像 $\frac1{x^2}$（幂次衰减）而不是 $\mathrm e^{-x}$（指数衰减），
+    就要立刻警觉"<b>期望可能不存在</b>"。<a href="#eg-412">基 4.12</a> 里 $f_Z(z)=\frac2{(1+z)^2}$ 也是这种尾巴——
+    我算过：<b>$EZ=E(Y/X)$ 确实发散、不存在</b>，题目只问 $E(X/Y)$ 是刻意避开的。
+    <b>如果考场上把两问看反，你会做一道无解的题。</b>
+  </div>
+
+  <div class="eg" id="eg-41"><div class="q"><span class="no">基 4.1</span>设一次试验成功的概率为 $p$，进行 100 次独立重复试验，则成功次数的标准差的最大值为 ____。<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s"><span class="lab">答案</span><span class="ans">5</span><br>
+      <span class="lab">分析</span>成功次数 $X\sim B(100,p)$，标准差 $\sqrt{DX}=\sqrt{100p(1-p)}$。
+      由 $p(1-p)\le\frac14$（$p=\frac12$ 取等），最大值为 $\sqrt{100\times\frac14}=5$。<br>
+      <span class="lab">要害</span>题面一个"方差"字样都没有，全靠你自己认出 $B(n,p)$ 并调用 $DX=np(1-p)$。
+      <b>接着是一步纯高中的二次函数最值</b>——本章大量填空题都是这个结构：<b>概率的部分只有一步，剩下全是初等运算</b>。</div></div>
+
+  <div class="eg" id="eg-42"><div class="q"><span class="no">基 4.2</span>设 $X$ 的概率密度为 $f(x)=\begin{cases}\frac12\cos\frac x2,&0\le x\lt\pi,\\0,&\text{其他},\end{cases}$ 对 $X$ 独立观察 4 次，用 $Y$ 表示观察值大于 $\frac\pi3$ 的次数，求 $E(Y^2)$。<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s"><span class="lab">答案</span><span class="ans">$E(Y^2)=5$</span><br>
+      <span class="lab">分析</span>$P\{X>\frac\pi3\}=\int_{\pi/3}^{\pi}\frac12\cos\frac x2\mathrm dx=\sin\frac x2\Big|_{\pi/3}^{\pi}=1-\frac12=\frac12$，
+      所以 $Y\sim B\left(4,\frac12\right)$，$EY=2$，$DY=1$，
+      $$E(Y^2)=DY+(EY)^2=1+4=5.$$
+      <span class="lab">要害</span><b>两个动作缺一不可</b>：<br>
+      ① <b>"独立观察 $n$ 次，数成功次数"⟹ 二项分布</b>——这是从连续型跳到离散型的<b>桥</b>，第 2 章讲过，本章反复用；<br>
+      ② <b>$E(X^2)=DX+(EX)^2$</b> ——这是方差公式的<u>移项形式</u>，<b>本章出现频率最高的一个变形</b>。
+      凡是要求 $E(X^2)$、$E(Y^2)$，一律先想它，而不是回去积分。</div></div>
+
+  <div class="eg" id="eg-43"><div class="q"><span class="no">基 4.3</span>设连续型随机变量 $X$ 的概率密度为 $f(x)=\dfrac1{\pi(1+x^2)}\ (-\infty\lt x\lt+\infty)$，则 $EX$（　）。<br>
+    (A) 等于 0　(B) 等于 1　(C) 等于 $\pi$　(D) 不存在<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s"><span class="lab">答案</span><span class="ans">(D) 不存在</span><br>
+      <span class="lab">分析</span>$\displaystyle\int_{-\infty}^{+\infty}\frac{x}{\pi(1+x^2)}\mathrm dx=\frac1{2\pi}\ln(1+x^2)\Big|_{-\infty}^{+\infty}$，
+      上下限都给出 $+\infty$，<b>该积分发散</b>，因此 $EX$ 不存在。<br>
+      <span class="lab">要害</span>这就是<b>柯西分布</b>，全考研概率论里"期望不存在"的<b>唯一出题口</b>。
+      (A) 是给"看到奇函数就写 0"的人准备的——<b>奇函数积分为 0 的前提是积分收敛</b>，这里前提不成立。<br>
+      <span class="lab">程序复核</span>我用 sympy 算 $\int_0^{+\infty}\frac{x}{\pi(1+x^2)}\mathrm dx$ 直接返回 $\infty$，
+      而 $\int_{-\infty}^{+\infty}$ 返回未化简的积分式（sympy 拒绝给出主值），<b>与"发散"一致</b>。</div></div>
+
+  <div class="eg" id="eg-44"><div class="q"><span class="no">基 4.4</span>设连续型随机变量 $X$ 的概率密度为 $f(x)=\dfrac1{\sqrt\pi}\mathrm e^{-x^2+2x-1}\ (-\infty\lt x\lt+\infty)$，则 $EX\cdot\sqrt{DX}=$ ____。<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s"><span class="lab">答案</span><span class="ans">$\dfrac1{\sqrt2}=\dfrac{\sqrt2}2$</span><br>
+      <span class="lab">分析</span>指数上配方：$-x^2+2x-1=-(x-1)^2$，于是
+      $$f(x)=\frac1{\sqrt\pi}\mathrm e^{-(x-1)^2}=\frac1{\sqrt{2\pi}\cdot\frac1{\sqrt2}}\exp\left\{-\frac{(x-1)^2}{2\left(\frac1{\sqrt2}\right)^2}\right\},$$
+      对照 $N(\mu,\sigma^2)$ 得 $\mu=1$、$\sigma^2=\frac12$，故 $EX=1$、$\sqrt{DX}=\frac1{\sqrt2}$，乘积为 $\frac1{\sqrt2}$。<br>
+      <span class="lab">要害（★ 眉批点名的方法）</span><b>形如 $A\mathrm e^{-ax^2+bx+c}\ (a>0)$ 的概率密度，一律凑成 $\frac1{\sqrt{2\pi}\sigma}\mathrm e^{-\frac{(x-\mu)^2}{2\sigma^2}}$</b>。
+      两步：先把指数配方成 $-\frac{(x-\mu)^2}{2\sigma^2}$ 读出 $\mu$ 与 $\sigma^2$，再<b>用系数 $A$ 校验</b>（$A$ 必须等于 $\frac1{\sqrt{2\pi}\sigma}$，这里 $\frac1{\sqrt{2\pi}\cdot\frac1{\sqrt2}}=\frac1{\sqrt\pi}$ ✓）。<br>
+      <span class="lab">提速</span>只看指数的<b>二次项系数</b>：$-ax^2$ 对应 $-\frac{x^2}{2\sigma^2}$，即 $\sigma^2=\frac1{2a}$。
+      本题 $a=1\Rightarrow\sigma^2=\frac12$，<b>一眼出结果</b>，不用真配方。$\mu$ 则是"指数的对称轴"$=\frac b{2a}=1$。</div></div>
+
+  <div class="eg" id="eg-45"><div class="q"><span class="no">基 4.5</span>设随机变量 $X$ 的概率分布为 $P\{X=k\}=\dfrac C{k!},\ k=0,1,2,\cdots$，则 $E(|X-EX|)=$ ____。<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s"><span class="lab">答案</span><span class="ans">$\dfrac2{\mathrm e}$</span><br>
+      <span class="lab">第一步：认分布</span>由归一性 $\sum_{k=0}^{\infty}\frac C{k!}=C\mathrm e=1$ 得 $C=\mathrm e^{-1}$，
+      对照 $P\{X=k\}=\frac{\lambda^k}{k!}\mathrm e^{-\lambda}$ 知 <b>$X\sim P(1)$</b>，于是 $EX=DX=1$。<br>
+      <span class="lab">第二步：拆绝对值</span>$E(|X-1|)$ 的绝对值只在 $k=0$ 处翻号（$k\ge1$ 时 $|k-1|=k-1$）：
+      $$E(|X-1|)=P\{X=0\}\cdot1+\sum_{k=1}^{\infty}P\{X=k\}(k-1)
+      =\frac1{\mathrm e}+\left[\underbrace{\sum_{k=0}^{\infty}P\{X=k\}(k-1)}_{=E(X-1)=EX-1=0}+P\{X=0\}\right]=\frac1{\mathrm e}+\frac1{\mathrm e}=\frac2{\mathrm e}.$$
+      <span class="lab">要害</span><b>把"从 1 求和"补成"从 0 求和"，再减掉多加的那一项</b>——这样中间那块就变成了已知的 $E(X-1)=0$。
+      这是级数题的通用手法：<b>凑成完整的期望，剩下的边角单独算</b>。<br>
+      <span class="lab">程序复核</span>sympy 直接对 $\sum_{k=0}^{\infty}|k-1|\frac{\mathrm e^{-1}}{k!}$ 求和，化简后 $=2\mathrm e^{-1}$；
+      蒙特卡洛 $10^7$ 个 $P(1)$ 样本得 $0.735614$，$2/\mathrm e=0.735759$，$|\Delta|=1.4\times10^{-4}$ ✓。</div></div>
+
+  <div class="eg" id="eg-46"><div class="q"><span class="no">基 4.6</span>设 $X$ 的概率密度为 $f(x)=\begin{cases}\frac x2,&0\lt x\lt2,\\0,&\text{其他},\end{cases}$ $F(x)$ 为分布函数，$EX$ 为数学期望，则 $P\{F(X)>EX-1\}=$ ____。<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s"><span class="lab">答案</span><span class="ans">$\dfrac23$</span><br>
+      <span class="lab">方法一（书上推荐）</span>$EX=\int_0^2 x\cdot\frac x2\mathrm dx=\frac{x^3}6\Big|_0^2=\frac43$，故 $EX-1=\frac13$。
+      令 $Y=F(X)$，因 $F$ 在 $(0,2)$ 上<b>严格单调增</b>，由第 2 章<b>例 2.15（概率积分变换）</b>知 $Y\sim U(0,1)$，于是
+      $$P\{F(X)>EX-1\}=P\left\{Y>\frac13\right\}=1-\frac13=\frac23.$$
+      <span class="lab">方法二（书上自评"比较复杂"）</span>先求 $F(x)=\frac{x^2}4\ (0\le x\lt2)$，再解 $\frac{X^2}4>\frac13\Rightarrow X>\frac2{\sqrt3}$，
+      $$P\left\{\frac2{\sqrt3}\lt X\lt2\right\}=\int_{2/\sqrt3}^{2}\frac x2\mathrm dx=\frac{x^2}4\Big|_{2/\sqrt3}^{2}=1-\frac13=\frac23.$$
+      <span class="lab">要害</span><b>$F(X)\sim U(0,1)$ 是本题的全部</b>（$F$ 连续且严格单调时恒成立）。
+      记住这个结论，本题从"要不要分段讨论"退化成"读一个均匀分布的概率"。<br>
+      <span class="lab">两法对比的价值</span>方法二算下来其实也就三行——<b>书写"复杂"，指的不是行数，是"思路上要多绕一圈"</b>：
+      你得先意识到 $F(X)$ 里的 $X$ 是随机的、$F$ 是那个具体函数，再把复合式解开。
+      考场上<b>方法二是保底路线</b>（想不起结论时一定能算出来），方法一是提速路线。<b>两条都要会，别只背结论。</b></div></div>
+
+  <!-- ================= s2 ================= -->
+  <h2 id="s2"><span class="idx">贰</span>$O_2$ 方差：一切用公式法，外加一张必须背死的表　<span class="layer L-base">基础</span><span class="layer L-str">强化</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/概率论与数理统计/04_随机变量的数字特征/概率_第04章_基础30讲.pdf">📄 基础30讲 p.105</a>
+
+  <div class="fml">
+    <b>定义</b>：$DX=E[(X-EX)^2]$，即 $DX$ 是随机变量 $(X-EX)^2$ 的<b>数学期望</b>。<br>
+    <b>★ 公式法（一切计算走这条）</b>：$$\boxed{DX=E[(X-EX)^2]=E(X^2)-(EX)^2}$$
+    <b>标准差</b> $\sigma(X)=\sqrt{DX}$；<b>标准化</b> $X^*=\dfrac{X-EX}{\sqrt{DX}}$，恒有 $EX^*=0,\ DX^*=1$。
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 为什么"定义法"几乎不用，而"公式法"是唯一实战路线</span>
+    <b>书上说</b>：强化版把方差的计算分成"（2）定义法"与"（3）公式法"两条，各给了式子，但<b>十道例题里没有一道走定义法</b>。<br>
+    <b>潜台词是</b>：定义法 $\sum(x_i-EX)^2p_i$ 要先算出 $EX$、再逐项作差平方，
+    而公式法 $E(X^2)-(EX)^2$ 只需<b>把 $x_i$ 换成 $x_i^2$ 再做一次同样的加权平均</b>——
+    对同一张分布表，<b>两次扫描的动作完全相同</b>，不用改结构、不易算错。连续型同理（$\int x^2f$ 与 $\int xf$ 只差一个幂次）。<br>
+    <b>所以能考</b>：考场上遇到"求 $DX$"，标准流程固定为三步——<b>①算 $EX$ ②算 $E(X^2)$ ③相减</b>。
+    <a href="#eg-x45">习 4.5</a>（求 $D(X^2)$，要算到 $E(X^4)$）、<a href="#eg-x46">习 4.6</a>（求 $D(\mathrm e^{-2X})$，要算 $E(\mathrm e^{-4X})$）
+    都是同一个模子——<b>"求 $D[g(X)]$"就是"算 $E[g^2]$ 与 $E[g]$"，$g$ 是什么完全不影响流程。</b>
+  </div>
+
+  <div class="key"><span class="tag">必记 · 方差的六条性质（③④⑤ 是错误重灾区）</span>
+    ① $DX\ge0$，且 $E(X^2)=DX+(EX)^2\ge(EX)^2$。<br>
+    ② $Dc=0$；反过来 $DX=0\iff P\{X=a\}=1$（<b>方差为零等价于退化成常数</b>）。<br>
+    ③ $D(aX+b)=a^2DX$ —— <b>书上专门批了「注意这里是 $a^2$」，且常数 $b$ 完全不影响方差</b>（平移不改变离散程度）。<br>
+    ④ $D(X\pm Y)=DX+DY\pm2\mathrm{Cov}(X,Y)$；一般地
+    $$D\left(\sum_{i=1}^n a_iX_i\right)=\sum_{i=1}^n a_i^2DX_i+2\sum_{1\le i\lt j\le n}a_ia_j\mathrm{Cov}(X_i,X_j).$$
+    书上批：「★<b>每两个随机变量之间都要求协方差</b>」（$n$ 个变量有 $\binom n2$ 个交叉项，一个都不能漏）。<br>
+    ⑤ 若 $X,Y$ <b>相互独立</b>：$D(aX+bY)=a^2DX+b^2DY$，且
+    $$D(XY)=DX\,DY+DX(EY)^2+DY(EX)^2\ \ge\ DX\,DY.$$
+    ⑥ 对任意常数 $c$，$DX=E[(X-EX)^2]\le E[(X-c)^2]$ —— <b>$c=EX$ 是使平方偏差最小的那个点</b>。
+  </div>
+
+  <div class="trap"><span class="tag">陷阱 · 本章第一号错误：$D(X-Y)=DX-DY$</span>
+    正确的是 $D(X-Y)=DX+DY-2\mathrm{Cov}(X,Y)$。<b>注意 $DY$ 前面是加号</b>——因为 $D(-Y)=(-1)^2DY=+DY$，
+    减号只作用在交叉项上。<a href="#eg-411">基 4.11</a> 里 $D(X-Y)=1+4-2\times0.5\times2=3$，
+    若错写成 $1-4$ 会得到负方差，<b>这是个当场就能自查的信号：方差算出负数一定是符号错了</b>。<br>
+    第二号错误：<b>把 $D(aX+b)$ 写成 $aDX$ 或 $aDX+b$</b>。牢记两句：<b>系数要平方，常数直接扔</b>。<br>
+    第三号错误：<b>没有独立性就直接写 $D(X+Y)=DX+DY$</b>。这一步的<u>准确</u>前提是"<b>不相关</b>"（比独立弱），
+    见 <a href="#s5">§5</a> 的五个等价条件。
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 性质⑥「$c=EX$ 使 $E[(X-c)^2]$ 最小」，是整个统计学的出发点</span>
+    <b>书上说</b>：$DX=E[(X-EX)^2]\le E[(X-c)^2]$，眉批标「关于 $c$ 的函数」，并给了一段求导证明：
+    令 $g(c)=E(X^2)-2cEX+c^2$，$g'(c)=-2EX+2c=0$ 得 $c=EX$，$g''=2>0$，故为最小值点。<br>
+    <b>潜台词是</b>：这条性质表面上是个不等式，实际上回答了一个更根本的问题——
+    <b>"如果只准用一个数来代表整个随机变量，该选哪个？"</b>
+    答案是：<b>在"平方误差"这个尺度下，最优的那个数就是 $EX$。</b>
+    换句话说，<b>期望不是被随便定义出来的，它是某个最优化问题的解</b>。<br>
+    <b>所以能考</b>：<b>①</b> 直接考不等式本身（给一个具体的 $c$ 比大小）；
+    <b>②</b> 变形考"求 $c$ 使 $E[(X-c)^2]$ 最小"，答案永远是 $EX$，最小值永远是 $DX$；
+    <b>③</b> 更重要的是它往后延伸——<b>第 6 章的"最小二乘"、"均方误差 $\mathrm{MSE}(\hat\theta)=D\hat\theta+[E\hat\theta-\theta]^2$"</b>
+    用的是同一个分解（"方差 + 偏差平方"），而这里的 $E[(X-c)^2]=DX+(EX-c)^2$ 正是那个分解的原型。
+    <b>把这一行推导记住，第 6 章那个吓人的 MSE 公式就是老朋友。</b><br>
+    ⚠️ 顺带一提：若把"平方误差"换成"绝对误差" $E|X-c|$，最优的 $c$ 就变成<b>中位数</b>而不是期望——
+    <b>这也解释了书上那句"最早研究波动用的是 $|X-EX|$，因不便计算才改用平方"背后真正的代价：换了尺度就换了中心。</b>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 性质⑤ 里那个不起眼的 $D(XY)\ge DX\,DY$，为什么书要专门证一遍</span>
+    <b>书上说</b>：$X,Y$ 独立时 $D(XY)=DX\,DY+DX(EY)^2+DY(EX)^2\ge DX\,DY$，并在注里给了完整证明。<br>
+    <b>潜台词是</b>：这条式子存在的意义<b>不是让你背它</b>（真题几乎不直接考），
+    而是让你看清一件事——<b>"独立"这个条件在方差里的用法，和在期望里完全不同</b>。
+    证明的关键一步是「$X,Y$ 独立 $\Rightarrow X^2,Y^2$ 也独立」，从而 $E(X^2Y^2)=E(X^2)E(Y^2)$。
+    <b>"独立的函数仍独立"——这才是这段证明真正要教的东西。</b><br>
+    <b>所以能考</b>：<b>$X,Y$ 独立 $\Rightarrow$ $g(X),h(Y)$ 独立</b>，这条在真题里用得非常多：
+    <a href="#eg-42">基 4.2</a> 里"独立观察 4 次"能用二项分布、
+    <a href="#eg-s610">强 6.10</a> 里 $P\{\min>t\}=\prod P\{T_i>t\}$、
+    <a href="#eg-s69">强 6.9</a> 里 $X_i$ 独立推出 $X_i^2$ 独立从而方差可加——<b>全是它</b>。
+    <b>反过来注意：$X$ 与 $|X|$ 不是"两个独立变量的函数"，而是同一个 $X$ 的两个函数，所以当然不独立</b>（<a href="#eg-410">基 4.10</a>）。
+  </div>
+
+  <div class="key"><span class="tag">必记 · 七（八）个常用分布的 $EX$ 与 $DX$ —— 书上批「要记住」，这是本章的乘法口诀表</span>
+    <div class="gridwrap"><table>
+      <tr><th>分布</th><th>分布律 $p_k$ / 密度 $f(x)$</th><th>$EX$</th><th>$DX$</th><th>记忆抓手</th></tr>
+      <tr><td>0–1 分布</td><td>$P\{X=k\}=p^k(1-p)^{1-k},k=0,1$</td><td>$p$</td><td>$p(1-p)$</td><td>$B(1,p)$ 的特例</td></tr>
+      <tr><td>二项 $B(n,p)$</td><td>$P\{X=k\}=C_n^kp^k(1-p)^{n-k}$</td><td>$np$</td><td>$np(1-p)$</td><td>$n$ 个 0–1 相加，两者都乘 $n$</td></tr>
+      <tr><td>泊松 $P(\lambda)$</td><td>$P\{X=k\}=\frac{\lambda^k}{k!}\mathrm e^{-\lambda}$</td><td>$\lambda$</td><td>$\lambda$</td><td><b>两个都是 $\lambda$</b></td></tr>
+      <tr><td>几何 $G(p)$</td><td>$P\{X=k\}=(1-p)^{k-1}p,k\ge1$</td><td>$\frac1p$</td><td>$\frac{1-p}{p^2}$</td><td>"平均等 $1/p$ 次"</td></tr>
+      <tr><td>正态 $N(\mu,\sigma^2)$</td><td>$\frac1{\sqrt{2\pi}\sigma}\mathrm e^{-\frac{(x-\mu)^2}{2\sigma^2}}$</td><td>$\mu$</td><td>$\sigma^2$</td><td>参数直接就是答案</td></tr>
+      <tr><td>均匀 $U(a,b)$</td><td>$f=\frac1{b-a},a\lt x\lt b$</td><td>$\frac{a+b}2$</td><td>$\frac{(b-a)^2}{12}$</td><td>中点；长度平方除 12</td></tr>
+      <tr><td>指数 $E(\lambda)$</td><td>$f=\lambda\mathrm e^{-\lambda x},x>0$</td><td>$\frac1\lambda$</td><td>$\frac1{\lambda^2}$</td><td><b>方差是期望的平方</b></td></tr>
+      <tr style="background:var(--green-soft)"><td><b>$\chi^2(n)$</b> <span class="layer L-str">强化新增</span></td><td>$n$ 个独立 $N(0,1)$ 的平方和</td><td><b>$n$</b></td><td><b>$2n$</b></td><td>为<b>第 6 章</b>提前埋的</td></tr>
+    </table></div>
+    <b>眉批点名的唯一混淆点</b>：「<b>泊松分布与指数分布要分清楚</b>」——
+    泊松是 $(\lambda,\lambda)$，指数是 $\left(\frac1\lambda,\frac1{\lambda^2}\right)$。
+    <b>一个离散一个连续，参数含义相反</b>（泊松的 $\lambda$ 是"平均发生次数"，指数的 $\lambda$ 是"单位时间发生率"，倒数才是平均等待时间）。
+  </div>
+
+  <div class="link"><span class="tag">串联 · 这张表的第八行 $\chi^2(n)$ 是<u>基础版没有的</u>，它把第 4 章与第 6 章接上了</span>
+    基础30讲的表只有七行，强化第 6 讲悄悄加了 <b>$X\sim\chi^2(n)\Rightarrow EX=n,DX=2n$</b>。
+    为什么在讲"数字特征"时提前给一个还没学的分布？因为<b>第 6 章数理统计里，$\chi^2$ 的期望方差是构造无偏估计与区间估计的必需品</b>
+    （$E\left(\frac{(n-1)S^2}{\sigma^2}\right)=n-1\Rightarrow ES^2=\sigma^2$，样本方差无偏性的证明就一行）。
+    <b>现在背下来，第 6 章能省一次回头。</b>顺带记住它的来路：$\chi^2(n)=\sum_{i=1}^nX_i^2$，$X_i$ 独立 $N(0,1)$，
+    于是 $EX_i^2=DX_i+(EX_i)^2=1$ 给出 $n$，$DX_i^2=E(X_i^4)-1=3-1=2$ 给出 $2n$——
+    <b>这里的 $E(X_i^4)=3$ 正是 <a href="#eg-x414">习 4.14</a> 算过的正态四阶矩。</b>
+  </div>
+
+  <div class="link"><span class="tag">串联 · 指数分布的"无记忆性"是它在 408 与工程里的全部身份</span>
+    表里的指数分布 $E(\lambda)$ 有一条本章没写、但后面处处要用的性质：<b>$P\{X>s+t\mid X>s\}=P\{X>t\}$（无记忆性）</b>，
+    它是<b>唯一</b>具有此性质的连续分布（离散侧的唯一者是几何分布——<a href="#eg-s63">强 6.3</a> 正是靠这一点让"整数部分服从几何分布"）。<br>
+    <b>→ 408 操作系统 / 组成原理</b>：<b>泊松到达 + 指数服务时间</b>是排队论模型（$M/M/1$）的标准假设，
+    进程平均等待时间、磁盘请求平均响应时间的推导都建立在它上面；<b>"平均无故障时间 MTBF"</b>就是 $EX=\frac1\lambda$。<br>
+    <b>→ 计网</b>：指数退避、超时重传的定时器分析用的是同一族分布。<br>
+    <b>→ 本章内部</b>：<a href="#eg-s610">强 6.10</a> 里"$n$ 个元件同时试验、第一个失效的时刻仍服从指数分布且率变成 $\frac n\theta$"，
+    正是无记忆性的直接推论——<b>$n$ 个"永远崭新"的元件并联，等价于一个失效率放大 $n$ 倍的元件</b>。
+    <b>这一条在可靠性工程里叫"串联系统的失效率相加"，是本章题目背后的真实工程含义。</b>
+  </div>
+
+  <div class="eg" id="eg-x45"><div class="q"><span class="no">习 4.5</span>设 $X$ 的分布函数为 $F(x)=\begin{cases}0,&x\lt-1,\\0.2,&-1\le x\lt0,\\0.8,&0\le x\lt1,\\1,&x\ge1,\end{cases}$ 则 $D(X^2)=$ ____。<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s"><span class="lab">答案</span><span class="ans">0.24</span><br>
+      <span class="lab">分析</span>先由<b>跳跃高度</b>还原分布列：$X\sim\begin{pmatrix}-1&0&1\\0.2&0.6&0.2\end{pmatrix}$（在 $-1$ 跳 0.2，在 $0$ 跳 $0.8-0.2=0.6$，在 $1$ 跳 $1-0.8=0.2$）。
+      于是 $X^2\sim\begin{pmatrix}0&1\\0.6&0.4\end{pmatrix}$，
+      $$E(X^2)=0.4,\quad E(X^4)=E[(X^2)^2]=0.4,\quad D(X^2)=E(X^4)-[E(X^2)]^2=0.4-0.16=0.24.$$
+      <span class="lab">要害</span>两个点：<b>①离散型分布函数 → 分布列，看跳跃高度</b>（第 2 章的老动作，本章还要用）；
+      <b>②$X$ 只取 $\pm1,0$，所以 $X^4=X^2$</b>，$E(X^4)$ 不用重算。
+      <b>凡是随机变量只取 $0,\pm1$，它的所有偶次幂都相等</b>——这个小观察能省一次求和。</div></div>
+
+  <div class="eg" id="eg-x46"><div class="q"><span class="no">习 4.6</span>设连续型随机变量 $X$ 服从参数为 1 的指数分布，则 $D(\mathrm e^{-2X})=$ ____。<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s"><span class="lab">答案</span><span class="ans">$\dfrac4{45}$</span><br>
+      <span class="lab">分析</span>$f(x)=\mathrm e^{-x}\ (x>0)$。
+      $$E(\mathrm e^{-2X})=\int_0^{+\infty}\mathrm e^{-2x}\mathrm e^{-x}\mathrm dx=\int_0^{+\infty}\mathrm e^{-3x}\mathrm dx=\frac13,$$
+      $$E[(\mathrm e^{-2X})^2]=E(\mathrm e^{-4X})=\int_0^{+\infty}\mathrm e^{-5x}\mathrm dx=\frac15,$$
+      $$D(\mathrm e^{-2X})=\frac15-\left(\frac13\right)^2=\frac{9-5}{45}=\frac4{45}.$$
+      <span class="lab">要害</span><b>$E(\mathrm e^{-kX})$ 对指数分布是"分母加 $k$"</b>：$\int_0^\infty\mathrm e^{-kx}\lambda\mathrm e^{-\lambda x}\mathrm dx=\frac\lambda{\lambda+k}$。
+      本题 $\lambda=1$：$k=2$ 给 $\frac13$，$k=4$ 给 $\frac15$，<b>心算即可，不必真积分</b>。<br>
+      <span class="lab">串联</span>$E(\mathrm e^{-kX})=\frac{\lambda}{\lambda+k}$ 其实就是指数分布的<b>矩母函数</b>（把 $k$ 换成 $-t$），
+      考研不考矩母函数，但这个式子的形状值得眼熟：<b>"指数分布碰到指数函数，永远出分式"</b>。</div></div>
+
+  <div class="eg" id="eg-x47"><div class="q"><span class="no">习 4.7</span>已知连续型随机变量 $Y$ 的概率密度为 $f(y)=\begin{cases}\frac y{a^2}\mathrm e^{-\frac{y^2}{2a^2}},&y>0,\\0,&y\le0,\end{cases}\ a>0$，则 $Z=\dfrac1Y$ 的数学期望 $EZ=$ ____。<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s"><span class="lab">答案</span><span class="ans">$\dfrac{\sqrt{2\pi}}{2a}$</span><br>
+      <span class="lab">分析</span>关键是 $\frac1y$ 与密度里的 $y$ <b>正好约掉</b>：
+      $$EZ=\int_0^{+\infty}\frac1y\cdot\frac y{a^2}\mathrm e^{-\frac{y^2}{2a^2}}\mathrm dy=\frac1{a^2}\int_0^{+\infty}\mathrm e^{-\frac{y^2}{2a^2}}\mathrm dy
+      =\frac1{2a^2}\int_{-\infty}^{+\infty}\mathrm e^{-\frac{y^2}{2a^2}}\mathrm dy=\frac{\sqrt{2\pi}a}{2a^2}=\frac{\sqrt{2\pi}}{2a}.$$
+      <span class="lab">要害（书上注给了两条路）</span><b>路线一：凑正态。</b>把 $\int_{-\infty}^{+\infty}\mathrm e^{-\frac{y^2}{2a^2}}\mathrm dy$ 补成
+      $\sqrt{2\pi}a\cdot\int\frac1{\sqrt{2\pi}a}\mathrm e^{-\frac{y^2}{2a^2}}\mathrm dy=\sqrt{2\pi}a\cdot1$。
+      <b>路线二：泊松积分</b> $\int_0^{+\infty}\mathrm e^{-x^2}\mathrm dx=\frac{\sqrt\pi}2$。<br>
+      <b>两条路的实质是同一件事</b>：$\int\mathrm e^{-(\text{二次})}$ 这个积分在初等函数里没有原函数，
+      <b>必须靠"某个已知总量等于 1（或 $\sqrt\pi$）"来白拿</b>。这是概率论里<b>唯一被反复使用的"非初等积分"</b>，
+      本章 <a href="#eg-s62">强 6.2</a>、<a href="#eg-s65">强 6.5</a>、<a href="#eg-x414">习 4.14</a> 都要用。<br>
+      <span class="lab">注</span>这个 $Y$ 就是<b>瑞利分布</b>（$\sqrt{X_1^2+X_2^2}$，$X_i$ 独立 $N(0,a^2)$），考研不点名，但形状要眼熟：<b>密度前面挂一个 $y$，就是它。</b></div></div>
+
+  <div class="eg" id="eg-x48"><div class="q"><span class="no">习 4.8</span>设 $X$ 服从参数为 $\lambda$ 的泊松分布，且 $E[(X-1)(X-2)]=1$，则 $\lambda=$ ____。<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s"><span class="lab">答案</span><span class="ans">$\lambda=1$</span><br>
+      <span class="lab">分析</span><b>先展开成幂的组合，再逐项换成数字特征</b>：
+      $$E[(X-1)(X-2)]=E(X^2-3X+2)=E(X^2)-3EX+2=\underbrace{DX+(EX)^2}_{=\lambda+\lambda^2}-3\lambda+2=\lambda^2-2\lambda+2=1,$$
+      即 $(\lambda-1)^2=0$，解得 $\lambda=1$。<br>
+      <span class="lab">要害</span><b>看到 $E[\text{关于 }X\text{ 的多项式}]$，一律先展开再逐项取期望</b>（用线性性"无条件打开"），
+      然后把 $E(X^2)$ 换成 $DX+(EX)^2$。这条流水线在本章出现三次（本题、<a href="#eg-42">基 4.2</a>、<a href="#eg-49">基 4.9</a>）。<br>
+      <span class="lab">提速</span>泊松分布有个漂亮结论：$E[X(X-1)]=\lambda^2$（<b>$k$ 阶阶乘矩 $E[X(X-1)\cdots(X-k+1)]=\lambda^k$</b>）。
+      用它：$E[(X-1)(X-2)]=E[X(X-1)]-2E(X-1)-\ldots$ 反而更绕，<b>本题老实展开最快</b>。
+      但阶乘矩这个结论值得记住——泊松题里出现 $X(X-1)$ 的连乘时它是一步过。</div></div>
+
+  <!-- ================= s3 ================= -->
+  <h2 id="s3"><span class="idx">叁</span>二维的数字特征：$E[g(X,Y)]$ 与协方差、相关系数的定义　<span class="layer L-base">基础</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/概率论与数理统计/04_随机变量的数字特征/概率_第04章_基础30讲.pdf">📄 基础30讲 p.109</a>
+
+  <div class="fml">
+    <b>二维函数的期望</b>（$Z=g(X,Y)$ <b>仍然是一维随机变量</b>）：
+    $$EZ=\sum_i\sum_j g(x_i,y_j)p_{ij}\quad(\text{离散}),\qquad EZ=\int_{-\infty}^{+\infty}\!\!\int_{-\infty}^{+\infty}g(x,y)f(x,y)\mathrm dx\mathrm dy\quad(\text{连续}),$$
+    $$DZ=E(Z^2)-(EZ)^2,\qquad E(Z^2)=\iint g^2(x,y)f(x,y)\mathrm dx\mathrm dy.$$
+    <b>协方差</b>（要求 $DX>0,DY>0$ 且都存在）：
+    $$\mathrm{Cov}(X,Y)=E[(X-EX)(Y-EY)]=E(XY)-EX\cdot EY.$$
+    <b>相关系数</b>：$\rho_{XY}=\dfrac{\mathrm{Cov}(X,Y)}{\sqrt{DX}\sqrt{DY}}$。$\rho_{XY}=0$ 称 <b>不相关</b>，$\rho_{XY}\ne0$ 称 <b>相关</b>。
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 书上批的"求 $\mathrm{Cov}$ 要先求 $EX,EY,E(XY)$"，是一条<u>固定作业流程</u></span>
+    <b>书上说</b>：协方差定义式旁边的眉批是「<b>要想求出 $\mathrm{Cov}(X,Y)$，需要先求 $EX,EY,E(XY)$</b>」。<br>
+    <b>潜台词是</b>：定义式 $E[(X-EX)(Y-EY)]$ <u>看起来</u>该逐格作差再相乘，<b>但没人这么算</b>。
+    实战一律走 $E(XY)-EXEY$，而这三个量的来源各不相同：<br>
+    　$EX,EY$ 来自<b>边缘分布</b>（行和、列和 / $\int f\mathrm dy$）；　$E(XY)$ 来自<b>联合分布</b>（$\sum\sum x_iy_jp_{ij}$ / $\iint xyf$）。<br>
+    <b>所以能考</b>：这决定了离散型协方差题的<b>标准动线</b>——先把联合表补全（往往是本题的第一问），
+    右边加一列<b>行和</b>得 $X$ 的边缘、下边加一行<b>列和</b>得 $Y$ 的边缘，然后三个量各扫一遍表。
+    <a href="#eg-47">基 4.7</a>、<a href="#eg-x43">习 4.3</a>、<a href="#eg-x413">习 4.13</a> 三道题走的是<b>一模一样</b>的动线。
+    <b>把这条动线练成肌肉记忆，这类题就是纯体力活。</b>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · $\rho$ 为什么"无量纲"，以及它为什么叫"标准化后的协方差"</span>
+    <b>书上说</b>：先证 $\mathrm{Cov}(X^*,Y^*)=\rho_{XY}$，眉批标「$EX^*=0$（去中心化），$DX^*=1$（<b>去扰动，去量纲</b>）」。<br>
+    <b>潜台词是</b>：协方差有个致命缺陷——<b>它带量纲，所以数值大小没有绝对意义</b>。
+    父亲身高与孩子身高的协方差，用厘米量和用米量差 10000 倍，但"相关程度"显然没变。
+    除以 $\sqrt{DX}\sqrt{DY}$ 恰好把两个量纲都约掉，于是 $\rho$ 成了<b>可以横向比较的纯数</b>，且被锁在 $[-1,1]$ 内。<br>
+    <b>所以能考</b>：<b>①</b> 凡是问"相关程度强弱"，答案必须是 $\rho$ 而不是 $\mathrm{Cov}$；
+    <b>②</b> $\rho$ 对<u>正的</u>线性变换免疫：$\rho_{(aX+b)(cY+d)}=\rho_{XY}$（$a,c>0$），
+    所以做题时可以随手把 $X$ 换成 $X-\mu$ 或 $\frac X\sigma$ <b>而不影响 $\rho$</b>——<a href="#eg-s68">强 6.8</a> 就用了这个自由度；
+    <b>③</b> $|\rho|=1$ 当且仅当 $Y$ 与 $X$ <b>几乎处处成一条直线</b>，这是 $\rho$ 的极端情形。
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 眉批「$Z=g(X,Y)$ 仍然是一维」，这句话省掉了本节一半的心理负担</span>
+    <b>书上说</b>：二维函数期望的定义旁批着「$Z=g(X,Y)$ <b>仍然是一维</b>，期望、方差都是对一维变量进行研究」。<br>
+    <b>潜台词是</b>：很多人一看到"二维随机变量的数字特征"就以为要学一套全新的东西——
+    <b>其实并没有</b>。$E(XY)$、$D(X+Y)$、$E(\max\{X,Y\})$ 里的 $XY$、$X+Y$、$\max\{X,Y\}$ <b>都只是一个一维随机变量</b>，
+    它们的期望方差<u>沿用第 1 节的全部定义</u>。二维在这里只贡献了一件事：<b>提供计算这个一维量所需的联合分布</b>。<br>
+    <b>所以能考</b>：这解释了为什么本章的"二维"部分只有<b>两个</b>新概念（协方差、相关系数）而不是一整套——
+    因为期望方差<u>本来就不需要新定义</u>。真正新的是"<b>两个变量之间</b>"的关系，那才是 $\mathrm{Cov}$ 与 $\rho$ 的领地。<br>
+    <b>操作上的直接好处</b>：遇到 $E[g(X,Y)]$，脑子里想的应该是"<b>把 $g$ 的值按 $p_{ij}$（或 $f\mathrm dx\mathrm dy$）加权平均</b>"，
+    <u>不要</u>去想"先求 $Z$ 的分布"。<a href="#eg-48">基 4.8</a> 求 $E|X-Y|$、<a href="#eg-x410">习 4.10</a> 求 $E(UV)$，
+    走的都是这条"直接加权"的路。
+  </div>
+
+  <div class="key"><span class="tag">必记 · 随机变量的矩：三个熟人换了个学名</span>
+    设 $(X,Y)$ 为二维随机变量：
+    <div class="gridwrap"><table>
+      <tr><th>名称</th><th>定义</th><th>你早就认识的它</th></tr>
+      <tr><td>$k$ 阶<b>原点</b>矩</td><td>$E(X^k),\ k=1,2,\cdots$</td><td>$k=1$ 就是 <b>$EX$</b></td></tr>
+      <tr><td>$k$ 阶<b>中心</b>矩</td><td>$E[(X-EX)^k],\ k=2,3,\cdots$</td><td>$k=2$ 就是 <b>$DX$</b></td></tr>
+      <tr><td>$k+l$ 阶<b>混合原点</b>矩</td><td>$E(X^kY^l)$</td><td>$k=l=1$ 就是 <b>$E(XY)$</b></td></tr>
+      <tr><td>$k+l$ 阶<b>混合中心</b>矩</td><td>$E[(X-EX)^k(Y-EY)^l]$</td><td>$k=l=1$ 就是 <b>$\mathrm{Cov}(X,Y)$</b></td></tr>
+    </table></div>
+    <b>为什么要记这套学名？</b>因为<b>第 6 章的"矩估计法"就靠它命名</b>：用样本的 $k$ 阶原点矩 $\frac1n\sum X_i^k$
+    去估计总体的 $k$ 阶原点矩 $E(X^k)$。<b>现在把名字对上号，第 6 章开篇那句"令样本矩等于总体矩"才读得懂。</b>
+    另外 <a href="#eg-s69">强 6.9</a> 全题就写在矩的语言里（$\mu_k=E(X_i^k)$），不认识记号连题都读不了。
+  </div>
+
+  <div class="bg"><span class="tag">背景</span>书上用"研究父亲身高 $X$ 与孩子身高 $Y$ 的偏差程度"来解释协方差的含义，
+    这段只是给个直观，<b>考试不会考"协方差的实际意义"这种问答</b>。真正要记的是紧跟其后的那句：
+    「$\rho_{XY}=0$ 表示 $X$ 与 $Y$ 之间不存在<b>线性</b>关系……但它们之间还可能存在某种<b>非线性</b>关系」——
+    <b>那一句是选择题的命题依据，这一段不是。</b></div>
+
+  <div class="trap"><span class="tag">陷阱 · ⭐本章头号陷阱：$\rho=0$ 只否定"直线"，不否定"关系"</span>
+    书上眉批直接给出了教科书级反例：<b>$X\sim U(-1,1)$，$Y=\cos X$</b>，则
+    $$EX=0,\qquad E(XY)=E(X\cos X)=\int_{-1}^{1}x\cos x\cdot\frac12\mathrm dx=0\ (\text{奇函数}),$$
+    故 $\mathrm{Cov}(X,Y)=0-0\cdot EY=0$，$\rho_{XY}=0$，<b>$X$ 与 $Y$ 不相关</b>。
+    可是 $Y$ 完全由 $X$ 决定（$Y=\cos X$ 是<b>函数关系</b>，相依到不能再相依），<b>怎么可能独立？</b><br>
+    <b>这个反例的机关在"对称"</b>：$X$ 的分布关于 0 对称，$g(x)=x\cos x$ 是奇函数，于是积分自动为 0。
+    <b>本章所有"不相关但不独立"的反例都是这个套路</b>——
+    <a href="#eg-410">基 4.10</a>（$X$ 与 $|X|$，拉普拉斯分布对称）、
+    <a href="#eg-x44">习 4.4</a>（$X\sim U[-1,1]$，$Y=X^3$，但 $x\cdot x^3=x^4$ 是<b>偶</b>函数所以<u>反而相关</u>）。
+    <b>👉 建议现在就去 <a href="#s9">§9 的📉相关系数实验室</a> 把这四个反例的散点图看一遍，比读十遍文字管用。</b>
+  </div>
+
+  <div class="key"><span class="tag">必记 · 协方差的五条性质，②③ 被强化版点名「特别爱考，要用好」</span>
+    ① <b>对称性</b>：$\mathrm{Cov}(X,Y)=\mathrm{Cov}(Y,X)$。<br>
+    ② <b>齐次性</b>：$\mathrm{Cov}(aX,bY)=ab\,\mathrm{Cov}(X,Y)$。<br>
+    ③ <b>可加性</b>：$\mathrm{Cov}(X_1+X_2,Y)=\mathrm{Cov}(X_1,Y)+\mathrm{Cov}(X_2,Y)$。<br>
+    ④ $|\rho_{XY}|\le1$。<br>
+    ⑤ $\rho_{XY}=1\iff P\{Y=aX+b\}=1\ (a>0)$；$\rho_{XY}=-1\iff P\{Y=aX+b\}=1\ (a\lt0)$。<br>
+    <b>另有两条要当结论背</b>：$\mathrm{Cov}(X,X)=DX$；$Y=aX+b\Rightarrow\rho_{XY}=\mathrm{sgn}(a)$（<b>正比例给 $+1$，反比例给 $-1$，与 $|a|,b$ 无关</b>）。
+  </div>
+
+  <div class="link"><span class="tag">串联 · ②③ 合起来叫"双线性"，它和线代的内积是同一个东西</span>
+    把 $\mathrm{Cov}(\cdot,\cdot)$ 看成一种"内积"，则：对称性 = 内积对称，双线性 = 内积双线性，
+    $DX=\mathrm{Cov}(X,X)\ge0$ = 内积正定，$\rho_{XY}=\frac{\langle X,Y\rangle}{\|X\|\|Y\|}$ = <b>两个向量夹角的余弦</b>。
+    于是：<b>$|\rho|\le1$ 就是柯西–施瓦茨不等式</b>，<b>$|\rho|=1$ 就是两向量共线</b>，<b>$\rho=0$ 就是两向量正交</b>。<br>
+    这个视角不是花架子——它<b>一眼解释</b>了为什么"不相关（正交）"比"独立"弱得多：
+    正交只是几何上的垂直，两个向量垂直但完全可以由同一个参数决定。<b>把 $\rho$ 读成"夹角余弦"，本章大半的判断题就有了图像。</b>
+  </div>
+
+  <div class="eg" id="eg-47"><div class="q"><span class="no">基 4.7</span>设 $X$ 与 $Y$ 的概率分布分别为 $X\sim\begin{pmatrix}0&1\\ \frac13&\frac23\end{pmatrix}$，$Y\sim\begin{pmatrix}-1&0&1\\ \frac13&\frac13&\frac13\end{pmatrix}$，且 $P\{X^2=Y^2\}=1$。<br>(1) 求 $(X,Y)$ 的概率分布；(2) 求 $Z=XY$ 的概率分布；(3) 求 $\rho_{XY}$。<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>题目只给了两个边缘分布，却要联合分布</b>——一般来说这是做不到的（边缘不能唯一决定联合）。
+            所以 $P\{X^2=Y^2\}=1$ 这个条件<b>必须挑起全部担子</b>，它一定能把六个格子唯一钉死。先盯住它。</li>
+          <li>"概率为 1 的事件"的正确用法是<b>取反</b>：$P\{X^2\ne Y^2\}=0$，于是<b>所有 $x^2\ne y^2$ 的格子全是 0</b>。
+            $X$ 取 $0,1$，$Y$ 取 $-1,0,1$，逐个比：$(0,-1),(0,1),(1,0)$ 三格 $x^2\ne y^2$，<b>直接填 0</b>。</li>
+          <li>六格里已定三格为 0，剩下三格 $(0,0),(1,-1),(1,1)$ 由边缘的行和列和<b>一步倒推</b>——
+            某行只剩一个非零格时，那一格就等于该行的行和。<b>不需要解方程组。</b></li>
+          <li>(2) $Z=XY$ 只需把三个非零格按乘积归类：<b>格子少的时候不要建表，直接点名</b>。</li>
+          <li>(3) 求 $\rho$ 的三件套 $EX,EY,E(XY)$：前两个用<u>边缘</u>（题目已给，白拿），第三个用<u>联合</u>。
+            <b>先算 $E(XY)$，看它是不是 0</b>——若是 0 且 $EY=0$，那 $\mathrm{Cov}=0$ 立刻出来，后面 $DX,DY$ 都不用算。</li>
+        </ol>
+      </div>
+      <div class="paper"><div class="phead">✍️ 考场卷面（写完对照）<span class="score">参考 11 分</span></div>
+        <div class="step"><b>解</b>　(1) 由 $P\{X^2=Y^2\}=1$ 知 $P\{X^2\ne Y^2\}=0$，故
+        $$P\{X=0,Y=-1\}=P\{X=0,Y=1\}=P\{X=1,Y=0\}=0.\tag{1}$$
+        <span class="pt">⛳ 2 分</span></div>
+        <div class="step">由 (1) 及边缘分布，
+        $$P\{X=0,Y=0\}=P\{X=0\}=\frac13,\quad P\{X=1,Y=-1\}=P\{Y=-1\}=\frac13,\quad P\{X=1,Y=1\}=P\{Y=1\}=\frac13,$$
+        即 $(X,Y)$ 的概率分布为
+        <div class="gridwrap"><table>
+          <tr><th>$X\backslash Y$</th><th>$-1$</th><th>$0$</th><th>$1$</th><th>$p_{i\cdot}$</th></tr>
+          <tr><td>$0$</td><td>$0$</td><td>$\frac13$</td><td>$0$</td><td>$\frac13$</td></tr>
+          <tr><td>$1$</td><td>$\frac13$</td><td>$0$</td><td>$\frac13$</td><td>$\frac23$</td></tr>
+          <tr><td>$p_{\cdot j}$</td><td>$\frac13$</td><td>$\frac13$</td><td>$\frac13$</td><td>$1$</td></tr>
+        </table></div>
+        <span class="pt">⛳ 3 分</span></div>
+        <div class="step">(2) $Z=XY$ 的可能取值为 $-1,0,1$，
+        $$P\{Z=-1\}=P\{X=1,Y=-1\}=\frac13,\quad P\{Z=1\}=P\{X=1,Y=1\}=\frac13,\quad P\{Z=0\}=1-\frac13-\frac13=\frac13,$$
+        即 $Z\sim\begin{pmatrix}-1&0&1\\ \frac13&\frac13&\frac13\end{pmatrix}$。<span class="pt">⛳ 3 分</span></div>
+        <div class="step">(3) 由边缘分布，
+        $$EX=\frac23,\ E(X^2)=\frac23,\ DX=\frac23-\frac49=\frac29;\qquad EY=0,\ E(Y^2)=\frac23,\ DY=\frac23.$$
+        由联合分布，$E(XY)=(-1)\times\frac13+1\times\frac13=0$，故
+        $$\mathrm{Cov}(X,Y)=E(XY)-EX\cdot EY=0-\frac23\times0=0,\qquad \rho_{XY}=\frac{\mathrm{Cov}(X,Y)}{\sqrt{DX}\sqrt{DY}}=0.$$
+        <span class="pt">⛳ 3 分</span></div>
+        <div class="fin">即 $(X,Y)$ 的概率分布如上表，$Z=XY$ 服从上述分布，且 $X$ 与 $Y$ 的相关系数 $\rho_{XY}=0$。</div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（对照完校对）</span>
+        <b>①</b> 第 (1) 问的 <span class="dock">扣分点</span>：<b>必须写出"由 $P\{X^2=Y^2\}=1$ 知 $P\{X^2\ne Y^2\}=0$"这句转化</b>。
+        直接甩出三个零概率而不说依据，阅卷按"结论正确、推理缺失"扣。<br>
+        <b>②</b> 中间结果编号 (1) 是为了第二段引用它。<b>本题式子少，编号一个足够</b>；式子多的题（如 <a href="#eg-x413">习 4.13</a>）要多编几个。<br>
+        <b>③</b> <span class="dock">扣分点</span>：第 (3) 问算完 $\mathrm{Cov}=0$ 后<b>不要顺手写"所以 $X$ 与 $Y$ 独立"</b>——本题恰恰是反例：
+        看联合表，$P\{X=0,Y=-1\}=0$ 但 $P\{X=0\}P\{Y=-1\}=\frac13\times\frac13=\frac19\ne0$，<b>$X$ 与 $Y$ 不独立</b>。
+        题目没问，就别写；写了是<b>倒扣</b>。<br>
+        <b>④</b> <b>提速</b>：算出 $EY=0$ 的瞬间，$\mathrm{Cov}=E(XY)-EX\cdot0=E(XY)$——
+        <b>只要有一个边缘期望为 0，协方差就等于 $E(XY)$</b>，这个观察在本章能省掉一半的乘法。<br>
+        <b>⑤</b> <b>本题的题眼可以推广</b>：$P\{g(X,Y)=0\}=1$ 型条件，用法永远是"取反⟹一批格子为 0"。
+        真题里还出现过 $P\{X+Y=1\}=1$、$P\{XY=0\}=1$，<b>处理方式一模一样</b>。</div>
+    </div></div>
+
+  <div class="eg" id="eg-48"><div class="q"><span class="no">基 4.8</span>甲、乙两人相约于某地在 12:00～13:00 会面，设 $X,Y$ 分别是甲、乙到达超过 12:00 的时间（单位：小时），$X$ 与 $Y$ 相互独立，$f_X(x)=\begin{cases}3x^2,&0\lt x\lt1,\\0,&\text{其他},\end{cases}$ $f_Y(y)=\begin{cases}2y,&0\lt y\lt1,\\0,&\text{其他}.\end{cases}$ 求先到达者需要等待的时间的数学期望。<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>先把中文翻译成数学</b>：谁先到不知道，等待时间是"后到时刻 − 先到时刻"，即 $\max\{X,Y\}-\min\{X,Y\}=|X-Y|$。
+            <b>本题的第一个采分点就是写出"所求为 $E(|X-Y|)$"</b>，翻译错了后面全废。</li>
+          <li>独立 ⟹ $f(x,y)=f_X(x)f_Y(y)=6x^2y$（$0\lt x\lt1,0\lt y\lt1$）。<b>"相互独立"四个字在题干里就是让你把联合密度乘出来。</b></li>
+          <li>要算 $\iint|x-y|f\mathrm dx\mathrm dy$。绝对值不能直接积，<b>必须按 $x-y$ 的正负把单位正方形切成两块</b>：
+            对角线 $y=x$ 上方 $D_1$（$y>x$，此时 $|x-y|=y-x$）、下方 $D_2$（$y\lt x$，此时 $|x-y|=x-y$）。<b>画图，别硬想。</b></li>
+          <li>定限：$D_1$ 取 $x$ 从 0 到 1、$y$ 从 $x$ 到 1；$D_2$ 取 $x$ 从 0 到 1、$y$ 从 0 到 $x$。
+            <b>两块用同一个外层 $x$，内层限不同</b>——这样只需写一次外层。</li>
+          <li>不要指望对称性省事：<b>这里 $f_X\ne f_Y$，两块积分不相等</b>（$\frac1{12}$ 与 $\frac16$），必须分别算。</li>
+        </ol>
+      </div>
+      <svg class="fig" viewBox="0 0 260 210" width="260" height="210" role="img" aria-label="图4-1 单位正方形被对角线分为D1与D2">
+        <defs><style>
+          .ax{stroke:currentColor;stroke-width:1.2;fill:none;opacity:.75}
+          .sq{fill:none;stroke:currentColor;stroke-width:1.1;opacity:.6}
+          .d1{fill:#6d5a8e;opacity:.16}
+          .d2{fill:#2f7a76;opacity:.16}
+          .dg{stroke:currentColor;stroke-width:1.3;opacity:.85}
+          .tx{font:12px sans-serif;fill:currentColor;opacity:.85}
+          .tl{font:italic 12px serif;fill:currentColor;opacity:.7}
+        </style></defs>
+        <polygon class="d1" points="40,170 40,40 170,40"/>
+        <polygon class="d2" points="40,170 170,40 170,170"/>
+        <line class="ax" x1="40" y1="185" x2="40" y2="28"/>
+        <line class="ax" x1="25" y1="170" x2="200" y2="170"/>
+        <polygon points="40,24 37,32 43,32" fill="currentColor" opacity=".75"/>
+        <polygon points="204,170 196,167 196,173" fill="currentColor" opacity=".75"/>
+        <rect class="sq" x="40" y="40" width="130" height="130"/>
+        <line class="dg" x1="40" y1="170" x2="170" y2="40"/>
+        <text class="tx" x="26" y="36">y</text><text class="tx" x="200" y="184">x</text>
+        <text class="tx" x="28" y="184">O</text>
+        <text class="tx" x="26" y="45">1</text><text class="tx" x="167" y="184">1</text>
+        <text class="tx" x="85" y="82" fill="#6d5a8e">D₁</text>
+        <text class="tx" x="128" y="140" fill="#2f7a76">D₂</text>
+        <text class="tl" x="176" y="60">y = x</text>
+        <text class="tx" x="60" y="102" font-size="10" opacity=".7">y &gt; x</text>
+        <text class="tx" x="118" y="160" font-size="10" opacity=".7">y &lt; x</text>
+      </svg>
+      <div style="text-align:center;font-size:.78rem;color:var(--muted);margin:-4px 0 10px">图 4-1（据书 p.113 重绘）：$D_1$ 上 $|x-y|=y-x$，$D_2$ 上 $|x-y|=x-y$</div>
+      <div class="paper"><div class="phead">✍️ 考场卷面（写完对照）<span class="score">参考 10 分</span></div>
+        <div class="step"><b>解</b>　由 $X$ 与 $Y$ 相互独立，$(X,Y)$ 的概率密度为
+        $$f(x,y)=f_X(x)f_Y(y)=\begin{cases}6x^2y,&0\lt x\lt1,\ 0\lt y\lt1,\\ 0,&\text{其他}.\end{cases}\tag{1}$$
+        <span class="pt">⛳ 2 分</span></div>
+        <div class="step">先到达者需等待的时间为 $|X-Y|$，故所求为 $E(|X-Y|)$。<span class="pt">⛳ 2 分</span></div>
+        <div class="step">记 $D_1=\{(x,y):0\lt x\lt1,\ x\lt y\lt1\}$，$D_2=\{(x,y):0\lt x\lt1,\ 0\lt y\lt x\}$（如图 4-1），由 (1) 式
+        $$E(|X-Y|)=\iint_{D_1}(y-x)\cdot6x^2y\,\mathrm dx\mathrm dy+\iint_{D_2}(x-y)\cdot6x^2y\,\mathrm dx\mathrm dy.\tag{2}$$
+        <span class="pt">⛳ 3 分</span></div>
+        <div class="step">分别计算 (2) 式两项：
+        $$\iint_{D_1}(y-x)6x^2y\,\mathrm dx\mathrm dy=\int_0^1 6x^2\left[\int_x^1(y^2-xy)\mathrm dy\right]\mathrm dx=\frac1{12},$$
+        $$\iint_{D_2}(x-y)6x^2y\,\mathrm dx\mathrm dy=\int_0^1 6x^2\left[\int_0^x(xy-y^2)\mathrm dy\right]\mathrm dx=\frac16.$$
+        <span class="pt">⛳ 2 分</span></div>
+        <div class="step">代入 (2) 式得 $E(|X-Y|)=\dfrac1{12}+\dfrac16=\dfrac14$。<span class="pt">⛳ 1 分</span></div>
+        <div class="fin">即先到达者需要等待的时间的数学期望为 $\dfrac14$ 小时（15 分钟）。</div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（对照完校对）</span>
+        <b>①</b> <span class="dock">扣分点</span>：<b>"所求为 $E(|X-Y|)$"这句必须单独成行写出来</b>。
+        它是应用题的"建模分"，不写直接跳到二重积分，即便结果对也要扣 2 分。<br>
+        <b>②</b> <span class="dock">扣分点</span>：<b>$D_1,D_2$ 要用集合语言写清楚，或明确标注"如图"</b>。
+        只写 $\iint_{D_1}$ 而不说 $D_1$ 是什么，阅卷无法确认你定限正确。<br>
+        <b>③</b> 结尾必须<b>带单位并回扣题干那句话</b>（"先到达者需要等待的时间"）。
+        本题单位是<b>小时</b>，写 $\frac14$ 不写单位要扣；换算成 15 分钟是加分项不是必需。<br>
+        <b>④</b> <b>提速心算</b>：内层积分可以先做。对 $D_2$：$\int_0^x(xy-y^2)\mathrm dy=\frac{x^3}2-\frac{x^3}3=\frac{x^3}6$，
+        于是 $\int_0^1 6x^2\cdot\frac{x^3}6\mathrm dx=\int_0^1x^5\mathrm dx=\frac16$，<b>两行出结果</b>。
+        对 $D_1$：$\int_x^1(y^2-xy)\mathrm dy=\frac{1-x^3}3-\frac{x(1-x^2)}2=\frac13-\frac x2+\frac{x^3}6$，
+        再乘 $6x^2$ 积分得 $\frac1{12}$。<br>
+        <b>⑤</b> <b>另一条路（更快，但要会 <a href="#s7">§7</a> 的恒等式）</b>：$|X-Y|=\max-\min$，而
+        $E(\max)+E(\min)=EX+EY=\frac34+\frac23=\frac{17}{12}$。可惜只有一个方程、两个未知数，
+        <b>还是得算一个二重积分</b>——所以本题恒等式帮不上忙。<b>但反过来，<a href="#eg-x410">习 4.10</a> 与 <a href="#eg-s62">强 6.2</a> 就是恒等式的主场</b>，去对比着看。<br>
+        <b>⑥</b> <b>程序复核</b>：sympy 分区域解析积分得 $\frac1{12}$ 与 $\frac16$，合计 $\frac14$；
+        蒙特卡洛 $10^7$（用逆变换生成 $X=U^{1/3},Y=\sqrt V$）得 $0.249962$，$|\Delta|=3.8\times10^{-5}$ ✓。</div>
+    </div></div>
+
+  <!-- ================= s4 ================= -->
+  <h2 id="s4"><span class="idx">肆</span>$O_3$ 协方差的双线性：本章真正的<b>计算引擎</b>　<span class="layer L-str">强化</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/概率论与数理统计/04_随机变量的数字特征/概率_第04章_强化9讲_第6讲_数字特征.pdf">📄 强化9讲第6讲 p.52</a>
+
+  <div class="mine"><span class="tag">补讲 · 强化版给性质②③批了「特别爱考，要用好」——这五个字是本节存在的全部理由</span>
+    <b>书上说</b>：$\mathrm{Cov}(aX,bY)=ab\mathrm{Cov}(X,Y)$ 与 $\mathrm{Cov}(X_1+X_2,Y)=\mathrm{Cov}(X_1,Y)+\mathrm{Cov}(X_2,Y)$ 两条旁边，
+    箭头指向「$D_{23}$（化归经典形式），<b>②③特别爱考，要用好</b>」。<br>
+    <b>潜台词是</b>：真题里的 $O_3$ 类题，<b>题面给的从来不是 $X,Y$ 本身，而是它们的线性组合</b>——
+    "$Z_1=2X+Y,Z_2=2X-Y$ 的相关系数"（<a href="#eg-x42">习 4.2</a>）、"$X$ 与 $X+2Y$ 不相关，求 $X$ 与 $X-Y$ 的相关系数"（<a href="#eg-s67">强 6.7</a>）、
+    "$U=X+Y,V=X-Y$ 不相关的充要条件"（<a href="#eg-49">基 4.9</a>）。
+    这类题<b>如果去求 $(Z_1,Z_2)$ 的联合分布，你会算到考试结束</b>；用双线性硬拆，三行结束。<br>
+    <b>所以能考</b>：把 $\mathrm{Cov}$ 当成一个<b>可以像多项式一样展开的运算符</b>：
+    $$\mathrm{Cov}(aX+bY,\ cX+dY)=ac\,DX+bd\,DY+(ad+bc)\,\mathrm{Cov}(X,Y).$$
+    <b>这一个公式吃掉本节全部题目。</b>记法：像 $(aX+bY)(cX+dY)$ 那样乘开，然后把 $XX$ 换成 $DX$、$YY$ 换成 $DY$、$XY$ 与 $YX$ 都换成 $\mathrm{Cov}$。
+  </div>
+
+  <div class="key"><span class="tag">必记 · 线性组合的三个母公式（把它们写在草稿纸顶端）</span>
+    设 $\sigma_1^2=DX,\ \sigma_2^2=DY,\ c=\mathrm{Cov}(X,Y)=\rho\sigma_1\sigma_2$，则
+    $$\mathrm{Cov}(aX+bY,\ cX+dY)=ac\,\sigma_1^2+bd\,\sigma_2^2+(ad+bc)\,\mathrm{Cov}(X,Y),$$
+    $$D(aX+bY)=a^2\sigma_1^2+b^2\sigma_2^2+2ab\,\mathrm{Cov}(X,Y),$$
+    $$\rho_{UV}=\frac{\mathrm{Cov}(U,V)}{\sqrt{DU}\cdot\sqrt{DV}}$$
+    （⚠️ 末式的分母是两个<b>标准差</b>之积，<b>不是方差之积</b>——写的时候把两个根号<u>分开写</u>，别缩成一个。）<br>
+    <b>另外三条常用</b>：$\mathrm{Cov}(X,X)=DX$；$\mathrm{Cov}(X,c)=0$（<b>与常数的协方差恒为 0</b>）；$\mathrm{Cov}(X+c,Y+d)=\mathrm{Cov}(X,Y)$（<b>平移不改协方差</b>）。
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 为什么"给数字特征反求联合分布"这类题一定做得出来——数一数自由度</span>
+    <b>书上说</b>：<a href="#eg-x412">习 4.12</a> 给两个 0–1 边缘 + 一个 $\mathrm{Cov}$，要求联合分布律；
+    <a href="#eg-x43">习 4.3</a> 给一张缺两格的表 + 一个"两事件独立"，要求 $\mathrm{Cov}$；
+    <a href="#eg-47">基 4.7</a> 给两个边缘 + 一个 $P\{X^2=Y^2\}=1$，要求联合。<b>三题同构。</b><br>
+    <b>潜台词是</b>：这类题能不能做，<b>算一遍自由度就知道</b>。设 $(X,Y)$ 的联合分布有 $m\times n$ 格：<br>
+    　未知数 $=mn$；　归一性用掉 <b>1</b> 个；　两条边缘用掉 <b>$(m-1)+(n-1)$</b> 个（因为行和列和各自也满足归一）；<br>
+    　剩余自由度 $=mn-1-(m-1)-(n-1)=\boldsymbol{(m-1)(n-1)}$。<br>
+    <b>所以能考</b>：<b>题目额外给的条件数，必须恰好等于 $(m-1)(n-1)$。</b><br>
+    　<a href="#eg-x412">习 4.12</a>：$2\times2$，剩 <b>1</b> 个自由度 ⟹ 给 <b>1</b> 个 $\mathrm{Cov}$，刚好；<br>
+    　<a href="#eg-47">基 4.7</a>：$2\times3$，剩 <b>2</b> 个自由度 ⟹ $P\{X^2=Y^2\}=1$ 一口气钉死了 3 个格子为 0，绰绰有余；<br>
+    　<a href="#eg-x43">习 4.3</a>：表里只缺 2 个数（$a,b$），归一性给 1 个方程、独立性给 1 个方程，刚好。<br>
+    <b>这个"数自由度"的习惯，能让你在动笔前就判断"条件够不够"</b>——
+    条件不够说明你漏读了题干；条件超了说明有一条是用来<u>验算</u>的。
+    <b>同时它也解释了 <a href="#s5">§5</a> 里"两个 0–1 分布不相关就必独立"：$(2-1)(2-1)=1$ 个自由度，被 $\mathrm{Cov}=0$ 一条正好钉死。</b>
+  </div>
+
+  <div class="link"><span class="tag">串联 · 双线性展开与线代的二次型是同一套记号</span>
+    把 $\mathbf X=(X,Y)^{\mathrm T}$ 的协方差阵记作 $\Sigma=\begin{pmatrix}DX&\mathrm{Cov}\\ \mathrm{Cov}&DY\end{pmatrix}$，
+    系数向量记作 $\boldsymbol\alpha=(a,b)^{\mathrm T}$、$\boldsymbol\beta=(c,d)^{\mathrm T}$，则本节的两个母公式就是
+    $$D(\boldsymbol\alpha^{\mathrm T}\mathbf X)=\boldsymbol\alpha^{\mathrm T}\Sigma\boldsymbol\alpha,\qquad
+    \mathrm{Cov}(\boldsymbol\alpha^{\mathrm T}\mathbf X,\ \boldsymbol\beta^{\mathrm T}\mathbf X)=\boldsymbol\alpha^{\mathrm T}\Sigma\boldsymbol\beta.$$
+    <b>左边是概率论的"双线性展开"，右边是线代的"二次型 / 双线性型"，一模一样。</b><br>
+    <b>由此立刻得到三条</b>：<b>①</b> $D(\cdot)\ge0$ 对一切 $\boldsymbol\alpha$ 成立 $\iff$ <b>$\Sigma$ 半正定</b>
+    （这就是 $|\rho|\le1$ 的矩阵版本：$|\Sigma|=DX\,DY-\mathrm{Cov}^2\ge0$）；
+    <b>②</b> <a href="#eg-s66">强 6.6</a> 求 $D(aX+bY)$ 在 $\|\boldsymbol\alpha\|=1$ 下的最大值，
+    就是<b>线代第 5 章"二次型在单位球面上的最大值 = 最大特征值"</b>——
+    $\Sigma=\begin{pmatrix}1&\rho\\ \rho&1\end{pmatrix}$ 的特征值是 $1\pm\rho$，最大者 $1+|\rho|$，<b>与答案分毫不差</b>；
+    <b>③</b> <a href="#eg-s68">强 6.8</a> 的 $A\Sigma A^{\mathrm T}$ 就是<b>合同变换</b>。
+    <b>这三条把线代第 5、6 章直接搬进了概率论，第 6 章数理统计还会再用一次。</b>
+  </div>
+
+  <div class="trap"><span class="tag">陷阱 · $\rho$ 的分母是标准差之积，本章最容易在最后一步算废</span>
+    <a href="#eg-s67">强 6.7</a> 里 $DX=1$、$D(X-Y)=4$，正确分母是 $\sqrt1\cdot\sqrt4=1\times2=2$，
+    得 $\rho=\frac{3/2}{2}=\frac34$。<b>若误写成 $\sqrt{DX\cdot D(X-Y)}$ 的"方差之积" $1\times4=4$，会得到 $\frac38$，恰好是个错误选项的样子。</b><br>
+    自查手段：<b>算完 $\rho$ 先看绝对值是否 $\le1$</b>。超过 1 一定错；但小于 1 不等于对（本例 $\frac38$ 也小于 1），
+    <b>所以更可靠的自查是"分母必须是两个根号相乘"</b>——写的时候就把 $\sqrt{\ }\cdot\sqrt{\ }$ 分开写，别缩成一个根号。
+  </div>
+
+  <div class="eg" id="eg-x41"><div class="q"><span class="no">习 4.1</span>已知连续型随机变量 $X$ 与 $Y$ 有相同的概率密度，$X\sim f(x)=\begin{cases}2x\theta^2,&0\lt x\lt\frac1\theta,\\0,&\text{其他}\end{cases}\ (\theta>0)$，且 $E[a(X+2Y)]=\dfrac1\theta$，则 $a=$（　）。<br>(A) $\frac23$　(B) $\frac12$　(C) $\frac13$　(D) $\frac16$<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s"><span class="lab">答案</span><span class="ans">(B) $a=\dfrac12$</span><br>
+      <span class="lab">分析</span>由"$X$ 与 $Y$ 有<b>相同的概率密度</b>"得 $EX=EY$（<b>注意：同分布，不必独立</b>），于是由期望的线性性
+      $$E[a(X+2Y)]=a(EX+2EY)=3aEX.$$
+      而 $EX=\int_0^{1/\theta}x\cdot2x\theta^2\mathrm dx=\frac23x^3\theta^2\Big|_0^{1/\theta}=\frac2{3\theta}$，故 $3a\cdot\frac2{3\theta}=\frac{2a}\theta=\frac1\theta$，$a=\frac12$。<br>
+      <span class="lab">要害</span>题目故意只说"<b>相同的概率密度</b>"而不说"独立"——<b>这是在测试你知不知道期望的线性性"无条件"</b>。
+      如果你以为要独立才能拆 $E(X+2Y)$，就会卡住。<b>再强调一次：期望的和永远能拆，方差的和才要条件。</b><br>
+      <span class="lab">提速</span>这个 $f$ 是 $[0,\frac1\theta]$ 上的三角形密度，$EX$ 可以直接用"三角形重心在 $\frac23$ 处"心算：$\frac23\times\frac1\theta=\frac2{3\theta}$，<b>不必积分</b>。</div></div>
+
+  <div class="eg" id="eg-49"><div class="q"><span class="no">基 4.9</span>设 $(X,Y)$ 服从二维正态分布，则随机变量 $U=X+Y$，$V=X-Y$ 不相关的充分必要条件为（　）。<br>(A) $EX=EY$　(B) $E(X^2)-(EX)^2=E(Y^2)-(EY)^2$　(C) $E(X^2)=E(Y^2)$　(D) $E(X^2)+(EX)^2=E(Y^2)+(EY)^2$<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s"><span class="lab">答案</span><span class="ans">(B)，即 $DX=DY$</span><br>
+      <span class="lab">分析（双线性一步展开）</span>
+      $$\mathrm{Cov}(U,V)=\mathrm{Cov}(X+Y,X-Y)=\underbrace{\mathrm{Cov}(X,X)}_{DX}-\mathrm{Cov}(X,Y)+\mathrm{Cov}(Y,X)-\underbrace{\mathrm{Cov}(Y,Y)}_{DY}=DX-DY,$$
+      交叉项因对称性 $\mathrm{Cov}(X,Y)=\mathrm{Cov}(Y,X)$ 而<b>自动抵消</b>。故 $U,V$ 不相关 $\iff DX=DY$，即 (B)。<br>
+      <span class="lab">书上的走法（等价，但绕）</span>先算 $E(UV)=E(X^2)-E(Y^2)$、$EU\cdot EV=(EX)^2-(EY)^2$，相减得同一结果。<br>
+      <span class="lab">要害 ★ 结论级</span><b>$\mathrm{Cov}(X+Y,X-Y)=DX-DY$ —— 这是一条应当直接背下来的公式。</b>
+      它说：<b>和与差不相关 $\iff$ 两者方差相等</b>。真题里反复出现（本题、<a href="#eg-x42">习 4.2</a> 的变形 $\mathrm{Cov}(2X+Y,2X-Y)=4DX-DY$）。<br>
+      <span class="lab">干扰项分析</span>(A) $EX=EY$ 只让 $EU\cdot EV$ 里的某项相等，与方差无关；
+      (C) $E(X^2)=E(Y^2)$ 是"二阶原点矩相等"，<b>只有在 $EX=EY$ 时才等价于 (B)</b>，题目没给这个前提；
+      (D) 符号写反。<b>四个选项全在"原点矩 vs 中心矩"上做文章——认清 $DX=E(X^2)-(EX)^2$ 就都不是问题。</b><br>
+      <span class="lab">补一句</span>题干说"二维正态"其实是<b>多余的</b>（不相关的判定不需要正态）。
+      给这个条件是为了让你顺手想到"<b>此时不相关还等价于独立</b>"——若问的是"$U,V$ 独立的充要条件"，答案<u>仍是</u> (B)。</div></div>
+
+  <div class="eg" id="eg-x42"><div class="q"><span class="no">习 4.2</span>设 $(X,Y)$ 服从二维正态分布，$X,Y$ 的期望值均为 $\mu$、方差均为 $\sigma^2$，$\rho_{XY}=0$，记 $Z_1=2X+Y$，$Z_2=2X-Y$，则 $Z_1,Z_2$ 的相关系数为（　）。<br>(A) 0　(B) $\frac35$　(C) $\frac3{\sqrt{15}}$　(D) $\frac3{\sqrt{10}}$<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s"><span class="lab">答案</span><span class="ans">(B) $\dfrac35$</span><br>
+      <span class="lab">分析</span>书上开篇一句提醒：「<b>利用已有的关系计算，不必从 $(Z_1,Z_2)$ 的分布去考虑</b>」。
+      由 $\rho_{XY}=0$ 且二维正态知 $X,Y$ <b>不相关 ⟹ 独立</b>，$\mathrm{Cov}(X,Y)=0$。于是
+      $$DZ_1=4DX+DY=5\sigma^2,\qquad DZ_2=4DX+DY=5\sigma^2,$$
+      $$\mathrm{Cov}(Z_1,Z_2)=\mathrm{Cov}(2X+Y,2X-Y)=4DX-DY=4\sigma^2-\sigma^2=3\sigma^2,$$
+      $$\rho_{Z_1Z_2}=\frac{3\sigma^2}{\sqrt{5\sigma^2}\sqrt{5\sigma^2}}=\frac35.$$
+      <span class="lab">要害</span>三个细节：<br>
+      <b>①</b> $DZ_2=D(2X-Y)=4DX+DY$，<b>$DY$ 前是加号</b>（$(-1)^2=1$），不是减号；<br>
+      <b>②</b> 交叉项 $\mathrm{Cov}(2X+Y,2X-Y)=4DX-DY+(-2+2)\mathrm{Cov}(X,Y)=4DX-DY$，
+      <b>本题 $\mathrm{Cov}(X,Y)=0$ 所以更省事，但即便不为 0，它的系数 $ad+bc=2\cdot(-1)+1\cdot2=0$ 也会让它消失</b>；<br>
+      <b>③</b> $\sigma^2$ <b>全程约掉</b>——$\rho$ 无量纲，说明答案与 $\sigma$ 无关，$\mu$ 更是从头到尾没用上。
+      <b>看到答案里参数全消，就是做对了的旁证。</b><br>
+      <span class="lab">干扰项分析</span>(C) $\frac3{\sqrt{15}}$ 与 (D) $\frac3{\sqrt{10}}$ 都是<b>分母算错的产物</b>：
+      把分母写成 $\sqrt{DZ_1\cdot DZ_2}$ 后又漏了一层，或把 $DZ_2$ 写成 $4\sigma^2-\sigma^2=3\sigma^2$（$DY$ 用了减号）得 $\frac3{\sqrt{15}}$。
+      <b>(C) 正是"$DY$ 前用减号"这个错误的专属陷阱。</b></div></div>
+
+  <div class="eg" id="eg-s66"><div class="q"><span class="no">强 6.6</span>设二维随机变量 $(X,Y)$ 服从正态分布 $N(0,0;1,1;\rho)$，其中 $\rho\in(-1,1)$，若 $a,b$ 为满足 $a^2+b^2=1$ 的任意实数，则 $D(aX+bY)$ 的最大值为（　）。<br>(A) 1　(B) 2　(C) $1+|\rho|$　(D) $1+\rho^2$<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s"><span class="lab">答案</span><span class="ans">(C) $1+|\rho|$</span><br>
+      <span class="lab">分析</span>$DX=DY=1$，$\mathrm{Cov}(X,Y)=\rho\cdot1\cdot1=\rho$，故
+      $$D(aX+bY)=a^2+b^2+2ab\rho=1+2ab\rho.$$
+      由均值不等式 $|ab|\le\dfrac{a^2+b^2}2=\dfrac12$，得 $2ab\rho\le2|ab||\rho|\le|\rho|$，故最大值 $1+|\rho|$。<br>
+      <span class="lab">要害</span><b>约束 $a^2+b^2=1$ 的作用有两个</b>：一是把 $a^2DX+b^2DY$ 直接压成常数 1，二是给 $|ab|\le\frac12$ 提供上界。
+      <b>看到"$a^2+b^2=1$"就该想到"$a=\cos t,b=\sin t$"，此时 $2ab=\sin2t\in[-1,1]$，最大值一步可见。</b><br>
+      <span class="lab">干扰项分析</span>(D) $1+\rho^2$ 是"把 $2ab\rho$ 的上界错估成 $\rho^2$"——
+      注意 $\rho\in(-1,1)$ 时 $\rho^2\lt|\rho|$，<b>所以 (D) 恒小于 (C)，永远不是最大值</b>。
+      (B) 是漏掉 $|ab|\le\frac12$、直接用 $|ab\rho|\le1$。<br>
+      <span class="lab">程序复核</span>取 $\rho=0.6$、$a=b=\frac1{\sqrt2}$，蒙特卡洛 $10^7$ 得 $D=1.599953$，理论 $1+0.6=1.6$，$|\Delta|=4.7\times10^{-5}$ ✓。
+      <b>👉 <a href="#s9">§9 的🧮线性组合沙盘</a>可以拖 $\rho$ 与 $(a,b)$ 实时看这条曲线。</b></div></div>
+
+  <div class="eg" id="eg-s67"><div class="q"><span class="no">强 6.7</span>设 $X\sim N(-1,1)$，$Y\sim N(1,2)$，若 $X$ 与 $X+2Y$ 不相关，则 $X$ 与 $X-Y$ 的相关系数为（　）。<br>(A) $\frac13$　(B) $\frac12$　(C) $\frac23$　(D) $\frac34$<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s"><span class="lab">答案</span><span class="ans">(D) $\dfrac34$</span><br>
+      <span class="lab">分析（全程只用双线性，三步）</span>$DX=1$，$DY=2$。<br>
+      <b>第一步：从条件解出 $\mathrm{Cov}(X,Y)$。</b>
+      $$\mathrm{Cov}(X,X+2Y)=\mathrm{Cov}(X,X)+2\mathrm{Cov}(X,Y)=DX+2\mathrm{Cov}(X,Y)=0\Rightarrow \mathrm{Cov}(X,Y)=-\frac12DX=-\frac12.$$
+      <b>第二步：算目标的分子。</b>
+      $$\mathrm{Cov}(X,X-Y)=\mathrm{Cov}(X,X)-\mathrm{Cov}(X,Y)=1-\left(-\frac12\right)=\frac32.$$
+      <b>第三步：算目标的分母。</b>
+      $$D(X-Y)=DX+DY-2\mathrm{Cov}(X,Y)=1+2-2\times\left(-\frac12\right)=4,$$
+      $$\rho_{X,X-Y}=\frac{3/2}{\sqrt{DX}\cdot\sqrt{D(X-Y)}}=\frac{3/2}{1\times2}=\frac34.$$
+      <span class="lab">要害</span><b>"不相关"在题干里等价于给你一个方程</b>——它不是背景，是<b>唯一的已知条件</b>。
+      本题若不把 $\mathrm{Cov}(X,X+2Y)=0$ 解成 $\mathrm{Cov}(X,Y)=-\frac12$，后面一步都走不了。
+      <b>凡是题干出现"若 $\cdots$ 与 $\cdots$ 不相关"，第一动作就是把它写成 $\mathrm{Cov}(\cdot,\cdot)=0$ 并展开。</b><br>
+      <span class="lab">干扰项分析</span>(B) $\frac12$ 是把分母误算成 $\sqrt{1\times4}\cdot$ 某种组合；
+      <b>(A) $\frac13$ 与 (C) $\frac23$ 对应 $D(X-Y)$ 算成 $1+2+1=4$ 之外的其他值</b>（比如漏了 $-2\mathrm{Cov}$ 得 3，则 $\rho=\frac{3/2}{\sqrt3}\approx0.87$；
+      或把 $\mathrm{Cov}$ 符号弄反得 $D=2$）。<b>三个干扰项覆盖了这道题的三种典型错法，逐个对照能校准自己的手感。</b><br>
+      <span class="lab">程序复核</span>用协方差阵 $\begin{pmatrix}1&-0.5\\-0.5&2\end{pmatrix}$ 生成 $10^7$ 个二维正态样本：
+      $\mathrm{Cov}(X,X+2Y)=1.9\times10^{-4}\approx0$ ✓，$\rho_{X,X-Y}=0.750157$ ✓。</div></div>
+
+  <div class="eg" id="eg-x412"><div class="q"><span class="no">习 4.12</span>设 $X\sim\begin{pmatrix}0&1\\ \frac14&\frac34\end{pmatrix}$，$Y\sim\begin{pmatrix}0&1\\ \frac12&\frac12\end{pmatrix}$，且 $\mathrm{Cov}(X,Y)=\dfrac18$，则 $X$ 与 $Y$ 的联合分布律为 ____。<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s"><span class="lab">答案</span>
+      <div class="gridwrap"><table>
+        <tr><th>$X\backslash Y$</th><th>$0$</th><th>$1$</th><th>$p_{i\cdot}$</th></tr>
+        <tr><td>$0$</td><td>$\frac14$</td><td>$0$</td><td>$\frac14$</td></tr>
+        <tr><td>$1$</td><td>$\frac14$</td><td>$\frac12$</td><td>$\frac34$</td></tr>
+        <tr><td>$p_{\cdot j}$</td><td>$\frac12$</td><td>$\frac12$</td><td>$1$</td></tr>
+      </table></div>
+      <span class="lab">分析</span>$EX=\frac34$，$EY=\frac12$，由 $\mathrm{Cov}=E(XY)-EXEY=\frac18$ 得 $E(XY)=\frac18+\frac38=\frac12$。<br>
+      <b>关键一步</b>：$X,Y$ 都只取 $0,1$，所以 $XY$ 也只取 $0,1$，且 $XY=1$ 当且仅当 $X=1,Y=1$，于是
+      $$E(XY)=1\cdot P\{X=1,Y=1\}\Rightarrow P\{X=1,Y=1\}=\frac12.$$
+      剩下三格由边缘一步补齐：$P\{X=0,Y=1\}=\frac12-\frac12=0$，$P\{X=0,Y=0\}=\frac14-0=\frac14$，$P\{X=1,Y=0\}=1-\frac14-\frac12-0=\frac14$。<br>
+      <span class="lab">要害 ★</span><b>两个 0–1 分布相乘时，$E(XY)=P\{X=1,Y=1\}$</b>——
+      这条把"期望"直接翻译成"某一格的概率"，是 0–1 型联合分布反解题的<b>万能钥匙</b>。
+      同理 $EX=P\{X=1\}$、$E(X^2)=EX$、$DX=p(1-p)$。<br>
+      <span class="lab">这是"反解"型</span>：常规题是"给联合求数字特征"，本题是"<b>给数字特征反求联合</b>"。
+      反解的信息量刚好够：<b>4 个未知格 − 2 个边缘约束 − 1 个归一约束 = 1 个自由度，恰好由一个 $\mathrm{Cov}$ 补上</b>。
+      <a href="#eg-x43">习 4.3</a> 是同一思路的变形（用"两事件独立"补自由度）。<br>
+      <span class="lab">顺带一问</span>本题的 $X,Y$ 独立吗？$P\{X=0,Y=1\}=0\ne\frac14\times\frac12$，<b>不独立</b>。
+      而 $\mathrm{Cov}=\frac18\ne0$ 说明它们<b>相关</b>——由"相关 ⟹ 不独立"也能一步断定。</div></div>
+
+  <div class="eg" id="eg-x413"><div class="q"><span class="no">习 4.13</span>设 $A,B$ 为两个随机事件，$P(A)=\frac14$，$P(B|A)=\frac13$，$P(A|B)=\frac12$。令 $X=\begin{cases}1,&A\text{ 发生},\\0,&\text{否则},\end{cases}$ $Y=\begin{cases}1,&B\text{ 发生},\\0,&\text{否则}.\end{cases}$<br>求：(1) $(X,Y)$ 的概率分布；(2) $\rho_{XY}$；(3) $Z=X^2+Y^2$ 的概率分布。<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>先认清这题的骨架：前半是第 1 章，后半才是第 4 章。</b>示性变量 $X,Y$ 的联合分布，四个格子分别对应
+            $\bar A\bar B,\ \bar AB,\ A\bar B,\ AB$ 四个事件的概率——<b>问题立刻退化成"求这四个事件的概率"</b>。</li>
+          <li>题给三个条件里，$P(AB)$ 是<b>枢纽</b>：由乘法公式 $P(AB)=P(A)P(B|A)$ 一步得到；
+            再由 $P(A|B)=\frac{P(AB)}{P(B)}$ 反解出 $P(B)$。<b>先把 $P(A),P(B),P(AB)$ 三个数凑齐，四个格子就都是它们的加减。</b></li>
+          <li>$P(\bar A\bar B)$ 用<b>对偶律 + 加法公式</b>：$P(\overline{A\cup B})=1-P(A)-P(B)+P(AB)$。
+            $P(\bar AB)=P(B)-P(AB)$，$P(A\bar B)=P(A)-P(AB)$。<b>三条式子背下来，不必现推。</b></li>
+          <li>(2) 求 $\rho$ 走标准三件套。<b>0–1 变量的便利要用足</b>：$EX=P\{X=1\}$、$E(X^2)=EX$、$DX=EX(1-EX)$、$E(XY)=P\{X=1,Y=1\}$——<b>一个乘法都不用做</b>。</li>
+          <li>(3) $Z=X^2+Y^2=X+Y$（因为 $X,Y$ 只取 0/1，平方等于自身）。取值 $0,1,2$，<b>按格子归并即可</b>：
+            $Z=1$ 对应两个格子相加。<b>这里最容易漏掉一个格子，写的时候把两项都列出来。</b></li>
+        </ol>
+      </div>
+      <div class="paper"><div class="phead">✍️ 考场卷面（写完对照）<span class="score">参考 12 分</span></div>
+        <div class="step"><b>解</b>　(1) 由乘法公式，
+        $$P(AB)=P(A)P(B\mid A)=\frac14\times\frac13=\frac1{12};\qquad
+        P(B)=\frac{P(AB)}{P(A\mid B)}=\frac{1/12}{1/2}=\frac16.\tag{1}$$
+        <span class="pt">⛳ 3 分</span></div>
+        <div class="step">$(X,Y)$ 的可能取值为 $(0,0),(0,1),(1,0),(1,1)$。由 (1) 式及对偶律、加法公式，
+        $$P\{X=0,Y=0\}=P(\bar A\bar B)=P(\overline{A\cup B})=1-P(A)-P(B)+P(AB)=1-\frac14-\frac16+\frac1{12}=\frac23,$$
+        $$P\{X=0,Y=1\}=P(\bar AB)=P(B)-P(AB)=\frac16-\frac1{12}=\frac1{12},$$
+        $$P\{X=1,Y=0\}=P(A\bar B)=P(A)-P(AB)=\frac14-\frac1{12}=\frac16,\qquad P\{X=1,Y=1\}=P(AB)=\frac1{12}.$$
+        即 $(X,Y)$ 的概率分布为
+        <div class="gridwrap"><table>
+          <tr><th>$X\backslash Y$</th><th>$0$</th><th>$1$</th><th>$p_{i\cdot}$</th></tr>
+          <tr><td>$0$</td><td>$\frac23$</td><td>$\frac1{12}$</td><td>$\frac34$</td></tr>
+          <tr><td>$1$</td><td>$\frac16$</td><td>$\frac1{12}$</td><td>$\frac14$</td></tr>
+          <tr><td>$p_{\cdot j}$</td><td>$\frac56$</td><td>$\frac16$</td><td>$1$</td></tr>
+        </table></div>
+        <span class="pt">⛳ 3 分</span></div>
+        <div class="step">(2) 由边缘分布 $X\sim\begin{pmatrix}0&1\\ \frac34&\frac14\end{pmatrix}$，$Y\sim\begin{pmatrix}0&1\\ \frac56&\frac16\end{pmatrix}$，得
+        $$EX=\frac14,\ E(X^2)=\frac14,\ DX=\frac14-\frac1{16}=\frac3{16};\qquad EY=\frac16,\ E(Y^2)=\frac16,\ DY=\frac16-\frac1{36}=\frac5{36}.\tag{2}$$
+        <span class="pt">⛳ 2 分</span></div>
+        <div class="step">由联合分布 $E(XY)=1\times1\times\dfrac1{12}=\dfrac1{12}$，故由 (2) 式
+        $$\mathrm{Cov}(X,Y)=E(XY)-EX\cdot EY=\frac1{12}-\frac14\times\frac16=\frac1{24},$$
+        $$\rho_{XY}=\frac{\mathrm{Cov}(X,Y)}{\sqrt{DX}\cdot\sqrt{DY}}=\frac{1/24}{\sqrt{\frac3{16}}\cdot\sqrt{\frac5{36}}}=\frac{1/24}{\frac{\sqrt{15}}{24}}=\frac1{\sqrt{15}}=\frac{\sqrt{15}}{15}.$$
+        <span class="pt">⛳ 2 分</span></div>
+        <div class="step">(3) 因 $X,Y$ 只取 $0,1$，故 $Z=X^2+Y^2=X+Y$，可能取值为 $0,1,2$：
+        $$P\{Z=0\}=P\{X=0,Y=0\}=\frac23,$$
+        $$P\{Z=1\}=P\{X=0,Y=1\}+P\{X=1,Y=0\}=\frac1{12}+\frac16=\frac14,$$
+        $$P\{Z=2\}=P\{X=1,Y=1\}=\frac1{12},$$
+        即 $Z\sim\begin{pmatrix}0&1&2\\ \frac23&\frac14&\frac1{12}\end{pmatrix}$。<span class="pt">⛳ 2 分</span></div>
+        <div class="fin">即 $(X,Y)$ 的概率分布如上表，$X$ 与 $Y$ 的相关系数 $\rho_{XY}=\dfrac{\sqrt{15}}{15}$，$Z=X^2+Y^2$ 的概率分布如上。</div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（对照完校对）</span>
+        <b>①</b> <span class="dock">扣分点</span>：第 (1) 问<b>必须点出"由乘法公式"「由对偶律与加法公式」</b>。
+        本题概率论的含量几乎全在这两句依据上，不写依据只写数字，按"跳步"扣。<br>
+        <b>②</b> <b>$P(\bar A\bar B)$ 千万别写成 $P(\bar A)P(\bar B)$</b> —— 题目从没说 $A,B$ 独立，
+        事实上 $P(AB)=\frac1{12}\ne P(A)P(B)=\frac1{24}$，<b>它们不独立</b>。这是 <span class="dock">最常见的整题崩盘点</span>。<br>
+        <b>③</b> $\sqrt{\frac3{16}}\cdot\sqrt{\frac5{36}}=\frac{\sqrt3}4\cdot\frac{\sqrt5}6=\frac{\sqrt{15}}{24}$ —— <b>把两个根号分开开方再相乘，分母正好凑出 24 与分子约掉</b>。
+        这一步<b>写成一个大根号 $\sqrt{\frac{15}{576}}$ 也对，但心算更容易错</b>，建议分开写。<br>
+        <b>④</b> 最终答案 $\frac1{\sqrt{15}}$ 应<b>有理化成 $\frac{\sqrt{15}}{15}$</b>——考研答案的标准形式，不化不扣分但要养成习惯。<br>
+        <b>⑤</b> <b>提速</b>：0–1 变量的 $DX=p(1-p)$ 直接用：$DX=\frac14\cdot\frac34=\frac3{16}$、$DY=\frac16\cdot\frac56=\frac5{36}$，
+        <b>不用先算 $E(X^2)$ 再减</b>。卷面上仍建议写出 $E(X^2)$ 那一步（表明方法），但草稿上心算。<br>
+        <b>⑥</b> <b>结构提醒</b>：本题 12 分里有 6 分是第 1 章的内容。<b>数字特征的大题常常是"第 1/2/3 章 + 第 4 章"的拼装</b>，
+        复习到本章时前三章不能生疏——<b>这也是把本章排在概率论最后一个"计算章"的原因</b>。<br>
+        <b>⑦</b> <b>程序复核</b>：四格概率之和 $=1$ ✓，$\mathrm{Cov}=\frac1{24}$、$\rho=\frac{\sqrt{15}}{15}\approx0.2582$ 由 sympy 精确复算通过。</div>
+    </div></div>
+
+  <!-- ================= s5 ================= -->
+  <h2 id="s5"><span class="idx">伍</span>$O_4$ 独立 vs 不相关：★本章最重要的一张流程图　<span class="layer L-base">基础</span><span class="layer L-str">强化</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/概率论与数理统计/04_随机变量的数字特征/概率_第04章_基础30讲.pdf">📄 基础30讲 p.113</a>
+  <a class="pg" href="../../张宇系列_分章易识别版/概率论与数理统计/04_随机变量的数字特征/概率_第04章_强化9讲_第6讲_数字特征.pdf">📄 强化9讲第6讲 p.54</a>
+
+  <div class="mine"><span class="tag">补讲 · 结构图上那句「两个同时考，可以出四个选项」，直接交代了命题模板</span>
+    <b>书上说</b>：第一页结构图里，「独立性与不相关性的判定」旁边有一条眉批——<b>「两个同时考，可以出四个选项」</b>。<br>
+    <b>潜台词是</b>：出题人手里有两个二值判断（相关 / 不相关）×（独立 / 不独立），<b>$2\times2$ 正好凑成 A、B、C、D 四个选项</b>。
+    而这四种组合里，<b>有一种是逻辑上不可能的</b>：
+    <div style="margin-top:8px" class="gridwrap"><table>
+      <tr><th>组合</th><th>可能吗</th><th>典型例子</th></tr>
+      <tr><td>不相关 + 独立</td><td>✅ 可能</td><td>独立的两个正态、掷两次骰子</td></tr>
+      <tr><td><b>不相关 + 不独立</b></td><td>✅ <b>可能（本章主角）</b></td><td><a href="#eg-410">基 4.10</a> 的 $X$ 与 $|X|$；$X\sim U(-1,1),Y=\cos X$</td></tr>
+      <tr><td>相关 + 不独立</td><td>✅ 可能</td><td><a href="#eg-x44">习 4.4</a> 的 $X$ 与 $X^3$；<a href="#eg-x414">习 4.14</a></td></tr>
+      <tr><td><b>相关 + 独立</b></td><td>❌ <b>不可能</b></td><td>独立必不相关，故"相关"与"独立"互斥</td></tr>
+    </table></div>
+    <b>所以能考</b>：<b>拿到这类选择题，第一刀就砍掉"相关且相互独立"那个选项</b>——它对任意两个随机变量都不成立。
+    <a href="#eg-x44">习 4.4</a> 的书上解答开头第一句就是「显然，结论 (C) 对任意两个随机变量都不正确」，<b>这一刀是白送的。</b>
+    剩下三选一，再算一个 $\mathrm{Cov}$ 定相关性，最后判独立，<b>三步锁死答案</b>。
+  </div>
+
+  <div class="key"><span class="tag">必记 · ★判定流程图（基础版与强化版一字不差地给了两遍，说明它有多重要）</span>
+    $$\mathrm{Cov}(X,Y)=E(XY)-EX\,EY\begin{cases}
+    \ne0\iff X,Y\ \textbf{相关}\ \Longrightarrow\ X,Y\ \textbf{不独立}\quad(\text{到此结束，不必再查}),\\[8pt]
+    =0\iff X,Y\ \textbf{不相关}，\text{此时必须通过分布再判}\begin{cases}X,Y\ \text{独立},\\ X,Y\ \text{不独立}.\end{cases}\end{cases}$$
+    <b>读这张图的正确姿势</b>：<br>
+    <b>①</b> 入口永远是算 $\mathrm{Cov}$（<b>不是先判独立</b>）——因为"算 $\mathrm{Cov}$"是纯计算，"判独立"要对比分布，前者便宜得多。<br>
+    <b>②</b> <b>$\mathrm{Cov}\ne0$ 是一条"一击必杀"的路</b>：相关 ⟹ 不独立，两个结论一起拿到，题就做完了。<br>
+    <b>③</b> <b>$\mathrm{Cov}=0$ 只是走完一半</b>：不相关不能推出任何关于独立性的结论，<b>必须另找证据</b>——
+    要么找到一个点 $(x_0,y_0)$ 使 $F(x_0,y_0)\ne F_X(x_0)F_Y(y_0)$（证不独立，只需一点），
+    要么验证 $f(x,y)\equiv f_X(x)f_Y(y)$（证独立，要对一切）。<br>
+    <b>④</b> 书上注补一句：<b>上述讨论均假设方差存在且不为零</b>（否则 $\rho$ 的分母为 0，无定义）。
+  </div>
+
+  <div class="key"><span class="tag">必记 · "不相关 ⟹ 独立"只在<u>两种</u>场合成立（强化版比基础版多给了一种）</span>
+    一般情形只有单向：<b>独立 $\Rightarrow$ 不相关</b>，反之不然。但有两个特例双向成立：
+    <div class="gridwrap"><table>
+      <tr><th>场合</th><th>结论</th><th>出处</th></tr>
+      <tr><td>$(X,Y)$ 服从<b>二维正态</b>分布</td><td>$X,Y$ 独立 $\iff$ 不相关（$\rho=0$）</td><td>基础版 + 强化版都有</td></tr>
+      <tr style="background:var(--green-soft)"><td>$X$ 与 $Y$ <b>均服从 0–1 分布</b></td><td>$X,Y$ 独立 $\iff$ 不相关</td><td><b>只有强化版第 6 讲有</b></td></tr>
+    </table></div>
+    <b>第二条为什么成立</b>（值得自己会推）：两个 0–1 变量的联合分布只有 4 格、3 个自由度，
+    而两条边缘用掉 2 个，只剩 <b>1 个自由度</b>；$\mathrm{Cov}=0$ 恰好把这最后 1 个自由度钉死，
+    钉出来的正是乘积分布。<b>"自由度刚好用完"就是这类等价成立的根本原因</b>——
+    对比 <a href="#eg-x412">习 4.12</a>（那里 $\mathrm{Cov}=\frac18\ne0$，钉出来的就<u>不是</u>乘积分布）。<br>
+    ⚠️ <b>别把这两条推广</b>：$X,Y$ 各自是一维正态<b>但联合不是二维正态</b>时，不相关<b>推不出</b>独立
+    （<a href="#eg-x414">习 4.14</a> 的 $X\sim N(0,\sigma^2)$ 与 $Y=X^3$ 就是各自不正态/不联合正态的反面教材）。
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · "证独立"与"证不独立"的工作量差着数量级，这决定了你该往哪个方向使劲</span>
+    <b>书上说</b>：强化版在"用分布判独立"的标题旁批了一句<b>「否定方法：存在 $x_0,y_0$，使 $F(x_0,y_0)\ne F_X(x_0)F_Y(y_0)\iff X,Y$ 不独立」</b>。<br>
+    <b>潜台词是</b>：独立性的定义是"<b>对一切</b> $(x,y)$ 成立"，所以——<br>
+    　<b>证独立</b>：要验证一族<u>无穷多</u>的等式，实际做法只有一条：<b>把 $f(x,y)$ 因式分解成 $f_X(x)f_Y(y)$，并且定义域也要能分离成矩形</b>；<br>
+    　<b>证不独立</b>：<b>找到<u>一个</u>反例点就够了</b>。<br>
+    <b>两者工作量差着数量级。</b><br>
+    <b>所以能考</b>：拿到判独立的题，<b>先赌"不独立"去找反例点</b>——因为考题里"不独立"占绝大多数（本章 5 道判定题里 5 道都是不独立）。
+    找反例点的三个高产位置：<br>
+    　<b>①</b> 联合分布里的 <b>0 格</b>（如 <a href="#eg-47">基 4.7</a>：$P\{X=0,Y=-1\}=0$ 而两个边缘都非 0）；<br>
+    　<b>②</b> 定义域<b>不是矩形</b>的连续型（三角形区域上的均匀分布必不独立，第 3 章反复用）；<br>
+    　<b>③</b> $Y$ 是 $X$ 的<b>函数</b>（<a href="#eg-410">基 4.10</a>、<a href="#eg-x44">习 4.4</a>、<a href="#eg-x414">习 4.14</a>）——
+    此时连点都不用找，<b>一句"函数关系不可能独立"即可</b>。
+  </div>
+
+  <div class="bg"><span class="tag">背景</span>基础版把"独立性与不相关性的判定"和"切比雪夫不等式"塞进同一个二级标题里，
+    其实<b>这两件事毫无关系</b>——只是因为它们都短、都放在本章末尾。
+    <b>复习时把它们当成两个独立的知识点，别因为排在一起就去找联系。</b>
+    强化版的 $O_4$ / $O_5$ 分开编号，才是更合理的组织。</div>
+
+  <div class="link"><span class="tag">串联 · 这张流程图与第 1 章"事件独立"、第 3 章"变量独立"是同一条线的三段</span>
+    <b>第 1 章</b>：事件独立 $P(AB)=P(A)P(B)$，判据是<b>一个等式</b>。<br>
+    <b>第 3 章</b>：变量独立 $F(x,y)=F_X(x)F_Y(y)$ 对<b>一切</b> $(x,y)$ 成立，判据是<b>一族等式</b>——所以证独立难、证不独立易。<br>
+    <b>第 4 章</b>：不相关 $E(XY)=EXEY$，只是那一族等式在<b>某个加权意义下</b>的一个推论，<b>信息量少得多</b>。<br>
+    三者的强弱链条：<b>独立 ⟹ 不相关</b>，反向断裂。<a href="#eg-x413">习 4.13</a> 恰好把三段串在一题里
+    （用第 1 章的乘法公式求联合、用第 3 章的乘积判独立、用第 4 章的 $\mathrm{Cov}$ 求 $\rho$）。<br>
+    <b>往后</b>：第 5 章的<b>独立同分布</b>是大数定律/中心极限定理的前提，那里要的是<u>独立</u>不是不相关；
+    第 6 章的<b>样本</b>定义也是独立同分布。<b>所以"不相关"这个弱条件，主要战场就在本章的选择题里。</b>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 二维正态凭什么享有"不相关 ⟹ 独立"的特权</span>
+    <b>书上说</b>：结论③「如果 $(X,Y)$ 服从二维正态分布，则 $X,Y$ 独立 $\iff$ 不相关」，
+    强化版还加了一句注：<b>「只有在二维正态分布下，不相关才能断言独立。」</b><br>
+    <b>潜台词是</b>：这个特权来自<b>二维正态密度的形状</b>。它的密度指数部分是
+    $$-\frac1{2(1-\rho^2)}\left[\frac{(x-\mu_1)^2}{\sigma_1^2}-\frac{2\rho(x-\mu_1)(y-\mu_2)}{\sigma_1\sigma_2}+\frac{(y-\mu_2)^2}{\sigma_2^2}\right],$$
+    <b>$x$ 与 $y$ 的耦合<u>只出现在中间那一项</u>，而那一项的系数正是 $\rho$</b>。
+    所以 $\rho=0$ 的瞬间，指数变成 $-\frac{(x-\mu_1)^2}{2\sigma_1^2}-\frac{(y-\mu_2)^2}{2\sigma_2^2}$，
+    <b>指数相加即密度相乘</b>，$f(x,y)=f_X(x)f_Y(y)$ 当场成立。<br>
+    <b>所以能考</b>：<b>①</b> 记住这个理由，就不会误把特权推广到别的分布——
+    一般分布里 $x,y$ 的耦合方式千变万化，$\rho$ 只是"线性耦合"的强度，压掉它剩下的耦合还在
+    （<a href="#eg-410">基 4.10</a> 的 $|X|$ 就是纯粹的非线性耦合）；<br>
+    <b>②</b> 这也解释了 <a href="#s5">§5</a> 里另一个特权者<b>两个 0–1 分布</b>为什么也成立——
+    它的联合分布只有 1 个自由度，<b>根本没有地方藏"非线性耦合"</b>；<br>
+    <b>③</b> ⚠️ 命题人最爱的坑：<b>"$X\sim N$，$Y\sim N$，且不相关"推不出独立</b>——
+    因为<u>边缘都正态不等于联合正态</u>。必须题干明写"$(X,Y)$ 服从二维正态"才能用。
+    <a href="#eg-x414">习 4.14</a> 的 $X\sim N(0,\sigma^2)$ 与 $Y=X^3$ 就是"边缘不联合"的现成反例。
+  </div>
+
+  <div class="eg" id="eg-410"><div class="q"><span class="no">基 4.10</span>设 $X$ 的概率密度为 $f(x)=\frac12\mathrm e^{-|x|},\ x\in(-\infty,+\infty)$，则（　）。<br>(A) $X$ 与 $|X|$ 不相关，$X$ 与 $|X|$ 不独立　(B) $X$ 与 $|X|$ 不相关，$X$ 与 $|X|$ 独立<br>(C) $X$ 与 $|X|$ 相关，$X$ 与 $|X|$ 不独立　(D) $X$ 与 $|X|$ 相关，$X$ 与 $|X|$ 独立<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s"><span class="lab">答案</span><span class="ans">(A) 不相关且不独立</span><br>
+      <span class="lab">书上眉批</span>「<b>常考题，研究 $X$、$|X|$ 的独立性、相关性</b>」<br>
+      <span class="lab">分析</span>① <b>先算 $\mathrm{Cov}$</b>：$f$ 是<b>偶函数</b>（拉普拉斯分布），所以 $xf(x)$ 与 $x|x|f(x)$ 都是<b>奇函数</b>，
+      $$EX=\int_{-\infty}^{+\infty}xf(x)\mathrm dx=0,\qquad E(X|X|)=\int_{-\infty}^{+\infty}x|x|f(x)\mathrm dx=0,$$
+      故 $\mathrm{Cov}(X,|X|)=E(X|X|)-EX\cdot E|X|=0-0=0$，<b>不相关</b>。砍掉 (C)(D)。<br>
+      ② <b>再判独立</b>：由<b>例 3.6</b> 知 $X$ 与 $|X|$ 不独立。故选 (A)。<br>
+      <span class="lab">要害（怎么<u>自己</u>证不独立，不靠引用例 3.6）</span>取 $x_0=1,\ y_0=\frac12$：
+      $$P\{X\le1,\ |X|\le\tfrac12\}=P\{|X|\le\tfrac12\}\ne P\{X\le1\}\cdot P\{|X|\le\tfrac12\},$$
+      因为 $P\{X\le1\}\lt1$（$X$ 可以大于 1），所以右边严格小于左边。<b>一个点就够了。</b><br>
+      更直观的说法：<b>$|X|$ 是 $X$ 的函数，知道 $X$ 就完全知道 $|X|$，相依到极点</b>；
+      反过来知道 $|X|=a$，$X$ 只剩 $\pm a$ 两种可能——<b>信息量巨大，绝不可能独立</b>。<br>
+      <span class="lab">通用结论 ★</span><b>只要 $X$ 的分布关于 0 对称（密度是偶函数），就有 $\mathrm{Cov}(X,|X|)=0$，但 $X$ 与 $|X|$ 永不独立。</b>
+      这是"不相关但不独立"最经典的一族反例，把 $f=\frac12\mathrm e^{-|x|}$ 换成 $N(0,\sigma^2)$、$U(-a,a)$ 全都成立。
+      <b>👉 <a href="#s9">§9 的📉相关系数实验室</a>里可以直接看到这个散点图：一个完美的 V 形，$\rho$ 却是 0。</b></div></div>
+
+  <div class="eg" id="eg-x44"><div class="q"><span class="no">习 4.4</span>设 $X$ 在 $[-1,1]$ 上服从均匀分布，$Y=X^3$，则 $X$ 与 $Y$（　）。<br>(A) 不相关且相互独立　(B) 不相关且不相互独立　(C) 相关且相互独立　(D) 相关且不相互独立<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s"><span class="lab">答案</span><span class="ans">(D) 相关且不相互独立</span><br>
+      <span class="lab">分析（三刀砍完）</span>
+      <b>第一刀</b>：(C)「相关且相互独立」对<b>任意</b>两个随机变量都不成立（独立必不相关），<b>白送</b>。<br>
+      <b>第二刀</b>：$Y=X^3$ 是 $X$ 的<b>函数</b>，函数关系不可能独立，砍掉 (A)。<br>
+      <b>第三刀</b>：$EX=0$，$E(XY)=E(X^4)=\int_{-1}^1x^4\cdot\frac12\mathrm dx=\frac15\ne0$，
+      故 $\mathrm{Cov}(X,Y)=\frac15-0=\frac15\ne0$，<b>相关</b>，砍掉 (B)。故选 (D)。<br>
+      <span class="lab">要害 ★ 与 <a href="#eg-410">基 4.10</a> 的对照，是本章最值得琢磨的一组</span>
+      两题都是"对称分布 + $X$ 的函数"，结果一个不相关、一个相关，<b>差别只在函数的奇偶性</b>：
+      <div class="gridwrap"><table>
+        <tr><th></th><th>$g(X)$</th><th>$x\cdot g(x)$ 的奇偶</th><th>$E[Xg(X)]$</th><th>结论</th></tr>
+        <tr><td>基 4.10</td><td>$|X|$（偶函数）</td><td>$x|x|$ 是<b>奇</b></td><td>$=0$</td><td><b>不</b>相关</td></tr>
+        <tr><td>习 4.4</td><td>$X^3$（奇函数）</td><td>$x\cdot x^3=x^4$ 是<b>偶</b></td><td>$\ne0$</td><td>相关</td></tr>
+      </table></div>
+      <b>一句话规律：$X$ 对称时，$X$ 与 $g(X)$ 不相关 $\iff$ $g$ 是偶函数（此时 $xg(x)$ 为奇）。</b>
+      带着这条规律，这类选择题<b>看一眼 $g$ 的奇偶就能定相关性，一秒不用算</b>。</div></div>
+
+  <div class="eg" id="eg-x43"><div class="q"><span class="no">习 4.3</span>设 $(X,Y)$ 的概率分布为<div class="gridwrap"><table><tr><th>$X\backslash Y$</th><th>0</th><th>1</th><th>2</th></tr><tr><td>$-1$</td><td>0.1</td><td>0.1</td><td>$b$</td></tr><tr><td>$1$</td><td>$a$</td><td>0.1</td><td>0.1</td></tr></table></div>若事件 $\{\max\{X,Y\}=2\}$ 与 $\{\min\{X,Y\}=1\}$ 相互独立，则 $\mathrm{Cov}(X,Y)=$（　）。<br>(A) $-0.6$　(B) $-0.36$　(C) 0　(D) 0.48<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s"><span class="lab">答案</span><span class="ans">(B) $-0.36$</span><br>
+      <span class="lab">第一步：把两个事件翻译成格子</span>
+      <b>$\{\max\{X,Y\}=2\}$</b>：$X$ 只取 $\pm1$，所以最大值为 2 只能来自 $Y=2$，即 $\{Y=2\}$，概率 $=b+0.1$。<br>
+      <b>$\{\min\{X,Y\}=1\}$</b>：最小值为 1 要求两个都 $\ge1$ 且至少一个 $=1$，即 $X=1$ 且 $Y\in\{1,2\}$，概率 $=0.1+0.1=0.2$。<br>
+      <b>交事件</b>：$\{Y=2\}\cap\{X=1,Y\ge1\}=\{X=1,Y=2\}$，概率 $=0.1$。<br>
+      <span class="lab">第二步：用独立性与归一性解出 $a,b$</span>
+      $$0.1=(b+0.1)\times0.2\Rightarrow b=0.4;\qquad 0.1\times4+a+b=1\Rightarrow a=0.2.$$
+      <span class="lab">第三步：三件套</span>
+      $$EX=-1\times(0.1+0.1+0.4)+1\times(0.2+0.1+0.1)=-0.6+0.4=-0.2,$$
+      $$EY=0\times0.3+1\times0.2+2\times0.5=1.2,$$
+      $$E(XY)=(-1)(1)(0.1)+(-1)(2)(0.4)+(1)(1)(0.1)+(1)(2)(0.1)=-0.1-0.8+0.1+0.2=-0.6,$$
+      $$\mathrm{Cov}(X,Y)=-0.6-(-0.2)(1.2)=-0.6+0.24=-0.36.$$
+      <span class="lab">要害</span><b>本题的难点全在第一步的"翻译"</b>，第二三步是纯体力。
+      翻译 $\max/\min$ 事件的通法：<b>$\{\max=c\}$ ＝ 两者都 $\le c$ 且至少一个 $=c$；$\{\min=c\}$ ＝ 两者都 $\ge c$ 且至少一个 $=c$。</b>
+      结合本题 $X$ 的取值范围（只有 $\pm1$）能大幅化简。<br>
+      <span class="lab">陷阱</span>$E(XY)$ 求和时<b>$Y=0$ 的那一列贡献为 0，可以跳过</b>，但<b>不要连带把 $EY$ 里的 $Y=0$ 一列也漏了</b>——
+      那一列虽然对 $EY$ 的加权和贡献 0，却<b>参与归一性</b>。本题 $a$ 就在这一列，漏了它解不出方程。<br>
+      <span class="lab">程序复核</span>sympy 逐格复算：$b=\frac25,a=\frac15$，$EX=-\frac15$，$EY=\frac65$，$E(XY)=-\frac35$，$\mathrm{Cov}=-\frac9{25}=-0.36$ ✓。</div></div>
+
+  <div class="eg" id="eg-s68"><div class="q"><span class="no">强 6.8</span>设 $(X,Y)$ 服从二维正态分布 $N\left(0,0;1,4;-\dfrac12\right)$，则下列随机变量中服从<b>标准正态分布且与 $X$ 独立</b>的是（　）。<br>(A) $\frac{\sqrt5}5(X+Y)$　(B) $\frac{\sqrt5}5(X-Y)$　(C) $\frac{\sqrt3}3(X+Y)$　(D) $\frac{\sqrt3}3(X-Y)$<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s"><span class="lab">答案</span><span class="ans">(C) $\dfrac{\sqrt3}3(X+Y)$</span><br>
+      <span class="lab">读参数</span>记号 $N(\mu_1,\mu_2;\sigma_1^2,\sigma_2^2;\rho)$：$X\sim N(0,1)$，$Y\sim N(0,4)$，$\rho=-\frac12$，
+      故 $\mathrm{Cov}(X,Y)=\rho\sigma_1\sigma_2=-\frac12\times1\times2=-1$。<br>
+      <span class="lab">第一关：谁能标准化成 $N(0,1)$</span>
+      $$D(X+Y)=1+4+2\times(-1)=3\Rightarrow X+Y\sim N(0,3)\Rightarrow \frac{X+Y}{\sqrt3}=\frac{\sqrt3}3(X+Y)\sim N(0,1),$$
+      $$D(X-Y)=1+4-2\times(-1)=7\Rightarrow X-Y\sim N(0,7)\Rightarrow \frac{X-Y}{\sqrt7}=\frac{\sqrt7}7(X-Y)\sim N(0,1).$$
+      系数 $\frac{\sqrt5}5=\frac1{\sqrt5}$ 对应方差 5，<b>两个组合都不是 5</b>，砍掉 (A)(B)；(D) 的系数应是 $\frac1{\sqrt7}$ 不是 $\frac1{\sqrt3}$，砍掉。<b>只剩 (C)。</b><br>
+      <span class="lab">第二关：为什么它真的与 $X$ 独立（书上"事实上"那一段）</span>
+      $$\mathrm{Cov}(X,X+Y)=\mathrm{Cov}(X,X)+\mathrm{Cov}(X,Y)=DX+\rho\sigma_1\sigma_2=1+(-1)=0,$$
+      所以 $X$ 与 $X+Y$ <b>不相关</b>。又因为
+      $$\begin{pmatrix}X\\ X+Y\end{pmatrix}=\begin{pmatrix}1&0\\ 1&1\end{pmatrix}\begin{pmatrix}X\\ Y\end{pmatrix},$$
+      矩阵 $\begin{pmatrix}1&0\\1&1\end{pmatrix}$ <b>可逆</b>（行列式 $=1\ne0$），故 $(X,X+Y)$ <b>仍是二维正态分布</b>，
+      在二维正态下不相关 $\iff$ 独立，于是 <b>$X$ 与 $X+Y$ 独立</b>。<br>
+      <span class="lab">要害 ★ 本章最深的一层</span><b>书上注：「只有在二维正态分布下，不相关才能断言独立。」</b>
+      而"$(X,X+Y)$ 仍是二维正态"这句<b>不是废话，是必须论证的一环</b>——
+      理由是<b>可逆线性变换保持联合正态性</b>。若变换矩阵不可逆（比如取 $(X,2X)$），联合分布退化，就不能这么说。<br>
+      <span class="lab">这里是线代与概率论的正式接口</span>二维正态的密度可以写成 $\frac1{2\pi\sqrt{|\Sigma|}}\exp\left\{-\frac12(\mathbf x-\boldsymbol\mu)^{\mathrm T}\Sigma^{-1}(\mathbf x-\boldsymbol\mu)\right\}$，
+      作变换 $\mathbf Y=A\mathbf X$ 后协方差阵变成 $A\Sigma A^{\mathrm T}$——<b>这正是线代第 6 章"二次型的合同变换"</b>。
+      考研不要求写出这个密度，但<b>"可逆变换保正态、协方差阵按 $A\Sigma A^{\mathrm T}$ 变"这两句要当结论记住</b>，第 6 章会再用。<br>
+      <span class="lab">程序复核</span>用 $\Sigma=\begin{pmatrix}1&-1\\-1&4\end{pmatrix}$ 生成 $10^7$ 样本：
+      $D(X+Y)=3.0018$、$D(X-Y)=7.0011$、$\mathrm{Cov}(X,X+Y)=4.5\times10^{-4}\approx0$、$D\left(\frac{\sqrt3}3(X+Y)\right)=1.0006$ ✓。</div></div>
+
+  <div class="eg" id="eg-x414"><div class="q"><span class="no">习 4.14</span>设 $X\sim N(0,\sigma^2)\ (\sigma>0)$，$Y=X^3$。(1) 求 $EY$；(2) 判断 $X$ 与 $Y$ 是否相关？是否独立？说明理由。<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li>(1) 求 $EY=E(X^3)$。<b>不要去求 $Y$ 的分布</b>——用 $E[g(X)]=\int g(x)f(x)\mathrm dx$ 一步。
+            $f$ 是<b>偶函数</b>（$N(0,\sigma^2)$ 关于 0 对称），$x^3$ 是奇函数，乘积为奇，<b>积分为 0</b>。
+            但注意：<b>要先确认积分绝对收敛</b>（正态尾巴是 $\mathrm e^{-x^2}$，压得住任何多项式），否则不能用奇偶性。</li>
+          <li>(2) 判相关：算 $\mathrm{Cov}(X,Y)=E(XY)-EX\cdot EY=E(X^4)-0\cdot0=E(X^4)$。
+            $x^4f(x)$ 是<b>偶函数且恒非负</b>，积分<b>严格大于 0</b>——<b>这一句就够判"相关"了，不必算出具体值。</b></li>
+          <li>判独立：<b>由"相关 ⟹ 不独立"直接得</b>。<b>不要再去费劲比较分布</b>——流程图的左支是一击必杀。</li>
+          <li>本题与 <a href="#eg-410">基 4.10</a> 正好构成一对：同样是对称分布 + $X$ 的函数，<b>那题的 $g$ 是偶函数所以不相关，本题的 $g$ 是奇函数所以相关</b>。写卷面时心里要清楚差别在哪。</li>
+        </ol>
+      </div>
+      <div class="paper"><div class="phead">✍️ 考场卷面（写完对照）<span class="score">参考 10 分</span></div>
+        <div class="step"><b>解</b>　(1) 由 $X\sim N(0,\sigma^2)$，其概率密度为
+        $$f(x)=\frac1{\sqrt{2\pi}\sigma}\mathrm e^{-\frac{x^2}{2\sigma^2}},\quad -\infty\lt x\lt+\infty,$$
+        $f(x)$ 为 $x$ 的<b>偶函数</b>。又 $\int_{-\infty}^{+\infty}|x|^3f(x)\mathrm dx\lt+\infty$（积分绝对收敛），故 $x^3f(x)$ 为奇函数且积分存在，
+        $$EY=E(X^3)=\int_{-\infty}^{+\infty}x^3f(x)\mathrm dx=0.\tag{1}$$
+        <span class="pt">⛳ 3 分</span></div>
+        <div class="step">(2) 由 $EX=0$ 及 (1) 式 $EY=0$，
+        $$\mathrm{Cov}(X,Y)=E(XY)-EX\cdot EY=E(X^4)-0=\int_{-\infty}^{+\infty}x^4\cdot\frac1{\sqrt{2\pi}\sigma}\mathrm e^{-\frac{x^2}{2\sigma^2}}\mathrm dx
+        =\frac2{\sqrt{2\pi}\sigma}\int_0^{+\infty}x^4\mathrm e^{-\frac{x^2}{2\sigma^2}}\mathrm dx\gt0,\tag{2}$$
+        因被积函数在 $(0,+\infty)$ 上连续且恒正。<span class="pt">⛳ 3 分</span></div>
+        <div class="step">由 (2) 式 $\mathrm{Cov}(X,Y)\ne0$，即 $E(XY)\ne EX\cdot EY$，故 <b>$X$ 与 $Y$ 相关</b>。<span class="pt">⛳ 2 分</span></div>
+        <div class="step">由"若 $X$ 与 $Y$ 相互独立，则 $X$ 与 $Y$ 不相关"的逆否命题知：<b>$X$ 与 $Y$ 相关 $\Rightarrow$ $X$ 与 $Y$ 不独立</b>。<span class="pt">⛳ 2 分</span></div>
+        <div class="fin">即 $EY=0$；$X$ 与 $Y$ <b>相关</b>，且 $X$ 与 $Y$ <b>不相互独立</b>。</div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（对照完校对）</span>
+        <b>①</b> <span class="dock">扣分点</span>：(2) 问的最后一步<b>必须写出依据"由独立必不相关的逆否命题"</b>。
+        本题是<b>判断题</b>，题干白纸黑字写着"<b>说明理由</b>"——<b>没有理由的正确结论只给一半分</b>。<br>
+        <b>②</b> <span class="dock">扣分点</span>：$\mathrm{Cov}\ne0$ 的论证不能只写"$E(X^4)\ne0$"就完事，
+        要说清<b>为什么不为 0</b>（被积函数恒正）。写"$\gt0$"比写"$\ne0$"更好——<b>正态的四阶矩当然是正的，说得更强反而更容易论证</b>。<br>
+        <b>③</b> <b>要不要算出 $E(X^4)=3\sigma^4$？</b>本题<b>不需要</b>（只判正负），算出来也不扣分。
+        但这个值本身值得记：正态的偶数阶矩 $E(X^{2k})=(2k-1)!!\,\sigma^{2k}$，即 $E(X^2)=\sigma^2$、$E(X^4)=3\sigma^4$、$E(X^6)=15\sigma^6$。
+        <b>$E(X^4)=3\sigma^4$ 是 $\chi^2(n)$ 方差为 $2n$ 的来源</b>（见 <a href="#s2">§2</a> 的串联）。<br>
+        <b>④</b> <b>如果题目追问 $\rho_{XY}$</b>（真题变形常见）：$DY=D(X^3)=E(X^6)-0=15\sigma^6$，
+        $$\rho_{XY}=\frac{3\sigma^4}{\sigma\cdot\sqrt{15\sigma^6}}=\frac3{\sqrt{15}}=\frac{\sqrt{15}}5\approx0.7746.$$
+        <b>注意它不等于 1</b>——虽然 $Y$ 完全由 $X$ 决定，但 $\rho$ 只测线性，$|\rho|=1$ 要求的是<b>直线关系</b>而非任意函数关系。
+        <b>这个 0.77 是理解 $\rho$ 的绝佳数据点：函数关系再强，只要不是直线，$|\rho|$ 就到不了 1。</b><br>
+        <b>⑤</b> <b>程序复核</b>：sympy 得 $E(X^3)=0$、$E(X^4)=3\sigma^4$、$E(X^6)=15\sigma^6$，$\rho=\frac{\sqrt{15}}5$；
+        蒙特卡洛（$\sigma=1.3$，$10^7$ 样本）得 $\rho=0.774520$，理论 $0.774597$ ✓。</div>
+    </div></div>
+
+  <!-- ================= s6 ================= -->
+  <h2 id="s6"><span class="idx">陆</span>$O_5$ 切比雪夫不等式：公式很短，难点全在"认出主角"　<span class="layer L-base">基础</span><span class="layer L-str">强化</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/概率论与数理统计/04_随机变量的数字特征/概率_第04章_基础30讲.pdf">📄 基础30讲 p.114</a>
+
+  <div class="fml">
+    设随机变量 $X$ 的期望 $EX$ 与方差 $DX$ 均存在，则对任意 $\varepsilon>0$，
+    $$P\{|X-EX|\ge\varepsilon\}\le\frac{DX}{\varepsilon^2}\qquad\text{或}\qquad P\{|X-EX|\lt\varepsilon\}\ge1-\frac{DX}{\varepsilon^2}.$$
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 强化版给了实操口诀，把这个公式的"难"精确定位了</span>
+    <b>书上说</b>（强化第 6 讲眉批）：「$D_{23}$（化归经典形式），<b>识别 $EX$、$DX$ 分别是多少，有时还要识别 $\varepsilon$ 取多少</b>，然后套用公式即可。」<br>
+    <b>潜台词是</b>：这个不等式<b>没有任何技巧可言</b>——难点 100% 在"<b>题目里那个要被估计的随机变量到底是谁</b>"。
+    一旦认出它，$EX$、$DX$ 是前面几节的常规计算，代入就完事。<br>
+    <b>所以能考</b>：三道例题恰好是"认主角"的三种难度：<br>
+    　<b>易</b>（<a href="#eg-x411">习 4.11</a>）：主角就是 $X$ 本身，只是反过来求 $\varepsilon$；<br>
+    　<b>中</b>（<a href="#eg-411">基 4.11</a>）：主角是 <b>$U=X-Y$</b>，题干写的是 $P\{|X-Y|\ge6\}$，要先看出 $EU=0$ 所以 $|X-Y|=|U-EU|$；<br>
+    　<b>难</b>（<a href="#eg-s69">强 6.9</a>）：主角是 <b>$\frac1n\sum X_i^2$</b>，不是 $X_i$、也不是 $\bar X$。<b>认错主角，四个选项全都在等你。</b>
+  </div>
+
+  <div class="trap"><span class="tag">陷阱 · 切比雪夫是"上界"，不是"等于"；它松到什么程度要有数</span>
+    这个不等式对<b>一切</b>有期望方差的分布成立，代价是<b>极松</b>。例如 $X\sim N(0,1)$，取 $\varepsilon=2$：<br>
+    　真实值 $P\{|X|\ge2\}=0.0455$，切比雪夫上界 $\frac1{4}=0.25$ —— <b>差 5.5 倍</b>。<br>
+    　取 $\varepsilon=3$：真实 $0.0027$，上界 $\frac19=0.111$ —— <b>差 41 倍</b>。<br>
+    <b>所以</b>：题目问"用切比雪夫估计"时，答案必须是那个<u>松</u>的界，<b>你算出更精确的真实概率反而是错的</b>（答非所问）。
+    反过来，题目问"求概率"时用切比雪夫也是错的。<b>看清题干的动词：「估计」用切比雪夫，「求」要精确算。</b><br>
+    <b>什么时候它才紧？</b>只有<b>两点分布</b>能取到等号（把全部概率集中在 $EX\pm\varepsilon$ 两点上）。
+    <b>👉 <a href="#s9">§9 的⚖️切比雪夫松紧台</a>把五种分布的真实概率与上界画在同一张图上，包括那个取到等号的两点分布。</b>
+  </div>
+
+  <div class="link"><span class="tag">串联 · 切比雪夫不等式是<u>下一章</u>大数定律的证明工具，不是孤立的知识点</span>
+    第 5 章的<b>切比雪夫大数定律</b>与<b>辛钦大数定律</b>，说的是 $\bar X_n=\frac1n\sum X_i$ 依概率收敛到 $\mu$，即
+    $$\lim_{n\to\infty}P\{|\bar X_n-\mu|\lt\varepsilon\}=1.$$
+    证明只有一行：由 $D\bar X_n=\frac{\sigma^2}n$ 与切比雪夫不等式，
+    $$P\{|\bar X_n-\mu|\ge\varepsilon\}\le\frac{\sigma^2}{n\varepsilon^2}\xrightarrow{n\to\infty}0.$$
+    <b>"$\frac{\sigma^2}n\to0$"就是大数定律的全部秘密</b>——样本量越大，样本均值的方差越小，切比雪夫的上界就被压到 0。
+    <a href="#eg-s69">强 6.9</a> 的 $\frac{\mu_4-\mu_2^2}{n\varepsilon^2}$ 里那个 $n$ 在分母，正是同一件事，
+    <b>它其实已经证明了"$\frac1n\sum X_i^2$ 依概率收敛到 $E(X^2)$"——这是第 6 章矩估计相合性的依据。</b>
+    <b>本章这个不起眼的公式，是概率论后两章的地基。</b>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 切比雪夫不等式为什么长这样——一行就能自己推出来，不必死记</span>
+    <b>书上说</b>：直接给出结论，没有证明。<br>
+    <b>潜台词是</b>：它其实是<b>"用方差反推概率"的最朴素做法</b>，两行可以自己推：
+    $$DX=E[(X-EX)^2]\ \ge\ E\Big[(X-EX)^2\cdot\mathbf 1_{\{|X-EX|\ge\varepsilon\}}\Big]\ \ge\ \varepsilon^2\cdot P\{|X-EX|\ge\varepsilon\},$$
+    第一个 $\ge$ 是<b>把被积区域缩小</b>（丢掉非负的一部分），第二个 $\ge$ 是<b>在剩下的区域上 $(X-EX)^2\ge\varepsilon^2$</b>。
+    两边除以 $\varepsilon^2$ 即得。<br>
+    <b>所以能考</b>：<b>①</b> 推导里两次放缩<b>都很粗暴</b>——这就是<a href="#s9">§9 模块二</a>看到的"松"的来源，
+    也解释了为什么<b>只有把全部概率压在 $\pm\varepsilon$ 两点上时才取等号</b>（那时两次放缩都变成恒等）；<br>
+    <b>②</b> 同样的手法把 $(X-EX)^2$ 换成 $|X|$ 就得到<b>马尔可夫不等式</b> $P\{|X|\ge\varepsilon\}\le\frac{E|X|}\varepsilon$
+    （数一不考，但知道这条能明白切比雪夫只是它的一个特例）；<br>
+    <b>③</b> <b>记不住公式时就地推一遍只要 20 秒</b>，比赌记忆可靠。
+    要点：<b>"方差 ≥ 尾巴部分的贡献 ≥ $\varepsilon^2\times$ 尾巴概率"。</b>
+  </div>
+
+  <div class="link"><span class="tag">串联 · 切比雪夫思想在 408 与工程里的同款：用"平均量"卡住"极端事件"</span>
+    切比雪夫不等式的实质是——<b>只知道均值与方差，就能给极端偏离的概率一个上界</b>。这个思路在计算机里到处都是：<br>
+    <b>→ 408 操作系统</b>：估计"进程响应时间超过 $T$ 的概率"，在只知道平均响应时间与波动时，用的就是同款放缩；
+    <b>缓冲区大小</b>、<b>超时阈值</b>的保守设计（"取 $3\sigma$"）背后是同一逻辑。<br>
+    <b>→ 算法分析</b>：随机算法的<b>高概率界</b>（with high probability）第一步往往是切比雪夫；
+    要更紧的界才升级到 Chernoff 界——<b>而 Chernoff 的推法与上面那两行放缩<u>结构完全相同</u>，只是把 $(X-EX)^2$ 换成 $\mathrm e^{tX}$</b>。<br>
+    <b>→ 本科目内部</b>：它是第 5 章<b>大数定律的唯一证明工具</b>（见下方串联卡）。
+    <b>所以本节虽短，却是"概率论 → 统计推断 → 算法分析"这条链的第一环。</b>
+  </div>
+
+  <div class="eg" id="eg-411"><div class="q"><span class="no">基 4.11</span>设 $X,Y$ 为随机变量，数学期望都是 2，方差分别为 1 和 4，相关系数为 0.5，则由切比雪夫不等式，$P\{|X-Y|\ge6\}\le$ ____。<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s"><span class="lab">答案</span><span class="ans">$\dfrac1{12}$</span><br>
+      <span class="lab">第一步：认主角</span>令 $U=X-Y$。因为 $EU=EX-EY=2-2=0$，所以
+      $$P\{|X-Y|\ge6\}=P\{|U-EU|\ge6\},$$
+      <b>这正好是切比雪夫的左边形状</b>，$\varepsilon=6$。<br>
+      <span class="lab">第二步：算 $DU$</span>由 $\rho_{XY}=0.5=\dfrac{\mathrm{Cov}(X,Y)}{\sqrt1\cdot\sqrt4}=\dfrac{\mathrm{Cov}(X,Y)}2$ 得 $\mathrm{Cov}(X,Y)=1$，故
+      $$DU=D(X-Y)=DX+DY-2\mathrm{Cov}(X,Y)=1+4-2\times1=3.$$
+      <span class="lab">第三步：代入</span>$P\{|X-Y|\ge6\}\le\dfrac{DU}{6^2}=\dfrac3{36}=\dfrac1{12}$。<br>
+      <span class="lab">要害</span><b>$EU=0$ 这一步是本题的枢纽</b>：只有 $EU=0$ 时 $|X-Y|$ 才等于 $|U-EU|$，公式才能直接套。
+      <b>若 $EX\ne EY$，就必须写成 $P\{|U-EU|\ge6-|EU|\}$ 之类，$\varepsilon$ 要跟着调整</b>——这就是眉批说的"有时还要识别 $\varepsilon$ 取多少"。<br>
+      <span class="lab">易错</span>$\mathrm{Cov}=\rho\sqrt{DX}\sqrt{DY}=0.5\times1\times2=1$，<b>不是 $0.5\times1\times4=2$</b>（分母是标准差不是方差，又一次）。
+      若错成 2，$DU=1+4-4=1$，答案会变成 $\frac1{36}$。</div></div>
+
+  <div class="eg" id="eg-x411"><div class="q"><span class="no">习 4.11</span>设 $X$ 为随机变量，$P\{|X-EX|\lt\varepsilon\}\ge0.9$，$DX=0.009$，用切比雪夫不等式估计 $\varepsilon$ 的取值范围。<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s"><span class="lab">答案</span><span class="ans">$\varepsilon\ge0.3$</span><br>
+      <span class="lab">分析</span>这题<b>反着用</b>：已知概率下界求 $\varepsilon$。由 $P\{|X-EX|\lt\varepsilon\}\ge1-\dfrac{DX}{\varepsilon^2}$，
+      要保证它 $\ge0.9$，<b>只需让切比雪夫给出的下界本身 $\ge0.9$</b>：
+      $$1-\frac{0.009}{\varepsilon^2}\ge0.9\Rightarrow \frac{0.009}{\varepsilon^2}\le0.1\Rightarrow \varepsilon^2\ge0.09\Rightarrow \varepsilon\ge0.3.$$
+      <span class="lab">要害（这里有个容易含糊的逻辑）</span>严格说，"$1-\frac{DX}{\varepsilon^2}\ge0.9$"是"$P\ge0.9$"的<b>充分条件</b>，不是必要条件——
+      $\varepsilon$ 小于 0.3 时真实概率<u>也可能</u> $\ge0.9$（因为界很松）。
+      <b>但题目说的是"用切比雪夫不等式估计"，意思就是"只用这个工具能保证什么"</b>，所以答案是 $\varepsilon\ge0.3$。<br>
+      <b>这类题的标准表述是"保证 $P\ge0.9$ 的 $\varepsilon$ 至少要取多大"</b>，理解成"最保守的取法"就不会纠结。<br>
+      <span class="lab">提速</span>数字设计得很友好：$DX=0.009$，$1-0.9=0.1$，$\varepsilon^2=\frac{0.009}{0.1}=0.09$，$\varepsilon=0.3$。
+      <b>$\varepsilon=\sqrt{\dfrac{DX}{1-p}}$ 是这类题的通式</b>，记住这一个式子即可。</div></div>
+
+  <div class="eg" id="eg-s69"><div class="q"><span class="no">强 6.9</span>设 $X_1,\cdots,X_n$ 独立同分布，记 $E(X_i^k)=\mu_k\ (k=1,2,3,4)$，则由切比雪夫不等式，对任意 $\varepsilon>0$，有 $P\left\{\left|\dfrac1n\sum_{i=1}^nX_i^2-\mu_2\right|\ge\varepsilon\right\}\le$（　）。<br>(A) $\dfrac{\mu_4-\mu_2^2}{n\varepsilon^2}$　(B) $\dfrac{\mu_4-\mu_2^2}{\sqrt n\varepsilon^2}$　(C) $\dfrac{\mu_2-\mu_1^2}{n\varepsilon^2}$　(D) $\dfrac{\mu_2-\mu_1^2}{\sqrt n\varepsilon^2}$<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s"><span class="lab">答案</span><span class="ans">(A) $\dfrac{\mu_4-\mu_2^2}{n\varepsilon^2}$</span><br>
+      <span class="lab">第一步：认主角 ★</span>被估计的随机变量是 <b>$T=\dfrac1n\sum_{i=1}^nX_i^2$</b>——
+      <b>不是 $X_i$，也不是 $\bar X=\frac1n\sum X_i$</b>。整道题的分水岭就在这里。<br>
+      <span class="lab">第二步：算 $ET$</span>由期望的线性性，$ET=\dfrac1n\cdot n\cdot E(X_i^2)=\mu_2$。
+      <b>所以题干里的 $\mu_2$ 正是 $ET$，形状 $|T-ET|$ 对上了。</b><br>
+      <span class="lab">第三步：算 $DT$</span>$X_i$ 独立 $\Rightarrow X_i^2$ 也独立，方差可加：
+      $$DT=\frac1{n^2}\sum_{i=1}^n D(X_i^2)=\frac1{n^2}\cdot n\cdot\left\{E(X_i^4)-[E(X_i^2)]^2\right\}=\frac{\mu_4-\mu_2^2}n.$$
+      <span class="lab">第四步：代入</span>$P\{|T-\mu_2|\ge\varepsilon\}\le\dfrac{DT}{\varepsilon^2}=\dfrac{\mu_4-\mu_2^2}{n\varepsilon^2}$，选 (A)。<br>
+      <span class="lab">干扰项分析（四个选项精确对应四种错法）</span>
+      <div class="gridwrap"><table>
+        <tr><th>选项</th><th>对应的错误</th></tr>
+        <tr><td>(A) ✅</td><td>正确：主角是 $\frac1n\sum X_i^2$，$D=\frac{\mu_4-\mu_2^2}n$</td></tr>
+        <tr><td>(B)</td><td>把 $\frac1{n^2}\cdot n=\frac1n$ 错成 $\frac1{\sqrt n}$（<b>把方差与标准差搞混</b>）</td></tr>
+        <tr><td>(C)</td><td><b>主角认成 $\bar X=\frac1n\sum X_i$</b>，于是 $D\bar X=\frac{\mu_2-\mu_1^2}n$</td></tr>
+        <tr><td>(D)</td><td>上面两个错误同时犯</td></tr>
+      </table></div>
+      <span class="lab">要害</span><b>$D(X_i^2)=E(X_i^4)-[E(X_i^2)]^2=\mu_4-\mu_2^2$</b> —— 这一步就是"把 $X_i^2$ 当成一个新的随机变量"，
+      它的"二阶原点矩"是 $X_i$ 的<b>四阶</b>原点矩。<b>题目给到 $\mu_4$ 就是在提示这一点</b>——
+      如果只需要 $\bar X$，给 $\mu_1,\mu_2$ 就够了，<b>给出 $\mu_3,\mu_4$ 本身就是"主角不是 $\bar X$"的信号</b>。<br>
+      <span class="lab">读懂题面的记号</span>$\mu_k=E(X_i^k)$ 是 <a href="#s3">§3</a> 讲过的<b>$k$ 阶原点矩</b>。
+      不熟悉这套记号的话，本题连题干都读不懂——<b>这就是为什么"矩"那一小节不能跳过</b>。</div></div>
+
+  <!-- ================= s7 ================= -->
+  <h2 id="s7"><span class="idx">柒</span>强化专属三件套：最值恒等式 · 分解法 · 绝对值方差　<span class="layer L-str">强化</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/概率论与数理统计/04_随机变量的数字特征/概率_第04章_强化9讲_第6讲_数字特征.pdf">📄 强化9讲第6讲 p.48</a>
+
+  <div class="key"><span class="tag">必记 · ★最值五恒等式（强化版列在"形式化归体系块"里，本节的核心资产）</span>
+    $$\max\{X,Y\}=\frac{X+Y+|X-Y|}2,\qquad \min\{X,Y\}=\frac{X+Y-|X-Y|}2,$$
+    $$\boxed{\max\{X,Y\}+\min\{X,Y\}=X+Y},\qquad \boxed{\max\{X,Y\}-\min\{X,Y\}=|X-Y|},\qquad \boxed{\max\{X,Y\}\cdot\min\{X,Y\}=XY}$$
+    另有<b>独立同分布</b>时的分布公式（第 3 章已给）：
+    $$Z=\max\Rightarrow F_Z=[F]^n,\ f_Z=n[F]^{n-1}f;\qquad Y=\min\Rightarrow F_Y=1-[1-F]^n,\ f_Y=n[1-F]^{n-1}f.$$
+    强化版还配了三条口诀：<b>用好降维法</b>（令 $Z=X-Y$）、<b>用好标准化</b>（令 $U=\frac{X-\mu}\sigma$）、
+    以及眉批 <b>「见到 $|X-Y|$，两种考虑：$Z=|X-Y|$ ／ $U=X-Y,\ Z=|U|$」</b>。
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 后三个恒等式为什么是"白拿分"——它们把二维问题<u>降回</u>一维，且完全不需要分布</span>
+    <b>书上说</b>：三个恒等式列在"最值"小节，强化例 6.2 用完 $\max$ 之后，注里说「因 $\max+\min=X+Y$，故 $E(\min)=EX+EY-E(\max)$」。<br>
+    <b>潜台词是</b>：$\max$ 与 $\min$ 的分布都很难求（要用 $[F]^n$，还得积分），
+    但<b>它们的"和"、"差的绝对值"、"积"却是 $X,Y$ 的初等表达式</b>。
+    于是凡是问 <b>$E(\max)+E(\min)$、$E(\max\cdot\min)$、$E(\max)-E(\min)$</b> 的题，
+    <b>可以完全绕开 $\max,\min$ 的分布，直接用 $X,Y$ 的数字特征回答</b>。<br>
+    <b>所以能考</b>：<a href="#eg-x410">习 4.10</a> 就是这个套路的<b>标准样板</b>——题目问 $E(U+V)$ 与 $E(UV)$，
+    答案分别是 $EX+EY$ 与 $E(XY)=\mathrm{Cov}+EXEY$，<b>一个积分都不用做</b>。
+    <a href="#eg-s62">强 6.2</a> 是"用掉一半"的版本：先算出 $E(\max)$，再用恒等式白拿 $E(\min)$，<b>省一半工作量</b>。<br>
+    ⚠️ <b>但注意恒等式帮不上的场合</b>：单独问 $E(\max)$（不问 $E(\min)$）时，恒等式只给出一个方程、两个未知数，
+    <b>你仍然得算 $E|X-Y|$</b>——这就是 <a href="#eg-48">基 4.8</a> 躲不掉二重积分的原因。
+    <b>判据：问"两个最值的对称组合"→ 恒等式；问"单个最值"→ 老实算 $E|X-Y|$ 或用 $[F]^n$。</b>
+  </div>
+
+  <div class="key"><span class="tag">必记 · 绝对值函数 $|aX+bY+c|$ 的方差三步法（基础版完全没有）</span>
+    令 $U=aX+bY+c$，则
+    $$EU=aEX+bEY+c,\qquad DU=a^2DX+b^2DY\quad(X,Y\ \text{独立}),$$
+    $$\boxed{D(|U|)=E(U^2)-[E(|U|)]^2=DU+(EU)^2-[E(|U|)]^2}$$
+    其中唯一要动手算的是
+    $$E(|U|)=\int_{-\infty}^{+\infty}|u|f_U(u)\mathrm du\ (\text{连续型})\quad\text{或}\quad\sum_i|u_i|p_i\ (\text{离散型}).$$
+    <b>三步流程</b>：<b>①把 $U$ 降成一维、读出 $EU,DU$；②单独算 $E|U|$（唯一的积分）；③代入方框。</b>
+    <b>关键在于 $E(U^2)=E(|U|^2)$——绝对值平方等于本身平方，所以二阶矩不用重算，只有一阶矩要重算。</b>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · $E|U|$ 这一个积分，全章只有一个模板：$U\sim N(0,\tau^2)$</span>
+    <b>书上说</b>：<a href="#eg-s62">强 6.2</a> 与 <a href="#eg-s65">强 6.5</a> 都要算 $E|Z|$，$Z$ 都是均值为 0 的正态。<br>
+    <b>潜台词是</b>：考研范围内，$E|U|$ 只在 <b>$U\sim N(0,\tau^2)$</b> 这一种情形被考。而这种情形有<b>闭式结论</b>：
+    $$U\sim N(0,\tau^2)\Rightarrow E|U|=\tau\sqrt{\frac2\pi}=\frac{\sqrt2\,\tau}{\sqrt\pi},\qquad D|U|=\tau^2\left(1-\frac2\pi\right).$$
+    验证：强 6.2 中 $\tau^2=2$，$E|Z|=\sqrt2\cdot\sqrt{\frac2\pi}=\frac2{\sqrt\pi}$ ✓；
+    强 6.5 中 $\tau^2=2\sigma^2$，$E|Z|=\sigma\sqrt2\cdot\sqrt{\frac2\pi}=\frac{2\sigma}{\sqrt\pi}$ ✓。<br>
+    <b>所以能考</b>：<b>把这两个式子背下来，两道例题都能秒杀</b>。但<b>卷面上仍要写出积分过程</b>——
+    考研不认"由结论知"，除非是教材里的标准结论（正态的 $E|X|$ 不算）。
+    <b>背它是为了检验和提速，不是为了跳步。</b><br>
+    积分本身也不难：$E|U|=2\int_0^{+\infty}u\cdot\frac1{\sqrt{2\pi}\tau}\mathrm e^{-\frac{u^2}{2\tau^2}}\mathrm du$，
+    <b>被积函数里的 $u$ 恰好是 $\mathrm e^{-u^2/(2\tau^2)}$ 求导后多出来的因子</b>，凑微分一步出原函数——
+    <b>这正是 <a href="#eg-x47">习 4.7</a> 里"$\frac1y$ 与密度的 $y$ 约掉"的同一个机制的反向使用。</b>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 最值有两条路（$[F]^n$ 与恒等式），什么时候走哪条有明确判据</span>
+    <b>书上说</b>：强化第 6 讲的"4. 最值"给了两组工具——①独立同分布时的 $F_{\max}=[F]^n$、$F_{\min}=1-[1-F]^n$；②五个恒等式。<b>并列给出，没说什么时候用哪个。</b><br>
+    <b>潜台词是</b>：两条路各有<u>严格的适用范围</u>，选错就是白费力气：
+    <div style="margin-top:8px" class="gridwrap"><table>
+      <tr><th></th><th>$[F]^n$ 路线</th><th>恒等式路线</th></tr>
+      <tr><td><b>前提</b></td><td>必须<b>独立同分布</b>，$n$ 个也行</td><td>任意两个变量，<b>不要独立、不要同分布</b></td></tr>
+      <tr><td><b>能回答</b></td><td>$\max$ / $\min$ 的<b>分布</b>与<b>任意</b>数字特征</td><td>只能回答 <b>和 / 积 / 差的绝对值</b> 这三种组合</td></tr>
+      <tr><td><b>代价</b></td><td>要求 $f_Z$ 再积分，<b>通常算不动</b></td><td>零代价，<b>两行结束</b></td></tr>
+      <tr><td><b>本章用例</b></td><td><a href="#eg-s610">强 6.10</a>（$n$ 个元件取 $\min$，要密度）</td><td><a href="#eg-x410">习 4.10</a>、<a href="#eg-s62">强 6.2</a>、<a href="#eg-x43">习 4.3</a></td></tr>
+    </table></div>
+    <b>所以能考 —— 判据只有一句</b>：<b>题目要"分布"就走 $[F]^n$，题目要"$E(\max+\min)$ / $E(\max\cdot\min)$ / $E(\max-\min)$"就走恒等式。</b><br>
+    ⚠️ <b>灰色地带</b>：题目要<b>单个</b> $E(\max)$。此时恒等式只给一个方程、两个未知数，<b>必须补上 $E|X-Y|$</b>——
+    <a href="#eg-s62">强 6.2</a> 走的正是"恒等式 + 算一个 $E|X-Y|$"的混合路线，而 <a href="#eg-48">基 4.8</a> 因为 $X,Y$ 不同分布，
+    连 $[F]^n$ 都用不了，只能硬算二重积分。<b>这三道题恰好把三种情况演了一遍，对照着看一遍就分清了。</b>
+  </div>
+
+  <div class="bg"><span class="tag">背景</span>强化版还列了"③用好降维法，令 $Z=X-Y$""④用好标准化，令 $U=\frac{X-\mu}\sigma$"两条。
+    <b>这两条其实不是新方法</b>——降维就是"把二维问题写成一维随机变量"，标准化是第 2 章就在用的老动作。
+    列在这里只是提醒你<b>在最值题里也别忘了它们</b>。<b>不必单独记，做题时自然会用到。</b></div>
+
+  <div class="eg" id="eg-s61"><div class="q"><span class="no">强 6.1</span>设 $X$ 的概率密度为 $f(x)=\begin{cases}a^{-x}\ln a,&x>0,\\0,&\text{其他}\end{cases}\ (a>0)$。对 $X$ 进行独立重复观测，直到第 2 个大于 3 的观测值出现时停止，记 $Y$ 为观测次数，$P\{X>3\}=\frac18$。(1) 求 $a$；(2) 求 $EY$。<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li>(1) 密度里写着 $a^{-x}\ln a$，这是个<b>陌生形状</b>。第一动作是 $D_{23}$：把底数换成 $\mathrm e$。
+            $a^{-x}=\mathrm e^{-x\ln a}$，于是 $f(x)=\ln a\cdot\mathrm e^{-(\ln a)x}$——<b>这就是参数 $\lambda=\ln a$ 的指数分布</b>。
+            认出分布之后，$P\{X>3\}=\mathrm e^{-3\lambda}$ 是现成公式。</li>
+          <li>(2) "直到第 2 个成功出现时停止，记观测次数"——<b>这是负二项（帕斯卡）分布</b>，不是几何分布。
+            分布律要自己推：$\{Y=k\}$ 意味着<b>前 $k-1$ 次恰有 1 次成功，且第 $k$ 次成功</b>，
+            所以 $P\{Y=k\}=C_{k-1}^1p(1-p)^{k-2}\cdot p$。<b>"前面恰好几次成功 + 最后一次必成功"是这类题的固定拆法。</b></li>
+          <li>算 $EY=\sum_{k\ge2}k(k-1)p^2q^{k-2}$ 时又要 $D_{23}$：<b>把 $k(k-1)x^{k-2}$ 认成 $(x^k)''$</b>，
+            于是求和号与二阶导交换，$\sum_{k\ge2}x^k=\frac{x^2}{1-x}$ 求两次导即可。<b>这是高数第 16 章幂级数的标准动作。</b></li>
+          <li><b>自查</b>：负二项分布 $NB(r,p)$ 的均值是 $\frac rp$，本题 $\frac2{1/8}=16$。<b>算完对一下，不对就是级数求导错了。</b></li>
+        </ol>
+      </div>
+      <div class="paper"><div class="phead">✍️ 考场卷面（写完对照）<span class="score">参考 11 分</span></div>
+        <div class="step"><b>解</b>　(1) 当 $x>0$ 时，
+        $$f(x)=a^{-x}\ln a=\ln a\cdot\mathrm e^{-(\ln a)x},$$
+        故 $X$ 服从参数为 $\lambda=\ln a$ 的指数分布，其分布函数 $F(x)=1-\mathrm e^{-(\ln a)x}\ (x\ge0)$。<span class="pt">⛳ 3 分</span></div>
+        <div class="step">由题设
+        $$P\{X>3\}=1-F(3)=\mathrm e^{-3\ln a}=a^{-3}=\frac18,$$
+        解得 $a=2$。<span class="pt">⛳ 2 分</span></div>
+        <div class="step">(2) 记 $p=P\{X>3\}=\dfrac18$。$Y$ 为离散型随机变量，取值 $2,3,\cdots$。事件 $\{Y=k\}$ 表示前 $k-1$ 次观测中恰有 1 次大于 3，且第 $k$ 次大于 3，故
+        $$P\{Y=k\}=C_{k-1}^1p(1-p)^{k-2}\cdot p=(k-1)\left(\frac18\right)^2\left(\frac78\right)^{k-2},\quad k=2,3,\cdots\tag{1}$$
+        <span class="pt">⛳ 3 分</span></div>
+        <div class="step">由 (1) 式，
+        $$EY=\sum_{k=2}^{\infty}k(k-1)\left(\frac18\right)^2\left(\frac78\right)^{k-2}=\frac1{64}\sum_{k=2}^{\infty}k(k-1)x^{k-2}\bigg|_{x=\frac78}
+        =\frac1{64}\left(\sum_{k=2}^{\infty}x^k\right)''\bigg|_{x=\frac78}=\frac1{64}\left(\frac{x^2}{1-x}\right)''\bigg|_{x=\frac78},$$
+        而 $\left(\dfrac{x^2}{1-x}\right)''=\dfrac2{(1-x)^3}$，故
+        $$EY=\frac1{64}\cdot\frac2{\left(1-\frac78\right)^3}=\frac1{64}\cdot\frac2{\frac1{512}}=\frac{1024}{64}=16.$$
+        <span class="pt">⛳ 3 分</span></div>
+        <div class="fin">即 $a=2$，观测次数 $Y$ 的数学期望 $EY=16$。</div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（对照完校对）</span>
+        <b>①</b> <span class="dock">扣分点</span>：(1) 问<b>必须写出"故 $X$ 服从参数为 $\ln a$ 的指数分布"这句认定</b>，
+        再用指数分布的分布函数。直接写 $P\{X>3\}=\int_3^\infty f$ 也对，但那要多算一个积分。<b>认分布是这一问的采分点。</b><br>
+        <b>②</b> <span class="dock">扣分点</span>：(2) 问的分布律<b>必须说明 $\{Y=k\}$ 的含义</b>（"前 $k-1$ 次恰有 1 次…"），
+        直接甩组合数不给推理，按跳步扣。<b>另外别忘写取值范围 $k=2,3,\cdots$（从 2 开始，不是 1）。</b><br>
+        <b>③</b> <b>$\left(\dfrac{x^2}{1-x}\right)''=\dfrac2{(1-x)^3}$ 建议在草稿上验一遍</b>：
+        $\frac{x^2}{1-x}=\frac{x^2-1+1}{1-x}=-(x+1)+\frac1{1-x}$，求两次导：一次得 $-1+\frac1{(1-x)^2}$，
+        再一次得 $\frac2{(1-x)^3}$。<b>先做多项式除法再求导，比直接用商法则快得多，也不容易错。</b><br>
+        <b>④</b> <b>提速与自查</b>：负二项 $NB(r,p)$ 的 $EY=\frac rp$、$DY=\frac{r(1-p)}{p^2}$。
+        本题 $EY=\frac2{1/8}=16$，<b>一秒验完</b>。考场上先用它确认答案，再决定级数那一大段要不要重算。<br>
+        <b>⑤</b> <b>与几何分布的区别</b>：$r=1$ 时负二项退化成几何分布 $EY=\frac1p$。
+        <b>题目里的"第 2 个"就是 $r=2$</b>——<b>看到"第 $r$ 个…出现时停止"，一律是负二项。</b><br>
+        <b>⑥</b> <b>程序复核</b>：sympy 对 $\sum_{k\ge2}k(k-1)p^2q^{k-2}$ 直接求和得 16，且 $\sum_{k\ge2}(k-1)p^2q^{k-2}=1$（分布律归一）✓；
+        蒙特卡洛 $10^6$ 次负二项抽样得 $15.994$ ✓。</div>
+    </div></div>
+
+  <div class="eg" id="eg-s62"><div class="q"><span class="no">强 6.2</span>设 $X,Y$ 独立同分布于 $N(0,1)$，求 $E(\max\{X,Y\})$ 和 $E(\min\{X,Y\})$。<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li>正面走"求 $\max$ 的分布再积分"：$F_{\max}=[\Phi(z)]^2$，$f_{\max}=2\Phi(z)\varphi(z)$，
+            $E=\int z\cdot2\Phi(z)\varphi(z)\mathrm dz$——<b>这个积分要分部积分，能做但慢</b>。先别走这条。</li>
+          <li>换恒等式：$\max=\frac{X+Y+|X-Y|}2$。取期望后 $EX=EY=0$ 全消，<b>只剩 $\frac12E|X-Y|$</b>。
+            <b>二维问题被降成"一个一维随机变量的绝对值期望"。</b></li>
+          <li>降维：令 $Z=X-Y$。$X,Y$ 独立正态 ⟹ $Z\sim N(0-0,\ 1+1)=N(0,2)$。
+            <b>注意方差是相加（$D(-Y)=DY$），这是最容易写成 $N(0,0)$ 的地方。</b></li>
+          <li>算 $E|Z|$：被积函数 $|z|\mathrm e^{-z^2/4}$，利用对称性折成 $2\int_0^\infty$，<b>$z\mathrm e^{-z^2/4}$ 可以凑微分</b>，一步出原函数。</li>
+          <li>第二问<b>绝对不要重算</b>：用 $\max+\min=X+Y$ 得 $E(\min)=EX+EY-E(\max)=-E(\max)$。<b>这是本题的送分点。</b></li>
+        </ol>
+      </div>
+      <div class="paper"><div class="phead">✍️ 考场卷面（写完对照）<span class="score">参考 10 分</span></div>
+        <div class="step"><b>解</b>　由 $X,Y$ 相互独立且同服从 $N(0,1)$，得 $X-Y\sim N(0,2)$。<span class="pt">⛳ 2 分</span></div>
+        <div class="step">由恒等式 $\max\{X,Y\}=\dfrac{X+Y+|X-Y|}2$ 及 $EX=EY=0$，
+        $$E(\max\{X,Y\})=\frac{EX+EY+E(|X-Y|)}2=\frac{E(|X-Y|)}2.\tag{1}$$
+        <span class="pt">⛳ 2 分</span></div>
+        <div class="step">令 $Z=X-Y$，则 $Z\sim N(0,2)$，其概率密度为 $\dfrac1{\sqrt{2\pi}\cdot\sqrt2}\mathrm e^{-\frac{z^2}4}$，故
+        $$E(|Z|)=\int_{-\infty}^{+\infty}|z|\cdot\frac1{\sqrt{2\pi}\cdot\sqrt2}\mathrm e^{-\frac{z^2}4}\mathrm dz
+        =\frac2{\sqrt{2\pi}\cdot\sqrt2}\int_0^{+\infty}z\mathrm e^{-\frac{z^2}4}\mathrm dz
+        =\frac2{2\sqrt\pi}\left(-2\mathrm e^{-\frac{z^2}4}\right)\bigg|_0^{+\infty}=\frac2{\sqrt\pi}.$$
+        <span class="pt">⛳ 3 分</span></div>
+        <div class="step">代入 (1) 式得 $E(\max\{X,Y\})=\dfrac12\cdot\dfrac2{\sqrt\pi}=\dfrac1{\sqrt\pi}$。<span class="pt">⛳ 1 分</span></div>
+        <div class="step">又由 $\max\{X,Y\}+\min\{X,Y\}=X+Y$ 得
+        $$E(\min\{X,Y\})=EX+EY-E(\max\{X,Y\})=0+0-\frac1{\sqrt\pi}=-\frac1{\sqrt\pi}.$$
+        <span class="pt">⛳ 2 分</span></div>
+        <div class="fin">即 $E(\max\{X,Y\})=\dfrac1{\sqrt\pi}$，$E(\min\{X,Y\})=-\dfrac1{\sqrt\pi}$。</div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（对照完校对）</span>
+        <b>①</b> <span class="dock">扣分点</span>：<b>"$X-Y\sim N(0,2)$"必须写出来并说明依据</b>（独立正态的线性组合仍正态，方差 $1+1=2$）。
+        这是第 3 章的结论，本章直接引用，但不能省略。<br>
+        <b>②</b> <b>常数系数别写错</b>：$\frac1{\sqrt{2\pi}\cdot\sqrt2}=\frac1{2\sqrt\pi}$（因为 $\sqrt{2\pi}\cdot\sqrt2=2\sqrt\pi$）。
+        折成 $2\int_0^\infty$ 后系数是 $\frac2{2\sqrt\pi}=\frac1{\sqrt\pi}$。<b>这里少乘或多乘一个 2 是本题最高频的算错点。</b><br>
+        <b>③</b> <b>凑微分</b>：$\mathrm d\left(\mathrm e^{-z^2/4}\right)=-\frac z2\mathrm e^{-z^2/4}\mathrm dz$，
+        所以 $\int z\mathrm e^{-z^2/4}\mathrm dz=-2\mathrm e^{-z^2/4}$。<b>不要换元，直接看出来。</b><br>
+        <b>④</b> <span class="dock">扣分点</span>：第二问<b>必须写出"由 $\max+\min=X+Y$"这句依据</b>。
+        直接写 $-\frac1{\sqrt\pi}$ 而不说理由，会被当成"猜对称性"。<b>书上注专门把这条路径写了一遍，就是在强调它是正规解法而非取巧。</b><br>
+        <b>⑤</b> <b>结论级公式（可当自查）</b>：$X,Y$ 独立同 $N(\mu,\sigma^2)$ 时
+        $$E(\max)=\mu+\frac\sigma{\sqrt\pi},\qquad E(\min)=\mu-\frac\sigma{\sqrt\pi}.$$
+        本题 $\mu=0,\sigma=1$ 直接给出 $\pm\frac1{\sqrt\pi}\approx\pm0.5642$。<br>
+        <b>⑥</b> <b>程序复核</b>：$10^7$ 对独立标准正态，$E(\max)=0.564551$、$E(\min)=-0.564090$，
+        理论 $\pm\frac1{\sqrt\pi}=\pm0.564190$，$|\Delta|\le3.6\times10^{-4}$ ✓。</div>
+    </div></div>
+
+  <div class="eg" id="eg-s63"><div class="q"><span class="no">强 6.3</span>设 $X$ 服从参数为 $\lambda$ 的指数分布，$Y=[X]$，$Z=\{X\}$ 分别是 $X$ 的整数部分和小数部分，求 $EY$ 和 $EZ$。<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li>$Z=\{X\}$ 的分布很难求（要把 $[0,\infty)$ 上的密度按整数段折叠回 $[0,1)$ 并求和）。
+            <b>看到"难求的那个"和"好求的那个"同时出现，就该想到分解法。</b></li>
+          <li>关键恒等式：<b>$X=[X]+\{X\}$，即 $X=Y+Z$</b>。取期望得 $EX=EY+EZ$，
+            于是 <b>$EZ=EX-EY$</b>——把难题换成两道易题。<b>注意 $Y$ 与 $Z$ 并不独立，但期望的线性性不需要独立。</b></li>
+          <li>$EX=\frac1\lambda$ 是现成的。剩下只需 $EY$。</li>
+          <li>$Y=[X]$ 的分布：$P\{Y=k\}=P\{k\le X\lt k+1\}=\mathrm e^{-\lambda k}-\mathrm e^{-\lambda(k+1)}=(\mathrm e^{-\lambda})^k(1-\mathrm e^{-\lambda})$，
+            <b>这是几何分布的形状</b>（书上引例 3.3：$Y+1\sim G(1-\mathrm e^{-\lambda})$）。于是 $E(Y+1)=\frac1{1-\mathrm e^{-\lambda}}$。</li>
+          <li><b>指数分布的"无记忆性"在这里现形</b>：把时间轴按整数切段，每段"是否已经结束"是独立同分布的判定，所以整数部分服从几何分布。<b>这是本题真正的数学内容。</b></li>
+        </ol>
+      </div>
+      <div class="paper"><div class="phead">✍️ 考场卷面（写完对照）<span class="score">参考 10 分</span></div>
+        <div class="step"><b>解</b>　由例 3.3 知，$Y+1=[X]+1$ 服从参数为 $p=1-\mathrm e^{-\lambda}$ 的几何分布。<span class="pt">⛳ 3 分</span></div>
+        <div class="step">故
+        $$E(Y+1)=\frac1p=\frac1{1-\mathrm e^{-\lambda}},\qquad EY=\frac1{1-\mathrm e^{-\lambda}}-1=\frac{\mathrm e^{-\lambda}}{1-\mathrm e^{-\lambda}}=\frac1{\mathrm e^{\lambda}-1}.\tag{1}$$
+        <span class="pt">⛳ 3 分</span></div>
+        <div class="step">由题意，$X$ 的整数部分与小数部分之和为 $X$ 本身，即
+        $$X=Y+Z,$$
+        由数学期望的线性性（<b>不需要 $Y$ 与 $Z$ 相互独立</b>）得 $EX=EY+EZ$。<span class="pt">⛳ 2 分</span></div>
+        <div class="step">又 $X\sim E(\lambda)$ 知 $EX=\dfrac1\lambda$，故由 (1) 式
+        $$EZ=EX-EY=\frac1\lambda-\frac1{\mathrm e^{\lambda}-1}=\frac{\mathrm e^{\lambda}-1-\lambda}{\lambda(\mathrm e^{\lambda}-1)}.$$
+        <span class="pt">⛳ 2 分</span></div>
+        <div class="fin">即 $X$ 的整数部分的数学期望 $EY=\dfrac1{\mathrm e^{\lambda}-1}$，小数部分的数学期望 $EZ=\dfrac{\mathrm e^{\lambda}-1-\lambda}{\lambda(\mathrm e^{\lambda}-1)}$。</div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（对照完校对）</span>
+        <b>①</b> <b>书上注点破了本题的价值</b>：「由 $EX=EY+EZ$，<b>巧妙地回避了求 $Z$ 的分布的难题</b>，
+        而 $Y,Z$ 满足上式也<b>并无独立性要求</b>。」——<b>这两句话就是"分解法"的全部要义</b>，
+        卷面上写"由数学期望的线性性"时，心里想的应该是这两句。<br>
+        <b>②</b> <span class="dock">扣分点</span>：如果考场上不记得"例 3.3"，<b>要自己把 $Y$ 的分布律推出来</b>：
+        $$P\{Y=k\}=P\{k\le X\lt k+1\}=\mathrm e^{-\lambda k}-\mathrm e^{-\lambda(k+1)}=(1-\mathrm e^{-\lambda})(\mathrm e^{-\lambda})^k,\ k=0,1,2,\cdots$$
+        对照几何分布 $P\{W=k\}=(1-p)^{k-1}p\ (k\ge1)$，令 $W=Y+1$、$p=1-\mathrm e^{-\lambda}$ 即吻合。
+        <b>推导只有两行，比赌自己记得例题编号可靠。</b><br>
+        <b>③</b> <b>自查（极限检验）</b>：$\lambda\to0^+$ 时 $EY\approx\frac1\lambda-\frac12\to\infty$（指数分布均值极大，整数部分也极大），
+        $EZ\to\frac12$（小数部分趋于 $U(0,1)$，均值 $\frac12$）。<b>把 $\lambda\to0$ 代进答案验一遍，是这道题最好的检查手段。</b>
+        实测：$\lambda=0.7$ 时 $EZ$ 的解析值 $0.442138$。<br>
+        <b>④</b> <b>程序复核</b>：$\lambda=0.7$，$10^7$ 个指数样本取 floor 与小数部分：
+        $EY=0.986276$（解析 $\frac1{\mathrm e^{0.7}-1}=0.986434$）、$EZ=0.442141$（解析 $0.442138$），$|\Delta|\le1.6\times10^{-4}$ ✓。<br>
+        <b>⑤</b> <b>这个套路的推广</b>：凡是"$A=B+C$，$B$ 好求 $C$ 难求"，一律用 $EC=EA-EB$。
+        真题里还出现过 $X=X^++X^-$（正部负部）、$X=\bar X+(X-\bar X)$ 等，<b>同一个动作</b>。</div>
+    </div></div>
+
+  <div class="mine"><span class="tag">补讲 · 分解法的完全体：把随机变量拆成一串"0–1 指示器"</span>
+    <b>书上说</b>：「5. 分解：若 $X=X_1+\cdots+X_n$，则 $EX=EX_1+\cdots+EX_n$」，例子是 <a href="#eg-s63">强 6.3</a> 的 $X=Y+Z$。<br>
+    <b>潜台词是</b>：书上的例子只拆成两项，但这条性质的<b>真正威力在于拆成 $n$ 个 0–1 变量</b>。
+    做法是：对每个"可能发生的小事件"设一个指示器
+    $$X_i=\begin{cases}1,&\text{第 }i\text{ 件事发生},\\0,&\text{否则},\end{cases}\qquad EX_i=P\{\text{第 }i\text{ 件事发生}\},$$
+    则"总数"$X=\sum X_i$，于是 <b>$EX=\sum P_i$</b>——<b>把"求一个复杂计数量的期望"化成"求 $n$ 个简单概率"。</b><br>
+    <b>所以能考</b>：<b>$B(n,p)$ 的 $EX=np$ 就是这么来的</b>（$n$ 个 0–1 相加）。真题里的典型形态：<br>
+    　"$n$ 封信随机装 $n$ 个信封，求装对的封数的期望"——设 $X_i=\mathbf 1\{$第 $i$ 封装对$\}$，$EX_i=\frac1n$，故 $EX=n\cdot\frac1n=1$（<b>与 $n$ 无关！</b>）；<br>
+    　"$n$ 个球随机放 $m$ 个盒，求空盒数的期望"——设 $X_j=\mathbf 1\{$第 $j$ 盒为空$\}$，$EX_j=\left(1-\frac1m\right)^n$，故 $EX=m\left(1-\frac1m\right)^n$。<br>
+    <b>★ 这两题若去求分布，几乎不可做；用指示器，两行结束。</b>
+    <b>诀窍在于：$X_i$ 之间通常<u>并不独立</u>（装对第 1 封会影响第 2 封），但期望的线性性根本不在乎。</b>
+    <b>这就是书上那句"并无独立性要求"最厉害的用处。</b>
+  </div>
+
+  <div class="link"><span class="tag">串联 · 指示器分解法 = 408 里算法平均复杂度的标准武器</span>
+    上面那个"设指示器再求和"的手法，在算法分析里叫<b>指示器随机变量法（indicator random variable）</b>，
+    是《算法导论》里推导平均复杂度的<b>主力工具</b>：<br>
+    <b>→ 快速排序的平均比较次数</b> $O(n\log n)$：设 $X_{ij}=\mathbf 1\{$第 $i$ 小与第 $j$ 小元素被比较过$\}$，
+    算出 $EX_{ij}=\frac2{j-i+1}$，再求和得 $2n\ln n$。<b>整个证明就是本章的 $E\left(\sum X_i\right)=\sum EX_i$。</b><br>
+    <b>→ 散列表的平均查找长度</b>：设 $X_i=\mathbf 1\{$关键字 $i$ 与待查关键字冲突$\}$，$EX_i=\frac1m$，
+    平均探测次数 $=1+\frac{n}m=1+\alpha$（装填因子）——<b>408 数据结构里那个 $1+\frac\alpha2$ 的公式就是这么推的。</b><br>
+    <b>→ 随机化算法的期望运行时间</b>、<b>Bloom filter 的期望误判率</b>、<b>页面置换的期望缺页数</b>：同一套。<br>
+    <b>所以本章的"分解法"不是概率论的小技巧，而是你在 408 里天天要用的东西。</b>
+    <b>👉 与之配套的是 <a href="#s0">§0</a> 提到的"408 里凡出现'平均'两个字，写的都是 $EX=\sum x_ip_i$"。</b>
+  </div>
+
+  <div class="eg" id="eg-s64"><div class="q"><span class="no">强 6.4</span>设 $X$ 的概率分布为 $P\{X=k\}=\dfrac1{2^k},\ k=1,2,3,\cdots$。$Y$ 表示 $X$ 被 3 除的余数，则 $DY=$ ____。<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s"><span class="lab">答案</span><span class="ans">$DY=\dfrac{20}{49}$</span><br>
+      <span class="lab">分析</span>由例 3.1 知 $Y\sim\begin{pmatrix}0&1&2\\ \frac17&\frac47&\frac27\end{pmatrix}$，于是
+      $$EY=0\times\frac17+1\times\frac47+2\times\frac27=\frac87,\qquad E(Y^2)=1^2\times\frac47+2^2\times\frac27=\frac{12}7,$$
+      $$DY=\frac{12}7-\left(\frac87\right)^2=\frac{84-64}{49}=\frac{20}{49}.$$
+      <span class="lab">自己推 $Y$ 的分布律（别赌记得例 3.1）</span>按余数分三类等比求和，公比都是 $\frac18$：
+      $$P\{Y=0\}=\sum_{m=1}^{\infty}\frac1{2^{3m}}=\frac{1/8}{1-1/8}=\frac17,\quad
+      P\{Y=1\}=\sum_{m=0}^{\infty}\frac1{2^{3m+1}}=\frac{1/2}{7/8}=\frac47,\quad
+      P\{Y=2\}=\frac{1/4}{7/8}=\frac27.$$
+      <b>校验：$\frac17+\frac47+\frac27=1$ ✓。</b><br>
+      <span class="lab">要害</span>本题的全部动作是 <b>$D_{23}$：把"被 3 除的余数"翻译成"下标模 3 分类"，每一类都是公比 $\frac18$ 的等比级数</b>。
+      三个和只有<b>首项不同</b>（$\frac18,\frac12,\frac14$），分母一律是 $1-\frac18=\frac78$——<b>算一次分母，三个答案一起出</b>。<br>
+      <span class="lab">串联</span>这个 $X$ 就是 $p=\frac12$ 的<b>几何分布</b>。而"几何分布模 $m$ 的余数"是一类固定题型：
+      分类求和后概率恒为 $\dfrac{(1-p)^{r-1}p}{1-(1-p)^m}$ 的形状（$r$ 为余数对应的首个取值）。
+      <b>记住"三类只差首项"这个结构，比记结果有用。</b></div></div>
+
+  <div class="eg" id="eg-s65"><div class="q"><span class="no">强 6.5</span>设 $X_1,X_2$ 为来自总体 $N(\mu,\sigma^2)$ 的简单随机样本，$\sigma>0$ 未知。记 $\hat\sigma=a|X_1-X_2|\ (a>0)$，若 $D\hat\sigma=\sigma^2$，则 $a=$ ____。<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s"><span class="lab">答案</span><span class="ans">$a=\sqrt{\dfrac\pi{2\pi-4}}$</span><br>
+      <span class="lab">三步法（绝对值方差的标准流程）</span>
+      <b>第一步：降维。</b>令 $Z=X_1-X_2$。样本相互独立同 $N(\mu,\sigma^2)$，故
+      $$EZ=\mu-\mu=0,\qquad DZ=\sigma^2+\sigma^2=2\sigma^2,\qquad Z\sim N(0,2\sigma^2).$$
+      <b>第二步：算 $E|Z|$（唯一的积分）。</b>
+      $$E(|Z|)=\int_{-\infty}^{+\infty}|z|\cdot\frac1{\sqrt{2\pi}\cdot\sqrt2\sigma}\mathrm e^{-\frac{z^2}{4\sigma^2}}\mathrm dz
+      =2\int_0^{+\infty}\frac z{2\sqrt\pi\sigma}\mathrm e^{-\frac{z^2}{4\sigma^2}}\mathrm dz
+      =-\frac{2\sigma}{\sqrt\pi}\mathrm e^{-\frac{z^2}{4\sigma^2}}\bigg|_0^{+\infty}=\frac{2\sigma}{\sqrt\pi}.$$
+      <b>第三步：代入方框。</b>
+      $$D(|Z|)=DZ+(EZ)^2-[E(|Z|)]^2=2\sigma^2+0-\frac{4\sigma^2}\pi=2\sigma^2\left(1-\frac2\pi\right).$$
+      由 $D\hat\sigma=a^2D(|Z|)=\sigma^2$ 得
+      $$a^2\cdot2\sigma^2\left(1-\frac2\pi\right)=\sigma^2\Rightarrow a=\sqrt{\frac1{2-\frac4\pi}}=\sqrt{\frac\pi{2\pi-4}}.$$
+      <span class="lab">要害</span><b>$D(|Z|)\ne DZ$！</b> 这是本题唯一的思想门槛。
+      很多人会想"绝对值只是把负的翻正，方差应该不变"——<b>错得离谱</b>：翻正之后分布从对称的钟形变成了半边的折叠形，
+      期望从 0 变成了 $\frac{2\sigma}{\sqrt\pi}>0$，<b>方差反而变小了</b>（$2\sigma^2\to2\sigma^2(1-\frac2\pi)\approx0.727\times2\sigma^2$）。<br>
+      <b>为什么变小？</b>因为 $D(|Z|)=E(Z^2)-[E|Z|]^2$ 而 $DZ=E(Z^2)-[EZ]^2=E(Z^2)$，
+      两者只差 $[E|Z|]^2>0$ 这一项——<b>取绝对值不改变二阶矩，只把一阶矩从 0 抬起来，于是方差被减掉一块。</b><br>
+      <span class="lab">数值感</span>$a=\sqrt{\frac\pi{2\pi-4}}=\sqrt{\frac{3.1416}{2.2832}}\approx1.173$。
+      顺带一提：这个 $\hat\sigma$ 是 $\sigma$ 的一个估计量，$a$ 的取法使它<b>方差恰好等于 $\sigma^2$</b>（不是无偏！题目要求的是 $D\hat\sigma=\sigma^2$）。
+      <b>若要无偏（$E\hat\sigma=\sigma$），则 $a=\frac{\sqrt\pi}2\approx0.886$，两者不同，读题要看清要求的是期望还是方差。</b><br>
+      <span class="lab">程序复核</span>$\sigma=1.4$，$10^7$ 对样本，$D\left(a|X_1-X_2|\right)=1.959984$，$\sigma^2=1.96$，$|\Delta|=1.6\times10^{-5}$ ✓。</div></div>
+
+  <div class="eg" id="eg-x49"><div class="q"><span class="no">习 4.9</span>设 $X$ 的概率密度为 $f(x)=\dfrac1{\pi(1+x^2)}\ (-\infty\lt x\lt+\infty)$，则 $E(\min\{|X|,1\})=$ ____。<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s"><span class="lab">答案</span><span class="ans">$\dfrac1\pi\ln2+\dfrac12$</span><br>
+      <span class="lab">分析</span>$f$ 是偶函数，$\min\{|x|,1\}$ 也是偶函数，故可折半：
+      $$E(\min\{|X|,1\})=\int_{-\infty}^{+\infty}\min\{|x|,1\}f(x)\mathrm dx=2\int_0^{+\infty}\min\{x,1\}f(x)\mathrm dx.$$
+      在 $[0,1]$ 上 $\min\{x,1\}=x$，在 $[1,+\infty)$ 上 $\min\{x,1\}=1$，<b>按这个折点分段</b>：
+      $$=2\left[\int_0^1 xf(x)\mathrm dx+\int_1^{+\infty}f(x)\mathrm dx\right]=\frac2\pi\left[\int_0^1\frac x{1+x^2}\mathrm dx+\int_1^{+\infty}\frac{\mathrm dx}{1+x^2}\right]$$
+      $$=\frac2\pi\left[\frac12\ln(1+x^2)\Big|_0^1+\arctan x\Big|_1^{+\infty}\right]=\frac2\pi\left[\frac{\ln2}2+\left(\frac\pi2-\frac\pi4\right)\right]=\frac{\ln2}\pi+\frac12.$$
+      <span class="lab">要害 ★ 与 <a href="#eg-43">基 4.3</a> 的对照，是本章最有教育意义的一对</span>
+      <b>同一个柯西分布，$EX$ 不存在，但 $E(\min\{|X|,1\})$ 却存在且有限。</b>为什么？
+      因为 $\min\{|X|,1\}\le1$ 是<b>有界</b>的随机变量——<b>有界随机变量的期望必然存在</b>。
+      柯西分布期望不存在的病根在"尾巴太重"，而<b>取 $\min$ 相当于把尾巴齐根截断</b>，病根就消失了。<br>
+      <b>这条经验推广开来</b>：$E[g(X)]$ 是否存在，<b>取决于 $g$ 在尾部的增长速度与密度衰减速度的赛跑</b>，
+      与 $EX$ 本身存在与否<u>没有必然关系</u>。<b>看到"重尾分布 + 有界函数"，直接放心算。</b><br>
+      <span class="lab">易错</span>折半时<b>系数 2 要一路带到底</b>。第二块 $2\int_1^\infty f=2\times\frac14=\frac12$——
+      注意 $\int_1^{+\infty}\frac{\mathrm dx}{\pi(1+x^2)}=\frac1\pi\left(\frac\pi2-\frac\pi4\right)=\frac14$，<b>它是"柯西分布落在 $[1,+\infty)$ 的概率"，正好 $\frac14$</b>，可心算。<br>
+      <span class="lab">程序复核</span>$10^7$ 个标准柯西样本，$E(\min\{|X|,1\})=0.720725$，解析值 $\frac{\ln2}\pi+\frac12=0.720636$，$|\Delta|=9.0\times10^{-5}$ ✓。</div></div>
+
+  <div class="eg" id="eg-x410"><div class="q"><span class="no">习 4.10</span>已知 $(X,Y)\sim N(0,0;1,1;0.5)$，$U=\max\{X,Y\}$，$V=\min\{X,Y\}$，则 $E(U+V)=$ ____，$E(UV)=$ ____。<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s"><span class="lab">答案</span><span class="ans">$E(U+V)=0$；$E(UV)=0.5$</span><br>
+      <span class="lab">分析（本章最漂亮的一题，两个恒等式各用一次）</span>由
+      $$U=\max\{X,Y\}=\frac{(X+Y)+|X-Y|}2,\qquad V=\min\{X,Y\}=\frac{(X+Y)-|X-Y|}2,$$
+      直接得 <b>$U+V=X+Y$</b> 与 <b>$UV=XY$</b>（后者由平方差公式：$UV=\frac{(X+Y)^2-(X-Y)^2}4=XY$）。于是
+      $$E(U+V)=EX+EY=0+0=0,$$
+      $$E(UV)=E(XY)=\mathrm{Cov}(X,Y)+EX\cdot EY=\rho\sigma_1\sigma_2+0=0.5\times1\times1=0.5.$$
+      <span class="lab">要害 ★★</span><b>整题没有出现一次积分，也没有求过 $U$ 或 $V$ 的分布。</b>
+      $\max$ 与 $\min$ 的分布是出了名的难写（$[F]^2$ 里套着二维正态的 $\Phi$），而<b>它们的和与积却是 $X,Y$ 的初等表达式</b>。
+      <b>这就是恒等式的全部价值：绕开分布，直取数字特征。</b><br>
+      <span class="lab">$UV=XY$ 的验证（值得亲手推一遍）</span>无论 $X\ge Y$ 还是 $X\lt Y$，$\{U,V\}$ 作为集合都等于 $\{X,Y\}$，
+      <b>所以它们的乘积当然相等</b>——这比用平方差公式更直观。同理 $U+V=X+Y$。
+      <b>"$\max$ 与 $\min$ 只是把两个数重新排序，不改变它们的和与积"</b>，一句话记住两个恒等式。<br>
+      <span class="lab">题目给 $\rho=0.5$ 的用处</span>只用在最后一步的 $\mathrm{Cov}=\rho\sigma_1\sigma_2$ 上。
+      <b>若题目改问 $E(U)$ 单独一个，就必须算 $E|X-Y|$</b>：$X-Y\sim N(0,\ 1+1-2\times0.5)=N(0,1)$，
+      $E|X-Y|=\sqrt{\frac2\pi}$，于是 $EU=\frac12\sqrt{\frac2\pi}\approx0.3989$，$EV=-0.3989$。<b>这是本题最自然的变形，顺手算一下。</b><br>
+      <span class="lab">程序复核</span>$10^7$ 个 $\rho=0.5$ 的二维正态样本：$E(U+V)=7.1\times10^{-4}\approx0$，$E(UV)=0.499897$ ✓。</div></div>
+
+  <!-- ================= s8 ================= -->
+  <h2 id="s8"><span class="idx">捌</span>综合题：一道向前串到第 2 章、一道向后串到第 6 章　<span class="layer L-base">基础</span><span class="layer L-str">强化</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/概率论与数理统计/04_随机变量的数字特征/概率_第04章_基础30讲.pdf">📄 基础30讲 p.115</a>
+  <a class="pg" href="../../张宇系列_分章易识别版/概率论与数理统计/04_随机变量的数字特征/概率_第04章_强化9讲_第6讲_数字特征.pdf">📄 强化9讲第6讲 p.55</a>
+
+  <div class="mine"><span class="tag">补讲 · 这两道综合题是本章唯一的"完整战场"，值得比选择填空多花三倍时间</span>
+    <b>书上说</b>：两道题都放在"综合题举例"标题下，一道来自基础版、一道来自强化版。<br>
+    <b>潜台词是</b>：本章的选择填空<b>每题只考一个动作</b>（认分布、拆双线性、套切比雪夫），
+    而这两道大题<b>把整条链走完</b>：建模 → 求分布 → 求数字特征 → 得出结论。<b>这才是解答题的真实形态。</b><br>
+    <b>两题的"跨度"正好相反</b>：<br>
+    　<a href="#eg-412">基 4.12</a> <b>向前跨</b>：$\min$（第 3 章）+ 单调变换求密度（第 2 章）+ $E[g(X)]$（本章）——
+    <b>检验的是"前三章还在不在手上"</b>；<br>
+    　<a href="#eg-s610">强 6.10</a> <b>向后跨</b>：$\min$ 的分布（第 3 章）+ 无偏性与 $D\hat\theta$（本章 + 第 6 章）+ 最大似然（第 6 章）——
+    <b>检验的是"数字特征在统计里怎么用"</b>。<br>
+    <b>所以能考</b>：真题的概率解答题（每年 1 道，11–12 分）几乎全是这个形态。
+    <b>建议把这两题当模板反复默写，尤其是"设 $V\sim U(0,2)$"和"设 $T_i$ 为第 $i$ 个元件的寿命"这两句开场——
+    应用题的第一分永远给"设变量"。</b>
+  </div>
+
+  <div class="eg" id="eg-412"><div class="q"><span class="no">基 4.12</span>在区间 $(0,2)$ 上随机取一点，将该区间分成两段，较短一段的长度记为 $X$，较长一段的长度记为 $Y$，令 $Z=\dfrac YX$。<br>(1) 求 $X$ 的概率密度；(2) 求 $Z$ 的概率密度；(3) 求 $E\left(\dfrac XY\right)$。<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>先建模</b>：题干说"随机取一点"，必须自己引入变量——设取点坐标 $V\sim U(0,2)$。
+            两段长度是 $V$ 与 $2-V$，于是 <b>$X=\min\{V,2-V\}$、$Y=\max\{V,2-V\}=2-X$</b>。
+            <b>这一步"设 $V$"是本题的第一个采分点，不设变量后面无从下手。</b></li>
+          <li>(1) 求 $X$ 的密度。$X$ 是 $\min$，走"<b>先求分布函数再求导</b>"：
+            $P\{X\le x\}=1-P\{\min>x\}=1-P\{x\lt V\lt 2-x\}$，右边是均匀分布的区间长度比，<b>一行算完</b>。
+            先判断范围：$X\in[0,1]$（较短的一段最多是一半），<b>先说 $P\{0\le X\le1\}=1$ 能省掉两段讨论</b>。</li>
+          <li>(2) 求 $Z=\frac YX=\frac{2-X}X$ 的密度。这是<b>一元函数的单调变换</b>，走第 2 章的<b>公式法</b>：
+            $z=\frac{2-x}x$ 在 $(0,1)$ 上<b>严格单调递减</b>且可导，反函数 $x=\frac2{1+z}$，
+            $f_Z(z)=f_X(x(z))\left|\frac{\mathrm dx}{\mathrm dz}\right|$。<b>注意确定 $z$ 的取值范围：$x\in(0,1)\Rightarrow z>1$。</b></li>
+          <li>(3) 问 $E\left(\frac XY\right)$，注意<b>不是 $EZ$ 而是 $E\left(\frac1Z\right)$</b>。
+            <b>此时千万别去求 $\frac1Z$ 的分布</b>——用 $E[g(X)]$ 公式，$\frac XY=\frac X{2-X}$ 是 $X$ 的函数，$X\sim U(0,1)$，一个定积分搞定。</li>
+          <li><b>⚠️ 顺带警惕</b>：$EZ=E\left(\frac YX\right)$ <u>不存在</u>（$\int_1^\infty z\cdot\frac2{(1+z)^2}\mathrm dz$ 发散）。
+            <b>题目只问 $E\left(\frac XY\right)$ 是刻意的</b>——把两问看反，你会做一道无解的题。</li>
+        </ol>
+      </div>
+      <div class="paper"><div class="phead">✍️ 考场卷面（写完对照）<span class="score">参考 12 分</span></div>
+        <div class="step"><b>解</b>　(1) 设随机取的点的坐标为 $V$，则 $V\sim U(0,2)$，且
+        $$X=\min\{V,\ 2-V\},\qquad Y=2-X.\tag{1}$$
+        记 $X$ 的分布函数为 $F_X(x)$。由 (1) 式知 $P\{0\le X\le1\}=1$，故当 $x\lt0$ 时 $F_X(x)=0$；当 $x\ge1$ 时 $F_X(x)=1$。<span class="pt">⛳ 2 分</span></div>
+        <div class="step">当 $0\le x\lt1$ 时，
+        $$F_X(x)=P\{X\le x\}=1-P\{\min\{V,2-V\}>x\}=1-P\{x\lt V\lt 2-x\}=1-\frac{(2-x)-x}2=x.$$
+        所以
+        $$F_X(x)=\begin{cases}0,&x\lt0,\\ x,&0\le x\lt1,\\ 1,&x\ge1,\end{cases}
+        \qquad\text{故}\qquad f_X(x)=F_X'(x)=\begin{cases}1,&0\lt x\lt1,\\ 0,&\text{其他},\end{cases}$$
+        即 $X\sim U(0,1)$。<span class="pt">⛳ 3 分</span></div>
+        <div class="step">(2) 由 (1) 式，$Z=\dfrac YX=\dfrac{2-X}X$。函数 $z=\dfrac{2-x}x$ 在 $(0,1)$ 内严格单调且可导，
+        其值域为 $(1,+\infty)$，反函数为 $x=\dfrac2{1+z}$，且 $\dfrac{\mathrm dx}{\mathrm dz}=-\dfrac2{(1+z)^2}$。<span class="pt">⛳ 2 分</span></div>
+        <div class="step">由一元函数变换的密度公式，
+        $$f_Z(z)=\begin{cases}f_X\left(\dfrac2{1+z}\right)\left|-\dfrac2{(1+z)^2}\right|,&z>1,\\[6pt] 0,&\text{其他}\end{cases}
+        =\begin{cases}\dfrac2{(1+z)^2},&z>1,\\[6pt] 0,&\text{其他}.\end{cases}$$
+        <span class="pt">⛳ 3 分</span></div>
+        <div class="step">(3) 由 (1) 式 $\dfrac XY=\dfrac X{2-X}$，它是 $X$ 的函数，由 $X\sim U(0,1)$ 及 $E[g(X)]=\int g(x)f_X(x)\mathrm dx$，
+        $$E\left(\frac XY\right)=E\left(\frac X{2-X}\right)=\int_0^1\frac x{2-x}\mathrm dx=\int_0^1\left(\frac2{2-x}-1\right)\mathrm dx=\left[-2\ln(2-x)-x\right]_0^1=2\ln2-1.$$
+        <span class="pt">⛳ 2 分</span></div>
+        <div class="fin">即 $X$ 的概率密度为 $f_X(x)=1\ (0\lt x\lt1)$，$Z$ 的概率密度为 $f_Z(z)=\dfrac2{(1+z)^2}\ (z>1)$，且 $E\left(\dfrac XY\right)=2\ln2-1$。</div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（对照完校对）</span>
+        <b>①</b> <span class="dock">扣分点</span>：<b>"设取点坐标为 $V\sim U(0,2)$"必须写</b>。
+        这是应用题的建模分，也是后面所有推导的出发点。<b>不设 $V$ 而直接说"$X\sim U(0,1)$"是猜答案，即使对也要扣 2–3 分。</b><br>
+        <b>②</b> <span class="dock">扣分点</span>：$X=\min\{V,2-V\}$ 求分布函数时，<b>要先声明取值范围 $P\{0\le X\le1\}=1$</b>，
+        否则分段讨论会漏掉端点或多写无用段。<b>"先定范围再分段"是所有求分布函数题的通用开头。</b><br>
+        <b>③</b> <b>用变换公式时三件事必须写全</b>：<b>单调、可导、值域</b>。
+        少写"值域为 $(1,+\infty)$"，$f_Z$ 的定义域就没有依据，扣分。<br>
+        <b>④</b> <b>$\int_0^1\frac x{2-x}\mathrm dx$ 的算法</b>：分子凑分母，$\frac x{2-x}=\frac{-(2-x)+2}{2-x}=-1+\frac2{2-x}$，
+        <b>假分式先化成"常数 + 真分式"</b>，两项都是基本积分。结果 $-2\ln(2-x)-x\Big|_0^1=(0-1)-(-2\ln2-0)=2\ln2-1$。<br>
+        <b>⑤</b> <b>⚠️ 一个值得写进错题本的事实</b>：本题的 $Z$ 满足 $EZ=+\infty$（<b>期望不存在</b>）。
+        验算：$\int_1^{+\infty}z\cdot\frac2{(1+z)^2}\mathrm dz$ 的被积函数当 $z\to\infty$ 时约为 $\frac2z$，<b>调和级数型发散</b>。
+        我用 sympy 确认返回 $\infty$。<b>所以本题第 (3) 问问的是 $E\left(\frac XY\right)$ 而不是 $E\left(\frac YX\right)$，是出题人的刻意安排。</b>
+        考场上若看反，会陷进一个无解的积分——<b>这也是 <a href="#eg-43">基 4.3</a> 那条"重尾 ⟹ 期望可能不存在"的经验第二次派上用场。</b><br>
+        <b>⑥</b> <b>程序复核</b>：$f_Z$ 归一 $\int_1^\infty\frac2{(1+z)^2}\mathrm dz=1$ ✓；
+        蒙特卡洛（$10^7$ 个 $V\sim U(0,2)$）得 $EX=0.500134$、$E(X/Y)=0.386401$（解析 $2\ln2-1=0.386294$）、
+        $P\{Z>3\}=0.499742$（解析 $1-\frac2{1+3}\cdot$… 即 $\frac12$）✓。</div>
+    </div></div>
+
+  <div class="eg" id="eg-s610"><div class="q"><span class="no">强 6.10</span>假设某种元件的寿命服从指数分布，其均值 $\theta$ 是未知参数。为估计 $\theta$，取 $n$ 个这种元件同时做寿命试验，试验到出现 $k\ (1\le k\le n)$ 个元件失效时停止。<br>(1) 若 $k=1$，失效元件的寿命记为 $T$：(i) 求 $T$ 的概率密度；(ii) 记 $\hat\theta=aT$，确定 $a$ 使 $E\hat\theta=\theta$，并求 $D\hat\theta$。<br>(2) 已知 $k$ 个失效元件的寿命值为 $t_1\le t_2\le\cdots\le t_k$，似然函数为 $L(\theta)=\dfrac1{\theta^k}\mathrm e^{-\frac1\theta\left[\sum_{i=1}^kt_i+(n-k)t_k\right]}$，求 $\theta$ 的最大似然估计值。<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>先读懂物理背景</b>："$n$ 个元件同时开始，到第 1 个失效就停"——<b>第 1 个失效的时刻就是 $n$ 个寿命的最小值</b>，
+            即 $T=\min\{T_1,\cdots,T_n\}$。<b>把中文场景翻译成 $\min$，是这一问的全部难度。</b></li>
+          <li>"均值 $\theta$ 的指数分布"意味着参数 $\lambda=\frac1\theta$，$F(t)=1-\mathrm e^{-t/\theta}$。
+            <b>注意题目给的是均值不是率参数，写错就全盘皆错。</b></li>
+          <li>(1)(i) 用第 3 章的 $\min$ 公式：$F_T=1-[1-F]^n=1-\mathrm e^{-nt/\theta}$——
+            <b>结果仍是指数分布，参数变成 $\frac n\theta$</b>。<b>"$n$ 个独立指数取最小仍是指数，率相加"是必背结论。</b></li>
+          <li>(1)(ii) 由 $T\sim E\left(\frac n\theta\right)$ 得 $ET=\frac\theta n$，要 $E(aT)=\theta$ 就取 $a=n$；
+            再由 $DT=\frac{\theta^2}{n^2}$ 得 $D\hat\theta=n^2\cdot\frac{\theta^2}{n^2}=\theta^2$。
+            <b>算完盯一眼这个结果：它与 $n$ 无关——这是本题最值得想的一句话。</b></li>
+          <li>(2) 最大似然：<b>一律先取对数再求导</b>（乘积变求和，指数掉下来）。$\ln L$ 对 $\theta$ 求导令为 0，解一元方程。
+            <b>题目已经把 $L$ 给出来了，所以这一问纯粹是"会不会做 MLE 的三步"。</b></li>
+        </ol>
+      </div>
+      <div class="paper"><div class="phead">✍️ 考场卷面（写完对照）<span class="score">参考 12 分</span></div>
+        <div class="step"><b>解</b>　(1)(i) 设 $T_i\ (i=1,2,\cdots,n)$ 为第 $i$ 个元件的寿命，则 $T_1,\cdots,T_n$ 独立同分布，且均值为 $\theta$ 的指数分布的分布函数为
+        $$F(t)=\begin{cases}1-\mathrm e^{-\frac t\theta},&t\ge0,\\ 0,&t\lt0.\end{cases}\tag{1}$$
+        <span class="pt">⛳ 2 分</span></div>
+        <div class="step">当 $k=1$ 时，$T=\min\{T_1,T_2,\cdots,T_n\}$。设 $T$ 的分布函数为 $F_T(t)$，由独立性
+        $$F_T(t)=P\{T\le t\}=1-P\{\min\{T_1,\cdots,T_n\}>t\}=1-\prod_{i=1}^n P\{T_i>t\}=1-[1-F(t)]^n.\tag{2}$$
+        <span class="pt">⛳ 3 分</span></div>
+        <div class="step">由 (1)(2) 两式求导，$T$ 的概率密度为
+        $$f_T(t)=n[1-F(t)]^{n-1}F'(t)=\begin{cases}\dfrac n\theta\mathrm e^{-\frac n\theta t},&t\ge0,\\[4pt] 0,&t\lt0,\end{cases}$$
+        即 $T\sim E\left(\dfrac n\theta\right)$。<span class="pt">⛳ 2 分</span></div>
+        <div class="step">(ii) 由 (i) 知 $ET=\dfrac\theta n$，$DT=\dfrac{\theta^2}{n^2}$。于是
+        $$E\hat\theta=E(aT)=aET=\frac a n\theta,$$
+        令 $E\hat\theta=\theta$ 得 <b>$a=n$</b>，此时
+        $$D\hat\theta=D(nT)=n^2DT=n^2\cdot\frac{\theta^2}{n^2}=\theta^2.$$
+        <span class="pt">⛳ 3 分</span></div>
+        <div class="step">(2) 对数似然函数为
+        $$\ln L(\theta)=-k\ln\theta-\frac1\theta\left[\sum_{i=1}^kt_i+(n-k)t_k\right].$$
+        令
+        $$\frac{\mathrm d\ln L(\theta)}{\mathrm d\theta}=-\frac k\theta+\frac1{\theta^2}\left[\sum_{i=1}^kt_i+(n-k)t_k\right]=0,$$
+        解得 $\theta=\dfrac1k\sum_{i=1}^kt_i+\dfrac{n-k}kt_k$。<span class="pt">⛳ 2 分</span></div>
+        <div class="fin">即 $T$ 的概率密度如上（$T\sim E\left(\frac n\theta\right)$）；$a=n$ 时 $E\hat\theta=\theta$，此时 $D\hat\theta=\theta^2$；$\theta$ 的最大似然估计值为 $\tilde\theta=\dfrac1k\sum_{i=1}^kt_i+\dfrac{n-k}kt_k$。</div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（对照完校对）</span>
+        <b>①</b> <span class="dock">扣分点</span>：(i) 问<b>必须写出"由独立性 $P\{\min>t\}=\prod P\{T_i>t\}$"这一步</b>。
+        直接甩 $F_T=1-[1-F]^n$ 是引用结论，本题作为 12 分的大题应当把这一步展开。<br>
+        <b>②</b> <b>$\lambda$ 与 $\theta$ 千万别混</b>：题目说"均值 $\theta$"，所以 $\lambda=\frac1\theta$，$F(t)=1-\mathrm e^{-t/\theta}$。
+        <b>写成 $1-\mathrm e^{-\theta t}$ 是整题崩盘。</b>本题的 $\theta$ 全程以"均值"身份出现，$E\hat\theta=\theta$ 的目标也是在估计均值。<br>
+        <b>③</b> <b>⭐ $D\hat\theta=\theta^2$ 与 $n$ 无关——这是本题真正的思想</b>：
+        增加同时试验的元件数 $n$，<b>对这个估计量的精度毫无帮助</b>。
+        原因是 $n$ 变大时 $T$ 变小（更快出现第一个失效），但你只用了"第一个失效时刻"这<b>一个</b>数据点，
+        放大回去 $\hat\theta=nT$ 时噪声也被同比放大。<b>这正是 (2) 问要用上全部 $k$ 个失效数据的动机。</b>
+        <span class="dock">若题目追问"评价该估计量"</span>，答"无偏但方差不随 $n$ 减小，不相合"。<br>
+        <b>④</b> <b>(2) 问的似然函数为什么长这样</b>（题目给了，但值得懂）：$k$ 个失效元件贡献密度 $\prod\frac1\theta\mathrm e^{-t_i/\theta}$，
+        剩下 $n-k$ 个到时刻 $t_k$ 仍未失效，各贡献<b>生存概率</b> $\mathrm e^{-t_k/\theta}$，
+        合起来正是 $\frac1{\theta^k}\mathrm e^{-\frac1\theta[\sum t_i+(n-k)t_k]}$。<b>这是"截尾数据"的标准似然，第 6 章会正式讲。</b><br>
+        <b>⑤</b> <b>MLE 三步固定</b>：<b>①取对数 ②对参数求导令 0 ③解出并交代是最大值点</b>。
+        本题第③步可略（$\ln L$ 在唯一驻点两侧单调性明显），但<b>写一句"该驻点唯一且为最大值点"更稳妥</b>。<br>
+        <b>⑥</b> <b>这道题为什么放在第 4 章</b>：它把本章的 $EX$、$DX$、$D(aX)=a^2DX$ 与第 3 章的 $\min$ 分布、
+        第 6 章的无偏估计与最大似然<b>全部串在一起</b>。<b>做完这题，你就知道数字特征在数理统计里是怎么用的了。</b><br>
+        <b>⑦</b> <b>程序复核</b>：sympy（$n$ 声明为正）得 $ET=\frac\theta n$、$DT=\frac{\theta^2}{n^2}$、$D(nT)=\theta^2$，
+        MLE 驻点 $\theta=\frac{S}{k}$（$S=\sum t_i+(n-k)t_k$）✓；
+        蒙特卡洛（$\theta=2.5,n=6$，$10^6$ 组）：$E(nT)=2.500393$、$D(nT)=6.2675$（理论 $\theta^2=6.25$）✓。</div>
+    </div></div>
+
+  <!-- ================= s9 ================= -->
+  <h2 id="s9"><span class="idx">玖</span>三个交互模块：把本章三个"想不出画面"的地方变成看得见的</h2>
+
+  <div class="mine"><span class="tag">补讲 · 为什么是这三个模块（每个都对应一处"文字讲不清"的地方）</span>
+    本章的公式都不难，难的是<b>三处没有画面的地方</b>：<br>
+    ① <b>"$\rho=0$ 却不独立"到底长什么样？</b>——文字反例读十遍也建立不起直觉，<b>散点图一眼就懂</b>；<br>
+    ② <b>切比雪夫的界"很松"，到底多松？</b>——不知道量级，就不知道为什么它只能用来"估计"；<br>
+    ③ <b>$\mathrm{Cov}$ 双线性展开算完无法自查</b>——四个交叉项、正负号、分母是标准差还是方差，<b>错了也不知道</b>。<br>
+    三个模块分别对着这三处。<b>都可以离线运行，随机数在本机生成，刷新即换一批样本。</b>
+  </div>
+
+  <!-- 模块 1 -->
+  <div class="tool">
+    <h4>📉 模块一 · 相关系数实验室：看清 $\rho$ 只测<u>直线</u></h4>
+    <div class="hint">左图是 $(X,Y)$ 的散点（$N=$ <span id="m1n">4000</span> 个样本），右图是把 $X$ 与 $Y$ 各自标准化后的图（$\rho$ 就是右图点云的"倾斜程度"）。
+      读数区给出<b>样本 $\rho$ 与理论 $\rho$ 的对拍</b>，以及这一对 $(X,Y)$ 究竟<b>独立还是不独立</b>。
+      <b>重点看那四个 <span style="color:var(--red)">红色标注</span> 的预设：$\rho$ 都是 0，可点云明明摆着一条曲线。</b></div>
+    <div class="presets" id="m1pre"></div>
+    <div class="ctrl">
+      <label>样本量 N<input type="range" id="m1N" min="500" max="12000" step="500" value="4000"><span class="v" id="m1Nv">4000</span></label>
+      <button class="go" id="m1re">🎲 重新抽样</button>
+    </div>
+    <div class="twocv">
+      <div><canvas id="m1cv" width="380" height="330"></canvas><div class="cap">原始散点 $(X,Y)$</div></div>
+      <div><canvas id="m1cw" width="380" height="330"></canvas><div class="cap">标准化后 $(X^*,Y^*)$：$\rho$ 就是这团点的"斜度"</div></div>
+    </div>
+    <div class="readout" id="m1out"></div>
+  </div>
+
+  <div class="trap"><span class="tag">陷阱 · 用模块一时请重点确认的三件事</span>
+    <b>①</b> 切到「$Y=\cos X$」「$Y=|X|$」「单位圆」「$Y=X^2$」这四个预设，$\rho\approx0$，
+    <b>但右图的点云明显不是一团圆云，而是一条清晰的曲线</b>——<b>这就是"不相关但不独立"的样子</b>。<br>
+    <b>②</b> 切到「$Y=X^3$（均匀）」，$\rho\approx0.917$；切到「$Y=X^3$（正态）」，$\rho\approx0.775$。
+    <b>两者都是完全的函数关系（知道 $X$ 就知道 $Y$），$|\rho|$ 却远小于 1</b>——
+    <b>$|\rho|=1$ 要求的是直线，不是"任意确定性关系"。</b><br>
+    <b>③</b> 切到「$Y=-2X+1$」，$\rho$ 精确等于 $-1$。<b>只有直线才能顶到边界</b>，这印证了性质⑤。
+  </div>
+
+  <!-- 模块 2 -->
+  <div class="tool">
+    <h4>⚖️ 模块二 · 切比雪夫松紧台：这个界到底松到什么地步</h4>
+    <div class="hint">横轴是 $\varepsilon$（以标准差 $\sigma$ 为单位），纵轴是概率。
+      <b style="color:var(--red)">红线</b>＝切比雪夫上界 $\dfrac{DX}{\varepsilon^2}$（对一切分布通用），
+      <b style="color:var(--green)">绿线</b>＝该分布的<b>真实</b> $P\{|X-EX|\ge\varepsilon\}$。
+      两线之间的距离就是"松弛量"。<b>把分布切到「两点分布」，你会看到绿线在整段上贴着红线——这是唯一能取到等号的分布。</b></div>
+    <div class="presets" id="m2pre"></div>
+    <div class="ctrl">
+      <label>$\varepsilon/\sigma$<input type="range" id="m2e" min="0.5" max="4" step="0.05" value="2"><span class="v" id="m2ev">2.00</span></label>
+    </div>
+    <div class="cvwrap"><canvas id="m2cv" width="820" height="360"></canvas></div>
+    <div class="readout" id="m2out"></div>
+    <div class="tabwrap"><table class="rtab" id="m2tab"></table></div>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 模块二读出来的三条结论（考场上直接能用）</span>
+    <b>① $\varepsilon\le\sigma$ 时切比雪夫毫无信息</b>：此时 $\frac{DX}{\varepsilon^2}\ge1$，上界大于等于 1，等于什么都没说。
+    <b>所以这类题的 $\varepsilon$ 一定大于 $\sigma$</b>（<a href="#eg-411">基 4.11</a> 的 $\varepsilon=6$ 而 $\sigma=\sqrt3\approx1.73$，是 $3.46\sigma$）。<br>
+    <b>② 分布越"钟形"，界越松</b>。正态在 $\varepsilon=2\sigma$ 处真实概率 $0.0455$ 而上界 $0.25$，<b>差 5.5 倍</b>；
+    到 $3\sigma$ 处差 <b>41 倍</b>。<b>指数分布因为尾巴重，反而比正态贴近一些。</b><br>
+    <b>③ 只有两点分布贴合</b>：$P\{X=\pm\varepsilon\}=\frac{\sigma^2}{2\varepsilon^2}$、$P\{X=0\}=1-\frac{\sigma^2}{\varepsilon^2}$ 时，
+    真实概率恰好等于 $\frac{\sigma^2}{\varepsilon^2}$。<b>这解释了切比雪夫为什么"不能再改进"——存在分布使它取等号，所以它是最优的通用界。</b>
+  </div>
+
+  <!-- 模块 3 -->
+  <div class="tool">
+    <h4>🧮 模块三 · 线性组合沙盘：$\mathrm{Cov}$ 双线性展开的自动对拍</h4>
+    <div class="hint">输入 $DX,DY,\rho$ 与两组系数，自动给出 $U=aX+bY$、$V=cX+dY$ 的 $DU,DV,\mathrm{Cov}(U,V),\rho_{UV}$，
+      <b>并逐项列出双线性展开的四个交叉项</b>（这样你能定位自己是哪一项算错的），
+      最后用 $10^5$ 个二维正态样本做<b>蒙特卡洛对拍</b>。预设覆盖了本章全部 5 道线性组合题。</div>
+    <div class="presets" id="m3pre"></div>
+    <div class="ctrl">
+      <label>$DX$<input type="number" id="m3dx" value="1" step="0.5" min="0.01"></label>
+      <label>$DY$<input type="number" id="m3dy" value="4" step="0.5" min="0.01"></label>
+      <label>$\rho$<input type="range" id="m3r" min="-0.99" max="0.99" step="0.01" value="-0.5"><span class="v" id="m3rv">-0.50</span></label>
+    </div>
+    <div class="ctrl">
+      <label>$U=$<input type="number" id="m3a" value="1" step="1">$\,X+$<input type="number" id="m3b" value="1" step="1">$\,Y$</label>
+      <label>$V=$<input type="number" id="m3c" value="1" step="1">$\,X+$<input type="number" id="m3d" value="0" step="1">$\,Y$</label>
+    </div>
+    <div class="readout" id="m3out"></div>
+    <div class="tabwrap"><table class="rtab" id="m3tab"></table></div>
+  </div>
+
+  <div class="link"><span class="tag">串联 · 三个模块与后两章、与 408 的接口</span>
+    <b>模块二 → 第 5 章</b>：把 $X$ 换成 $\bar X_n$ 时，$\sigma$ 变成 $\frac\sigma{\sqrt n}$，红线整体下压——
+    <b>这就是大数定律的图像</b>。中心极限定理则说绿线趋近于正态那条曲线。<br>
+    <b>模块三 → 第 6 章</b>：$\chi^2,t,F$ 分布全部由独立正态的线性/二次组合构造，
+    而"$U,V$ 是否独立"决定了能不能构造 $t$ 统计量（$t=\frac{Z}{\sqrt{\chi^2/n}}$ 要求分子分母<b>独立</b>）。
+    <b>模块三里把 $\rho$ 调到使 $\mathrm{Cov}(U,V)=0$ 的那个值，就是第 6 章"$\bar X$ 与 $S^2$ 独立"的同款操作。</b><br>
+    <b>模块一 → 408 与机器学习</b>：$\rho$ 就是<b>皮尔逊相关系数</b>，408 里做数据分析、
+    以及后面搞 StudyMate 那类项目里的"特征相关性筛选"，用的都是它。
+    <b>"$\rho=0$ 不代表无关"这条教训，在实际工程里踩坑的人比考场上还多。</b>
+  </div>
+
+  <!-- ================= s10 ================= -->
+  <h2 id="s10"><span class="idx">拾</span>收网清单：合上页面前对着过一遍</h2>
+
+  <div class="mine"><span class="tag">补讲 · 回头看：本章 36 道题里，真正"求分布"的只有 3 道</span>
+    数一遍就明白本章的性格：<b>36 道题中，需要写出某个随机变量的分布（分布律或密度）的只有</b>
+    <a href="#eg-47">基 4.7</a>(1)(2)、<a href="#eg-412">基 4.12</a>(1)(2)、<a href="#eg-s610">强 6.10</a>(1)(i)、
+    以及 <a href="#eg-x412">习 4.12</a>、<a href="#eg-x413">习 4.13</a>(1)(3) 这<b>几处</b>，
+    <b>其余全部是"不求分布，直接算数字特征"</b>。<br>
+    <b>这正是本章与第 2、3 章最大的性格差异</b>：前两章的默认动作是"把分布求出来"，
+    本章的默认动作是"<b>能不求就不求</b>"。<br>
+    <b>所以合上页面前，请把这个反射建立起来</b>：<br>
+    　看到"求 $E\cdots$ / $D\cdots$ / $\mathrm{Cov}\cdots$ / $\rho\cdots$ / 判独立 / 估概率"——<b>先想有没有绕开分布的路</b>；<br>
+    　只有题目<u>明写</u>"求……的概率密度 / 概率分布"时，才动手求分布。<br>
+    <b>本章丢分最多的情形不是算错，而是"本可以三行做完的题，去求了半页的分布"——考场上那是致命的。</b>
+  </div>
+
+  <div class="bg"><span class="tag">背景</span>本章还有一些书上提到、但考纲边缘或不考的内容：
+    高阶矩（$k\ge3$ 的中心矩、偏度峰度）只在<b>定义层面</b>出现，从不计算；
+    $D(XY)$ 的展开式（性质⑤后半）真题从未直接考过；
+    协方差的"父子身高"实际意义属于科普。<b>这些地方读一遍知道存在即可，不要花时间。</b>
+    <b>真正要反复练的只有：四个定义、十四条公式、一张判定流程图、五个恒等式。</b></div>
+
+  <div class="key"><span class="tag">必记 · 本章 36 道题的"题型 → 动作"速查（考场上按这张表找路）</span>
+    <div class="gridwrap"><table>
+      <tr><th>题目问什么</th><th>第一动作</th><th>例题</th></tr>
+      <tr><td>求 $EX$、$E[g(X)]$</td><td>套 $\sum g(x_i)p_i$ / $\int g(x)f(x)\mathrm dx$，<b>不求 $g$ 的分布</b></td><td><a href="#eg-45">基4.5</a> <a href="#eg-46">基4.6</a> <a href="#eg-x47">习4.7</a> <a href="#eg-x49">习4.9</a></td></tr>
+      <tr><td>密度形如 $A\mathrm e^{-ax^2+bx+c}$</td><td><b>凑正态</b>，读 $\sigma^2=\frac1{2a}$、$\mu=\frac b{2a}$</td><td><a href="#eg-44">基4.4</a></td></tr>
+      <tr><td>分布律形似 $\frac{C}{k!}$、$\frac1{2^k}$</td><td><b>用归一性定常数 → 认出经典分布</b></td><td><a href="#eg-45">基4.5</a> <a href="#eg-s64">强6.4</a></td></tr>
+      <tr><td>求 $DX$、$D[g(X)]$</td><td>公式法：<b>算 $E(g^2)$ 与 $E(g)$ 再相减</b></td><td><a href="#eg-x45">习4.5</a> <a href="#eg-x46">习4.6</a></td></tr>
+      <tr><td>$E[\text{多项式}(X)]=$ 已知，求参数</td><td><b>展开 → 逐项换成 $EX,DX$ → 解方程</b></td><td><a href="#eg-x48">习4.8</a></td></tr>
+      <tr><td>给两个边缘 + 一个条件，求联合</td><td>把条件翻译成<b>某几格为 0 或某格的值</b>，再用行列和补齐</td><td><a href="#eg-47">基4.7</a> <a href="#eg-x43">习4.3</a> <a href="#eg-x412">习4.12</a></td></tr>
+      <tr><td>题面给的是<b>线性组合</b>的 $\rho$ 或 $D$</td><td><b>双线性硬拆</b>，绝不求联合分布</td><td><a href="#eg-49">基4.9</a> <a href="#eg-x42">习4.2</a> <a href="#eg-s66">强6.6</a> <a href="#eg-s67">强6.7</a></td></tr>
+      <tr><td>四个选项写"相关/不相关 × 独立/不独立"</td><td><b>先砍"相关且独立"，再算 $\mathrm{Cov}$，最后判独立</b></td><td><a href="#eg-410">基4.10</a> <a href="#eg-x44">习4.4</a></td></tr>
+      <tr><td>出现 $\max,\min$</td><td>先试<b>五恒等式</b>（问和/积/差的绝对值就直接用）</td><td><a href="#eg-x410">习4.10</a> <a href="#eg-s62">强6.2</a> <a href="#eg-x43">习4.3</a> <a href="#eg-s610">强6.10</a></td></tr>
+      <tr><td>出现 $|aX+bY+c|$ 的方差</td><td><b>三步法</b>：降维 → 算 $E|U|$ → $DU+(EU)^2-[E|U|]^2$</td><td><a href="#eg-s65">强6.5</a></td></tr>
+      <tr><td>难求的量 ＝ 好求的量 − 好求的量</td><td><b>分解法</b>（期望线性性不要独立）</td><td><a href="#eg-s63">强6.3</a></td></tr>
+      <tr><td>"用切比雪夫不等式估计"</td><td><b>认出主角是谁 → 算它的 $E,D$ → 代公式</b></td><td><a href="#eg-411">基4.11</a> <a href="#eg-x411">习4.11</a> <a href="#eg-s69">强6.9</a></td></tr>
+      <tr><td>"求 $Z$ 的概率密度"（明确要分布）</td><td>单调可导就用<b>变换公式</b>，否则先求 $F_Z$ 再求导</td><td><a href="#eg-412">基4.12</a> <a href="#eg-s610">强6.10</a></td></tr>
+    </table></div>
+  </div>
+
+  <div class="key"><span class="tag">必记 · 本章"必须背死"的公式与结论清单（共 14 条）</span>
+    <b>基本关系</b><br>
+    ① $DX=E(X^2)-(EX)^2$，移项形式 $E(X^2)=DX+(EX)^2$ ← <b>使用频率第一</b><br>
+    ② $\mathrm{Cov}(X,Y)=E(XY)-EXEY$；$\mathrm{Cov}(X,X)=DX$；$\rho=\frac{\mathrm{Cov}}{\sqrt{DX}\sqrt{DY}}$<br>
+    ③ $E(aX+bY)=aEX+bEY$ <b>无条件</b>；$D(aX+b)=a^2DX$；$D(X\pm Y)=DX+DY\pm2\mathrm{Cov}$<br>
+    ④ $\mathrm{Cov}(aX+bY,cX+dY)=ac\,DX+bd\,DY+(ad+bc)\mathrm{Cov}(X,Y)$ ← <b>一式吃掉全部线性组合题</b><br>
+    ⑤ $\mathrm{Cov}(X+Y,X-Y)=DX-DY$（结论级，直接用）<br>
+    <b>七＋一个分布表</b><br>
+    ⑥ $B(n,p)$: $np,\ np(1-p)$；$P(\lambda)$: $\lambda,\lambda$；$G(p)$: $\frac1p,\frac{1-p}{p^2}$；
+    $U(a,b)$: $\frac{a+b}2,\frac{(b-a)^2}{12}$；$E(\lambda)$: $\frac1\lambda,\frac1{\lambda^2}$；$N(\mu,\sigma^2)$: $\mu,\sigma^2$；<b>$\chi^2(n)$: $n,2n$</b><br>
+    ⑦ 正态偶数阶矩：$E(X^2)=\sigma^2$，$E(X^4)=3\sigma^4$，$E(X^6)=15\sigma^6$（$X\sim N(0,\sigma^2)$）<br>
+    <b>最值与绝对值</b><br>
+    ⑧ $\max+\min=X+Y$，$\max-\min=|X-Y|$，$\max\cdot\min=XY$<br>
+    ⑨ $U\sim N(0,\tau^2)\Rightarrow E|U|=\tau\sqrt{\frac2\pi}$，$D|U|=\tau^2\left(1-\frac2\pi\right)$<br>
+    ⑩ $X,Y$ 独立同 $N(\mu,\sigma^2)$：$E(\max)=\mu+\frac\sigma{\sqrt\pi}$，$E(\min)=\mu-\frac\sigma{\sqrt\pi}$<br>
+    ⑪ $n$ 个独立 $E(\lambda_i)$ 取 $\min$ 仍是指数分布，率为 $\sum\lambda_i$<br>
+    <b>判定与估计</b><br>
+    ⑫ 独立 $\Rightarrow$ 不相关，反之不然；<b>二维正态</b>与<b>两个 0–1 分布</b>这两种场合双向成立<br>
+    ⑬ $\rho=0\iff\mathrm{Cov}=0\iff E(XY)=EXEY\iff D(X\pm Y)=DX+DY$（五个等价条件）<br>
+    ⑭ 切比雪夫：$P\{|X-EX|\ge\varepsilon\}\le\frac{DX}{\varepsilon^2}$，反用时 $\varepsilon\ge\sqrt{\frac{DX}{1-p}}$
+  </div>
+
+  <div class="trap"><span class="tag">陷阱 · 本章七个高频失分点（每一个都在上面的题里现场翻过车）</span>
+    <b>①</b> $D(X-Y)$ 写成 $DX-DY$ —— <b>$DY$ 前恒为加号</b>，减号只在交叉项。<br>
+    <b>②</b> $\rho$ 的分母写成 $\sqrt{DX\cdot DY}$ 之外的东西 —— <b>是两个<u>标准差</u>相乘</b>，$\mathrm{Cov}=\rho\sqrt{DX}\sqrt{DY}$ 同理。<br>
+    <b>③</b> $\mathrm{Cov}=0$ 就写"所以独立" —— <b>只有二维正态和双 0–1 才能这么说</b>，其余必须另证。<br>
+    <b>④</b> 忘记"绝对收敛"，把发散积分按奇函数写成 0 —— <b>柯西分布专治这一条</b>（<a href="#eg-43">基4.3</a>）。<br>
+    <b>⑤</b> 切比雪夫题里认错主角 —— <b>是 $\frac1n\sum X_i^2$ 还是 $\bar X$？看题目给了哪些矩</b>（<a href="#eg-s69">强6.9</a>）。<br>
+    <b>⑥</b> $D(|U|)$ 当成 $DU$ —— <b>取绝对值不改二阶矩，但把一阶矩抬起来了，方差变小</b>（<a href="#eg-s65">强6.5</a>）。<br>
+    <b>⑦</b> 指数分布把"均值 $\theta$"当成"参数 $\lambda$" —— <b>$\lambda=\frac1\theta$，写反整题报废</b>（<a href="#eg-s610">强6.10</a>）。
+  </div>
+
+  <div class="link"><span class="tag">串联 · 本章往后三章的接口清单（下一章开工时对着这张表）</span>
+    <div class="gridwrap"><table>
+      <tr><th>本章交出去的东西</th><th>下游怎么用</th><th>去哪一章</th></tr>
+      <tr><td>$E\bar X=\mu$，$D\bar X=\frac{\sigma^2}n$</td><td><b>大数定律</b>：$\frac{\sigma^2}n\to0$ 加切比雪夫，一行证完</td><td>第 5 章</td></tr>
+      <tr><td>切比雪夫不等式</td><td>切比雪夫大数定律、伯努利大数定律的<b>唯一证明工具</b></td><td>第 5 章</td></tr>
+      <tr><td>七个分布的 $EX,DX$</td><td><b>中心极限定理</b>标准化时的 $\mu,\sigma$ 全从这张表取</td><td>第 5 章</td></tr>
+      <tr><td>$k$ 阶原点矩 $E(X^k)$</td><td><b>矩估计法</b>：令样本矩 $=$ 总体矩</td><td>第 6 章</td></tr>
+      <tr><td>$E\hat\theta=\theta$、$D\hat\theta$ 谁更小</td><td><b>无偏性</b>与<b>有效性</b>的定义（<a href="#eg-s610">强6.10</a> 已提前考）</td><td>第 6 章</td></tr>
+      <tr><td>$\chi^2(n)$ 的 $n,2n$</td><td>样本方差 $S^2$ 的无偏性与分布</td><td>第 6 章</td></tr>
+      <tr><td>不相关 $\iff$ 独立（二维正态）</td><td>证明 <b>$\bar X$ 与 $S^2$ 相互独立</b>的关键一步</td><td>第 6 章</td></tr>
+      <tr><td>可逆线性变换保持二维正态</td><td>$\chi^2$ 分解、正交变换法</td><td>第 6 章 + 线代</td></tr>
+    </table></div>
+    <b>下一章 ch5 大数定律与中心极限定理只有 8 页基础 + 6 页强化，是全科最薄的一讲</b>——
+    因为它的全部计算工具都在本章。<b>本章掌握了，下一章基本是读一遍就会。</b>
+  </div>
+
+  <div class="outro">
+    <b>本章自测（不看页面能答出来才算过）</b><br>
+    ① 写出 $\mathrm{Cov}(aX+bY,cX+dY)$ 的展开式，并说出四个系数分别从哪来。<br>
+    ② $\rho=0$ 能推出独立吗？哪两种情况可以？举一个不可以的反例。<br>
+    ③ $D(|U|)$ 与 $DU$ 的关系是什么？为什么取绝对值后方差反而小了？<br>
+    ④ 切比雪夫不等式在 $\varepsilon=2\sigma$ 处给出的界是多少？正态分布的真实值是多少？差几倍？<br>
+    ⑤ $\max\{X,Y\}$ 的分布很难求，但哪三个量可以完全绕开它？<br>
+    ⑥ 柯西分布的 $EX$ 不存在，但 $E(\min\{|X|,1\})$ 存在，为什么？<br>
+    ⑦ 七个常用分布里，哪一个的期望与方差相等？哪一个的方差是期望的平方？<br>
+    ⑧ 为什么 $\chi^2(n)$ 的方差是 $2n$？（提示：用正态四阶矩）
+  </div>
+</div>
+
+<script>
+(function(){
+/* ============ 公共工具 ============ */
+function cssv(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim();}
+function fmt(x,d){d=(d===undefined)?4:d;
+  if(x===undefined||x===null||(typeof x==='number'&&isNaN(x)))return'—';
+  if(!isFinite(x))return'∞';
+  var eps=5*Math.pow(10,-(d+1));
+  var s=x.toFixed(d); if(Math.abs(x)<eps)s=(0).toFixed(d); return s;}
+/* JS 动态插入的文字里若含 $…$，需要再跑一次 KaTeX（首次 auto-render 早于本脚本） */
+function rekatex(el){
+  if(typeof renderMathInElement!=='function'||!el)return;
+  try{renderMathInElement(el,{delimiters:[{left:'$$',right:'$$',display:true},
+    {left:'$',right:'$',display:false}],ignoredClasses:['nokatex'],throwOnError:false});}catch(e){}
+}
+/* ⚠️ 高分屏适配：CSS 尺寸必须在首次放大前存进 dataset。
+   若像早期写法那样每次都读 cv.width 当 CSS 宽度，第二次调用拿到的是已乘过 DPR 的物理宽度，
+   配合 setTransform 再放大一次 ⟹ 图只画在左上 1/4，看起来像"数据错了"（实际是坐标错了）。 */
+function hidpi(cv){var r=window.devicePixelRatio||1;
+  if(cv.dataset.hd!=='1'){
+    cv.dataset.cw=cv.width; cv.dataset.ch=cv.height;
+    cv.style.width=cv.width+'px'; cv.style.height=cv.height+'px';
+    cv.width=cv.width*r; cv.height=cv.height*r; cv.dataset.hd='1';}
+  var w=+cv.dataset.cw, h=+cv.dataset.ch;
+  var g=cv.getContext('2d');g.setTransform(r,0,0,r,0,0);g.clearRect(0,0,w,h);return {g:g,w:w,h:h};}
+/* Box-Muller 标准正态 */
+var spare=null;
+function gauss(){if(spare!==null){var s=spare;spare=null;return s;}
+  var u,v,s2;do{u=Math.random()*2-1;v=Math.random()*2-1;s2=u*u+v*v;}while(s2>=1||s2===0);
+  var m=Math.sqrt(-2*Math.log(s2)/s2);spare=v*m;return u*m;}
+function corr(xs,ys){var n=xs.length,mx=0,my=0,i;
+  for(i=0;i<n;i++){mx+=xs[i];my+=ys[i];} mx/=n;my/=n;
+  var sxy=0,sxx=0,syy=0;
+  for(i=0;i<n;i++){var a=xs[i]-mx,b=ys[i]-my;sxy+=a*b;sxx+=a*a;syy+=b*b;}
+  if(sxx<=0||syy<=0)return NaN;
+  return {r:sxy/Math.sqrt(sxx*syy),mx:mx,my:my,sx:Math.sqrt(sxx/n),sy:Math.sqrt(syy/n)};}
+
+/* ================================================================
+   模块一：相关系数实验室
+   ================================================================ */
+var M1PRE=[
+ {n:'独立正态（ρ=0，独立）',t:0,ind:'独立',note:'两个互不相干的 N(0,1)。点云是一团各向同性的圆——<b>这才是"不相关且独立"的样子</b>。',
+  gen:function(){return [gauss(),gauss()];}},
+ {n:'二维正态 ρ=0.8',t:0.8,ind:'不独立',note:'ρ 越接近 1，椭圆越窄、越贴近一条上升直线。',
+  gen:function(){var z1=gauss(),z2=gauss(),r=0.8;return [z1,r*z1+Math.sqrt(1-r*r)*z2];}},
+ {n:'二维正态 ρ=−0.5',t:-0.5,ind:'不独立',note:'负相关：椭圆向左上–右下倾斜。<b>这正是 <a href="#eg-s68">强 6.8</a> 的 ρ。</b>',
+  gen:function(){var z1=gauss(),z2=gauss(),r=-0.5;return [z1,2*(r*z1+Math.sqrt(1-r*r)*z2)];}},
+ {n:'⚠ Y=cos X（X~U(−1,1)）',t:0,ind:'不独立',bad:1,note:'<b>书上眉批的原装反例。</b>ρ=0，可点云是一段完整的余弦曲线——<b>Y 完全由 X 决定</b>。',
+  gen:function(){var x=Math.random()*2-1;return [x,Math.cos(x)];}},
+ {n:'⚠ Y=|X|（拉普拉斯）',t:0,ind:'不独立',bad:1,note:'<b><a href="#eg-410">基 4.10</a> 的原题。</b>密度 $\\frac12e^{-|x|}$ 对称 ⟹ Cov(X,|X|)=0，点云是一个完美的 V 形。',
+  gen:function(){var u=Math.random()-0.5,x=-Math.sign(u)*Math.log(1-2*Math.abs(u));return [x,Math.abs(x)];}},
+ {n:'⚠ Y=X²（X~U(−1,1)）',t:0,ind:'不独立',bad:1,note:'偶函数 ⟹ E(X·X²)=E(X³)=0 ⟹ ρ=0。抛物线摆在眼前，<b>ρ 却毫无察觉</b>。',
+  gen:function(){var x=Math.random()*2-1;return [x,x*x];}},
+ {n:'⚠ 单位圆上的点',t:0,ind:'不独立',bad:1,note:'<b>强化版注(2)② 的例子。</b>X=cos θ, Y=sin θ，ρ=0，但恒有 X²+Y²=1——<b>X² 与 Y² 是完美的线性关系</b>。',
+  gen:function(){var t=Math.random()*2*Math.PI;return [Math.cos(t),Math.sin(t)];}},
+ {n:'Y=X³（X~U(−1,1)）',t:Math.sqrt(21)/5,ind:'不独立',note:'<b><a href="#eg-x44">习 4.4</a> 的原题。</b>奇函数 ⟹ E(X·X³)=E(X⁴)=1/5≠0，<b>相关</b>。ρ=√21/5≈0.9165，<b>但仍不是 1</b>。',
+  gen:function(){var x=Math.random()*2-1;return [x,x*x*x];}},
+ {n:'Y=X³（X~N(0,1)）',t:3/Math.sqrt(15),ind:'不独立',note:'<b><a href="#eg-x414">习 4.14</a> 的原题。</b>ρ=3/√15≈0.7746。<b>函数关系再确定，只要不是直线，|ρ| 就到不了 1。</b>',
+  gen:function(){var x=gauss();return [x,x*x*x];}},
+ {n:'Y=−2X+1（直线）',t:-1,ind:'不独立',note:'<b>性质⑤：只有直线关系才能让 |ρ|=1。</b>a=−2&lt;0 所以 ρ=−1，与 |a| 和 b 都无关。',
+  gen:function(){var x=gauss();return [x,-2*x+1];}}
+];
+var m1i=3,m1N=4000,m1X=[],m1Y=[],m1clip=0;
+function m1samp(){var P=M1PRE[m1i];m1X=[];m1Y=[];
+  for(var k=0;k<m1N;k++){var p=P.gen();m1X.push(p[0]);m1Y.push(p[1]);}}
+function m1scatter(cv,xs,ys,std){
+  var o=hidpi(cv),g=o.g,W=o.w,H=o.h,i;
+  var line=cssv('--line'),muted=cssv('--muted'),acc=cssv('--accent');
+  var n=xs.length,X=xs,Y=ys;
+  if(std){var c=corr(xs,ys);X=[];Y=[];
+    for(i=0;i<n;i++){X.push((xs[i]-c.mx)/(c.sx||1));Y.push((ys[i]-c.my)/(c.sy||1));}}
+  /* ⚠️ 用 min/max 定轴会被重尾分布（拉普拉斯、柯西）的少数离群点压扁，
+     整团点云缩成一个角，本模块要展示的形状就看不见了。
+     改用 1%–99% 分位数定轴，落在框外的点直接不画（下方读数会报出被裁掉多少）。 */
+  function qtl(arr,p){var a=arr.slice().sort(function(u,v){return u-v;});
+    var k=(a.length-1)*p, lo=Math.floor(k), hi=Math.ceil(k);
+    return lo===hi?a[lo]:a[lo]+(a[hi]-a[lo])*(k-lo);}
+  var xmin=qtl(X,0.01),xmax=qtl(X,0.99),ymin=qtl(Y,0.01),ymax=qtl(Y,0.99);
+  if(xmax-xmin<1e-9){xmin-=0.5;xmax+=0.5;} if(ymax-ymin<1e-9){ymin-=0.5;ymax+=0.5;}
+  var px=(xmax-xmin)*0.08, py=(ymax-ymin)*0.08;
+  xmin-=px;xmax+=px;ymin-=py;ymax+=py;
+  var clipped=0;
+  var L=42,R=12,T=12,B=30;
+  function sx(v){return L+(v-xmin)/(xmax-xmin)*(W-L-R);}
+  function sy(v){return H-B-(v-ymin)/(ymax-ymin)*(H-T-B);}
+  g.strokeStyle=line;g.lineWidth=1;
+  g.beginPath();g.moveTo(L,T);g.lineTo(L,H-B);g.lineTo(W-R,H-B);g.stroke();
+  /* 零线 */
+  g.setLineDash([3,3]);g.strokeStyle=muted;g.globalAlpha=.55;
+  if(xmin<0&&xmax>0){g.beginPath();g.moveTo(sx(0),T);g.lineTo(sx(0),H-B);g.stroke();}
+  if(ymin<0&&ymax>0){g.beginPath();g.moveTo(L,sy(0));g.lineTo(W-R,sy(0));g.stroke();}
+  g.setLineDash([]);g.globalAlpha=1;
+  g.fillStyle=acc;g.globalAlpha=Math.max(0.10,Math.min(0.5,900/n));
+  for(i=0;i<n;i++){
+    if(X[i]<xmin||X[i]>xmax||Y[i]<ymin||Y[i]>ymax){clipped++;continue;}
+    g.beginPath();g.arc(sx(X[i]),sy(Y[i]),1.7,0,6.2832);g.fill();}
+  g.globalAlpha=1;
+  m1clip=clipped;
+  g.fillStyle=muted;g.font='10px sans-serif';
+  g.fillText(xmin.toFixed(1),L-6,H-B+14);g.fillText(xmax.toFixed(1),W-R-18,H-B+14);
+  g.fillText(ymax.toFixed(1),4,T+10);g.fillText(ymin.toFixed(1),4,H-B-2);
+  g.fillText(std?'X*':'X',(L+W-R)/2,H-B+22);
+}
+function m1upd(re){
+  if(re!==false)m1samp();
+  m1scatter(document.getElementById('m1cv'),m1X,m1Y,false);
+  var clipA=m1clip;
+  m1scatter(document.getElementById('m1cw'),m1X,m1Y,true);
+  var c=corr(m1X,m1Y),P=M1PRE[m1i];
+  var d=Math.abs(c.r-P.t), tolOK=d<0.06;
+  var el=document.getElementById('m1out');
+  el.className='readout'+(P.bad?' warn':(tolOK?' ok':''));
+  el.innerHTML='<b>'+P.n+'</b>　样本量 N='+m1N+
+    '<br><b>样本 ρ = '+fmt(c.r,4)+'</b>　理论 ρ = '+fmt(P.t,4)+'　|Δ| = '+fmt(d,4)+
+    (tolOK?'　✅ 对拍通过':'　（抽样涨落，可点「重新抽样」）')+
+    '<br><b>X 与 Y 是否独立：<span style="font-size:1.05em">'+P.ind+'</span></b>'+
+    (P.bad?'　←　<b>⚠ 这就是"不相关但不独立"：ρ=0，可图上明明是一条曲线</b>':'')+
+    '<br>'+P.note+
+    (clipA>0?'<span style="opacity:.75"><br>（坐标轴按 1%–99% 分位数取，'+clipA+' 个远端离群点未画出——'+
+      '这是重尾分布的常态，<b>不影响上面的 ρ，那是用全部 '+m1N+' 个样本算的</b>）</span>':'');
+  document.getElementById('m1n').textContent=m1N;
+  rekatex(el);
+}
+(function(){var box=document.getElementById('m1pre');
+  M1PRE.forEach(function(P,k){var b=document.createElement('button');b.textContent=P.n;
+    if(P.bad)b.style.borderColor=cssv('--red');
+    b.addEventListener('click',function(){m1i=k;m1upd(true);});box.appendChild(b);});})();
+document.getElementById('m1N').addEventListener('input',function(){
+  m1N=+this.value;document.getElementById('m1Nv').textContent=m1N;m1upd(true);});
+document.getElementById('m1re').addEventListener('click',function(){m1upd(true);});
+
+/* ================================================================
+   模块二：切比雪夫松紧台
+   ================================================================ */
+/* 每个分布给出：以 σ 为单位的 tail(t)=P{|X-EX| >= t·σ} 的精确/半解析值 */
+function erf(x){/* Abramowitz-Stegun 7.1.26 */
+  var s=x<0?-1:1;x=Math.abs(x);
+  var a1=0.254829592,a2=-0.284496736,a3=1.421413741,a4=-1.453152027,a5=1.061405429,p=0.3275911;
+  var t=1/(1+p*x),y=1-(((((a5*t+a4)*t)+a3)*t+a2)*t+a1)*t*Math.exp(-x*x);
+  return s*y;}
+function Phi(z){return 0.5*(1+erf(z/Math.SQRT2));}
+var M2=[
+ {n:'正态 N(0,1)',c:'--accent',
+  tail:function(t){return 2*(1-Phi(t));},
+  note:'钟形分布尾巴极薄，<b>切比雪夫最松的场合</b>。'},
+ {n:'均匀 U(0,1)',c:'--blue',
+  tail:function(t){var h=t/Math.sqrt(12);return h>=0.5?0:1-2*h;},
+  note:'有界分布：$t\\ge\\sqrt3$ 时真实概率<b>直接为 0</b>，上界却还有 1/3。'},
+ {n:'指数 E(1)',c:'--amber',
+  tail:function(t){/* EX=1,σ=1; P{|X-1|>=t} = P{X>=1+t} + P{X<=1-t} */
+    var a=Math.exp(-(1+t)); var b=(t<1)?(1-Math.exp(-(1-t))):0; return a+b;},
+  note:'重尾分布，绿线相对<b>贴近</b>红线——分布越"偏"，切比雪夫越有用。'},
+ {n:'0–1 分布 B(1,0.5)',c:'--purple',
+  tail:function(t){/* EX=.5, σ=.5 ; |X-.5|=.5 恒成立 */ return (t<=1)?1:0;},
+  note:'两点等概：偏差恒为 $\\sigma$，所以 $t\\le1$ 时真实概率恒为 1。'},
+ {n:'⭐ 两点分布（取等号）',c:'--green',eq:1,
+  tail:function(t){/* 对每个 t 单独构造: P{X=±tσ}=1/(2t²), P{X=0}=1-1/t² */
+    return (t>=1)?1/(t*t):1;},
+  note:'<b>对每个 $\\varepsilon$ 单独构造</b>：$P\\{X=\\pm\\varepsilon\\}=\\frac{\\sigma^2}{2\\varepsilon^2}$、$P\\{X=0\\}=1-\\frac{\\sigma^2}{\\varepsilon^2}$，此时真实概率<b>精确等于</b> $\\frac{\\sigma^2}{\\varepsilon^2}$。<b>切比雪夫无法再改进。</b>'}
+];
+var m2i=0,m2e=2;
+function m2draw(){
+  var cv=document.getElementById('m2cv'),o=hidpi(cv),g=o.g,W=o.w,H=o.h;
+  var line=cssv('--line'),muted=cssv('--muted'),red=cssv('--red'),grn=cssv('--green');
+  var L=54,R=16,T=16,B=38, t0=0.5,t1=4;
+  function sx(t){return L+(t-t0)/(t1-t0)*(W-L-R);}
+  function sy(p){return H-B-p*(H-T-B);}
+  /* 网格 */
+  g.strokeStyle=line;g.lineWidth=1;g.font='10px sans-serif';g.fillStyle=muted;
+  for(var p=0;p<=1.0001;p+=0.2){g.globalAlpha=.5;g.beginPath();g.moveTo(L,sy(p));g.lineTo(W-R,sy(p));g.stroke();
+    g.globalAlpha=1;g.fillText(p.toFixed(1),L-30,sy(p)+3);}
+  for(var t=1;t<=4;t+=1){g.globalAlpha=.4;g.beginPath();g.moveTo(sx(t),T);g.lineTo(sx(t),H-B);g.stroke();
+    g.globalAlpha=1;g.fillText(t+'σ',sx(t)-7,H-B+15);}
+  g.globalAlpha=1;
+  g.strokeStyle=cssv('--ink');g.globalAlpha=.7;g.beginPath();g.moveTo(L,T);g.lineTo(L,H-B);g.lineTo(W-R,H-B);g.stroke();g.globalAlpha=1;
+  /* 切比雪夫上界 1/t^2 */
+  g.strokeStyle=red;g.lineWidth=2.2;g.beginPath();
+  for(var k=0;k<=400;k++){var tt=t0+(t1-t0)*k/400,v=Math.min(1,1/(tt*tt));
+    if(k===0)g.moveTo(sx(tt),sy(v));else g.lineTo(sx(tt),sy(v));}
+  g.stroke();
+  /* 真实概率 */
+  var D=M2[m2i];
+  g.strokeStyle=grn;g.lineWidth=2.2;g.beginPath();var started=false;
+  for(k=0;k<=400;k++){var tt2=t0+(t1-t0)*k/400,v2=Math.max(0,Math.min(1,D.tail(tt2)));
+    if(!started){g.moveTo(sx(tt2),sy(v2));started=true;}else g.lineTo(sx(tt2),sy(v2));}
+  g.stroke();
+  /* 当前 ε 竖线与两点 */
+  var ub=Math.min(1,1/(m2e*m2e)), tv=Math.max(0,Math.min(1,D.tail(m2e)));
+  g.setLineDash([4,4]);g.strokeStyle=muted;g.lineWidth=1.3;
+  g.beginPath();g.moveTo(sx(m2e),T);g.lineTo(sx(m2e),H-B);g.stroke();g.setLineDash([]);
+  g.fillStyle=red;g.beginPath();g.arc(sx(m2e),sy(ub),4.5,0,6.2832);g.fill();
+  g.fillStyle=grn;g.beginPath();g.arc(sx(m2e),sy(tv),4.5,0,6.2832);g.fill();
+  /* 图例 */
+  g.font='11px sans-serif';
+  g.fillStyle=red;g.fillText('切比雪夫上界  DX/ε²',L+10,T+14);
+  g.fillStyle=grn;g.fillText('真实 P{|X−EX| ≥ ε}  ('+D.n+')',L+10,T+30);
+  g.fillStyle=muted;g.save();g.translate(14,H/2);g.rotate(-Math.PI/2);g.fillText('概率',0,0);g.restore();
+  g.fillText('ε（以 σ 为单位）',(W-L)/2,H-6);
+}
+function m2upd(){
+  m2draw();
+  var D=M2[m2i],ub=Math.min(1,1/(m2e*m2e)),tv=Math.max(0,Math.min(1,D.tail(m2e)));
+  var ratio=(tv>1e-12)?(ub/tv):Infinity;
+  var el=document.getElementById('m2out');
+  el.className='readout'+(D.eq?' ok':'');
+  el.innerHTML='<b>'+D.n+'</b>　ε = '+fmt(m2e,2)+'σ'+
+    '<br>切比雪夫上界 = <b style="color:'+cssv('--red')+'">'+fmt(ub,5)+'</b>　'+
+    '真实概率 = <b style="color:'+cssv('--green')+'">'+fmt(tv,5)+'</b>　'+
+    '<b>上界 / 真实 = '+(isFinite(ratio)?fmt(ratio,2)+' 倍':'∞（真实为 0）')+'</b>'+
+    (D.eq?'　✅ <b>恰好取等号，误差 '+fmt(Math.abs(ub-tv),6)+'</b>':'')+
+    '<br>'+D.note+
+    (m2e<=1?'<br><b>⚠ 此时 ε ≤ σ，上界 ≥ 1，这个不等式什么信息都没给——考题的 ε 一定大于 σ。</b>':'');
+  /* 对照表 */
+  var rows='<tr><th>ε</th>'+M2.map(function(d){return '<th>'+d.n+'</th>';}).join('')+'<th>切比雪夫上界</th></tr>';
+  [1.5,2,2.5,3,3.5].forEach(function(t){
+    rows+='<tr><td>'+t+'σ</td>'+M2.map(function(d){
+      var v=Math.max(0,Math.min(1,d.tail(t)));
+      var cls=d.eq?'y':(v<1e-9?'mut':'');
+      return '<td class="'+cls+'">'+fmt(v,5)+'</td>';}).join('')+
+      '<td class="bad">'+fmt(Math.min(1,1/(t*t)),5)+'</td></tr>';});
+  document.getElementById('m2tab').innerHTML=rows;
+  rekatex(el); rekatex(document.getElementById('m2tab'));
+}
+(function(){var box=document.getElementById('m2pre');
+  M2.forEach(function(D,k){var b=document.createElement('button');b.textContent=D.n;
+    if(D.eq)b.style.borderColor=cssv('--green');
+    b.addEventListener('click',function(){m2i=k;m2upd();});box.appendChild(b);});})();
+document.getElementById('m2e').addEventListener('input',function(){
+  m2e=+this.value;document.getElementById('m2ev').textContent=(+this.value).toFixed(2);m2upd();});
+
+/* ================================================================
+   模块三：线性组合沙盘
+   ================================================================ */
+var M3PRE=[
+ {n:'强 6.6（a=b=1/√2，ρ=0.6）',dx:1,dy:1,r:0.6,a:0.7071067812,b:0.7071067812,c:1,d:0,
+  note:'$D(aX+bY)=1+2ab\\rho$，$a=b=\\frac1{\\sqrt2}$ 时取到最大值 $1+|\\rho|$。'},
+ {n:'强 6.7（DX=1,DY=2,Cov=−1/2）',dx:1,dy:2,r:-0.3535533906,a:1,b:0,c:1,d:-1,
+  note:'$\\rho=-\\frac1{2\\sqrt2}\\approx-0.3536$ 使 $\\mathrm{Cov}(X,Y)=-\\frac12$。看 $U=X$、$V=X-Y$ 的 $\\rho_{UV}$ 是不是 $\\frac34$。'},
+ {n:'强 6.8（N(0,0;1,4;−1/2)）',dx:1,dy:4,r:-0.5,a:1,b:1,c:1,d:0,
+  note:'$U=X+Y$、$V=X$：$DU=3$、$\\mathrm{Cov}(U,V)=0$ ⟹ <b>不相关，二维正态下即独立</b>。'},
+ {n:'习 4.2（σ²=1，ρ=0）',dx:1,dy:1,r:0,a:2,b:1,c:2,d:-1,
+  note:'$Z_1=2X+Y$、$Z_2=2X-Y$：$DZ_1=DZ_2=5$，$\\mathrm{Cov}=4-1=3$，$\\rho=\\frac35$。'},
+ {n:'基 4.9（和与差，DX=DY）',dx:2.5,dy:2.5,r:0.3,a:1,b:1,c:1,d:-1,
+  note:'$\\mathrm{Cov}(X+Y,X-Y)=DX-DY=0$ ⟹ <b>$DX=DY$ 时和与差恒不相关</b>，与 $\\rho$ 无关（拖 $\\rho$ 试试）。'},
+ {n:'反例：D(X−Y)≠DX−DY',dx:3,dy:1,r:0.8,a:1,b:-1,c:1,d:1,
+  note:'$DX-DY=2$，但真正的 $D(X-Y)=3+1-2\\times0.8\\sqrt3=1.23$。<b>看清楚 $DY$ 前面是加号。</b>'}
+];
+/* ⚠️ 状态对象是唯一真值来源：滑块 step=0.01 会把预设值静默吸附
+   （如 ρ=-1/(2√2)=-0.353553 被吸成 -0.35，Cov 就从 -0.5 变成 -0.4950）。
+   根治办法不是把 step 调细，而是让预设<b>直接写状态对象</b>、控件只作显示。 */
+var m3S={dx:1,dy:4,r:-0.5,a:1,b:1,c:1,d:0};
+function m3pull(){   /* 用户动控件时，把控件值同步进状态 */
+  m3S.dx=+document.getElementById('m3dx').value; m3S.dy=+document.getElementById('m3dy').value;
+  m3S.r =+document.getElementById('m3r').value;
+  m3S.a =+document.getElementById('m3a').value;  m3S.b=+document.getElementById('m3b').value;
+  m3S.c =+document.getElementById('m3c').value;  m3S.d=+document.getElementById('m3d').value;}
+function m3push(){   /* 把状态写回控件（滑块可能吸附，但状态不受影响） */
+  ['dx','dy','r','a','b','c','d'].forEach(function(k){
+    document.getElementById('m3'+k).value=m3S[k];});
+  document.getElementById('m3rv').textContent=(+m3S.r).toFixed(4);}
+function m3get(){return m3S;}
+function m3set(P){['dx','dy','r','a','b','c','d'].forEach(function(k){m3S[k]=P[k];});m3push();}
+function m3mc(S,N){
+  var s1=Math.sqrt(S.dx),s2=Math.sqrt(S.dy),r=S.r,q=Math.sqrt(Math.max(0,1-r*r));
+  var su=0,sv=0,suu=0,svv=0,suv=0;
+  for(var i=0;i<N;i++){
+    var z1=gauss(),z2=gauss();
+    var x=s1*z1, y=s2*(r*z1+q*z2);
+    var u=S.a*x+S.b*y, v=S.c*x+S.d*y;
+    su+=u;sv+=v;suu+=u*u;svv+=v*v;suv+=u*v;}
+  var mu=su/N,mv=sv/N;
+  var Du=suu/N-mu*mu, Dv=svv/N-mv*mv, Cuv=suv/N-mu*mv;
+  return {Du:Du,Dv:Dv,Cuv:Cuv,rho:(Du>0&&Dv>0)?Cuv/Math.sqrt(Du*Dv):NaN};}
+function m3upd(fromControl){
+  if(fromControl!==false) { /* 由控件触发时才回读 */ }
+  var S=m3get();
+  document.getElementById('m3rv').textContent=S.r.toFixed(4);
+  var cov=S.r*Math.sqrt(S.dx)*Math.sqrt(S.dy);
+  var DU=S.a*S.a*S.dx+S.b*S.b*S.dy+2*S.a*S.b*cov;
+  var DV=S.c*S.c*S.dx+S.d*S.d*S.dy+2*S.c*S.d*cov;
+  var CUV=S.a*S.c*S.dx+S.b*S.d*S.dy+(S.a*S.d+S.b*S.c)*cov;
+  var RHO=(DU>1e-12&&DV>1e-12)?CUV/(Math.sqrt(DU)*Math.sqrt(DV)):NaN;
+  var mc=m3mc(S,100000);
+  var okD=Math.abs(mc.Du-DU)<0.05*Math.max(1,Math.abs(DU)),
+      okC=Math.abs(mc.Cuv-CUV)<0.05*Math.max(1,Math.abs(CUV)),
+      okR=isNaN(RHO)?true:Math.abs(mc.rho-RHO)<0.02;
+  var allok=okD&&okC&&okR;
+  var el=document.getElementById('m3out');
+  el.className='readout'+(allok?' ok':' warn');
+  el.innerHTML=
+   '<b>Cov(X,Y) = ρ·√DX·√DY = '+fmt(S.r,3)+'×'+fmt(Math.sqrt(S.dx),4)+'×'+fmt(Math.sqrt(S.dy),4)+' = <b>'+fmt(cov,5)+'</b></b>'+
+   '<br><b>Cov(U,V)</b> = ac·DX + bd·DY + (ad+bc)·Cov = '+
+     fmt(S.a*S.c,3)+'×'+fmt(S.dx,3)+' + '+fmt(S.b*S.d,3)+'×'+fmt(S.dy,3)+' + '+fmt(S.a*S.d+S.b*S.c,3)+'×'+fmt(cov,4)+
+     ' = <b>'+fmt(CUV,5)+'</b>'+
+   '<br><b>DU</b> = a²DX + b²DY + 2ab·Cov = '+fmt(S.a*S.a,3)+'×'+fmt(S.dx,3)+' + '+fmt(S.b*S.b,3)+'×'+fmt(S.dy,3)+' + '+fmt(2*S.a*S.b,3)+'×'+fmt(cov,4)+' = <b>'+fmt(DU,5)+'</b>'+
+   '<br><b>DV</b> = c²DX + d²DY + 2cd·Cov = '+fmt(S.c*S.c,3)+'×'+fmt(S.dx,3)+' + '+fmt(S.d*S.d,3)+'×'+fmt(S.dy,3)+' + '+fmt(2*S.c*S.d,3)+'×'+fmt(cov,4)+' = <b>'+fmt(DV,5)+'</b>'+
+   '<br><b>ρ_UV = Cov(U,V) / (√DU · √DV) = '+fmt(CUV,5)+' / ('+fmt(Math.sqrt(DU),4)+' × '+fmt(Math.sqrt(DV),4)+') = <span style="font-size:1.08em">'+fmt(RHO,5)+'</span></b>'+
+     '　<span style="opacity:.8">（分母是两个<u>标准差</u>相乘，不是方差）</span>'+
+   '<br>蒙特卡洛（$10^5$ 个二维正态样本）：DU='+fmt(mc.Du,4)+'　DV='+fmt(mc.Dv,4)+'　Cov(U,V)='+fmt(mc.Cuv,4)+'　ρ_UV='+fmt(mc.rho,4)+
+     (allok?'　✅ <b>与解析式一致，展开无误</b>':'　（样本涨落，重设参数可再算）');
+  var rows='<tr><th>项</th><th>系数</th><th>× 什么</th><th>= 贡献</th></tr>'+
+   '<tr><td>Cov(U,V) 第 1 项</td><td>ac = '+fmt(S.a*S.c,3)+'</td><td>DX = '+fmt(S.dx,3)+'</td><td>'+fmt(S.a*S.c*S.dx,5)+'</td></tr>'+
+   '<tr><td>Cov(U,V) 第 2 项</td><td>bd = '+fmt(S.b*S.d,3)+'</td><td>DY = '+fmt(S.dy,3)+'</td><td>'+fmt(S.b*S.d*S.dy,5)+'</td></tr>'+
+   '<tr><td>Cov(U,V) 第 3 项</td><td>ad+bc = '+fmt(S.a*S.d+S.b*S.c,3)+'</td><td>Cov(X,Y) = '+fmt(cov,4)+'</td><td>'+fmt((S.a*S.d+S.b*S.c)*cov,5)+'</td></tr>'+
+   '<tr><td class="y">合计 Cov(U,V)</td><td class="mut">—</td><td class="mut">—</td><td class="y">'+fmt(CUV,5)+'</td></tr>'+
+   '<tr><td class="'+(Math.abs(CUV)<1e-9?'y':'mut')+'">是否不相关</td><td colspan="3" class="'+(Math.abs(CUV)<1e-9?'y':'mut')+'">'+
+     (Math.abs(CUV)<1e-9?'Cov(U,V)=0 ⟹ U 与 V 不相关；因 (X,Y) 为二维正态且变换可逆，此时 U 与 V <b>相互独立</b>':'Cov(U,V)≠0 ⟹ U 与 V 相关，从而<b>不独立</b>')+'</td></tr>';
+  document.getElementById('m3tab').innerHTML=rows;
+  rekatex(el); rekatex(document.getElementById('m3tab'));
+}
+(function(){var box=document.getElementById('m3pre');
+  M3PRE.forEach(function(P){var b=document.createElement('button');b.textContent=P.n;
+    b.addEventListener('click',function(){m3set(P);m3upd(false);});box.appendChild(b);});})();
+['m3dx','m3dy','m3r','m3a','m3b','m3c','m3d'].forEach(function(id){
+  document.getElementById(id).addEventListener('input',function(){m3pull();m3upd(true);});});
+
+/* 初始化 */
+m1upd(true);
+m2upd();
+m3push(); m3upd(false);
+window.addEventListener('resize',function(){m1upd(false);m2draw();});
+})();
+</script>
+
+</body>
+</html>
