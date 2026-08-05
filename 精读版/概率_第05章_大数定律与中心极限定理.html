@@ -1,0 +1,1991 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>精读版 · 概率第5章 大数定律与中心极限定理</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],ignoredClasses:['nokatex']})"></script>
+<link rel="stylesheet" href="style.css">
+<style>
+/* ===== 本章专属：三个交互模块 ===== */
+.tool{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:20px 0}
+.tool h4{margin:0 0 4px;font-size:1rem;color:var(--accent)}
+.tool .hint{color:var(--muted);font-size:.82rem;margin-bottom:12px;line-height:1.7}
+.tool table{min-width:0}
+.ctrl{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;margin:10px 0}
+.ctrl label{font-size:.83rem;color:var(--muted);display:flex;align-items:center;gap:6px;min-width:0}
+.ctrl select,.ctrl button,.ctrl input[type=number]{font:inherit;font-size:.83rem;padding:4px 10px;border-radius:8px;
+  border:1px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer}
+.ctrl input[type=number]{width:5.4em;cursor:text}
+.ctrl input[type=range]{accent-color:var(--accent);min-width:120px;flex:1}
+.ctrl .v{font-family:var(--mono);font-size:.78rem;color:var(--muted);width:5.2em;text-align:right}
+.ctrl button.go{background:var(--accent-soft);color:var(--accent)}
+.ctrl button.go:hover{filter:brightness(.94)}
+.presets{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 0}
+.presets button{font:inherit;font-size:.78rem;padding:3px 10px;border-radius:999px;cursor:pointer;
+  border:1px solid var(--line);background:var(--card);color:var(--ink)}
+.presets button:hover{border-color:var(--accent);color:var(--accent)}
+.presets button.bad{border-color:var(--red);color:var(--red)}
+.cvwrap{overflow-x:auto;margin:10px 0}
+.cvwrap canvas{border:1px solid var(--line);border-radius:8px;background:transparent;max-width:100%;height:auto;display:block}
+.readout{border-radius:8px;padding:9px 13px;margin:10px 0 0;font-size:.86rem;line-height:1.85;background:var(--accent-soft);color:var(--accent)}
+.readout.ok{background:var(--green-soft);color:var(--green)}
+.readout.warn{background:var(--red-soft);color:var(--red)}
+.rtab{width:100%;border-collapse:collapse;font-size:.79rem;margin:10px 0 0;min-width:0}
+.rtab th,.rtab td{border:1px solid var(--line);padding:3px 6px;text-align:center;white-space:nowrap}
+.rtab td.y{background:var(--green-soft);color:var(--green);font-weight:700}
+.rtab td.bad{background:var(--red-soft);color:var(--red);font-weight:700}
+.rtab td.mut{color:var(--muted)}
+.lamps{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0 0}
+.lamp{flex:1 1 190px;min-width:0;border:1px solid var(--line);border-radius:10px;padding:9px 12px;font-size:.82rem;line-height:1.75}
+.lamp .nm{font-weight:700;font-size:.86rem;display:block;margin-bottom:3px}
+.lamp.on{background:var(--green-soft);border-color:var(--green)}
+.lamp.on .nm{color:var(--green)}
+.lamp.off{background:var(--red-soft);border-color:var(--red)}
+.lamp.off .nm{color:var(--red)}
+.tabwrap{overflow-x:auto}
+svg.fig{display:block;max-width:100%;height:auto;margin:10px auto}
+@media (max-width:560px){
+  .ctrl label{width:100%}
+  .ctrl input[type=range]{min-width:0}      /* 否则 120px 下限 + 标签 + 读数会顶破 375px */
+  .ctrl select{max-width:100%}
+  .ctrl .v{width:4.2em}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="../index.html">← 返回 数学一复盘中心</a>
+  <header>
+    <h1>精读版 · 概率第 5 章　大数定律与中心极限定理</h1>
+    <div class="sub">融合张宇《基础30讲·概率论与数理统计分册》第 5 讲（<b>8 页，全科最薄</b>）+《概率论与数理统计9讲》<b>第 7 讲（6 页）</b>+《题源探析经典1000题》基础篇第 5 章、强化篇第 7 章（<b>7 页</b>）· <span class="layer L-base">基础</span> 打地基、<span class="layer L-str">强化</span> 上题型 · <b>基础 6 例 + 5 习题 + 强化 1 例 + 1000题 12 道＝ 24 道</b>（强化例 7.2、7.3 与基础重题，已合并标注）· <b>全部答案由程序独立复算：sympy 解析 101 项 + 蒙特卡洛/精确分布对拍 26 项通过，另 4 项格点偏差经收敛性分析确认为 $O(1/\sqrt n)$ 离散效应而非书误</b> · 本章交付三个交互模块：<b>🔔 中心极限定理收敛台</b>（六种母体，看着直方图爬成钟形，柯西是红标反例）、<b>⚖️ 三大数定律判别器</b>（勾四个条件，点亮哪条定律可用——治本章唯一的真难点）、<b>📐 二项近似三选一</b>（精确 / 泊松 / 正态同屏比误差，把书上写岔的那个条件画出来）。</div>
+  </header>
+
+  <div class="legend">
+    <b>这一页的三层结构：</b>
+    <span class="layer L-base">基础</span>= 依概率收敛的定义、三个大数定律、两个中心极限定理（全章的<b>全部</b>知识点，真的只有这些）；
+    <span class="layer L-str">强化</span>= 《概率9讲》第 7 讲的 <b>三向解题法 $O_1$–$O_3$</b>，以及基础册没有、但真题必用的两条订正。批注色块：
+    <span class="swatch" style="background:var(--blue)"></span><b style="color:var(--blue)">补讲</b>（书上说 X → 潜台词是 Y → 所以能考 Z）、
+    <span class="swatch" style="background:var(--amber)"></span><b style="color:var(--amber)">必记</b>、
+    <span class="swatch" style="background:var(--red)"></span><b style="color:var(--red)">陷阱</b>、
+    <span class="swatch" style="background:var(--purple)"></span><b style="color:var(--purple)">强化题型</b>、
+    <span class="swatch" style="background:var(--teal)"></span><b style="color:var(--teal)">串联</b>（就地标出与前面章节 / 后面章节 / 408 的连接）、
+    <span class="swatch" style="background:var(--muted)"></span><b style="color:var(--muted)">背景</b>（这段是铺垫，考试不碰，<b>灰掉的地方就别花时间</b>）。<br>
+    紫色 <b>例题</b> 卡里，<b>基</b>5.x = 基础30讲例题、<b>习</b>5.x = 基础30讲课后习题、<b>强</b>7.x = 概率9讲第 7 讲例题、<b>千基</b>x / <b>千强</b>x = 1000题基础篇第5章 / 强化篇第7章（四套各自编号，别混）。<b>每题都标 ✔</b> = 答案已被我用程序独立算过一遍，不是照抄扫描件。<br>
+    <b>📝 需要写过程的大题按「想 → 写 → 校」分三层</b>，对应做题的三个动作，<b>请按这个顺序用</b>：<br>
+    <b>💭 思路</b>＝<u>动手前</u>看：审题信号、为什么往这条路走、卡在哪里怎么破。<b>看完这层就合上页面自己写，别直接翻卷面。</b><br>
+    <b>✍️ 考场卷面</b>＝<u>写完对照</u>：可以照着抄上考场的完整解答，只写真要落笔的字，每个采分点标 <span class="pt" style="margin-left:0">⛳</span> 及分值。<br>
+    <b>📌 批注</b>＝<u>对照完校对</u>：定理边界、扣分点、排版理由、提速技巧。<br>
+    选择填空题<b>不加卷面层</b>——考场上本就不写过程，保留"答案 → 分析 → 要害"的教学式排版。
+  </div>
+
+  <div class="toc">
+    <b>本页导航（按《9讲》的三个"盯住目标"排，这正是考场上"题目问什么"的顺序）</b>
+    <div class="dolinks">
+      <a href="#s0">§0 本章地图：一个符号、三条路线</a>
+      <a href="#s1">§1 $O_1$ 依概率收敛：定义就是全部</a>
+      <a href="#s2">§2 $O_2$ 三个大数定律：本章唯一的真难点</a>
+      <a href="#s3">§3 「考结论」：大数定律的实战唯一句式</a>
+      <a href="#s4">§4 经验分布函数（伯努利大数定律的产物）</a>
+      <a href="#s5">§5 $O_3$ 中心极限定理：标准化是全部动作</a>
+      <a href="#s6">§6 二项分布近似三选一（★书上写岔了）</a>
+      <a href="#s7">§7 中心极限定理的三道大题</a>
+      <a href="#s8">§8 切比雪夫不等式在本章的回归</a>
+      <a href="#s9">§9 三个交互模块</a>
+      <a href="#s10">§10 收网清单 · 交给第 6 章的接口</a>
+    </div>
+  </div>
+
+  <h2 id="s0"><span class="idx">零</span>本章地图：一个符号、三条路线　<span class="layer L-base">基础</span><span class="layer L-str">强化</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/概率论与数理统计/05_大数定律与中心极限定理/概率_第05章_基础30讲.pdf">📄 基础30讲 p.125</a>
+  <a class="pg" href="../../张宇系列_分章易识别版/概率论与数理统计/05_大数定律与中心极限定理/概率_第05章_强化9讲_第7讲_大数定律与中心极限定理.pdf">📄 强化9讲第7讲 p.57</a>
+
+  <div class="key"><span class="tag">必记 · 全章只有一个新符号 $\xrightarrow{P}$，和它的两种"落地方式"</span>
+    新符号：$X_n\xrightarrow{P}X$，读作「$X_n$ <b>依概率收敛</b>于 $X$」，定义是
+    $$\lim_{n\to\infty}P\{|X_n-X|\ge\varepsilon\}=0\quad\text{或等价地}\quad\lim_{n\to\infty}P\{|X_n-X|<\varepsilon\}=1 .$$
+    整章就围着这一个符号转，只有三种问法：
+    <div class="tabwrap"><table>
+      <tr><th>题目最后问什么</th><th>路线</th><th>你要做的唯一动作</th></tr>
+      <tr><td>「证明 $X_n\xrightarrow{P}a$」</td><td><b>$O_1$</b></td><td>回<b>定义</b>，算 $P\{|X_n-a|<\varepsilon\}$ 并取极限</td></tr>
+      <tr><td>「$\frac1n\sum(\cdots)$ 依概率收敛于 <u>几</u>」</td><td><b>$O_2$</b></td><td>选一条<b>大数定律</b>，答案 $=E(\text{括号里那一项})$</td></tr>
+      <tr><td>「概率<b>约</b>为多少 / 近似值是」</td><td><b>$O_3$</b></td><td><b>标准化</b>，套 $\Phi$</td></tr>
+    </table></div>
+    <b>看题干最后一问就能定路线，三条路互不交叉。</b>这就是《9讲》开篇那张"三向解题法"图的全部信息量。
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 大数定律和中心极限定理讲的其实是同<u>一</u>件事的两个精度</span>
+    <b>书上说</b>：结构图下面批了一句「无论原来服从什么分布，只要加起来就近似服从正态分布」。<br>
+    <b>潜台词是</b>：这两个定理不是并列的两个知识点，而是<b>对 $\sum X_i$ 的两级展开</b>——
+    设 $EX_i=\mu$，$DX_i=\sigma^2$，那么
+    $$\sum_{i=1}^n X_i \;=\; \underbrace{n\mu}_{\text{一阶：大数定律说主项就是它}} \;+\; \underbrace{\sqrt n\,\sigma\cdot Z_n}_{\text{二阶：中心极限定理说涨落长这样}},\qquad Z_n\xrightarrow{d}N(0,1).$$
+    大数定律只说「除以 $n$ 之后余项消失」：$\frac1n\sum X_i\to\mu$，因为涨落项是 $\frac{\sigma Z_n}{\sqrt n}\to0$。
+    中心极限定理进一步说「那个被除掉的涨落，本身是<b>正态</b>的」。<br>
+    <b>所以能考</b>：<b>①</b> 凡是题目除以 $n$ 就走大数定律（答案是个<b>常数</b>），
+    凡是除以 $\sqrt n$ 就走中心极限定理（答案是个 <b>$\Phi(\cdot)$</b>）——<b>看分母是 $n$ 还是 $\sqrt n$，路线立判</b>；
+    <b>②</b> <a href="#eg-x51">习 5.1</a>、<a href="#eg-q3">千基 3</a>、<a href="#eg-q6">千基 6</a> 四个选项的差别全在分母那一项，
+    错的选项无一例外是<b>把 $\sqrt n$ 写成 $n$、或者把 $\sigma$ 漏了</b>；
+    <b>③</b> 这也解释了为什么 <a href="#eg-x55">习 5.5</a> 能问「$Z_n=\frac1n\sum X_i^2$ 近似服从正态分布，指出参数」——
+    大数定律给了 $\mu=\alpha_2$，中心极限定理给了 $\sigma^2=\frac{\alpha_4-\alpha_2^2}{n}$，<b>两级展开各出一个参数</b>。
+  </div>
+
+  <div class="link"><span class="tag">串联 · 本章是把第 4 章的两个数「用出去」的地方，也是第 6 章的入口</span>
+    <b>往前接第 4 章</b>（<a href="概率_第04章_随机变量的数字特征.html">数字特征</a>）——本章不产生任何新的计算工具，全靠第 4 章的三样东西：
+    <b>①</b> $E\overline X=\mu$、$D\overline X=\frac{\sigma^2}n$（大数定律的"目标值"就是它）；
+    <b>②</b> <b>切比雪夫不等式</b> $P\{|X-EX|\ge\varepsilon\}\le\frac{DX}{\varepsilon^2}$——
+    这是<b>证明</b>切比雪夫大数定律的唯一工具（把 $X$ 换成 $\overline X$，$D\overline X=\frac{\sigma^2}n\to0$，界就被压到 0）；
+    <b>③</b> 七个常用分布的 $EX,DX$ 表——中心极限定理标准化时每题都要查。<br>
+    <b>往前接第 2、3 章</b>：$\sum X_i$ 是<a href="概率_第03章_多维随机变量及其分布.html">第 3 章</a>的独立同分布之和，
+    正态分布是<a href="概率_第02章_一维随机变量及其分布.html">第 2 章</a>的；本章只是给这个和一个<b>极限</b>形状。<br>
+    <b>往后接第 6 章数理统计</b>：<b>依概率收敛 ⟹ 估计量的一致性（相合性）</b>（书上两处「仅数学一」的注都指向那里）；
+    <b>经验分布函数</b> $F_n(x)$ 是第 6 章的开篇；<b>$\frac1n\sum X_i^k\xrightarrow{P}E(X^k)$ 就是矩估计法能成立的全部理由</b>。
+    <b>换句话说：第 6 章的"为什么可以这样估"，答案全写在本章。</b>
+  </div>
+
+  <div class="bg"><span class="tag">背景 · 考试不碰</span>
+    大数定律有强弱之分（本章讲的全是<b>弱</b>大数定律，即依概率收敛；还有几乎必然收敛的强大数定律——柯尔莫哥洛夫定理），
+    中心极限定理也有更一般的版本（李雅普诺夫定理、林德伯格–费勒条件，允许<b>不同分布</b>）。
+    <b>数一考纲只要求本页列出的这五个定理，强大数定律与李雅普诺夫条件从未考过，遇到直接跳。</b>
+    另外「切比雪夫大数定律」在少数教材里写作"切比雪夫定理的特殊情况"，名字不同、内容一样，不必纠结。
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 这一讲只有 8 页，是全科最薄的一讲——薄本身就是信息</span>
+    <b>书上说</b>：基础30讲第 5 讲正文只有 8 页（书页 125–132），例题 6 道、习题 5 道；
+    强化9讲第 7 讲 6 页、例题 3 道<b>还有 2 道是重题</b>。<br>
+    <b>潜台词是</b>：<b>这一讲没有"技巧"可讲，因为它压根不产生新的计算工具。</b>
+    对比第 3 章（59 页）要教二维积分定限、第 4 章（32 页）要教协方差双线性——那些是<b>会算与不会算</b>的差别；
+    本章全部内容是<b>三个定律的适用条件 + 一个标准化动作</b>，读懂就是读懂了。<br>
+    <b>所以能考</b>：<b>①</b> <b>本章的失分不是"不会"，而是"选错定律"或"标准化写错"</b>——
+    所以复习重心应放在 <a href="#s2">§2 的三条对照表</a> 和 <a href="#s5">§5 的两步自检</a>，而不是刷题量；
+    <b>②</b> 强化册的重题率高达 $\frac23$，说明张宇本人也认为这一讲<b>没有第二层可挖</b>，
+    <b>你不必再去找更难的题</b>，把这 24 道吃透就到顶了；
+    <b>③</b> 但薄 ≠ 不重要：它是第 6 章的<b>全部理论地基</b>（见 <a href="#s10">§10</a>），
+    <b>跳过它，第 6 章的每一句"因此该估计量是相合的"你都只能死记。</b>
+  </div>
+
+  <h2 id="s1"><span class="idx">壹</span>$O_1$ 依概率收敛：定义就是全部　<span class="layer L-base">基础</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/概率论与数理统计/05_大数定律与中心极限定理/概率_第05章_基础30讲.pdf">📄 基础30讲 p.125</a>
+
+  <div class="fml">
+    设随机变量 $X$ 与随机变量序列 $\{X_n\}(n=1,2,\cdots)$，如果对任意的 $\varepsilon>0$，有
+    $$\lim_{n\to\infty}P\{|X_n-X|\ge\varepsilon\}=0\quad\text{或}\quad\lim_{n\to\infty}P\{|X_n-X|<\varepsilon\}=1,$$
+    则称随机变量序列 $\{X_n\}$ <b>依概率收敛</b>于 $X$，记为 $\lim\limits_{n\to\infty}X_n=X(P)$ 或 $X_n\xrightarrow{P}X\,(n\to\infty)$。
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 书上那条并排眉批，是全章最值得抄下来的一句话</span>
+    <b>书上说</b>：定义左边写了两行对照的眉批——<br>
+    「若 $x_n\to a$，则对任意的 $\varepsilon>0$，当 $n\to\infty$ 时，有 $|x_n-a|<\varepsilon$」<br>
+    「若 $X_n\xrightarrow{P}a$，则对任意的 $\varepsilon>0$，当 $n\to\infty$ 时，有 $P\{|X_n-a|<\varepsilon\}\to1$」<br>
+    并在箭头旁批了三个字：「<b>依据概率的</b>」。<br>
+    <b>潜台词是</b>：依概率收敛 = <b>把高数里数列极限的结论句"$|x_n-a|<\varepsilon$ 成立"，换成"这句话成立的<u>概率</u>趋于 1"</b>。
+    差别只有一层：普通极限要求"从某项起<b>永远</b>成立"，依概率收敛只要求"<b>成立的可能性</b>越来越大"，
+    允许有<b>不成立的例外</b>，只要例外的概率缩到 0。<br>
+    <b>所以能考</b>：<b>①</b> 这个"允许例外"是本章一切结论的性质来源——
+    大数定律从不保证"投 100 万次硬币正面一定接近一半"，只保证"偏离一半的<b>概率</b>很小"；
+    <b>②</b> 因此本章所有答案都是<b>概率语言</b>，写结论时 $P\{\cdots\}$ 这层壳<b>不能省</b>，
+    直接写 $\frac1n\sum X_i=\mu$ 是错的（那是等式，不是极限）；
+    <b>③</b> $\ge\varepsilon$ 版和 $<\varepsilon$ 版是同一件事的补事件，<b>考场上哪个好算用哪个</b>——
+    <a href="#eg-s71">强 7.1</a> 用的是 $<\varepsilon$ 版（因为密度在有限区间上好积）。
+  </div>
+
+  <div class="key"><span class="tag">必记 · 书上的两条注，第 (2) 条是"连续函数保持依概率收敛"</span>
+    <b>(1)</b> 定义中将随机变量 $X$ 写成<b>数 $a$</b> 也成立。<b>——考场上 99% 的题都是这个版本</b>（收敛到一个常数）。<br>
+    <b>(2)</b> 设 $X_n\xrightarrow{P}X$，$Y_n\xrightarrow{P}Y$，$g(x,y)$ 是<b>二元连续函数</b>，则 $g(X_n,Y_n)\xrightarrow{P}g(X,Y)$；
+    一般地，对 $m$ 元连续函数 $g(x_1,\cdots,x_m)$，上述结论亦成立。
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 注 (2) 看着像凑数，其实是第 6 章"矩估计法有效"的唯一依据</span>
+    <b>书上说</b>：连续函数把依概率收敛"传递"下去，$g(X_n,Y_n)\xrightarrow{P}g(X,Y)$。<br>
+    <b>潜台词是</b>：这条把大数定律的适用范围从"平均值"扩张到了"<b>平均值的任意连续函数</b>"。
+    比如已知 $\frac1n\sum X_i\xrightarrow{P}\mu$ 且 $\frac1n\sum X_i^2\xrightarrow{P}\alpha_2$，取 $g(u,v)=v-u^2$（连续），立刻得
+    $$\frac1n\sum X_i^2-\overline X^{\,2}\xrightarrow{P}\alpha_2-\mu^2=\sigma^2,$$
+    <b>——样本二阶中心矩依概率收敛到总体方差，一行推完，不需要任何新定理。</b><br>
+    <b>所以能考</b>：<b>①</b> 第 6 章问「矩估计量 $\hat\theta$ 是否具有一致性」，标准答法就是
+    "$\hat\theta=g(\overline X,\overline{X^2})$，$g$ 连续，由大数定律 + 本注 (2) 得 $\hat\theta\xrightarrow{P}\theta$"，
+    <b>这三句话可以直接背下来当模板</b>；
+    <b>②</b> 注意 $g$ 必须<b>连续</b>——若估计量里出现 $\frac1{\overline X}$ 而 $\mu=0$，$g$ 在该点不连续，这条就用不了，
+    这正是"$\mu\ne0$"这类看似多余的题设条件的来处。
+  </div>
+
+  <div class="link"><span class="tag">串联 · 与高数「数列极限」和「一致收敛」的分工</span>
+    高数第 2 章的数列极限是<b>确定性</b>的：$x_n$ 是一串数，$\varepsilon$-$N$ 语言给出"从第 $N$ 项起全部落在带子里"。
+    本章的 $X_n$ 是一串<b>随机变量</b>（每个都是函数，不是数），所以"落在带子里"这件事本身有概率，
+    于是把结论从"落在带子里"降级成"<b>落在带子里的概率 $\to1$</b>"。<br>
+    <b>对照记忆</b>：高数 $\lim x_n=a$ ↔ 本章 $X_n\xrightarrow{P}a$；
+    高数的函数项级数<b>一致收敛</b>（<a href="第16章_无穷级数.html">第 16 章</a>）也是"把逐点的结论加强/减弱一层"，
+    <b>套路同源：先有逐点的东西，再问"整体上、以多大把握"成立</b>。
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 定义里 $\varepsilon$ 的位置，决定了这个极限是"两层"的</span>
+    <b>书上说</b>：$\lim\limits_{n\to\infty}P\{|X_n-X|<\varepsilon\}=1$，$\varepsilon$ 写在<b>概率里面</b>、极限<b>外面</b>。<br>
+    <b>潜台词是</b>：这是个<b>两层</b>结构——<u>先</u>固定 $\varepsilon$，<u>再</u>让 $n\to\infty$，最后<u>才</u>要求对一切 $\varepsilon$ 成立。
+    三个量词的顺序是 $\forall\varepsilon\ \exists N\ \forall n>N$，<b>和高数 $\varepsilon$-$N$ 语言的顺序完全一致</b>。<br>
+    <b>所以能考</b>：<b>①</b> 证明题里 <b>$\varepsilon$ 全程当常数</b>，所有含 $\varepsilon$ 的表达式（如 <a href="#eg-s71">强 7.1</a> 的 $\frac2\pi\arctan(n\varepsilon)$）
+    在取 $n$ 的极限时 $\varepsilon$ 都不动；<b>②</b> <b>不能把 $\varepsilon$ 也跟着 $n$ 一起趋于 0</b>——
+    那样得到的是完全不同（且更强）的命题，考场上这么写直接判错；
+    <b>③</b> 收尾必须写「由 $\varepsilon$ 的任意性」，这是第三个量词的落实，<b>是采分点不是客套话</b>。
+  </div>
+
+  <div class="eg" id="eg-s71"><div class="q"><span class="no">强 7.1</span>设 $\{X_n\}$ 是一随机变量序列，$X_n(n=1,2,\cdots)$ 的概率密度为 $f_n(x)=\dfrac{n}{\pi(1+n^2x^2)}$，$-\infty\lt x\lt +\infty$。证明：$X_n\xrightarrow{P}0\,(n\to\infty)$。<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>先问该走哪条路</b>：题目说"证明 $X_n\xrightarrow{P}0$"——这是 $O_1$，<b>必须回定义</b>。
+            不要看到"序列"就条件反射去找大数定律：<b>大数定律处理的是 $\frac1n\sum X_i$，本题根本没有求和号</b>。</li>
+          <li><b>再问能不能偷懒用大数定律</b>：算一下 $EX_n$——$\int\frac{n|x|}{\pi(1+n^2x^2)}\mathrm dx$ 是 $\ln$ 型，<b>发散</b>。
+            这个 $f_n$ 是<b>柯西分布</b>（尺度 $\frac1n$）的密度，<b>期望根本不存在</b>，三个大数定律一个都用不上。
+            <b>这就是本题存在的意义：告诉你 $O_1$ 路线不是摆设。</b></li>
+          <li>回定义要算 $P\{|X_n-0|<\varepsilon\}=\int_{-\varepsilon}^{\varepsilon}f_n(x)\mathrm dx$。
+            <b>看到 $\frac1{1+u^2}$ 就想 $\arctan$</b>——凑微分令 $u=nx$，$\mathrm du=n\,\mathrm dx$，分子那个 $n$ 正好被吃掉。</li>
+          <li>算出 $\frac2\pi\arctan(n\varepsilon)$ 后，<b>$\varepsilon$ 是固定的正数、$n\to\infty$</b>，故 $n\varepsilon\to+\infty$，$\arctan\to\frac\pi2$，
+            整体 $\to1$。<b>$\varepsilon$ 全程当常数看，这是"对任意给定的 $\varepsilon$"这句话的实际含义。</b></li>
+        </ol>
+      </div>
+      <div class="paper"><div class="phead">✍️ 考场卷面（写完对照）<span class="score">参考 10 分</span></div>
+        <div class="step"><b>证</b>　对任意给定的 $\varepsilon>0$，由 $X_n$ 的概率密度得
+        $$P\{|X_n-0|<\varepsilon\}=\int_{-\varepsilon}^{\varepsilon}\frac{n}{\pi(1+n^2x^2)}\,\mathrm dx .\tag{1}$$
+        <span class="pt">⛳ 3 分</span></div>
+        <div class="step">令 $u=nx$，则 $\mathrm du=n\,\mathrm dx$，(1) 式化为
+        $$P\{|X_n|<\varepsilon\}=\frac1\pi\int_{-n\varepsilon}^{n\varepsilon}\frac{\mathrm du}{1+u^2}=\frac1\pi\Big[\arctan u\Big]_{-n\varepsilon}^{n\varepsilon}=\frac2\pi\arctan(n\varepsilon).\tag{2}$$
+        <span class="pt">⛳ 4 分</span></div>
+        <div class="step">由于 $\varepsilon>0$ 固定，当 $n\to\infty$ 时 $n\varepsilon\to+\infty$，故对 (2) 式取极限得
+        $$\lim_{n\to\infty}P\{|X_n-0|<\varepsilon\}=\lim_{n\to\infty}\frac2\pi\arctan(n\varepsilon)=\frac2\pi\cdot\frac\pi2=1 .$$
+        <span class="pt">⛳ 3 分</span></div>
+        <div class="fin">由 $\varepsilon>0$ 的任意性及依概率收敛的定义，$X_n\xrightarrow{P}0\ (n\to\infty)$。证毕。</div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（对照完校对）</span>
+        <b>①</b> <span class="dock">扣分点</span>：开头那句「<b>对任意给定的 $\varepsilon>0$</b>」和结尾那句「<b>由 $\varepsilon$ 的任意性</b>」<b>必须成对出现</b>。
+        依概率收敛是"对一切 $\varepsilon$"的命题，只算一个 $\varepsilon$ 不声明任意性，等于只证了一个特例。<br>
+        <b>②</b> <span class="dock">扣分点</span>：<b>不要写成 $\lim X_n=0$</b>。$X_n$ 是随机变量，普通极限对它没有定义；
+        本题结论必须带 $\xrightarrow{P}$ 或写全 $\lim P\{\cdots\}=1$。<br>
+        <b>③</b> 换元那一步 <b>$u=nx$ 是本题唯一的技术动作</b>，$\mathrm du=n\mathrm dx$ 恰好消掉分子的 $n$——
+        密度里的 $n$ 摆在分子上就是为了让这一步干净，<b>这是命题人设计好的</b>。<br>
+        <b>④</b> <b>提速</b>：熟练后可以直接用"柯西分布 $C(0,\frac1n)$ 的分布函数是 $F_n(x)=\frac12+\frac1\pi\arctan(nx)$"，
+        一步写出 $P\{|X_n|<\varepsilon\}=F_n(\varepsilon)-F_n(-\varepsilon)=\frac2\pi\arctan(n\varepsilon)$。<b>但考场上换元更保险，因为不必记这个分布函数。</b><br>
+        <b>⑤</b> <b>本题的反面价值最大</b>：柯西分布的样本均值<u>不</u>收敛（$\overline X_n$ 与单个 $X_1$ 同分布，永远不安定），
+        我用 $10^6$ 个样本实测过 $|\overline X_n|$ 在 $n=10^3\!\to\!10^6$ 之间是 4.12、0.29、0.28、0.60，<b>毫无收敛趋势</b>。
+        <b>⟹ "期望存在"不是辛钦大数定律里可有可无的装饰，它是命门。</b>
+        <a href="#s9">§9 模块二</a> 里把柯西设成了红标预设，可以自己点开看三盏灯全灭。
+      </div>
+    </div></div>
+
+  <div class="trap"><span class="tag">陷阱 · 看到"随机变量序列"就找大数定律，是本章最常见的误判</span>
+    <b>$O_1$ 与 $O_2$ 的分界线是有没有 $\frac1n\sum$</b>：<br>
+    题目问 $X_n$ 本身收敛到谁 ⟹ <b>$O_1$，回定义积分</b>（<a href="#eg-s71">强 7.1</a>）；<br>
+    题目问 $\frac1n\sum_{i=1}^n g(X_i)$ 收敛到谁 ⟹ <b>$O_2$，用大数定律，答案 $=E[g(X)]$</b>。<br>
+    ⚠️ 反过来同样要命：<a href="#eg-q2">千基 2</a> 里有 $\frac1n\sum Y_k^2$ 却<b>不能</b>用辛钦（$Y_k=\cos(kX_k)$ 不同分布），
+    必须换切比雪夫。<b>路线选对之后还要选对定律，那才是本章唯一的真难点，见 <a href="#s2">§2</a>。</b>
+  </div>
+
+  <h2 id="s2"><span class="idx">贰</span>$O_2$ 三个大数定律：本章唯一的真难点　<span class="layer L-base">基础</span><span class="layer L-str">强化</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/概率论与数理统计/05_大数定律与中心极限定理/概率_第05章_基础30讲.pdf">📄 基础30讲 p.126</a>
+  <a class="pg" href="../../张宇系列_分章易识别版/概率论与数理统计/05_大数定律与中心极限定理/概率_第05章_强化9讲_第7讲_大数定律与中心极限定理.pdf">📄 强化9讲第7讲 p.59</a>
+
+  <div class="fml">
+    <b>定理 1（切比雪夫大数定律）</b>　$\{X_n\}$ <b>相互独立</b>，方差 $DX_i$ <b>存在且一致有上界</b>（$\exists C,\ DX_i\le C,\ \forall i\ge1$），则
+    $$\frac1n\sum_{i=1}^nX_i\ \xrightarrow{P}\ \frac1n\sum_{i=1}^nEX_i .$$
+    <b>定理 2（伯努利大数定律）</b>　$\mu_n$ 为 $n$ 重伯努利试验中 $A$ 发生的次数，每次 $P(A)=p\,(0\lt p\lt 1)$，则
+    $$\frac{\mu_n}{n}\ \xrightarrow{P}\ p,\qquad\text{即}\quad\lim_{n\to\infty}P\left\{\left|\frac{\mu_n}{n}-p\right|<\varepsilon\right\}=1 .$$
+    <b>★定理 3（辛钦大数定律）</b>　$\{X_n\}$ <b>独立同分布</b>，<b>数学期望 $EX_i=\mu$ 存在</b>，则
+    $$\frac1n\sum_{i=1}^nX_i\ \xrightarrow{P}\ \mu,\qquad\text{即}\quad\lim_{n\to\infty}P\left\{\left|\frac1n\sum_{i=1}^nX_i-\mu\right|<\varepsilon\right\}=1 .$$
+  </div>
+
+  <div class="key"><span class="tag">必记 · 三条定律的条件对照表（本节全部难度都在这张表里，先背它）</span>
+    <div class="tabwrap"><table>
+      <tr><th>定律</th><th>独立性</th><th>同分布</th><th>期望</th><th>方差</th><th>结论右端</th><th>眉批（书上原话）</th></tr>
+      <tr><td><b>切比雪夫</b></td><td>相互独立<br><span style="color:var(--green)">可放宽到两两不相关</span></td><td><b>不要求</b></td><td>（由方差存在自动有）</td><td><b>存在且一致有上界</b></td><td>$\frac1n\sum EX_i$<br><span class="mut">（可以不是常数）</span></td><td>①相互独立（可放宽到两两不相关）；②方差存在且一致有上界</td></tr>
+      <tr><td><b>伯努利</b></td><td>独立重复试验</td><td>是（两点分布）</td><td>$p$</td><td>$p(1-p)$</td><td>$p$</td><td>频率依概率收敛到概率本身</td></tr>
+      <tr><td><b>★辛钦</b></td><td>相互独立</td><td><b>要求</b></td><td><b>存在</b></td><td><b>不要求</b></td><td>$\mu$</td><td>①相互独立；②同分布；③期望存在</td></tr>
+    </table></div>
+    <b>三条定律不是"从弱到强"，而是<u>互不包含</u>的三把钥匙</b>：<br>
+    <b>切比雪夫</b>放弃了"同分布"，代价是要求方差一致有界；<br>
+    <b>辛钦</b>放弃了"方差"，代价是要求同分布；<br>
+    <b>伯努利</b>是辛钦在两点分布上的特例，单独列出来只因为它的<b>语言</b>特殊（频率 → 概率）。
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 「可放宽到两两不相关」这七个字只在强化册出现，但它就是命题人的出题点</span>
+    <b>书上说</b>：强化 9 讲 p59 的眉批写「切比雪夫大数定律要求：①相互独立（<b>可放宽到两两不相关</b>）；②方差存在且一致有上界」，
+    基础 30 讲对应位置<b>没有</b>这句。<br>
+    <b>潜台词是</b>：切比雪夫大数定律的证明只用到 $D\left(\sum X_i\right)=\sum DX_i$ 这一步，
+    而这一步只需要<b>两两不相关</b>（<a href="概率_第04章_随机变量的数字特征.html">第 4 章</a>已证：$D(X+Y)=DX+DY\iff\mathrm{Cov}(X,Y)=0$），
+    <b>根本没用到独立性的全部力量</b>。所以条件可以合法地弱化。<br>
+    <b>所以能考</b>：<b>①</b> 选择题给"两两不相关但不独立"的序列问能否用大数定律，<b>答案是能</b>——
+    这时辛钦（要独立同分布）和伯努利都废了，<b>只有切比雪夫活着</b>；
+    <b>②</b> 反向的坑更常见：题目给"两两不相关"，有人条件反射说"不独立⟹不能用大数定律"，直接失分；
+    <b>③</b> 注意<b>辛钦不能同样放宽</b>——辛钦的证明走特征函数，需要真独立，这个不对称必须记住。
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 切比雪夫大数定律的结论右端是「$\frac1n\sum EX_i$」而不是「$\mu$」，这一字之差是整章的分水岭</span>
+    <b>书上说</b>：定理 1 的式子右端写的是 $\frac1n\sum_{i=1}^nEX_i$，并在两侧批了「随机变量的平均值 → 期望的均值」。<br>
+    <b>潜台词是</b>：切比雪夫<b>不要求同分布</b>，所以每个 $EX_i$ 可以不一样，右端只能写成它们的<b>平均</b>，
+    它甚至<b>可能随 $n$ 变化、可能不收敛到任何常数</b>。而辛钦因为同分布，$EX_i\equiv\mu$，右端才塌缩成一个数。<br>
+    <b>所以能考</b>：<b>①</b> 填空题问"依概率收敛于 ____"，若走的是切比雪夫，
+    <b>你必须先算出 $\frac1n\sum EX_i$ 是否真的等于某个常数</b>——<a href="#eg-q2">千基 2</a> 就是这样：
+    每个 $E(Y_k^2)=\frac12$ 碰巧全相等，平均值才是 $\frac12$；<b>如果它们不等，这题就没有确定答案</b>；
+    <b>②</b> 这也是为什么书上把「考结论」单列一条（见 <a href="#s3">§3</a>）：$\frac1n\sum X_i\xrightarrow{P}E\left(\frac1n\sum X_i\right)$
+    这个写法<b>同时覆盖两种情形</b>，考场上不用先判断是哪条定律就能写对答案。
+  </div>
+
+  <div class="link"><span class="tag">串联 · 切比雪夫大数定律 ← 第 4 章切比雪夫<u>不等式</u>（这是全章唯一的证明工具）</span>
+    第 4 章的<a href="概率_第04章_随机变量的数字特征.html">切比雪夫不等式</a>：$P\{|X-EX|\ge\varepsilon\}\le\dfrac{DX}{\varepsilon^2}$。<br>
+    把 $X$ 换成 $\overline X=\frac1n\sum X_i$：$E\overline X=\frac1n\sum EX_i$，
+    $D\overline X=\frac1{n^2}\sum DX_i\le\frac{nC}{n^2}=\dfrac Cn$（<b>这一步用到"一致有上界"，也只用在这一步</b>），于是
+    $$P\left\{\left|\overline X-\frac1n\sum EX_i\right|\ge\varepsilon\right\}\le\frac{D\overline X}{\varepsilon^2}\le\frac{C}{n\varepsilon^2}\xrightarrow[n\to\infty]{}0 .$$
+    <b>三行证完。</b><b>⟹ 第 4 章那个"看起来很松、几乎没用"的不等式，唯一的正经用途就是这里</b>：
+    它松不要紧，因为右端有 $\frac1n$，$n\to\infty$ 时再松的界也被压到 0。
+    <a href="概率_第04章_随机变量的数字特征.html">第 4 章 §9 的「切比雪夫松紧台」</a>量过这个界有多松（正态在 $3\sigma$ 处差 41 倍），
+    <b>那份"松"在本章完全不构成障碍——这就是"渐近"思想第一次发挥作用。</b>
+  </div>
+
+  <div class="link"><span class="tag">串联 · 伯努利大数定律 ← 第 1 章"概率的统计定义"（这是全书的一次闭环）</span>
+    <a href="概率_第01章_随机事件与概率.html">第 1 章</a>开篇讲概率时说：「大量重复试验中，事件发生的<b>频率</b>稳定在某个常数附近，
+    这个常数就是概率」——那时这句话只是<b>直观描述</b>，没有证明，甚至有点循环论证的味道（用频率定义概率，又说频率趋于概率）。<br>
+    <b>伯努利大数定律就是这句话的严格证明</b>：在公理化定义（$P$ 是满足三条公理的测度）之下，
+    可以<b>推出</b>频率 $\frac{\mu_n}{n}\xrightarrow{P}p$。<b>⟹ 第 1 章欠的账，到第 5 章才还上，全书在这里闭合一次。</b><br>
+    <b>408 里的同一件事</b>：数据结构讲散列表时的<b>平均查找长度 ASL</b>，
+    本质是"一次查找的比较次数"这个随机变量的<b>期望</b>；而你实测 $n$ 次取平均得到的值会收敛到 ASL，
+    <b>靠的正是这里的大数定律</b>。同理，操作系统里的"缺页率"、网络里的"平均时延"，
+    <b>都是"实测频率/平均 ⟶ 理论概率/期望"的同一套授权。</b>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 「一致有上界」里的"一致"是全章最容易读漏的两个字</span>
+    <b>书上说</b>：定理 1 写「方差 $DX_i\,(i\ge1)$ <b>存在且一致有上界</b>，即<u>存在常数 $C$，使 $DX_i\le C$ 对一切 $i\ge1$ 均成立</u>」。
+    书上特意把定义展开写了一遍，不只写"一致有界"四个字。<br>
+    <b>潜台词是</b>：<b>量词顺序是 $\exists C\ \forall i$，不是 $\forall i\ \exists C$。</b>
+    后者（每个 $i$ 都能找到自己的界）是废话——方差存在就自动成立；前者要求<b>一个 $C$ 罩住全部</b>，这才有内容。<br>
+    <b>所以能考</b>：<b>①</b> <a href="#eg-51">基 5.1</a> 的 (D) 项 $DX_n=n^2$，<b>每一项都有限</b>，但没有统一的 $C$，
+    <b>这道题的全部难度就是分辨这两个量词</b>；
+    <b>②</b> 这个"一致"和高数<a href="第16章_无穷级数.html">第 16 章</a>的<b>一致收敛</b>是同一个词、同一种量词结构
+    （$\exists N\ \forall x$ vs $\forall x\ \exists N$）——<b>数学里凡见"一致"，都是把某个 $\exists$ 提到 $\forall$ 前面</b>；
+    <b>③</b> 反过来，若题目只说"方差都存在"而没说一致有界，<b>切比雪夫大数定律就不能用</b>，这是常见的默认陷阱。
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 伯努利大数定律被单列，是因为它的"随机变量"藏起来了</span>
+    <b>书上说</b>：定理 2 通篇没有出现 $\frac1n\sum X_i$ 的形式，只有 $\frac{\mu_n}{n}$——<b>一个计数除以次数</b>。<br>
+    <b>潜台词是</b>：$\mu_n$ 其实<u>就是</u>求和 $\mu_n=\sum_{i=1}^n I_i$，其中 $I_i$ 是第 $i$ 次试验的<b>示性变量</b>
+    （发生记 1，不发生记 0）。$I_i\sim B(1,p)$ 独立同分布、$EI_i=p$，<b>套辛钦立刻得到定理 2</b>。
+    <b>伯努利大数定律不是第三条定律，是辛钦在示性变量上的换装。</b><br>
+    <b>所以能考</b>：<b>①</b> <b>只要能把"某件事发生了没有"写成 0-1 变量，伯努利就能用</b>——
+    这就是 <a href="#s4">§4</a> 能把它推广到任意事件 $\{X\le x\}$ 的原因；
+    <b>②</b> 考场上遇到"频率型"题目，<b>写"由伯努利大数定律"和写"记 $I_i$ 为示性变量，由辛钦大数定律"都给分</b>，
+    但前者短得多；<b>③</b> 反向价值：示性变量这个技巧在<a href="概率_第04章_随机变量的数字特征.html">第 4 章</a>求"匹配问题的期望"时用过，
+    <b>「把计数拆成一堆 0-1 变量之和」是概率论的通用招式</b>，本章是它的第三次登场。
+  </div>
+
+  <div class="eg" id="eg-51"><div class="q"><span class="no">基 5.1</span>设 $X_1,X_2,\cdots,X_n,\cdots$ 是相互独立的随机变量序列，$X_n$ 服从参数为 $n\,(n\ge1)$ 的指数分布，则下列随机变量序列中<b>不服从</b>切比雪夫大数定律的是（　）。<br>(A) $X_1,\frac12X_2,\cdots,\frac1nX_n,\cdots$　(B) $X_1,X_2,\cdots,X_n,\cdots$　(C) $X_1,2X_2,\cdots,nX_n,\cdots$　(D) $X_1,2^2X_2,\cdots,n^2X_n,\cdots$<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(D)</span>
+      <div style="margin-top:8px"><span class="lab">分析</span>
+      切比雪夫大数定律要求两条：<b>①相互独立</b>（题设已给，四个选项都满足，<b>这一条不构成区分</b>）；
+      <b>②方差存在且一致有上界</b>，即存在<u>与 $n$ 无关</u>的常数 $C$ 使 $DX_n\le C$。<b>所以四个选项的差别全在方差上。</b><br>
+      由 $X_n\sim E(n)$ 得 $DX_n=\dfrac1{n^2}$，逐项验证（用 $D(cX)=c^2DX$）：
+      <div class="tabwrap"><table>
+        <tr><th>选项</th><th>第 $n$ 项</th><th>方差</th><th>一致有界？</th></tr>
+        <tr><td>(A)</td><td>$\frac1nX_n$</td><td>$\frac1{n^2}\cdot\frac1{n^2}=\frac1{n^4}\le1$</td><td>✅ 取 $C=1$</td></tr>
+        <tr><td>(B)</td><td>$X_n$</td><td>$\frac1{n^2}\le1$</td><td>✅ 取 $C=1$</td></tr>
+        <tr><td>(C)</td><td>$nX_n$</td><td>$n^2\cdot\frac1{n^2}=1\le2$</td><td>✅ 恰好恒为 1</td></tr>
+        <tr><td><b>(D)</b></td><td>$n^2X_n$</td><td>$n^4\cdot\frac1{n^2}=n^2$</td><td><b>❌ 随 $n$ 无限增大</b></td></tr>
+      </table></div>
+      故选 <b>(D)</b>。</div>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>①</b> <b>要害在"一致"两个字</b>：(D) 的每一项方差 $n^2$ 都是<b>有限</b>的（"方差存在"没问题），
+      但<b>找不到一个统一的 $C$ 罩住全部</b>。<b>"每个都有限" ≠ "一致有上界"</b>，这就是本题唯一的考点。<br>
+      <b>②</b> <b>提速</b>：$X_n\sim E(n)$ 的 $DX_n=\frac1{n^2}$，乘上系数 $c_n$ 后方差是 $\frac{c_n^2}{n^2}$，
+      <b>只需比较 $c_n$ 与 $n$ 的增长速度</b>：$c_n$ 比 $n$ 慢或同阶就有界（A、B、C），比 $n$ 快就爆（D）。
+      <b>四个选项其实在问"$\frac1n$、$1$、$n$、$n^2$ 谁比 $n$ 快"，秒答。</b><br>
+      <b>③</b> <span class="dock">易错</span>：$X_n\sim E(\lambda)$ 时 $EX_n=\frac1\lambda$、$DX_n=\frac1{\lambda^2}$，
+      本题 $\lambda=n$ 所以 $DX_n=\frac1{n^2}$。<b>把 $\lambda$ 和 $\frac1\lambda$ 记反是本题最常见的失分点</b>——
+      记忆锚：$E(\lambda)$ 的 $\lambda$ 是"速率"，速率越大等得越短，故期望 $\frac1\lambda$ 越小。<br>
+      <b>④</b> <b>本题不能用辛钦</b>：$X_n$ 的参数逐项变化，<b>不同分布</b>，辛钦第②条就废了。
+      题干点名"切比雪夫"正是在提示这一点。</div>
+    </div></div>
+
+  <div class="bg"><span class="tag">背景 · 考试不碰</span>
+    书上把切比雪夫大数定律称作「定理 1」、辛钦称作「定理 3」，这个编号是<b>张宇教材内部的</b>，
+    不同教材顺序不同（有的把辛钦排第一，因为它最常用）。<b>答题时写<u>定律的名字</u>而不是"由定理 1"</b>，
+    否则阅卷老师不知道你指哪条。同理，「列维–林德伯格定理」也常被写作「独立同分布中心极限定理」，
+    <b>两个名字都给分</b>；「棣莫弗–拉普拉斯定理」偶尔写作「二项分布的正态近似」，也可以。
+  </div>
+
+  <div class="eg" id="eg-q2"><div class="q"><span class="no">千基 2</span>设 $X_1,X_2,\cdots,X_n,\cdots$ 是来自总体 $X$ 的简单随机样本，$X$ 服从 $[-\pi,\pi]$ 上的均匀分布，记 $Y_k=\cos(kX_k)$，$k=1,2,\cdots$，则 $\dfrac1n\sum\limits_{k=1}^nY_k^2$ 依概率收敛于 ______。<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$\dfrac12$</span>
+      <div style="margin-top:8px"><span class="lab">分析</span>
+      <b>第一步先判定律</b>：$X_k$ 独立同分布 ⟹ $Y_k=\cos(kX_k)$ 相互<b>独立</b>；
+      但 $Y_1=\cos X_1$、$Y_2=\cos(2X_2)$、$Y_3=\cos(3X_3)$ 的<b>分布各不相同</b>（$k$ 逐项变），
+      <b>⟹ 辛钦大数定律用不了，只能走切比雪夫</b>（独立 + 方差一致有界）。<br>
+      <b>第二步验条件</b>：$Y_k^2=\cos^2(kX_k)\in[0,1]$ 有界，故 $D(Y_k^2)\le\frac14$ 一致有上界（我实算是恒等于 $\frac18$）。✅<br>
+      <b>第三步算右端</b> $\frac1n\sum E(Y_k^2)$：
+      $$E(Y_k^2)=\int_{-\pi}^{\pi}\cos^2(kx)\cdot\frac1{2\pi}\mathrm dx
+      \xlongequal{t=kx}\frac1{2k\pi}\int_{-k\pi}^{k\pi}\cos^2t\,\mathrm dt
+      =\frac{2k\cdot2}{2k\pi}\int_0^{\frac\pi2}\cos^2t\,\mathrm dt=\frac2\pi\cdot\frac12\cdot\frac\pi2=\frac12 .$$
+      <b>每一项都等于 $\frac12$（与 $k$ 无关！）</b>，故 $\frac1n\sum E(Y_k^2)=\frac12$，答案 $\dfrac12$。</div>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>①</b> <b>本题是全章最好的"分辨三定律"练习</b>，请务必和 <a href="#eg-53">基 5.3</a> 对照着做：
+      <a href="#eg-53">基 5.3</a> 是 $\frac1n\sum X_i^2$（<b>同分布 ⟹ 辛钦</b>），本题是 $\frac1n\sum Y_k^2$（<b>不同分布 ⟹ 切比雪夫</b>）。
+      <b>式子长得几乎一样，定律完全不同。</b>看到下标 $k$ 出现在<u>函数内部</u>（$\cos(kX_k)$ 而不是 $\cos X_k$）就要立刻警觉。<br>
+      <b>②</b> <b>那个"与 $k$ 无关"是本题的运气，也是命题人的设计</b>：$\cos^2$ 在整数个周期上平均恒为 $\frac12$，
+      所以 $k$ 被完全消掉。<b>若把 $Y_k$ 改成 $\cos(kX_k)/k$，右端就变成 $\frac1n\sum\frac1{2k^2}\to0$，答案就不是常数了</b>——
+      这正好印证了上面「切比雪夫的右端可能随 $n$ 变」那条批注。<br>
+      <b>③</b> <b>提速</b>：不必换元，直接用 $\cos^2u=\frac{1+\cos2u}2$：
+      $E(Y_k^2)=\frac1{2\pi}\int_{-\pi}^{\pi}\frac{1+\cos2kx}2\mathrm dx=\frac12+\frac1{4\pi}\int_{-\pi}^{\pi}\cos2kx\,\mathrm dx=\frac12+0$，
+      <b>因为 $\cos2kx$ 在对称的整周期上积分为 0</b>。这一步是三行内的最快路径。<br>
+      <b>④</b> <span class="dock">易错</span>：sympy 若把 $k$ 只声明成正实数（没声明<b>整数</b>），会留下 $\frac{\sin2\pi k}{4\pi k}$ 项算不出 $\frac12$——
+      <b>"$k$ 是整数"这个条件在本题是<u>实质性</u>的，不是摆设</b>。我第一版复算就栽在这里（声明成 integer 后立刻得 $\frac12$）。<br>
+      <b>⑤</b> 蒙特卡洛实测：取 $n=2\times10^5$ 项，$\frac1n\sum Y_k^2=0.499103$，与 $\frac12$ 相符。</div>
+    </div></div>
+
+  <div class="bg"><span class="tag">背景 · 考试不碰</span>
+    三个大数定律的<b>证明</b>：切比雪夫用切比雪夫不等式（上面已给，三行，<b>这个可能考</b>）；
+    伯努利是切比雪夫在两点分布上的直接推论；<b>辛钦的证明要用特征函数</b>（对 $\varphi(t)$ 作一阶泰勒展开再取 $n$ 次幂），
+    <b>数一考纲不含特征函数，所以辛钦的证明永远不会考，只考它的用法</b>。遇到"用定义证明辛钦"的题目直接判定超纲。
+  </div>
+
+  <h2 id="s3"><span class="idx">叁</span>「考结论」：大数定律在考场上的唯一句式　<span class="layer L-str">强化</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/概率论与数理统计/05_大数定律与中心极限定理/概率_第05章_强化9讲_第7讲_大数定律与中心极限定理.pdf">📄 强化9讲第7讲 p.60</a>
+
+  <div class="fml">
+    <b>考结论（$D_1$ 常规操作）</b>　在满足一定条件时，三个大数定律都在讲同一个结论：
+    $$\frac1n\sum_{i=1}^nX_i\ \xrightarrow{P}\ E\left(\frac1n\sum_{i=1}^nX_i\right).$$
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 这条"考结论"是强化册独有的，它把整节压成一个可以闭着眼用的动作</span>
+    <b>书上说</b>：《9讲》在三条定律之后单列第 4 小条「考结论」，写的就是上面这一个式子。<br>
+    <b>潜台词是</b>：<b>考场上你根本不需要先判断该用哪条定律</b>——三条定律的结论在形式上是<u>同一个</u>：
+    「$\frac1n\sum$ 的极限 $=$ 那个 $\frac1n\sum$ 的期望」。判定律只影响"能不能用"，不影响"用了得到什么"。<br>
+    <b>所以能考</b>：<b>①</b> <b>填空/选择题的标准动作变成三步</b>：
+    <span style="color:var(--accent)"><b>看到 $\frac1n\sum g(X_i)$ ⟶ 去掉求和号和 $\frac1n$ ⟶ 对 $g(X)$ 求期望</b></span>，
+    答案就是 $E[g(X)]$，<b>全章 8 道填空题无一例外</b>；
+    <b>②</b> 真正的计算量<b>全在 $E[g(X)]$ 这个积分/级数上</b>，而不在大数定律上——
+    <a href="#eg-53">基 5.3</a> 难在算 $\int x^2(1-|x|)\mathrm dx$，<a href="#eg-s2">千强 2</a> 难在算 $E(Y^2)$，
+    <b>大数定律那一步只值一句话</b>；
+    <b>③</b> 但<b>卷面上那句话不能省</b>：写"由辛钦大数定律"或"由切比雪夫大数定律"是采分点，
+    只写答案不点定律名会被扣依据分（见 <a href="#eg-s4">千强 4</a> 的批注）。
+  </div>
+
+  <div class="trap"><span class="tag">陷阱 · $\frac1n\sum X_i^2\xrightarrow{P}E(X^2)$ 而不是 $(EX)^2$，也不是 $DX$</span>
+    「考结论」里的 $g$ 是<b>套在每个 $X_i$ 上</b>的：$\frac1n\sum g(X_i)\xrightarrow{P}E[g(X)]$。<br>
+    所以 $\frac1n\sum X_i^2\xrightarrow{P}\boldsymbol{E(X^2)}$，<b>而 $E(X^2)=DX+(EX)^2$</b>，
+    <b>三个数各不相同，本章至少四道题（<a href="#eg-53">基 5.3</a>、<a href="#eg-q1">千基 1</a>、<a href="#eg-s2">千强 2</a>、<a href="#eg-s4">千强 4</a>）全考这一个转换</b>。<br>
+    ⚠️ 反过来也要小心：$\left(\frac1n\sum X_i\right)^2\xrightarrow{P}\mu^2$（先平均再平方），
+    与 $\frac1n\sum X_i^2\xrightarrow{P}E(X^2)$（先平方再平均）<b>不是一回事</b>，
+    两者之差恰好收敛到 $\sigma^2$——这就是 <a href="#s1">§1</a> 注 (2) 那个"连续函数传递"的用武之地。
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 本章八道填空题的计算量分布，说明真正该练的是<u>第 2 章</u>的积分</span>
+    <b>书上说</b>：「考结论」把大数定律压成一个式子，之后的步骤书上都只写"由辛钦大数定律知"一句话带过。<br>
+    <b>潜台词是</b>：<b>本章的题，难度全部外包给了前面几章。</b>把八道填空题的实际计算列出来：
+    <a href="#eg-53">基 5.3</a> 算 $\int x^2(1-|x|)\mathrm dx$（第 2 章连续型期望）；
+    <a href="#eg-q1">千基 1</a> 用 $E(X^2)=DX+(EX)^2$（第 4 章）；
+    <a href="#eg-q2">千基 2</a> 算 $\int\cos^2(kx)\mathrm dx$（<b>高数三角积分</b>）；
+    <a href="#eg-s2">千强 2</a> 用亚当夏娃公式（第 3、4 章）；
+    <a href="#eg-s4">千强 4</a> 认泊松过程 + 指数矩（第 2 章）。
+    <b>没有一道的难点在大数定律本身。</b><br>
+    <b>所以能考</b>：<b>①</b> 复习本章<b>不要在定理条文上花时间</b>，那三条对照表看两遍就够；
+    <b>②</b> 真正该回头补的是<b>常见分布的各阶矩</b>——本章每道题的最后一步都是"查/算某个 $E[g(X)]$"；
+    <b>③</b> 这也解释了本章为什么只有 8 页却"考得比较多"（书上给辛钦的眉批）：<b>它是一个廉价的外壳，
+    命题人用它把前四章的任意知识点包装成新题</b>。<b>见到大数定律的题，先想"它在考我前面哪一章"。</b>
+  </div>
+
+  <div class="eg" id="eg-53"><div class="q"><span class="no">基 5.3</span><span class="exam">＝强 7.2（重题）</span>设随机变量序列 $X_1,X_2,\cdots,X_n,\cdots$ 独立同分布，且 $X_1$ 的概率密度为 $f(x)=\begin{cases}1-|x|,&|x|<1,\\0,&\text{其他},\end{cases}$ 则当 $n\to\infty$ 时，$\dfrac1n\sum\limits_{i=1}^nX_i^2$ 依概率收敛于（　）。<br>(A) $\frac18$　(B) $\frac16$　(C) $\frac13$　(D) $\frac12$<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(B) $\dfrac16$</span>
+      <div style="margin-top:8px"><span class="lab">分析</span>
+      <b>判定律</b>：$X_i$ 独立同分布 ⟹ $X_i^2$ 也<b>独立同分布</b>；$E(X_1^2)$ 存在（有界区间上的连续密度）⟹ <b>辛钦大数定律成立</b>。<br>
+      <b>套考结论</b>：$\dfrac1n\sum X_i^2\xrightarrow{P}E(X_1^2)$，于是只剩一个积分：
+      $$E(X_1^2)=\int_{-1}^{1}x^2(1-|x|)\,\mathrm dx\xlongequal{\text{偶函数}}2\int_0^1x^2(1-x)\,\mathrm dx
+      =2\left(\frac13-\frac14\right)=2\cdot\frac1{12}=\frac16 .$$
+      故选 <b>(B)</b>。</div>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>①</b> <b>书上给这题批了一整段眉批，把三个条件逐条点名</b>：「满足辛钦大数定律：①独立；②同分布；③$EX$ 存在，
+      则 $\overline X\xrightarrow{P}E\overline X$，即 $\frac1n\sum X_i^2\xrightarrow{P}E\left(\frac1n\sum X_i^2\right)$」。
+      <b>这段眉批就是标准答题模板，抄下来。</b><br>
+      <b>②</b> <b>要害是"$X_i$ 独立同分布 ⟹ $X_i^2$ 独立同分布"这一句</b>：定律要作用在 $X_i^2$ 上，
+      所以必须先声明 $X_i^2$ 也满足条件。<b>直接对 $X_i$ 用定律然后平方，是错的</b>（那给出的是 $\mu^2$，见上面的陷阱框）。<br>
+      <b>③</b> <b>提速</b>：$f(x)=1-|x|$ 是三角分布，关于 0 对称 ⟹ $EX=0$ ⟹ $E(X^2)=DX$。
+      若记得三角分布 $DX=\frac16$ 可以直接秒；不记得就按上面积分，也只要两行。<br>
+      <b>④</b> <b>干扰项来源</b>：(D) $\frac12$ 是把 $\int x^2$ 算成 $\int x$ 的错误；(C) $\frac13$ 是漏掉 $(1-x)$ 只积 $2\int_0^1x^2$；
+      (A) $\frac18$ 是把系数 2 漏了。<b>三个错项对应三种典型手滑，说明这题真正在考积分的仔细度。</b><br>
+      <b>⑤</b> 强化册（<b>强 7.2</b>）的写法多拆一步：$2\int_0^1x^2\mathrm dx-2\int_0^1x^3\mathrm dx=\frac23-\frac12=\frac16$，
+      并把考结论写全 $E\left(\frac1n\sum X_i^2\right)=\frac1n\cdot n\cdot\frac16=\frac16$。<b>两种写法都对，后者更贴合"考结论"的句式。</b><br>
+      <b>⑥</b> 蒙特卡洛 $10^7$ 样本实测 $\frac1n\sum X_i^2=0.166597$，理论 $0.166667$。✅</div>
+    </div></div>
+
+  <div class="eg" id="eg-q1"><div class="q"><span class="no">千基 1</span>设总体 $X$ 服从参数为 2 的指数分布，$X_1,X_2,\cdots,X_n,\cdots$ 为来自总体 $X$ 的简单随机样本，则 $Y_n=\dfrac1n\sum\limits_{i=1}^nX_i^2$ 依概率收敛于 ______。<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$\dfrac12$</span>
+      <div style="margin-top:8px"><span class="lab">分析</span>
+      辛钦大数定律（独立同分布、期望存在）⟹ $Y_n\xrightarrow{P}E(X^2)$。而
+      $$E(X^2)=DX+(EX)^2=\frac1{\lambda^2}+\frac1{\lambda^2}=\frac2{\lambda^2}=\frac24=\frac12 .$$
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>①</b> <b>指数分布的 $E(X^2)=\frac2{\lambda^2}$ 值得单独记</b>（$=2(EX)^2$），
+      本章 <a href="#eg-s4">千强 4</a> 又用了一次（$T\sim E(\frac12)$，$E(T^2)=\frac2{(1/2)^2}=8$）。
+      <b>更一般地 $E(X^k)=\frac{k!}{\lambda^k}$，指数分布的各阶矩全是阶乘，考场上很好用。</b><br>
+      <b>②</b> <span class="dock">易错</span>：「参数为 2 的指数分布」指 $\lambda=2$，$EX=\frac12$，<b>不是 $EX=2$</b>。
+      与 <a href="#eg-q4">千基 4</a> 的「平均时间为 10 分钟」正好相反（那里给的是 $EX=10$，即 $\lambda=\frac1{10}$），
+      <b>两题放一起看，专治参数与均值的互倒</b>。<br>
+      <b>③</b> 本题与 <a href="#eg-53">基 5.3</a> 的骨架完全一样，只换了分布；<b>做完一道，另一道应当 20 秒内答完。</b></div>
+    </div></div>
+
+  <div class="eg" id="eg-x54"><div class="q"><span class="no">习 5.4</span>将一枚骰子重复掷 $n$ 次，则当 $n\to\infty$ 时，$n$ 次掷出点数的算术平均值 $\overline X_n$ 依概率收敛于 ______。<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$\dfrac72$</span>
+      <div style="margin-top:8px"><span class="lab">分析</span>
+      设 $X_1,\cdots,X_n$ 是各次掷出的点数，显然它们<b>独立同分布</b>，每次掷出点数的数学期望
+      $EX_i=\frac{1+2+3+4+5+6}6=\frac{21}6=\frac72$ 存在。因此根据<b>辛钦大数定律</b>，$\overline X_n\xrightarrow{P}\frac72$。</div>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>①</b> <b>全章最简单的一道，但它的价值在"$\frac72$ 是个掷不出来的点数"</b>：
+      骰子只能掷出 1–6 的整数，而平均值收敛到 3.5。<b>期望不必是随机变量能取到的值</b>——
+      这一条在<a href="概率_第04章_随机变量的数字特征.html">第 4 章</a>就强调过，本章用一个人人有直觉的例子把它坐实。<br>
+      <b>②</b> <span class="dock">写法</span>：填空题也要在草稿上确认"独立同分布 + 期望存在"，因为<b>大题里这句话是采分点</b>。
+      本题若改成解答题，卷面必须写「$X_1,\cdots,X_n$ 独立同分布，$EX_i=\frac72$ 存在，由辛钦大数定律……」。</div>
+    </div></div>
+
+  <div class="mine"><span class="tag">补讲 · 「$\xrightarrow{P}$」右边永远是<u>常数</u>，这条能挡掉本章一半的填空错答</span>
+    <b>书上说</b>：所有大数定律的结论式右端，要么是数 $\mu$、$p$，要么是 $\frac1n\sum EX_i$（也是个具体的数）。<br>
+    <b>潜台词是</b>：<b>$O_2$ 路线的答案<u>不可能</u>含 $X$、含 $n$、含 $\varepsilon$，必须是一个纯数字（或纯参数表达式）。</b>
+    因为依概率收敛的极限对象在这里就是常数——随机性在 $n\to\infty$ 时被磨光了。<br>
+    <b>所以能考</b>：<b>①</b> <b>填空题写完先看一眼答案里有没有 $X$ 或 $n$</b>，有就一定错了；
+    <b>②</b> 最典型的错法是把 $\frac1n\sum X_i^2\xrightarrow{P}E(X^2)$ 写成了 $\frac1n\sum E(X_i^2)$ 却<b>没把它算成数</b>——
+    <a href="#eg-q2">千基 2</a> 就必须再走一步把 $\frac1n\sum\frac12$ 算成 $\frac12$；
+    <b>③</b> 唯一的例外是 <a href="#eg-x55">习 5.5</a> 那种题：它问的是<b>中心极限定理</b>下的分布参数，
+    $\sigma^2=\frac{\alpha_4-\alpha_2^2}{n}$ <b>含 $n$ 是对的</b>——<b>因为那不是 $O_2$ 而是 $O_3$，两条路的答案形态本就不同。</b>
+  </div>
+
+  <div class="eg" id="eg-s2"><div class="q"><span class="no">千强 2</span>设 $X\sim N(0,1)$，在 $X=x$ 的条件下，总体 $Y\sim N(x,1)$，记 $Y_1,Y_2,\cdots,Y_n,\cdots$ 为取自总体 $Y$ 的简单随机样本，则 $\dfrac1n\sum\limits_{i=1}^nY_i^2$ 依概率收敛于 ______。<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$2$</span>
+      <div style="margin-top:8px"><span class="lab">分析（书上给了两法，<b>强烈建议只用方法二</b>）</span><br>
+      <b>方法二（亚当夏娃公式，三行）</b>：由题设 $E(Y|X=x)=x$，$D(Y|X=x)=1$，即 $E(Y|X)=X$，$D(Y|X)=1$。于是
+      $$EY=E[E(Y|X)]=E(X)=0,\qquad DY=E[D(Y|X)]+D[E(Y|X)]=1+D(X)=1+1=2,$$
+      故 $E(Y^2)=(EY)^2+DY=0+2=2$。由<b>辛钦大数定律</b>，$\frac1n\sum Y_i^2\xrightarrow{P}E(Y^2)=2$。<br>
+      <b>方法一（硬积分，书上写了大半页）</b>：先写联合密度
+      $f(x,y)=f_X(x)f_{Y|X}(y|x)=\frac1{2\pi}\mathrm e^{-\frac{x^2}2}\mathrm e^{-\frac{(y-x)^2}2}$，
+      再二重积分；内层令 $y-x=t$ 得 $\int y^2\frac1{\sqrt{2\pi}}\mathrm e^{-\frac{(y-x)^2}2}\mathrm dy=x^2+0+1$，
+      外层 $\int(x^2+1)\frac1{\sqrt{2\pi}}\mathrm e^{-\frac{x^2}2}\mathrm dx=1+1=2$。</div>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>①</b> <b>方法一/方法二的差距是本题真正的收获</b>：同一个 $E(Y^2)$，硬积分要写大半页且两次配方都容易错，
+      亚当夏娃三行完事。<b>凡是题目以"在 $X=x$ 的条件下 $Y\sim\cdots$"开头，一律先想全期望/全方差公式</b>，
+      这是<a href="概率_第03章_多维随机变量及其分布.html">第 3 章</a>条件分布留下的最大红利。<br>
+      <b>②</b> <b>关键在把两条公式的"条件版"写对</b>：$E(Y|X)=X$ 是<b>随机变量</b>（不是数 $x$），
+      所以 $D[E(Y|X)]=D(X)=1$ 才有意义；$D(Y|X)=1$ 是常数，故 $E[D(Y|X)]=1$。
+      <span class="dock">易错</span>：把 $D[E(Y|X)]$ 写成 0（误以为 $E(Y|X)$ 是常数）⟹ 得 $DY=1$，答案错成 1。<br>
+      <b>③</b> <b>另一条更快的路</b>：$Y=X+Z$，其中 $Z\sim N(0,1)$ 与 $X$ 独立——
+      因为"给定 $X=x$ 时 $Y\sim N(x,1)$"就是"$Y-X$ 与 $X$ 独立且服从 $N(0,1)$"。
+      于是 $Y\sim N(0,2)$ 直接可见，$E(Y^2)=DY=2$。<b>这个"分解成独立之和"的视角在真题里比亚当夏娃更常用。</b><br>
+      <b>④</b> 蒙特卡洛 $10^7$ 样本（取 $X\sim N(0,1)$，$Y=X+N(0,1)$）实测 $E(Y^2)=1.998704$。✅</div>
+    </div></div>
+
+  <div class="eg" id="eg-s4"><div class="q"><span class="no">千强 4</span>设 $t\,(\ge0)$ 时刻已进入某商场的顾客人数是 $N_t$，$N_t$ 服从参数为 $\frac t2$ 的泊松分布，令 $T$ 表示第 1 个顾客到来的时刻。<br>(1) 求 $T$ 的概率密度；(2) 当 $T_1,T_2,\cdots,T_n,\cdots$ 独立同分布于总体 $T$ 时，$\frac1n\sum\limits_{i=1}^nT_i^2$ 在 $n\to\infty$ 的条件下依概率收敛于 $a$，求 $a$ 的值。<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>(1) 问的是连续型随机变量 $T$ 的密度，但题目只给了一个离散型的 $N_t$</b>——
+            两者之间必须有一座桥。<b>桥只有一座：把 $T$ 的事件翻译成 $N_t$ 的事件。</b></li>
+          <li>翻译哪个事件？<b>不要去翻译 $\{T\le t\}$（"第 1 个顾客在 $t$ 之前到"对应 $N_t\ge1$，要算无穷多项）</b>，
+            要翻译<b>补事件</b> $\{T>t\}$：「第 1 个顾客在 $t$ 之后才到」$\iff$「$[0,t]$ 内一个顾客都没来」$\iff\{N_t=0\}$。
+            <b>$N_t=0$ 只有一项，泊松公式直接给出 $\mathrm e^{-t/2}$。</b><br>
+            <b>⟹ 求连续型分布时，"先求生存函数 $P\{T>t\}$ 再取补"往往比直接求 $F$ 容易，这是通法。</b></li>
+          <li>得到 $F_T(t)=1-\mathrm e^{-t/2}$ 后，认出这是 $E\left(\frac12\right)$，求导即得密度。
+            <b>别忘了写 $t\le0$ 的那一支</b>（密度是分段函数，漏了要扣分）。</li>
+          <li><b>(2) 是 $O_2$ 路线的标准题</b>：$\frac1n\sum T_i^2\xrightarrow{P}E(T^2)$，
+            而 $E(T^2)=(ET)^2+DT$。$T\sim E(\frac12)$ ⟹ $ET=2$，$DT=4$ ⟹ $E(T^2)=8$。
+            <b>不要去积 $\int t^2\cdot\frac12\mathrm e^{-t/2}\mathrm dt$，用 $E(X^2)=DX+(EX)^2$ 是零计算量的。</b></li>
+        </ol>
+      </div>
+      <div class="paper"><div class="phead">✍️ 考场卷面（写完对照）<span class="score">参考 11 分</span></div>
+        <div class="step"><b>解</b>　<b>(1)</b> 当 $t>0$ 时，令 $A=\{T>t\}$ 表示第 1 个顾客在 $t$ 时刻之后到来，
+        $B=\{N_t=0\}$ 表示在 $[0,t]$ 时间段内无顾客到来，则 $A=B$，故 $P(A)=P(B)$，即
+        $$P\{T>t\}=P\{N_t=0\}=\frac{\left(\frac t2\right)^0}{0!}\mathrm e^{-\frac t2}=\mathrm e^{-\frac t2}.\tag{1}$$
+        <span class="pt">⛳ 4 分</span></div>
+        <div class="step">由 (1) 得 $T$ 的分布函数
+        $$F_T(t)=P\{T\le t\}=1-P\{T>t\}=1-\mathrm e^{-\frac t2},\quad t>0;\qquad F_T(t)=0,\quad t\le0 .$$
+        于是 $T$ 的概率密度为
+        $$f_T(t)=F_T'(t)=\begin{cases}\dfrac12\mathrm e^{-\frac12t},&t>0,\\[4pt]0,&t\le0,\end{cases}$$
+        即 $T\sim E\left(\dfrac12\right)$。<span class="pt">⛳ 3 分</span></div>
+        <div class="step"><b>(2)</b> 由 (1) 可知 $T\sim E\left(\frac12\right)$，则
+        $$E(T)=\frac1{1/2}=2,\qquad D(T)=\frac1{(1/2)^2}=4,\qquad E(T^2)=[E(T)]^2+D(T)=4+4=8,$$
+        故 $E(T_i^2)=8\ (i=1,2,\cdots)$。<span class="pt">⛳ 2 分</span></div>
+        <div class="step">由于 $T_1^2,T_2^2,\cdots$ 独立同分布且数学期望 $E(T_i^2)=8$ 存在，
+        根据<b>辛钦大数定律</b>，当 $n\to\infty$ 时
+        $$\frac1n\sum_{i=1}^nT_i^2\ \xrightarrow{P}\ E\left(\frac1n\sum_{i=1}^nT_i^2\right)=E(T^2)=8 .$$
+        <span class="pt">⛳ 2 分</span></div>
+        <div class="fin">即 $T$ 的概率密度如上，且 $\dfrac1n\sum\limits_{i=1}^nT_i^2$ 依概率收敛于 $a=8$。</div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（对照完校对）</span>
+        <b>①</b> <span class="dock">扣分点</span>：第 (1) 问<b>必须写出「$\{T>t\}$ 与 $\{N_t=0\}$ 是同一事件」这句话</b>。
+        这是全题唯一的思想步骤，直接甩出 $P\{T>t\}=\mathrm e^{-t/2}$ 不给理由，按"结论正确、推理缺失"扣 2–3 分。<br>
+        <b>②</b> <span class="dock">扣分点</span>：第 (2) 问<b>必须点名「辛钦大数定律」并声明 $T_i^2$ 独立同分布、期望存在</b>。
+        只写 $\frac1n\sum T_i^2\to E(T^2)=8$ 会被扣依据分。<b>本章所有大题的通用采分点就是这句定律名。</b><br>
+        <b>③</b> <b>中间结果编号 (1) 的用途</b>：第 (2) 问开头「由 (1) 可知 $T\sim E(\frac12)$」直接引用，
+        <b>不必把分布函数再抄一遍</b>。阅卷是找采分点，编号能让第二问的依据一目了然。<br>
+        <b>④</b> <b>成品结论值得单独记</b>：<b>$N_t\sim P(\lambda t)\ \Longrightarrow\ T\sim E(\lambda)$</b>——
+        泊松过程的<b>等待时间服从指数分布</b>。本题 $\lambda=\frac12$。
+        记住这个，(1) 问可以两行写完（但卷面上仍要补事件那句话作为依据）。<br>
+        <b>⑤</b> <b>提速</b>：$E(T^2)=\frac2{\lambda^2}$ 直接得 8，比 $(ET)^2+DT$ 还快一步（见 <a href="#eg-q1">千基 1</a> 批注①）。<br>
+        <b>⑥</b> 蒙特卡洛 $10^7$ 样本：$E(T^2)=8.002709$，且 $P\{T>3\}=0.223131$ 与 $\mathrm e^{-1.5}=0.223130$ 吻合，
+        <b>反向确认了 (1) 问的密度是对的</b>。✅
+      </div>
+    </div></div>
+
+  <h2 id="s4"><span class="idx">肆</span>经验分布函数：伯努利大数定律唯一的正式产物　<span class="layer L-base">基础</span><span class="layer L-str">强化</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/概率论与数理统计/05_大数定律与中心极限定理/概率_第05章_基础30讲.pdf">📄 基础30讲 p.126</a>
+  <a class="pg" href="../../张宇系列_分章易识别版/概率论与数理统计/05_大数定律与中心极限定理/概率_第05章_强化9讲_第7讲_大数定律与中心极限定理.pdf">📄 强化9讲第7讲 p.59</a>
+
+  <div class="fml">
+    设 $(x_1,\cdots,x_n)$ 为总体样本 $(X_1,\cdots,X_n)$ 的一个观测值，按大小排列为 $x_{(1)}\le x_{(2)}\le\cdots\le x_{(n)}$，
+    对任意实数 $x$，称
+    $$F_n(x)=\frac{x_1,x_2,\cdots,x_n\ \text{中小于等于}\ x\ \text{的样本值个数}}{n}
+    =\begin{cases}0,&x\lt x_{(1)},\\[2pt] \dfrac kn,& x_{(k)}\le x\lt x_{(k+1)}\ (k=1,\cdots,n-1),\\[4pt] 1,& x\ge x_{(n)}\end{cases}$$
+    为样本的<b>经验分布函数</b>。记 $V_n(x)$ 为 $n$ 个观测值中 $\le x$ 的个数，则 $F_n(x)=\dfrac{V_n(x)}{n}$，且
+    $$V_n(x)\sim B\big(n,F(x)\big),\qquad E[F_n(x)]=F(x),\qquad D[F_n(x)]=\frac{F(x)[1-F(x)]}{n}.$$
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 书上标着「仅数学三」，但这一节数一<u>必须</u>看——因为它是第 6 章的开篇</span>
+    <b>书上说</b>：基础册和强化册都把经验分布函数的注框标为「（仅数学三）」，而基础册在那段旁边又批了一句
+    「<b>这种考题是经常出现的</b>」。<br>
+    <b>潜台词是</b>：「仅数学三」限定的是<b>"直接求 $F_n(x)$"这种计算题</b>（数一确实不考 <a href="#eg-52">基 5.2</a> 那种题型），
+    但这一段真正的内容是<b>「频率是概率的估计」这件事的完整数学表述</b>——
+    $E[F_n(x)]=F(x)$ 说明它<b>无偏</b>，$D[F_n(x)]=\frac{F(1-F)}n\to0$ 说明它<b>越来越准</b>，
+    <b>这两句话正是第 6 章"什么叫好的估计量"的原型</b>。<br>
+    <b>所以能考</b>：<b>①</b> 数一在<a href="#s10">第 6 章</a>会以"估计量的无偏性、有效性、一致性"的名义把这三个性质再考一遍，
+    <b>提前在这里理解，第 6 章就少一半陌生感</b>；
+    <b>②</b> $V_n(x)\sim B(n,F(x))$ 这个识别本身就是数一的考点——
+    <a href="#eg-s3">千强 3</a>（强化篇真题型）问的正是"计数 / 总数 依概率收敛于谁"，<b>那就是这里的 $F_n(x)\xrightarrow{P}F(x)$</b>；
+    <b>③</b> 强化册比基础册多给了 $E,D$ 两个公式和推导，<b>这是强化册在替数一补课</b>——
+    基础册没写是因为它把这块整体划给了数三。
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 那句眉批「$\mu_n\sim B(n,F(x))$」是把伯努利大数定律"接到"任意分布上的接头</span>
+    <b>书上说</b>：强化册在伯努利大数定律旁批：「$\mu_n\sim B(n,p)$，若事件 $A=\{X\le x\}$，则 $p=P(A)=P\{X\le x\}=F(x)$，
+    则 $\mu_n\sim B(n,F(x))$，$E\mu_n=nF(x)$，$D\mu_n=nF(x)[1-F(x)]$」。<br>
+    <b>潜台词是</b>：伯努利大数定律表面上只管"抛硬币"这种两点分布，
+    但<b>任何</b>分布、<b>任何</b>事件 $A$，只要重复独立试验，"$A$ 发生了没有"本身就是一个两点分布，
+    <b>于是伯努利大数定律对<u>一切</u>事件都适用</b>。取 $A=\{X\le x\}$ 就得到经验分布函数，
+    取 $A=\{X\le1\}$ 就得到 <a href="#eg-s3">千强 3</a>。<br>
+    <b>所以能考</b>：<b>①</b> 凡是题目出现「<b>$n$ 个观测值中满足某条件的个数</b>」除以 $n$，
+    <b>一律是伯努利大数定律，答案 $=P\{\text{那个条件}\}$</b>，<b>这是一个可以背下来的模式识别</b>；
+    <b>②</b> 千万别去算"个数"的分布再求期望——那是绕远路，直接算那个事件的概率即可；
+    <b>③</b> 反过来，若题目问的是 $\frac1n\sum g(X_i)$ 而非"个数"，那就回辛钦，
+    <b>两者的分界是"计数（示性函数）"还是"求值"</b>——其实计数就是 $g=$ 示性函数的特例，殊途同归。
+  </div>
+
+  <div class="link"><span class="tag">串联 · $F_n(x)$ → 第 6 章数理统计（本章交出去的最重的一件行李）</span>
+    第 6 章一上来讲"总体、样本、统计量"，紧接着就是<b>经验分布函数与直方图</b>——它的合法性证书就在本节。
+    再往后：<b>矩估计法</b>用 $\frac1n\sum X_i^k\xrightarrow{P}E(X^k)$（<a href="#s3">§3</a> 的考结论）；
+    <b>最大似然估计的一致性</b>、<b>样本方差 $S^2\xrightarrow{P}\sigma^2$</b> 都靠 <a href="#s1">§1</a> 注 (2)。<br>
+    <b>一句话：第 6 章所有"这样估是对的"的断言，证明全部在第 5 章。</b>
+    考场上第 6 章要你写"证明 $\hat\theta$ 是 $\theta$ 的一致估计"，你写的就是本章的语言。
+  </div>
+
+  <div class="link"><span class="tag">串联 · $F_n(x)$ 是"用数据画出分布"，408 里到处都是它</span>
+    经验分布函数干的事是：<b>拿 $n$ 个观测值，画出一条阶梯，用它冒充真实的 $F(x)$</b>。
+    <b>408 里同一个动作反复出现</b>：操作系统用<b>过去的访存序列</b>估计将来的页面访问概率（LRU 的全部理由）；
+    组成原理用<b>实测的命中次数/访问次数</b>估计 Cache 命中率；计算机网络用<b>采样的往返时延</b>估计 RTT
+    （TCP 的 $\mathrm{SRTT}=(1-\alpha)\mathrm{SRTT}+\alpha\cdot\mathrm{RTT}_{\text{新}}$ 就是个加权版的经验平均）。<br>
+    <b>它们合法的理由都写在本节</b>：$E[F_n]=F$（不偏）、$D[F_n]=\frac{F(1-F)}n\to0$（越采越准）。
+    <b>⟹ "用实测频率代替理论概率"不是工程上的将就，是有定理背书的。</b>
+  </div>
+
+  <div class="eg" id="eg-52"><div class="q"><span class="no">基 5.2</span><span class="exam">仅数学三 · 数一了解</span>设 $(2,1,5,2,1,3,1)$ 是来自总体 $X$ 的简单随机样本值，求总体 $X$ 的经验分布函数 $F_7(x)$。<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>第一个动作永远是排序</b>：$F_n$ 的定义式里全是 $x_{(k)}$，不排序就写不出分段点。
+            $(2,1,5,2,1,3,1)\to 1,1,1,2,2,3,5$。</li>
+          <li><b>分段点不是 1,2,3,4,5，而是<u>出现过的值</u> $1,2,3,5$</b>——
+            $4$ 没出现过，所以 $[3,5)$ 是<b>一整段</b>，不能拆。<b>这是本题唯一的坑。</b></li>
+          <li>每段的高度＝"$\le$ 该段左端点的样本个数 $/7$"，累计着数：
+            到 1 有 3 个 ⟹ $\frac37$；到 2 有 5 个 ⟹ $\frac57$；到 3 有 6 个 ⟹ $\frac67$；到 5 有 7 个 ⟹ $1$。</li>
+          <li><b>区间端点的开闭要写对</b>：$F$ 是<u>右</u>连续的，定义里是 $x_{(k)}\le x\lt x_{(k+1)}$，
+            所以每段<b>左闭右开</b>，跳跃发生在样本值<b>本身</b>那一点。</li>
+        </ol>
+      </div>
+      <div class="paper"><div class="phead">✍️ 考场卷面（写完对照）<span class="score">参考 8 分</span></div>
+        <div class="step"><b>解</b>　将各观测值按从小到大的顺序排列，得
+        $$1,\ 1,\ 1,\ 2,\ 2,\ 3,\ 5 .\tag{1}$$
+        <span class="pt">⛳ 2 分</span></div>
+        <div class="step">由 (1)，样本容量 $n=7$，取值 $1,2,3,5$ 的频数依次为 $3,2,1,1$，累计频数依次为 $3,5,6,7$。
+        由经验分布函数的定义 $F_7(x)=\dfrac{\text{样本值中}\le x\text{的个数}}{7}$ 得
+        $$F_7(x)=\begin{cases}0,&x<1,\\[2pt] \dfrac37,&1\le x<2,\\[4pt] \dfrac57,&2\le x<3,\\[4pt] \dfrac67,&3\le x<5,\\[4pt] 1,&x\ge5 .\end{cases}$$
+        <span class="pt">⛳ 6 分</span></div>
+        <div class="fin">即总体 $X$ 的经验分布函数 $F_7(x)$ 如上式。</div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（对照完校对）</span>
+        <b>①</b> <span class="dock">扣分点</span>：<b>五段一个都不能少</b>，尤其是首段 $x<1$ 取 0 和末段 $x\ge5$ 取 1。
+        很多人只写中间三段，按"分布函数不完整"扣分——<b>$F$ 的定义域是整个 $\mathbb R$。</b><br>
+        <b>②</b> <span class="dock">扣分点</span>：<b>区间必须左闭右开</b>。写成 $1\lt x\le2$ 会把 $F$ 变成左连续，
+        与分布函数的右连续性矛盾。<b>记忆锚：$F(x)=P\{X\le x\}$ 里是"$\le$"，所以在 $x$ 处就已经把该点算进去了。</b><br>
+        <b>③</b> <b>要害：分段点是"出现过的值"</b>。本题 $4$ 未出现，$[3,5)$ 必须合并成一段；
+        若强行写出 $[3,4)$ 与 $[4,5)$ 两段且高度相同，虽不算错但显得没理解定义。<br>
+        <b>④</b> <b>自检一秒钟</b>：$F_7$ 的所有跳跃高度之和必须 $=1$：$\frac37+\frac27+\frac17+\frac17=1$。✅
+        <b>这个校验对任何离散分布函数都适用。</b><br>
+        <b>⑤</b> 强化册在同一道注例旁批了「$\{x_i\le x\}$ 发生的次数」——<b>提醒你分子是"次数"不是"数值之和"</b>。
+        我对 9 个自变量点（0.5, 1, 1.5, 2, 2.9, 3, 4.9, 5, 7）逐点复算过，与上式全部吻合。
+      </div>
+    </div></div>
+
+  <div class="mine"><span class="tag">补讲 · 「仅数学三」的标签下面，藏着数一唯一会被考的那一半</span>
+    <b>书上说</b>：经验分布函数整块被标了「仅数学三」，而<b>紧接着的 <a href="#eg-52">基 5.2</a> 也标了「仅数学三」</b>。<br>
+    <b>潜台词是</b>：<b>标签管的是"计算题"，不是"概念"。</b>数三要手算 $F_7(x)$ 那种阶梯函数；
+    数一不考手算，但<b>照样要用 $F_n(x)\xrightarrow{P}F(x)$ 这个结论</b>——
+    <a href="#eg-s3">千强 3</a> 是 1000题<b>强化篇</b>的题（数一必做），它问的正是 $\frac{\nu_n(1)}{n}$ 收敛于谁，
+    <b>那就是 $F_n(1)\xrightarrow{P}F(1)$ 换了个说法。</b><br>
+    <b>所以能考</b>：<b>①</b> 数一考生看到「仅数学三」<b>不要整块跳过</b>，要分辨"跳过的是计算还是结论"；
+    <b>②</b> 本节该带走的是三件事：<b>$V_n(x)\sim B(n,F(x))$</b>、<b>$E[F_n]=F$</b>、<b>$D[F_n]=\frac{F(1-F)}n$</b>，
+    <b>计算阶梯函数确实可以不练</b>；
+    <b>③</b> 判断标签能不能跳的通用办法：<b>看这块内容有没有被<u>后面章节</u>引用</b>。
+    本节被第 6 章直接引用（经验分布是数理统计的开篇），<b>所以跳不得</b>。
+  </div>
+
+  <div class="eg" id="eg-s3"><div class="q"><span class="no">千强 3</span>设总体 $X$ 服从参数为 1 的泊松分布，$X_1,X_2,\cdots,X_n,\cdots$ 为来自总体 $X$ 的简单随机样本。记 $\nu_n(1)$ 为 $n$ 个观测值中<b>不大于 1</b> 的个数，则 $\dfrac{\nu_n(1)}{n}$ 依概率收敛于（　）。<br>(A) $\frac1{\mathrm e}$　(B) $\frac2{\mathrm e}$　(C) $1-\frac1{\mathrm e}$　(D) $1-\frac2{\mathrm e}$<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(B) $\dfrac2{\mathrm e}$</span>
+      <div style="margin-top:8px"><span class="lab">分析</span>
+      <b>模式识别</b>：出现了「<b>个数 / 总数</b>」⟹ <b>伯努利大数定律</b>，答案 $=P\{\text{那个事件}\}$。这里事件是 $\{X\le1\}$。<br>
+      由 $X\sim P(1)$ 得 $P\{X=k\}=\dfrac{\mathrm e^{-1}}{k!}$，故
+      $$P\{X\le1\}=P\{X=0\}+P\{X=1\}=\mathrm e^{-1}+\mathrm e^{-1}=2\mathrm e^{-1}.$$
+      于是 $\frac{\nu_n(1)}{n}$ 是事件 $\{X\le1\}$ 在 $n$ 个观测值中出现的<b>频率</b>，$P\{X\le1\}$ 是它的<b>概率</b>，
+      由伯努利大数定律，$\dfrac{\nu_n(1)}{n}\xrightarrow{P}P\{X\le1\}=\dfrac2{\mathrm e}$。故选 <b>(B)</b>。</div>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>①</b> <b>这是伯努利大数定律在本章唯一的正式出题形态</b>，也是 $F_n(x)\xrightarrow{P}F(x)$ 的一个特例：
+      取 $x=1$，$\frac{\nu_n(1)}{n}=F_n(1)\xrightarrow{P}F(1)=P\{X\le1\}$。<b>把它和 <a href="#eg-52">基 5.2</a> 并排看，数一该考的那一半就在这里。</b><br>
+      <b>②</b> <b>四个干扰项精确对应四种错法</b>：(A) 漏掉 $k=0$ 只算 $P\{X=1\}$；
+      (C) 算成补事件 $P\{X>1\}$ 时又漏了 $k=0$；(D) 算成补事件 $P\{X\ge2\}=1-\frac2{\mathrm e}$（<b>把"不大于 1"读成了"小于 1"再取补</b>）。
+      <span class="dock">要害</span>：<b>「不大于 1」＝$X\le1$＝含 $k=0,1$ 两项</b>，泊松分布从 $k=0$ 开始取值，<b>0 这一项最容易漏</b>。<br>
+      <b>③</b> $P(1)$ 的 $P\{X=0\}=\mathrm e^{-1}$、$P\{X=1\}=\mathrm e^{-1}$ <b>恰好相等</b>（因为 $\lambda=1$），
+      这是本题数字如此干净的原因；<b>若 $\lambda\ne1$ 就不再相等</b>，别把这个巧合当规律。<br>
+      <b>④</b> <b>提速</b>：泊松分布 $\lambda=1$ 时前几项是 $\mathrm e^{-1}\{1,1,\frac12,\frac16,\cdots\}$，
+      累计到 $k=1$ 是 $2\mathrm e^{-1}\approx0.736$。<b>选项里只有 (B) 在 0.7 附近，估值即可秒选。</b></div>
+    </div></div>
+
+  <h2 id="s5"><span class="idx">伍</span>$O_3$ 中心极限定理：标准化就是全部动作　<span class="layer L-base">基础</span><span class="layer L-str">强化</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/概率论与数理统计/05_大数定律与中心极限定理/概率_第05章_基础30讲.pdf">📄 基础30讲 p.128</a>
+  <a class="pg" href="../../张宇系列_分章易识别版/概率论与数理统计/05_大数定律与中心极限定理/概率_第05章_强化9讲_第7讲_大数定律与中心极限定理.pdf">📄 强化9讲第7讲 p.60</a>
+
+  <div class="fml">
+    <b>定理 4（列维–林德伯格定理）</b>　$\{X_n\}$ <b>独立同分布</b>，$EX_i=\mu$、$DX_i=\sigma^2>0$ <b>存在</b>，则对任意实数 $x$，
+    $$\lim_{n\to\infty}P\left\{\frac{\sum_{i=1}^nX_i-n\mu}{\sqrt n\,\sigma}\le x\right\}=\frac1{\sqrt{2\pi}}\int_{-\infty}^{x}\mathrm e^{-\frac{t^2}2}\mathrm dt=\Phi(x).$$
+    <b>定理 5（棣莫弗–拉普拉斯定理）</b>　$Y_n\sim B(n,p)\,(0\lt p\lt 1)$，则对任意实数 $x$，
+    $$\lim_{n\to\infty}P\left\{\frac{Y_n-np}{\sqrt{np(1-p)}}\le x\right\}=\Phi(x).$$
+    <b>实用形式</b>：$n$ 很大时 $\sum X_i\overset{\text{近似}}{\sim}N(n\mu,n\sigma^2)$，于是
+    $$P\left\{a\lt \sum_{i=1}^nX_i\lt b\right\}\approx\Phi\!\left(\frac{b-n\mu}{\sqrt n\sigma}\right)-\Phi\!\left(\frac{a-n\mu}{\sqrt n\sigma}\right).$$
+  </div>
+
+  <div class="key"><span class="tag">必记 · 三个条件与一句操作口令</span>
+    <b>条件「独立、同分布、期望和方差存在」缺一不可</b>（书上原话）。<br>
+    <b>操作口令</b>：<span style="color:var(--accent)"><b>「减期望、除标准差、套 $\Phi$」</b></span>——
+    对 $\sum X_i$ 就是减 $n\mu$、除 $\sqrt n\sigma$；对 $\overline X$ 就是减 $\mu$、除 $\frac\sigma{\sqrt n}$；
+    对 $Y_n\sim B(n,p)$ 就是减 $np$、除 $\sqrt{np(1-p)}$。<b>三种写法是同一个动作，别当三个公式背。</b><br>
+    书上批：<b>「只要题目涉及独立同分布随机变量的和 $\sum X_i$，我们就要考虑独立同分布中心极限定理。」</b>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 棣莫弗–拉普拉斯不是新定理，书上明说了它是列维–林德伯格的推论</span>
+    <b>书上说</b>：注 (1) 写「如果记 $X_i\sim B(1,p)$ 且相互独立，则 $Y_n=\sum X_i\sim B(n,p)$，
+    <b>由列维–林德伯格定理推出棣莫弗–拉普拉斯定理</b>」。<br>
+    <b>潜台词是</b>：<b>两个定理只需要记一个</b>。二项分布 $=n$ 个独立两点分布之和，
+    每个两点分布 $EX_i=p$、$DX_i=p(1-p)$，代进列维–林德伯格就是 $\frac{Y_n-np}{\sqrt{np(1-p)}}$。
+    <b>棣莫弗–拉普拉斯只是把"查 $B(1,p)$ 的期望方差"这一步替你做完了。</b><br>
+    <b>所以能考</b>：<b>①</b> 遇到二项分布不必犹豫用哪个定理，<b>结果一样</b>；
+    <b>②</b> 更重要的是<b>反向</b>：题目给的若是"$n$ 重伯努利试验中 $A$ 发生的次数"（<a href="#eg-55">基 5.5</a> 掷硬币、
+    <a href="#eg-q5">千基 5</a> 放球、<a href="#eg-q7">千基 7</a> 汽车丢失、<a href="#eg-s1">千强 1</a> 取到 2 的个数），
+    <b>要先认出"这是个二项分布"</b>——这一步才是真考点，认出来之后套公式是机械的；
+    <b>③</b> 历史上棣莫弗–拉普拉斯早于列维–林德伯格一百多年，教材保留它是尊重历史，<b>不是因为它更有用</b>。
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 「$\sigma^2>0$」这个不起眼的条件，堵的是一个真实漏洞</span>
+    <b>书上说</b>：定理 4 的条件写的是 $DX_i=\sigma^2>0$，<b>特意加了 $>0$</b>。<br>
+    <b>潜台词是</b>：若 $\sigma^2=0$，则 $X_i\equiv\mu$（退化为常数），$\sum X_i-n\mu\equiv0$，
+    标准化的分母也是 0，<b>整个式子无意义</b>。所以这不是废话，是排除退化情形。<br>
+    <b>所以能考</b>：<b>①</b> 更实际的用法是<b>提醒你分母不能为 0</b>——
+    <a href="#eg-q6">千基 6</a> 里 $Y_i=X_{2i}-X_{2i-1}$ 的 $EY_i=0$，若不小心把 $DY_i$ 也算成 0（错误地用 $D(X-Y)=DX-DY$），
+    分母就废了，<b>这是本章最典型的方差符号错误</b>：$D(X-Y)=DX+DY-2\mathrm{Cov}$，独立时是 <b>$+$</b>；
+    <b>②</b> 与 <a href="#eg-54">基 5.4</a> 呼应：那题的 (B)(D) 之所以错，正是因为"期望或方差<b>未必存在</b>"，
+    <b>条件里每一个字都在给某个选项挖坑</b>。
+  </div>
+
+  <div class="link"><span class="tag">串联 · 中心极限定理 ← 第 2 章正态分布 · 第 4 章 $D\overline X=\frac{\sigma^2}n$</span>
+    <b>为什么极限一定是正态？</b><a href="概率_第02章_一维随机变量及其分布.html">第 2 章</a>讲过正态分布的
+    <b>可加性</b>：独立正态之和仍是正态。正态是<u>唯一</u>在"独立求和"这个运算下形状不变、且方差有限的分布族，
+    所以它是这个运算的<b>不动点</b>；中心极限定理说的是"不论从哪出发，迭代都收敛到这个不动点"。<br>
+    <b>与第 4 章的接口</b>：$E\overline X=\mu$、$D\overline X=\frac{\sigma^2}n$ 是本节每一道题的第一步。
+    <b>大数定律用的是 $D\overline X\to0$，中心极限定理用的是 $D\overline X$ 的<u>精确大小</u> $\frac{\sigma^2}n$</b>——
+    <b>同一个量，一个只要它趋于 0，一个要它的确切值。</b><br>
+    <b>高数侧</b>：$\Phi(x)=\frac1{\sqrt{2\pi}}\int_{-\infty}^x\mathrm e^{-t^2/2}\mathrm dt$ 是<a href="第09章_一元函数积分学的计算.html">第 9 章</a>说过的
+    「<b>积不出来的积分</b>」（无初等原函数），所以答案只能写成 $\Phi(\cdot)$ 的组合、或查表得数值。
+    <b>⟹ 本章选择题的选项全是 $\Phi$ 的表达式，这不是偷懒，是必然。</b>
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 「近似服从 $N(n\mu,n\sigma^2)$」这句话是<u>改写</u>，不是新结论——但它才是解题用的形式</span>
+    <b>书上说</b>：定理 4 给的是极限式 $\lim P\{\cdots\le x\}=\Phi(x)$，注 (2) 才把它翻译成
+    「$\sum X_i$ 近似服从 $N(n\mu,n\sigma^2)$」并配上区间概率公式，还特意说「<b>这常常是解题的依据</b>」。<br>
+    <b>潜台词是</b>：定理的原始形式是<b>严格的极限</b>（$n\to\infty$），而注 (2) 是把它当成<b>有限 $n$ 的近似</b>在用，
+    <b>这一步严格说是"越界"的</b>——定理并没有保证任何具体的 $n$ 有多准。
+    书上不点破，是因为考研只要求会用；但你要知道<b>误差有多大是没有定理管的</b>，
+    这正是 <a href="#s6">§6</a> 需要额外给出"$n,np,nq$ 都较大"这类<b>经验条件</b>的原因。<br>
+    <b>所以能考</b>：<b>①</b> 选择题问"极限式"时用<b>原始形式</b>（<a href="#eg-55">基 5.5</a>、<a href="#eg-x51">习 5.1</a>、<a href="#eg-q3">千基 3</a>）；
+    问"概率近似值"时用<b>注 (2) 的形式</b>（<a href="#eg-x52">习 5.2</a>、<a href="#eg-q4">千基 4</a>）。<b>两类题的书写方式不同：前者写 $\lim$，后者写 $\approx$。</b>
+    <b>②</b> 大题（<a href="#eg-56">基 5.6</a>）必须<b>先写"由列维–林德伯格定理知 $T_n$ 近似服从 $N(50n,25n)$"</b>再往下算——
+    这句"近似服从"是把定理转成可算对象的枢纽，<b>省了它后面所有等号都没有依据</b>。
+  </div>
+
+  <div class="eg" id="eg-54"><div class="q"><span class="no">基 5.4</span>设随机变量 $X_1,X_2,\cdots,X_n$ 相互独立，$S_n=X_1+X_2+\cdots+X_n$，则根据列维–林德伯格定理，当 $n$ 充分大时，$S_n$ 近似服从正态分布，只要 $X_1,\cdots,X_n$（　）。<br>(A) 有相同的期望和方差　(B) 服从同一离散型分布　(C) 服从同一指数分布　(D) 服从同一连续型分布<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(C)</span>
+      <div style="margin-top:8px"><span class="lab">分析</span>
+      定理条件：<b>独立</b>（题设已给）+ <b>同分布</b> + <b>期望和方差均存在</b>。四个选项逐一对照：
+      <div class="tabwrap"><table>
+        <tr><th>选项</th><th>同分布？</th><th>期望方差存在？</th><th>结论</th><th>书上眉批</th></tr>
+        <tr><td>(A) 相同期望和方差</td><td class="bad">❌ 不一定</td><td class="y">✅</td><td class="bad">不满足</td><td>不一定同分布</td></tr>
+        <tr><td>(B) 同一离散型分布</td><td class="y">✅</td><td class="bad">❌ 不一定</td><td class="bad">不满足</td><td>同分布但期望或方差</td></tr>
+        <tr><td><b>(C) 同一指数分布</b></td><td class="y">✅</td><td class="y">✅ 都存在</td><td class="y">✅ 成立</td><td>—</td></tr>
+        <tr><td>(D) 同一连续型分布</td><td class="y">✅</td><td class="bad">❌ 不一定</td><td class="bad">不满足</td><td>不一定存在</td></tr>
+      </table></div>
+      故选 <b>(C)</b>（指数分布的数学期望 $\frac1\lambda$ 和方差 $\frac1{\lambda^2}$ <b>都存在</b>）。</div>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>①</b> <b>本题是"三个条件缺一不可"这句话的直接考法</b>：(A) 缺同分布，(B)(D) 缺矩存在，
+      <b>每个错项精确对应一个被抽掉的条件</b>。做完这题，那三个条件就不用背了。<br>
+      <b>②</b> <b>(A) 的反例</b>：$X_1\sim N(0,1)$，$X_2\sim$ 均匀分布 $U(-\sqrt3,\sqrt3)$——期望都是 0、方差都是 1，
+      但分布完全不同。<b>"矩相同"远弱于"分布相同"</b>，这是<a href="概率_第04章_随机变量的数字特征.html">第 4 章</a>就该建立的观念
+      （数字特征是分布的<u>压缩</u>，压缩必有信息损失）。<br>
+      <b>③</b> <b>(B)(D) 的反例</b>：离散型可以取<b>圣彼得堡分布</b>（$P\{X=2^k\}=2^{-k}$，$EX=\infty$）；
+      连续型可以取<b>柯西分布</b>（期望就不存在，正是 <a href="#eg-s71">强 7.1</a> 的那个）。
+      <b>⟹ 本章前后两道题共用一个反例，柯西是全章的"反面标兵"。</b><br>
+      <b>④</b> <span class="dock">易错</span>：有人选 (D)，理由是"连续型分布总有密度、总能积分"。
+      <b>有密度 ≠ 积分收敛</b>——柯西有漂亮的密度，$\int|x|f\mathrm dx$ 照样发散。</div>
+    </div></div>
+
+  <div class="link"><span class="tag">串联 · 「$X^2=X$」这个 0-1 变量的小性质，本章用了三次</span>
+    $X\sim B(1,p)$ 只取 0、1，故 $X^2=X$，于是 $E(X^2)=EX=p$，$DX=p-p^2=p(1-p)$——
+    <b>不用积分、不用求和，一行得方差</b>。<br>
+    本章三处用到：<a href="#eg-55">基 5.5</a>（$p=\frac12$，$DX_n=\frac n4$）、
+    <a href="#eg-x52">习 5.2</a>（$DX=\frac12-\frac14=\frac14$）、
+    <a href="#eg-q6">千基 6</a>（$DX_i=\frac12-\frac14=\frac14$，书上原文就是这么写的）。<br>
+    <b>往前接</b>：<a href="概率_第02章_一维随机变量及其分布.html">第 2 章</a>两点分布的 $EX,DX$ 就是这么来的；
+    <b>往后接</b>：<a href="#s4">§4</a> 的示性变量 $I_i$ 也是 0-1 变量，$E[F_n]$、$D[F_n]$ 的推导同样吃这条性质。
+    <b>⟹ 一个"平方等于自身"的观察，串起了本章一半的方差计算。</b>
+  </div>
+
+  <div class="eg" id="eg-55"><div class="q"><span class="no">基 5.5</span>设 $X_n$ 表示将一枚硬币随意投掷 $n$ 次出现「正面」的次数，则（　）。<br>(A) $\lim\limits_{n\to\infty}P\left\{\frac{X_n-n}{\sqrt n}\le x\right\}=\Phi(x)$　(B) $\lim\limits_{n\to\infty}P\left\{\frac{2X_n-n}{\sqrt n}\le x\right\}=\Phi(x)$<br>(C) $\lim\limits_{n\to\infty}P\left\{\frac{X_n-2n}{\sqrt n}\le x\right\}=\Phi(x)$　(D) $\lim\limits_{n\to\infty}P\left\{\frac{2X_n-2n}{\sqrt n}\le x\right\}=\Phi(x)$<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(B)</span>
+      <div style="margin-top:8px"><span class="lab">分析</span>
+      <b>第一步认分布</b>：$X_n\sim B\left(n,\frac12\right)$，故 $EX_n=\frac n2$，$DX_n=n\cdot\frac12\cdot\frac12=\frac n4$。<br>
+      <b>第二步标准化</b>（减期望、除标准差）：
+      $$\frac{X_n-\frac12n}{\sqrt{\frac14n}}=\frac{X_n-\frac n2}{\frac{\sqrt n}2}=\frac{2X_n-n}{\sqrt n}.$$
+      由棣莫弗–拉普拉斯定理，$\lim P\left\{\frac{2X_n-n}{\sqrt n}\le x\right\}=\Phi(x)$。故选 <b>(B)</b>。</div>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>①</b> <b>要害是把 $\frac{X_n-n/2}{\sqrt n/2}$ 化成整齐形式</b>：分子分母同乘 2。
+      <b>选项都写成了"分母是 $\sqrt n$"的样子，所以你必须先把分母凑成 $\sqrt n$</b>，这一步的代数变形就是本题的全部难度。<br>
+      <b>②</b> <b>四个干扰项的来源</b>：(A) 把 $EX_n$ 错当成 $n$（<b>忘了乘 $p=\frac12$</b>）；
+      (C) 把 $EX_n$ 错当成 $2n$；(D) 是 (B) 的分子被整体乘 2 后 $n$ 也跟着乘了（<b>只乘了一半的项</b>）。
+      <span class="dock">要害</span>：<b>标准化后的式子必须满足"期望为 0"</b>——
+      拿这个当自检：(B) 中 $E(2X_n-n)=2\cdot\frac n2-n=0$ ✅，而 (A) 的 $E(X_n-n)=-\frac n2\ne0$ ❌。
+      <b>这个自检 5 秒钟就能排掉 (A)(C)(D)。</b><br>
+      <b>③</b> <b>再加一个方差自检</b>：$D\left(\frac{2X_n-n}{\sqrt n}\right)=\frac4n\cdot\frac n4=1$ ✅。
+      <b>"期望 0、方差 1"两个自检做完，选择题不必真的推导。</b><br>
+      <b>④</b> 本题与 <a href="#eg-x52">习 5.2</a>（$P\{X=0\}=P\{X=1\}=\frac12$，$n=100$）是同一个分布的两种问法：
+      一个问极限式的形状，一个问具体数值。<b>合起来正好覆盖棣莫弗–拉普拉斯的两种考法。</b></div>
+    </div></div>
+
+  <div class="mine"><span class="tag">补讲 · 本章选择题的固定包装：把 $\sigma$ 从分母"挪"到分子，四个选项考的就是这一步</span>
+    <b>书上说</b>：<a href="#eg-55">基 5.5</a>、<a href="#eg-x51">习 5.1</a>、<a href="#eg-q3">千基 3</a>、<a href="#eg-q6">千基 6</a> 四道题的选项，<b>分母清一色是 $\sqrt n$</b>，
+    没有一个带 $\sigma$。<br>
+    <b>潜台词是</b>：标准形式 $\frac{\sum X_i-n\mu}{\sqrt n\,\sigma}$ 的分母含 $\sigma$，而命题人<b>统一把 $\sigma$ 乘到分子上</b>，
+    使分母变成干净的 $\sqrt n$。于是你必须做一次代数整理才能和选项对上——
+    <b>这就是本章选择题的全部技术含量</b>：$\frac{X_n-n/2}{\sqrt n/2}=\frac{2X_n-n}{\sqrt n}$、
+    $\frac{\sum X_i-n/\lambda}{\sqrt n/\lambda}=\frac{\lambda\sum X_i-n}{\sqrt n}$，<b>动作完全一样，都是分子分母同乘 $\frac1\sigma$。</b><br>
+    <b>所以能考</b>：<b>①</b> <b>不必真去整理</b>，用两步自检更快：算给定式子的<b>期望是否为 0、方差是否为 1</b>，
+    两条都过的就是答案（<a href="#eg-q3">千基 3</a> 是唯一的例外——它的方差是 3，所以答案要写成 $\Phi(x/\sqrt3)$）；
+    <b>②</b> 更一般地：<b>若给定式子的期望为 0、标准差为 $s$，则极限是 $\Phi(x/s)$</b>。
+    <b>这一条把四道题统一成了一个公式</b>，比逐题推导快得多；
+    <b>③</b> 期望不为 0 的选项<b>连算都不用算</b>，直接划掉——极限不可能是任何 $\Phi$ 的形式。
+  </div>
+
+  <div class="eg" id="eg-x51"><div class="q"><span class="no">习 5.1</span>设 $X_1,X_2,\cdots,X_n,\cdots$ 为独立同分布随机变量序列，且均服从参数为 $\lambda\,(\lambda>1)$ 的指数分布，记 $\Phi(x)$ 为标准正态分布函数，则（　）。<br>(A) $\lim P\left\{\frac{\sum X_i-n\lambda}{\lambda\sqrt n}\le x\right\}=\Phi(x)$　(B) $\lim P\left\{\frac{\sum X_i-n\lambda}{\sqrt{\lambda n}}\le x\right\}=\Phi(x)$<br>(C) $\lim P\left\{\frac{\lambda\sum X_i-n}{\sqrt n}\le x\right\}=\Phi(x)$　(D) $\lim P\left\{\frac{\sum X_i-\lambda}{\sqrt{n\lambda}}\le x\right\}=\Phi(x)$<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(C)</span>
+      <div style="margin-top:8px"><span class="lab">分析</span>
+      $X_i\sim E(\lambda)$ ⟹ $EX_i=\frac1\lambda$，$DX_i=\frac1{\lambda^2}$，故
+      $$E\left(\sum_{i=1}^nX_i\right)=\frac n\lambda,\qquad D\left(\sum_{i=1}^nX_i\right)=\frac n{\lambda^2},\qquad
+      \sqrt{D\left(\sum X_i\right)}=\frac{\sqrt n}{\lambda}.$$
+      标准化：
+      $$\frac{\sum X_i-\frac n\lambda}{\frac{\sqrt n}\lambda}=\frac{\lambda\sum X_i-n}{\sqrt n},$$
+      因此 $\lim P\left\{\frac{\lambda\sum X_i-n}{\sqrt n}\le x\right\}=\Phi(x)$，选 <b>(C)</b>。</div>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>①</b> <span class="dock">要害</span>：<b>指数分布的期望是 $\frac1\lambda$ 不是 $\lambda$</b>。
+      (A)(B) 都把 $E(\sum X_i)$ 写成了 $n\lambda$，<b>一眼就是错的</b>——
+      这两个选项的存在说明命题人知道大家会记反。<b>本题真正的考点只有这一个。</b><br>
+      <b>②</b> <b>标准化后分子分母同乘 $\lambda$</b> 得到 (C) 的形式，与 <a href="#eg-55">基 5.5</a> 同乘 2 是同一个动作。
+      <b>选择题里"分母被化成 $\sqrt n$"是本章的固定包装</b>，看到就知道要把 $\sigma$ 挪到分子上去。<br>
+      <b>③</b> <b>期望自检</b>：$E(\lambda\sum X_i-n)=\lambda\cdot\frac n\lambda-n=0$ ✅；
+      <b>方差自检</b>：$D\left(\frac{\lambda\sum X_i}{\sqrt n}\right)=\frac{\lambda^2}n\cdot\frac n{\lambda^2}=1$ ✅。
+      (D) 连"$n$ 项之和减去一个常数 $\lambda$"都不合量纲，<b>可以直接划掉</b>。<br>
+      <b>④</b> 题设「$\lambda>1$」是<b>无用条件</b>（干扰项），指数分布对任何 $\lambda>0$ 结论都一样。
+      <b>考场上遇到这种多余条件不要慌，也不要硬去用它。</b></div>
+    </div></div>
+
+  <div class="eg" id="eg-x52"><div class="q"><span class="no">习 5.2</span><span class="exam">＝强 7.3（重题）</span>设 $X_1,X_2,\cdots,X_{100}$ 为来自总体 $X$ 的简单随机样本，其中 $P\{X=0\}=P\{X=1\}=\frac12$。$\Phi(x)$ 表示标准正态分布函数，则利用中心极限定理可得 $P\left\{\sum\limits_{i=1}^{100}X_i\le55\right\}$ 的近似值为（　）。<br>(A) $1-\Phi(1)$　(B) $\Phi(1)$　(C) $1-\Phi(0.2)$　(D) $\Phi(0.2)$<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(B) $\Phi(1)$</span>
+      <div style="margin-top:8px"><span class="lab">分析</span>
+      由总体的概率分布得 $EX=\frac12$，$E(X^2)=\frac12$，$DX=\frac12-\frac14=\frac14$，故
+      $$E\left(\sum_{i=1}^{100}X_i\right)=100\times\frac12=50,\qquad D\left(\sum_{i=1}^{100}X_i\right)=100\times\frac14=25 .$$
+      由中心极限定理，$\sum X_i$ 近似服从 $N(50,25)$，从而
+      $$P\left\{\sum X_i\le55\right\}=P\left\{\frac{\sum X_i-50}{5}\le\frac{55-50}{5}\right\}\approx\Phi\!\left(\frac{55-50}{\sqrt{25}}\right)=\Phi(1).$$
+      故选 <b>(B)</b>。</div>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>①</b> <span class="dock">要害</span>：<b>标准差是 $\sqrt{25}=5$，不是 25</b>。
+      (C)(D) 里的 $0.2=\frac5{25}$ 正是<b>误用方差当标准差</b>的产物。<b>本章一半的错误出在这一步。</b><br>
+      <b>②</b> (A) 是把 $\le$ 看成 $\ge$（或多做了一次取补）。<b>$\Phi$ 是"$\le$"的概率，方向不要绕。</b><br>
+      <b>③</b> <b>合理性自检</b>：55 比期望 50 大，所以概率应当<b>大于 0.5</b>。
+      $\Phi(1)\approx0.841$ ✅，而 (A) $1-\Phi(1)\approx0.159$ ❌。<b>一秒排除。</b><br>
+      <b>④</b> <b>本题的"总体"是两点分布 $B(1,\frac12)$，所以 $\sum X_i\sim B(100,\frac12)$ 是精确的</b>，
+      用棣莫弗–拉普拉斯或列维–林德伯格结果一致（印证 <a href="#s5">§5</a> 那条"两个定理只需记一个"）。
+      我算了精确值作参考：$P\{B(100,\frac12)\le55\}=0.8644$，而 $\Phi(1)=0.8413$，
+      <b>差 0.023——这是格点分布固有的 $O(1/\sqrt n)$ 误差</b>，加连续性修正 $\Phi(\frac{55.5-50}5)=\Phi(1.1)=0.8643$ 就几乎精确。
+      <b>考研只要 $\Phi(1)$，但知道这个差距的来处，才不会在 <a href="#s9">§9 模块三</a> 里被数字吓到。</b></div>
+    </div></div>
+
+  <div class="eg" id="eg-q3"><div class="q"><span class="no">千基 3</span>设随机变量 $X_1,X_2,\cdots,X_n,\cdots$ 相互独立且均服从 $U[1,4]$，$\Phi(x)$ 是标准正态分布的分布函数，则 $\lim\limits_{n\to\infty}P\left\{\dfrac{2\sum_{i=1}^nX_i-5n}{\sqrt n}\le x\right\}=$（　）。<br>(A) $\Phi(x)$　(B) $\Phi(\sqrt3x)$　(C) $\Phi\left(\frac x{\sqrt3}\right)$　(D) $\Phi\left(\frac{2x}{\sqrt3}\right)$<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(C) $\Phi\left(\dfrac x{\sqrt3}\right)$</span>
+      <div style="margin-top:8px"><span class="lab">分析（本题与前几道<b>反着来</b>，是"给定形式反求 $\Phi$ 的自变量"）</span><br>
+      $X_i\sim U[1,4]$ ⟹ $EX_i=\frac{1+4}2=\frac52$，$DX_i=\frac{(4-1)^2}{12}=\frac34$，$\sigma=\frac{\sqrt3}2$。
+      由中心极限定理，<b>标准化后的量</b>才收敛到 $\Phi$：
+      $$\lim_{n\to\infty}P\left\{\frac{\sum X_i-\frac52n}{\sqrt n\cdot\frac{\sqrt3}2}\le t\right\}=\Phi(t).$$
+      而题目给的是 $\frac{2\sum X_i-5n}{\sqrt n}$，两者的关系是
+      $$\frac{2\sum X_i-5n}{\sqrt n}=\sqrt3\cdot\frac{\sum X_i-\frac52n}{\sqrt n\cdot\frac{\sqrt3}2}
+      \quad\Longrightarrow\quad \lim P\left\{\frac{2\sum X_i-5n}{\sqrt n}\le\sqrt3\,t\right\}=\Phi(t).$$
+      令 $\sqrt3t=x$，即 $t=\frac x{\sqrt3}$，从而 $\lim P\left\{\frac{2\sum X_i-5n}{\sqrt n}\le x\right\}=\Phi\!\left(\dfrac x{\sqrt3}\right)$。选 <b>(C)</b>。</div>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>①</b> <b>本题的题型价值最高</b>：前面几道都是"你去标准化"，本题是"<b>题目替你标准化了一半，问剩下那个倍数去哪了</b>"。
+      <span class="dock">要害</span>：给定式子的<b>方差不是 1</b>——
+      $D\left(\frac{2\sum X_i-5n}{\sqrt n}\right)=\frac4n\cdot n\cdot\frac34=3$，<b>标准差是 $\sqrt3$</b>，
+      所以要把 $x$ 再除以 $\sqrt3$ 才落到标准正态上。<br>
+      <b>②</b> <b>三秒解法</b>：<b>算出给定式子的标准差 $s$，答案就是 $\Phi(x/s)$。</b>
+      本题 $s=\sqrt3$ ⟹ 直接选 $\Phi(x/\sqrt3)$。<b>不必做换元</b>——书上那套"令 $\sqrt3t=x$"是给不熟的人看的。<br>
+      <b>③</b> <b>期望必须先为 0</b>：$E(2\sum X_i-5n)=2\cdot\frac52n-5n=0$ ✅。
+      <b>若期望不为 0，这题就无解</b>（极限不会是任何 $\Phi$ 的平移）。<b>先验期望、再算标准差，两步定答案。</b><br>
+      <b>④</b> $U[a,b]$ 的 $DX=\frac{(b-a)^2}{12}$——<b>是区间长度的平方除以 12，与位置无关</b>。
+      本题 $(4-1)^2/12=\frac34$，<span class="dock">易错</span>：写成 $\frac{4^2-1^2}{12}$ 或 $\frac{(4+1)^2}{12}$ 都是常见笔误。<br>
+      <b>⑤</b> 蒙特卡洛（$n=200$，40 万条样本路径）实测：$x=-1$ 时 0.281975（理论 $\Phi(-1/\sqrt3)=0.281851$）、
+      $x=0$ 时 0.501158、$x=1.5$ 时 0.807787（理论 0.806762）。<b>三点全中，(C) 确认。</b>✅</div>
+    </div></div>
+
+  <div class="eg" id="eg-q6"><div class="q"><span class="no">千基 6</span>设随机变量 $X_1,X_2,\cdots,X_{2n},\cdots$ 相互独立，且均服从二项分布 $B\left(1,\frac12\right)$，若根据中心极限定理，有 $\lim\limits_{n\to\infty}P\left\{a\sum\limits_{i=1}^n(X_{2i}-X_{2i-1})\le\sqrt n\,x\right\}=\Phi(x)$，其中 $\Phi(x)$ 为标准正态分布函数，则 $a=$ ______。<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$\sqrt2$</span>
+      <div style="margin-top:8px"><span class="lab">分析</span>
+      <b>第一步造出独立同分布序列</b>：记 $Y_i=X_{2i}-X_{2i-1}$，$i=1,2,\cdots$。
+      由于 $X_1,X_2,\cdots$ 相互独立，<b>下标互不重叠</b>，故 $Y_1,Y_2,\cdots$ 相互独立且同分布。<br>
+      <b>第二步算 $Y$ 的两个数</b>：$EX_i=\frac12$，$DX_i=E(X_i^2)-[E(X_i)]^2=\frac12-\frac14=\frac14$，于是
+      $$EY_i=EX_{2i}-EX_{2i-1}=0,\qquad DY_i=DX_{2i}+DX_{2i-1}=\frac14+\frac14=\frac12 .$$
+      <b>第三步标准化并与题目比对</b>：
+      $$\lim_{n\to\infty}P\left\{\frac{\sum Y_i-0}{\sqrt{n\cdot\frac12}}\le x\right\}=\Phi(x)
+      \iff \lim_{n\to\infty}P\left\{\sqrt2\sum Y_i\le\sqrt n\,x\right\}=\Phi(x),$$
+      对照题目形式即得 $a=\boldsymbol{\sqrt2}$。</div>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>①</b> <span class="dock">最要命的错</span>：<b>$D(X-Y)=DX+DY$，是加号！</b>
+      独立时 $D(X_{2i}-X_{2i-1})=DX_{2i}+DX_{2i-1}=\frac12$，<b>不是 0</b>。
+      写成减号会得 $DY_i=0$，标准化分母为 0，整题崩溃（正好撞上 <a href="#s5">§5</a> 那条"$\sigma^2>0$"的补讲）。
+      <b>记忆锚：方差是"波动幅度的平方"，两个独立源的波动只会叠加、不会抵消。</b><br>
+      <b>②</b> <b>要害在"$Y_i$ 相互独立"这一句的理由</b>：$Y_1=X_2-X_1$、$Y_2=X_4-X_3$、$Y_3=X_6-X_5$……
+      <b>各自用的 $X$ 下标不重叠</b>，所以独立。<b>若题目改成 $Y_i=X_{i+1}-X_i$（下标重叠），$Y_i$ 就不独立了，本题解法立刻失效。</b>
+      这个"下标是否重叠"的检查，在真题里出现过不止一次。<br>
+      <b>③</b> $X\sim B(1,p)$ 时 $E(X^2)=E(X)=p$（因为 $X$ 只取 0、1，$X^2=X$），故 $DX=p-p^2=p(1-p)$。
+      <b>"$X^2=X$"这个观察对一切 0-1 变量成立，是本章多道题的提速点。</b><br>
+      <b>④</b> <b>反证 $a=\sqrt2$ 唯一</b>：我用 200 万条样本路径实测，
+      $a=\sqrt2$ 时最大偏差 $0.00032$；而 $a=1$ 时 $0.0799$、$a=2$ 时 $0.0813$，且<b>不随 $n$ 增大而衰减</b>。
+      $a=\sqrt2$ 的偏差则从 $n=300$ 的 $0.0106$ 一路降到 $n=3\times10^5$ 的 $0.0005$——
+      <b>这个"错的 $a$ 偏差不衰减、对的 $a$ 偏差以 $1/\sqrt n$ 衰减"的对比，就是格点分布下判断答案对错的正确姿势。</b>✅</div>
+    </div></div>
+
+  <div class="eg" id="eg-s1"><div class="q"><span class="no">千强 1</span>设 $X_1,X_2,\cdots,X_n$ 是来自总体 $X\sim\begin{pmatrix}0&1&2&3\\ \frac1{16}&\frac38&\frac1{16}&\frac12\end{pmatrix}$ 的简单随机样本，若<b>取值为 2 的样本个数</b> $K$ 满足 $\lim\limits_{n\to\infty}P\left\{\frac{K-a}{b}\le x\right\}=\Phi(x)$，其中 $\Phi(x)$ 为标准正态分布函数，则 $a$，$b$ 分别是（　）。<br>(A) $\frac1{16},\ \frac{\sqrt{15}}{16}$　(B) $\frac n{16},\ \frac{\sqrt{15n}}{16}$　(C) $\frac1{16},\ \frac{\sqrt{15n}}{16}$　(D) $\frac n{16},\ \frac{\sqrt{15}}{16}$<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(B) $\dfrac n{16},\ \dfrac{\sqrt{15n}}{16}$</span>
+      <div style="margin-top:8px"><span class="lab">分析</span>
+      <b>第一步：认出二项分布。</b>若把「取到 2」视为<b>成功</b>，则 $n$ 次取值中取到 2 的个数 $K$ 服从二项分布
+      $$K\sim B\left(n,\ \tfrac1{16}\right),\qquad p=P\{X=2\}=\tfrac1{16}.$$
+      <b>第二步：算两个数。</b>$EK=np=\dfrac n{16}$，$DK=np(1-p)=n\cdot\dfrac1{16}\cdot\dfrac{15}{16}=\dfrac{15n}{16^2}$，
+      故标准差 $\sqrt{DK}=\dfrac{\sqrt{15n}}{16}$。<br>
+      <b>第三步：套棣莫弗–拉普拉斯。</b>$n$ 充分大时 $K\overset{\text{近似}}{\sim}N\!\left(\frac n{16},\frac{15n}{16^2}\right)$，进而
+      $\dfrac{K-\frac n{16}}{\frac{\sqrt{15n}}{16}}\overset{\text{近似}}{\sim}N(0,1)$。对照题干得 $a=\dfrac n{16}$，$b=\dfrac{\sqrt{15n}}{16}$。选 <b>(B)</b>。</div>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>①</b> <span class="dock">要害</span>：<b>$a$ 是期望不是概率</b>。(A)(C) 把 $a$ 写成 $\frac1{16}$——
+      那是<b>单次</b>成功的概率，而 $K$ 是 $n$ 次的<b>计数</b>，期望要乘 $n$。
+      <b>凡是 $a$ 里不含 $n$ 的选项，一眼排除</b>（$K$ 会随 $n$ 增大而增大，减去一个固定的 $\frac1{16}$ 毫无意义）。<br>
+      <b>②</b> (D) 的 $b=\frac{\sqrt{15}}{16}$ 漏了 $\sqrt n$——<b>标准差也必须含 $\sqrt n$</b>。
+      <b>量纲自检：$a\sim O(n)$、$b\sim O(\sqrt n)$，这是本章一切标准化的固定骨架</b>，
+      对着这个骨架扫一眼四个选项，只有 (B) 合格。<br>
+      <b>③</b> <b>分布律里的 $\frac38$ 和 $\frac12$ 是纯障眼法</b>：本题只关心「是不是 2」这一件事，
+      其余取值全部塌缩成"失败"。<b>这正是 <a href="#s4">§4</a> 那条补讲的用法——任何事件都能造出一个两点分布。</b><br>
+      <b>④</b> <b>顺手验一下分布律</b>：$\frac1{16}+\frac38+\frac1{16}+\frac12=\frac{1+6+1+8}{16}=1$ ✅。
+      <b>拿到分布律先加一遍，10 秒，能挡住命题人埋的印刷错。</b><br>
+      <b>⑤</b> 我用 $n=4000$、40 万次模拟实测：$x=-1$ 处 0.155（理论 0.1587）、$x=1.2$ 处 0.8857（理论 0.8849）都吻合；
+      $x=0$ 处经验值 0.5174 偏高 0.017，是<b>格点分布在整数点上的跳跃</b>（$K$ 恰好取到 250 的那一整块概率都被算进了 $\le0$）。
+      我另外算了精确二项 CDF：$n=4000$ 时偏差 $+0.0168$，$n=64000$ 时 $+0.0042$，$n=256000$ 时 $+0.0021$——
+      <b>严格按 $1/\sqrt n$ 衰减，确认是离散效应而非答案错。</b>✅</div>
+    </div></div>
+
+  <h2 id="s6"><span class="idx">陆</span>二项分布近似三选一（★基础册在这里写岔了）　<span class="layer L-base">基础</span><span class="layer L-str">强化</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/概率论与数理统计/05_大数定律与中心极限定理/概率_第05章_基础30讲.pdf">📄 基础30讲 p.129</a>
+  <a class="pg" href="../../张宇系列_分章易识别版/概率论与数理统计/05_大数定律与中心极限定理/概率_第05章_强化9讲_第7讲_大数定律与中心极限定理.pdf">📄 强化9讲第7讲 p.61</a>
+
+  <div class="fml">
+    设 $X\sim B(n,p)$，计算 $P\{X=k\}$ 或 $P\{a\lt X\lt b\}$ 有<b>三条路</b>：
+    <div class="tabwrap" style="text-align:left"><table>
+      <tr><th>方法</th><th>适用条件（<b>以强化册为准</b>）</th><th>公式</th></tr>
+      <tr><td>① <b>精确</b></td><td>$n$ 不太大（$n\le10$）</td><td>$P\{X=k\}=C_n^kp^k(1-p)^{n-k}$</td></tr>
+      <tr><td>② <b>泊松近似</b></td><td>$n$ 很大，$\lambda=np$ 不大<b>或</b> $nq$ 不大<br>（即 $p$ 很小，<b>或</b> $q=1-p$ 很小）</td><td>$P\{X=k\}\approx\dfrac{\lambda^k}{k!}\mathrm e^{-\lambda}$</td></tr>
+      <tr><td>③ <b>正态近似</b><br>（中心极限定理）</td><td><b>$n$、$np$、$nq$ 都较大</b></td><td>$P\{a\lt X\lt b\}\approx\Phi\!\left(\dfrac{b-np}{\sqrt{np(1-p)}}\right)-\Phi\!\left(\dfrac{a-np}{\sqrt{np(1-p)}}\right)$</td></tr>
+    </table></div>
+    强化册在这张表右侧竖排批了四个字：「<b>形式化归体系</b>」，眉批又点了一句「<b>注意 ③ 的条件与近似公式</b>」。
+  </div>
+
+  <div class="trap"><span class="tag">陷阱 · ★基础册 p129 的 ③ 印错了条件，别背基础册那一版</span>
+    <b>基础30讲 p129 原文（我已用 dpi=300 放大逐字复核）</b>：<br>
+    「③ 当 $n$ 较大而 $p$ <u>不太大</u>时（<b>$p<0.1$，$np\ge10$</b>），根据中心极限定理，有近似公式……」<br>
+    <b>这句话自相矛盾</b>：它的 ② 刚说过「$n>10$，$p<0.1$ 时用泊松」，
+    ③ 又说「$p<0.1$ 时用正态」——<b>同一个 $p$ 范围，两条路互相打架</b>。
+    而且 $p<0.1$ 与 $np\ge10$ 并存意味着 $n\ge100$，这就把 $p$ 接近 1 的整整一半情形（如 $p=0.9$）排除在外了，
+    <b>可 $p=0.9,n=1000$ 明明该用正态。</b><br>
+    <b>强化9讲 p61 已订正为「当 $n$、$np$、$nq$ 都较大时」，1000题解析 p199 引用的也是这一版。</b><br>
+    <b>⟹ 答题一律按「$n,np,nq$ 都较大」。</b>这个条件才是对的，理由见下面的补讲。
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 为什么正确的条件必须<u>同时</u>卡住 $np$ 和 $nq$，而不是只卡 $p$</span>
+    <b>书上说</b>：强化册把 ③ 的条件写成 $n,np,nq$ 都较大，②的条件写成「$np$ 不大<b>或</b> $nq$ 不大」。<br>
+    <b>潜台词是</b>：<b>二项分布的形状由 $np$ 与 $nq$ 这<u>两</u>个数共同决定，不是由 $p$ 决定。</b>
+    $B(n,p)$ 的偏度是 $\dfrac{1-2p}{\sqrt{np(1-p)}}$，<b>正态近似要求偏度趋于 0</b>，
+    而偏度小 $\iff np(1-p)$ 大 $\iff$ <b>$np$ 与 $nq$ 同时大</b>。<br>
+    若只有 $np$ 大而 $nq$ 小（$p$ 接近 1），分布贴着右端 $n$ 被截断，<b>严重左偏，正态近似同样失败</b>——
+    这时应该对<b>失败次数</b> $n-X\sim B(n,q)$ 用泊松。<b>这就是 ② 里那个「或 $nq$ 不大」的来处。</b><br>
+    <b>所以能考</b>：<b>①</b> 记忆口令：<b>「$np$ 与 $nq$ 谁小谁说了算——小的那个不到 10 就别用正态」</b>；
+    <b>②</b> 本章的题正好卡在两侧：<a href="#eg-x53">习 5.3</a> 的 $np=5<10$（<b>严格说不该用正态，书上仍用了</b>，误差 0.063），
+    <a href="#eg-q5">千基 5</a> 的 $np=20,nq=80$（<b>正常</b>，误差 0.047），
+    <a href="#eg-q7">千基 7</a> 的 $np=60,nq=9940$（<b>很好</b>，误差 0.034 但因阈值取在期望处而对称抵消）；
+    <b>③</b> <a href="#s9">§9 模块三</a> 就是把这三种情形同屏画出来的——<b>看一眼比背十遍管用</b>。
+  </div>
+
+  <div class="link"><span class="tag">串联 · 三条路径分别通向第 2 章的三个分布</span>
+    ① 精确 ⟶ <a href="概率_第02章_一维随机变量及其分布.html">第 2 章</a><b>二项分布</b>本身；
+    ② ⟶ 第 2 章<b>泊松定理</b>（$n\to\infty$、$p\to0$、$np\to\lambda$ 时 $B(n,p)\to P(\lambda)$）；
+    ③ ⟶ 第 2 章<b>正态分布</b>。<br>
+    <b>⟹ 第 2 章那三个分布之间的关系图，到本章才被"什么时候用哪个"填满</b>：
+    二项是本体，泊松管<b>稀有事件</b>（$np$ 有限），正态管<b>常见事件</b>（$np,nq$ 都大）。
+    <b>两个近似不是竞争关系，是分管两个不同的极限方向</b>——
+    这正是<a href="第01章_函数极限与连续.html">高数</a>里"同一个式子沿不同路径取极限得到不同结果"的概率版本。
+  </div>
+
+  <div class="mine"><span class="tag">补讲 · 「形式化归体系」这四个竖排字，说的是三条路其实是一条路</span>
+    <b>书上说</b>：强化册在二项近似三方法的表格右侧竖排批了「<b>形式化归体系</b>」四个字。<br>
+    <b>潜台词是</b>：三种方法<b>不是三个独立公式，而是同一个 $B(n,p)$ 沿三个方向的化归</b>——
+    $n$ 小就<b>不化归</b>（精确算）；$np$ 或 $nq$ 有限就化归到<b>泊松</b>（离散 → 离散，形状仍偏）；
+    $np,nq$ 都大就化归到<b>正态</b>（离散 → 连续，形状对称）。
+    <b>判据只有一个：$B(n,p)$ 此刻的形状离谁更近。</b><br>
+    <b>所以能考</b>：<b>①</b> 选择题问"下列近似中最合适的是"，<b>先算 $np$ 和 $nq$，谁小看谁</b>——
+    最小的那个 $<10$ 就选泊松（对小的那一侧计数），都 $\ge10$ 就选正态；
+    <b>②</b> <b>$p$ 大于 $\frac12$ 时要对<u>失败次数</u>用泊松</b>，这一点基础册完全没提，
+    <a href="#s9">§9 模块三</a>的「$p=.95$」预设就是专门演示这个盲区的；
+    <b>③</b> 三条路的<b>答案精度</b>我实测过一轮，在各自适用区内误差都在 0.005 量级，出了区就跳到 0.06 —— <b>差一个数量级，不是小事。</b>
+  </div>
+
+  <div class="eg" id="eg-x53"><div class="q"><span class="no">习 5.3</span>设某种电气元件不能承受超负荷试验的概率为 0.05。现对 100 个这样的元件进行超负荷试验，以 $X$ 表示「不能承受试验而烧毁的元件数」，则根据中心极限定理，$P\{5\le X\le10\}\approx$ ______。（$\Phi(2.29)=0.989$）<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$0.489$</span>
+      <div style="margin-top:8px"><span class="lab">分析</span>
+      $X\sim B(n,p)$，$n=100$，$p=0.05$，$q=0.95$，故 $np=5$，$npq=100\times0.05\times0.95=4.75$。
+      根据棣莫弗–拉普拉斯定理，$X$ 近似服从 $N(np,npq)=N(5,4.75)$，因此
+      $$P\{5\le X\le10\}=P\left\{\frac{5-np}{\sqrt{npq}}\le\frac{X-np}{\sqrt{npq}}\le\frac{10-np}{\sqrt{npq}}\right\}
+      =P\left\{0\le\frac{X-5}{\sqrt{4.75}}\le\frac{10-5}{\sqrt{4.75}}\right\}$$
+      $$=P\left\{0\le\frac{X-5}{\sqrt{4.75}}\le2.29\right\}\approx\Phi(2.29)-\Phi(0)=0.989-0.5=\boldsymbol{0.489}.$$</div>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>①</b> <b>下限恰好是 $np$，所以下限的标准化值是 0</b>，$\Phi(0)=0.5$ 直接得，<b>不用查表</b>。
+      <b>命题人把区间左端点设成 $np$ 就是为了省一次查表</b>——看到"左端点 = 期望"要立刻反应过来。<br>
+      <b>②</b> 上限 $\frac{10-5}{\sqrt{4.75}}=2.2941573$，题目给 $\Phi(2.29)$ 就是在告诉你四舍五入到 2.29。
+      <b>题干给出的那个 $\Phi$ 值本身就是提示，反过来可以校验你的标准差算对没有</b>——
+      若你算出的 $z$ 离 2.29 很远，说明 $npq$ 算错了。<br>
+      <b>③</b> <span class="dock">易错</span>：$npq$ 里的 $q=1-p=0.95$，<b>不是 $0.05$</b>；
+      另外 $\sqrt{npq}=\sqrt{4.75}\approx2.18$，<b>别把方差 4.75 当标准差代进去</b>（那会得 $z=1.05$，答案全错）。<br>
+      <b>④</b> ⚠️ <b>本题其实用错了方法，但考研要的就是这个答案。</b>
+      $np=5<10$，按 <a href="#s6">§6</a> 正确的条件应当用<b>泊松</b>近似。我算过三个值：
+      <b>精确二项 $0.5525$、泊松近似 $0.5458$（误差 0.0067）、书上的正态近似 $0.4891$（误差 <u>0.0634</u>）</b>。
+      <b>正态近似整整差了 6 个百分点</b>，而加上连续性修正 $\Phi(\frac{10.5-5}{\sqrt{4.75}})-\Phi(\frac{4.5-5}{\sqrt{4.75}})=0.5849$ 也才勉强靠近。<br>
+      <b>⑤</b> <b>那考场上怎么办？</b><b>题干说"根据中心极限定理"就按中心极限定理做</b>，
+      给了 $\Phi(2.29)$ 就是要你走这条路。<b>阅卷按书上的答案给分，不按真值给分。</b>
+      但你要<u>知道</u>这个近似在这里并不好——<b>这正是 <a href="#s9">§9 模块三</a> 存在的理由：把"什么时候近似会翻车"看一遍，
+      以后遇到没有指定方法的题（比如问"最合适的近似是"），你才选得对。</b></div>
+    </div></div>
+
+  <div class="mine"><span class="tag">补讲 · 三道二项应用题的"认分布"那一步，各藏着一种不同的伪装</span>
+    <b>书上说</b>：<a href="#eg-x53">习 5.3</a>、<a href="#eg-q5">千基 5</a>、<a href="#eg-q7">千基 7</a>、<a href="#eg-s1">千强 1</a> 的解答第一句全是「$X\sim B(n,p)$」，
+    仿佛这一步是显然的。<br>
+    <b>潜台词是</b>：<b>这一步恰恰是四道题唯一的思考点，而且每道题的伪装都不一样</b>——
+    <b>习 5.3</b>：$n$ ＝元件数，$p$ ＝单个元件烧毁概率（<u>最直白</u>）；
+    <b>千基 5</b>：$n$ ＝<u>球</u>数不是盒数，$p=\frac15$ ＝单个球进指定盒的概率（<u>主体易认错</u>）；
+    <b>千基 7</b>：$n$ ＝车数，$p$ ＝丢失率，但<u>问的是钱</u>，还要再做一次线性变换（<u>目标量不是 $X$ 本身</u>）；
+    <b>千强 1</b>：$n$ ＝样本容量，$p=P\{X=2\}$ ＝<u>分布律里挑一格</u>（<u>$p$ 藏在表里</u>）。<br>
+    <b>所以能考</b>：<b>①</b> 认二项分布的判据永远是这句话——<b>「有没有 $n$ 次<u>独立重复</u>的、只有两种结果的试验？」</b>
+    找到"重复的是什么"，$n$ 就定了；找到"什么叫成功"，$p$ 就定了；
+    <b>②</b> <b>$n$ 与 $p$ 一旦定错，后面全错且无法补救</b>，所以这一步值得在草稿上写清楚再往下走；
+    <b>③</b> 认出之后剩下的全是机械操作（$np$、$np(1-p)$、标准化），<b>四道题的后半段一模一样</b>。
+  </div>
+
+  <div class="eg" id="eg-q5"><div class="q"><span class="no">千基 5</span>设有 5 个盒子，100 个球，每个球等可能地放入任一盒子中，根据中心极限定理，指定的某一个盒子中<b>不超过 22 个球</b>的概率近似为（　）。<br>(A) $1-\Phi(1)$　(B) $\Phi(1)$　(C) $1-\Phi(0.5)$　(D) $\Phi(0.5)$<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(D) $\Phi(0.5)$</span>
+      <div style="margin-top:8px"><span class="lab">分析</span>
+      <b>建模是本题唯一的难点</b>：令指定盒子中球的个数为 $X$。<b>每个球独立地"进不进这个盒子"是一次伯努利试验</b>，
+      成功概率 $p=\frac15$（5 个盒子等可能），共 100 个球，故
+      $$X\sim B\left(100,\ \tfrac15\right),\qquad EX=np=20,\qquad DX=np(1-p)=100\times\tfrac15\times\tfrac45=16 .$$
+      根据中心极限定理，
+      $$P\{X\le22\}=P\left\{\frac{X-20}{\sqrt{16}}\le\frac{22-20}{\sqrt{16}}\right\}\approx\Phi(0.5).$$
+      故选 <b>(D)</b>。</div>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>①</b> <b>要害是"以球为试验单位，不是以盒为单位"</b>：$n=100$（球数），$p=\frac15$（每球进指定盒的概率）。
+      <span class="dock">易错</span>：有人设 $n=5$、$p=\frac1{100}$，方向就全反了。
+      <b>判据：谁在重复，谁就是 $n$——这里是 100 个球各做一次独立选择。</b><br>
+      <b>②</b> <b>"每个球等可能地放入任一盒子"隐含了球与球之间独立</b>，这是能用二项分布的前提。
+      <b>若改成"每盒至多放 25 个"就不独立了，二项模型立刻失效</b>——真题里出现过这种加限制的变体。<br>
+      <b>③</b> 干扰项 (A)(B) 里的 1 来自 $\frac{22-20}{2}$，即<b>误把标准差算成 $\sqrt{DX/4}$ 或直接用了 2</b>；
+      (C) 是把 $\le$ 看成 $>$。<b>合理性自检：22 大于期望 20，概率应 $>0.5$，(A)(C) 立刻出局。</b><br>
+      <b>④</b> <b>本题的近似质量正常</b>（$np=20$、$nq=80$ 都够大）：
+      精确 $P\{B(100,0.2)\le22\}=0.7389$，裸 CLT $\Phi(0.5)=0.6915$（误差 0.047），
+      <b>加连续性修正 $\Phi(\frac{22.5-20}{4})=\Phi(0.625)=0.7340$，误差降到 0.005</b>。
+      <b>⟹ 离散型用正态近似时，那 0.5 的修正值不少钱；考研不要求，但心里要有数。</b></div>
+    </div></div>
+
+  <div class="eg" id="eg-q7"><div class="q"><span class="no">千基 7</span>某保险公司接受了 10 000 辆汽车的保险，每辆汽车每年的保费为 1.2 万元。若汽车丢失，则车主获得赔偿 100 万元。设汽车的丢失率为 0.006，对于此项业务，利用中心极限定理，则保险公司一年所获利润<b>不少于 6 000 万元</b>的概率为 ______。<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$0.5$</span>
+      <div style="margin-top:8px"><span class="lab">分析</span>
+      <b>第一步把"利润"翻译成随机变量。</b>设 $X$ 为「需要赔偿的车主人数」，则赔偿金额 $Y=100X$（万元），
+      保费总收入 $C=10\,000\times1.2=12\,000$（万元，<b>确定值，不随机</b>）。
+      「利润不少于 6 000 万元」即 $12\,000-Y\ge6\,000$，即 <b>$Y\le6\,000$</b>。<br>
+      <b>第二步认分布。</b>$X\sim B(n,p)$，$n=10\,000$，$p=0.006$，故
+      $$EX=np=60,\qquad DX=np(1-p)=10\,000\times0.006\times0.994=59.64 .$$
+      由棣莫弗–拉普拉斯定理，$X$ 近似 $N(60,\ 59.64)$，从而 $Y=100X$ 近似 $N(6\,000,\ 596\,400)$。<br>
+      <b>第三步标准化。</b>
+      $$P\{Y\le6\,000\}=P\left\{\frac{Y-6\,000}{\sqrt{596\,400}}\le0\right\}\approx\Phi(0)=\boldsymbol{0.5}.$$</div>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>①</b> <b>本题的"设计感"很强：阈值恰好落在期望上，所以答案是 $\Phi(0)=0.5$，一个数都不用查表。</b>
+      <b>看到最后 $z=0$ 不要怀疑自己算错了</b>——命题人就是这么设的（$12\,000-6\,000=6\,000=EY$）。<br>
+      <b>②</b> <span class="dock">要害</span>：<b>随机的只有"丢几辆车"，保费收入是确定的。</b>
+      不要把 12 000 也当成随机变量。<b>凡是保险/收益类应用题，先分清"哪部分随机"，这是建模的第一刀。</b><br>
+      <b>③</b> <b>$Y=100X$ 的方差要乘 $100^2$</b>：$DY=100^2\times59.64=596\,400$。
+      <span class="dock">易错</span>：写成 $100\times59.64$ 是本题最常见的失分点（$D(cX)=c^2DX$，<b>系数要平方</b>）。<br>
+      <b>④</b> <b>提速</b>：其实<b>根本不必换成 $Y$</b>。$Y\le6000\iff100X\le6000\iff X\le60=EX$，
+      直接对 $X$ 标准化即得 $\Phi(0)=0.5$，<b>把上面的方差平方那一步整个绕过去了</b>。
+      <b>⟹ 线性变换不改变标准化后的值，能不换就不换。</b><br>
+      <b>⑤</b> 精确值：$P\{B(10000,0.006)\le60\}=0.5343$，与 0.5 差 0.034——
+      <b>这个偏差来自二项分布的右偏（$p$ 小）</b>，且因为 $X\le60$ 把 $X=60$ 那一整块概率算了进来。
+      $np=60$、$nq=9940$ 都够大，<b>近似本身是合格的</b>。</div>
+    </div></div>
+
+  <h2 id="s7"><span class="idx">柒</span>中心极限定理的三道大题　<span class="layer L-base">基础</span></h2>
+  <a class="pg" href="../../张宇系列_分章易识别版/概率论与数理统计/05_大数定律与中心极限定理/概率_第05章_基础30讲.pdf">📄 基础30讲 p.130</a>
+
+  <div class="mine"><span class="tag">补讲 · 本章大题只有三种问法，其中"反求 $n$"是最值得单独练的一种</span>
+    <b>书上说</b>：基础册的例题里，前五道都是选择题，<b>唯一的大题 <a href="#eg-56">基 5.6</a> 问的是"最多装多少箱"</b>。<br>
+    <b>潜台词是</b>：中心极限定理的大题只有三种问法，<b>难度递增</b>：
+    <b>①</b> 给 $n$ 求概率（<a href="#eg-q4">千基 4</a>，直接代）；
+    <b>②</b> <b>给概率反求 $n$</b>（<a href="#eg-56">基 5.6</a>，要解不等式）；
+    <b>③</b> 求某个统计量的<b>渐近分布及参数</b>（<a href="#eg-x55">习 5.5</a>，要反解标准化式）。
+    <b>三种问法用的是同一个式子，区别只在"哪个是未知数"。</b><br>
+    <b>所以能考</b>：<b>①</b> 反求 $n$ 的题，关键动作是<b>「$\Phi$ 单调 ⟹ 脱 $\Phi$」</b>，
+    题干给的那个 $\Phi(2)=0.977$ 就是脱壳用的钥匙——<b>题目给什么 $\Phi$ 值，就说明脱完之后要跟哪个数比</b>；
+    <b>②</b> 脱完得到的通常是关于 $\sqrt n$ 的二次不等式，<b>考场上直接试整数比求根快</b>；
+    <b>③</b> 第 ③ 类是第 6 章区间估计的原型——<b>那里的"求置信区间"就是本类问法的第四种变体：给概率反求<u>区间端点</u></b>。
+  </div>
+
+  <div class="eg" id="eg-56"><div class="q"><span class="no">基 5.6</span>生产线生产的产品成箱包装，每箱质量是随机的。假设平均每箱重 50 千克，标准差为 5 千克，若用载重为 5 吨的汽车承运，试用中心极限定理说明每辆汽车最多可以装多少箱，才能保证不超载的概率大于 0.977。（$\Phi(2)=0.977$）<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>先认出这是"反问"题</b>：前面所有题都是"给 $n$ 求概率"，本题是<b>"给概率求 $n$"</b>。
+            但动作完全一样——<b>照常写出概率的近似表达式，然后把它当成关于 $n$ 的不等式解</b>。</li>
+          <li><b>题设给的是"平均每箱重 50、标准差 5"，没说服从什么分布</b>——这正是中心极限定理的用武之处：
+            <b>不需要知道分布，只需要 $\mu=50$、$\sigma=5$ 存在</b>。看到"只给了期望和标准差、没给分布"就该想到本定理。</li>
+          <li>设 $n$ 箱总质量 $T_n=\sum X_i$，则 $ET_n=50n$、$\sqrt{DT_n}=5\sqrt n$（<b>标准差是 $\sigma\sqrt n$，不是 $\sigma n$</b>）。
+            "不超载"＝$T_n\le5\,000$（<b>5 吨 = 5000 千克，单位必须先统一</b>）。</li>
+          <li>标准化后要求 $\Phi\!\left(\frac{5000-50n}{5\sqrt n}\right)>0.977=\Phi(2)$。
+            <b>$\Phi$ 单调增，所以直接脱掉 $\Phi$</b>，得 $\frac{1000-10n}{\sqrt n}>2$。</li>
+          <li>这是个关于 $\sqrt n$ 的二次不等式。<b>不必硬解</b>——令 $u=\sqrt n$ 得 $10u^2+2u-1000<0$，
+            或者直接试算：$n=98$ 时左边 $\approx2.02>2$ ✅，$n=99$ 时 $\approx1.005<2$ ❌。
+            <b>答案是整数箱数，试算比求根公式快且不会错。</b></li>
+        </ol>
+      </div>
+      <div class="paper"><div class="phead">✍️ 考场卷面（写完对照）<span class="score">参考 12 分</span></div>
+        <div class="step"><b>解</b>　设 $X_i\ (i=1,2,\cdots,n)$ 为「第 $i$ 箱产品的质量（千克）」。
+        由题意，$X_1,X_2,\cdots,X_n$ <b>独立同分布</b>，且
+        $$EX_i=50,\qquad \sqrt{DX_i}=5 .$$
+        记 $n$ 箱的总质量为 $T_n=\sum\limits_{i=1}^nX_i$，则
+        $$ET_n=50n,\qquad \sqrt{DT_n}=5\sqrt n .\tag{1}$$
+        <span class="pt">⛳ 3 分</span></div>
+        <div class="step">由于 $X_i$ 独立同分布且期望、方差均存在，由<b>列维–林德伯格中心极限定理</b>知，当 $n$ 充分大时
+        $$T_n\overset{\text{近似}}{\sim}N(50n,\ 25n).\tag{2}$$
+        <span class="pt">⛳ 2 分</span></div>
+        <div class="step">载重 5 吨 $=5\,000$ 千克，「不超载」即事件 $\{T_n\le5\,000\}$。由 (1)(2) 及标准化，
+        $$P\{T_n\le5\,000\}=P\left\{\frac{T_n-50n}{5\sqrt n}\le\frac{5\,000-50n}{5\sqrt n}\right\}
+        \approx\Phi\!\left(\frac{1\,000-10n}{\sqrt n}\right).\tag{3}$$
+        <span class="pt">⛳ 3 分</span></div>
+        <div class="step">依题意要求 $P\{T_n\le5\,000\}>0.977$，即由 (3) 得
+        $$\Phi\!\left(\frac{1\,000-10n}{\sqrt n}\right)>0.977=\Phi(2).$$
+        由于 $\Phi(x)$ <b>单调增加</b>，上式等价于
+        $$\frac{1\,000-10n}{\sqrt n}>2 .\tag{4}$$
+        <span class="pt">⛳ 2 分</span></div>
+        <div class="step">解不等式 (4)：令 $u=\sqrt n>0$，(4) 化为 $10u^2+2u-1\,000<0$，解得
+        $0\lt u\lt \dfrac{-1+\sqrt{10\,001}}{10}$，即 $n<98.019\,9$。<span class="pt">⛳ 2 分</span></div>
+        <div class="fin">由于 $n$ 取正整数，故每辆汽车最多可以装 <b>98 箱</b>，才能保证不超载的概率大于 0.977。</div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（对照完校对）</span>
+        <b>①</b> <span class="dock">扣分点</span>：<b>必须先声明"$X_i$ 独立同分布、期望方差存在"再引用定理</b>。
+        这是列维–林德伯格的三个条件，不写就是"用定理不验条件"，按 <a href="#s5">§5</a> 那句「缺一不可」扣分。<br>
+        <b>②</b> <span class="dock">扣分点</span>：<b>「$\Phi$ 单调增，故可脱去 $\Phi$」这句话要写</b>。
+        直接从 $\Phi(A)>\Phi(2)$ 跳到 $A>2$ 而不说依据，是本题最常见的推理缺失。<br>
+        <b>③</b> <span class="dock">扣分点</span>：<b>单位换算 5 吨 $=5\,000$ 千克要显式写出</b>。
+        这类应用题的单位分是白给的，漏了可惜。<br>
+        <b>④</b> <b>标准差是 $\sigma\sqrt n=5\sqrt n$</b>——<span class="dock">易错</span>写成 $5n$。
+        记忆锚：<b>$D$ 可加，$\sqrt D$ 不可加</b>；$DT_n=25n$，开根号才是 $5\sqrt n$。<br>
+        <b>⑤</b> <b>结尾必须回扣题干问的"最多装多少箱"</b>，并说明"$n$ 取正整数所以取 98"。
+        <b>只写 $n<98.0199$ 不给整数答案，等于没回答问题。</b><br>
+        <b>⑥</b> <b>提速（考场推荐）</b>：不解二次不等式，直接代 98 和 99 验证：
+        $n=98$：$\frac{1000-980}{\sqrt{98}}=\frac{20}{9.899}=2.020>2$ ✅；
+        $n=99$：$\frac{1000-990}{\sqrt{99}}=\frac{10}{9.950}=1.005<2$ ❌。
+        <b>两次除法就定了答案，比求根公式快、还不会算错。</b>卷面上可以写"经验证 $n=98$ 满足、$n=99$ 不满足"。<br>
+        <b>⑦</b> 我按 $T_n\sim N(50n,25n)$ 精确算了三个值：$n=97$ 时 $P=0.9988$、<b>$n=98$ 时 $0.9783>0.977$ ✅</b>、
+        $n=99$ 时 $0.8426<0.977$ ❌。<b>注意 98 到 99 概率断崖式下跌（0.978 → 0.843）</b>，
+        因为 99 箱的期望重量 4 950 已经贴近 5 000 了。<b>这个悬崖说明答案 98 是"卡着极限"的，不是随便取的。</b>
+      </div>
+    </div></div>
+
+  <div class="mine"><span class="tag">补讲 · 应用题的通用建模四步，本章三道大题一步不差地按它走</span>
+    <b>书上说</b>：<a href="#eg-56">基 5.6</a>（装箱）、<a href="#eg-q4">千基 4</a>（生产时间）、<a href="#eg-q7">千基 7</a>（保险）的解答，
+    开头都是同一句式：「<b>设 $X_i$ 为「第 $i$ 个……」，由题意 $X_i$ 独立同分布，且 $EX_i=\cdots$，$DX_i=\cdots$</b>」。<br>
+    <b>潜台词是</b>：应用题的建模是<b>模板化</b>的，四步固定：
+    <b>①</b> 设 $X_i$ ＝<u>单个个体</u>的那个量（<b>并写明单位</b>）；
+    <b>②</b> 声明"独立同分布"，写出 $\mu$ 与 $\sigma$（<b>这是引用定理的入场券</b>）；
+    <b>③</b> 令 $T=\sum X_i$，写 $ET=n\mu$、$\sqrt{DT}=\sqrt n\,\sigma$；
+    <b>④</b> 把题目那句<u>中文</u>翻译成关于 $T$ 的事件（"不超载"→$T\le5000$、"利润不少于 6000"→$Y\le6000$、"15~20 小时"→$900\le T\le1200$）。<br>
+    <b>所以能考</b>：<b>①</b> <b>难点全在第 ④ 步的翻译上</b>，三道题分别埋了单位换算、正负号方向、双侧区间三种坑；
+    <b>②</b> 第 ① 步写单位可以直接挡掉 <a href="#eg-q4">千基 4</a> 的小时/分钟陷阱——<b>把单位写进设句里，是零成本的防错</b>；
+    <b>③</b> 第 ② 步那句"独立同分布且期望方差存在"<b>是采分点</b>，三道题的卷面都不能省。
+  </div>
+
+  <div class="eg" id="eg-q4"><div class="q"><span class="no">千基 4</span>设生产每件产品的时间服从指数分布，且平均时间为 10 分钟，生产各件产品的时间相互独立，由中心极限定理，在 <b>15 小时至 20 小时</b>之间生产 100 件产品的概率约为（　）。<br>(A) $\Phi(2)-\Phi(1)$　(B) $2\Phi(1)-\Phi(2)$　(C) $\Phi(1)+\Phi(2)-1$　(D) $2[\Phi(1)-\Phi(-2)]$<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">(C) $\Phi(1)+\Phi(2)-1$</span>
+      <div style="margin-top:8px"><span class="lab">分析</span>
+      记 $X_i$ 为生产第 $i$ 件产品的时间（<b>单位：分钟</b>），$i=1,\cdots,100$。
+      由「平均时间 10 分钟」得 $E X_i=10$，即 $\lambda=\frac1{10}$，故 $DX_i=\frac1{\lambda^2}=100$。
+      记总时间 $X=\sum\limits_{i=1}^{100}X_i$，由中心极限定理
+      $$X\overset{\text{近似}}{\sim}N(100\times10,\ 100\times100)=N(1\,000,\ 10\,000),\qquad \sqrt{DX}=100 .$$
+      <b>单位换算</b>：15 小时 $=900$ 分钟，20 小时 $=1\,200$ 分钟。于是
+      $$P\{900\le X\le1\,200\}=P\left\{\frac{900-1000}{100}\le\frac{X-1000}{100}\le\frac{1200-1000}{100}\right\}=P\left\{-1\le\frac{X-1000}{100}\le2\right\}$$
+      $$\approx\Phi(2)-\Phi(-1)=\Phi(2)-[1-\Phi(1)]=\boldsymbol{\Phi(1)+\Phi(2)-1}.$$
+      故选 <b>(C)</b>。</div>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>①</b> <span class="dock">要害一</span>：<b>单位陷阱</b>。题干给的是「小时」，而 $EX_i$ 是「分钟」，
+      <b>必须先统一</b>。不换算会得到 $P\{15\le X\le20\}$，那是个荒谬的区间（期望是 1000）。<br>
+      <b>②</b> <span class="dock">要害二</span>：<b>$\Phi(-1)=1-\Phi(1)$ 的化简是本题的<u>唯一</u>考点</b>。
+      四个选项全是 $\Phi(1)$ 和 $\Phi(2)$ 的组合，考的就是你会不会用<b>正态分布的对称性</b>把负自变量翻正。
+      <b>$\Phi(-x)=1-\Phi(x)$ 必须闭着眼写出来。</b><br>
+      <b>③</b> <b>选项 (A) 是不化简的错误答案</b>：$\Phi(2)-\Phi(1)$ 对应的是区间 $[1100,1200]$，
+      <b>它把下限 $-1$ 误写成了 $+1$</b>。<b>合理性自检：(A) $\approx0.136$ 太小</b>，
+      而区间 $[900,1200]$ 罩住了期望 1000 左右各一个多标准差，概率该在 0.8 上下；(C) $\approx0.819$ ✅。<br>
+      <b>④</b> <span class="dock">易错</span>：指数分布 $DX=\frac1{\lambda^2}=(EX)^2=100$，
+      <b>即"指数分布的标准差等于期望"</b>。这个性质很好用：$\sigma_i=10$，$\sigma_{\text{总}}=10\sqrt{100}=100$。<br>
+      <b>⑤</b> <b>精确值对照</b>：$X$ 实际服从 $\Gamma(100,\frac1{10})$，精确 $P=0.8139$，CLT 给 $0.8186$，
+      <b>误差仅 0.0047</b>——$n=100$ 对指数分布已经够用了。<b>连续型分布的正态近似比离散型好得多</b>（没有格点跳跃），
+      对比 <a href="#eg-x53">习 5.3</a> 的 0.063，差了一个数量级。</div>
+    </div></div>
+
+  <div class="link"><span class="tag">串联 · $\sqrt n$ 这个速率，是本章留给后面所有"抽样"问题的通用汇率</span>
+    本章反复出现的 $\frac\sigma{\sqrt n}$ 有个名字叫<b>标准误</b>，它给出了一条硬汇率：
+    <b>要把估计精度提高一倍，样本量要变成四倍。</b><br>
+    <b>第 6 章</b>：置信区间的半宽是 $z_{\alpha/2}\frac\sigma{\sqrt n}$，"要多少样本才能把区间缩到 ±0.1" 就是解这个式子；
+    <b>假设检验</b>的功效、<b>样本量设计</b>全部由它决定。<br>
+    <b>408 侧</b>：性能测试要跑多少次才能把平均耗时测准、蒙特卡洛模拟要采样多少次——同一条 $\frac1{\sqrt n}$。
+    <b>这也解释了为什么"多跑几次取平均"收益递减</b>：从 100 次加到 400 次才把误差减半。<br>
+    <b>⟹ $\sqrt n$ 不是某个公式里的装饰，它是"用有限样本了解无限总体"这件事的<u>价格表</u>。</b>
+  </div>
+
+  <div class="eg" id="eg-x55"><div class="q"><span class="no">习 5.5</span>假设 $X_1,X_2,\cdots,X_n$ 是来自总体 $X$ 的简单随机样本，已知 $E(X^k)=\alpha_k\,(k=1,2,3,4)$。<br>证明：当 $n$ 充分大时，随机变量 $Z_n=\dfrac1n\sum\limits_{i=1}^nX_i^2$ 近似服从正态分布，并指出其分布参数。<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s">
+      <div class="think"><span class="th">💭 思路（动手前看）</span>
+        <ol>
+          <li><b>题目给了四阶矩 $\alpha_1,\cdots,\alpha_4$，但结论里只会出现 $\alpha_2$ 和 $\alpha_4$</b>——
+            这是最强的审题信号：<b>定理要作用在 $X_i^2$ 上，不是 $X_i$ 上</b>。
+            因为 $E(X_i^2)=\alpha_2$、$D(X_i^2)=E(X_i^4)-[E(X_i^2)]^2=\alpha_4-\alpha_2^2$，
+            <b>刚好用掉二阶和四阶，$\alpha_1,\alpha_3$ 是干扰</b>。</li>
+          <li><b>第一句话必须是"$X_1^2,\cdots,X_n^2$ 也独立同分布"</b>——
+            独立变量的函数仍独立、同分布变量的同一函数仍同分布。<b>这句话是全题的逻辑起点，不能跳。</b></li>
+          <li>然后就是套列维–林德伯格：对序列 $\{X_i^2\}$，$\mu=\alpha_2$、$\sigma^2=\alpha_4-\alpha_2^2$，
+            标准化量 $\frac{\sum X_i^2-n\alpha_2}{\sqrt{n(\alpha_4-\alpha_2^2)}}$ 的极限分布是 $N(0,1)$。</li>
+          <li><b>最后一步是"反解"</b>：题目问的是 $Z_n=\frac1n\sum X_i^2$ 的分布参数，
+            所以要把标准化量里的 $\sum X_i^2$ 换成 $nZ_n$，<b>分子分母同除 $n$</b>：
+            $\frac{\sum X_i^2-n\alpha_2}{\sqrt{n(\alpha_4-\alpha_2^2)}}=\frac{Z_n-\alpha_2}{\sqrt{(\alpha_4-\alpha_2^2)/n}}$，
+            <b>一眼读出 $\mu=\alpha_2$、$\sigma^2=\frac{\alpha_4-\alpha_2^2}{n}$</b>。</li>
+          <li>⚠️ <b>方差里那个 $n$ 在分母，别漏</b>——$Z_n$ 是<u>平均值</u>，方差要比单项小 $n$ 倍。
+            这正好呼应 <a href="#s0">§0</a> 那条"两级展开"：大数定律给 $\mu$，中心极限定理给 $\frac{\sigma^2}n$。</li>
+        </ol>
+      </div>
+      <div class="paper"><div class="phead">✍️ 考场卷面（写完对照）<span class="score">参考 11 分</span></div>
+        <div class="step"><b>证</b>　依题意，$X_1,X_2,\cdots,X_n$ 独立同分布，可知 $X_1^2,X_2^2,\cdots,X_n^2$ <b>也独立同分布</b>，且
+        $$E(X_i^2)=\alpha_2,\qquad D(X_i^2)=E(X_i^4)-[E(X_i^2)]^2=\alpha_4-\alpha_2^2 \quad(i=1,2,\cdots,n).\tag{1}$$
+        <span class="pt">⛳ 4 分</span></div>
+        <div class="step">由 (1) 知 $\{X_i^2\}$ 的数学期望与方差均存在，故由<b>列维–林德伯格中心极限定理</b>，随机变量
+        $$V_n=\frac{\sum\limits_{i=1}^nX_i^2-n\alpha_2}{\sqrt{n(\alpha_4-\alpha_2^2)}}
+        =\frac{\dfrac1n\sum\limits_{i=1}^nX_i^2-\alpha_2}{\sqrt{(\alpha_4-\alpha_2^2)/n}}
+        =\frac{Z_n-\alpha_2}{\sqrt{(\alpha_4-\alpha_2^2)/n}}\tag{2}$$
+        的极限分布是<b>标准正态分布</b>。<span class="pt">⛳ 4 分</span></div>
+        <div class="step">所以当 $n$ 充分大时，$V_n$ 近似服从标准正态分布。由 (2) 反解得
+        $$Z_n=\sqrt{\frac{\alpha_4-\alpha_2^2}{n}}\cdot V_n+\alpha_2,$$
+        故 $Z_n$ 近似服从正态分布。<span class="pt">⛳ 2 分</span></div>
+        <div class="fin">即当 $n$ 充分大时，$Z_n=\dfrac1n\sum\limits_{i=1}^nX_i^2$ 近似服从参数为
+        $\ \mu=\alpha_2,\ \ \sigma^2=\dfrac{\alpha_4-\alpha_2^2}{n}\ $ 的正态分布。证毕。</div>
+      </div>
+      <div class="notekeep"><span class="nh">📌 批注（对照完校对）</span>
+        <b>①</b> <span class="dock">扣分点</span>：<b>第一句「$X_i^2$ 也独立同分布」是采分点</b>。
+        很多人直接对 $X_i^2$ 用定理却不说理由，等于默认了一个需要论证的事实。<br>
+        <b>②</b> <span class="dock">扣分点</span>：<b>$D(X_i^2)=E(X_i^4)-[E(X_i^2)]^2$ 这一步要写出来</b>，
+        不能直接甩 $\alpha_4-\alpha_2^2$。<b>这是"方差 = 二阶原点矩 − 一阶原点矩平方"套在 $X^2$ 上的结果</b>，
+        <span class="dock">易错</span>：写成 $\alpha_4-\alpha_2$（忘平方）或 $\alpha_2-\alpha_1^2$（套错变量）。<br>
+        <b>③</b> <b>(2) 式那串"三等号"是全题的技术核心</b>：
+        第一个等号是定理的标准形式，第二个等号<b>分子分母同除 $n$</b>，第三个等号换记号。
+        <b>卷面上把这三步写在同一行，阅卷一眼就看到你完成了"从 $\sum$ 到 $\overline{\phantom x}$"的转换。</b><br>
+        <b>④</b> <b>结尾必须同时给出 $\mu$ <u>和</u> $\sigma^2$</b>——题目明确问"指出其分布参数"。
+        <b>只证近似正态而不给参数，最多拿一半分。</b><br>
+        <b>⑤</b> <b>本题的通用价值</b>：把 $X_i^2$ 换成 $g(X_i)$，模板一字不变——
+        <b>「$g(X_i)$ 独立同分布 ⟹ 算 $Eg$、$Dg$ ⟹ 套定理 ⟹ 除以 $n$ 反解」</b>。
+        真题里问过 $\frac1n\sum|X_i|$、$\frac1n\sum\mathrm e^{X_i}$，<b>全是这一套</b>。<br>
+        <b>⑥</b> <b>与第 6 章的接口</b>：$Z_n$ 正是总体二阶原点矩 $\alpha_2$ 的<b>矩估计量</b>，
+        本题证明的其实是<b>「矩估计量渐近正态」</b>——第 6 章会直接引用这个结论来做区间估计。
+        <b>换句话说，这道"习题"是数理统计的一块基石，不是练手题。</b>
+      </div>
+    </div></div>
+
+  <h2 id="s8"><span class="idx">捌</span>切比雪夫不等式在本章的回归　<span class="layer L-str">强化</span></h2>
+
+  <div class="mine"><span class="tag">补讲 · 大数定律用切比雪夫不等式来<u>证</u>，但考场上它还会被单独拿来<u>算</u></span>
+    <b>书上说</b>：本章讲义正文没有再提切比雪夫不等式（第 4 章讲过），但 1000题在本章安排了一道专门考它的填空题。<br>
+    <b>潜台词是</b>：<b>本章与第 4 章的切比雪夫不等式共用一个"关键词触发"</b>——
+    <span style="color:var(--accent)"><b>题干出现「不小于」「至少是」「下界」而又没给具体分布时，一律用切比雪夫不等式</b></span>。
+    因为它是唯一一个"<b>只要知道 $EX$ 和 $DX$ 就能给出概率界</b>"的工具。<br>
+    <b>所以能考</b>：<b>①</b> 区分两条路线的判据很硬：<b>问"约等于多少"⟹ 中心极限定理（等号，需大 $n$）；
+    问"不小于多少"⟹ 切比雪夫不等式（不等号，任意 $n$）</b>；
+    <b>②</b> 切比雪夫不等式<b>不需要 $n$ 大</b>，也不需要独立同分布，代价是<b>界很松</b>
+    （<a href="概率_第04章_随机变量的数字特征.html">第 4 章「切比雪夫松紧台」</a>量过：正态在 $3\sigma$ 处差 41 倍）；
+    <b>③</b> 用它的<b>唯一技术动作</b>是把题目给的区间改写成 $|X-EX|<\varepsilon$ 的形式——<b>见下题</b>。
+  </div>
+
+  <div class="link"><span class="tag">串联 · 「等号 vs 不等号」是本章与第 4 章的分工，也是整门概率论的一条主线</span>
+    <b>第 4 章</b>给的是<b>不等号</b>工具（切比雪夫不等式）：适用面极广（任意分布、任意 $n$），代价是<b>只给界</b>。<br>
+    <b>第 5 章</b>给的是<b>等号</b>工具（中心极限定理）：能给出精确的近似值，代价是<b>要 $n$ 大、要独立同分布、要矩存在</b>。<br>
+    <b>本章两者同时登场</b>：<a href="#eg-q8">千基 8</a> 用不等号（题干点名"由切比雪夫不等式"），
+    <a href="#eg-x53">习 5.3</a> 用等号（题干点名"根据中心极限定理"）。
+    <b>⟹ 题干里的那句"根据……"不是废话，它在替你选工具。</b><br>
+    <b>往后看</b>：第 6 章的<b>区间估计</b>是等号路线的延续（要精确的分位数）；
+    而机器学习里的"泛化误差界"、408 里"最坏情况复杂度"则是不等号路线的延续——
+    <b>「要精确值就付出假设，要普适性就接受松弛」，这个权衡贯穿整个应用数学。</b>
+  </div>
+
+  <div class="eg" id="eg-q8"><div class="q"><span class="no">千基 8</span>设 $X_1,X_2,\cdots,X_n\ (n>2)$ 是来自总体 $X\sim N(0,1)$ 的简单随机样本，由<b>切比雪夫不等式</b>得 $P\left\{0<\sum\limits_{i=1}^nX_i^2<2n\right\}$ 不小于 ______。<span style="float:right;color:var(--green)">✔</span></div>
+    <div class="s">
+      <span class="lab">答案</span><span class="ans">$1-\dfrac2n$</span>
+      <div style="margin-top:8px"><span class="lab">分析</span>
+      <b>第一步认分布</b>：$X_i\sim N(0,1)$ 相互独立 ⟹ $\sum\limits_{i=1}^nX_i^2\sim\chi^2(n)$，故
+      $$E\left(\sum X_i^2\right)=n,\qquad D\left(\sum X_i^2\right)=2n .$$
+      <b>第二步把区间改写成"以期望为中心"的形式</b>（<b>这是全题唯一的入口</b>）：
+      区间 $(0,\ 2n)$ 的中点恰好是 $n=E\left(\sum X_i^2\right)$，半径是 $n$，所以
+      $$\left\{0<\sum X_i^2<2n\right\}=\left\{\left|\sum X_i^2-n\right|\lt n\right\}.$$
+      <b>第三步套切比雪夫不等式</b>（取 $\varepsilon=n$）：
+      $$P\left\{\left|\sum X_i^2-n\right|\lt n\right\}\ \ge\ 1-\frac{D\left(\sum X_i^2\right)}{n^2}=1-\frac{2n}{n^2}=\boldsymbol{1-\frac2n}.$$</div>
+      <div class="notekeep"><span class="nh">📌 批注</span>
+      <b>①</b> <span class="dock">要害</span>：<b>"区间中点必须正好是期望"是切比雪夫不等式能用上的前提</b>。
+      本题 $\frac{0+2n}2=n=E$ ✅，<b>这不是巧合，是命题人设计的</b>。
+      若区间改成 $(0,3n)$，中点 $\frac{3n}2\ne n$，就<b>不能直接套</b>，只能放缩到对称区间（会更松）。
+      <b>⟹ 拿到这类题，第一件事是算区间中点，看它是不是期望。</b><br>
+      <b>②</b> <b>$\chi^2(n)$ 的 $E=n$、$D=2n$ 必须背</b>。这里出现在第 5 章，但它属于
+      <b>第 6 章三大抽样分布</b>的内容——<b>1000题在本章提前用了它，说明这个知识点跨章绑定</b>。
+      记忆锚：$\chi^2(n)$ 是 $n$ 个 $N(0,1)$ 的平方和，单个 $E(X^2)=1$、$D(X^2)=E(X^4)-1=3-1=2$，
+      <b>$n$ 个相加就是 $n$ 和 $2n$</b>（正态四阶矩 $E(X^4)=3$ 也要记）。<br>
+      <b>③</b> <span class="dock">易错</span>：切比雪夫不等式有两个版本，
+      <b>$P\{|X-EX|\ge\varepsilon\}\le\frac{DX}{\varepsilon^2}$ 与 $P\{|X-EX|<\varepsilon\}\ge1-\frac{DX}{\varepsilon^2}$</b>。
+      本题问"不小于"，用的是<b>第二个（$\ge$ 版）</b>。<b>两个版本互为补事件，用错方向答案会变成 $\frac2n$。</b><br>
+      <b>④</b> <b>这个界有多松？</b>我算了真值对照：
+      <div class="tabwrap"><table>
+        <tr><th>$n$</th><th>3</th><th>5</th><th>10</th><th>30</th><th>100</th></tr>
+        <tr><td>真实概率</td><td>0.8884</td><td>0.9248</td><td>0.9707</td><td>0.9991</td><td>1.0000</td></tr>
+        <tr><td>切比雪夫下界 $1-\frac2n$</td><td class="mut">0.3333</td><td class="mut">0.6000</td><td class="mut">0.8000</td><td class="mut">0.9333</td><td class="mut">0.9800</td></tr>
+        <tr><td>松弛量</td><td class="bad">+0.555</td><td class="bad">+0.325</td><td>+0.171</td><td>+0.066</td><td class="y">+0.020</td></tr>
+      </table></div>
+      <b>$n=3$ 时界只有 0.33 而真值 0.89，松得离谱；但 $n$ 一大就迅速收紧</b>。
+      <b>⟹ 这正是 <a href="#s2">§2</a> 说的"切比雪夫不等式松不要紧，因为大数定律只要它趋于 1"</b>——
+      本题把那句抽象的话变成了一张可以数的表。<br>
+      <b>⑤</b> 题设 $n>2$ 是为了让 $1-\frac2n>0$（否则界为负数，毫无信息）。<b>这个条件不是摆设。</b></div>
+    </div></div>
+
+  <div class="mine"><span class="tag">补讲 · 「不小于」这三个字，在整份数一卷子里都是切比雪夫的信号</span>
+    <b>书上说</b>：<a href="#eg-q8">千基 8</a> 的题干直接点名「由切比雪夫不等式得……不小于 ______」。<br>
+    <b>潜台词是</b>：命题人点名，是因为<b>不点名就有歧义</b>——同一个 $P\{0\lt\sum X_i^2\lt2n\}$，
+    用 $\chi^2$ 分布表可以算出精确值，用中心极限定理可以算出近似值，只有切比雪夫给出的是<b>下界</b>。
+    <b>三种工具给三个不同的数（$n=10$ 时分别是 0.9707、近似值、0.8），题目要哪个必须说清楚。</b><br>
+    <b>所以能考</b>：<b>①</b> 反过来，<b>若题干<u>没</u>点名而问"不小于/至少"，那就是要切比雪夫</b>——
+    因为另外两个工具给不出"不小于"这种表述；
+    <b>②</b> 若题干给了具体分布又问"约等于"，用精确分布或中心极限定理；
+    <b>③</b> <b>最容易被忽略的一点</b>：切比雪夫不等式<u>不要求</u>独立、不要求同分布、不要求 $n$ 大，
+    它对<b>单个</b>随机变量就成立。<a href="#eg-q8">千基 8</a> 把它用在 $\sum X_i^2$ 这<u>一个</u>服从 $\chi^2(n)$ 的变量上，
+    <b>压根没用到样本的独立性</b>（独立性只用来认出 $\chi^2(n)$ 这个分布）。
+  </div>
+
+  <div class="bg"><span class="tag">背景 · 考试不碰</span>
+    切比雪夫不等式还有若干加强版：单侧的<b>坎泰利不等式</b> $P\{X-EX\ge\varepsilon\}\le\frac{DX}{DX+\varepsilon^2}$、
+    用高阶矩的<b>马尔可夫不等式</b> $P\{|X|\ge\varepsilon\}\le\frac{E|X|^k}{\varepsilon^k}$、
+    以及指数矩的<b>切尔诺夫界</b>（机器学习里很常用）。<b>数一考纲只有最基本的那一条，其余全部不考</b>，
+    见到也不必展开。知道它们存在的唯一价值是：<b>明白"切比雪夫很松"是可以被改进的，只是改进要付出更强的假设。</b>
+  </div>
+
+  <h2 id="s9"><span class="idx">玖</span>三个交互模块</h2>
+
+  <div class="tool">
+    <h4>🔔 模块一 · 中心极限定理收敛台</h4>
+    <div class="hint">
+      本章的核心断言是「<b>不管母体长什么样，$\frac{\sum X_i-n\mu}{\sqrt n\,\sigma}$ 都会变成 $N(0,1)$</b>」——
+      这句话背下来容易，<b>相信</b>它很难。这个台子把它画出来：选一个母体（左图），拖 $n$，看标准化和的直方图（右图）怎么爬成钟形。<br>
+      <b>看三件事</b>：① <b>要多大的 $n$ 才够</b>（均匀分布 $n=2$ 就很像了，指数分布要 $n\approx30$，$p=0.05$ 的两点分布要 $n>200$）；
+      ② <b>偏斜的母体收敛得最慢</b>（这正是 <a href="#s6">§6</a>「$np,nq$ 都要大」的直观来源）；
+      ③ <b>柯西母体<span style="color:var(--red)">永远不收敛</span></b>——它的期望根本不存在，定理条件不满足（<a href="#eg-s71">强 7.1</a> 用的就是它）。
+      右下角报的 $D_{\max}=\sup_x|F_{\text{经验}}(x)-\Phi(x)|$ 是"离标准正态还差多远"，<b>越小越像</b>。
+    </div>
+    <div class="ctrl">
+      <label>母体分布
+        <select id="m1pop">
+          <option value="unif">均匀 U(0,1)（对称，收敛最快）</option>
+          <option value="exp">指数 E(1)（右偏，收敛中等）</option>
+          <option value="tri">三角 f(x)=1-|x|（基 5.3 的母体）</option>
+          <option value="bern5">两点 B(1, 0.5)（对称格点）</option>
+          <option value="bern05">两点 B(1, 0.05)（极偏，收敛最慢）</option>
+          <option value="pois">泊松 P(0.5)（离散右偏）</option>
+          <option value="cauchy">柯西（★期望不存在，永不收敛）</option>
+        </select>
+      </label>
+    </div>
+    <div class="ctrl">
+      <label style="flex:1">$n$（每次求和的项数）
+        <input type="range" id="m1n" min="1" max="200" step="1" value="1">
+        <span class="v" id="m1nv">1</span>
+      </label>
+      <button class="go" id="m1go">🎲 重新抽样</button>
+    </div>
+    <div class="presets">
+      <button data-m1="unif,1">均匀 n=1（原形）</button>
+      <button data-m1="unif,2">均匀 n=2（已成三角）</button>
+      <button data-m1="unif,12">均匀 n=12</button>
+      <button data-m1="exp,1">指数 n=1（严重右偏）</button>
+      <button data-m1="exp,30">指数 n=30</button>
+      <button data-m1="bern05,20">两点 p=.05, n=20（np=1，差）</button>
+      <button data-m1="bern05,200">两点 p=.05, n=200（np=10，好）</button>
+      <button data-m1="tri,5">三角 n=5</button>
+      <button class="bad" data-m1="cauchy,5">★柯西 n=5</button>
+      <button class="bad" data-m1="cauchy,200">★柯西 n=200（还是不收敛）</button>
+    </div>
+    <div class="twocv">
+      <div><canvas id="m1cvA" width="380" height="230"></canvas><div class="cap">母体分布（$n=1$ 时的形状）</div></div>
+      <div><canvas id="m1cvB" width="380" height="230"></canvas><div class="cap">标准化和的直方图 vs $N(0,1)$ 密度</div></div>
+    </div>
+    <div class="readout" id="m1out">—</div>
+  </div>
+
+  <div class="tool">
+    <h4>⚖️ 模块二 · 三大数定律判别器</h4>
+    <div class="hint">
+      本章唯一的真难点不是计算，是<b>「这道题该用哪条大数定律」</b>——
+      <a href="#eg-51">基 5.1</a>（不同分布，只能切比雪夫）、<a href="#eg-q2">千基 2</a>（独立不同分布，只能切比雪夫）、
+      <a href="#eg-53">基 5.3</a>（同分布，辛钦）、<a href="#eg-s3">千强 3</a>（计数频率，伯努利）四道题走的是三条不同的路。<br>
+      勾选下面四个条件，三盏灯会告诉你<b>哪条定律此刻是合法的</b>，以及它给出的<b>结论式子长什么样</b>。
+      <b>请重点玩两组</b>：① 把「同分布」关掉——<b>辛钦立刻灭，切比雪夫还亮</b>；
+      ② 把「期望存在」关掉（柯西）——<b>三盏全灭，只能回定义</b>（<a href="#s1">$O_1$ 路线</a>）。
+    </div>
+    <div class="ctrl">
+      <label>独立性
+        <select id="m2ind">
+          <option value="ind">相互独立</option>
+          <option value="unc">仅两两不相关</option>
+          <option value="dep">既不独立也不确定不相关</option>
+        </select>
+      </label>
+      <label>同分布
+        <select id="m2iid"><option value="1">是</option><option value="0">否</option></select>
+      </label>
+    </div>
+    <div class="ctrl">
+      <label>数学期望 EX<sub>i</sub>
+        <select id="m2e"><option value="1">存在</option><option value="0">不存在</option></select>
+      </label>
+      <label>方差 DX<sub>i</sub>
+        <select id="m2d">
+          <option value="bnd">存在且一致有上界</option>
+          <option value="unb">存在但无一致上界</option>
+          <option value="no">不存在</option>
+        </select>
+      </label>
+      <label>是「计数 / 总数」型
+        <select id="m2b"><option value="0">否</option><option value="1">是（n 重伯努利）</option></select>
+      </label>
+    </div>
+    <div class="presets">
+      <button data-m2="ind,0,1,bnd,0">基 5.1 (A)(B)(C)：独立·不同分布·方差有界</button>
+      <button class="bad" data-m2="ind,0,1,unb,0">基 5.1 (D)：方差无一致上界 ✗</button>
+      <button data-m2="ind,0,1,bnd,0">千基 2：$\cos(kX_k)$ 独立不同分布</button>
+      <button data-m2="ind,1,1,bnd,0">基 5.3 / 千基 1：独立同分布</button>
+      <button data-m2="ind,1,1,no,1">千强 3：计数频率型</button>
+      <button data-m2="unc,0,1,bnd,0">两两不相关（切比雪夫仍可用）</button>
+      <button class="bad" data-m2="ind,1,0,no,0">★柯西（强 7.1）：期望不存在</button>
+      <button data-m2="ind,1,1,no,0">同分布但方差不存在（辛钦仍可用）</button>
+    </div>
+    <div class="lamps">
+      <div class="lamp" id="m2L1"><span class="nm">切比雪夫大数定律</span><span class="tx">—</span></div>
+      <div class="lamp" id="m2L2"><span class="nm">伯努利大数定律</span><span class="tx">—</span></div>
+      <div class="lamp" id="m2L3"><span class="nm">辛钦大数定律</span><span class="tx">—</span></div>
+    </div>
+    <div class="readout" id="m2out">—</div>
+  </div>
+
+  <div class="tool">
+    <h4>📐 模块三 · 二项近似三选一</h4>
+    <div class="hint">
+      <a href="#s6">§6</a> 说基础册把正态近似的条件写岔了（写成 $p<0.1,np\ge10$，正解是 <b>$n,np,nq$ 都较大</b>）。
+      光说没用——这个台子把<b>精确二项</b>、<b>泊松近似</b>、<b>正态近似</b>三条曲线画在同一张图上，
+      并报出它们在区间 $[a,b]$ 上的概率与误差。<br>
+      <b>请依次点这四个预设</b>：① <b>习 5.3</b>（$np=5$，正态误差 0.063、泊松误差 0.007 ⟹ <b>该用泊松，书上却用了正态</b>）；
+      ② <b>千基 5</b>（$np=20,nq=80$，正态正常）；③ <b>$p=0.95$</b>（$nq=5$ 小 ⟹ <b>正态同样翻车</b>，这正是基础册那个条件漏掉的半边）；
+      ④ <b>$n=8$</b>（该用精确公式）。<b>看完这四组，那三个条件就不用背了。</b>
+    </div>
+    <div class="ctrl">
+      <label style="flex:1">$n$ <input type="range" id="m3n" min="5" max="400" step="1" value="100"><span class="v" id="m3nv">100</span></label>
+      <label style="flex:1">$p$ <input type="range" id="m3p" min="0.005" max="0.995" step="0.005" value="0.05"><span class="v" id="m3pv">0.050</span></label>
+    </div>
+    <div class="ctrl">
+      <label>区间 $a\le X\le b$：$a=$ <input type="number" id="m3a" value="5" step="1"></label>
+      <label>$b=$ <input type="number" id="m3b" value="10" step="1"></label>
+    </div>
+    <div class="presets">
+      <button data-m3="100,0.05,5,10">习 5.3：n=100, p=.05, [5,10]</button>
+      <button data-m3="100,0.2,0,22">千基 5：n=100, p=.2, [0,22]</button>
+      <button data-m3="400,0.015,0,6">n=400, p=.015（np=6，泊松区）</button>
+      <button data-m3="100,0.95,90,98">★p=.95：nq=5（正态翻车的另一半）</button>
+      <button data-m3="8,0.4,2,4">n=8：该用精确公式</button>
+      <button data-m3="400,0.5,190,210">n=400, p=.5（正态最佳）</button>
+    </div>
+    <div class="cvwrap"><canvas id="m3cv" width="820" height="270"></canvas></div>
+    <div class="readout" id="m3out">—</div>
+    <div class="readout" id="m3jdg">—</div>
+  </div>
+
+  <h2 id="s10"><span class="idx">拾</span>收网清单 · 交给第 6 章的接口</h2>
+
+  <div class="key"><span class="tag">必记 · 全章压成一页（考前十分钟看这一块）</span>
+    <b>【一】三条路线的分流</b><br>
+    问「证明 $X_n\xrightarrow{P}a$」⟹ <b>$O_1$ 回定义</b>算 $P\{|X_n-a|<\varepsilon\}$ 再取极限（<a href="#eg-s71">强 7.1</a>）。<br>
+    问「$\frac1n\sum g(X_i)$ 收敛于<u>几</u>」⟹ <b>$O_2$ 大数定律</b>，答案 $=E[g(X)]$。<br>
+    问「概率<u>约</u>为多少」⟹ <b>$O_3$ 中心极限定理</b>，减期望、除标准差、套 $\Phi$。<br>
+    问「不小于 / 至少」⟹ <b>切比雪夫不等式</b>（<a href="#eg-q8">千基 8</a>）。<br>
+    <b>看分母：是 $n$ 走大数定律（答案是常数），是 $\sqrt n$ 走中心极限定理（答案是 $\Phi$）。</b><br><br>
+    <b>【二】三条大数定律，选哪条</b><br>
+    <b>同分布 + 期望存在</b> ⟹ <b>辛钦</b>（最常用，答案 $=\mu$）。<br>
+    <b>不同分布</b> ⟹ 只能 <b>切比雪夫</b>（要独立/两两不相关 + 方差<u>一致</u>有上界，答案 $=\frac1n\sum EX_i$）。<br>
+    <b>「个数 / 总数」型</b> ⟹ <b>伯努利</b>（答案 $=$ 那个事件的概率）。<br>
+    <b>期望不存在（柯西）</b> ⟹ 三条全废，回 $O_1$。<br><br>
+    <b>【三】三个标准化模板</b><br>
+    $\dfrac{\sum X_i-n\mu}{\sqrt n\,\sigma}$　|　$\dfrac{\overline X-\mu}{\sigma/\sqrt n}$　|　$\dfrac{Y_n-np}{\sqrt{np(1-p)}}$　——<b>同一个动作的三种包装。</b><br>
+    <b>自检两步</b>：标准化后<b>期望必为 0、方差必为 1</b>。选择题用这两步可以直接排除三个选项。<br><br>
+    <b>【四】二项近似三选一</b>（<b>以强化册为准，基础册 p129 的 ③ 印错了</b>）<br>
+    $n\le10$ ⟹ 精确公式；　$np$ 或 $nq$ 不大 ⟹ 泊松；　<b>$n,np,nq$ 都较大 ⟹ 正态</b>。<br><br>
+    <b>【五】必背常数</b><br>
+    $\Phi(-x)=1-\Phi(x)$，$\Phi(0)=0.5$；$E(\lambda)$：$EX=\frac1\lambda$、$DX=\frac1{\lambda^2}$、$E(X^2)=\frac2{\lambda^2}$、$E(X^k)=\frac{k!}{\lambda^k}$；
+    $U[a,b]$：$DX=\frac{(b-a)^2}{12}$；$B(1,p)$：$X^2=X$ 故 $DX=p(1-p)$；$\chi^2(n)$：$E=n$、$D=2n$；$N(0,1)$：$E(X^4)=3$。
+  </div>
+
+  <div class="link"><span class="tag">串联 · 本章交给第 6 章数理统计的四件行李（下一章开箱即用）</span>
+    <b>①</b> <b>依概率收敛</b> ⟹ 估计量的 <b>一致性（相合性）</b>。模板三句话：
+    「$\hat\theta=g(\overline X,\overline{X^2})$，$g$ 连续，由大数定律与 <a href="#s1">§1 注 (2)</a> 得 $\hat\theta\xrightarrow{P}\theta$。」<br>
+    <b>②</b> <b>$\frac1n\sum X_i^k\xrightarrow{P}E(X^k)$</b>（<a href="#s3">§3</a> 考结论）⟹ <b>矩估计法</b>成立的全部理由。<br>
+    <b>③</b> <b>经验分布函数</b> $F_n(x)$ 及 $E[F_n]=F$、$D[F_n]=\frac{F(1-F)}n$（<a href="#s4">§4</a>）⟹ 第 6 章开篇，
+    也是<b>无偏性 / 有效性 / 一致性</b>三个概念的原型。<br>
+    <b>④</b> <b>$Z_n=\frac1n\sum X_i^2$ 渐近正态</b>（<a href="#eg-x55">习 5.5</a>）⟹ 第 6 章<b>区间估计</b>的理论依据；
+    $\sum X_i^2\sim\chi^2(n)$、$E=n$、$D=2n$（<a href="#eg-q8">千基 8</a>）⟹ 第 6 章<b>三大抽样分布</b>已提前登场。<br>
+    <b>⟹ 第 6 章会问很多"为什么这样估是对的"，答案全部写在第 5 章。带着这四件行李进下一章。</b>
+  </div>
+
+  <div class="bg"><span class="tag">背景 · 本章在真题中的分量</span>
+    大数定律与中心极限定理在数一真题中<b>单独命题的频率不高</b>（多数年份 0–1 道选择/填空，分值 3–5 分），
+    但它<b>与第 6 章绑定出现</b>的概率很高（相合性、矩估计的性质）。
+    本章讲义只有 14 页、题只有 24 道，<b>是全科性价比最高的一讲</b>——
+    半天读完，拿的是"送分题不丢分 + 第 6 章少一半困惑"两份收益。<b>不要因为它薄就跳过。</b>
+  </div>
+
+<script>
+(function(){
+'use strict';
+/* ============ 公用 ============ */
+// ⚠️ ch4 教训：hidpi 重复调用会把已乘过 DPR 的 cv.width 再当 CSS 宽度 → 图只画左上 1/4。
+// 根治：首次放大前把 CSS 尺寸存进 dataset，之后一律读 dataset，绝不读 cv.width。
+function hidpi(cv){
+  if(!cv.dataset.cw){ cv.dataset.cw = cv.width; cv.dataset.ch = cv.height; }
+  var dw = +cv.dataset.cw, dh = +cv.dataset.ch;          // 设计尺寸，永远从 dataset 读
+  // 窄屏自适应：按容器可用宽度等比缩，保证 375px 下不横向溢出、且图形不变形
+  var avail = cv.parentElement ? cv.parentElement.clientWidth : dw;
+  var w = (avail > 40 && avail < dw) ? Math.floor(avail) : dw;
+  var h = Math.round(dh * w / dw);
+  var r = window.devicePixelRatio || 1;
+  cv.width = w*r; cv.height = h*r; cv.style.width = w+'px'; cv.style.height = h+'px';
+  var g = cv.getContext('2d'); g.setTransform(r,0,0,r,0,0);
+  return {g:g, w:w, h:h};
+}
+function css(n){ return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
+// ⚠️ ch4 教训：KaTeX auto-render 早于本脚本执行 → JS 插入的 $…$ 不会被渲染，须手动重渲。
+function rekatex(el){
+  if(window.renderMathInElement){
+    try{ renderMathInElement(el,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false}); }catch(e){}
+  }
+}
+function setHTML(el,html){ el.innerHTML = html; rekatex(el); }
+// 标准正态分布函数（Abramowitz–Stegun 26.2.17，精度 7.5e-8，够用）
+function Phi(x){
+  var s = x<0 ? -1 : 1; x = Math.abs(x)/Math.SQRT2;
+  var t = 1/(1+0.3275911*x);
+  var y = 1 - (((((1.061405429*t-1.453152027)*t)+1.421413741)*t-0.284496736)*t+0.254829592)*t*Math.exp(-x*x);
+  return 0.5*(1+s*y);
+}
+function phi(x){ return Math.exp(-x*x/2)/Math.sqrt(2*Math.PI); }
+function fmt(v,d){ return (v===null||!isFinite(v)) ? '—' : v.toFixed(d===undefined?4:d); }
+
+/* ============ 模块一：中心极限定理收敛台 ============ */
+var M1 = {pop:'unif', n:1, M:12000};   // ⚠️ ch2/3/4 教训：预设直接写状态对象，控件只作显示，避免 step 静默吸附
+var POPS = {
+  unif  :{nm:'均匀 U(0,1)',    mu:0.5,  sd:Math.sqrt(1/12), lo:-0.1, hi:1.1, ok:true,
+          gen:function(){ return Math.random(); }},
+  exp   :{nm:'指数 E(1)',      mu:1,    sd:1,               lo:0,    hi:5,   ok:true,
+          gen:function(){ return -Math.log(1-Math.random()); }},
+  tri   :{nm:'三角 f=1-|x|',   mu:0,    sd:Math.sqrt(1/6),  lo:-1.1, hi:1.1, ok:true,
+          gen:function(){ var s=Math.random()<0.5?-1:1; return s*(1-Math.sqrt(1-Math.random())); }},
+  bern5 :{nm:'两点 B(1,0.5)',  mu:0.5,  sd:0.5,             lo:-0.3, hi:1.3, ok:true, disc:true,
+          gen:function(){ return Math.random()<0.5?1:0; }},
+  bern05:{nm:'两点 B(1,0.05)', mu:0.05, sd:Math.sqrt(0.05*0.95), lo:-0.3, hi:1.3, ok:true, disc:true,
+          gen:function(){ return Math.random()<0.05?1:0; }},
+  pois  :{nm:'泊松 P(0.5)',    mu:0.5,  sd:Math.sqrt(0.5),  lo:-0.5, hi:5.5, ok:true, disc:true,
+          gen:function(){ var L=Math.exp(-0.5),k=0,p=1; do{k++;p*=Math.random();}while(p>L); return k-1; }},
+  cauchy:{nm:'柯西（期望不存在）', mu:0, sd:1,               lo:-6,   hi:6,   ok:false,
+          gen:function(){ return Math.tan(Math.PI*(Math.random()-0.5)); }}
+};
+function hist(vals, lo, hi, bins){
+  var c = new Array(bins).fill(0), w = (hi-lo)/bins, k;
+  for(var i=0;i<vals.length;i++){ k = Math.floor((vals[i]-lo)/w); if(k>=0&&k<bins) c[k]++; }
+  return {c:c, w:w, lo:lo};
+}
+function drawHist(cv, vals, lo, hi, bins, overlay, title){
+  var d = hidpi(cv), g = d.g, W = d.w, H = d.h, PL = 34, PR = 8, PT = 16, PB = 24;
+  var ink = css('--ink')||'#222', line = css('--line')||'#ccc',
+      acc = css('--accent')||'#2a7', red = css('--red')||'#c33', mut = css('--muted')||'#888';
+  g.clearRect(0,0,W,H);
+  var h = hist(vals, lo, hi, bins), tot = vals.length, mx = 0, dens = [];
+  for(var i=0;i<bins;i++){ dens.push(h.c[i]/(tot*h.w)); if(dens[i]>mx) mx=dens[i]; }
+  if(overlay) mx = Math.max(mx, 0.42);
+  mx = mx*1.12 || 1;
+  var X = function(v){ return PL + (v-lo)/(hi-lo)*(W-PL-PR); };
+  var Y = function(v){ return H-PB - v/mx*(H-PT-PB); };
+  // 坐标轴
+  g.strokeStyle = line; g.lineWidth = 1; g.beginPath();
+  g.moveTo(PL, PT-4); g.lineTo(PL, H-PB); g.lineTo(W-PR, H-PB); g.stroke();
+  // 直方
+  g.fillStyle = acc; g.globalAlpha = 0.42;
+  for(i=0;i<bins;i++){
+    if(dens[i]<=0) continue;
+    var x0 = X(lo+i*h.w), x1 = X(lo+(i+1)*h.w);
+    g.fillRect(x0, Y(dens[i]), Math.max(x1-x0-0.5,0.6), H-PB-Y(dens[i]));
+  }
+  g.globalAlpha = 1;
+  // N(0,1) 密度
+  if(overlay){
+    g.strokeStyle = red; g.lineWidth = 2; g.beginPath();
+    for(var px=0; px<=240; px++){
+      var xv = lo + (hi-lo)*px/240;
+      if(px===0) g.moveTo(X(xv), Y(phi(xv))); else g.lineTo(X(xv), Y(phi(xv)));
+    }
+    g.stroke();
+  }
+  // 刻度
+  g.fillStyle = mut; g.font = '10px system-ui,sans-serif'; g.textAlign = 'center';
+  var ticks = overlay ? [-3,-2,-1,0,1,2,3] : null;
+  if(!ticks){ ticks = []; for(i=0;i<=4;i++) ticks.push(lo+(hi-lo)*i/4); }
+  ticks.forEach(function(t){
+    if(t<lo||t>hi) return;
+    g.beginPath(); g.moveTo(X(t),H-PB); g.lineTo(X(t),H-PB+3); g.strokeStyle=line; g.stroke();
+    g.fillText((Math.abs(t)<1e-9?0:t).toFixed(overlay?0:2), X(t), H-PB+14);
+  });
+  g.textAlign = 'left'; g.fillStyle = ink; g.font = '11px system-ui,sans-serif';
+  g.fillText(title, PL+2, PT-4);
+  return {dens:dens, h:h};
+}
+function m1run(){
+  var P = POPS[M1.pop], n = M1.n, M = M1.M, i, j, s;
+  // 左：母体（n=1 的样本）
+  var raw = new Float64Array(M);
+  for(i=0;i<M;i++) raw[i] = P.gen();
+  var rlo = P.lo, rhi = P.hi;
+  drawHist(document.getElementById('m1cvA'), raw, rlo, rhi, P.disc?26:44, false, P.nm);
+  // 右：标准化和
+  var std = new Float64Array(M);
+  for(i=0;i<M;i++){
+    s = 0; for(j=0;j<n;j++) s += P.gen();
+    std[i] = P.ok ? (s - n*P.mu)/(Math.sqrt(n)*P.sd) : (s - n*P.mu)/(Math.sqrt(n)*P.sd);
+  }
+  drawHist(document.getElementById('m1cvB'), std, -4, 4, 56, true,
+           '标准化和  n = '+n);
+  // KS 距离
+  var arr = Array.prototype.slice.call(std).sort(function(a,b){return a-b;});
+  var D = 0, clipped = 0;
+  for(i=0;i<arr.length;i++){
+    var F = (i+1)/arr.length, d1 = Math.abs(F - Phi(arr[i])), d2 = Math.abs(i/arr.length - Phi(arr[i]));
+    if(d1>D) D = d1; if(d2>D) D = d2;
+    if(arr[i]<-4||arr[i]>4) clipped++;
+  }
+  var out = document.getElementById('m1out');
+  var verdict, cls;
+  if(!P.ok){
+    cls = 'readout warn';
+    verdict = '★ <b>柯西母体：期望不存在，列维–林德伯格的条件从第一条就不满足。</b>无论 $n$ 多大，'
+      + '标准化量都<b>不会</b>收敛到 $N(0,1)$——事实上 $\\overline X_n$ 与单个 $X_1$ <b>同分布</b>，'
+      + '增加样本毫无用处。图上那些甩到 $\\pm4$ 之外的点（本次 <b>'+clipped+'</b> 个，占 '
+      + fmt(100*clipped/M,2)+'%）就是证据：正态分布在 $\\pm4$ 外的概率只有 0.006%。'
+      + '<b>这正是 <a href="#eg-s71">强 7.1</a> 只能回定义、不能用大数定律的原因。</b>';
+  }else if(D<0.02){ cls='readout ok';
+    verdict = '$D_{\\max}='+fmt(D)+'$ —— <b>已经非常接近 $N(0,1)$</b>，这个 $n$ 完全够用。';
+  }else if(D<0.06){ cls='readout';
+    verdict = '$D_{\\max}='+fmt(D)+'$ —— <b>已经很像钟形，但还看得出偏斜</b>，再加大 $n$ 会更好。';
+  }else{ cls='readout warn';
+    verdict = '$D_{\\max}='+fmt(D)+'$ —— <b>离正态还差得远</b>。'
+      + (M1.pop==='bern05' ? '此时 $np='+fmt(n*0.05,2)+'$，'+(n*0.05<10?'<b>不到 10</b>，正是 <a href="#s6">§6</a> 说的"$np$ 太小则正态近似失效"。':'已经过 10，形状明显改善。')
+                           : '把 $n$ 调大试试。');
+  }
+  out.className = cls;
+  setHTML(out, '<b>母体</b> '+P.nm+'　$\\mu='+fmt(P.mu,3)+'$，$\\sigma='+fmt(P.sd,4)+'$　|　'
+    + '<b>样本量</b> '+M+' 条，每条求 '+n+' 项之和<br>'+verdict);
+}
+function m1sync(){ document.getElementById('m1n').value = M1.n; document.getElementById('m1nv').textContent = M1.n;
+                   document.getElementById('m1pop').value = M1.pop; }
+document.getElementById('m1n').addEventListener('input', function(){ M1.n = +this.value; m1sync(); m1run(); });
+document.getElementById('m1pop').addEventListener('change', function(){ M1.pop = this.value; m1run(); });
+document.getElementById('m1go').addEventListener('click', m1run);
+document.querySelectorAll('[data-m1]').forEach(function(b){
+  b.addEventListener('click', function(){
+    var a = this.getAttribute('data-m1').split(',');
+    M1.pop = a[0]; M1.n = +a[1];      // 预设写状态，不写控件
+    m1sync(); m1run();
+  });
+});
+
+/* ============ 模块二：三大数定律判别器 ============ */
+var M2 = {ind:'ind', iid:'1', e:'1', d:'bnd', b:'0'};
+function m2run(){
+  var indOK = (M2.ind==='ind'), uncOK = (M2.ind==='ind'||M2.ind==='unc');
+  var iid = (M2.iid==='1'), eOK = (M2.e==='1'), dBnd = (M2.d==='bnd'), dExist = (M2.d!=='no'), bern = (M2.b==='1');
+  // 切比雪夫：两两不相关（含独立）+ 方差存在且一致有上界
+  var L1 = uncOK && dBnd;
+  // 伯努利：n 重伯努利试验（计数/总数型）
+  var L2 = bern && indOK;
+  // 辛钦：相互独立 + 同分布 + 期望存在
+  var L3 = indOK && iid && eOK;
+  var C = [
+    {el:'m2L1', on:L1, txt: L1
+      ? '✅ 可用。结论：$\\dfrac1n\\sum X_i\\xrightarrow{P}\\dfrac1n\\sum EX_i$（<b>右端未必是常数</b>，要自己算）。'
+      : '❌ 不可用。' + (!uncOK ? '缺「独立或两两不相关」。' : '') + (!dBnd ? (M2.d==='unb' ? '方差<b>无一致上界</b>（如 <a href="#eg-51">基 5.1 (D)</a> 的 $DX_n=n^2$）。' : '方差不存在。') : '')},
+    {el:'m2L2', on:L2, txt: L2
+      ? '✅ 可用。结论：$\\dfrac{\\mu_n}{n}\\xrightarrow{P}p$，即<b>频率 → 概率</b>（<a href="#eg-s3">千强 3</a>）。'
+      : '❌ 不可用。' + (!bern ? '本题不是「计数 / 总数」型。' : '缺独立重复试验。')},
+    {el:'m2L3', on:L3, txt: L3
+      ? '✅ 可用（<b>首选，最常用</b>）。结论：$\\dfrac1n\\sum X_i\\xrightarrow{P}\\mu=EX$。'
+      : '❌ 不可用。' + (!indOK ? '辛钦要求<b>真独立</b>（不能只放宽到不相关）。' : '') + (!iid ? '缺「同分布」——这正是 <a href="#eg-q2">千基 2</a> 只能用切比雪夫的原因。' : '') + (!eOK ? '<b>期望不存在</b>（柯西），这是命门。' : '')}
+  ];
+  C.forEach(function(c){
+    var el = document.getElementById(c.el);
+    el.className = 'lamp ' + (c.on ? 'on' : 'off');
+    setHTML(el.querySelector('.tx'), c.txt);
+  });
+  var out = document.getElementById('m2out'), msg, cls;
+  if(L1||L2||L3){
+    cls = 'readout ok';
+    var first = L3 ? '<b>辛钦</b>（同分布，直接得 $\\mu$，最省事）' : (L2 ? '<b>伯努利</b>（答案就是那个事件的概率）' : '<b>切比雪夫</b>（要算 $\\frac1n\\sum EX_i$）');
+    msg = '共 <b>'+[L1,L2,L3].filter(Boolean).length+'</b> 条可用，考场首选 '+first+'。'
+        + '<br>无论用哪条，写答案时都可以统一套「考结论」：$\\dfrac1n\\sum X_i\\xrightarrow{P}E\\left(\\dfrac1n\\sum X_i\\right)$'
+        + '（<a href="#s3">§3</a>），<b>但卷面上必须点出定律名字，那是采分点</b>。';
+  }else{
+    cls = 'readout warn';
+    msg = '<b>三条大数定律全部失效。</b>' + (!eOK
+      ? '因为<b>期望不存在</b>——这时唯一的出路是回到依概率收敛的<b>定义</b>直接积分，即 <a href="#s1">$O_1$ 路线</a>（<a href="#eg-s71">强 7.1</a> 的柯西密度就是这种情形）。'
+      : '请检查条件组合；若题目仍要求收敛结论，多半要回 <a href="#s1">$O_1$ 定义</a>。');
+  }
+  out.className = cls; setHTML(out, msg);
+}
+['m2ind','m2iid','m2e','m2d','m2b'].forEach(function(id){
+  document.getElementById(id).addEventListener('change', function(){
+    M2[id.slice(2)] = this.value; m2run();
+  });
+});
+function m2sync(){ document.getElementById('m2ind').value=M2.ind; document.getElementById('m2iid').value=M2.iid;
+                   document.getElementById('m2e').value=M2.e; document.getElementById('m2d').value=M2.d;
+                   document.getElementById('m2b').value=M2.b; }
+document.querySelectorAll('[data-m2]').forEach(function(b){
+  b.addEventListener('click', function(){
+    var a = this.getAttribute('data-m2').split(',');
+    M2.ind=a[0]; M2.iid=a[1]; M2.e=a[2]; M2.d=a[3]; M2.b=a[4];
+    m2sync(); m2run();
+  });
+});
+
+/* ============ 模块三：二项近似三选一 ============ */
+var M3 = {n:100, p:0.05, a:5, b:10};
+function binomPMF(n,p){                       // 递推，避免大组合数溢出
+  var arr = new Float64Array(n+1), i;
+  if(p<=0){ arr[0]=1; return arr; }
+  if(p>=1){ arr[n]=1; return arr; }
+  // 从众数附近起推更稳；这里用对数递推
+  var logp = Math.log(p), logq = Math.log(1-p), lg = 0, cur = n*logq;
+  arr[0] = Math.exp(cur);
+  for(i=1;i<=n;i++){ cur += Math.log((n-i+1)/i) + logp - logq; arr[i] = Math.exp(cur); }
+  return arr;
+}
+function poisPMF(lam, kmax){
+  var arr = new Float64Array(kmax+1), cur = -lam, i;
+  arr[0] = Math.exp(cur);
+  for(i=1;i<=kmax;i++){ cur += Math.log(lam) - Math.log(i); arr[i] = Math.exp(cur); }
+  return arr;
+}
+function m3run(){
+  var n = M3.n, p = M3.p, a = Math.max(0,Math.min(n,Math.round(M3.a))), b = Math.max(0,Math.min(n,Math.round(M3.b)));
+  if(b<a){ var t=a; a=b; b=t; }
+  var np = n*p, nq = n*(1-p), sd = Math.sqrt(np*(1-p));
+  var pm = binomPMF(n,p), po = poisPMF(np, n), i;
+  var exact = 0, pois = 0;
+  for(i=a;i<=b;i++){ exact += pm[i]; pois += po[i]; }
+  var norm  = Phi((b-np)/sd) - Phi((a-np)/sd);
+  var normC = Phi((b+0.5-np)/sd) - Phi((a-0.5-np)/sd);
+  // 画图
+  var cv = document.getElementById('m3cv'), d = hidpi(cv), g = d.g, W = d.w, H = d.h;
+  var PL = 40, PR = 10, PT = 14, PB = 26;
+  var line = css('--line')||'#ccc', mut = css('--muted')||'#888', ink = css('--ink')||'#222',
+      acc = css('--accent')||'#2a7', red = css('--red')||'#c33', pur = css('--purple')||'#96c';
+  g.clearRect(0,0,W,H);
+  // 只画有意义的 k 范围
+  var lo = Math.max(0, Math.floor(np - 4.5*sd - 2)), hi = Math.min(n, Math.ceil(np + 4.5*sd + 2));
+  if(hi-lo<6){ lo=Math.max(0,lo-3); hi=Math.min(n,hi+3); }
+  var mx = 0;
+  for(i=lo;i<=hi;i++){ if(pm[i]>mx) mx=pm[i]; if(po[i]>mx) mx=po[i]; }
+  mx = mx*1.15 || 1;
+  var X = function(k){ return PL + (k-lo+0.5)/(hi-lo+1)*(W-PL-PR); };
+  var Y = function(v){ return H-PB - v/mx*(H-PT-PB); };
+  g.strokeStyle = line; g.beginPath(); g.moveTo(PL,PT-4); g.lineTo(PL,H-PB); g.lineTo(W-PR,H-PB); g.stroke();
+  // 区间底色
+  g.fillStyle = acc; g.globalAlpha = 0.10;
+  g.fillRect(X(a)-((W-PL-PR)/(hi-lo+1))/2, PT-4, (b-a+1)*((W-PL-PR)/(hi-lo+1)), H-PB-PT+4);
+  g.globalAlpha = 1;
+  // 精确二项：柱
+  var bw = Math.max(1.2, (W-PL-PR)/(hi-lo+1) - 1.6);
+  g.fillStyle = acc; g.globalAlpha = 0.55;
+  for(i=lo;i<=hi;i++){ if(pm[i]>0) g.fillRect(X(i)-bw/2, Y(pm[i]), bw, H-PB-Y(pm[i])); }
+  g.globalAlpha = 1;
+  // 泊松：紫点线
+  g.strokeStyle = pur; g.lineWidth = 1.6; g.beginPath();
+  for(i=lo;i<=hi;i++){ if(i===lo) g.moveTo(X(i),Y(po[i])); else g.lineTo(X(i),Y(po[i])); }
+  g.stroke();
+  // 正态：红曲线
+  g.strokeStyle = red; g.lineWidth = 2; g.beginPath();
+  for(var px=0;px<=300;px++){
+    var kv = lo + (hi-lo)*px/300, yv = phi((kv-np)/sd)/sd;
+    if(px===0) g.moveTo(X(kv),Y(yv)); else g.lineTo(X(kv),Y(yv));
+  }
+  g.stroke();
+  // 刻度与图例
+  g.fillStyle = mut; g.font='10px system-ui,sans-serif'; g.textAlign='center';
+  for(var t=0;t<=5;t++){
+    var kk = Math.round(lo + (hi-lo)*t/5);
+    g.fillText(kk, X(kk), H-PB+13);
+  }
+  g.textAlign='left'; g.font='11px system-ui,sans-serif';
+  g.fillStyle=acc; g.fillRect(PL+6,PT+2,10,8); g.fillStyle=ink; g.fillText('精确二项 B(n,p)', PL+20, PT+10);
+  g.fillStyle=pur; g.fillRect(PL+140,PT+2,10,8); g.fillStyle=ink; g.fillText('泊松近似 λ=np', PL+154, PT+10);
+  g.fillStyle=red; g.fillRect(PL+270,PT+2,10,8); g.fillStyle=ink; g.fillText('正态近似（中心极限定理）', PL+284, PT+10);
+  // 读数
+  var eN = Math.abs(norm-exact), eP = Math.abs(pois-exact), eC = Math.abs(normC-exact);
+  var best = (eP<eN) ? '泊松' : '正态';
+  setHTML(document.getElementById('m3out'),
+    '$n='+n+'$，$p='+fmt(p,3)+'$　⟹　$np='+fmt(np,2)+'$，$nq='+fmt(nq,2)+'$，$\\sqrt{np(1-p)}='+fmt(sd,3)+'$'
+    + '　|　区间 $['+a+','+b+']$<br>'
+    + '<b>精确二项</b> = '+fmt(exact)+'　|　<b>泊松近似</b> = '+fmt(pois)+'（误差 '+fmt(eP)+'）'
+    + '　|　<b>正态近似</b> = '+fmt(norm)+'（误差 <b>'+fmt(eN)+'</b>）'
+    + '　|　正态+连续性修正 = '+fmt(normC)+'（误差 '+fmt(eC)+'）');
+  // 判据灯
+  var jdg = document.getElementById('m3jdg'), msg, cls;
+  var small = Math.min(np,nq);
+  if(n<=10){
+    cls='readout'; msg='<b>$n\\le10$ ⟹ 该用①精确公式</b> $C_n^kp^k(1-p)^{n-k}$。此时两个近似都没必要，直接算最快。';
+  }else if(small<10){
+    cls='readout warn';
+    msg='<b>$\\min(np,nq)='+fmt(small,2)+'<10$ ⟹ 正态近似<u>不合格</u>，该用②泊松</b>（对'
+      + (np<nq ? '<b>成功次数</b> $X$，$\\lambda=np='+fmt(np,2)+'$' : '<b>失败次数</b> $n-X$，$\\lambda=nq='+fmt(nq,2)+'$')
+      + '）。本次实测：正态误差 <b>'+fmt(eN)+'</b>，泊松误差 <b>'+fmt(eP)+'</b>，'
+      + (eP<eN ? '<b>泊松确实更准</b>。' : '本例两者接近。')
+      + '<br>⚠️ <b>注意基础册 p129 的 ③ 写的是「$p<0.1,\\ np\\ge10$」</b>——'
+      + (p>0.5 ? '本例 $p='+fmt(p,3)+'>0.1$，按基础册的条件<b>根本轮不到正态</b>，可它偏偏是"$nq$ 小"这一侧的典型翻车案例，基础册的条件<b>连提都没提</b>。'
+               : '本例 $p='+fmt(p,3)+'<0.1$ 且 $np='+fmt(np,2)+'<10$，按基础册的条件也不该用正态；但它把 $p<0.1$ 同时写给了②和③，读者根本分不清。')
+      + ' <b>以强化册「$n,np,nq$ 都较大」为准。</b>';
+  }else{
+    cls='readout ok';
+    msg='<b>$n$、$np='+fmt(np,2)+'$、$nq='+fmt(nq,2)+'$ 都较大 ⟹ ③正态近似合格。</b>'
+      + '本次正态误差 <b>'+fmt(eN)+'</b>，加连续性修正后降到 <b>'+fmt(eC)+'</b>。'
+      + '<br>（考研不要求连续性修正，但它能解释"为什么算出来总差一点点"：离散分布用连续曲线去罩，边界要各让半格。）';
+  }
+  jdg.className = cls; setHTML(jdg, msg);
+}
+function m3sync(){
+  document.getElementById('m3n').value=M3.n; document.getElementById('m3nv').textContent=M3.n;
+  document.getElementById('m3p').value=M3.p; document.getElementById('m3pv').textContent=fmt(M3.p,3);
+  document.getElementById('m3a').value=M3.a; document.getElementById('m3b').value=M3.b;
+}
+document.getElementById('m3n').addEventListener('input', function(){ M3.n=+this.value; m3sync(); m3run(); });
+document.getElementById('m3p').addEventListener('input', function(){ M3.p=+this.value; m3sync(); m3run(); });
+document.getElementById('m3a').addEventListener('input', function(){ M3.a=+this.value; m3run(); });
+document.getElementById('m3b').addEventListener('input', function(){ M3.b=+this.value; m3run(); });
+document.querySelectorAll('[data-m3]').forEach(function(b){
+  b.addEventListener('click', function(){
+    var a = this.getAttribute('data-m3').split(',');
+    M3.n=+a[0]; M3.p=+a[1]; M3.a=+a[2]; M3.b=+a[3];   // 预设写状态，绕开 range 的 step 吸附
+    m3sync(); m3run();
+  });
+});
+
+/* ============ 启动 ============ */
+function boot(){ m1sync(); m1run(); m2sync(); m2run(); m3sync(); m3run(); }
+// 窗口尺寸变化后重绘（canvas 的 CSS 宽度随容器变，须重新按新宽度作图）
+var rzT; window.addEventListener('resize', function(){
+  clearTimeout(rzT); rzT = setTimeout(function(){ m1run(); m3run(); }, 180);
+});
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', boot); else boot();
+})();
+</script>
+
+
+
+
+
+
+
+
+</div>
+</body>
+</html>
