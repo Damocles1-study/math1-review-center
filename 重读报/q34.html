@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>概率就是区域上的二重积分 · 第34期 · 重读报</title>
+<link rel="stylesheet" href="assets/katex/katex.min.css">
+<link rel="stylesheet" href="assets/paper.css">
+</head><body class="issue" data-no="34" data-prev="q33.html" data-next="q35.html">
+<header class="strip"><a class="brand" href="index.html">重读报</a>
+<span class="strip-m">第 34 期 · 概率统计 · 二维随机变量</span>
+<nav class="tools"><button data-a="toc" title="目录 (T)">目录</button><button data-a="rail" class="only-narrow">定理<i id="railn"></i></button><button data-a="hide" title="遮住卷面，先自己写 (H)">遮卷面</button><button data-a="night" title="夜读">夜读</button></nav></header>
+<main class="sheet" id="sheet">
+<section class="cover" id="cover">
+<div class="mast"><div class="mast-l">概率统计<br>第 34 期</div><div class="mast-c">重读报</div><div class="mast-r">本期约 18 分钟<br>二维随机变量</div></div>
+<h1>概率就是区域上的二重积分</h1>
+<p class="deck">概率大题的主战场，靠的全部是第 25 期的二重积分。<span class="m">P((X,Y)\in D)</span> 就是在 <span class="m">D</span> 与密度非零区域的公共部分上积分。题目的难点其实只有一个：把区域画对。</p>
+<div class="cover-grid">
+<div class="cover-keep"><h4>本期只记这几行</h4><ol><li><span class="m">P((X,Y)\in D)=\iint_Df\,dx\,dy</span>。第一步画密度非零的区域。</li><li>边缘：<span class="m">f_X(x)=\int f\,dy</span>。条件：<span class="m">f_{Y\vert X}=\frac{f}{f_X}</span>。</li><li>独立 ⟺ <span class="m">f(x,y)=f_X(x)f_Y(y)</span>。必要条件：非零区域是矩形。</li><li><span class="m">Z=X+Y</span>：<span class="m">f_Z(z)=\int f(x,z-x)\,dx</span>；<span class="m">\max</span>：<span class="m">F_{\max}=F_XF_Y</span>；<span class="m">\min</span>：<span class="m">F_{\min}=1-(1-F_X)(1-F_Y)</span>。</li></ol></div>
+<div class="cover-prev"><h4>开读前，先答上期</h4><div id="prevq"></div></div>
+<div class="cover-toc"><h4>本期目录</h4><ol><li>联合分布</li><li>函数的分布：<span class="m">Z=g(X,Y)</span></li></ol><p class="hint">→ 键 / 点右缘 / 左滑翻页</p></div>
+</div></section>
+<section class="stage" id="stage" hidden>
+<div class="viewport" id="vp"><div class="flow" id="flow">
+<h2>联合分布</h2>
+<div class="thm" id="t-joint"><div class="thm-h"><span>定理</span>二维分布</div><p><b>联合分布函数</b>：<span class="m">F(x,y)=P(X\le x,Y\le y)</span>。</p>
+<p><b>离散</b>：<span class="m">P(X=x_i,Y=y_j)=p_{ij}</span>。<b>连续</b>：<span class="m">F=\iint f</span>，<span class="m">f\ge0</span>，<span class="m">\iint_{\mathbb R^2}f=1</span>，<span class="m">\frac{\partial^2F}{\partial x\partial y}=f</span>。</p>
+<div class="M">P((X,Y)\in D)=\iint_Df(x,y)\,dx\,dy.</div></div>
+<div class="thm" id="t-marginal"><div class="thm-h"><span>定理</span>边缘分布与条件分布</div><p><b>边缘</b>：<span class="m">f_X(x)=\displaystyle\int_{-\infty}^{+\infty}f(x,y)\,dy</span>，<span class="m">f_Y(y)=\displaystyle\int_{-\infty}^{+\infty}f(x,y)\,dx</span>。离散时行、列分别求和。</p>
+<p><b>条件</b>：<span class="m">f_{Y\vert X}(y\vert x)=\dfrac{f(x,y)}{f_X(x)}</span>（<span class="m">f_X(x)\gt0</span>）。</p></div>
+<div class="thm" id="t-rvindep"><div class="thm-h"><span>定理</span>随机变量的独立性</div><p><span class="m">X,Y</span> 独立 ⟺ <span class="m">F(x,y)=F_X(x)F_Y(y)</span> ⟺ <span class="m">f(x,y)=f_X(x)f_Y(y)</span>（连续） ⟺ <span class="m">p_{ij}=p_{i\cdot}p_{\cdot j}</span>（离散，每个格都要成立）。</p></div>
+<div class="ex"><div class="ex-h">例 34.1<span class="ex-tag">离散型</span></div><p><span class="m">(X,Y)</span> 的分布律为下表。求 <span class="m">a</span>，并判断 <span class="m">X,Y</span> 是否独立。</p>
+<div class="tab"><table><thead><tr><th><span class="m">X\backslash Y</span></th><th><span class="m">0</span></th><th><span class="m">1</span></th></tr></thead><tbody><tr><td><span class="m">0</span></td><td><span class="m">0.2</span></td><td><span class="m">0.3</span></td></tr><tr><td><span class="m">1</span></td><td><span class="m">0.2</span></td><td><span class="m">a</span></td></tr></tbody></table></div></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 由分布律之和为 <span class="m">1</span>，<span class="m">a=0.3</span>。边缘：<span class="m">P(X=0)=0.5</span>，<span class="m">P(X=1)=0.5</span>，<span class="m">P(Y=0)=0.4</span>，<span class="m">P(Y=1)=0.6</span>。</p>
+<p>逐格检验：<span class="m">0.5\times0.4=0.2</span>，<span class="m">0.5\times0.6=0.3</span>，<span class="m">0.5\times0.4=0.2</span>，<span class="m">0.5\times0.6=0.3</span>。</p>
+<p class="fin">由<a class="c" data-t="rvindep">随机变量的独立性</a>，<span class="m">a=0.3</span>，<span class="m">X,Y</span> 独立。</p></div>
+<div class="ex"><div class="ex-h">例 34.2<span class="ex-tag">连续型全套（大题）</span></div><p><span class="m">(X,Y)</span> 的概率密度为 <span class="m">f(x,y)=\begin{cases}cx,&amp;0\lt x\lt y\lt1\\0,&amp;\text{其他}\end{cases}</span>。求 (1) <span class="m">c</span>；(2) 边缘密度，判断是否独立；(3) <span class="m">P(X+Y\lt1)</span>；(4) <span class="m">f_{Y\vert X}(y\vert x)</span>。</p></div>
+<div class="think"><div class="b-h">思路</div><p>先画三角形 <span class="m">0\lt x\lt y\lt1</span>。所有积分都按这个三角形定限，<span class="m">P(X+Y\lt1)</span> 再与直线 <span class="m">x+y=1</span> 切一刀。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 (1) 由<a class="c" data-t="joint">二维分布</a>，</p>
+<span class="pt">2分</span><div class="M">1=\int_0^1dy\int_0^ycx\,dx=\int_0^1\frac{cy^2}{2}\,dy=\frac{c}{6},\quad\text{所以 }c=6.</div>
+<p>(2) 由<a class="c" data-t="marginal">边缘分布与条件分布</a>，<span class="m">0\lt x\lt1</span> 时，<span class="m">f_X(x)=\displaystyle\int_x^16x\,dy=6x(1-x)</span>；<span class="m">0\lt y\lt1</span> 时，<span class="m">f_Y(y)=\displaystyle\int_0^y6x\,dx=3y^2</span>；其余为 <span class="m">0</span>。因 <span class="m">f\neq f_Xf_Y</span>，由<a class="c" data-t="rvindep">随机变量的独立性</a>，<span class="m">X,Y</span> <b>不独立</b>。<span class="pt">4分</span></p>
+<p>(3) 区域为 <span class="m">0\lt x\lt\frac12</span>，<span class="m">x\lt y\lt1-x</span>：</p>
+<span class="pt">3分</span><div class="M">P(X+Y\lt1)=\int_0^{1/2}dx\int_x^{1-x}6x\,dy=\int_0^{1/2}6x(1-2x)\,dx=\frac{1}{4}.</div>
+<p>(4) 由<a class="c" data-t="marginal">边缘分布与条件分布</a>，对 <span class="m">0\lt x\lt1</span>，</p>
+<span class="pt">2分</span><div class="M">f_{Y\vert X}(y\vert x)=\frac{6x}{6x(1-x)}=\frac{1}{1-x},\quad x\lt y\lt1.</div>
+<p class="fin">所以 <span class="m">c=6</span>；不独立；<span class="m">P=\dfrac{1}{4}</span>；<span class="m">Y\mid X=x</span> 服从 <span class="m">(x,1)</span> 上的均匀分布。</p></div>
+<figure><svg viewBox="0 0 210 180" role="img"><defs><marker id="arr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path class="arrh" d="M0 .8L7 4L0 7.2z"/></marker></defs><line class="ax" x1="10.0" y1="152.2" x2="200.0" y2="152.2" marker-end="url(#arr)"/><line class="ax" x1="30.4" y1="170.0" x2="30.4" y2="10.0" marker-end="url(#arr)"/><text class="tx" x="193.0" y="166.2">x</text><text class="tx" x="38.4" y="18.0">y</text><text class="tx" x="19.4" y="165.2">O</text><path class="fl" d="M30.4 152.2 L166.1 33.7 L30.4 33.7 Z"/><path class="fr" d="M30.4 152.2 L98.2 93.0 L30.4 33.7 Z"/><line class="ln" x1="30.4" y1="152.2" x2="166.1" y2="33.7"/><line class="ln" x1="30.4" y1="33.7" x2="166.1" y2="33.7"/><line class="lr" x1="30.4" y1="33.7" x2="166.1" y2="152.2"/><text class="tx" x="137.8" y="71.5">y=x</text><text class="tx tr" x="132.1" y="117.0">x+y=1</text><text class="tx" x="20.4" y="37.7">1</text><text class="tx" x="163.1" y="166.2">1</text></svg><figcaption>密度非零的三角形（灰），以及 <span class="m">x+y\lt1</span> 切下的部分（红）。</figcaption></figure>
+<h2>函数的分布：<span class="m">Z=g(X,Y)</span></h2>
+<p>一般方法与一维相同：<span class="m">F_Z(z)=P(g(X,Y)\le z)=\iint_{g\le z}f\,dx\,dy</span>。</p>
+<div class="thm" id="t-conv"><div class="thm-h"><span>定理</span>和的分布、max 与 min</div><p><b>和（卷积）</b>：<span class="m">Z=X+Y</span>，</p>
+<div class="M">f_Z(z)=\int_{-\infty}^{+\infty}f(x,z-x)\,dx.</div>
+<p>独立时 <span class="m">f(x,z-x)=f_X(x)f_Y(z-x)</span>。</p>
+<p><b>极值</b>：<span class="m">X,Y</span> 独立时，</p>
+<div class="M">F_{\max}(z)=F_X(z)F_Y(z),\qquad F_{\min}(z)=1-[1-F_X(z)][1-F_Y(z)].</div>
+<p><b>可加性</b>（独立）：<span class="m">B(n_1,p)+B(n_2,p)=B(n_1+n_2,p)</span>；<span class="m">P(\lambda_1)+P(\lambda_2)=P(\lambda_1+\lambda_2)</span>；正态的线性组合仍正态。</p></div>
+<div class="ex"><div class="ex-h">例 34.3<span class="ex-tag">卷积（大题）</span></div><p><span class="m">X,Y</span> 独立，都服从 <span class="m">E(1)</span>。求 <span class="m">Z=X+Y</span> 的概率密度。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 由<a class="c" data-t="conv">和的分布、max 与 min</a>，<span class="m">f_Z(z)=\displaystyle\int_{-\infty}^{+\infty}f_X(x)f_Y(z-x)\,dx</span>。被积函数非零，要求 <span class="m">x\gt0</span> 且 <span class="m">z-x\gt0</span>，即 <span class="m">0\lt x\lt z</span>。<span class="pt">3分</span></p>
+<p><span class="m">z\le0</span> 时，<span class="m">f_Z(z)=0</span>。<span class="m">z\gt0</span> 时，</p>
+<span class="pt">4分</span><div class="M">f_Z(z)=\int_0^ze^{-x}e^{-(z-x)}\,dx=\int_0^ze^{-z}\,dx=ze^{-z}.</div>
+<p class="fin"><span class="m">f_Z(z)=\begin{cases}ze^{-z},&amp;z\gt0\\0,&amp;z\le0\end{cases}</span>。<span class="pt">1分</span></p></div>
+<div class="ex"><div class="ex-h">例 34.4<span class="ex-tag">max 与 min</span></div><p><span class="m">X,Y</span> 独立，都服从 <span class="m">U(0,1)</span>。求 <span class="m">\max(X,Y)</span> 和 <span class="m">\min(X,Y)</span> 的概率密度。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 <span class="m">F(z)=z</span>（<span class="m">0\le z\le1</span>）。由<a class="c" data-t="conv">和的分布、max 与 min</a>，<span class="m">0\le z\le1</span> 时，</p>
+<div class="M">F_{\max}(z)=z^2,\qquad F_{\min}(z)=1-(1-z)^2.</div>
+<p class="fin"><span class="m">0\lt z\lt1</span> 上，<span class="m">f_{\max}(z)=2z</span>，<span class="m">f_{\min}(z)=2(1-z)</span>，其余为 <span class="m">0</span>。</p></div>
+<div class="thm" id="t-bvn"><div class="thm-h"><span>定理</span>二维正态的结论</div><p><span class="m">(X,Y)\sim N(\mu_1,\mu_2;\sigma_1^2,\sigma_2^2;\rho)</span>：</p>
+<p>(1) 边缘分布都是正态。(2) <span class="m">aX+bY</span> 仍是正态（<span class="m">a,b</span> 不全为 <span class="m">0</span>）。(3) 若 <span class="m">Z_1,Z_2</span> 都是 <span class="m">X,Y</span> 的线性组合，则 <span class="m">(Z_1,Z_2)</span> 仍服从二维正态。</p>
+<p>注意：<span class="m">X,Y</span> 各自正态，不一定联合正态。</p></div>
+
+<div class="endq"><h2>今日考你</h2><p class="hint">合上前答一遍：先想，再点开。答错的会回到后面几期和温故版。</p><div class="rq" data-q="34-0"><p class="rq-q">边缘密度怎么求？</p><p class="rq-a">对另一个变量积分。<span class="m">f_X(x)=\int_{-\infty}^{+\infty}f(x,y)\,dy</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="34-1"><p class="rq-q"><span class="m">X,Y</span> 独立同分布，<span class="m">\max(X,Y)</span> 的分布函数？</p><p class="rq-a"><span class="m">[F(z)]^2</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="34-2"><p class="rq-q">卷积公式？</p><p class="rq-a"><span class="m">f_Z(z)=\int_{-\infty}^{+\infty}f_X(x)f_Y(z-x)\,dx</span>（独立时）。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="34-3"><p class="rq-q">独立的正态变量之和仍是？</p><p class="rq-a">正态，参数相加：<span class="m">N(\mu_1+\mu_2,\sigma_1^2+\sigma_2^2)</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div></div>
+<div class="endnext" id="endnext"></div>
+<div id="sent"></div>
+</div></div>
+<aside class="rail" id="rail"><div class="rail-h">本版引用 · 定理全文</div><div id="railc"></div></aside>
+</section></main>
+<footer class="pager"><button id="pv" aria-label="上一版">‹</button><div class="pginfo"><span id="pgt"></span><div class="bar"><i id="pgb"></i></div></div><button id="nx" aria-label="下一版">›</button></footer>
+<div class="sheetup" id="sheetup" hidden><div class="sheetup-h"><span>定理全文</span><button id="sheetx">关闭</button></div><div id="sheetc"></div></div>
+<div class="drawer" id="drawer" hidden></div>
+<script src="assets/katex/katex.min.js"></script><script src="assets/data.js"></script><script src="assets/paper.js"></script>
+</body></html>

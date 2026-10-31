@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>沿着一根铁丝、一张薄膜求和 · 第27期 · 重读报</title>
+<link rel="stylesheet" href="assets/katex/katex.min.css">
+<link rel="stylesheet" href="assets/paper.css">
+</head><body class="issue" data-no="27" data-prev="q26.html" data-next="q28.html">
+<header class="strip"><a class="brand" href="index.html">重读报</a>
+<span class="strip-m">第 27 期 · 多元与级数 · 第一类曲线、曲面积分</span>
+<nav class="tools"><button data-a="toc" title="目录 (T)">目录</button><button data-a="rail" class="only-narrow">定理<i id="railn"></i></button><button data-a="hide" title="遮住卷面，先自己写 (H)">遮卷面</button><button data-a="night" title="夜读">夜读</button></nav></header>
+<main class="sheet" id="sheet">
+<section class="cover" id="cover">
+<div class="mast"><div class="mast-l">多元与级数<br>第 27 期</div><div class="mast-c">重读报</div><div class="mast-r">本期约 17 分钟<br>第一类曲线、曲面积分</div></div>
+<h1>沿着一根铁丝、一张薄膜求和</h1>
+<p class="deck">第一类积分没有方向，物理意义是质量。计算只有一招：把曲线或曲面代进去，换成普通积分。还有一招专属的省力技巧：被积函数可以先用曲线或曲面的方程化简。</p>
+<div class="cover-grid">
+<div class="cover-keep"><h4>本期只记这几行</h4><ol><li>第一类曲线：<span class="m">ds=\sqrt{x'^2+y'^2}\,dt</span>，下限 <span class="m">\lt</span> 上限。</li><li>第一类曲面：<span class="m">dS=\sqrt{1+z_x^2+z_y^2}\,d\sigma</span>。</li><li>积分在曲线/曲面上进行，<b>可以把方程代入被积函数</b>。</li><li>对称性（奇零偶倍）和轮换对称同样适用。</li></ol></div>
+<div class="cover-prev"><h4>开读前，先答上期</h4><div id="prevq"></div></div>
+<div class="cover-toc"><h4>本期目录</h4><ol><li>第一类曲线积分</li><li>第一类曲面积分</li></ol><p class="hint">→ 键 / 点右缘 / 左滑翻页</p></div>
+</div></section>
+<section class="stage" id="stage" hidden>
+<div class="viewport" id="vp"><div class="flow" id="flow">
+<h2>第一类曲线积分</h2>
+<div class="thm" id="t-line1"><div class="thm-h"><span>定理</span>第一类曲线积分</div><p><span class="m">\int_Lf(x,y)\,ds</span> 表示线密度为 <span class="m">f</span> 的曲线的质量。</p>
+<p><b>参数式</b> <span class="m">x=x(t),y=y(t)</span>，<span class="m">\alpha\le t\le\beta</span>：</p>
+<div class="M">\int_Lf\,ds=\int_\alpha^\beta f(x(t),y(t))\sqrt{x'^2+y'^2}\,dt\quad(\alpha\lt\beta).</div>
+<p><b>直角式</b> <span class="m">y=y(x)</span>：<span class="m">ds=\sqrt{1+y'^2}\,dx</span>。<b>极坐标</b>：<span class="m">ds=\sqrt{r^2+r'^2}\,d\theta</span>。空间曲线多一项 <span class="m">z'^2</span>。</p></div>
+<div class="like"><div class="b-h">打个比方</div><p>给一根粗细不均的铁丝称重：每一小段的长度 <span class="m">ds</span> 乘那里的密度，再加起来。长度总是正的，所以积分方向必须从小到大，和走向无关。</p></div>
+<div class="ex"><div class="ex-h">例 27.1<span class="ex-tag">代方程</span></div><p>计算 <span class="m">\displaystyle\oint_L(x^2+y^2)\,ds</span>，<span class="m">L:x^2+y^2=4</span>。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 <span class="m">L</span> 上 <span class="m">x^2+y^2=4</span>，代入被积函数，</p>
+<p class="fin">原式 <span class="m">=\displaystyle\oint_L4\,ds=4\cdot(2\pi\cdot2)=16\pi</span>。</p></div>
+<div class="ex"><div class="ex-h">例 27.2<span class="ex-tag">参数化</span></div><p>计算 <span class="m">\displaystyle\int_Lx\,ds</span>，<span class="m">L</span> 是 <span class="m">y=\dfrac{x^2}{2}</span> 上从 <span class="m">x=0</span> 到 <span class="m">x=1</span> 的一段。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 <span class="m">ds=\sqrt{1+x^2}\,dx</span>。由<a class="c" data-t="line1">第一类曲线积分</a>，</p>
+<div class="M">\int_Lx\,ds=\int_0^1x\sqrt{1+x^2}\,dx=\frac{1}{3}(1+x^2)^{3/2}\Big\vert_0^1.</div>
+<p class="fin">原式 <span class="m">=\dfrac{2\sqrt2-1}{3}</span>。</p></div>
+<div class="ex"><div class="ex-h">例 27.3<span class="ex-tag">对称性</span></div><p>计算 <span class="m">\displaystyle\oint_L(x^2+xy)\,ds</span>，<span class="m">L:x^2+y^2=1</span>。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 <span class="m">L</span> 关于 <span class="m">y</span> 轴对称，<span class="m">xy</span> 对 <span class="m">x</span> 是奇函数，故 <span class="m">\oint_Lxy\,ds=0</span>。<span class="m">L</span> 关于 <span class="m">y=x</span> 对称，由轮换对称，</p>
+<div class="M">\oint_Lx^2\,ds=\frac{1}{2}\oint_L(x^2+y^2)\,ds=\frac{1}{2}\oint_L1\,ds=\frac{1}{2}\cdot2\pi.</div>
+<p class="fin">原式 <span class="m">=\pi</span>。</p></div>
+<h2>第一类曲面积分</h2>
+<div class="thm" id="t-surf1"><div class="thm-h"><span>定理</span>第一类曲面积分</div><p><span class="m">\iint_\Sigma f\,dS</span> 表示面密度为 <span class="m">f</span> 的曲面的质量。<span class="m">\Sigma:z=z(x,y)</span>，投影到 <span class="m">xOy</span> 面为 <span class="m">D</span>：</p>
+<div class="M">\iint_\Sigma f\,dS=\iint_Df(x,y,z(x,y))\sqrt{1+z_x^2+z_y^2}\,d\sigma.</div>
+<p>投影要求曲面上每点只对应一个投影点，否则要分片。</p></div>
+<figure><svg viewBox="0 0 240 165" role="img"><defs><marker id="arr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path class="arrh" d="M0 .8L7 4L0 7.2z"/></marker></defs><line class="ax" x1="120.0" y1="82.5" x2="77.5" y2="123.2" marker-end="url(#arr)"/><line class="ax" x1="120.0" y1="82.5" x2="221.2" y2="82.5" marker-end="url(#arr)"/><line class="ax" x1="120.0" y1="82.5" x2="120.0" y2="12.6" marker-end="url(#arr)"/><text class="tx" x="81.5" y="120.2">x</text><text class="tx" x="225.2" y="79.5">y</text><text class="tx" x="124.0" y="9.6">z</text><text class="tx" x="109.0" y="94.5">O</text><path class="fl" d="M122.9 29.5 L105.2 68.9 L155.9 54.3 L173.7 14.9 Z"/><path class="cv" d="M122.9 29.5 L105.2 68.9 L155.9 54.3 L173.7 14.9 L122.9 29.5"/><path class="fr" d="M122.9 91.9 L105.2 108.9 L155.9 108.9 L173.7 91.9 Z"/><path class="lr" d="M122.9 91.9 L105.2 108.9 L155.9 108.9 L173.7 91.9 L122.9 91.9"/><path class="ds" d="M122.9 29.5 L122.9 91.9"/><path class="ds" d="M105.2 68.9 L105.2 108.9"/><path class="ds" d="M155.9 54.3 L155.9 108.9"/><path class="ds" d="M173.7 14.9 L173.7 91.9"/><text class="tx" x="121.9" y="22.5">dS</text><text class="tx tr" x="159.9" y="118.9">dσ</text></svg><figcaption>曲面上的小块 <span class="m">dS</span> 投影成 <span class="m">d\sigma</span>，二者之比由倾斜程度决定：<span class="m">d\sigma=\vert\cos\gamma\vert dS</span>。<span class="m">dS</span> 的公式就是由此而来。</figcaption></figure>
+<div class="ex"><div class="ex-h">例 27.4<span class="ex-tag">半球面</span></div><p>计算 <span class="m">\displaystyle\iint_\Sigma z\,dS</span>，<span class="m">\Sigma</span> 是上半球面 <span class="m">z=\sqrt{1-x^2-y^2}</span>。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 <span class="m">z_x=-\dfrac{x}{z}</span>，<span class="m">z_y=-\dfrac{y}{z}</span>，<span class="m">\sqrt{1+z_x^2+z_y^2}=\dfrac{\sqrt{z^2+x^2+y^2}}{z}=\dfrac{1}{z}</span>。投影 <span class="m">D:x^2+y^2\le1</span>。由<a class="c" data-t="surf1">第一类曲面积分</a>，</p>
+<div class="M">\iint_\Sigma z\,dS=\iint_Dz\cdot\frac{1}{z}\,d\sigma=\iint_Dd\sigma.</div>
+<p class="fin">原式 <span class="m">=\pi</span>。</p></div>
+<div class="ex"><div class="ex-h">例 27.5<span class="ex-tag">圆锥面</span></div><p>计算 <span class="m">\displaystyle\iint_\Sigma(x^2+y^2)\,dS</span>，<span class="m">\Sigma</span> 是圆锥面 <span class="m">z=\sqrt{x^2+y^2}</span>（<span class="m">z\le1</span>）。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 <span class="m">z_x=\dfrac{x}{z}</span>，<span class="m">z_y=\dfrac{y}{z}</span>，<span class="m">\sqrt{1+z_x^2+z_y^2}=\sqrt2</span>。投影 <span class="m">D:x^2+y^2\le1</span>。由<a class="c" data-t="surf1">第一类曲面积分</a>和<a class="c" data-t="polar">二重积分的极坐标计算</a>，</p>
+<div class="M">\iint_\Sigma(x^2+y^2)\,dS=\sqrt2\iint_D(x^2+y^2)\,d\sigma=\sqrt2\int_0^{2\pi}d\theta\int_0^1r^3\,dr.</div>
+<p class="fin">原式 <span class="m">=\dfrac{\sqrt2\pi}{2}</span>。</p></div>
+<div class="trap"><div class="b-h">易错</div><p>第一类积分和后两期的第二类积分，长得很像。判断依据：第一类写 <span class="m">ds,dS</span>，没有方向；第二类写 <span class="m">dx,dy,dydz</span>，有方向。</p></div>
+
+<div class="endq"><h2>今日考你</h2><p class="hint">合上前答一遍：先想，再点开。答错的会回到后面几期和温故版。</p><div class="rq" data-q="27-0"><p class="rq-q"><span class="m">\oint_{x^2+y^2=1}(x^2+y^2)ds</span>？</p><p class="rq-a">代入方程，<span class="m">=\oint1\,ds=2\pi</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="27-1"><p class="rq-q">上半球面 <span class="m">z=\sqrt{1-x^2-y^2}</span> 的 <span class="m">dS</span>？</p><p class="rq-a"><span class="m">\frac{d\sigma}{z}</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="27-2"><p class="rq-q">第一类曲线积分定限有什么要求？</p><p class="rq-a">下限必须小于上限，因为 <span class="m">ds\gt0</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="27-3"><p class="rq-q">圆锥面 <span class="m">z=\sqrt{x^2+y^2}</span> 的 <span class="m">dS</span>？</p><p class="rq-a"><span class="m">\sqrt2\,d\sigma</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div></div>
+<div class="endnext" id="endnext"></div>
+<div id="sent"></div>
+</div></div>
+<aside class="rail" id="rail"><div class="rail-h">本版引用 · 定理全文</div><div id="railc"></div></aside>
+</section></main>
+<footer class="pager"><button id="pv" aria-label="上一版">‹</button><div class="pginfo"><span id="pgt"></span><div class="bar"><i id="pgb"></i></div></div><button id="nx" aria-label="下一版">›</button></footer>
+<div class="sheetup" id="sheetup" hidden><div class="sheetup-h"><span>定理全文</span><button id="sheetx">关闭</button></div><div id="sheetc"></div></div>
+<div class="drawer" id="drawer" hidden></div>
+<script src="assets/katex/katex.min.js"></script><script src="assets/data.js"></script><script src="assets/paper.js"></script>
+</body></html>

@@ -1,0 +1,113 @@
+@part 甲
+@day 第二天
+@kicker 定积分
+@title 无限切细再加起来
+@deck 定积分有两副面孔：一副是面积（和式极限），一副是原函数之差（牛顿—莱布尼茨）。连接它们的是变限积分。这一期还要收下对称性和点火公式这两个省时利器。
+@keep 牛顿—莱布尼茨：$\int_a^bf=F(b)-F(a)$。
+@keep 变限积分求导：$\frac{d}{dx}\int_{a}^{\varphi(x)}f(t)\,dt=f(\varphi(x))\varphi'(x)$。
+@keep 奇函数在对称区间积分为 $0$；偶函数等于两倍半区间。
+@keep 和式极限：$\lim\limits_{n\to\infty}\frac1n\sum f(\frac kn)=\int_0^1f(x)\,dx$。
+@recall $\frac{d}{dx}\int_0^{x^2}\sin t\,dt$？ || $2x\sin x^2$。
+@recall $\int_0^{\pi/2}\sin^nx\,dx$（点火公式）？ || $\frac{n-1}{n}\cdot\frac{n-3}{n-2}\cdots$；$n$ 为偶数末尾乘 $\frac\pi2$，奇数末尾到 $1$。
+@recall 换元法做定积分要注意什么？ || 上下限跟着换，不必回代。
+@recall 积分中值定理？ || $f$ 连续时，存在 $\xi\in[a,b]$，$\int_a^bf=f(\xi)(b-a)$。
+
+## 定义：和式的极限
+!fig f11_riemann | 把区间切成 $n$ 段，每段用矩形近似。段数越多，矩形面积之和越接近曲边面积。
+:::thm defint | 定积分 | 定义
+$$\int_a^bf(x)\,dx=\lim_{\lambda\to0}\sum_{i=1}^nf(\xi_i)\Delta x_i,$$
+其中 $\lambda=\max\Delta x_i$，极限与分法和 $\xi_i$ 的取法无关。闭区间上连续函数或只有有限个第一类间断点的有界函数都可积。
+**实用形式**：
+$$\lim_{n\to\infty}\frac{1}{n}\sum_{k=1}^{n}f\Bigl(\frac{k}{n}\Bigr)=\int_0^1f(x)\,dx.$$
+:::
+**翻译的方向**：见到 $n$ 项和，提出 $\frac1n$，剩下的若是 $f(\frac kn)$，就是 $\int_0^1f$。下面算出牛—莱公式后立刻用一次。
+
+## 性质
+:::thm intprop | 定积分的性质
+线性；对区间可加 $\int_a^b=\int_a^c+\int_c^b$；$\int_a^bf=-\int_b^af$。
+**保序**：$a\lt b$，$f\le g$，则 $\int_a^bf\le\int_a^bg$。
+**估值**：$m\le f\le M$，则 $m(b-a)\le\int_a^bf\le M(b-a)$。
+**积分中值定理**：$f$ 在 $[a,b]$ 上连续，则存在 $\xi\in[a,b]$，使 $\int_a^bf(x)\,dx=f(\xi)(b-a)$。
+:::
+中值定理的理由：由估值，$\frac{1}{b-a}\int_a^bf$ 夹在最小值、最大值之间，再用[[ivt]]。
+
+## 变限积分与牛—莱公式
+:::thm ftc | 变限积分求导
+$f$ 连续，则 $\Phi(x)=\int_a^xf(t)\,dt$ 可导，且 $\Phi'(x)=f(x)$。一般地，
+$$\frac{d}{dx}\int_{\psi(x)}^{\varphi(x)}f(t)\,dt=f(\varphi(x))\varphi'(x)-f(\psi(x))\psi'(x).$$
+:::
+:::thm nl | 牛顿—莱布尼茨公式
+$f$ 在 $[a,b]$ 上连续，$F$ 是它的一个原函数，则
+$$\int_a^bf(x)\,dx=F(b)-F(a).$$
+:::
+:::ex 和式极限
+求 $\displaystyle\lim_{n\to\infty}\sum_{k=1}^n\frac{1}{n+k}$。
+:::
+:::think
+提一个 $\frac1n$ 出来，看剩下的是否是 $f(\frac kn)$ 的形状。
+:::
+:::paper
+解 $\displaystyle\sum_{k=1}^n\frac{1}{n+k}=\frac{1}{n}\sum_{k=1}^n\frac{1}{1+\frac{k}{n}}$。由[[defint]]，
+∎ 原式 $=\displaystyle\int_0^1\frac{dx}{1+x}=\ln(1+x)\Big\vert_0^1=\ln2$，最后一步用[[nl]]。
+:::
+:::trap
+被积函数里含求导变量 $x$ 时不能直接用公式。比如 $\int_0^xxf(t)\,dt$，要先把 $x$ 提出去；$\int_0^xf(x-t)\,dt$ 要先换元 $u=x-t$。
+:::
+:::ex 变限积分的极限
+求 $\displaystyle\lim_{x\to0}\frac{\int_0^{x^2}\sin t\,dt}{x^4}$。
+:::
+:::paper
+解 这是 $\frac00$ 型。由[[lhopital]]和[[ftc]]，
+$$\lim_{x\to0}\frac{\int_0^{x^2}\sin t\,dt}{x^4}=\lim_{x\to0}\frac{2x\sin x^2}{4x^3}=\lim_{x\to0}\frac{\sin x^2}{2x^2}.$$
+∎ 由[[equiv]]，$\sin x^2\sim x^2$，故原式 $=\dfrac{1}{2}$。
+:::
+:::ex 提 $x$ 再求导
+设 $F(x)=\displaystyle\int_0^x(x-t)f(t)\,dt$，$f$ 连续，求 $F''(x)$。
+:::
+:::paper
+解 拆开提出 $x$：$F(x)=x\displaystyle\int_0^xf(t)\,dt-\int_0^xtf(t)\,dt$。由[[ftc]]，
+$$F'(x)=\int_0^xf(t)\,dt+xf(x)-xf(x)=\int_0^xf(t)\,dt.$$
+∎ 再求导，$F''(x)=f(x)$。
+:::
+
+## 计算：换元与分部的定积分版
+定积分的换元**要换上下限，不必回代**；分部公式 $\int_a^bu\,dv=uv\big\vert_a^b-\int_a^bv\,du$。
+:::thm sym | 对称性与周期性
+$f$ 连续：若 $f$ 为奇函数，$\int_{-a}^af=0$；若 $f$ 为偶函数，$\int_{-a}^af=2\int_0^af$。
+若 $f$ 周期为 $T$，则 $\int_a^{a+T}f=\int_0^Tf$。
+:::
+:::thm wallis | 点火公式（华里士）
+$$\int_0^{\pi/2}\sin^nx\,dx=\int_0^{\pi/2}\cos^nx\,dx=\begin{cases}\dfrac{n-1}{n}\cdot\dfrac{n-3}{n-2}\cdots\dfrac{1}{2}\cdot\dfrac{\pi}{2},&n\text{ 为偶数}\\[2mm]\dfrac{n-1}{n}\cdot\dfrac{n-3}{n-2}\cdots\dfrac{2}{3},&n\text{ 为奇数}\end{cases}$$
+:::
+:::ex 对称 + 面积
+计算 $\displaystyle\int_{-1}^{1}\bigl(x^3+\sqrt{1-x^2}\bigr)\,dx$。
+:::
+:::paper
+解 $x^3$ 为奇函数，由[[sym]]其积分为 $0$。$\int_{-1}^1\sqrt{1-x^2}\,dx$ 是半径为 $1$ 的上半圆的面积。
+∎ 原式 $=\dfrac{\pi}{2}$。
+:::
+:::note
+被积函数是圆的方程时，直接看面积，比三角换元快得多。
+:::
+:::ex 分部
+计算 $\displaystyle\int_0^{\pi}x\sin x\,dx$。
+:::
+:::paper
+解 由[[byparts]]的定积分形式，
+$$\int_0^\pi x\sin x\,dx=-x\cos x\Big\vert_0^\pi+\int_0^\pi\cos x\,dx=\pi+\sin x\Big\vert_0^\pi.$$
+∎ 原式 $=\pi$。
+:::
+:::ex 绝对值拆区间
+计算 $\displaystyle\int_0^2x\vert x-1\vert\,dx$。
+:::
+:::paper
+解 由[[intprop]]在 $x=1$ 处拆开：
+$$\int_0^2x\vert x-1\vert\,dx=\int_0^1x(1-x)\,dx+\int_1^2x(x-1)\,dx=\frac{1}{6}+\frac{5}{6}.$$
+∎ 原式 $=1$。
+:::
+:::ex 点火
+计算 $\displaystyle\int_0^{\pi/2}\sin^4x\,dx$。
+:::
+:::paper
+解 由[[wallis]]，$n=4$ 为偶数，原式 $=\dfrac{3}{4}\cdot\dfrac{1}{2}\cdot\dfrac{\pi}{2}=\dfrac{3\pi}{16}$。
+:::

@@ -1,0 +1,118 @@
+@part 甲
+@day 第一天
+@kicker 求极限（第一套工具）
+@title 不靠后面的知识，极限也能算大半
+@deck 这一期只用四则、两个重要极限和等价替换。凡是 $\frac00$ 型，先看能不能把因子换成最简单的形状，这是考场上最快的路。
+@keep 等价替换只能换**乘除因子**，不能换加减中的一项。
+@keep 替换表：$\sin x,\tan x,\arcsin x,\arctan x,\ln(1+x),e^x-1\sim x$；$1-\cos x\sim\frac{x^2}{2}$；$(1+x)^a-1\sim ax$。
+@keep $1^\infty$ 型：$\lim u^v=e^{\lim(u-1)v}$。
+@keep 数列递推：先证单调有界，再对递推式两边取极限。
+@recall $\lim_{x\to0}\frac{\tan x-\sin x}{x^3}$ 怎么算？ || 提因子 $\tan x(1-\cos x)\sim x\cdot\frac{x^2}{2}$，得 $\frac12$。不能把 $\tan x,\sin x$ 各自换成 $x$。
+@recall $1^\infty$ 的公式？ || $\lim u^v=e^{\lim(u-1)v}$，前提 $u\to1$，$v\to\infty$。
+@recall $\sqrt[3]{1+x}-1$ 的等价无穷小？ || $\frac{x}{3}$，由 $(1+x)^a-1\sim ax$。
+@recall 夹逼准则放缩一个 $n$ 项和，常用什么上下界？ || $n\cdot$最小项 $\le$ 和 $\le n\cdot$最大项。
+
+## 两个重要极限
+!fig f03_sinx | 单位圆中：三角形 $OAP$、扇形 $OAP$、三角形 $OAT$ 的面积依次增大，给出 $\sin x\lt x\lt\tan x$。
+:::thm squeeze | 夹逼准则
+若在 $x_0$ 附近（或 $n$ 充分大时）$g\le f\le h$，且 $\lim g=\lim h=A$，则 $\lim f=A$。
+:::
+:::thm sinlim | 第一重要极限
+$$\lim_{x\to0}\frac{\sin x}{x}=1.$$
+由图，$0\lt x\lt\frac\pi2$ 时 $\sin x\lt x\lt\tan x$，取倒数乘 $\sin x$ 得 $\cos x\lt\frac{\sin x}{x}\lt1$，再由[[squeeze]]得结论。
+:::
+:::thm elim | 第二重要极限
+$$\lim_{x\to\infty}\Bigl(1+\frac{1}{x}\Bigr)^x=e,\qquad \lim_{t\to0}(1+t)^{1/t}=e.$$
+:::
+
+## 等价无穷小替换
+从两个重要极限出发，配合连续性（[[elemcont]]），可以得到下面整张表。例如 $\frac{\ln(1+x)}{x}=\ln(1+x)^{1/x}\to\ln e=1$；令 $t=e^x-1$，又得 $\frac{e^x-1}{x}=\frac{t}{\ln(1+t)}\to1$。
+:::thm equiv | 等价无穷小替换
+$x\to0$ 时：
+$$\sin x\sim\tan x\sim\arcsin x\sim\arctan x\sim\ln(1+x)\sim e^x-1\sim x,$$
+$$1-\cos x\sim\frac{x^2}{2},\qquad (1+x)^a-1\sim ax,\qquad a^x-1\sim x\ln a.$$
+替换规则：若 $\alpha\sim\alpha'$，则 $\lim\frac{\alpha\cdot\gamma}{\beta}=\lim\frac{\alpha'\cdot\gamma}{\beta}$，也就是**只能换乘除因子**。这里的 $x$ 可换成任何趋于 $0$ 的式子。
+:::
+:::ex 基本替换
+求 $\displaystyle\lim_{x\to0}\frac{\sqrt{1+x\sin x}-1}{x\arctan x}$。
+:::
+:::paper
+解 $x\to0$ 时 $x\sin x\to0$。由[[equiv]]，
+$$\sqrt{1+x\sin x}-1\sim\frac{1}{2}x\sin x\sim\frac{1}{2}x^2,\qquad x\arctan x\sim x^2.$$
+∎ 故原式 $=\displaystyle\lim_{x\to0}\frac{\frac12x^2}{x^2}=\frac{1}{2}$。
+:::
+:::trap
+加减中间的项**不能**单独替换。$\tan x-\sin x$ 若各换成 $x$，得到 $0$，是错的。正确做法是先写成乘积。
+:::
+:::ex 先化成乘积
+求 $\displaystyle\lim_{x\to0}\frac{\tan x-\sin x}{x^3}$。
+:::
+:::think
+分子是差，不能直接换。提出 $\tan x$，把差变成积。
+:::
+:::paper
+解 $\tan x-\sin x=\tan x(1-\cos x)$。由[[equiv]]，$\tan x\sim x$，$1-\cos x\sim\frac{x^2}{2}$，所以
+∎ 原式 $=\displaystyle\lim_{x\to0}\frac{x\cdot\frac{x^2}{2}}{x^3}=\frac{1}{2}$。
+:::
+**$e^a-e^b$ 型**：提出 $e^b$，变成 $e^b(e^{a-b}-1)\sim e^b(a-b)$。**$\ln$ 型**：$\ln u$ 当 $u\to1$ 时写成 $\ln(1+u-1)\sim u-1$。这两招专门把差变成因子。
+
+## $1^\infty$ 型
+底趋于 $1$、指数趋于 $\infty$。设 $u\to1$，$v\to\infty$，把幂写成指数：$u^v=e^{v\ln u}$。由于 $\ln u=\ln(1+u-1)\sim u-1$，得到：
+:::thm oneinf | $1^\infty$ 公式
+若 $u\to1$，$v\to\infty$，则
+$$\lim u^v=e^{\lim(u-1)v}.$$
+:::
+:::ex $1^\infty$
+求 $\displaystyle\lim_{x\to0}(\cos x)^{1/x^2}$。
+:::
+:::paper
+解 这是 $1^\infty$ 型。由[[oneinf]]，
+$$\lim_{x\to0}(\cos x)^{1/x^2}=\exp\Bigl(\lim_{x\to0}\frac{\cos x-1}{x^2}\Bigr).$$
+由[[equiv]]，$\cos x-1\sim-\frac{x^2}{2}$，指数上的极限等于 $-\frac12$。
+∎ 故原式 $=e^{-1/2}$。
+:::
+
+## $\infty/\infty$ 与 $\infty-\infty$
+**抓大头**：分子分母同除最高增长项。$\infty-\infty$ 的处理：**根式有理化**，或者**通分**，把它变成 $\frac00$ 或 $\frac\infty\infty$。
+:::ex 有理化
+求 $\displaystyle\lim_{x\to+\infty}(\sqrt{x^2+x}-x)$。
+:::
+:::paper
+解 分子有理化：
+$$\sqrt{x^2+x}-x=\frac{x}{\sqrt{x^2+x}+x}=\frac{1}{\sqrt{1+\frac{1}{x}}+1}\quad(x\gt0).$$
+∎ 由于 $x\to+\infty$ 时 $\frac{1}{x}\to0$，故原式 $=\dfrac{1}{1+1}=\dfrac{1}{2}$。
+:::
+
+## 数列极限：夹逼与单调有界
+**$n$ 项和**首选夹逼：每项放成最大项或最小项。
+:::ex 夹逼
+求 $\displaystyle\lim_{n\to\infty}\sum_{k=1}^{n}\frac{1}{\sqrt{n^2+k}}$。
+:::
+:::paper
+解 对 $k=1,\dots,n$，有 $\dfrac{1}{\sqrt{n^2+n}}\le\dfrac{1}{\sqrt{n^2+k}}\le\dfrac{1}{\sqrt{n^2+1}}$。把 $n$ 项相加，
+$$\frac{n}{\sqrt{n^2+n}}\le\sum_{k=1}^n\frac{1}{\sqrt{n^2+k}}\le\frac{n}{\sqrt{n^2+1}}.$$
+两端当 $n\to\infty$ 时极限都等于 $1$，由[[squeeze]]，
+∎ 原式 $=1$。
+:::
+**递推数列** $x_{n+1}=g(x_n)$ 用下面这条：
+:::thm mono | 单调有界准则
+单调递增且有上界的数列必有极限；单调递减且有下界的数列必有极限。
+:::
+三步固定：**证有界 → 证单调 → 对递推式两边取极限解方程**。没证存在就直接取极限是要扣分的。
+:::ex 递推数列
+设 $x_1=1$，$x_{n+1}=\sqrt{2+x_n}$。证明 $\lim\limits_{n\to\infty}x_n$ 存在并求之。
+:::
+:::think
+先猜极限：令 $a=\sqrt{2+a}$ 得 $a=2$。于是用数学归纳法证 $x_n\lt2$。单调性用作差，差里的因子刚好用到这个界。
+:::
+:::paper
+解 (1) 证有界。用数学归纳法证 $0\lt x_n\lt2$。$x_1=1$ 成立。设 $0\lt x_n\lt2$，则 $0\lt x_{n+1}=\sqrt{2+x_n}\lt\sqrt{4}=2$。故对一切 $n$，$0\lt x_n\lt2$。⛳3
+(2) 证单调。
+$$x_{n+1}-x_n=\sqrt{2+x_n}-x_n=\frac{2+x_n-x_n^2}{\sqrt{2+x_n}+x_n}=\frac{(2-x_n)(1+x_n)}{\sqrt{2+x_n}+x_n}\gt0,$$
+最后一步用到 (1)。故 $\{x_n\}$ 单调递增。⛳3
+(3) 求极限。由[[mono]]，$\lim\limits_{n\to\infty}x_n$ 存在，记为 $a$，由 (1) 知 $0\le a\le 2$。对 $x_{n+1}=\sqrt{2+x_n}$ 两边取极限得 $a=\sqrt{2+a}$，即 $a^2-a-2=0$，解得 $a=2$ 或 $a=-1$（舍去）。⛳4
+∎ 所以 $\lim\limits_{n\to\infty}x_n=2$。
+:::
+:::note
+「$a=-1$ 舍去」的理由必须写：由有界性，$a\ge 0$。
+:::

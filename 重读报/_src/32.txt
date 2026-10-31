@@ -1,0 +1,92 @@
+@part 丁
+@kicker 事件与概率
+@title 先分情况，再加权求和
+@deck 概率统计和前面的联系只有积分。这一期要拿到的是两个工具：条件概率的乘法公式，和「先把样本空间切开再加权」的全概率公式。贝叶斯就是把它倒过来。
+@keep $P(A\cup B)=P(A)+P(B)-P(AB)$；$P(A-B)=P(A)-P(AB)$。
+@keep $P(B\vert A)=\frac{P(AB)}{P(A)}$；$P(AB)=P(A)P(B\vert A)$。
+@keep 全概率：$P(B)=\sum P(A_i)P(B\vert A_i)$；贝叶斯：$P(A_i\vert B)=\frac{P(A_i)P(B\vert A_i)}{P(B)}$。
+@keep 独立：$P(AB)=P(A)P(B)$。互斥不是独立。
+@recall 互斥和独立的关系？ || 不同的概念。互斥 $AB=\varnothing$；独立 $P(AB)=P(A)P(B)$。$P(A),P(B)\gt0$ 时，互斥必不独立。
+@recall 独立事件 $A_1,\dots,A_n$ 至少发生一个的概率？ || $1-\prod(1-P(A_i))$。
+@recall 对偶律？ || $\overline{A\cup B}=\bar A\bar B$，$\overline{AB}=\bar A\cup\bar B$。
+@recall 不放回抽签，第 $k$ 次抽中的概率？ || 与 $k$ 无关，等于第一次抽中的概率（抓阄公平）。
+
+## 事件运算与概率公式
+事件是样本空间的子集，运算就是集合运算。$\bar A$ 是对立事件。**对偶律**：$\overline{A\cup B}=\bar A\bar B$，$\overline{AB}=\bar A\cup\bar B$。
+:::thm probbasic | 概率的基本公式
+$0\le P(A)\le1$，$P(\Omega)=1$，$P(\bar A)=1-P(A)$。
+**加法**：$P(A\cup B)=P(A)+P(B)-P(AB)$；三个事件：$P(A\cup B\cup C)=\sum P(A)-\sum P(AB)+P(ABC)$。
+**减法**：$P(A-B)=P(A\bar B)=P(A)-P(AB)$。
+:::
+:::thm classic | 古典概型与几何概型
+**古典**：等可能的有限个结果，$P(A)=\dfrac{A\text{ 包含的结果数}}{\text{结果总数}}$。
+**几何**：等可能地落在区域 $\Omega$ 内，$P(A)=\dfrac{A\text{ 的度量}}{\Omega\text{ 的度量}}$。
+:::
+!fig f32_geo | 约会问题：$x,y$ 各自在 $[0,1]$ 上均匀，$\vert x-y\vert\le\frac13$ 的区域就是相遇。
+:::ex 几何概型
+两人在 $[0,1]$（小时）内独立且等可能地到达，先到者等 $\frac{1}{3}$ 小时。求相遇的概率。
+:::
+:::paper
+解 设到达时刻为 $x,y$，样本空间是单位正方形，面积为 $1$。相遇 ⟺ $\vert x-y\vert\le\dfrac{1}{3}$。不相遇部分是两个直角边为 $\dfrac{2}{3}$ 的直角三角形，面积 $\Bigl(\dfrac{2}{3}\Bigr)^2=\dfrac{4}{9}$。
+∎ 由[[classic]]，所求概率 $=1-\dfrac{4}{9}=\dfrac{5}{9}$。
+:::
+
+## 条件概率与乘法公式
+:::thm condprob | 条件概率与乘法公式
+$P(A)\gt0$ 时，$P(B\vert A)=\dfrac{P(AB)}{P(A)}$。
+**乘法公式**：$P(AB)=P(A)P(B\vert A)$；$P(ABC)=P(A)P(B\vert A)P(C\vert AB)$。
+:::
+:::like
+条件概率是「把样本空间缩小到 $A$ 之后」再看 $B$。知道今天下雨（$A$），再问堵车的概率，范围已经只剩下雨天。
+:::
+
+## 全概率公式与贝叶斯公式
+:::thm totalprob | 全概率公式与贝叶斯公式
+$A_1,\dots,A_n$ 两两互斥、并为 $\Omega$（**完备事件组**），$P(A_i)\gt0$：
+$$P(B)=\sum_{i=1}^nP(A_i)P(B\vert A_i),$$
+$$P(A_i\vert B)=\frac{P(A_i)P(B\vert A_i)}{\sum_jP(A_j)P(B\vert A_j)}.$$
+:::
+!fig f32_tree | 概率树：第一层是原因，第二层是结果。全概率把所有通向 $B$ 的路径相加；贝叶斯算其中一条路占多少比例。
+**信号**：事情分两个阶段发生，问第二阶段的结果，用全概率；已知结果，反问原因，用贝叶斯。
+:::ex 全概率 + 贝叶斯
+甲、乙、丙三台机器的产量占比为 $50\%,30\%,20\%$，次品率分别为 $1\%,2\%,5\%$。任取一件：(1) 求它是次品的概率；(2) 已知是次品，求它来自丙的概率。
+:::
+:::paper
+解 设 $A_1,A_2,A_3$ 分别表示产品来自甲、乙、丙，$B$ 表示次品。
+(1) 由[[totalprob]]，
+$$P(B)=0.5\times0.01+0.3\times0.02+0.2\times0.05=0.021.$$
+(2) 由[[totalprob]]，
+$$P(A_3\vert B)=\frac{P(A_3)P(B\vert A_3)}{P(B)}=\frac{0.01}{0.021}.$$
+∎ 故 $P(B)=0.021$，$P(A_3\vert B)=\dfrac{10}{21}$。
+:::
+:::ex 抓阄
+袋中 $3$ 红 $2$ 白，不放回地取两次。求第二次取到红球的概率。
+:::
+:::paper
+解 设 $A$ 为第一次取红。由[[totalprob]]，
+$$P(\text{第二次红})=P(A)\cdot\frac{2}{4}+P(\bar A)\cdot\frac{3}{4}=\frac{3}{5}\cdot\frac{1}{2}+\frac{2}{5}\cdot\frac{3}{4}.$$
+∎ 所求概率 $=\dfrac{3}{5}$，与第一次相同。
+:::
+
+## 独立性
+:::thm indep | 事件的独立性
+$P(AB)=P(A)P(B)$ 称 $A,B$ **独立**。此时 $A,\bar B$ 等也都独立。
+三个事件**相互独立**：两两独立，且 $P(ABC)=P(A)P(B)P(C)$。**两两独立不能推出相互独立。**
+:::
+:::ex 用条件判断独立
+$P(A)=0.5,\ P(B)=0.4,\ P(A\vert B)=0.5$。求 $P(A\cup B)$，判断 $A,B$ 是否独立。
+:::
+:::paper
+解 由[[condprob]]，$P(AB)=P(B)P(A\vert B)=0.2$。由[[probbasic]]，$P(A\cup B)=0.5+0.4-0.2=0.7$。
+∎ $P(AB)=0.2=P(A)P(B)$，由[[indep]]，$A,B$ 独立。
+:::
+:::ex 至少一个
+三门炮独立射击，命中率为 $0.8,0.7,0.5$，求目标被击中的概率。
+:::
+:::paper
+解 对立事件是三门都未命中，由[[indep]]，
+∎ 所求概率 $=1-0.2\times0.3\times0.5=0.97$。
+:::
+:::trap
+「互斥」和「独立」是两回事。$P(A),P(B)\gt0$ 时，互斥则 $P(AB)=0\neq P(A)P(B)$，一定不独立。
+:::

@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>证明题就三件事：移项、求导、看符号 · 第9期 · 重读报</title>
+<link rel="stylesheet" href="assets/katex/katex.min.css">
+<link rel="stylesheet" href="assets/paper.css">
+</head><body class="issue" data-no="9" data-prev="q08.html" data-next="q10.html">
+<header class="strip"><a class="brand" href="index.html">重读报</a>
+<span class="strip-m">第 9 期 · 一元微积分 · 不等式、根、辅助函数</span>
+<nav class="tools"><button data-a="toc" title="目录 (T)">目录</button><button data-a="rail" class="only-narrow">定理<i id="railn"></i></button><button data-a="hide" title="遮住卷面，先自己写 (H)">遮卷面</button><button data-a="night" title="夜读">夜读</button></nav></header>
+<main class="sheet" id="sheet">
+<section class="cover" id="cover">
+<div class="mast"><div class="mast-l">一元微积分<br>第 9 期</div><div class="mast-c">重读报</div><div class="mast-r">本期约 21 分钟<br>不等式、根、辅助函数</div></div>
+<h1>证明题就三件事：移项、求导、看符号</h1>
+<p class="deck">导数学完，一元微分学最后的硬骨头是证明题。不等式和根的个数都有固定流程；中值等式的关键是把要证的式子「还原」成某个函数的导数。</p>
+<div class="cover-grid">
+<div class="cover-keep"><h4>本期只记这几行</h4><ol><li>证不等式：令 <span class="m">F=</span> 左 <span class="m">-</span> 右，用单调性或最值。</li><li>根的个数：分离参数，画 <span class="m">g(x)</span> 的图，数交点。</li><li>辅助函数口诀：<span class="m">f'+gf</span> 乘 <span class="m">e^{\int g}</span>；<span class="m">xf'+nf</span> 乘 <span class="m">x^{n-1}</span>；<span class="m">xf'-f</span> 除 <span class="m">x^2</span>。</li><li>两个中值 <span class="m">\xi,\eta</span>：分段用两次拉格朗日。</li></ol></div>
+<div class="cover-prev"><h4>开读前，先答上期</h4><div id="prevq"></div></div>
+<div class="cover-toc"><h4>本期目录</h4><ol><li>证不等式</li><li>根的个数</li><li>中值等式：还原辅助函数</li><li>两个中值</li></ol><p class="hint">→ 键 / 点右缘 / 左滑翻页</p></div>
+</div></section>
+<section class="stage" id="stage" hidden>
+<div class="viewport" id="vp"><div class="flow" id="flow">
+<h2>证不等式</h2>
+<p><b>固定流程</b>：移项令 <span class="m">F(x)=</span> 左 <span class="m">-</span> 右；求 <span class="m">F'</span>；若 <span class="m">F'</span> 的符号看不出，再求 <span class="m">F''</span>；用单调性得结论。</p>
+<div class="ex"><div class="ex-h">例 9.1<span class="ex-tag">单调性</span></div><p>证明：当 <span class="m">x\gt0</span> 时，<span class="m">(1+x)\ln(1+x)\gt\arctan x</span>。</p></div>
+<div class="think"><div class="b-h">思路</div><p>直接令差函数。<span class="m">F(0)=0</span>，只需 <span class="m">F'\gt0</span>。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>证 令 <span class="m">F(x)=(1+x)\ln(1+x)-\arctan x</span>，<span class="m">F</span> 在 <span class="m">[0,+\infty)</span> 上连续，<span class="m">F(0)=0</span>。当 <span class="m">x\gt0</span> 时，</p>
+<div class="M">F'(x)=\ln(1+x)+1-\frac{1}{1+x^2}=\ln(1+x)+\frac{x^2}{1+x^2}\gt0.</div>
+<p>由<a class="c" data-t="monoder">单调性判别</a>，<span class="m">F</span> 在 <span class="m">[0,+\infty)</span> 上严格单调增，故 <span class="m">x\gt0</span> 时 <span class="m">F(x)\gt F(0)=0</span>。</p>
+<p class="fin">即 <span class="m">(1+x)\ln(1+x)\gt\arctan x</span>。证毕。</p></div>
+<div class="ex"><div class="ex-h">例 9.2<span class="ex-tag">最值法</span></div><p>证明：对任意实数 <span class="m">x</span>，<span class="m">e^x\ge1+x</span>，等号仅在 <span class="m">x=0</span> 时成立。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>证 令 <span class="m">F(x)=e^x-1-x</span>，<span class="m">F'(x)=e^x-1</span>。当 <span class="m">x\lt0</span> 时 <span class="m">F'\lt0</span>，当 <span class="m">x\gt0</span> 时 <span class="m">F'\gt0</span>。由<a class="c" data-t="extjudge">极值的判别</a>，<span class="m">F</span> 在 <span class="m">x=0</span> 取最小值 <span class="m">F(0)=0</span>。</p>
+<p class="fin">所以 <span class="m">F(x)\ge0</span>，等号仅在 <span class="m">x=0</span> 时成立，即 <span class="m">e^x\ge1+x</span>。证毕。</p></div>
+<h2>根的个数</h2>
+<p><b>存在性</b>靠零点定理；<b>唯一性</b>靠单调；带参数时先分离。</p>
+<figure><svg viewBox="0 0 290 150" role="img"><defs><marker id="arr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path class="arrh" d="M0 .8L7 4L0 7.2z"/></marker></defs><line class="ax" x1="10.0" y1="69.1" x2="280.0" y2="69.1" marker-end="url(#arr)"/><line class="ax" x1="18.7" y1="140.0" x2="18.7" y2="10.0" marker-end="url(#arr)"/><text class="tx" x="273.0" y="83.1">x</text><text class="tx" x="26.7" y="18.0">y</text><text class="tx" x="7.7" y="82.1">O</text><path class="cv" d="M30.7 154.7 L31.7 136.9 L32.8 122.5 L33.8 110.8 L34.8 101.0 L35.9 92.8 L36.9 85.9 L38.0 80.1 L39.0 75.1 L40.0 70.8 L41.1 67.0 L42.1 63.8 L43.2 61.0 L44.2 58.5 L45.2 56.3 L46.3 54.4 L47.3 52.7 L48.3 51.2 L49.4 49.9 L50.4 48.8 L51.5 47.7 L52.5 46.8 L53.5 46.0 L54.6 45.2 L55.6 44.6 L56.7 44.0 L57.7 43.5 L58.7 43.0 L59.8 42.6 L60.8 42.2 L61.8 41.9 L62.9 41.6 L63.9 41.4 L65.0 41.1 L66.0 41.0 L67.0 40.8 L68.1 40.6 L69.1 40.5 L70.2 40.4 L71.2 40.3 L72.2 40.3 L73.3 40.2 L74.3 40.2 L75.4 40.1 L76.4 40.1 L77.4 40.1 L78.5 40.1 L79.5 40.1 L80.5 40.1 L81.6 40.2 L82.6 40.2 L83.7 40.2 L84.7 40.3 L85.7 40.3 L86.8 40.4 L87.8 40.4 L88.9 40.5 L89.9 40.5 L90.9 40.6 L92.0 40.7 L93.0 40.8 L94.1 40.8 L95.1 40.9 L96.1 41.0 L97.2 41.1 L98.2 41.1 L99.2 41.2 L100.3 41.3 L101.3 41.4 L102.4 41.5 L103.4 41.6 L104.4 41.7 L105.5 41.8 L106.5 41.8 L107.6 41.9 L108.6 42.0 L109.6 42.1 L110.7 42.2 L111.7 42.3 L112.8 42.4 L113.8 42.5 L114.8 42.6 L115.9 42.7 L116.9 42.8 L117.9 42.9 L119.0 43.0 L120.0 43.1 L121.1 43.1 L122.1 43.2 L123.1 43.3 L124.2 43.4 L125.2 43.5 L126.3 43.6 L127.3 43.7 L128.3 43.8 L129.4 43.9 L130.4 44.0 L131.5 44.1 L132.5 44.2 L133.5 44.2 L134.6 44.3 L135.6 44.4 L136.6 44.5 L137.7 44.6 L138.7 44.7 L139.8 44.8 L140.8 44.9 L141.8 45.0 L142.9 45.0 L143.9 45.1 L145.0 45.2 L146.0 45.3 L147.0 45.4 L148.1 45.5 L149.1 45.5 L150.1 45.6 L151.2 45.7 L152.2 45.8 L153.3 45.9 L154.3 46.0 L155.3 46.0 L156.4 46.1 L157.4 46.2 L158.5 46.3 L159.5 46.3 L160.5 46.4 L161.6 46.5 L162.6 46.6 L163.7 46.7 L164.7 46.7 L165.7 46.8 L166.8 46.9 L167.8 47.0 L168.8 47.0 L169.9 47.1 L170.9 47.2 L172.0 47.2 L173.0 47.3 L174.0 47.4 L175.1 47.5 L176.1 47.5 L177.2 47.6 L178.2 47.7 L179.2 47.7 L180.3 47.8 L181.3 47.9 L182.4 47.9 L183.4 48.0 L184.4 48.1 L185.5 48.1 L186.5 48.2 L187.5 48.3 L188.6 48.3 L189.6 48.4 L190.7 48.5 L191.7 48.5 L192.7 48.6 L193.8 48.7 L194.8 48.7 L195.9 48.8 L196.9 48.9 L197.9 48.9 L199.0 49.0 L200.0 49.0 L201.1 49.1 L202.1 49.2 L203.1 49.2 L204.2 49.3 L205.2 49.3 L206.2 49.4 L207.3 49.5 L208.3 49.5 L209.4 49.6 L210.4 49.6 L211.4 49.7 L212.5 49.7 L213.5 49.8 L214.6 49.8 L215.6 49.9 L216.6 50.0 L217.7 50.0 L218.7 50.1 L219.7 50.1 L220.8 50.2 L221.8 50.2 L222.9 50.3 L223.9 50.3 L224.9 50.4 L226.0 50.4 L227.0 50.5 L228.1 50.5 L229.1 50.6 L230.1 50.6 L231.2 50.7 L232.2 50.7 L233.3 50.8 L234.3 50.8 L235.3 50.9 L236.4 50.9 L237.4 51.0 L238.4 51.0 L239.5 51.1 L240.5 51.1 L241.6 51.2 L242.6 51.2 L243.6 51.3 L244.7 51.3 L245.7 51.4 L246.8 51.4 L247.8 51.5 L248.8 51.5 L249.9 51.6 L250.9 51.6 L252.0 51.6 L253.0 51.7 L254.0 51.7 L255.1 51.8 L256.1 51.8 L257.1 51.9 L258.2 51.9 L259.2 52.0 L260.3 52.0 L261.3 52.0 L262.3 52.1 L263.4 52.1 L264.4 52.2 L265.5 52.2 L266.5 52.3 L267.5 52.3 L268.6 52.3 L269.6 52.4 L270.7 52.4 L271.7 52.5 L272.7 52.5 L273.8 52.5 L274.8 52.6 L275.8 52.6 L276.9 52.7 L277.9 52.7 L279.0 52.7 L280.0 52.8"/><line class="ds" x1="10.0" y1="40.1" x2="280.0" y2="40.1"/><line class="ds" x1="77.9" y1="69.1" x2="77.9" y2="40.1"/><line class="lr" x1="10.0" y1="53.3" x2="280.0" y2="53.3"/><circle class="pt " cx="77.9" cy="40.1" r="2.6"/><text class="tx" x="82.9" y="35.1">y=1/e</text><text class="tx" x="74.9" y="83.1">e</text><text class="tx tr" x="247.3" y="49.3">y=k</text></svg><figcaption><span class="m">g(x)=\frac{\ln x}{x}</span>：<span class="m">x\to0^+</span> 趋于 <span class="m">-\infty</span>，在 <span class="m">x=e</span> 达到最大值 <span class="m">\frac1e</span>，<span class="m">x\to+\infty</span> 趋于 <span class="m">0^+</span>。水平线 <span class="m">y=k</span> 与它的交点数就是根的个数。</figcaption></figure>
+<div class="ex"><div class="ex-h">例 9.3<span class="ex-tag">带参数的根</span></div><p>讨论方程 <span class="m">\ln x=kx</span> 的实根个数（<span class="m">k</span> 为实常数）。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 <span class="m">x\gt0</span> 时，方程等价于 <span class="m">k=g(x)</span>，其中 <span class="m">g(x)=\dfrac{\ln x}{x}</span>。求导：</p>
+<div class="M">g'(x)=\frac{1-\ln x}{x^2}.</div>
+<p>当 <span class="m">0\lt x\lt e</span> 时 <span class="m">g'\gt0</span>，当 <span class="m">x\gt e</span> 时 <span class="m">g'\lt0</span>，故 <span class="m">g</span> 在 <span class="m">x=e</span> 处取最大值 <span class="m">g(e)=\dfrac{1}{e}</span>。<span class="pt">4分</span></p>
+<p>又 <span class="m">\lim\limits_{x\to0^+}g(x)=-\infty</span>，<span class="m">\lim\limits_{x\to+\infty}g(x)=0</span>（由<a class="c" data-t="lhopital">洛必达法则</a>：<span class="m">\lim\frac{1/x}{1}=0</span>），且 <span class="m">g\gt0</span> 当 <span class="m">x\gt1</span>。<span class="pt">2分</span></p>
+<p>由<a class="c" data-t="ivt">介值定理</a>与单调性，</p>
+<p class="fin"><span class="m">k\gt\dfrac{1}{e}</span> 时无实根；<span class="m">k=\dfrac{1}{e}</span> 或 <span class="m">k\le0</span> 时恰有一个实根；<span class="m">0\lt k\lt\dfrac{1}{e}</span> 时恰有两个实根。</p></div>
+<h2>中值等式：还原辅助函数</h2>
+<p>要证「存在 <span class="m">\xi</span>，使某式 <span class="m">=0</span>」。把 <span class="m">\xi</span> 换成 <span class="m">x</span>，反问：这个式子是谁的导数的因子？然后对那个函数用罗尔。</p>
+<div class="fml"><div class="b-h">还原表</div><div class="tab"><table><thead><tr><th>要证的式子</th><th>辅助函数 <span class="m">F(x)</span></th></tr></thead><tbody><tr><td><span class="m">f'(\xi)+g'(\xi)f(\xi)=0</span></td><td><span class="m">e^{g(x)}f(x)</span></td></tr><tr><td><span class="m">f'(\xi)+\lambda f(\xi)=0</span></td><td><span class="m">e^{\lambda x}f(x)</span></td></tr><tr><td><span class="m">\xi f'(\xi)+nf(\xi)=0</span></td><td><span class="m">x^nf(x)</span></td></tr><tr><td><span class="m">\xi f'(\xi)-nf(\xi)=0</span></td><td><span class="m">f(x)/x^n</span></td></tr><tr><td><span class="m">f'(\xi)g(\xi)+f(\xi)g'(\xi)=0</span></td><td><span class="m">f(x)g(x)</span></td></tr><tr><td><span class="m">f'(\xi)g(\xi)-f(\xi)g'(\xi)=0</span></td><td><span class="m">f(x)/g(x)</span></td></tr></tbody></table></div></div>
+<div class="ex"><div class="ex-h">例 9.4<span class="ex-tag">还原 + 罗尔</span></div><p>设 <span class="m">f</span> 在 <span class="m">[0,1]</span> 上连续，在 <span class="m">(0,1)</span> 内可导，<span class="m">f(1)=0</span>。证明：存在 <span class="m">\xi\in(0,1)</span>，使 <span class="m">\xi f'(\xi)+2f(\xi)=0</span>。</p></div>
+<div class="think"><div class="b-h">思路</div><p>查表：<span class="m">n=2</span>，<span class="m">F=x^2f(x)</span>。<span class="m">F(0)=0</span>，<span class="m">F(1)=f(1)=0</span>，两端相等，正好用罗尔。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>证 令 <span class="m">F(x)=x^2f(x)</span>，<span class="m">F</span> 在 <span class="m">[0,1]</span> 上连续，在 <span class="m">(0,1)</span> 内可导，且 <span class="m">F(0)=0=F(1)</span>。由<a class="c" data-t="rolle">罗尔定理</a>，存在 <span class="m">\xi\in(0,1)</span>，使 <span class="m">F'(\xi)=0</span>，即</p>
+<div class="M">2\xi f(\xi)+\xi^2f'(\xi)=0.</div>
+<p class="fin">由 <span class="m">\xi\neq0</span>，两边除以 <span class="m">\xi</span>，得 <span class="m">\xi f'(\xi)+2f(\xi)=0</span>。证毕。</p></div>
+<h2>两个中值</h2>
+<p>结论出现 <span class="m">f'(\eta)</span>、<span class="m">f'(\zeta)</span> 两个不同的中值，一般先找分点，再用两次拉格朗日。</p>
+<div class="ex"><div class="ex-h">例 9.5<span class="ex-tag">两次拉格朗日</span></div><p>设 <span class="m">f</span> 在 <span class="m">[0,1]</span> 上连续，在 <span class="m">(0,1)</span> 内可导，<span class="m">f(0)=0</span>，<span class="m">f(1)=1</span>。证明：</p>
+<p>(1) 存在 <span class="m">\xi\in(0,1)</span>，使 <span class="m">f(\xi)=1-\xi</span>；</p>
+<p>(2) 存在两个不同的点 <span class="m">\eta,\zeta\in(0,1)</span>，使 <span class="m">f'(\eta)f'(\zeta)=1</span>。</p></div>
+<div class="think"><div class="b-h">思路</div><p>(1) 是零点定理。(2) 里两个导数相乘要等于 <span class="m">1</span>，<span class="m">\xi</span> 把 <span class="m">[0,1]</span> 切成两段，分别用拉格朗日，分子分母恰好互相抵消，第 (1) 问就是为此准备的。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>证 (1) 令 <span class="m">F(x)=f(x)-1+x</span>，<span class="m">F</span> 在 <span class="m">[0,1]</span> 上连续，<span class="m">F(0)=-1\lt0</span>，<span class="m">F(1)=1\gt0</span>。由<a class="c" data-t="zero">零点定理</a>，存在 <span class="m">\xi\in(0,1)</span>，使 <span class="m">F(\xi)=0</span>，即 <span class="m">f(\xi)=1-\xi</span>。<span class="pt">4分</span></p>
+<p>(2) 在 <span class="m">[0,\xi]</span> 和 <span class="m">[\xi,1]</span> 上分别用<a class="c" data-t="lagrange">拉格朗日中值定理</a>，存在 <span class="m">\eta\in(0,\xi)</span>，<span class="m">\zeta\in(\xi,1)</span>，使</p>
+<div class="M">f'(\eta)=\frac{f(\xi)-f(0)}{\xi}=\frac{1-\xi}{\xi},\qquad f'(\zeta)=\frac{f(1)-f(\xi)}{1-\xi}=\frac{\xi}{1-\xi}.</div>
+<p class="fin">所以 <span class="m">f'(\eta)f'(\zeta)=1</span>，且 <span class="m">\eta\lt\xi\lt\zeta</span>，二者不同。证毕。<span class="pt">6分</span></p></div>
+<div class="note"><div class="b-h">批注</div><p>每次用中值定理之前，「连续、可导」这句都要写，这是采分点。</p></div>
+
+<div class="endq"><h2>今日考你</h2><p class="hint">合上前答一遍：先想，再点开。答错的会回到后面几期和温故版。</p><div class="rq" data-q="9-0"><p class="rq-q">证明 <span class="m">\ln x-kx=0</span> 的根个数的第一步？</p><p class="rq-a">分离参数：<span class="m">k=\frac{\ln x}{x}</span>，研究 <span class="m">g(x)=\frac{\ln x}{x}</span> 的单调性和极限。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="9-1"><p class="rq-q"><span class="m">xf'(\xi)+f(\xi)=0</span> 的辅助函数？</p><p class="rq-a"><span class="m">F(x)=xf(x)</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="9-2"><p class="rq-q"><span class="m">f'(\xi)=f(\xi)</span> 的辅助函数？</p><p class="rq-a"><span class="m">F(x)=e^{-x}f(x)</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="9-3"><p class="rq-q">什么情况用两次拉格朗日？</p><p class="rq-a">结论里有两个不同的中值，通常先找一个分点 <span class="m">c</span>，再在 <span class="m">[a,c]</span>、<span class="m">[c,b]</span> 上分别用。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div></div>
+<div class="endnext" id="endnext"></div>
+<div id="sent"></div>
+</div></div>
+<aside class="rail" id="rail"><div class="rail-h">本版引用 · 定理全文</div><div id="railc"></div></aside>
+</section></main>
+<footer class="pager"><button id="pv" aria-label="上一版">‹</button><div class="pginfo"><span id="pgt"></span><div class="bar"><i id="pgb"></i></div></div><button id="nx" aria-label="下一版">›</button></footer>
+<div class="sheetup" id="sheetup" hidden><div class="sheetup-h"><span>定理全文</span><button id="sheetx">关闭</button></div><div id="sheetc"></div></div>
+<div class="drawer" id="drawer" hidden></div>
+<script src="assets/katex/katex.min.js"></script><script src="assets/data.js"></script><script src="assets/paper.js"></script>
+</body></html>

@@ -1,0 +1,89 @@
+@part 丙
+@kicker 第二类曲面积分、高斯、斯托克斯
+@title 穿过曲面的流量，等于内部的源头
+@deck 大题的常驻考点。高斯公式把封闭曲面变成三重积分，用法和格林完全平行：不封闭就补面，有奇点就挖球。斯托克斯只需要一个模板。
+@keep 投影法：$\iint_\Sigma R\,dxdy=\pm\iint_{D_{xy}}R(x,y,z(x,y))\,d\sigma$，上侧取 $+$，下侧取 $-$。
+@keep 高斯：$\oiint_{\text{外侧}}Pdydz+Qdzdx+Rdxdy=\iiint_\Omega(P_x+Q_y+R_z)\,dV$。
+@keep 不封闭：补平面（上底/下底），方向使整体朝外。
+@keep 斯托克斯：曲线积分 = 旋度通过曲面的通量。
+@recall 第二类曲面积分的「侧」如何影响符号？ || 上、前、右侧取 $+$；下、后、左侧取 $-$。
+@recall 散度和旋度的公式？ || $\mathrm{div}F=P_x+Q_y+R_z$；$\mathrm{rot}F=(R_y-Q_z,P_z-R_x,Q_x-P_y)$。
+@recall 平面 $z=1$（上侧）上 $\iint x\,dydz$ 等于多少？ || $0$，因为投影到 $yOz$ 面的面积为零。
+@recall 高斯公式的外侧与「内侧」符号关系？ || 整张取内侧时，公式右端加负号。
+
+## 第二类曲面积分
+:::thm surf2 | 第二类曲面积分
+$\iint_\Sigma Pdydz+Qdzdx+Rdxdy$ 是向量场 $F=(P,Q,R)$ 穿过有向曲面 $\Sigma$ 的**流量**（通量）。
+**分面投影**：$\Sigma:z=z(x,y)$，投影 $D_{xy}$：
+$$\iint_\Sigma R\,dxdy=\pm\iint_{D_{xy}}R(x,y,z(x,y))\,d\sigma,$$
+上侧取 $+$，下侧取 $-$。$dydz$ 投影到 $yOz$（前 $+$ 后 $-$）；$dzdx$ 投影到 $zOx$（右 $+$ 左 $-$）。
+**垂直于某坐标面的曲面**，在该坐标面上的投影积分为 $0$。
+:::
+:::thm surf12 | 两类曲面积分的关系
+$$\iint_\Sigma Pdydz+Qdzdx+Rdxdy=\iint_\Sigma(P\cos\alpha+Q\cos\beta+R\cos\gamma)\,dS,$$
+$(\cos\alpha,\cos\beta,\cos\gamma)$ 是所取侧的单位法向量。
+:::
+:::ex 投影法
+计算 $\displaystyle\iint_\Sigma z\,dxdy$，$\Sigma$ 是上半球面 $z=\sqrt{1-x^2-y^2}$，取上侧。
+:::
+:::paper
+解 投影 $D:x^2+y^2\le1$，上侧取 $+$。由[[surf2]]和[[polar]]，
+$$\iint_\Sigma z\,dxdy=\iint_D\sqrt{1-x^2-y^2}\,d\sigma=\int_0^{2\pi}d\theta\int_0^1\sqrt{1-r^2}\,r\,dr=2\pi\cdot\frac{1}{3}.$$
+∎ 原式 $=\dfrac{2\pi}{3}$。
+:::
+
+## 高斯公式
+:::thm gauss | 高斯公式
+$\Omega$ 是有界闭区域，$\Sigma$ 是其**外侧**边界，$P,Q,R$ 有连续一阶偏导，则
+$$\oiint_\Sigma Pdydz+Qdzdx+Rdxdy=\iiint_\Omega\Bigl(\frac{\partial P}{\partial x}+\frac{\partial Q}{\partial y}+\frac{\partial R}{\partial z}\Bigr)dV.$$
+被积函数叫**散度** $\mathrm{div}F$。
+:::
+:::like
+一个气球里有若干水龙头。从气球表面流出的总水量，等于里面所有水龙头的出水量之和。散度就是每一点水龙头的流量。
+:::
+:::ex 封闭曲面
+计算 $\displaystyle\oiint_\Sigma x^3dydz+y^3dzdx+z^3dxdy$，$\Sigma$ 是单位球面外侧。
+:::
+:::paper
+解 $P_x+Q_y+R_z=3(x^2+y^2+z^2)$。由[[gauss]]和[[sph]]，
+$$\oiint_\Sigma=3\iiint_\Omega(x^2+y^2+z^2)\,dV=3\int_0^{2\pi}d\theta\int_0^\pi\sin\varphi\,d\varphi\int_0^1\rho^4\,d\rho=3\cdot2\pi\cdot2\cdot\frac{1}{5}.$$
+∎ 原式 $=\dfrac{12\pi}{5}$。
+:::
+
+## 不封闭：补面（最常考）
+!fig f29_gauss | 旋转抛物面本身不封闭，补上顶面 $z=1$（取上侧）。整体构成封闭曲面的外侧。
+:::ex 补面（大题）
+计算 $I=\displaystyle\iint_\Sigma x\,dydz+y\,dzdx+z\,dxdy$，$\Sigma$ 是 $z=x^2+y^2$（$z\le1$），取下侧。
+:::
+:::think
+直接算要投影到三个面，很繁。散度是常数 3，高斯公式一步到位。下侧恰好朝外，只需补顶面 $z=1$ 的上侧。
+:::
+:::paper
+解 补平面 $\Sigma_1:z=1$（$x^2+y^2\le1$），取上侧。$\Sigma+\Sigma_1$ 是闭合曲面的外侧，所围区域为 $\Omega$。⛳2
+$P_x+Q_y+R_z=3$。由[[gauss]]，
+$$\oiint_{\Sigma+\Sigma_1}=3\iiint_\Omega dV=3\int_0^{1}\pi z\,dz=\frac{3\pi}{2}.$$⛳4
+在 $\Sigma_1$ 上，$\Sigma_1$ 垂直于 $yOz,zOx$ 面，由[[surf2]]，$dydz,dzdx$ 项积分为 $0$；$z=1$，上侧，
+$$\iint_{\Sigma_1}=\iint_{x^2+y^2\le1}1\,d\sigma=\pi.$$⛳3
+∎ 所以 $I=\dfrac{3\pi}{2}-\pi=\dfrac{\pi}{2}$。⛳1
+:::
+:::note
+有奇点（如 $\frac{1}{r^3}$ 型）时，用小球面挖掉，再在壳形区域用高斯，和第 28 期「挖洞」完全平行。
+:::
+
+## 斯托克斯公式
+:::thm stokes | 斯托克斯公式
+$L$ 是曲面 $\Sigma$ 的边界，方向与 $\Sigma$ 的侧成右手系，则
+$$\oint_LPdx+Qdy+Rdz=\iint_\Sigma\begin{vmatrix}\cos\alpha&\cos\beta&\cos\gamma\\\frac{\partial}{\partial x}&\frac{\partial}{\partial y}&\frac{\partial}{\partial z}\\P&Q&R\end{vmatrix}dS.$$
+**旋度**：$\mathrm{rot}F=(R_y-Q_z,\ P_z-R_x,\ Q_x-P_y)$。公式右端即 $\iint_\Sigma\mathrm{rot}F\cdot n\,dS$。格林公式是它在平面上的特例。
+:::
+**考法固定**：$L$ 是平面与曲面的交线，取这张平面上被 $L$ 围住的部分作 $\Sigma$，法向量是常向量。
+:::ex 斯托克斯
+计算 $\displaystyle\oint_Ly\,dx+z\,dy+x\,dz$，$L$ 是球面 $x^2+y^2+z^2=1$ 与平面 $x+y+z=0$ 的交线，从 $z$ 轴正向看去为逆时针。
+:::
+:::paper
+解 取 $\Sigma$ 为平面 $x+y+z=0$ 上被 $L$ 所围的圆盘，取上侧。单位法向量 $n=\dfrac{1}{\sqrt3}(1,1,1)$。平面过球心，所以圆盘半径为 $1$，面积 $\pi$。⛳3
+$F=(y,z,x)$，$\mathrm{rot}F=(0-1,\ 0-1,\ 0-1)=(-1,-1,-1)$，$\mathrm{rot}F\cdot n=-\sqrt3$。⛳4
+由[[stokes]]，
+$$\oint_L=\iint_\Sigma(-\sqrt3)\,dS=-\sqrt3\cdot\pi.$$
+∎ 原式 $=-\sqrt3\pi$。⛳3
+:::

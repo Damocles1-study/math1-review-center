@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>特征根定一切 · 第14期 · 重读报</title>
+<link rel="stylesheet" href="assets/katex/katex.min.css">
+<link rel="stylesheet" href="assets/paper.css">
+</head><body class="issue" data-no="14" data-prev="q13.html" data-next="q15.html">
+<header class="strip"><a class="brand" href="index.html">重读报</a>
+<span class="strip-m">第 14 期 · 一元微积分 · 二阶微分方程</span>
+<nav class="tools"><button data-a="toc" title="目录 (T)">目录</button><button data-a="rail" class="only-narrow">定理<i id="railn"></i></button><button data-a="hide" title="遮住卷面，先自己写 (H)">遮卷面</button><button data-a="night" title="夜读">夜读</button></nav></header>
+<main class="sheet" id="sheet">
+<section class="cover" id="cover">
+<div class="mast"><div class="mast-l">一元微积分<br>第 14 期</div><div class="mast-c">重读报</div><div class="mast-r">本期约 19 分钟<br>二阶微分方程</div></div>
+<h1>特征根定一切</h1>
+<p class="deck">二阶常系数线性方程是真题常客。齐次通解由特征根决定，非齐次特解按右端的形式待定。把这张表记住，一元微积分就此收官。</p>
+<div class="cover-grid">
+<div class="cover-keep"><h4>本期只记这几行</h4><ol><li>通解 = 齐次通解 + 非齐次特解。</li><li>两不等实根 <span class="m">C_1e^{r_1x}+C_2e^{r_2x}</span>；重根 <span class="m">(C_1+C_2x)e^{rx}</span>；复根 <span class="m">e^{\alpha x}(C_1\cos\beta x+C_2\sin\beta x)</span>。</li><li><span class="m">f=P_m(x)e^{\lambda x}</span>：设 <span class="m">y^*=x^kQ_m(x)e^{\lambda x}</span>，<span class="m">k</span> 是 <span class="m">\lambda</span> 作为特征根的重数。</li><li>欧拉方程令 <span class="m">x=e^t</span>，变常系数。</li></ol></div>
+<div class="cover-prev"><h4>开读前，先答上期</h4><div id="prevq"></div></div>
+<div class="cover-toc"><h4>本期目录</h4><ol><li>可降阶的两种</li><li>线性方程解的结构</li><li>常系数齐次：特征方程</li><li>常系数非齐次：待定特解</li><li>欧拉方程（数一）</li></ol><p class="hint">→ 键 / 点右缘 / 左滑翻页</p></div>
+</div></section>
+<section class="stage" id="stage" hidden>
+<div class="viewport" id="vp"><div class="flow" id="flow">
+<h2>可降阶的两种</h2>
+<div class="thm" id="t-reduce"><div class="thm-h"><span>定理</span>可降阶的二阶方程</div><ul><li>不显含 <span class="m">y</span>：<span class="m">y''=f(x,y')</span>。令 <span class="m">p=y'</span>，<span class="m">y''=\frac{dp}{dx}</span>，化成关于 <span class="m">p</span> 的一阶方程。</li><li>不显含 <span class="m">x</span>：<span class="m">y''=f(y,y')</span>。令 <span class="m">p=y'</span>，<span class="m">y''=p\frac{dp}{dy}</span>，化成关于 <span class="m">p,y</span> 的一阶方程。</li></ul></div>
+<div class="ex"><div class="ex-h">例 14.1<span class="ex-tag">不显含 <span class="m">x</span></span></div><p>求 <span class="m">y''=2yy'</span> 满足 <span class="m">y(0)=1,\ y'(0)=1</span> 的特解。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 方程不显含 <span class="m">x</span>。由<a class="c" data-t="reduce">可降阶的二阶方程</a>，令 <span class="m">p=y'</span>，则 <span class="m">y''=p\dfrac{dp}{dy}</span>，方程化为 <span class="m">p\dfrac{dp}{dy}=2yp</span>。因 <span class="m">y'(0)=1\neq0</span>，在 <span class="m">x=0</span> 附近 <span class="m">p\neq0</span>，约去得 <span class="m">\dfrac{dp}{dy}=2y</span>，所以 <span class="m">p=y^2+C_1</span>。</p>
+<p>代入初值 <span class="m">y=1,p=1</span>，得 <span class="m">C_1=0</span>，即 <span class="m">y'=y^2</span>。由<a class="c" data-t="sep">可分离变量方程</a>，</p>
+<div class="M">-\frac{1}{y}=x+C_2.</div>
+<p>代入 <span class="m">y(0)=1</span>，得 <span class="m">C_2=-1</span>。</p>
+<p class="fin">所求特解为 <span class="m">y=\dfrac{1}{1-x}</span>。</p></div>
+<h2>线性方程解的结构</h2>
+<div class="thm" id="t-struct"><div class="thm-h"><span>定理</span>线性方程解的结构</div><p>对 <span class="m">y''+py'+qy=f(x)</span>（<span class="m">p,q</span> 可为函数）：</p>
+<p>(1) <span class="m">y_1,y_2</span> 是对应齐次方程的两个解，且比值 <span class="m">y_1/y_2</span> 不是常数，则齐次通解为 <span class="m">C_1y_1+C_2y_2</span>。</p>
+<p>(2) 非齐次通解 = 齐次通解 + 非齐次的一个特解。</p>
+<p>(3) 两个非齐次解之差是齐次解。</p>
+<p>(4) 若 <span class="m">y_1^*,y_2^*</span> 分别是右端 <span class="m">f_1,f_2</span> 的解，则 <span class="m">y_1^*+y_2^*</span> 是右端 <span class="m">f_1+f_2</span> 的解。</p></div>
+<p>第 (3) 条是选择题的常客：已知非齐次方程的三个解，两两相减得到齐次解。</p>
+<h2>常系数齐次：特征方程</h2>
+<p><span class="m">y=e^{rx}</span> 代入 <span class="m">y''+py'+qy=0</span>，得 <span class="m">r^2+pr+q=0</span>（特征方程）。</p>
+<div class="thm" id="t-charroot"><div class="thm-h"><span>定理</span>常系数齐次方程的通解</div><div class="tab"><table><thead><tr><th>特征根</th><th>通解</th></tr></thead><tbody><tr><td>两不等实根 <span class="m">r_1,r_2</span></td><td><span class="m">C_1e^{r_1x}+C_2e^{r_2x}</span></td></tr><tr><td>二重根 <span class="m">r</span></td><td><span class="m">(C_1+C_2x)e^{rx}</span></td></tr><tr><td>共轭复根 <span class="m">\alpha\pm i\beta</span></td><td><span class="m">e^{\alpha x}(C_1\cos\beta x+C_2\sin\beta x)</span></td></tr></tbody></table></div>
+<p>更高阶同理：每个根贡献一项，<span class="m">k</span> 重根乘 <span class="m">1,x,\dots,x^{k-1}</span>。</p></div>
+<div class="like"><div class="b-h">打个比方</div><p>可以把特征根理解为「运动模式」：实根是指数增长或衰减；复根是一边衰减一边振荡。弹簧的阻尼振动就是后者。</p></div>
+<h2>常系数非齐次：待定特解</h2>
+<div class="thm" id="t-undet"><div class="thm-h"><span>定理</span>非齐次方程的特解形式</div><p><b>(一)</b> <span class="m">f(x)=P_m(x)e^{\lambda x}</span>，设</p>
+<div class="M">y^*=x^kQ_m(x)e^{\lambda x},</div>
+<p><span class="m">Q_m</span> 是 <span class="m">m</span> 次待定多项式，<span class="m">k</span> 是 <span class="m">\lambda</span> 作为特征根的重数（不是根时 <span class="m">0</span>，单根时 <span class="m">1</span>，二重根时 <span class="m">2</span>）。</p>
+<p><b>(二)</b> <span class="m">f(x)=e^{\alpha x}[P_l\cos\beta x+P_n\sin\beta x]</span>，设</p>
+<div class="M">y^*=x^ke^{\alpha x}[R_m\cos\beta x+T_m\sin\beta x],</div>
+<p><span class="m">m=\max(l,n)</span>，<span class="m">k</span> 是 <span class="m">\alpha+i\beta</span> 作为特征根的重数（<span class="m">0</span> 或 <span class="m">1</span>）。</p></div>
+<div class="ex"><div class="ex-h">例 14.2<span class="ex-tag">共振</span></div><p>求 <span class="m">y''-3y'+2y=xe^x</span> 的通解。</p></div>
+<div class="think"><div class="b-h">思路</div><p><span class="m">\lambda=1</span> 是单根，<span class="m">k=1</span>；<span class="m">P_m=x</span>，<span class="m">m=1</span>。设 <span class="m">y^*=x(ax+b)e^x</span>。代入时用「<span class="m">y=ue^{x}</span>，则 <span class="m">y'=(u'+u)e^x</span>，<span class="m">y''=(u''+2u'+u)e^x</span>」最省事。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 特征方程 <span class="m">r^2-3r+2=0</span>，<span class="m">r_1=1,r_2=2</span>，由<a class="c" data-t="charroot">常系数齐次方程的通解</a>，齐次通解为 <span class="m">Y=C_1e^x+C_2e^{2x}</span>。<span class="pt">3分</span></p>
+<p><span class="m">\lambda=1</span> 为单根，由<a class="c" data-t="undet">非齐次方程的特解形式</a>，设 <span class="m">y^*=(ax^2+bx)e^x</span>。记 <span class="m">u=ax^2+bx</span>，代入方程，约去 <span class="m">e^x</span>：</p>
+<div class="M">(u''+2u'+u)-3(u'+u)+2u=u''-u'=x.</div>
+<p>即 <span class="m">2a-(2ax+b)=x</span>，比较系数：<span class="m">-2a=1</span>，<span class="m">2a-b=0</span>，得 <span class="m">a=-\dfrac{1}{2}</span>，<span class="m">b=-1</span>。<span class="pt">5分</span></p>
+<p>由<a class="c" data-t="struct">线性方程解的结构</a>，</p>
+<p class="fin">通解为 <span class="m">y=C_1e^x+C_2e^{2x}-\Bigl(\dfrac{x^2}{2}+x\Bigr)e^x</span>。<span class="pt">2分</span></p></div>
+<div class="ex"><div class="ex-h">例 14.3<span class="ex-tag">三角右端</span></div><p>求 <span class="m">y''+y=\cos x</span> 的通解。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 特征根 <span class="m">r=\pm i</span>，齐次通解 <span class="m">Y=C_1\cos x+C_2\sin x</span>。</p>
+<p><span class="m">\alpha+i\beta=i</span> 是单根，由<a class="c" data-t="undet">非齐次方程的特解形式</a>，设 <span class="m">y^*=x(a\cos x+b\sin x)</span>。求导：</p>
+<div class="M">y^{*\prime\prime}=2(-a\sin x+b\cos x)-x(a\cos x+b\sin x).</div>
+<p>代入方程，<span class="m">y^{*\prime\prime}+y^*=-2a\sin x+2b\cos x=\cos x</span>，得 <span class="m">a=0,\ b=\dfrac{1}{2}</span>。</p>
+<p class="fin">通解为 <span class="m">y=C_1\cos x+C_2\sin x+\dfrac{x}{2}\sin x</span>。</p></div>
+<h2>欧拉方程（数一）</h2>
+<div class="thm" id="t-euler"><div class="thm-h"><span>定理</span>欧拉方程</div><p><span class="m">x^2y''+pxy'+qy=f(x)</span>。令 <span class="m">x=e^t</span>（<span class="m">x\gt0</span>），记 <span class="m">D=\frac{d}{dt}</span>，则 <span class="m">xy'=Dy</span>，<span class="m">x^2y''=D(D-1)y</span>，方程化为常系数：</p>
+<div class="M">[D(D-1)+pD+q]y=f(e^t).</div></div>
+<div class="ex"><div class="ex-h">例 14.4<span class="ex-tag">欧拉</span></div><p>求 <span class="m">x^2y''-2xy'+2y=0</span>（<span class="m">x\gt0</span>）的通解。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 由<a class="c" data-t="euler">欧拉方程</a>，令 <span class="m">x=e^t</span>，方程化为 <span class="m">[D(D-1)-2D+2]y=0</span>，即 <span class="m">y_{tt}-3y_t+2y=0</span>。</p>
+<p>特征根 <span class="m">r=1,2</span>，<span class="m">y=C_1e^t+C_2e^{2t}</span>。</p>
+<p class="fin">回代 <span class="m">e^t=x</span>，通解为 <span class="m">y=C_1x+C_2x^2</span>。</p></div>
+
+<div class="endq"><h2>今日考你</h2><p class="hint">合上前答一遍：先想，再点开。答错的会回到后面几期和温故版。</p><div class="rq" data-q="14-0"><p class="rq-q"><span class="m">y''-2y'+y=0</span> 的通解？</p><p class="rq-a">特征根 <span class="m">r=1</span>（二重），<span class="m">y=(C_1+C_2x)e^x</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="14-1"><p class="rq-q"><span class="m">y''+y=\cos x</span> 特解怎么设？</p><p class="rq-a"><span class="m">\pm i</span> 是特征根，<span class="m">k=1</span>：<span class="m">y^*=x(a\cos x+b\sin x)</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="14-2"><p class="rq-q">不显含 <span class="m">y</span> 的 <span class="m">y''=f(x,y')</span> 怎么降阶？</p><p class="rq-a">令 <span class="m">p=y'</span>，<span class="m">y''=p'</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="14-3"><p class="rq-q">不显含 <span class="m">x</span> 的 <span class="m">y''=f(y,y')</span> 怎么降阶？</p><p class="rq-a">令 <span class="m">p=y'</span>，<span class="m">y''=p\frac{dp}{dy}</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div></div>
+<div class="endnext" id="endnext"></div>
+<div id="sent"></div>
+</div></div>
+<aside class="rail" id="rail"><div class="rail-h">本版引用 · 定理全文</div><div id="railc"></div></aside>
+</section></main>
+<footer class="pager"><button id="pv" aria-label="上一版">‹</button><div class="pginfo"><span id="pgt"></span><div class="bar"><i id="pgb"></i></div></div><button id="nx" aria-label="下一版">›</button></footer>
+<div class="sheetup" id="sheetup" hidden><div class="sheetup-h"><span>定理全文</span><button id="sheetx">关闭</button></div><div id="sheetc"></div></div>
+<div class="drawer" id="drawer" hidden></div>
+<script src="assets/katex/katex.min.js"></script><script src="assets/data.js"></script><script src="assets/paper.js"></script>
+</body></html>

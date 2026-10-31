@@ -1,0 +1,100 @@
+@part 甲
+@day 第二天
+@kicker 二阶微分方程
+@title 特征根定一切
+@deck 二阶常系数线性方程是真题常客。齐次通解由特征根决定，非齐次特解按右端的形式待定。把这张表记住，一元微积分就此收官。
+@keep 通解 = 齐次通解 + 非齐次特解。
+@keep 两不等实根 $C_1e^{r_1x}+C_2e^{r_2x}$；重根 $(C_1+C_2x)e^{rx}$；复根 $e^{\alpha x}(C_1\cos\beta x+C_2\sin\beta x)$。
+@keep $f=P_m(x)e^{\lambda x}$：设 $y^*=x^kQ_m(x)e^{\lambda x}$，$k$ 是 $\lambda$ 作为特征根的重数。
+@keep 欧拉方程令 $x=e^t$，变常系数。
+@recall $y''-2y'+y=0$ 的通解？ || 特征根 $r=1$（二重），$y=(C_1+C_2x)e^x$。
+@recall $y''+y=\cos x$ 特解怎么设？ || $\pm i$ 是特征根，$k=1$：$y^*=x(a\cos x+b\sin x)$。
+@recall 不显含 $y$ 的 $y''=f(x,y')$ 怎么降阶？ || 令 $p=y'$，$y''=p'$。
+@recall 不显含 $x$ 的 $y''=f(y,y')$ 怎么降阶？ || 令 $p=y'$，$y''=p\frac{dp}{dy}$。
+
+## 可降阶的两种
+:::thm reduce | 可降阶的二阶方程
+- 不显含 $y$：$y''=f(x,y')$。令 $p=y'$，$y''=\frac{dp}{dx}$，化成关于 $p$ 的一阶方程。
+- 不显含 $x$：$y''=f(y,y')$。令 $p=y'$，$y''=p\frac{dp}{dy}$，化成关于 $p,y$ 的一阶方程。
+:::
+:::ex 不显含 $x$
+求 $y''=2yy'$ 满足 $y(0)=1,\ y'(0)=1$ 的特解。
+:::
+:::paper
+解 方程不显含 $x$。由[[reduce]]，令 $p=y'$，则 $y''=p\dfrac{dp}{dy}$，方程化为 $p\dfrac{dp}{dy}=2yp$。因 $y'(0)=1\neq0$，在 $x=0$ 附近 $p\neq0$，约去得 $\dfrac{dp}{dy}=2y$，所以 $p=y^2+C_1$。
+代入初值 $y=1,p=1$，得 $C_1=0$，即 $y'=y^2$。由[[sep]]，
+$$-\frac{1}{y}=x+C_2.$$
+代入 $y(0)=1$，得 $C_2=-1$。
+∎ 所求特解为 $y=\dfrac{1}{1-x}$。
+:::
+
+## 线性方程解的结构
+:::thm struct | 线性方程解的结构
+对 $y''+py'+qy=f(x)$（$p,q$ 可为函数）：
+(1) $y_1,y_2$ 是对应齐次方程的两个解，且比值 $y_1/y_2$ 不是常数，则齐次通解为 $C_1y_1+C_2y_2$。
+(2) 非齐次通解 = 齐次通解 + 非齐次的一个特解。
+(3) 两个非齐次解之差是齐次解。
+(4) 若 $y_1^*,y_2^*$ 分别是右端 $f_1,f_2$ 的解，则 $y_1^*+y_2^*$ 是右端 $f_1+f_2$ 的解。
+:::
+第 (3) 条是选择题的常客：已知非齐次方程的三个解，两两相减得到齐次解。
+
+## 常系数齐次：特征方程
+$y=e^{rx}$ 代入 $y''+py'+qy=0$，得 $r^2+pr+q=0$（特征方程）。
+:::thm charroot | 常系数齐次方程的通解
+| 特征根 | 通解 |
+| 两不等实根 $r_1,r_2$ | $C_1e^{r_1x}+C_2e^{r_2x}$ |
+| 二重根 $r$ | $(C_1+C_2x)e^{rx}$ |
+| 共轭复根 $\alpha\pm i\beta$ | $e^{\alpha x}(C_1\cos\beta x+C_2\sin\beta x)$ |
+更高阶同理：每个根贡献一项，$k$ 重根乘 $1,x,\dots,x^{k-1}$。
+:::
+:::like
+可以把特征根理解为「运动模式」：实根是指数增长或衰减；复根是一边衰减一边振荡。弹簧的阻尼振动就是后者。
+:::
+
+## 常系数非齐次：待定特解
+:::thm undet | 非齐次方程的特解形式
+**(一)** $f(x)=P_m(x)e^{\lambda x}$，设
+$$y^*=x^kQ_m(x)e^{\lambda x},$$
+$Q_m$ 是 $m$ 次待定多项式，$k$ 是 $\lambda$ 作为特征根的重数（不是根时 $0$，单根时 $1$，二重根时 $2$）。
+**(二)** $f(x)=e^{\alpha x}[P_l\cos\beta x+P_n\sin\beta x]$，设
+$$y^*=x^ke^{\alpha x}[R_m\cos\beta x+T_m\sin\beta x],$$
+$m=\max(l,n)$，$k$ 是 $\alpha+i\beta$ 作为特征根的重数（$0$ 或 $1$）。
+:::
+:::ex 共振
+求 $y''-3y'+2y=xe^x$ 的通解。
+:::
+:::think
+$\lambda=1$ 是单根，$k=1$；$P_m=x$，$m=1$。设 $y^*=x(ax+b)e^x$。代入时用「$y=ue^{x}$，则 $y'=(u'+u)e^x$，$y''=(u''+2u'+u)e^x$」最省事。
+:::
+:::paper
+解 特征方程 $r^2-3r+2=0$，$r_1=1,r_2=2$，由[[charroot]]，齐次通解为 $Y=C_1e^x+C_2e^{2x}$。⛳3
+$\lambda=1$ 为单根，由[[undet]]，设 $y^*=(ax^2+bx)e^x$。记 $u=ax^2+bx$，代入方程，约去 $e^x$：
+$$(u''+2u'+u)-3(u'+u)+2u=u''-u'=x.$$
+即 $2a-(2ax+b)=x$，比较系数：$-2a=1$，$2a-b=0$，得 $a=-\dfrac{1}{2}$，$b=-1$。⛳5
+由[[struct]]，
+∎ 通解为 $y=C_1e^x+C_2e^{2x}-\Bigl(\dfrac{x^2}{2}+x\Bigr)e^x$。⛳2
+:::
+:::ex 三角右端
+求 $y''+y=\cos x$ 的通解。
+:::
+:::paper
+解 特征根 $r=\pm i$，齐次通解 $Y=C_1\cos x+C_2\sin x$。
+$\alpha+i\beta=i$ 是单根，由[[undet]]，设 $y^*=x(a\cos x+b\sin x)$。求导：
+$$y^{*\prime\prime}=2(-a\sin x+b\cos x)-x(a\cos x+b\sin x).$$
+代入方程，$y^{*\prime\prime}+y^*=-2a\sin x+2b\cos x=\cos x$，得 $a=0,\ b=\dfrac{1}{2}$。
+∎ 通解为 $y=C_1\cos x+C_2\sin x+\dfrac{x}{2}\sin x$。
+:::
+
+## 欧拉方程（数一）
+:::thm euler | 欧拉方程
+$x^2y''+pxy'+qy=f(x)$。令 $x=e^t$（$x\gt0$），记 $D=\frac{d}{dt}$，则 $xy'=Dy$，$x^2y''=D(D-1)y$，方程化为常系数：
+$$[D(D-1)+pD+q]y=f(e^t).$$
+:::
+:::ex 欧拉
+求 $x^2y''-2xy'+2y=0$（$x\gt0$）的通解。
+:::
+:::paper
+解 由[[euler]]，令 $x=e^t$，方程化为 $[D(D-1)-2D+2]y=0$，即 $y_{tt}-3y_t+2y=0$。
+特征根 $r=1,2$，$y=C_1e^t+C_2e^{2t}$。
+∎ 回代 $e^t=x$，通解为 $y=C_1x+C_2x^2$。
+:::

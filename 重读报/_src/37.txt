@@ -1,0 +1,113 @@
+@part 丁
+@kicker 参数估计与假设检验
+@title 由样本反猜总体
+@deck 最大似然估计差不多是概率大题最后一问的固定内容，流程背下来就能拿分。无偏性就是算一个期望。区间估计和检验只考最基本的情形。读完这一期，就去做套卷。
+@keep 矩估计：令 $EX=\bar X$（两个参数再加 $E(X^2)=\frac1n\sum X_i^2$），解出参数。
+@keep 最大似然：写 $L(\theta)$，取对数，求导令 $0$；单调时取样本的端点值。
+@keep 无偏：$E\hat\theta=\theta$。
+@keep 第一类错误（弃真）$\alpha$，第二类错误（取伪）$\beta$。
+@recall MLE 四步？ || 写 $L(\theta)=\prod f(x_i;\theta)$；取对数；求导令 $0$；解出 $\hat\theta$。
+@recall $U(0,\theta)$ 中 $\theta$ 的 MLE 和矩估计？ || MLE 是 $\max X_i$；矩估计是 $2\bar X$。
+@recall $\sigma$ 已知时，$\mu$ 的 $1-\alpha$ 置信区间？ || $\bar X\pm\frac{\sigma}{\sqrt n}u_{\alpha/2}$。
+@recall $\sigma$ 未知时，用什么分布？ || $t(n-1)$，把 $\sigma$ 换成 $S$。
+@recall 样本容量固定时，$\alpha$ 和 $\beta$ 的关系？ || 此消彼长。增大样本容量才能让两者同时减小。
+
+## 矩估计
+:::thm mom | 矩估计法
+用样本矩代替总体矩。一个参数：$EX=\bar X$，解出 $\theta$。两个参数，再加 $E(X^2)=\frac{1}{n}\sum X_i^2$。
+:::
+:::ex 矩估计 + MLE（大题）
+设总体的概率密度 $f(x;\theta)=(\theta+1)x^\theta$（$0\lt x\lt1$），$\theta\gt-1$。$X_1,\dots,X_n$ 是样本。求 $\theta$ 的矩估计和最大似然估计。
+:::
+:::think
+矩估计：算 $EX$，令其等于 $\bar X$。最大似然：连乘取对数，对 $\theta$ 求导。
+:::
+:::paper
+解 (1) 矩估计。
+$$EX=\int_0^1(\theta+1)x^{\theta+1}\,dx=\frac{\theta+1}{\theta+2}.$$
+由[[mom]]，令 $\dfrac{\theta+1}{\theta+2}=\bar X$，解得 $\hat\theta=\dfrac{2\bar X-1}{1-\bar X}$。⛳5
+(2) 最大似然估计。样本值 $x_i\in(0,1)$ 时，似然函数为
+$$L(\theta)=\prod_{i=1}^n(\theta+1)x_i^\theta=(\theta+1)^n\Bigl(\prod_{i=1}^nx_i\Bigr)^\theta.$$⛳2
+取对数：
+$$\ln L=n\ln(\theta+1)+\theta\sum_{i=1}^n\ln x_i.$$⛳1
+求导并令其为 $0$：
+$$\frac{d\ln L}{d\theta}=\frac{n}{\theta+1}+\sum_{i=1}^n\ln x_i=0.$$⛳2
+∎ 解得 $\hat\theta=-\dfrac{n}{\sum_{i=1}^n\ln X_i}-1$。⛳1
+:::
+
+## 最大似然估计
+:::thm mle | 最大似然估计
+**似然函数**：连续型 $L(\theta)=\prod f(x_i;\theta)$，离散型 $L(\theta)=\prod P(X=x_i;\theta)$。
+**步骤**：取对数 → 求导令 $0$ → 解出 $\hat\theta$。
+**特殊情形**：$L(\theta)$ 关于 $\theta$ 单调时，导数无零点，要直接由定义域取端点。
+:::
+:::like
+似然就是「哪个参数最能解释我看到的数据」。看到连续十次正面，你会猜这枚硬币正面概率很高，因为这样最容易产生这个结果。
+:::
+:::ex 参数在定义域里（必须分清）
+总体 $X\sim U(0,\theta)$，$\theta\gt0$。求 $\theta$ 的矩估计和最大似然估计，并判断矩估计是否无偏。
+:::
+:::think
+密度 $\frac{1}{\theta}$ 对 $\theta$ 单调减，求导得不出零点。要让 $L$ 最大，$\theta$ 越小越好，但必须能覆盖所有样本值。
+:::
+:::paper
+解 (1) 矩估计：$EX=\dfrac{\theta}{2}=\bar X$，故 $\hat\theta_1=2\bar X$。⛳2
+(2) 最大似然估计：
+$$L(\theta)=\begin{cases}\theta^{-n},&\theta\ge\max x_i\\0,&\text{其他}\end{cases}$$
+$L$ 在 $\theta\ge\max x_i$ 上单调减。由[[mle]]，$\hat\theta_2=\max\limits_{1\le i\le n}X_i$。⛳4
+(3) 由[[expect]]，$E\hat\theta_1=2E\bar X=2\cdot\dfrac{\theta}{2}=\theta$。
+∎ 矩估计 $2\bar X$，最大似然估计 $\max X_i$，矩估计是无偏的。⛳2
+:::
+
+## 估计量的评价
+:::thm estqual | 无偏性、有效性、一致性
+**无偏**：$E\hat\theta=\theta$。
+**有效**：两个无偏估计，方差小的更有效。
+**一致**：$\hat\theta\xrightarrow{P}\theta$。
+$\bar X$ 是 $\mu$ 的无偏估计，$S^2$ 是 $\sigma^2$ 的无偏估计。这就是 $S^2$ 分母取 $n-1$ 的理由。
+:::
+:::ex 无偏（选填）
+$X_1,\dots,X_n$ 来自期望为 $\mu$ 的总体，$\hat\mu=aX_1+bX_2$，求使 $\hat\mu$ 无偏的条件；若 $DX=\sigma^2$，$a,b$ 取何值时最有效？
+:::
+:::paper
+解 由[[estqual]]，$E\hat\mu=(a+b)\mu=\mu$，得 $a+b=1$。
+$D\hat\mu=(a^2+b^2)\sigma^2$。代入 $b=1-a$，$a^2+(1-a)^2$ 在 $a=\frac12$ 时最小。
+∎ 条件为 $a+b=1$；$a=b=\dfrac{1}{2}$ 时最有效。
+:::
+
+## 区间估计
+:::thm ci | 正态总体的置信区间 | 公式
+$\mu$ 的 $1-\alpha$ 置信区间：
+**$\sigma$ 已知**：$\bar X\pm\dfrac{\sigma}{\sqrt n}u_{\alpha/2}$。
+**$\sigma$ 未知**：$\bar X\pm\dfrac{S}{\sqrt n}t_{\alpha/2}(n-1)$。
+$\sigma^2$（$\mu$ 未知）：$\Bigl(\dfrac{(n-1)S^2}{\chi^2_{\alpha/2}(n-1)},\dfrac{(n-1)S^2}{\chi^2_{1-\alpha/2}(n-1)}\Bigr)$。
+$u_{\alpha/2}$ 是上侧分位数，即 $P(U\gt u_{\alpha/2})=\frac{\alpha}{2}$。
+:::
+:::ex 置信区间
+$X\sim N(\mu,16)$，$n=16$，$\bar x=50$，$u_{0.025}=1.96$。求 $\mu$ 的 $95\%$ 置信区间。
+:::
+:::paper
+解 $\sigma=4$ 已知。由[[ci]]，半宽 $=\dfrac{4}{\sqrt{16}}\times1.96=1.96$。
+∎ 置信区间为 $(48.04,\ 51.96)$。
+:::
+
+## 假设检验
+:::thm test | 假设检验的两类错误
+$H_0$ 成立却拒绝：**第一类错误**（弃真），概率 $\alpha$。$H_0$ 不成立却接受：**第二类错误**（取伪），概率 $\beta$。
+$n$ 固定时 $\alpha,\beta$ 此消彼长；增大 $n$ 可以同时减小。
+**$\mu$ 的双侧检验（$\sigma$ 已知）**：统计量 $U=\dfrac{\bar X-\mu_0}{\sigma/\sqrt n}$，$\vert U\vert\ge u_{\alpha/2}$ 时拒绝 $H_0$。$\sigma$ 未知时用 $T=\dfrac{\bar X-\mu_0}{S/\sqrt n}$ 和 $t_{\alpha/2}(n-1)$。
+:::
+:::ex 两类错误
+$X\sim N(\mu,1)$，$n=16$。检验 $H_0:\mu=0$，当 $\vert\bar X\vert\ge0.49$ 时拒绝。求第一类错误概率，以及 $\mu=0.5$ 时的第二类错误概率。
+:::
+:::paper
+解 $\bar X\sim N\bigl(\mu,\frac{1}{16}\bigr)$，$\frac{\bar X-\mu}{1/4}\sim N(0,1)$。
+由[[test]]，$H_0$ 成立时（$\mu=0$），
+$$\alpha=P(\vert\bar X\vert\ge0.49)=P(\vert U\vert\ge1.96)=0.05.$$
+$\mu=0.5$ 时，
+$$\beta=P(\vert\bar X\vert\lt0.49)=\Phi\bigl(4(0.49-0.5)\bigr)-\Phi\bigl(4(-0.49-0.5)\bigr)=\Phi(-0.04)-\Phi(-3.96).$$
+∎ $\alpha=0.05$，$\beta\approx0.484$。
+:::
+:::note
+本报到此全部刊完。接下来就上真题套卷。做错的题，回到对应的期号查例题和右栏定理。
+:::

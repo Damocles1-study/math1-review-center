@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>用几个数概括一个分布 · 第35期 · 重读报</title>
+<link rel="stylesheet" href="assets/katex/katex.min.css">
+<link rel="stylesheet" href="assets/paper.css">
+</head><body class="issue" data-no="35" data-prev="q34.html" data-next="q36.html">
+<header class="strip"><a class="brand" href="index.html">重读报</a>
+<span class="strip-m">第 35 期 · 概率统计 · 数字特征</span>
+<nav class="tools"><button data-a="toc" title="目录 (T)">目录</button><button data-a="rail" class="only-narrow">定理<i id="railn"></i></button><button data-a="hide" title="遮住卷面，先自己写 (H)">遮卷面</button><button data-a="night" title="夜读">夜读</button></nav></header>
+<main class="sheet" id="sheet">
+<section class="cover" id="cover">
+<div class="mast"><div class="mast-l">概率统计<br>第 35 期</div><div class="mast-c">重读报</div><div class="mast-r">本期约 19 分钟<br>数字特征</div></div>
+<h1>用几个数概括一个分布</h1>
+<p class="deck">期望是重心，方差是分散程度，相关系数是线性相关的强弱。计算只是积分，真正要背的是常见分布的期望方差表和一组运算律。</p>
+<div class="cover-grid">
+<div class="cover-keep"><h4>本期只记这几行</h4><ol><li><span class="m">E[g(X)]=\int g(x)f(x)\,dx</span>，不需要先求 <span class="m">g(X)</span> 的分布。</li><li><span class="m">D(X)=E(X^2)-(EX)^2</span>。<span class="m">D(X\pm Y)=DX+DY\pm2\mathrm{Cov}(X,Y)</span>。</li><li><span class="m">\mathrm{Cov}(X,Y)=E(XY)-EX\cdot EY</span>，<span class="m">\rho=\frac{\mathrm{Cov}}{\sqrt{DX}\sqrt{DY}}</span>。</li><li>独立 ⟹ 不相关，反之不成立；二维正态中两者等价。</li></ol></div>
+<div class="cover-prev"><h4>开读前，先答上期</h4><div id="prevq"></div></div>
+<div class="cover-toc"><h4>本期目录</h4><ol><li>期望</li><li>方差</li><li>协方差与相关系数</li></ol><p class="hint">→ 键 / 点右缘 / 左滑翻页</p></div>
+</div></section>
+<section class="stage" id="stage" hidden>
+<div class="viewport" id="vp"><div class="flow" id="flow">
+<h2>期望</h2>
+<div class="thm" id="t-expect"><div class="thm-h"><span>定义</span>数学期望</div><p><b>离散</b>：<span class="m">EX=\sum x_kp_k</span>；<b>连续</b>：<span class="m">EX=\int_{-\infty}^{+\infty}xf(x)\,dx</span>。</p>
+<p><b>函数的期望</b>：<span class="m">E[g(X)]=\int g(x)f(x)\,dx</span>；<span class="m">E[g(X,Y)]=\iint g(x,y)f(x,y)\,dx\,dy</span>。</p>
+<p><b>性质</b>：<span class="m">E(aX+bY+c)=aEX+bEY+c</span>（不需要独立）；独立时 <span class="m">E(XY)=EX\cdot EY</span>。</p></div>
+<div class="like"><div class="b-h">打个比方</div><p>期望就是加权平均，也是分布的重心：把密度曲线剪成一块板，用手指顶住重心位置，它就平衡了。</p></div>
+<h2>方差</h2>
+<div class="thm" id="t-variance"><div class="thm-h"><span>定理</span>方差</div><p><span class="m">DX=E(X-EX)^2=E(X^2)-(EX)^2</span>。</p>
+<p><span class="m">D(aX+b)=a^2DX</span>；<span class="m">D(X\pm Y)=DX+DY\pm2\mathrm{Cov}(X,Y)</span>；独立时 <span class="m">D(X\pm Y)=DX+DY</span>。</p>
+<p><span class="m">D(c)=0</span>；<span class="m">DX=0</span> ⟺ <span class="m">X</span> 以概率 1 为常数。</p></div>
+<div class="thm" id="t-distmom"><div class="thm-h"><span>公式</span>常见分布的期望和方差</div><div class="tab"><table><thead><tr><th>分布</th><th><span class="m">EX</span></th><th><span class="m">DX</span></th></tr></thead><tbody><tr><td><span class="m">B(1,p)</span></td><td><span class="m">p</span></td><td><span class="m">p(1-p)</span></td></tr><tr><td><span class="m">B(n,p)</span></td><td><span class="m">np</span></td><td><span class="m">np(1-p)</span></td></tr><tr><td><span class="m">P(\lambda)</span></td><td><span class="m">\lambda</span></td><td><span class="m">\lambda</span></td></tr><tr><td><span class="m">G(p)</span></td><td><span class="m">\frac{1}{p}</span></td><td><span class="m">\frac{1-p}{p^2}</span></td></tr><tr><td><span class="m">U(a,b)</span></td><td><span class="m">\frac{a+b}{2}</span></td><td><span class="m">\frac{(b-a)^2}{12}</span></td></tr><tr><td><span class="m">E(\lambda)</span></td><td><span class="m">\frac{1}{\lambda}</span></td><td><span class="m">\frac{1}{\lambda^2}</span></td></tr><tr><td><span class="m">N(\mu,\sigma^2)</span></td><td><span class="m">\mu</span></td><td><span class="m">\sigma^2</span></td></tr></tbody></table></div></div>
+<div class="ex"><div class="ex-h">例 35.1<span class="ex-tag">用表求 <span class="m">E(X^2)</span></span></div><p><span class="m">X\sim P(2)</span>，求 <span class="m">E(X^2)</span>。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 由<a class="c" data-t="distmom">常见分布的期望和方差</a>，<span class="m">EX=DX=2</span>。由<a class="c" data-t="variance">方差</a>，</p>
+<p class="fin"><span class="m">E(X^2)=DX+(EX)^2=2+4=6</span>。</p></div>
+<div class="ex"><div class="ex-h">例 35.2<span class="ex-tag">连续型</span></div><p><span class="m">X</span> 的概率密度 <span class="m">f(x)=2x</span>（<span class="m">0\lt x\lt1</span>）。求 <span class="m">EX,DX</span>，以及 <span class="m">E(e^{X})</span>。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 由<a class="c" data-t="expect">数学期望</a>，<span class="m">EX=\displaystyle\int_0^12x^2\,dx=\frac{2}{3}</span>，<span class="m">E(X^2)=\displaystyle\int_0^12x^3\,dx=\frac{1}{2}</span>。由<a class="c" data-t="variance">方差</a>，<span class="m">DX=\dfrac{1}{2}-\dfrac{4}{9}=\dfrac{1}{18}</span>。</p>
+<p>由<a class="c" data-t="expect">数学期望</a>中函数的期望公式和分部积分，</p>
+<div class="M">E(e^X)=\int_0^12xe^x\,dx=2\bigl[(x-1)e^x\bigr]_0^1=2.</div>
+<p class="fin"><span class="m">EX=\dfrac{2}{3}</span>，<span class="m">DX=\dfrac{1}{18}</span>，<span class="m">E(e^X)=2</span>。</p></div>
+<h2>协方差与相关系数</h2>
+<div class="thm" id="t-cov"><div class="thm-h"><span>定理</span>协方差与相关系数</div><p><span class="m">\mathrm{Cov}(X,Y)=E[(X-EX)(Y-EY)]=E(XY)-EX\cdot EY</span>。</p>
+<p>双线性：<span class="m">\mathrm{Cov}(aX+b,cY+d)=ac\mathrm{Cov}(X,Y)</span>；<span class="m">\mathrm{Cov}(X_1+X_2,Y)=\mathrm{Cov}(X_1,Y)+\mathrm{Cov}(X_2,Y)</span>；<span class="m">\mathrm{Cov}(X,X)=DX</span>。</p>
+<p><b>相关系数</b>：<span class="m">\rho_{XY}=\dfrac{\mathrm{Cov}(X,Y)}{\sqrt{DX}\sqrt{DY}}</span>，<span class="m">\vert\rho\vert\le1</span>。<span class="m">\vert\rho\vert=1</span> ⟺ 存在 <span class="m">a\neq0,b</span>，使 <span class="m">P(Y=aX+b)=1</span>。</p></div>
+<div class="thm" id="t-uncor"><div class="thm-h"><span>定理</span>不相关与独立</div><p><span class="m">\rho=0</span> 称<b>不相关</b>，等价于 <span class="m">E(XY)=EX\cdot EY</span>，等价于 <span class="m">D(X\pm Y)=DX+DY</span>。</p>
+<p><b>独立 ⟹ 不相关，反之不成立</b>。不相关只说明没有<b>线性</b>关系，不代表没有关系。</p>
+<p><b>二维正态</b>中：独立 ⟺ 不相关。</p></div>
+<div class="ex"><div class="ex-h">例 35.3<span class="ex-tag">不相关不独立</span></div><p>设 <span class="m">X\sim U(-1,1)</span>，<span class="m">Y=X^2</span>。证明 <span class="m">X,Y</span> 不相关，但不独立。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>证 <span class="m">EX=0</span>，<span class="m">E(XY)=E(X^3)=\displaystyle\int_{-1}^1\frac{x^3}{2}\,dx=0</span>。由<a class="c" data-t="cov">协方差与相关系数</a>，<span class="m">\mathrm{Cov}(X,Y)=0</span>，所以 <span class="m">X,Y</span> 不相关。</p>
+<p>又 <span class="m">P\bigl(X\gt\frac12,Y\gt\frac14\bigr)=P\bigl(X\gt\frac12\bigr)=\frac14</span>，而 <span class="m">P\bigl(X\gt\frac12\bigr)P\bigl(Y\gt\frac14\bigr)=\frac14\cdot\frac12=\frac18</span>，两者不等。</p>
+<p class="fin">所以 <span class="m">X,Y</span> 不独立。证毕。</p></div>
+<div class="ex"><div class="ex-h">例 35.4<span class="ex-tag">方差运算</span></div><p><span class="m">DX=1</span>，<span class="m">DY=4</span>，<span class="m">\rho_{XY}=0.5</span>，求 <span class="m">D(2X-3Y+1)</span>。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 <span class="m">\mathrm{Cov}(X,Y)=0.5\times1\times2=1</span>。由<a class="c" data-t="variance">方差</a>和<a class="c" data-t="cov">协方差与相关系数</a>，</p>
+<div class="M">D(2X-3Y+1)=4DX+9DY-2\cdot2\cdot3\mathrm{Cov}(X,Y)=4+36-12.</div>
+<p class="fin">结果为 <span class="m">28</span>。</p></div>
+<div class="ex"><div class="ex-h">例 35.5<span class="ex-tag">接第 34 期（大题）</span></div><p><span class="m">(X,Y)</span> 的概率密度为 <span class="m">f=6x</span>（<span class="m">0\lt x\lt y\lt1</span>）。求 <span class="m">\mathrm{Cov}(X,Y)</span> 和 <span class="m">\rho_{XY}</span>。</p></div>
+<div class="think"><div class="b-h">思路</div><p>第 34 期已求出边缘 <span class="m">f_X=6x(1-x)</span>，<span class="m">f_Y=3y^2</span>，一维的矩直接用边缘算。<span class="m">E(XY)</span> 用联合密度。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 由边缘密度，</p>
+<div class="M">EX=\int_0^16x^2(1-x)\,dx=\frac{1}{2},\quad E(X^2)=\int_0^16x^3(1-x)\,dx=\frac{3}{10},\quad DX=\frac{1}{20},</div>
+<span class="pt">4分</span><div class="M">EY=\int_0^13y^3\,dy=\frac{3}{4},\quad E(Y^2)=\int_0^13y^4\,dy=\frac{3}{5},\quad DY=\frac{3}{80}.</div>
+<p>由<a class="c" data-t="expect">数学期望</a>，</p>
+<span class="pt">3分</span><div class="M">E(XY)=\int_0^1dx\int_x^16x^2y\,dy=\int_0^13x^2(1-x^2)\,dx=\frac{2}{5}.</div>
+<p>由<a class="c" data-t="cov">协方差与相关系数</a>，<span class="m">\mathrm{Cov}(X,Y)=\dfrac{2}{5}-\dfrac{3}{8}=\dfrac{1}{40}</span>，</p>
+<span class="pt">3分</span><div class="M">\rho_{XY}=\frac{1/40}{\sqrt{\frac{1}{20}\cdot\frac{3}{80}}}=\frac{1/40}{\sqrt3/40}.</div>
+<p class="fin"><span class="m">\mathrm{Cov}(X,Y)=\dfrac{1}{40}</span>，<span class="m">\rho_{XY}=\dfrac{\sqrt3}{3}</span>。</p></div>
+
+<div class="endq"><h2>今日考你</h2><p class="hint">合上前答一遍：先想，再点开。答错的会回到后面几期和温故版。</p><div class="rq" data-q="35-0"><p class="rq-q">指数分布 <span class="m">E(\lambda)</span> 的 <span class="m">EX,DX</span>？</p><p class="rq-a"><span class="m">\frac1\lambda,\frac{1}{\lambda^2}</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="35-1"><p class="rq-q">泊松分布 <span class="m">P(\lambda)</span> 的 <span class="m">EX,DX</span>？</p><p class="rq-a">都是 <span class="m">\lambda</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="35-2"><p class="rq-q">二项 <span class="m">B(n,p)</span> 的 <span class="m">EX,DX</span>？</p><p class="rq-a"><span class="m">np,np(1-p)</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="35-3"><p class="rq-q"><span class="m">U(a,b)</span> 的 <span class="m">EX,DX</span>？</p><p class="rq-a"><span class="m">\frac{a+b}{2},\frac{(b-a)^2}{12}</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="35-4"><p class="rq-q"><span class="m">\vert\rho\vert=1</span> 的含义？</p><p class="rq-a"><span class="m">Y=aX+b</span>，以概率 1 线性相关。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="35-5"><p class="rq-q"><span class="m">E(XY)=EX\cdot EY</span> 的条件？</p><p class="rq-a">不相关（独立是充分条件）。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div></div>
+<div class="endnext" id="endnext"></div>
+<div id="sent"></div>
+</div></div>
+<aside class="rail" id="rail"><div class="rail-h">本版引用 · 定理全文</div><div id="railc"></div></aside>
+</section></main>
+<footer class="pager"><button id="pv" aria-label="上一版">‹</button><div class="pginfo"><span id="pgt"></span><div class="bar"><i id="pgb"></i></div></div><button id="nx" aria-label="下一版">›</button></footer>
+<div class="sheetup" id="sheetup" hidden><div class="sheetup-h"><span>定理全文</span><button id="sheetx">关闭</button></div><div id="sheetc"></div></div>
+<div class="drawer" id="drawer" hidden></div>
+<script src="assets/katex/katex.min.js"></script><script src="assets/data.js"></script><script src="assets/paper.js"></script>
+</body></html>

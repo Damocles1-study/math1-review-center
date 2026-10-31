@@ -1,0 +1,120 @@
+@part 甲
+@day 第一天
+@kicker 中值定理与洛必达
+@title 一条割线，必有一条切线与它平行
+@deck 费马、罗尔、拉格朗日、柯西是一条链，后一个由前一个推出。到了链的末端，洛必达法则作为它的推论自然登场。从这一期起，$\frac00$ 型多了一把通用钥匙。
+@keep 费马：可导的极值点处导数为 $0$。
+@keep 罗尔：闭连开导 + 两端相等 ⟹ 存在 $f'(\xi)=0$。
+@keep 拉格朗日：$f(b)-f(a)=f'(\xi)(b-a)$。
+@keep 洛必达三步：验型 → 求导 → 看新极限是否存在；新极限不存在时法则失效，不能说原极限不存在。
+@recall 三个中值定理共同的条件写法？ || $f$ 在闭区间 $[a,b]$ 上连续，在开区间 $(a,b)$ 内可导。
+@recall 用洛必达前必须确认什么？ || 是 $\frac00$ 或 $\frac\infty\infty$ 型；且求导后的极限存在（或为 $\infty$）。
+@recall $\lim_{x\to0}\frac{x-\sin x}{x^3}$ 等于？ || $\frac16$。
+@recall $0\cdot\infty$ 型怎么处理？ || 把一个因子放到分母，化成 $\frac00$ 或 $\frac\infty\infty$。
+@recall 由导数恒为零能推出什么？ || 区间上 $f$ 为常数（拉格朗日中值定理的推论）。
+
+## 极值与费马引理
+:::thm extdef | 极值 | 定义
+若存在 $x_0$ 的某邻域，其中任意 $x$ 都有 $f(x)\le f(x_0)$，称 $f(x_0)$ 为**极大值**（反向不等式为极小值）。极值是局部概念，最值是全局概念。
+:::
+:::thm fermat | 费马引理
+若 $f$ 在 $x_0$ 处取极值且**可导**，则 $f'(x_0)=0$。
+:::
+理由：极大值点右侧差商 $\le0$，左侧差商 $\ge0$，导数存在只能等于 $0$。
+
+## 三个中值定理
+:::thm rolle | 罗尔定理
+$f$ 在 $[a,b]$ 上连续，在 $(a,b)$ 内可导，$f(a)=f(b)$，则存在 $\xi\in(a,b)$，使 $f'(\xi)=0$。
+:::
+理由：连续函数在闭区间上有最值（[[maxmin]]）。若最值都在端点，$f$ 为常数；否则某个最值在内部，由[[fermat]]导数为 $0$。
+:::thm lagrange | 拉格朗日中值定理
+$f$ 在 $[a,b]$ 上连续，在 $(a,b)$ 内可导，则存在 $\xi\in(a,b)$，使
+$$f(b)-f(a)=f'(\xi)(b-a).$$
+:::
+!fig f06_mvt | 把割线「平移」，必能在某处贴成切线。
+:::like
+从 A 地开到 B 地，全程平均时速 80，那么路上一定有某一刻时速表正好指向 80。
+:::
+证法值得看一眼，因为这就是**构造辅助函数**的原型：要证的式子是 $f'(\xi)-\frac{f(b)-f(a)}{b-a}=0$，于是令 $F(x)=f(x)-\frac{f(b)-f(a)}{b-a}x$，它满足 $F(a)=F(b)$，对 $F$ 用罗尔定理即得。
+:::thm cauchy | 柯西中值定理
+$f,g$ 在 $[a,b]$ 上连续，在 $(a,b)$ 内可导，$g'(x)\neq0$，则存在 $\xi\in(a,b)$，使
+$$\frac{f(b)-f(a)}{g(b)-g(a)}=\frac{f'(\xi)}{g'(\xi)}.$$
+:::
+:::thm constder | 导数恒为零的推论
+$f$ 在区间 $I$ 上可导且 $f'(x)\equiv0$，则 $f$ 在 $I$ 上为常数。
+:::
+:::ex 拉格朗日证不等式
+证明：当 $x\gt0$ 时，$\dfrac{x}{1+x}\lt\ln(1+x)\lt x$。
+:::
+:::think
+$\ln(1+x)=\ln(1+x)-\ln1$，是函数值之差，正对拉格朗日。$\xi$ 的范围就给出上下界。
+:::
+:::paper
+证 令 $f(t)=\ln t$，$f$ 在 $[1,1+x]$ 上连续，在 $(1,1+x)$ 内可导。由[[lagrange]]，存在 $\xi\in(1,1+x)$，使
+$$\ln(1+x)-\ln1=\frac{1}{\xi}\cdot x.$$
+因为 $1\lt\xi\lt1+x$，所以 $\dfrac{1}{1+x}\lt\dfrac{1}{\xi}\lt1$。两边乘以 $x\gt0$，
+∎ 得 $\dfrac{x}{1+x}\lt\ln(1+x)\lt x$。证毕。
+:::
+:::ex 罗尔证存在性
+设 $f$ 在 $[0,1]$ 上连续，在 $(0,1)$ 内可导，$f(0)=f(1)=0$。证明：存在 $\xi\in(0,1)$，使 $f'(\xi)+f(\xi)=0$。
+:::
+:::think
+$f'+f$ 不是谁的导数，但乘上 $e^x$ 就是：$(e^xf)'=e^x(f'+f)$。于是令 $F=e^xf$。
+:::
+:::paper
+证 令 $F(x)=e^xf(x)$，$F$ 在 $[0,1]$ 上连续，在 $(0,1)$ 内可导，$F(0)=F(1)=0$。由[[rolle]]，存在 $\xi\in(0,1)$，使 $F'(\xi)=0$，即
+$$e^{\xi}\bigl[f'(\xi)+f(\xi)\bigr]=0.$$
+∎ 因 $e^\xi\neq0$，故 $f'(\xi)+f(\xi)=0$。证毕。
+:::
+
+## 洛必达法则
+由[[cauchy]]，令 $g(x_0)=f(x_0)=0$，就得到 $\frac{f(x)}{g(x)}=\frac{f'(\xi)}{g'(\xi)}$，$\xi$ 夹在 $x$ 与 $x_0$ 之间，让 $x\to x_0$ 便是：
+:::thm lhopital | 洛必达法则
+若 $x\to x_0$ 时 $\frac{f}{g}$ 为 $\frac00$ 或 $\frac\infty\infty$ 型，$f,g$ 在 $x_0$ 的去心邻域内可导，$g'\neq0$，且 $\lim\frac{f'}{g'}$ 存在或为 $\infty$，则
+$$\lim\frac{f(x)}{g(x)}=\lim\frac{f'(x)}{g'(x)}.$$
+$x\to\infty$ 时同样成立。
+:::
+:::ex $\frac00$
+求 $\displaystyle\lim_{x\to0}\frac{x-\sin x}{x^3}$。
+:::
+:::paper
+解 这是 $\frac00$ 型，由[[lhopital]]，
+$$\lim_{x\to0}\frac{x-\sin x}{x^3}=\lim_{x\to0}\frac{1-\cos x}{3x^2}.$$
+由[[equiv]]，$1-\cos x\sim\frac{x^2}{2}$，
+∎ 故原式 $=\dfrac{1}{6}$。
+:::
+:::note
+洛一次，立刻等价替换。两种工具交替用，比连续洛三次快。由此也得到两个以后常用的结论：$x-\sin x\sim\frac{x^3}{6}$，$\tan x-x\sim\frac{x^3}{3}$。
+:::
+:::trap
+洛必达是「若新极限存在，则旧极限等于它」。新极限不存在时，不能得出旧极限不存在。如 $\lim\limits_{x\to\infty}\frac{x+\sin x}{x}=1$，求导后 $1+\cos x$ 振荡。
+:::
+
+## 其他未定式都化成 $\frac00$
+| 型 | 处理 |
+| $0\cdot\infty$ | 把一个因子取倒数放到分母 |
+| $\infty-\infty$ | 通分或有理化 |
+| $0^0,\infty^0$ | $u^v=e^{v\ln u}$，指数上是 $0\cdot\infty$ |
+| $1^\infty$ | $e^{\lim(u-1)v}$ |
+:::ex $0\cdot\infty$
+求 $\displaystyle\lim_{x\to0^+}x\ln x$，并由此求 $\displaystyle\lim_{x\to0^+}x^x$。
+:::
+:::think
+$\ln x$ 难求积，放分子留着求导，$x$ 变 $\frac{1}{1/x}$ 放分母。
+:::
+:::paper
+解 $\displaystyle\lim_{x\to0^+}x\ln x=\lim_{x\to0^+}\frac{\ln x}{1/x}$ 是 $\frac\infty\infty$ 型，由[[lhopital]]，
+$$\lim_{x\to0^+}\frac{\ln x}{1/x}=\lim_{x\to0^+}\frac{1/x}{-1/x^2}=\lim_{x\to0^+}(-x)=0.$$
+又 $x^x=e^{x\ln x}$，由指数函数连续，
+∎ $\displaystyle\lim_{x\to0^+}x\ln x=0$，$\displaystyle\lim_{x\to0^+}x^x=e^0=1$。
+:::
+:::ex $\infty-\infty$
+求 $\displaystyle\lim_{x\to0}\Bigl(\frac{1}{x^2}-\frac{1}{x\tan x}\Bigr)$。
+:::
+:::paper
+解 通分：
+$$\frac{1}{x^2}-\frac{1}{x\tan x}=\frac{\tan x-x}{x^2\tan x}.$$
+$x\to0$ 时 $\tan x\sim x$（因子替换），原式 $=\displaystyle\lim_{x\to0}\frac{\tan x-x}{x^3}$，再由[[lhopital]]，
+$$\lim_{x\to0}\frac{\tan x-x}{x^3}=\lim_{x\to0}\frac{\sec^2x-1}{3x^2}=\lim_{x\to0}\frac{\tan^2x}{3x^2}.$$
+∎ 由 $\tan x\sim x$，原式 $=\dfrac{1}{3}$。
+:::

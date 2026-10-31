@@ -1,0 +1,114 @@
+@part 甲
+@day 第一天
+@kicker 求导法则
+@title 一张公式表和五种场合
+@deck 求导是纯技术活。公式表必须背死，然后只需要分清场合：复合、反函数、隐函数、参数方程、幂指函数。高阶导数记五个公式就够。
+@keep 复合函数：一层一层乘。$[f(g(x))]'=f'(g(x))g'(x)$。
+@keep 隐函数：两边对 $x$ 求导，$y$ 看作 $x$ 的函数。
+@keep 参数方程：$\frac{dy}{dx}=\frac{y'_t}{x'_t}$；二阶是 $\frac{d}{dt}\bigl(\frac{dy}{dx}\bigr)\Big/x'_t$，不是 $y''_t/x''_t$。
+@keep 幂指函数：先取对数，或者写成 $e^{v\ln u}$。
+@recall 参数方程二阶导的公式？ || $\frac{d^2y}{dx^2}=\frac{\frac{d}{dt}(\frac{dy}{dx})}{x'(t)}$，分母只有一个 $x'(t)$。
+@recall $(\arctan x)'$ 和 $(\arcsin x)'$？ || $\frac{1}{1+x^2}$ 和 $\frac{1}{\sqrt{1-x^2}}$。
+@recall $(x^x)'$？ || $x^x(\ln x+1)$。
+@recall $(uv)^{(n)}$ 的公式？ || $\sum_{k=0}^nC_n^ku^{(n-k)}v^{(k)}$。
+
+## 公式表
+:::thm dertable | 基本求导公式 | 公式
+$(x^a)'=ax^{a-1}$，$(e^x)'=e^x$，$(a^x)'=a^x\ln a$，
+$(\ln x)'=\frac{1}{x}$，$(\log_ax)'=\frac{1}{x\ln a}$，
+$(\sin x)'=\cos x$，$(\cos x)'=-\sin x$，
+$(\tan x)'=\sec^2x$，$(\cot x)'=-\csc^2x$，
+$(\sec x)'=\sec x\tan x$，$(\csc x)'=-\csc x\cot x$，
+$(\arcsin x)'=\frac{1}{\sqrt{1-x^2}}$，$(\arccos x)'=-\frac{1}{\sqrt{1-x^2}}$，
+$(\arctan x)'=\frac{1}{1+x^2}$，$(\ln\vert x\vert)'=\frac{1}{x}$。
+:::
+:::thm derarith | 四则与复合
+$(u\pm v)'=u'\pm v'$，$(uv)'=u'v+uv'$，$\Bigl(\dfrac{u}{v}\Bigr)'=\dfrac{u'v-uv'}{v^2}$。
+**复合（链式法则）**：$y=f(u),u=g(x)$ 时，$\dfrac{dy}{dx}=\dfrac{dy}{du}\cdot\dfrac{du}{dx}$。
+:::
+:::like
+链式法则就是齿轮传动。第一个齿轮转一圈带第二个转 3 圈，第二个转一圈带第三个转 2 圈，那么第一个转一圈，第三个转 $3\times2$ 圈。
+:::
+:::ex 复合函数
+求 $y=\ln\bigl(x+\sqrt{1+x^2}\bigr)$ 的导数。
+:::
+:::paper
+解 由[[derarith]]，
+$$y'=\frac{1}{x+\sqrt{1+x^2}}\Bigl(1+\frac{2x}{2\sqrt{1+x^2}}\Bigr)=\frac{1}{x+\sqrt{1+x^2}}\cdot\frac{\sqrt{1+x^2}+x}{\sqrt{1+x^2}}.$$
+∎ 约分得 $y'=\dfrac{1}{\sqrt{1+x^2}}$。
+:::
+:::note
+这个结果值得记住：$\int\frac{dx}{\sqrt{1+x^2}}$ 将来就要用它。
+:::
+
+## 反函数
+若 $y=f(x)$ 单调可导，$f'(x)\neq0$，反函数 $x=\varphi(y)$ 的导数就是倒数：
+:::thm derinv | 反函数求导
+$$\varphi'(y)=\frac{1}{f'(x)},\qquad \varphi''(y)=-\frac{f''(x)}{[f'(x)]^3}.$$
+:::
+二阶公式这样来：$\varphi''(y)=\frac{d}{dy}\bigl(\frac{1}{f'(x)}\bigr)=\frac{d}{dx}\bigl(\frac{1}{f'(x)}\bigr)\cdot\frac{dx}{dy}=-\frac{f''(x)}{[f'(x)]^2}\cdot\frac{1}{f'(x)}$。
+
+## 隐函数
+方程 $F(x,y)=0$ 确定 $y=y(x)$。**不需要解出 $y$**：两边对 $x$ 求导，把 $y$ 看作 $x$ 的函数，用链式法则。
+:::ex 隐函数
+设 $y=y(x)$ 由 $e^y+xy=e$ 确定，求 $y'(0)$ 和 $y''(0)$。
+:::
+:::think
+先求 $x=0$ 对应的 $y$：$e^y=e$，$y=1$。求导一次代入得 $y'(0)$，再求导一次代入得 $y''(0)$。不要先解出 $y'$ 的表达式再求导，那样繁。
+:::
+:::paper
+解 $x=0$ 时，由原方程得 $e^y=e$，所以 $y(0)=1$。
+两边对 $x$ 求导：
+$$e^yy'+y+xy'=0. \tag{1}$$
+以 $x=0,y=1$ 代入 (1)：$ey'(0)+1=0$，得 $y'(0)=-\dfrac{1}{e}$。
+(1) 式两边再对 $x$ 求导：
+$$e^y(y')^2+e^yy''+2y'+xy''=0. \tag{2}$$
+以 $x=0,y=1,y'=-\frac{1}{e}$ 代入 (2)：$e\cdot\frac{1}{e^2}+ey''(0)-\frac{2}{e}=0$，解得 $y''(0)=\dfrac{1}{e^2}$。
+∎ $y'(0)=-\dfrac{1}{e}$，$y''(0)=\dfrac{1}{e^2}$。
+:::
+
+## 参数方程
+:::thm derparam | 参数方程求导
+设 $x=x(t),y=y(t)$ 可导，$x'(t)\neq0$，则
+$$\frac{dy}{dx}=\frac{y'(t)}{x'(t)},\qquad\frac{d^2y}{dx^2}=\frac{\frac{d}{dt}\bigl(\frac{dy}{dx}\bigr)}{x'(t)}.$$
+:::
+:::trap
+二阶导不是 $\frac{y''(t)}{x''(t)}$。一阶导 $\frac{dy}{dx}$ 仍是 $t$ 的函数，再对 $x$ 求导要用链式法则，因此必须再除一个 $x'(t)$。
+:::
+:::ex 参数方程
+设 $x=\ln(1+t^2),\ y=t-\arctan t$，求 $\dfrac{dy}{dx}$ 和 $\dfrac{d^2y}{dx^2}$。
+:::
+:::paper
+解 $x'(t)=\dfrac{2t}{1+t^2}$，$y'(t)=1-\dfrac{1}{1+t^2}=\dfrac{t^2}{1+t^2}$。由[[derparam]]，
+$$\frac{dy}{dx}=\frac{t^2/(1+t^2)}{2t/(1+t^2)}=\frac{t}{2}.$$
+$$\frac{d^2y}{dx^2}=\frac{\frac{d}{dt}(\frac{t}{2})}{x'(t)}=\frac{\frac12}{\frac{2t}{1+t^2}}=\frac{1+t^2}{4t}.$$
+∎ $\dfrac{dy}{dx}=\dfrac{t}{2}$，$\dfrac{d^2y}{dx^2}=\dfrac{1+t^2}{4t}$（$t\neq0$）。
+:::
+
+## 幂指函数与连乘
+$y=u^v$ 不是幂函数也不是指数函数。**写成 $y=e^{v\ln u}$ 再求导**。多个因子连乘或开方，也可以取对数后再求导。
+:::ex 幂指函数
+求 $y=x^{\sin x}\ (x\gt0)$ 的导数。
+:::
+:::paper
+解 $y=e^{\sin x\ln x}$，由[[derarith]]，
+$$y'=e^{\sin x\ln x}\Bigl(\cos x\ln x+\frac{\sin x}{x}\Bigr).$$
+∎ 即 $y'=x^{\sin x}\Bigl(\cos x\ln x+\dfrac{\sin x}{x}\Bigr)$。
+:::
+
+## 高阶导数：记公式
+:::thm highder | 高阶导数公式 | 公式
+$(e^{ax})^{(n)}=a^ne^{ax}$，$\bigl(\frac{1}{x+a}\bigr)^{(n)}=\frac{(-1)^nn!}{(x+a)^{n+1}}$，
+$(\sin x)^{(n)}=\sin(x+\frac{n\pi}{2})$，$(\cos x)^{(n)}=\cos(x+\frac{n\pi}{2})$，
+$[\ln(1+x)]^{(n)}=\frac{(-1)^{n-1}(n-1)!}{(1+x)^n}$。
+**莱布尼茨公式**：$(uv)^{(n)}=\sum\limits_{k=0}^{n}C_n^ku^{(n-k)}v^{(k)}$。
+:::
+分式先拆项，再套第二个公式。乘积里如果有多项式，莱布尼茨只需写前几项，因为多项式求导几次就变成 $0$。
+:::ex 莱布尼茨
+求 $y=x^2e^{x}$ 的 $n$ 阶导数。
+:::
+:::paper
+解 令 $u=e^x,v=x^2$，则 $v'=2x,v''=2$，$v^{(k)}=0\ (k\ge3)$。由[[highder]]中的莱布尼茨公式，
+$$y^{(n)}=e^xx^2+C_n^1e^x\cdot2x+C_n^2e^x\cdot2.$$
+∎ 整理得 $y^{(n)}=e^x\bigl[x^2+2nx+n(n-1)\bigr]$。
+:::

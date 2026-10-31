@@ -1,0 +1,73 @@
+@part 丙
+@kicker 第一类曲线、曲面积分
+@title 沿着一根铁丝、一张薄膜求和
+@deck 第一类积分没有方向，物理意义是质量。计算只有一招：把曲线或曲面代进去，换成普通积分。还有一招专属的省力技巧：被积函数可以先用曲线或曲面的方程化简。
+@keep 第一类曲线：$ds=\sqrt{x'^2+y'^2}\,dt$，下限 $\lt$ 上限。
+@keep 第一类曲面：$dS=\sqrt{1+z_x^2+z_y^2}\,d\sigma$。
+@keep 积分在曲线/曲面上进行，**可以把方程代入被积函数**。
+@keep 对称性（奇零偶倍）和轮换对称同样适用。
+@recall $\oint_{x^2+y^2=1}(x^2+y^2)ds$？ || 代入方程，$=\oint1\,ds=2\pi$。
+@recall 上半球面 $z=\sqrt{1-x^2-y^2}$ 的 $dS$？ || $\frac{d\sigma}{z}$。
+@recall 第一类曲线积分定限有什么要求？ || 下限必须小于上限，因为 $ds\gt0$。
+@recall 圆锥面 $z=\sqrt{x^2+y^2}$ 的 $dS$？ || $\sqrt2\,d\sigma$。
+
+## 第一类曲线积分
+:::thm line1 | 第一类曲线积分
+$\int_Lf(x,y)\,ds$ 表示线密度为 $f$ 的曲线的质量。
+**参数式** $x=x(t),y=y(t)$，$\alpha\le t\le\beta$：
+$$\int_Lf\,ds=\int_\alpha^\beta f(x(t),y(t))\sqrt{x'^2+y'^2}\,dt\quad(\alpha\lt\beta).$$
+**直角式** $y=y(x)$：$ds=\sqrt{1+y'^2}\,dx$。**极坐标**：$ds=\sqrt{r^2+r'^2}\,d\theta$。空间曲线多一项 $z'^2$。
+:::
+:::like
+给一根粗细不均的铁丝称重：每一小段的长度 $ds$ 乘那里的密度，再加起来。长度总是正的，所以积分方向必须从小到大，和走向无关。
+:::
+:::ex 代方程
+计算 $\displaystyle\oint_L(x^2+y^2)\,ds$，$L:x^2+y^2=4$。
+:::
+:::paper
+解 $L$ 上 $x^2+y^2=4$，代入被积函数，
+∎ 原式 $=\displaystyle\oint_L4\,ds=4\cdot(2\pi\cdot2)=16\pi$。
+:::
+:::ex 参数化
+计算 $\displaystyle\int_Lx\,ds$，$L$ 是 $y=\dfrac{x^2}{2}$ 上从 $x=0$ 到 $x=1$ 的一段。
+:::
+:::paper
+解 $ds=\sqrt{1+x^2}\,dx$。由[[line1]]，
+$$\int_Lx\,ds=\int_0^1x\sqrt{1+x^2}\,dx=\frac{1}{3}(1+x^2)^{3/2}\Big\vert_0^1.$$
+∎ 原式 $=\dfrac{2\sqrt2-1}{3}$。
+:::
+:::ex 对称性
+计算 $\displaystyle\oint_L(x^2+xy)\,ds$，$L:x^2+y^2=1$。
+:::
+:::paper
+解 $L$ 关于 $y$ 轴对称，$xy$ 对 $x$ 是奇函数，故 $\oint_Lxy\,ds=0$。$L$ 关于 $y=x$ 对称，由轮换对称，
+$$\oint_Lx^2\,ds=\frac{1}{2}\oint_L(x^2+y^2)\,ds=\frac{1}{2}\oint_L1\,ds=\frac{1}{2}\cdot2\pi.$$
+∎ 原式 $=\pi$。
+:::
+
+## 第一类曲面积分
+:::thm surf1 | 第一类曲面积分
+$\iint_\Sigma f\,dS$ 表示面密度为 $f$ 的曲面的质量。$\Sigma:z=z(x,y)$，投影到 $xOy$ 面为 $D$：
+$$\iint_\Sigma f\,dS=\iint_Df(x,y,z(x,y))\sqrt{1+z_x^2+z_y^2}\,d\sigma.$$
+投影要求曲面上每点只对应一个投影点，否则要分片。
+:::
+!fig f27_ds | 曲面上的小块 $dS$ 投影成 $d\sigma$，二者之比由倾斜程度决定：$d\sigma=\vert\cos\gamma\vert dS$。$dS$ 的公式就是由此而来。
+:::ex 半球面
+计算 $\displaystyle\iint_\Sigma z\,dS$，$\Sigma$ 是上半球面 $z=\sqrt{1-x^2-y^2}$。
+:::
+:::paper
+解 $z_x=-\dfrac{x}{z}$，$z_y=-\dfrac{y}{z}$，$\sqrt{1+z_x^2+z_y^2}=\dfrac{\sqrt{z^2+x^2+y^2}}{z}=\dfrac{1}{z}$。投影 $D:x^2+y^2\le1$。由[[surf1]]，
+$$\iint_\Sigma z\,dS=\iint_Dz\cdot\frac{1}{z}\,d\sigma=\iint_Dd\sigma.$$
+∎ 原式 $=\pi$。
+:::
+:::ex 圆锥面
+计算 $\displaystyle\iint_\Sigma(x^2+y^2)\,dS$，$\Sigma$ 是圆锥面 $z=\sqrt{x^2+y^2}$（$z\le1$）。
+:::
+:::paper
+解 $z_x=\dfrac{x}{z}$，$z_y=\dfrac{y}{z}$，$\sqrt{1+z_x^2+z_y^2}=\sqrt2$。投影 $D:x^2+y^2\le1$。由[[surf1]]和[[polar]]，
+$$\iint_\Sigma(x^2+y^2)\,dS=\sqrt2\iint_D(x^2+y^2)\,d\sigma=\sqrt2\int_0^{2\pi}d\theta\int_0^1r^3\,dr.$$
+∎ 原式 $=\dfrac{\sqrt2\pi}{2}$。
+:::
+:::trap
+第一类积分和后两期的第二类积分，长得很像。判断依据：第一类写 $ds,dS$，没有方向；第二类写 $dx,dy,dydz$，有方向。
+:::

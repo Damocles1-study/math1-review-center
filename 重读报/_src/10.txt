@@ -1,0 +1,110 @@
+@part 甲
+@day 第一天
+@kicker 不定积分
+@title 求导的逆运算，靠认形状
+@deck 积分没有万能算法，但题目用来用去就四招：凑微分、换元、分部、有理函数拆项。把公式表背死，再练会判断该走哪一招。
+@keep 先想凑微分，再想换元，然后分部，分式最后拆项。
+@keep 分部口诀：「反对幂指三」，靠前的留作 $u$，靠后的放进 $d$。
+@keep 根号换元：$\sqrt{a^2-x^2}$ 用 $x=a\sin t$；$\sqrt{a^2+x^2}$ 用 $x=a\tan t$；$\sqrt{x^2-a^2}$ 用 $x=a\sec t$。
+@keep 不定积分结果**必须带 $+C$**。
+@recall $\int\frac{dx}{x^2+a^2}$ 等于？ || $\frac1a\arctan\frac xa+C$。
+@recall $\int\frac{dx}{\sqrt{x^2+a^2}}$ 等于？ || $\ln(x+\sqrt{x^2+a^2})+C$。
+@recall $\int\sec x\,dx$ 等于？ || $\ln\vert\sec x+\tan x\vert+C$。
+@recall $\int\ln x\,dx$ 等于？ || $x\ln x-x+C$，分部。
+@recall 分部口诀「反对幂指三」谁当 $u$？ || 靠前的当 $u$（反三角、对数优先），靠后的放进 $dv$。
+
+## 原函数与公式表
+:::thm antider | 原函数与不定积分 | 定义
+若 $F'(x)=f(x)$，称 $F$ 是 $f$ 的一个**原函数**。$f$ 的全体原函数记作 $\int f(x)\,dx=F(x)+C$。连续函数一定有原函数。
+:::
+:::thm inttable | 基本积分表 | 公式
+$\int x^a\,dx=\frac{x^{a+1}}{a+1}+C\ (a\neq-1)$，$\int\frac{dx}{x}=\ln\vert x\vert+C$，
+$\int e^x\,dx=e^x+C$，$\int a^x\,dx=\frac{a^x}{\ln a}+C$，
+$\int\sin x\,dx=-\cos x+C$，$\int\cos x\,dx=\sin x+C$，
+$\int\tan x\,dx=-\ln\vert\cos x\vert+C$，$\int\cot x\,dx=\ln\vert\sin x\vert+C$，
+$\int\sec x\,dx=\ln\vert\sec x+\tan x\vert+C$，$\int\csc x\,dx=\ln\vert\csc x-\cot x\vert+C$，
+$\int\sec^2x\,dx=\tan x+C$，$\int\csc^2x\,dx=-\cot x+C$，
+$\int\frac{dx}{a^2+x^2}=\frac{1}{a}\arctan\frac{x}{a}+C$，$\int\frac{dx}{\sqrt{a^2-x^2}}=\arcsin\frac{x}{a}+C$，
+$\int\frac{dx}{\sqrt{x^2+a^2}}=\ln(x+\sqrt{x^2+a^2})+C$，$\int\frac{dx}{x^2-a^2}=\frac{1}{2a}\ln\Bigl\vert\frac{x-a}{x+a}\Bigr\vert+C$。
+:::
+
+## 第一招：凑微分
+被积函数是「某个复合函数 × 里层的导数」时，把里层的导数凑进 $d$ 后面。
+:::thm substone | 第一类换元（凑微分）
+$$\int f(\varphi(x))\varphi'(x)\,dx=\int f(u)\,du\Big\vert_{u=\varphi(x)}.$$
+常用：$x\,dx=\frac12d(x^2)$，$\frac{dx}{x}=d(\ln x)$，$\frac{dx}{\sqrt x}=2d\sqrt x$，$\cos x\,dx=d\sin x$，$\frac{dx}{1+x^2}=d\arctan x$，$e^xdx=de^x$。
+:::
+:::ex 凑微分
+求 $\displaystyle\int\frac{\ln^2x}{x}\,dx$ 和 $\displaystyle\int\frac{dx}{x^2+2x+5}$。
+:::
+:::paper
+解 (1) 由[[substone]]，$\displaystyle\int\frac{\ln^2x}{x}\,dx=\int\ln^2x\,d(\ln x)=\frac{\ln^3x}{3}+C$。
+(2) 分母配方：$x^2+2x+5=(x+1)^2+4$。由[[inttable]]，
+∎ $\displaystyle\int\frac{dx}{(x+1)^2+2^2}=\frac{1}{2}\arctan\frac{x+1}{2}+C$。
+:::
+
+## 第二招：换元去根号
+:::thm substtwo | 第二类换元 | 公式
+$\sqrt{a^2-x^2}$：令 $x=a\sin t$；$\sqrt{a^2+x^2}$：令 $x=a\tan t$；$\sqrt{x^2-a^2}$：令 $x=a\sec t$；$\sqrt[n]{ax+b}$：直接令它 $=t$。
+:::
+!fig f10_tri | 换元后要回代 $x$：画直角三角形。例如 $x=a\tan t$ 时，对边 $x$，邻边 $a$，斜边 $\sqrt{a^2+x^2}$。
+:::ex 三角换元
+求 $\displaystyle\int\frac{dx}{x^2\sqrt{1+x^2}}$。
+:::
+:::think
+有 $\sqrt{1+x^2}$，令 $x=\tan t$。$dx=\sec^2t\,dt$ 与根号里的 $\sec t$ 约掉一次。
+:::
+:::paper
+解 令 $x=\tan t$，$t\in(-\frac\pi2,\frac\pi2)$，则 $dx=\sec^2t\,dt$，$\sqrt{1+x^2}=\sec t$。
+$$\int\frac{dx}{x^2\sqrt{1+x^2}}=\int\frac{\sec^2t\,dt}{\tan^2t\sec t}=\int\frac{\cos t}{\sin^2t}\,dt=-\frac{1}{\sin t}+C.$$
+由直角三角形，$\sin t=\dfrac{x}{\sqrt{1+x^2}}$，
+∎ 故原式 $=-\dfrac{\sqrt{1+x^2}}{x}+C$。
+:::
+
+## 第三招：分部积分
+:::thm byparts | 分部积分
+$$\int u\,dv=uv-\int v\,du.$$
+选择顺序「**反对幂指三**」：反三角、对数、幂、指数、三角，靠前的当 $u$。
+:::
+:::like
+分部积分是「踢皮球」：把难啃的因子（对数、反三角）留在 $u$，求导一次它就变简单了。
+:::
+:::ex 分部
+求 $\displaystyle\int x\ln x\,dx$，$\displaystyle\int\arctan x\,dx$。
+:::
+:::paper
+解 (1) 对数当 $u$。由[[byparts]]，
+$$\int x\ln x\,dx=\int\ln x\,d\frac{x^2}{2}=\frac{x^2}{2}\ln x-\int\frac{x^2}{2}\cdot\frac{1}{x}\,dx=\frac{x^2}{2}\ln x-\frac{x^2}{4}+C.$$
+(2) $\displaystyle\int\arctan x\,dx=x\arctan x-\int\frac{x}{1+x^2}\,dx$，
+∎ 故 $\displaystyle\int\arctan x\,dx=x\arctan x-\frac{1}{2}\ln(1+x^2)+C$。
+:::
+:::ex 循环型
+求 $I=\displaystyle\int e^x\sin x\,dx$。
+:::
+:::think
+指数和三角求导都不会变简单，但分部两次会变回自身，解方程。
+:::
+:::paper
+解 由[[byparts]]，连续分部两次：
+$$I=\int\sin x\,de^x=e^x\sin x-\int e^x\cos x\,dx=e^x\sin x-e^x\cos x-\int e^x\sin x\,dx.$$
+即 $I=e^x(\sin x-\cos x)-I$，
+∎ 解得 $I=\dfrac{1}{2}e^x(\sin x-\cos x)+C$。
+:::
+
+## 第四招：有理函数拆项
+真分式 $\frac{P}{Q}$（假分式先做除法）。分母因式分解，每个因子对应一项：
+| 分母因子 | 对应的项 |
+| $(x-a)$ | $\frac{A}{x-a}$ |
+| $(x-a)^2$ | $\frac{A}{x-a}+\frac{B}{(x-a)^2}$ |
+| $x^2+px+q$（不可约） | $\frac{Ax+B}{x^2+px+q}$ |
+:::ex 拆项
+求 $\displaystyle\int\frac{dx}{x(x^2+1)}$。
+:::
+:::paper
+解 设 $\dfrac{1}{x(x^2+1)}=\dfrac{A}{x}+\dfrac{Bx+C}{x^2+1}$，通分比较系数得 $A=1,\ B=-1,\ C=0$，故
+$$\int\frac{dx}{x(x^2+1)}=\int\frac{dx}{x}-\int\frac{x\,dx}{x^2+1}.$$
+∎ 由[[inttable]]，原式 $=\ln\vert x\vert-\dfrac{1}{2}\ln(1+x^2)+C$。
+:::
+:::skip
+万能代换 $t=\tan\frac{x}{2}$ 计算太长，只在其他方法都失败时才用。复杂的三角有理式不单独练。
+:::

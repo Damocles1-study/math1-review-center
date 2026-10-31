@@ -1,0 +1,86 @@
+@part 甲
+@day 第一天
+@kicker 导数与微分
+@title 导数是一种极限：瞬时变化率
+@deck 导数的定义比求导公式更值分。分段点、抽象函数、只给一点信息的题，只能回定义。这一期把定义、几何意义和可导条件讲清楚。
+@keep $f'(x_0)=\lim\limits_{\Delta x\to0}\frac{f(x_0+\Delta x)-f(x_0)}{\Delta x}$；分段点**必须**用定义。
+@keep 可导 ⟹ 连续，反过来不行（$\vert x\vert$ 在 $0$ 处）。
+@keep 可导 ⟺ 左导数、右导数存在且相等。
+@keep 一元函数：可微 ⟺ 可导，$dy=f'(x_0)\,dx$。
+@recall 写出导数定义的两种形式。 || $\lim_{\Delta x\to0}\frac{f(x_0+\Delta x)-f(x_0)}{\Delta x}$ 和 $\lim_{x\to x_0}\frac{f(x)-f(x_0)}{x-x_0}$。
+@recall $f(x)=x\vert x\vert$ 在 $x=0$ 可导吗？ || 可导，$f'(0)=\lim_{x\to0}\vert x\vert=0$。
+@recall 切线与法线方程？ || 切线 $y-y_0=f'(x_0)(x-x_0)$；法线 $y-y_0=-\frac{1}{f'(x_0)}(x-x_0)$（$f'(x_0)\neq0$）。
+@recall $\Delta y-dy$ 是什么量级？ || 当 $\Delta x\to0$ 时是 $o(\Delta x)$。
+
+## 定义
+:::thm derdef | 导数的定义 | 定义
+$$f'(x_0)=\lim_{\Delta x\to0}\frac{f(x_0+\Delta x)-f(x_0)}{\Delta x}=\lim_{x\to x_0}\frac{f(x)-f(x_0)}{x-x_0}.$$
+极限存在就叫可导。把 $\Delta x\to0^-$、$\Delta x\to0^+$ 分别取极限，得到左导数 $f'_-(x_0)$ 和右导数 $f'_+(x_0)$。
+:::
+:::like
+汽车的路程 $s(t)$。$\frac{s(t+\Delta t)-s(t)}{\Delta t}$ 是这一段的平均速度，让 $\Delta t\to0$，平均速度就变成仪表盘上的瞬时速度。
+:::
+!fig f04_tangent | 割线的斜率是平均变化率。$\Delta x\to0$ 时割线转成切线，斜率就是 $f'(x_0)$。
+**几何意义**：$f'(x_0)$ 是曲线在 $(x_0,f(x_0))$ 处的切线斜率。切线方程为 $y-f(x_0)=f'(x_0)(x-x_0)$。
+
+## 可导与连续
+:::thm dercont | 可导与连续、左右导数
+(1) 若 $f$ 在 $x_0$ 可导，则 $f$ 在 $x_0$ 连续；反之不成立。
+(2) $f$ 在 $x_0$ 可导，当且仅当 $f'_-(x_0),f'_+(x_0)$ 都存在且相等。
+:::
+(1) 的理由：$f(x)-f(x_0)=\frac{f(x)-f(x_0)}{x-x_0}\cdot(x-x_0)\to f'(x_0)\cdot0=0$。反例：$y=\vert x\vert$ 在 $0$ 处连续，但左导数 $-1$、右导数 $1$，图上是一个尖角，没有切线。
+:::ex 分段点用定义
+讨论 $f(x)=\begin{cases}x^2\sin\frac{1}{x},&x\neq0\\0,&x=0\end{cases}$ 在 $x=0$ 处的连续性与可导性。
+:::
+:::think
+分段点没有公式可代，回定义。$\sin\frac{1}{x}$ 有界，要找「无穷小 × 有界」。
+:::
+:::paper
+解 (1) 连续性：$\vert x^2\sin\frac{1}{x}\vert\le x^2\to0$，所以 $\lim\limits_{x\to0}f(x)=0=f(0)$，$f$ 在 $x=0$ 连续。
+(2) 可导性：由[[derdef]]，
+$$f'(0)=\lim_{x\to0}\frac{f(x)-f(0)}{x-0}=\lim_{x\to0}x\sin\frac{1}{x}=0,$$
+这里用了无穷小乘有界量仍为无穷小。
+∎ 所以 $f$ 在 $x=0$ 连续且可导，$f'(0)=0$。
+:::
+:::ex 由极限反推导数
+设 $f$ 在 $x=0$ 连续，$\displaystyle\lim_{x\to0}\frac{f(x)}{x}=2$。求 $f(0)$ 和 $f'(0)$。
+:::
+:::paper
+解 由于分母 $x\to0$ 而比值有极限，故 $\lim\limits_{x\to0}f(x)=\lim\limits_{x\to0}\frac{f(x)}{x}\cdot x=0$。又 $f$ 在 $x=0$ 连续，得 $f(0)=0$。
+于是 $f'(0)=\lim\limits_{x\to0}\dfrac{f(x)-f(0)}{x-0}=\lim\limits_{x\to0}\dfrac{f(x)}{x}=2$。
+∎ $f(0)=0$，$f'(0)=2$。
+:::
+:::ex 定义的变形
+设 $f'(a)$ 存在，求 $\displaystyle\lim_{h\to0}\frac{f(a+2h)-f(a-h)}{h}$。
+:::
+:::think
+定义要求「动点减定点，再除以它们的差」。这里两头都在动，就加减一个 $f(a)$ 拆开。
+:::
+:::paper
+解 拆成
+$$\frac{f(a+2h)-f(a-h)}{h}=2\cdot\frac{f(a+2h)-f(a)}{2h}+\frac{f(a-h)-f(a)}{-h}.$$
+当 $h\to0$ 时，由[[derdef]]，两个商都趋于 $f'(a)$。
+∎ 原式 $=2f'(a)+f'(a)=3f'(a)$。
+:::
+:::trap
+$\lim\limits_{h\to0}\frac{f(a+h)-f(a-h)}{2h}$ 存在**不能**推出 $f'(a)$ 存在：$f=\vert x\vert$，$a=0$ 时这个极限为 $0$，但 $f'(0)$ 不存在。判定可导，定义里必须有一个定点 $f(a)$，且动点能从两侧趋近。
+:::
+
+## 微分
+:::thm diffdef | 微分 | 定义
+若 $\Delta y=f(x_0+\Delta x)-f(x_0)=A\Delta x+o(\Delta x)$，则称 $f$ 在 $x_0$ 可微，$dy=A\,\Delta x$。一元函数中**可微 ⟺ 可导**，且 $A=f'(x_0)$，所以 $dy=f'(x_0)\,dx$。
+:::
+!fig f04_diff | $dy$ 是切线的增量，$\Delta y$ 是曲线的增量。两者之差是 $\Delta x$ 的高阶无穷小。
+:::like
+微分就是「局部用直线代替曲线」。在足够小的范围内，曲线和切线几乎分不清，误差比 $\Delta x$ 还要小一个量级。
+:::
+:::ex 选择
+设 $f$ 可导，$f'(x_0)=\frac{1}{2}$。$\Delta x\to0$ 时，$dy$ 与 $\Delta x$ 的关系是（　　）。
+(A) 高阶　(B) 同阶但不等价　(C) 等价　(D) 低阶
+:::
+:::paper
+答案 (B)。$dy=\frac12\Delta x$，$\frac{dy}{\Delta x}=\frac{1}{2}\neq0,1$。
+:::
+:::skip
+函数在区间上「可导」的定义（端点取单侧导数）只需知道；物理中的变化率题放到建模里一句带过。
+:::

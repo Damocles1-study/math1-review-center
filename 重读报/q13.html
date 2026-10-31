@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>认型：三种方程，三把钥匙 · 第13期 · 重读报</title>
+<link rel="stylesheet" href="assets/katex/katex.min.css">
+<link rel="stylesheet" href="assets/paper.css">
+</head><body class="issue" data-no="13" data-prev="q12.html" data-next="q14.html">
+<header class="strip"><a class="brand" href="index.html">重读报</a>
+<span class="strip-m">第 13 期 · 一元微积分 · 一阶微分方程</span>
+<nav class="tools"><button data-a="toc" title="目录 (T)">目录</button><button data-a="rail" class="only-narrow">定理<i id="railn"></i></button><button data-a="hide" title="遮住卷面，先自己写 (H)">遮卷面</button><button data-a="night" title="夜读">夜读</button></nav></header>
+<main class="sheet" id="sheet">
+<section class="cover" id="cover">
+<div class="mast"><div class="mast-l">一元微积分<br>第 13 期</div><div class="mast-c">重读报</div><div class="mast-r">本期约 17 分钟<br>一阶微分方程</div></div>
+<h1>认型：三种方程，三把钥匙</h1>
+<p class="deck">微分方程的题分两步：认出是哪一型，代进公式。一阶只要认可分离、齐次、线性三种。应用题读出的方程也逃不出这三种。</p>
+<div class="cover-grid">
+<div class="cover-keep"><h4>本期只记这几行</h4><ol><li>可分离：<span class="m">y'=f(x)g(y)</span>，分开两边积分。</li><li>齐次：<span class="m">y'=\varphi(\frac{y}{x})</span>，令 <span class="m">u=\frac{y}{x}</span>。</li><li>一阶线性：<span class="m">y'+P(x)y=Q(x)</span>，通解公式 <span class="m">y=e^{-\int P}\bigl(\int Qe^{\int P}dx+C\bigr)</span>。</li><li>解完代初值确定 <span class="m">C</span>；公式里的 <span class="m">\int</span> 不用再加常数。</li></ol></div>
+<div class="cover-prev"><h4>开读前，先答上期</h4><div id="prevq"></div></div>
+<div class="cover-toc"><h4>本期目录</h4><ol><li>基本概念</li><li>可分离变量</li><li>齐次方程</li><li>一阶线性</li><li>应用题：从几何条件列方程</li></ol><p class="hint">→ 键 / 点右缘 / 左滑翻页</p></div>
+</div></section>
+<section class="stage" id="stage" hidden>
+<div class="viewport" id="vp"><div class="flow" id="flow">
+<h2>基本概念</h2>
+<p>含未知函数导数的方程叫<b>微分方程</b>，最高阶导数的阶数是方程的阶。<b>通解</b>中独立常数的个数等于阶数；由初值条件确定常数后得到<b>特解</b>。</p>
+<h2>可分离变量</h2>
+<div class="thm" id="t-sep"><div class="thm-h"><span>定理</span>可分离变量方程</div><p><span class="m">\dfrac{dy}{dx}=f(x)g(y)</span>，分离为 <span class="m">\dfrac{dy}{g(y)}=f(x)\,dx</span>，两边积分：</p>
+<div class="M">\int\frac{dy}{g(y)}=\int f(x)\,dx+C.</div></div>
+<div class="ex"><div class="ex-h">例 13.1<span class="ex-tag">可分离</span></div><p>求 <span class="m">y'=2xy</span> 满足 <span class="m">y(0)=3</span> 的特解。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 由<a class="c" data-t="sep">可分离变量方程</a>，<span class="m">y\neq0</span> 时 <span class="m">\dfrac{dy}{y}=2x\,dx</span>，两边积分，</p>
+<div class="M">\ln\vert y\vert=x^2+C_1,\quad\text{即 }y=Ce^{x^2}.</div>
+<p>代入 <span class="m">y(0)=3</span>，得 <span class="m">C=3</span>。</p>
+<p class="fin">所求特解为 <span class="m">y=3e^{x^2}</span>。</p></div>
+<h2>齐次方程</h2>
+<div class="thm" id="t-homo"><div class="thm-h"><span>定理</span>齐次方程</div><p><span class="m">\dfrac{dy}{dx}=\varphi\Bigl(\dfrac{y}{x}\Bigr)</span>。令 <span class="m">u=\dfrac{y}{x}</span>，则 <span class="m">y'=u+xu'</span>，方程化为可分离的</p>
+<div class="M">x\frac{du}{dx}=\varphi(u)-u.</div></div>
+<div class="ex"><div class="ex-h">例 13.2<span class="ex-tag">齐次</span></div><p>求方程 <span class="m">xy'=y+x\tan\dfrac{y}{x}</span> 的通解。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 两边除以 <span class="m">x</span>：<span class="m">y'=\dfrac{y}{x}+\tan\dfrac{y}{x}</span>。由<a class="c" data-t="homo">齐次方程</a>，令 <span class="m">u=\dfrac{y}{x}</span>，得 <span class="m">u+xu'=u+\tan u</span>，即</p>
+<div class="M">\frac{\cos u}{\sin u}\,du=\frac{dx}{x}.</div>
+<p>两边积分，<span class="m">\ln\vert\sin u\vert=\ln\vert x\vert+C_1</span>，即 <span class="m">\sin u=Cx</span>。</p>
+<p class="fin">回代得通解 <span class="m">\sin\dfrac{y}{x}=Cx</span>。</p></div>
+<h2>一阶线性</h2>
+<div class="thm" id="t-fol"><div class="thm-h"><span>定理</span>一阶线性方程</div><p><span class="m">y'+P(x)y=Q(x)</span> 的通解为</p>
+<div class="M">y=e^{-\int P(x)\,dx}\Bigl(\int Q(x)e^{\int P(x)\,dx}\,dx+C\Bigr).</div></div>
+<div class="like"><div class="b-h">打个比方</div><p>方程左边 <span class="m">y'+Py</span> 差一点就是某个乘积的导数。两边乘上 <span class="m">e^{\int P}</span>（「积分因子」），左边恰好变成 <span class="m">\bigl(ye^{\int P}\bigr)'</span>，然后两边积分。这就是公式的全部来历。</p></div>
+<div class="ex"><div class="ex-h">例 13.3<span class="ex-tag">线性</span></div><p>求 <span class="m">y'+\dfrac{y}{x}=\dfrac{\sin x}{x}</span> 满足 <span class="m">y(\pi)=1</span> 的特解。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 <span class="m">P=\dfrac{1}{x}</span>，<span class="m">Q=\dfrac{\sin x}{x}</span>，<span class="m">e^{\int P\,dx}=x</span>（取 <span class="m">x\gt0</span>）。由<a class="c" data-t="fol">一阶线性方程</a>，</p>
+<div class="M">y=\frac{1}{x}\Bigl(\int\frac{\sin x}{x}\cdot x\,dx+C\Bigr)=\frac{1}{x}(-\cos x+C).</div>
+<p>代入 <span class="m">y(\pi)=1</span>：<span class="m">\dfrac{1+C}{\pi}=1</span>，<span class="m">C=\pi-1</span>。</p>
+<p class="fin">所求特解为 <span class="m">y=\dfrac{\pi-1-\cos x}{x}</span>。</p></div>
+<div class="trap"><div class="b-h">易错</div><p>先把 <span class="m">y'</span> 的系数化为 <span class="m">1</span>，再读 <span class="m">P,Q</span>。<span class="m">xy'+y=\sin x</span> 要先除以 <span class="m">x</span>。</p></div>
+<p><b>有时把 <span class="m">x</span> 看成 <span class="m">y</span> 的函数才线性</b>：如 <span class="m">\frac{dy}{dx}=\frac{1}{x+y}</span>，写成 <span class="m">\frac{dx}{dy}-x=y</span>，关于 <span class="m">x</span> 是线性的。</p>
+<h2>应用题：从几何条件列方程</h2>
+<div class="ex"><div class="ex-h">例 13.4<span class="ex-tag">建模</span></div><p>曲线 <span class="m">y=y(x)</span> 过点 <span class="m">(1,1)</span>，<span class="m">x\gt0</span>，其上任一点处的切线在 <span class="m">y</span> 轴上的截距等于该点的横坐标。求曲线方程。</p></div>
+<div class="think"><div class="b-h">思路</div><p>点 <span class="m">(x,y)</span> 处的切线：<span class="m">Y-y=y'(X-x)</span>。令 <span class="m">X=0</span> 得截距 <span class="m">y-xy'</span>，它等于 <span class="m">x</span>。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 过曲线上点 <span class="m">(x,y)</span> 的切线为 <span class="m">Y-y=y'(X-x)</span>。令 <span class="m">X=0</span>，截距为 <span class="m">y-xy'</span>。由题设，<span class="m">y-xy'=x</span>，即</p>
+<div class="M">y'-\frac{y}{x}=-1.</div>
+<p>这是一阶线性方程，<span class="m">P=-\frac{1}{x}</span>，<span class="m">Q=-1</span>，<span class="m">e^{\int P}=\frac{1}{x}</span>。由<a class="c" data-t="fol">一阶线性方程</a>，</p>
+<div class="M">y=x\Bigl(\int-\frac{1}{x}\,dx+C\Bigr)=x(C-\ln x).</div>
+<p>代入 <span class="m">(1,1)</span>：<span class="m">C=1</span>。</p>
+<p class="fin">曲线方程为 <span class="m">y=x(1-\ln x)</span>。</p></div>
+<div class="skip"><div class="b-h">本报不刊</div><p>伯努利方程 <span class="m">y'+Py=Qy^n</span>：令 <span class="m">z=y^{1-n}</span> 化成线性。知道这一句就够，近年几乎不考。</p></div>
+
+<div class="endq"><h2>今日考你</h2><p class="hint">合上前答一遍：先想，再点开。答错的会回到后面几期和温故版。</p><div class="rq" data-q="13-0"><p class="rq-q">一阶线性通解公式？</p><p class="rq-a"><span class="m">y=e^{-\int P\,dx}\bigl(\int Qe^{\int P\,dx}dx+C\bigr)</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="13-1"><p class="rq-q">齐次方程的换元以及 <span class="m">y'</span> 变成什么？</p><p class="rq-a"><span class="m">u=\frac yx</span>，<span class="m">y'=u+xu'</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="13-2"><p class="rq-q">什么叫通解、特解？</p><p class="rq-a">通解含的独立常数个数等于阶数；特解是确定了常数的解。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="13-3"><p class="rq-q">由「切线在 <span class="m">y</span> 轴截距」列方程，截距怎么写？</p><p class="rq-a">切线 <span class="m">Y-y=y'(X-x)</span>，令 <span class="m">X=0</span>，得截距 <span class="m">y-xy'</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div></div>
+<div class="endnext" id="endnext"></div>
+<div id="sent"></div>
+</div></div>
+<aside class="rail" id="rail"><div class="rail-h">本版引用 · 定理全文</div><div id="railc"></div></aside>
+</section></main>
+<footer class="pager"><button id="pv" aria-label="上一版">‹</button><div class="pginfo"><span id="pgt"></span><div class="bar"><i id="pgb"></i></div></div><button id="nx" aria-label="下一版">›</button></footer>
+<div class="sheetup" id="sheetup" hidden><div class="sheetup-h"><span>定理全文</span><button id="sheetx">关闭</button></div><div id="sheetc"></div></div>
+<div class="drawer" id="drawer" hidden></div>
+<script src="assets/katex/katex.min.js"></script><script src="assets/data.js"></script><script src="assets/paper.js"></script>
+</body></html>

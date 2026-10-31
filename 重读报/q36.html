@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>样本够大，平均数就可靠 · 第36期 · 重读报</title>
+<link rel="stylesheet" href="assets/katex/katex.min.css">
+<link rel="stylesheet" href="assets/paper.css">
+</head><body class="issue" data-no="36" data-prev="q35.html" data-next="q37.html">
+<header class="strip"><a class="brand" href="index.html">重读报</a>
+<span class="strip-m">第 36 期 · 概率统计 · 极限定理与抽样分布</span>
+<nav class="tools"><button data-a="toc" title="目录 (T)">目录</button><button data-a="rail" class="only-narrow">定理<i id="railn"></i></button><button data-a="hide" title="遮住卷面，先自己写 (H)">遮卷面</button><button data-a="night" title="夜读">夜读</button></nav></header>
+<main class="sheet" id="sheet">
+<section class="cover" id="cover">
+<div class="mast"><div class="mast-l">概率统计<br>第 36 期</div><div class="mast-c">重读报</div><div class="mast-r">本期约 16 分钟<br>极限定理与抽样分布</div></div>
+<h1>样本够大，平均数就可靠</h1>
+<p class="deck">大数定律说平均值会稳定，中心极限定理说它的波动接近正态。然后进入统计：<span class="m">\chi^2,t,F</span> 三个分布各有固定的构造方式，记住定义和正态总体的结论就够了。</p>
+<div class="cover-grid">
+<div class="cover-keep"><h4>本期只记这几行</h4><ol><li>切比雪夫：<span class="m">P(\vert X-EX\vert\ge\varepsilon)\le\frac{DX}{\varepsilon^2}</span>。</li><li>中心极限：独立同分布，<span class="m">\sum X_i\approx N(n\mu,n\sigma^2)</span>。</li><li><span class="m">\chi^2(n)</span>：<span class="m">n</span> 个标准正态的平方和。<span class="m">t(n)=\frac{N(0,1)}{\sqrt{\chi^2(n)/n}}</span>。<span class="m">F(m,n)=\frac{\chi^2(m)/m}{\chi^2(n)/n}</span>。</li><li>正态总体：<span class="m">\bar X\sim N(\mu,\frac{\sigma^2}{n})</span>；<span class="m">\frac{(n-1)S^2}{\sigma^2}\sim\chi^2(n-1)</span>；<span class="m">\frac{\bar X-\mu}{S/\sqrt n}\sim t(n-1)</span>。</li></ol></div>
+<div class="cover-prev"><h4>开读前，先答上期</h4><div id="prevq"></div></div>
+<div class="cover-toc"><h4>本期目录</h4><ol><li>切比雪夫与大数定律</li><li>中心极限定理</li><li>三大抽样分布</li></ol><p class="hint">→ 键 / 点右缘 / 左滑翻页</p></div>
+</div></section>
+<section class="stage" id="stage" hidden>
+<div class="viewport" id="vp"><div class="flow" id="flow">
+<h2>切比雪夫与大数定律</h2>
+<div class="thm" id="t-cheby"><div class="thm-h"><span>定理</span>切比雪夫不等式</div><p>对任意 <span class="m">\varepsilon\gt0</span>，</p>
+<div class="M">P(\vert X-EX\vert\ge\varepsilon)\le\frac{DX}{\varepsilon^2}.</div></div>
+<div class="ex"><div class="ex-h">例 36.1<span class="ex-tag">估计概率</span></div><p><span class="m">EX=5,DX=2</span>，估计 <span class="m">P(\vert X-5\vert\ge2)</span>。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 由<a class="c" data-t="cheby">切比雪夫不等式</a>，<span class="m">P(\vert X-5\vert\ge2)\le\dfrac{2}{4}=\dfrac{1}{2}</span>。</p></div>
+<div class="thm" id="t-lln"><div class="thm-h"><span>定理</span>大数定律</div><p><b>切比雪夫大数定律</b>：<span class="m">X_i</span> 相互独立，方差一致有界，则 <span class="m">\frac{1}{n}\sum X_i-\frac{1}{n}\sum EX_i\xrightarrow{P}0</span>。</p>
+<p><b>辛钦</b>：<span class="m">X_i</span> 独立同分布，<span class="m">EX_i=\mu</span> 存在，则 <span class="m">\frac{1}{n}\sum X_i\xrightarrow{P}\mu</span>。</p>
+<p><b>伯努利</b>：<span class="m">n</span> 次独立试验成功 <span class="m">n_A</span> 次，<span class="m">\frac{n_A}{n}\xrightarrow{P}p</span>。</p>
+<p>「依概率收敛」<span class="m">X_n\xrightarrow{P}a</span> 指：对任意 <span class="m">\varepsilon\gt0</span>，<span class="m">\lim P(\vert X_n-a\vert\lt\varepsilon)=1</span>。</p></div>
+<div class="like"><div class="b-h">打个比方</div><p>抛硬币抛十次，正面可能出现七次。抛一万次，比例一定靠近一半。大数定律保证了频率的稳定。</p></div>
+<h2>中心极限定理</h2>
+<div class="thm" id="t-clt"><div class="thm-h"><span>定理</span>中心极限定理</div><p><b>列维—林德伯格</b>：<span class="m">X_i</span> 独立同分布，<span class="m">EX_i=\mu</span>，<span class="m">DX_i=\sigma^2\gt0</span>，则 <span class="m">n</span> 充分大时</p>
+<div class="M">\sum_{i=1}^nX_i\ \dot\sim\ N(n\mu,n\sigma^2),\quad\text{即}\quad\frac{\sum X_i-n\mu}{\sqrt n\sigma}\ \dot\sim\ N(0,1).</div>
+<p><b>棣莫弗—拉普拉斯</b>：<span class="m">X\sim B(n,p)</span>，<span class="m">n</span> 充分大时 <span class="m">X\ \dot\sim\ N(np,np(1-p))</span>。</p></div>
+<figure><svg viewBox="0 0 280 130" role="img"><defs><marker id="arr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path class="arrh" d="M0 .8L7 4L0 7.2z"/></marker></defs><line class="ax" x1="10.0" y1="113.3" x2="270.0" y2="113.3" marker-end="url(#arr)"/><line class="ax" x1="140.0" y1="120.0" x2="140.0" y2="10.0" marker-end="url(#arr)"/><text class="tx" x="263.0" y="127.3">x</text><text class="tx" x="148.0" y="18.0"></text><path class="ds" d="M10.0 113.3 L100.6 113.3 L100.6 30.0 L179.4 30.0 L179.4 113.3 L270.0 113.3"/><path class="cb" d="M10.0 113.3 L61.2 113.3 L140.0 30.0 L218.8 113.3 L270.0 113.3"/><path class="cr" d="M10.0 112.7 L11.1 112.7 L12.2 112.6 L13.2 112.5 L14.3 112.4 L15.4 112.3 L16.5 112.2 L17.6 112.1 L18.7 112.0 L19.8 111.9 L20.8 111.7 L21.9 111.6 L23.0 111.4 L24.1 111.3 L25.2 111.1 L26.3 110.9 L27.3 110.8 L28.4 110.6 L29.5 110.4 L30.6 110.2 L31.7 109.9 L32.8 109.7 L33.8 109.5 L34.9 109.2 L36.0 109.0 L37.1 108.7 L38.2 108.4 L39.2 108.1 L40.3 107.8 L41.4 107.5 L42.5 107.2 L43.6 106.8 L44.7 106.5 L45.7 106.1 L46.8 105.7 L47.9 105.4 L49.0 105.0 L50.1 104.5 L51.2 104.1 L52.2 103.7 L53.3 103.2 L54.4 102.7 L55.5 102.3 L56.6 101.8 L57.7 101.2 L58.7 100.7 L59.8 100.2 L60.9 99.6 L62.0 99.0 L63.1 98.4 L64.2 97.8 L65.2 97.2 L66.3 96.6 L67.4 95.9 L68.5 95.3 L69.6 94.6 L70.7 93.9 L71.8 93.2 L72.8 92.5 L73.9 91.8 L75.0 91.1 L76.1 90.4 L77.2 89.6 L78.2 88.9 L79.3 88.2 L80.4 87.4 L81.5 86.7 L82.6 85.9 L83.7 85.1 L84.8 84.4 L85.8 83.6 L86.9 82.9 L88.0 82.1 L89.1 81.3 L90.2 80.6 L91.2 79.8 L92.3 79.1 L93.4 78.3 L94.5 77.5 L95.6 76.8 L96.7 76.1 L97.8 75.3 L98.8 74.6 L99.9 73.9 L101.0 73.1 L102.1 72.4 L103.2 71.7 L104.2 71.0 L105.3 70.4 L106.4 69.7 L107.5 69.0 L108.6 68.4 L109.7 67.8 L110.7 67.1 L111.8 66.5 L112.9 65.9 L114.0 65.4 L115.1 64.8 L116.2 64.2 L117.2 63.7 L118.3 63.2 L119.4 62.7 L120.5 62.3 L121.6 61.8 L122.7 61.4 L123.8 61.0 L124.8 60.6 L125.9 60.2 L127.0 59.9 L128.1 59.5 L129.2 59.2 L130.2 59.0 L131.3 58.7 L132.4 58.5 L133.5 58.3 L134.6 58.2 L135.7 58.0 L136.8 57.9 L137.8 57.8 L138.9 57.8 L140.0 57.8 L141.1 57.8 L142.2 57.8 L143.2 57.9 L144.3 58.0 L145.4 58.2 L146.5 58.3 L147.6 58.5 L148.7 58.7 L149.8 59.0 L150.8 59.2 L151.9 59.5 L153.0 59.9 L154.1 60.2 L155.2 60.6 L156.2 61.0 L157.3 61.4 L158.4 61.8 L159.5 62.3 L160.6 62.7 L161.7 63.2 L162.7 63.7 L163.8 64.2 L164.9 64.8 L166.0 65.4 L167.1 65.9 L168.2 66.5 L169.2 67.1 L170.3 67.8 L171.4 68.4 L172.5 69.0 L173.6 69.7 L174.7 70.4 L175.8 71.0 L176.8 71.7 L177.9 72.4 L179.0 73.1 L180.1 73.9 L181.2 74.6 L182.2 75.3 L183.3 76.1 L184.4 76.8 L185.5 77.5 L186.6 78.3 L187.7 79.1 L188.8 79.8 L189.8 80.6 L190.9 81.3 L192.0 82.1 L193.1 82.9 L194.2 83.6 L195.2 84.4 L196.3 85.1 L197.4 85.9 L198.5 86.7 L199.6 87.4 L200.7 88.2 L201.8 88.9 L202.8 89.6 L203.9 90.4 L205.0 91.1 L206.1 91.8 L207.2 92.5 L208.2 93.2 L209.3 93.9 L210.4 94.6 L211.5 95.3 L212.6 95.9 L213.7 96.6 L214.8 97.2 L215.8 97.8 L216.9 98.4 L218.0 99.0 L219.1 99.6 L220.2 100.2 L221.2 100.7 L222.3 101.2 L223.4 101.8 L224.5 102.3 L225.6 102.7 L226.7 103.2 L227.8 103.7 L228.8 104.1 L229.9 104.5 L231.0 105.0 L232.1 105.4 L233.2 105.7 L234.2 106.1 L235.3 106.5 L236.4 106.8 L237.5 107.2 L238.6 107.5 L239.7 107.8 L240.8 108.1 L241.8 108.4 L242.9 108.7 L244.0 109.0 L245.1 109.2 L246.2 109.5 L247.2 109.7 L248.3 109.9 L249.4 110.2 L250.5 110.4 L251.6 110.6 L252.7 110.8 L253.8 110.9 L254.8 111.1 L255.9 111.3 L257.0 111.4 L258.1 111.6 L259.2 111.7 L260.2 111.9 L261.3 112.0 L262.4 112.1 L263.5 112.2 L264.6 112.3 L265.7 112.4 L266.8 112.5 L267.8 112.6 L268.9 112.7 L270.0 112.7"/><text class="tx" x="181.4" y="28.0">n=1</text><text class="tx tb" x="182.5" y="66.7">n=2</text><text class="tx tr" x="58.7" y="66.7">n=4</text></svg><figcaption>把 <span class="m">n</span> 个均匀分布相加：<span class="m">n=1,2,4</span> 时密度越来越接近钟形。不管单个分布什么形状，和都趋向正态。</figcaption></figure>
+<div class="ex"><div class="ex-h">例 36.2<span class="ex-tag">中心极限定理</span></div><p>独立同分布的 <span class="m">X_1,\dots,X_{100}</span>，<span class="m">EX_i=2</span>，<span class="m">DX_i=4</span>。用 <span class="m">\Phi</span> 近似表示 <span class="m">P\Bigl(\sum X_i\le220\Bigr)</span>。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 <span class="m">n\mu=200</span>，<span class="m">\sqrt n\sigma=20</span>。由<a class="c" data-t="clt">中心极限定理</a>，</p>
+<div class="M">P\Bigl(\sum X_i\le220\Bigr)=P\Bigl(\frac{\sum X_i-200}{20}\le1\Bigr)\approx\Phi(1).</div>
+<p class="fin">所求概率约为 <span class="m">\Phi(1)\approx0.8413</span>。</p></div>
+<h2>三大抽样分布</h2>
+<p><b>样本</b>：<span class="m">X_1,\dots,X_n</span> 独立同分布。<span class="m">\bar X=\frac{1}{n}\sum X_i</span>，<span class="m">S^2=\frac{1}{n-1}\sum(X_i-\bar X)^2</span>。无论总体分布如何，<span class="m">E\bar X=\mu</span>，<span class="m">D\bar X=\frac{\sigma^2}{n}</span>，<span class="m">E(S^2)=\sigma^2</span>。</p>
+<div class="thm" id="t-sampling"><div class="thm-h"><span>定理</span><span class="m">\chi^2,t,F</span> 分布</div><p><span class="m">X_i\sim N(0,1)</span> 独立：</p>
+<p><b><span class="m">\chi^2(n)</span></b>：<span class="m">X_1^2+\cdots+X_n^2</span>。<span class="m">E=n</span>，<span class="m">D=2n</span>。可加性：<span class="m">\chi^2(m)+\chi^2(n)=\chi^2(m+n)</span>（独立）。</p>
+<p><b><span class="m">t(n)</span></b>：<span class="m">X\sim N(0,1)</span>，<span class="m">Y\sim\chi^2(n)</span>，独立，<span class="m">T=\dfrac{X}{\sqrt{Y/n}}</span>。密度关于 <span class="m">0</span> 对称，<span class="m">n</span> 大时接近 <span class="m">N(0,1)</span>。</p>
+<p><b><span class="m">F(m,n)</span></b>：<span class="m">U\sim\chi^2(m)</span>，<span class="m">V\sim\chi^2(n)</span>，独立，<span class="m">F=\dfrac{U/m}{V/n}</span>。<span class="m">\frac{1}{F}\sim F(n,m)</span>；<span class="m">T^2\sim F(1,n)</span>。</p></div>
+<div class="thm" id="t-normsample"><div class="thm-h"><span>定理</span>正态总体的抽样分布</div><p><span class="m">X_i\sim N(\mu,\sigma^2)</span>：</p>
+<p>(1) <span class="m">\bar X\sim N\bigl(\mu,\frac{\sigma^2}{n}\bigr)</span>；</p>
+<p>(2) <span class="m">\bar X</span> 与 <span class="m">S^2</span> <b>独立</b>；</p>
+<p>(3) <span class="m">\dfrac{(n-1)S^2}{\sigma^2}\sim\chi^2(n-1)</span>；</p>
+<p>(4) <span class="m">\dfrac{\bar X-\mu}{S/\sqrt n}\sim t(n-1)</span>；</p>
+<p>(5) <span class="m">\dfrac{1}{\sigma^2}\sum(X_i-\mu)^2\sim\chi^2(n)</span>。</p></div>
+<div class="ex"><div class="ex-h">例 36.3<span class="ex-tag">认分布（选填）</span></div><p><span class="m">X_1,X_2,X_3,X_4</span> 是来自 <span class="m">N(0,\sigma^2)</span> 的样本。判断 <span class="m">T=\dfrac{X_1+X_2}{\sqrt{X_3^2+X_4^2}}</span> 服从什么分布。</p></div>
+<div class="think"><div class="b-h">思路</div><p>目标是凑 <span class="m">\frac{N(0,1)}{\sqrt{\chi^2/n}}</span>。分子先标准化，分母的 <span class="m">\sigma</span> 和分子的正好约掉。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 <span class="m">X_1+X_2\sim N(0,2\sigma^2)</span>，故 <span class="m">\dfrac{X_1+X_2}{\sqrt2\sigma}\sim N(0,1)</span>。又 <span class="m">\dfrac{X_3^2+X_4^2}{\sigma^2}\sim\chi^2(2)</span>，两者独立。由<a class="c" data-t="sampling"><span class="m">\chi^2,t,F</span> 分布</a>，</p>
+<div class="M">\frac{\frac{X_1+X_2}{\sqrt2\sigma}}{\sqrt{\frac{X_3^2+X_4^2}{2\sigma^2}}}=\frac{X_1+X_2}{\sqrt{X_3^2+X_4^2}}\sim t(2).</div>
+<p class="fin">即 <span class="m">T\sim t(2)</span>。</p></div>
+<div class="ex"><div class="ex-h">例 36.4<span class="ex-tag">数字特征</span></div><p><span class="m">X_1,\dots,X_n</span> 来自 <span class="m">N(\mu,\sigma^2)</span>，求 <span class="m">D(S^2)</span>。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 由<a class="c" data-t="normsample">正态总体的抽样分布</a>，<span class="m">\dfrac{(n-1)S^2}{\sigma^2}\sim\chi^2(n-1)</span>，由<a class="c" data-t="sampling"><span class="m">\chi^2,t,F</span> 分布</a>，方差为 <span class="m">2(n-1)</span>。于是</p>
+<div class="M">\frac{(n-1)^2}{\sigma^4}D(S^2)=2(n-1).</div>
+<p class="fin"><span class="m">D(S^2)=\dfrac{2\sigma^4}{n-1}</span>。</p></div>
+
+<div class="endq"><h2>今日考你</h2><p class="hint">合上前答一遍：先想，再点开。答错的会回到后面几期和温故版。</p><div class="rq" data-q="36-0"><p class="rq-q"><span class="m">\chi^2(n)</span> 的期望和方差？</p><p class="rq-a"><span class="m">n,\ 2n</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="36-1"><p class="rq-q"><span class="m">\bar X</span> 的期望和方差？</p><p class="rq-a"><span class="m">\mu,\ \frac{\sigma^2}{n}</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="36-2"><p class="rq-q"><span class="m">\frac{\bar X-\mu}{S/\sqrt n}</span> 服从？</p><p class="rq-a"><span class="m">t(n-1)</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="36-3"><p class="rq-q"><span class="m">E(S^2)</span>？</p><p class="rq-a"><span class="m">\sigma^2</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="36-4"><p class="rq-q">若 <span class="m">T\sim t(n)</span>，<span class="m">T^2</span> 服从？</p><p class="rq-a"><span class="m">F(1,n)</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div></div>
+<div class="endnext" id="endnext"></div>
+<div id="sent"></div>
+</div></div>
+<aside class="rail" id="rail"><div class="rail-h">本版引用 · 定理全文</div><div id="railc"></div></aside>
+</section></main>
+<footer class="pager"><button id="pv" aria-label="上一版">‹</button><div class="pginfo"><span id="pgt"></span><div class="bar"><i id="pgb"></i></div></div><button id="nx" aria-label="下一版">›</button></footer>
+<div class="sheetup" id="sheetup" hidden><div class="sheetup-h"><span>定理全文</span><button id="sheetx">关闭</button></div><div id="sheetc"></div></div>
+<div class="drawer" id="drawer" hidden></div>
+<script src="assets/katex/katex.min.js"></script><script src="assets/data.js"></script><script src="assets/paper.js"></script>
+</body></html>

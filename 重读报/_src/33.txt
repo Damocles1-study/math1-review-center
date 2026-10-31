@@ -1,0 +1,103 @@
+@part 丁
+@kicker 一维随机变量
+@title 把随机结果写成函数
+@deck 随机变量把结果变成数，分布函数和概率密度就是用微积分描述它。这一期要记住常见分布表，以及求 $Y=g(X)$ 分布的唯一通法：回到定义算分布函数。
+@keep $F(x)=P(X\le x)$：单调不减，右连续，$F(-\infty)=0$，$F(+\infty)=1$。
+@keep $f\ge0$，$\int_{-\infty}^{+\infty}f\,dx=1$，$P(a\lt X\le b)=\int_a^bf\,dx$，$F'=f$。
+@keep $N(\mu,\sigma^2)$：标准化 $\frac{X-\mu}{\sigma}\sim N(0,1)$，$\Phi(-x)=1-\Phi(x)$。
+@keep $Y=g(X)$：$F_Y(y)=P(g(X)\le y)$，求导得 $f_Y$。
+@recall 指数分布的概率密度和无记忆性？ || $f=\lambda e^{-\lambda x}$（$x\gt0$）；$P(X\gt s+t\vert X\gt s)=P(X\gt t)$。
+@recall 泊松分布的分布律？ || $P(X=k)=\frac{\lambda^k}{k!}e^{-\lambda}$。
+@recall 分布函数的三条性质？ || 单调不减，右连续，$F(-\infty)=0,F(+\infty)=1$。
+@recall $X\sim N(0,1)$，$P(\vert X\vert\le1.96)$？ || $0.95$。
+@recall 连续型 $P(X=a)$ 等于？ || $0$。
+
+## 分布函数
+:::thm cdf | 分布函数 | 定义
+$F(x)=P(X\le x)$。**充要性质**：$F$ 单调不减、右连续、$F(-\infty)=0$、$F(+\infty)=1$。
+$P(a\lt X\le b)=F(b)-F(a)$，$P(X=a)=F(a)-F(a^-)$。
+:::
+
+## 离散型与连续型
+:::thm pdf | 离散型分布律与连续型概率密度
+**离散**：$P(X=x_k)=p_k$，$p_k\ge0$，$\sum p_k=1$，$F$ 是阶梯函数。
+**连续**：$F(x)=\int_{-\infty}^xf(t)\,dt$，$f\ge0$，$\int_{-\infty}^{+\infty}f=1$。此时 $F$ 处处连续，$F'=f$（$f$ 的连续点），$P(X=a)=0$。
+$P(a\lt X\lt b)=\int_a^bf(x)\,dx$，端点有无不影响。
+:::
+!fig f33_pdf | 概率就是密度曲线下的面积。
+:::ex 求常数与概率
+设 $X$ 的概率密度为 $f(x)=cx$（$0\lt x\lt2$），其余为 $0$。求 $c$、$P(1\lt X\lt3)$、分布函数 $F(x)$。
+:::
+:::paper
+解 由[[pdf]]，$\displaystyle\int_0^2cx\,dx=2c=1$，得 $c=\dfrac{1}{2}$。⛳2
+$P(1\lt X\lt3)=\displaystyle\int_1^2\frac{x}{2}\,dx=\frac{3}{4}$。⛳2
+$x\lt0$ 时 $F=0$；$0\le x\lt2$ 时 $F=\displaystyle\int_0^x\frac{t}{2}\,dt=\frac{x^2}{4}$；$x\ge2$ 时 $F=1$。
+∎ 故 $c=\dfrac12$，$P=\dfrac34$，$F(x)=\begin{cases}0,&x\lt0\\\frac{x^2}{4},&0\le x\lt2\\1,&x\ge2\end{cases}$。⛳3
+:::
+:::ex 用性质定常数
+设 $F(x)=A+B\arctan x$ 是分布函数，求 $A,B$ 和概率密度。
+:::
+:::paper
+解 由[[cdf]]，$F(-\infty)=A-\dfrac{\pi}{2}B=0$，$F(+\infty)=A+\dfrac{\pi}{2}B=1$。解得 $A=\dfrac{1}{2}$，$B=\dfrac{1}{\pi}$。
+∎ $f(x)=F'(x)=\dfrac{1}{\pi(1+x^2)}$。
+:::
+
+## 常见分布
+:::thm dists | 常见分布表 | 公式
+| 名称 | 分布 | 背景 |
+| 0-1 $B(1,p)$ | $P(X=1)=p$ | 一次试验 |
+| 二项 $B(n,p)$ | $C_n^kp^k(1-p)^{n-k}$ | $n$ 次独立试验成功次数 |
+| 泊松 $P(\lambda)$ | $\frac{\lambda^k}{k!}e^{-\lambda}$ | 稀有事件计数 |
+| 几何 $G(p)$ | $(1-p)^{k-1}p$ | 首次成功所需次数 |
+| 均匀 $U(a,b)$ | $\frac{1}{b-a}$ | 等可能落入区间 |
+| 指数 $E(\lambda)$ | $\lambda e^{-\lambda x},x\gt0$ | 寿命，等待时间 |
+| 正态 $N(\mu,\sigma^2)$ | $\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x-\mu)^2}{2\sigma^2}}$ | 大量因素之和 |
+指数分布：$F(x)=1-e^{-\lambda x}$，$P(X\gt t)=e^{-\lambda t}$，具有**无记忆性**。
+:::
+:::thm normal | 正态分布
+$X\sim N(\mu,\sigma^2)$，$\dfrac{X-\mu}{\sigma}\sim N(0,1)$。标准正态的分布函数记 $\Phi$，$\Phi(-x)=1-\Phi(x)$，$\Phi(0)=\frac{1}{2}$。
+$P(a\lt X\lt b)=\Phi\Bigl(\dfrac{b-\mu}{\sigma}\Bigr)-\Phi\Bigl(\dfrac{a-\mu}{\sigma}\Bigr)$。
+$aX+b\sim N(a\mu+b,a^2\sigma^2)$。
+:::
+!fig f33_normal | 正态密度关于 $x=\mu$ 对称，$\sigma$ 越大越矮胖。阴影是 $P(\vert X-\mu\vert\le\sigma)\approx0.683$。
+:::ex 正态计算
+$X\sim N(1,4)$，用 $\Phi$ 表示 $P(-1\lt X\lt3)$。
+:::
+:::paper
+解 由[[normal]]，$\mu=1,\sigma=2$，
+$$P(-1\lt X\lt3)=\Phi\Bigl(\frac{3-1}{2}\Bigr)-\Phi\Bigl(\frac{-1-1}{2}\Bigr)=\Phi(1)-\Phi(-1).$$
+∎ 故 $P=2\Phi(1)-1\approx0.6826$。
+:::
+:::ex 无记忆性
+某元件寿命 $X\sim E(\lambda)$，已经工作了 $s$ 小时。求它再工作 $t$ 小时的概率。
+:::
+:::paper
+解 由[[dists]]，
+$$P(X\gt s+t\mid X\gt s)=\frac{P(X\gt s+t)}{P(X\gt s)}=\frac{e^{-\lambda(s+t)}}{e^{-\lambda s}}.$$
+∎ 所求概率 $=e^{-\lambda t}$，与已工作的时间 $s$ 无关。
+:::
+
+## 随机变量函数的分布
+:::thm funcdist | $Y=g(X)$ 的分布：分布函数法
+**离散**：列出 $Y$ 的所有取值，把对应的概率相加。
+**连续**：先写
+$$F_Y(y)=P(g(X)\le y),$$
+把事件 $\{g(X)\le y\}$ 翻译成关于 $X$ 的不等式，用 $f_X$ 积分，再求导得 $f_Y$。$y$ 的范围要分段讨论。
+:::
+:::like
+别背公式。「$Y$ 不超过 $y$」的意思是什么？翻译成 $X$ 的范围，然后量一下这段范围的概率。
+:::
+:::ex 平方函数（大题）
+$X\sim U(-1,1)$，$Y=X^2$，求 $Y$ 的概率密度。
+:::
+:::think
+$Y\in[0,1]$。$y$ 在此范围内时 $\{X^2\le y\}=\{-\sqrt y\le X\le\sqrt y\}$。在此之外都是常数。
+:::
+:::paper
+解 $f_X(x)=\dfrac{1}{2}$（$-1\lt x\lt1$）。由[[funcdist]]：
+$y\lt0$ 时，$F_Y(y)=0$；$y\ge1$ 时，$F_Y(y)=1$。⛳2
+$0\le y\lt1$ 时，
+$$F_Y(y)=P(X^2\le y)=P(-\sqrt y\le X\le\sqrt y)=\int_{-\sqrt y}^{\sqrt y}\frac{1}{2}\,dx=\sqrt y.$$⛳4
+求导，
+∎ $f_Y(y)=\begin{cases}\dfrac{1}{2\sqrt y},&0\lt y\lt1\\0,&\text{其他}\end{cases}$。⛳2
+:::

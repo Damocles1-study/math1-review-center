@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>求导的逆运算，靠认形状 · 第10期 · 重读报</title>
+<link rel="stylesheet" href="assets/katex/katex.min.css">
+<link rel="stylesheet" href="assets/paper.css">
+</head><body class="issue" data-no="10" data-prev="q09.html" data-next="q11.html">
+<header class="strip"><a class="brand" href="index.html">重读报</a>
+<span class="strip-m">第 10 期 · 一元微积分 · 不定积分</span>
+<nav class="tools"><button data-a="toc" title="目录 (T)">目录</button><button data-a="rail" class="only-narrow">定理<i id="railn"></i></button><button data-a="hide" title="遮住卷面，先自己写 (H)">遮卷面</button><button data-a="night" title="夜读">夜读</button></nav></header>
+<main class="sheet" id="sheet">
+<section class="cover" id="cover">
+<div class="mast"><div class="mast-l">一元微积分<br>第 10 期</div><div class="mast-c">重读报</div><div class="mast-r">本期约 19 分钟<br>不定积分</div></div>
+<h1>求导的逆运算，靠认形状</h1>
+<p class="deck">积分没有万能算法，但题目用来用去就四招：凑微分、换元、分部、有理函数拆项。把公式表背死，再练会判断该走哪一招。</p>
+<div class="cover-grid">
+<div class="cover-keep"><h4>本期只记这几行</h4><ol><li>先想凑微分，再想换元，然后分部，分式最后拆项。</li><li>分部口诀：「反对幂指三」，靠前的留作 <span class="m">u</span>，靠后的放进 <span class="m">d</span>。</li><li>根号换元：<span class="m">\sqrt{a^2-x^2}</span> 用 <span class="m">x=a\sin t</span>；<span class="m">\sqrt{a^2+x^2}</span> 用 <span class="m">x=a\tan t</span>；<span class="m">\sqrt{x^2-a^2}</span> 用 <span class="m">x=a\sec t</span>。</li><li>不定积分结果<b>必须带 <span class="m">+C</span></b>。</li></ol></div>
+<div class="cover-prev"><h4>开读前，先答上期</h4><div id="prevq"></div></div>
+<div class="cover-toc"><h4>本期目录</h4><ol><li>原函数与公式表</li><li>第一招：凑微分</li><li>第二招：换元去根号</li><li>第三招：分部积分</li><li>第四招：有理函数拆项</li></ol><p class="hint">→ 键 / 点右缘 / 左滑翻页</p></div>
+</div></section>
+<section class="stage" id="stage" hidden>
+<div class="viewport" id="vp"><div class="flow" id="flow">
+<h2>原函数与公式表</h2>
+<div class="thm" id="t-antider"><div class="thm-h"><span>定义</span>原函数与不定积分</div><p>若 <span class="m">F'(x)=f(x)</span>，称 <span class="m">F</span> 是 <span class="m">f</span> 的一个<b>原函数</b>。<span class="m">f</span> 的全体原函数记作 <span class="m">\int f(x)\,dx=F(x)+C</span>。连续函数一定有原函数。</p></div>
+<div class="thm" id="t-inttable"><div class="thm-h"><span>公式</span>基本积分表</div><p><span class="m">\int x^a\,dx=\frac{x^{a+1}}{a+1}+C\ (a\neq-1)</span>，<span class="m">\int\frac{dx}{x}=\ln\vert x\vert+C</span>，</p>
+<p><span class="m">\int e^x\,dx=e^x+C</span>，<span class="m">\int a^x\,dx=\frac{a^x}{\ln a}+C</span>，</p>
+<p><span class="m">\int\sin x\,dx=-\cos x+C</span>，<span class="m">\int\cos x\,dx=\sin x+C</span>，</p>
+<p><span class="m">\int\tan x\,dx=-\ln\vert\cos x\vert+C</span>，<span class="m">\int\cot x\,dx=\ln\vert\sin x\vert+C</span>，</p>
+<p><span class="m">\int\sec x\,dx=\ln\vert\sec x+\tan x\vert+C</span>，<span class="m">\int\csc x\,dx=\ln\vert\csc x-\cot x\vert+C</span>，</p>
+<p><span class="m">\int\sec^2x\,dx=\tan x+C</span>，<span class="m">\int\csc^2x\,dx=-\cot x+C</span>，</p>
+<p><span class="m">\int\frac{dx}{a^2+x^2}=\frac{1}{a}\arctan\frac{x}{a}+C</span>，<span class="m">\int\frac{dx}{\sqrt{a^2-x^2}}=\arcsin\frac{x}{a}+C</span>，</p>
+<p><span class="m">\int\frac{dx}{\sqrt{x^2+a^2}}=\ln(x+\sqrt{x^2+a^2})+C</span>，<span class="m">\int\frac{dx}{x^2-a^2}=\frac{1}{2a}\ln\Bigl\vert\frac{x-a}{x+a}\Bigr\vert+C</span>。</p></div>
+<h2>第一招：凑微分</h2>
+<p>被积函数是「某个复合函数 × 里层的导数」时，把里层的导数凑进 <span class="m">d</span> 后面。</p>
+<div class="thm" id="t-substone"><div class="thm-h"><span>定理</span>第一类换元（凑微分）</div><div class="M">\int f(\varphi(x))\varphi'(x)\,dx=\int f(u)\,du\Big\vert_{u=\varphi(x)}.</div>
+<p>常用：<span class="m">x\,dx=\frac12d(x^2)</span>，<span class="m">\frac{dx}{x}=d(\ln x)</span>，<span class="m">\frac{dx}{\sqrt x}=2d\sqrt x</span>，<span class="m">\cos x\,dx=d\sin x</span>，<span class="m">\frac{dx}{1+x^2}=d\arctan x</span>，<span class="m">e^xdx=de^x</span>。</p></div>
+<div class="ex"><div class="ex-h">例 10.1<span class="ex-tag">凑微分</span></div><p>求 <span class="m">\displaystyle\int\frac{\ln^2x}{x}\,dx</span> 和 <span class="m">\displaystyle\int\frac{dx}{x^2+2x+5}</span>。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 (1) 由<a class="c" data-t="substone">第一类换元（凑微分）</a>，<span class="m">\displaystyle\int\frac{\ln^2x}{x}\,dx=\int\ln^2x\,d(\ln x)=\frac{\ln^3x}{3}+C</span>。</p>
+<p>(2) 分母配方：<span class="m">x^2+2x+5=(x+1)^2+4</span>。由<a class="c" data-t="inttable">基本积分表</a>，</p>
+<p class="fin"><span class="m">\displaystyle\int\frac{dx}{(x+1)^2+2^2}=\frac{1}{2}\arctan\frac{x+1}{2}+C</span>。</p></div>
+<h2>第二招：换元去根号</h2>
+<div class="thm" id="t-substtwo"><div class="thm-h"><span>公式</span>第二类换元</div><p><span class="m">\sqrt{a^2-x^2}</span>：令 <span class="m">x=a\sin t</span>；<span class="m">\sqrt{a^2+x^2}</span>：令 <span class="m">x=a\tan t</span>；<span class="m">\sqrt{x^2-a^2}</span>：令 <span class="m">x=a\sec t</span>；<span class="m">\sqrt[n]{ax+b}</span>：直接令它 <span class="m">=t</span>。</p></div>
+<figure><svg viewBox="0 0 220 130" role="img"><defs><marker id="arr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path class="arrh" d="M0 .8L7 4L0 7.2z"/></marker></defs><line class="ln" x1="22.2" y1="110.8" x2="185.5" y2="110.8"/><line class="ln" x1="185.5" y1="110.8" x2="185.5" y2="31.4"/><line class="lr" x1="22.2" y1="110.8" x2="185.5" y2="31.4"/><line class="ln" x1="175.3" y1="110.8" x2="175.3" y2="103.2"/><line class="ln" x1="175.3" y1="103.2" x2="185.5" y2="103.2"/><text class="tx" x="103.9" y="124.8">a</text><text class="tx" x="190.5" y="71.1">x</text><text class="tx tr" x="59.9" y="65.1">√(a²+x²)</text><text class="tx" x="44.7" y="105.8">t</text></svg><figcaption>换元后要回代 <span class="m">x</span>：画直角三角形。例如 <span class="m">x=a\tan t</span> 时，对边 <span class="m">x</span>，邻边 <span class="m">a</span>，斜边 <span class="m">\sqrt{a^2+x^2}</span>。</figcaption></figure>
+<div class="ex"><div class="ex-h">例 10.2<span class="ex-tag">三角换元</span></div><p>求 <span class="m">\displaystyle\int\frac{dx}{x^2\sqrt{1+x^2}}</span>。</p></div>
+<div class="think"><div class="b-h">思路</div><p>有 <span class="m">\sqrt{1+x^2}</span>，令 <span class="m">x=\tan t</span>。<span class="m">dx=\sec^2t\,dt</span> 与根号里的 <span class="m">\sec t</span> 约掉一次。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 令 <span class="m">x=\tan t</span>，<span class="m">t\in(-\frac\pi2,\frac\pi2)</span>，则 <span class="m">dx=\sec^2t\,dt</span>，<span class="m">\sqrt{1+x^2}=\sec t</span>。</p>
+<div class="M">\int\frac{dx}{x^2\sqrt{1+x^2}}=\int\frac{\sec^2t\,dt}{\tan^2t\sec t}=\int\frac{\cos t}{\sin^2t}\,dt=-\frac{1}{\sin t}+C.</div>
+<p>由直角三角形，<span class="m">\sin t=\dfrac{x}{\sqrt{1+x^2}}</span>，</p>
+<p class="fin">故原式 <span class="m">=-\dfrac{\sqrt{1+x^2}}{x}+C</span>。</p></div>
+<h2>第三招：分部积分</h2>
+<div class="thm" id="t-byparts"><div class="thm-h"><span>定理</span>分部积分</div><div class="M">\int u\,dv=uv-\int v\,du.</div>
+<p>选择顺序「<b>反对幂指三</b>」：反三角、对数、幂、指数、三角，靠前的当 <span class="m">u</span>。</p></div>
+<div class="like"><div class="b-h">打个比方</div><p>分部积分是「踢皮球」：把难啃的因子（对数、反三角）留在 <span class="m">u</span>，求导一次它就变简单了。</p></div>
+<div class="ex"><div class="ex-h">例 10.3<span class="ex-tag">分部</span></div><p>求 <span class="m">\displaystyle\int x\ln x\,dx</span>，<span class="m">\displaystyle\int\arctan x\,dx</span>。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 (1) 对数当 <span class="m">u</span>。由<a class="c" data-t="byparts">分部积分</a>，</p>
+<div class="M">\int x\ln x\,dx=\int\ln x\,d\frac{x^2}{2}=\frac{x^2}{2}\ln x-\int\frac{x^2}{2}\cdot\frac{1}{x}\,dx=\frac{x^2}{2}\ln x-\frac{x^2}{4}+C.</div>
+<p>(2) <span class="m">\displaystyle\int\arctan x\,dx=x\arctan x-\int\frac{x}{1+x^2}\,dx</span>，</p>
+<p class="fin">故 <span class="m">\displaystyle\int\arctan x\,dx=x\arctan x-\frac{1}{2}\ln(1+x^2)+C</span>。</p></div>
+<div class="ex"><div class="ex-h">例 10.4<span class="ex-tag">循环型</span></div><p>求 <span class="m">I=\displaystyle\int e^x\sin x\,dx</span>。</p></div>
+<div class="think"><div class="b-h">思路</div><p>指数和三角求导都不会变简单，但分部两次会变回自身，解方程。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 由<a class="c" data-t="byparts">分部积分</a>，连续分部两次：</p>
+<div class="M">I=\int\sin x\,de^x=e^x\sin x-\int e^x\cos x\,dx=e^x\sin x-e^x\cos x-\int e^x\sin x\,dx.</div>
+<p>即 <span class="m">I=e^x(\sin x-\cos x)-I</span>，</p>
+<p class="fin">解得 <span class="m">I=\dfrac{1}{2}e^x(\sin x-\cos x)+C</span>。</p></div>
+<h2>第四招：有理函数拆项</h2>
+<p>真分式 <span class="m">\frac{P}{Q}</span>（假分式先做除法）。分母因式分解，每个因子对应一项：</p>
+<div class="tab"><table><thead><tr><th>分母因子</th><th>对应的项</th></tr></thead><tbody><tr><td><span class="m">(x-a)</span></td><td><span class="m">\frac{A}{x-a}</span></td></tr><tr><td><span class="m">(x-a)^2</span></td><td><span class="m">\frac{A}{x-a}+\frac{B}{(x-a)^2}</span></td></tr><tr><td><span class="m">x^2+px+q</span>（不可约）</td><td><span class="m">\frac{Ax+B}{x^2+px+q}</span></td></tr></tbody></table></div>
+<div class="ex"><div class="ex-h">例 10.5<span class="ex-tag">拆项</span></div><p>求 <span class="m">\displaystyle\int\frac{dx}{x(x^2+1)}</span>。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 设 <span class="m">\dfrac{1}{x(x^2+1)}=\dfrac{A}{x}+\dfrac{Bx+C}{x^2+1}</span>，通分比较系数得 <span class="m">A=1,\ B=-1,\ C=0</span>，故</p>
+<div class="M">\int\frac{dx}{x(x^2+1)}=\int\frac{dx}{x}-\int\frac{x\,dx}{x^2+1}.</div>
+<p class="fin">由<a class="c" data-t="inttable">基本积分表</a>，原式 <span class="m">=\ln\vert x\vert-\dfrac{1}{2}\ln(1+x^2)+C</span>。</p></div>
+<div class="skip"><div class="b-h">本报不刊</div><p>万能代换 <span class="m">t=\tan\frac{x}{2}</span> 计算太长，只在其他方法都失败时才用。复杂的三角有理式不单独练。</p></div>
+
+<div class="endq"><h2>今日考你</h2><p class="hint">合上前答一遍：先想，再点开。答错的会回到后面几期和温故版。</p><div class="rq" data-q="10-0"><p class="rq-q"><span class="m">\int\frac{dx}{x^2+a^2}</span> 等于？</p><p class="rq-a"><span class="m">\frac1a\arctan\frac xa+C</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="10-1"><p class="rq-q"><span class="m">\int\frac{dx}{\sqrt{x^2+a^2}}</span> 等于？</p><p class="rq-a"><span class="m">\ln(x+\sqrt{x^2+a^2})+C</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="10-2"><p class="rq-q"><span class="m">\int\sec x\,dx</span> 等于？</p><p class="rq-a"><span class="m">\ln\vert\sec x+\tan x\vert+C</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="10-3"><p class="rq-q"><span class="m">\int\ln x\,dx</span> 等于？</p><p class="rq-a"><span class="m">x\ln x-x+C</span>，分部。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="10-4"><p class="rq-q">分部口诀「反对幂指三」谁当 <span class="m">u</span>？</p><p class="rq-a">靠前的当 <span class="m">u</span>（反三角、对数优先），靠后的放进 <span class="m">dv</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div></div>
+<div class="endnext" id="endnext"></div>
+<div id="sent"></div>
+</div></div>
+<aside class="rail" id="rail"><div class="rail-h">本版引用 · 定理全文</div><div id="railc"></div></aside>
+</section></main>
+<footer class="pager"><button id="pv" aria-label="上一版">‹</button><div class="pginfo"><span id="pgt"></span><div class="bar"><i id="pgb"></i></div></div><button id="nx" aria-label="下一版">›</button></footer>
+<div class="sheetup" id="sheetup" hidden><div class="sheetup-h"><span>定理全文</span><button id="sheetx">关闭</button></div><div id="sheetc"></div></div>
+<div class="drawer" id="drawer" hidden></div>
+<script src="assets/katex/katex.min.js"></script><script src="assets/data.js"></script><script src="assets/paper.js"></script>
+</body></html>

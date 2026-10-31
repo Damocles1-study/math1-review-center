@@ -1,0 +1,101 @@
+@part 乙
+@kicker 矩阵
+@title 一张数表，一次变换
+@deck 矩阵乘法不满足交换律，这是所有陷阱的根源。这一期把运算、可逆、伴随和初等变换讲透，尤其是那组必须背熟的伴随公式。
+@keep $AB\neq BA$；$AB=O$ 推不出 $A=O$ 或 $B=O$。
+@keep $AA^*=A^*A=\vert A\vert E$，一切伴随公式都由此推出。
+@keep $\vert kA\vert=k^n\vert A\vert$，$\vert A^*\vert=\vert A\vert^{n-1}$，$\vert A^{-1}\vert=\vert A\vert^{-1}$。
+@keep 左乘行变换，右乘列变换。$(A\mid E)\to(E\mid A^{-1})$。
+@recall $(A+B)^2=A^2+2AB+B^2$ 成立吗？ || 一般不成立，需要 $AB=BA$。
+@recall $A$ 可逆时，$A^*$ 怎样用 $A^{-1}$ 表示？ || $A^*=\vert A\vert A^{-1}$。
+@recall $(AB)^{-1}$ 和 $(AB)^T$？ || $B^{-1}A^{-1}$ 和 $B^TA^T$，顺序都反过来。
+@recall 「列 × 行」型矩阵 $A=\alpha\beta^T$ 的 $A^n$ 怎么算？ || $A^n=(\beta^T\alpha)^{n-1}A$。
+@recall 交换第一、二行，相当于对 $A$ 做什么？ || 左乘相应的初等矩阵。
+
+## 运算
+加法、数乘按元素进行。**乘法**：$C=AB$，$c_{ij}=$ $A$ 的第 $i$ 行与 $B$ 的第 $j$ 列的内积。要求 $A$ 的列数 = $B$ 的行数。
+:::thm matrule | 矩阵运算的规则
+(1) $AB\neq BA$（一般）；$AB=O$ 不能推出 $A=O$ 或 $B=O$；$AB=AC$ 且 $A\neq O$ 不能推出 $B=C$。
+(2) $(AB)^T=B^TA^T$；$(AB)^{-1}=B^{-1}A^{-1}$。
+(3) $\vert AB\vert=\vert A\vert\vert B\vert$；$\vert kA\vert=k^n\vert A\vert$（$n$ 阶）；$\vert A^T\vert=\vert A\vert$。$\vert A+B\vert$ 没有公式。
+:::
+:::like
+矩阵相当于一个操作，乘法就是先后做两个操作。先穿袜子再穿鞋，和先穿鞋再穿袜子，结果不一样，所以不能交换。
+:::
+:::ex 列 × 行型矩阵的幂
+设 $A=\begin{pmatrix}1&1\\2&2\end{pmatrix}$，求 $A^n$。
+:::
+:::think
+两行成比例，可以写成「列 × 行」。$\beta^T\alpha$ 是个数，可以从连乘中提出来。
+:::
+:::paper
+解 $A=\alpha\beta^T$，其中 $\alpha=\begin{pmatrix}1\\2\end{pmatrix}$，$\beta=\begin{pmatrix}1\\1\end{pmatrix}$，$\beta^T\alpha=3$。于是
+$$A^n=\alpha(\beta^T\alpha)(\beta^T\alpha)\cdots(\beta^T\alpha)\beta^T=3^{n-1}\alpha\beta^T.$$
+∎ 故 $A^n=3^{n-1}\begin{pmatrix}1&1\\2&2\end{pmatrix}$。
+:::
+
+## 可逆矩阵
+:::thm inverse | 可逆矩阵 | 定义
+$n$ 阶方阵 $A$，若存在 $B$ 使 $AB=E$（此时必有 $BA=E$），称 $A$ 可逆，$B=A^{-1}$。**$A$ 可逆 ⟺ $\vert A\vert\neq0$**。
+:::
+由矩阵多项式求逆：凑成 $(A-aE)\cdot(\cdots)=E$ 的形式。
+:::ex 凑逆
+设 $A^2+A-3E=O$，求 $(A-E)^{-1}$。
+:::
+:::paper
+解 $(A-E)(A+2E)=A^2+A-2E$。由已知 $A^2+A=3E$，故 $(A-E)(A+2E)=E$。
+∎ 由[[inverse]]，$(A-E)^{-1}=A+2E$。
+:::
+
+## 伴随矩阵
+:::thm adj | 伴随矩阵
+$A^*$ 由代数余子式 $A_{ij}$ 排成，注意**转置**：第 $i$ 行第 $j$ 列放 $A_{ji}$。根本公式：
+$$AA^*=A^*A=\vert A\vert E.$$
+由此推出（$n$ 阶）：
+$$A^{-1}=\frac{A^*}{\vert A\vert},\quad A^*=\vert A\vert A^{-1},\quad\vert A^*\vert=\vert A\vert^{n-1},$$
+$$(A^*)^{-1}=\frac{A}{\vert A\vert},\quad(kA)^*=k^{n-1}A^*,\quad(A^*)^*=\vert A\vert^{n-2}A.$$
+二阶速算：$\begin{pmatrix}a&b\\c&d\end{pmatrix}^*=\begin{pmatrix}d&-b\\-c&a\end{pmatrix}$（主对调，副变号）。
+:::
+第一步由[[expand]]得到：$A$ 的第 $i$ 行与 $A^*$ 的第 $k$ 列相乘，$i=k$ 时为 $\vert A\vert$，$i\neq k$ 时异行展开为 $0$。
+:::ex 伴随 + 逆
+设 $A$ 是 $3$ 阶矩阵，$\vert A\vert=2$，求 $\vert 3A^{-1}-A^*\vert$。
+:::
+:::think
+把 $A^*$ 和 $A^{-1}$ 统一成一个东西，合并之后再提系数。
+:::
+:::paper
+解 由[[adj]]，$A^*=\vert A\vert A^{-1}=2A^{-1}$，于是 $3A^{-1}-A^*=A^{-1}$。
+∎ 所以 $\vert 3A^{-1}-A^*\vert=\vert A^{-1}\vert=\dfrac{1}{\vert A\vert}=\dfrac{1}{2}$。
+:::
+
+## 初等变换
+三种：互换两行、某行乘非零数、某行的 $k$ 倍加到另一行。对单位矩阵作一次初等变换得到的就是**初等矩阵**。
+:::thm elem | 初等矩阵
+左乘初等矩阵 = 对 $A$ 做相应的**行**变换；右乘 = 对 $A$ 做相应的**列**变换（左行右列）。
+初等矩阵可逆，逆矩阵是同类型的：互换的逆是自身；$E_{ij}(k)^{-1}=E_{ij}(-k)$。
+可逆矩阵 = 若干初等矩阵的乘积。
+**求逆**：$(A\mid E)\xrightarrow{\text{初等行变换}}(E\mid A^{-1})$。
+:::
+:::ex 行变换求逆
+求 $A=\begin{pmatrix}1&0&1\\2&1&0\\0&1&1\end{pmatrix}$ 的逆矩阵。
+:::
+:::paper
+解 由[[elem]]，对 $(A\mid E)$ 作初等行变换：
+$$\left(\begin{array}{ccc|ccc}1&0&1&1&0&0\\2&1&0&0&1&0\\0&1&1&0&0&1\end{array}\right)\xrightarrow{r_2-2r_1}\left(\begin{array}{ccc|ccc}1&0&1&1&0&0\\0&1&-2&-2&1&0\\0&1&1&0&0&1\end{array}\right)$$
+$$\xrightarrow{r_3-r_2}\left(\begin{array}{ccc|ccc}1&0&1&1&0&0\\0&1&-2&-2&1&0\\0&0&3&2&-1&1\end{array}\right)\xrightarrow[\ r_1-r_3,\ r_2+2r_3\ ]{r_3\div3}\left(\begin{array}{ccc|ccc}1&0&0&\frac13&\frac13&-\frac13\\0&1&0&-\frac23&\frac13&\frac23\\0&0&1&\frac23&-\frac13&\frac13\end{array}\right).$$
+∎ 故 $A^{-1}=\dfrac{1}{3}\begin{pmatrix}1&1&-1\\-2&1&2\\2&-1&1\end{pmatrix}$。
+:::
+
+## 矩阵方程
+$AX=B$，$A$ 可逆时 $X=A^{-1}B$；$XA=B$ 时 $X=BA^{-1}$。左右不能搞反。含 $X$ 的项先移到一边，提公因子时要补上 $E$。
+:::ex 矩阵方程
+设 $A=\begin{pmatrix}3&1\\0&3\end{pmatrix}$，$AX=A+2X$，求 $X$。
+:::
+:::paper
+解 移项得 $AX-2X=A$，即 $(A-2E)X=A$。$A-2E=\begin{pmatrix}1&1\\0&1\end{pmatrix}$ 可逆，由[[adj]]中的二阶速算，
+$$(A-2E)^{-1}=\begin{pmatrix}1&-1\\0&1\end{pmatrix}.$$
+∎ 故 $X=(A-2E)^{-1}A=\begin{pmatrix}1&-1\\0&1\end{pmatrix}\begin{pmatrix}3&1\\0&3\end{pmatrix}=\begin{pmatrix}3&-2\\0&3\end{pmatrix}$。
+:::
+:::thm block | 分块矩阵 | 公式
+$$\begin{pmatrix}A&O\\O&B\end{pmatrix}^{-1}=\begin{pmatrix}A^{-1}&O\\O&B^{-1}\end{pmatrix},\quad\begin{pmatrix}O&A\\B&O\end{pmatrix}^{-1}=\begin{pmatrix}O&B^{-1}\\A^{-1}&O\end{pmatrix}.$$
+:::

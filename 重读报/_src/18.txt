@@ -1,0 +1,96 @@
+@part 乙
+@kicker 向量组
+@title 相关，就是有人是多余的
+@deck 向量组是方程组换个说法。「能否线性表示」就是「方程组有没有解」，「线性相关」就是「齐次方程组有没有非零解」。翻译表一立，整章变简单。数一额外要会基和过渡矩阵。
+@keep $\beta$ 能由 $\alpha_1,\dots,\alpha_n$ 表示 ⟺ $Ax=\beta$ 有解 ⟺ $r(A)=r(A\mid\beta)$。
+@keep $\alpha_1,\dots,\alpha_n$ 线性相关 ⟺ $Ax=0$ 有非零解 ⟺ $r(A)\lt n$。
+@keep 向量组的秩 = 极大无关组的个数 = 排成矩阵的秩。
+@keep 过渡矩阵：$(\beta_1,\dots,\beta_n)=(\alpha_1,\dots,\alpha_n)C$。
+@recall 向量个数大于维数时，一定如何？ || 一定线性相关。
+@recall 部分相关与整体相关的关系？ || 部分相关 ⟹ 整体相关；整体无关 ⟹ 部分无关。
+@recall 求极大无关组的步骤？ || 向量排成列，只做**行**变换化阶梯形，首元所在列对应的原向量即为一组。
+@recall 施密特正交化第二步公式？ || $\beta_2=\alpha_2-\frac{(\alpha_2,\beta_1)}{(\beta_1,\beta_1)}\beta_1$。
+@recall 坐标变换公式？ || 由 $\beta=\alpha C$，若 $x$ 是旧坐标、$y$ 是新坐标，则 $x=Cy$。
+
+## 翻译表
+记 $A=(\alpha_1,\alpha_2,\dots,\alpha_n)$，按列排。
+:::thm lindef | 线性表示与线性相关 | 定义
+**线性表示**：$\beta=k_1\alpha_1+\cdots+k_n\alpha_n$ ⟺ $Ax=\beta$ 有解。
+**线性相关**：存在不全为 $0$ 的 $k_i$，使 $k_1\alpha_1+\cdots+k_n\alpha_n=0$。否则称**线性无关**。
+相关 ⟺ $Ax=0$ 有非零解 ⟺ $r(A)\lt n$；无关 ⟺ $r(A)=n$。方阵情形：相关 ⟺ $\vert A\vert=0$。
+:::
+!fig f18_dep | 平面上三个向量必相关：第三个总能由前两个合成。若两个向量共线，则一个是另一个的倍数，也相关。
+:::thm linthm | 相关性的基本结论
+(1) 向量个数 > 维数 ⟹ 相关。
+(2) 部分相关 ⟹ 整体相关；整体无关 ⟹ 部分无关。
+(3) 无关的向量组加长（添分量）后仍无关；相关的减短后仍相关。
+(4) 向量组相关 ⟺ 其中至少一个向量可由其余的表示。
+(5) $\alpha_1,\dots,\alpha_r$ 无关，加上 $\beta$ 后相关 ⟹ $\beta$ 可由 $\alpha_i$ **唯一**表示。
+(6) 若 $\alpha_1,\dots,\alpha_s$ 可由 $\beta_1,\dots,\beta_t$ 表示，且 $s\gt t$，则 $\alpha$ 组相关。少数表示多数，多数必相关。
+(7) 两向量组可以互相表示，称为**等价**。等价的向量组秩相同。
+:::
+**第 17 期的基础解系**：$\xi_1,\dots,\xi_{n-r}$ 在自由变量分量上是单位向量，由 (3) 知它们线性无关，且能表示全部解。这就是基础解系的严格定义。
+:::ex 带参数判定
+设 $\alpha_1=(1,1,1)^T,\alpha_2=(1,2,3)^T,\alpha_3=(1,3,t)^T$。$t$ 为何值时向量组相关？
+:::
+:::paper
+解 由[[lindef]]，只需计算行列式：
+$$\vert\alpha_1,\alpha_2,\alpha_3\vert=\begin{vmatrix}1&1&1\\1&2&3\\1&3&t\end{vmatrix}\overset{r_2-r_1,r_3-r_1}{=}\begin{vmatrix}1&1&1\\0&1&2\\0&2&t-1\end{vmatrix}=t-5.$$
+∎ 当 $t=5$ 时线性相关，$t\neq5$ 时线性无关。
+:::
+:::ex 用定义证无关
+设 $\alpha_1,\alpha_2,\alpha_3$ 线性无关，证明 $\beta_1=\alpha_1+\alpha_2$，$\beta_2=\alpha_2+\alpha_3$，$\beta_3=\alpha_3+\alpha_1$ 线性无关。
+:::
+:::think
+抽象向量，用定义：设组合为 $0$，代入后重新合并，由 $\alpha$ 组无关得到系数方程。
+:::
+:::paper
+证 设 $k_1\beta_1+k_2\beta_2+k_3\beta_3=0$，代入并按 $\alpha_i$ 合并：
+$$(k_1+k_3)\alpha_1+(k_1+k_2)\alpha_2+(k_2+k_3)\alpha_3=0.$$
+因 $\alpha_1,\alpha_2,\alpha_3$ 线性无关，由[[lindef]]，各系数为 $0$：
+$$k_1+k_3=0,\quad k_1+k_2=0,\quad k_2+k_3=0.$$
+其系数行列式 $\begin{vmatrix}1&0&1\\1&1&0\\0&1&1\end{vmatrix}=2\neq0$，只有零解 $k_1=k_2=k_3=0$。
+∎ 故 $\beta_1,\beta_2,\beta_3$ 线性无关。证毕。
+:::
+:::note
+也可写成 $(\beta_1,\beta_2,\beta_3)=(\alpha_1,\alpha_2,\alpha_3)C$，由 $\vert C\vert=2\neq0$ 直接得到。这个乘法式子在大题里经常用。
+:::
+
+## 极大无关组
+:::thm maxind | 极大无关组与向量组的秩
+向量组中，$r$ 个无关的向量，且任意 $r+1$ 个都相关，称这 $r$ 个为**极大无关组**，$r$ 叫向量组的**秩**。
+**向量组的秩 = 排成矩阵的秩**（行秩 = 列秩 = 矩阵的秩）。
+求法：向量按列排，**只做初等行变换**化成阶梯形，首元所在的列对应的原向量构成一个极大无关组。
+:::
+:::ex 求极大无关组
+求 $\alpha_1=(1,1,1)^T$，$\alpha_2=(1,2,3)^T$，$\alpha_3=(2,3,4)^T$，$\alpha_4=(1,0,-1)^T$ 的秩和一个极大无关组，并用它表示其余向量。
+:::
+:::paper
+解 按列排并作行变换，化到行最简：
+$$\begin{pmatrix}1&1&2&1\\1&2&3&0\\1&3&4&-1\end{pmatrix}\to\begin{pmatrix}1&1&2&1\\0&1&1&-1\\0&2&2&-2\end{pmatrix}\to\begin{pmatrix}1&0&1&2\\0&1&1&-1\\0&0&0&0\end{pmatrix}.$$
+由[[maxind]]，秩为 2，首元在第 1、2 列，$\alpha_1,\alpha_2$ 是一个极大无关组。读最简形第 3、4 列，
+∎ 得 $\alpha_3=\alpha_1+\alpha_2$，$\alpha_4=2\alpha_1-\alpha_2$。
+:::
+
+## 向量空间、基与过渡矩阵（数一）
+:::thm basis | 基与过渡矩阵
+$\mathbb R^n$ 中 $n$ 个线性无关的向量叫一组**基**。$\alpha=x_1\alpha_1+\cdots+x_n\alpha_n$ 中的 $(x_1,\dots,x_n)^T$ 叫**坐标**。
+基 $\alpha$ 到基 $\beta$ 的**过渡矩阵** $C$：$(\beta_1,\dots,\beta_n)=(\alpha_1,\dots,\alpha_n)C$，即 $C=A^{-1}B$。
+**坐标变换**：同一向量的旧坐标 $x$、新坐标 $y$ 满足 $x=Cy$。
+:::
+:::ex 过渡矩阵
+求 $\mathbb R^2$ 中由基 $\alpha_1=(1,0)^T,\alpha_2=(1,1)^T$ 到基 $\beta_1=(1,2)^T,\beta_2=(0,1)^T$ 的过渡矩阵。
+:::
+:::paper
+解 由[[basis]]，$C=A^{-1}B$，其中 $A=\begin{pmatrix}1&1\\0&1\end{pmatrix}$，$B=\begin{pmatrix}1&0\\2&1\end{pmatrix}$。
+∎ $C=\begin{pmatrix}1&-1\\0&1\end{pmatrix}\begin{pmatrix}1&0\\2&1\end{pmatrix}=\begin{pmatrix}-1&-1\\2&1\end{pmatrix}$。
+:::
+
+## 内积与施密特正交化
+内积 $(\alpha,\beta)=\alpha^T\beta$。$(\alpha,\beta)=0$ 称**正交**。$A^TA=E$ 的方阵叫**正交矩阵**，列向量组两两正交且都是单位向量，$\vert A\vert=\pm1$。
+:::thm schmidt | 施密特正交化
+线性无关的 $\alpha_1,\alpha_2,\alpha_3$：
+$$\beta_1=\alpha_1,\quad\beta_2=\alpha_2-\frac{(\alpha_2,\beta_1)}{(\beta_1,\beta_1)}\beta_1,\quad\beta_3=\alpha_3-\frac{(\alpha_3,\beta_1)}{(\beta_1,\beta_1)}\beta_1-\frac{(\alpha_3,\beta_2)}{(\beta_2,\beta_2)}\beta_2.$$
+再各自除以长度得到单位向量。
+:::
+思想：从新向量里减去它在已有方向上的投影，剩下的自然垂直。这个工具第 20 期马上要用。

@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>换一组坐标，矩阵就变成对角 · 第20期 · 重读报</title>
+<link rel="stylesheet" href="assets/katex/katex.min.css">
+<link rel="stylesheet" href="assets/paper.css">
+</head><body class="issue" data-no="20" data-prev="q19.html" data-next="q21.html">
+<header class="strip"><a class="brand" href="index.html">重读报</a>
+<span class="strip-m">第 20 期 · 线性代数 · 相似与对角化</span>
+<nav class="tools"><button data-a="toc" title="目录 (T)">目录</button><button data-a="rail" class="only-narrow">定理<i id="railn"></i></button><button data-a="hide" title="遮住卷面，先自己写 (H)">遮卷面</button><button data-a="night" title="夜读">夜读</button></nav></header>
+<main class="sheet" id="sheet">
+<section class="cover" id="cover">
+<div class="mast"><div class="mast-l">线性代数<br>第 20 期</div><div class="mast-c">重读报</div><div class="mast-r">本期约 18 分钟<br>相似与对角化</div></div>
+<h1>换一组坐标，矩阵就变成对角</h1>
+<p class="deck">对角矩阵的幂和行列式都是口算。相似对角化就是找到一组让 <span class="m">A</span> 变成对角矩阵的坐标，而这组坐标正是特征向量。实对称矩阵更好，不但一定行，还能用正交矩阵完成。</p>
+<div class="cover-grid">
+<div class="cover-keep"><h4>本期只记这几行</h4><ol><li><span class="m">P^{-1}AP=B</span>：相似矩阵有相同的特征值、行列式、迹、秩。</li><li>可对角化 ⟺ 有 <span class="m">n</span> 个线性无关特征向量 ⟺ 每个 <span class="m">k</span> 重根 <span class="m">\lambda</span> 都有 <span class="m">r(\lambda E-A)=n-k</span>。</li><li><span class="m">P</span> 的列是特征向量，顺序与对角阵上的 <span class="m">\lambda</span> 对应。</li><li>实对称：特征值全实，不同特征值的向量正交，一定可正交对角化。</li></ol></div>
+<div class="cover-prev"><h4>开读前，先答上期</h4><div id="prevq"></div></div>
+<div class="cover-toc"><h4>本期目录</h4><ol><li>相似</li><li>对角化的条件和步骤</li><li>实对称矩阵</li></ol><p class="hint">→ 键 / 点右缘 / 左滑翻页</p></div>
+</div></section>
+<section class="stage" id="stage" hidden>
+<div class="viewport" id="vp"><div class="flow" id="flow">
+<h2>相似</h2>
+<div class="thm" id="t-simdef"><div class="thm-h"><span>定义</span>相似矩阵</div><p>若存在可逆矩阵 <span class="m">P</span>，使 <span class="m">P^{-1}AP=B</span>，称 <span class="m">A</span> 与 <span class="m">B</span> <b>相似</b>，记 <span class="m">A\sim B</span>。</p>
+<p><b>不变量</b>：<span class="m">\vert\lambda E-A\vert=\vert\lambda E-B\vert</span>（特征值相同），<span class="m">\vert A\vert=\vert B\vert</span>，<span class="m">\mathrm{tr}A=\mathrm{tr}B</span>，<span class="m">r(A)=r(B)</span>。这些只是<b>必要条件</b>。</p></div>
+<div class="like"><div class="b-h">打个比方</div><p>同一套家具在两张不同坐标的平面图上。数字变了，房间没变。特征值就是不随坐标变化的「房间本身的尺寸」。</p></div>
+<div class="ex"><div class="ex-h">例 20.1<span class="ex-tag">用不变量求参数</span></div><p>设 <span class="m">A=\begin{pmatrix}1&amp;a\\0&amp;2\end{pmatrix}</span> 相似于 <span class="m">B=\begin{pmatrix}b&amp;0\\0&amp;2\end{pmatrix}</span>，求 <span class="m">b</span>。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 由<a class="c" data-t="simdef">相似矩阵</a>，迹相等：<span class="m">1+2=b+2</span>，</p>
+<p class="fin">故 <span class="m">b=1</span>。</p></div>
+<h2>对角化的条件和步骤</h2>
+<div class="thm" id="t-diag"><div class="thm-h"><span>定理</span>相似对角化</div><p><span class="m">n</span> 阶 <span class="m">A</span> 可对角化 ⟺ <span class="m">A</span> 有 <span class="m">n</span> 个线性无关的特征向量。</p>
+<p><b>判定</b>：(1) <span class="m">n</span> 个特征值互不相同 ⟹ 可对角化。(2) 有重根时，对每个 <span class="m">k</span> 重根 <span class="m">\lambda</span>，要求 <span class="m">n-r(\lambda E-A)=k</span>。</p>
+<p><b>写法</b>：<span class="m">P=(\xi_1,\dots,\xi_n)</span>，则 <span class="m">P^{-1}AP=\mathrm{diag}(\lambda_1,\dots,\lambda_n)</span>，<span class="m">\xi_i</span> 与 <span class="m">\lambda_i</span> 次序对应。</p>
+<p>由此 <span class="m">A^m=P\Lambda^mP^{-1}</span>。</p></div>
+<div class="ex"><div class="ex-h">例 20.2<span class="ex-tag">判定 + 求幂</span></div><p><span class="m">A=\begin{pmatrix}2&amp;0&amp;0\\1&amp;2&amp;-1\\1&amp;0&amp;1\end{pmatrix}</span>（第 19 期例 19.1）。判断 <span class="m">A</span> 能否对角化，若能，写出 <span class="m">P</span> 和对角矩阵，并求 <span class="m">A^n</span>。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 由例 19.1，<span class="m">\lambda_1=\lambda_2=2</span>，<span class="m">\lambda_3=1</span>。<span class="m">\lambda=2</span> 时 <span class="m">r(2E-A)=1</span>，<span class="m">3-1=2</span>，等于重数。由<a class="c" data-t="diag">相似对角化</a>，<span class="m">A</span> 可对角化。<span class="pt">3分</span></p>
+<p>取 <span class="m">P=(\xi_1,\xi_2,\xi_3)=\begin{pmatrix}1&amp;0&amp;0\\0&amp;1&amp;1\\1&amp;0&amp;1\end{pmatrix}</span>，则 <span class="m">P^{-1}AP=\Lambda=\mathrm{diag}(2,2,1)</span>。<span class="pt">3分</span></p>
+<p>求得 <span class="m">P^{-1}=\begin{pmatrix}1&amp;0&amp;0\\1&amp;1&amp;-1\\-1&amp;0&amp;1\end{pmatrix}</span>，于是 <span class="pt">2分</span></p>
+<div class="M">A^n=P\Lambda^nP^{-1}=\begin{pmatrix}2^n&amp;0&amp;0\\2^n-1&amp;2^n&amp;1-2^n\\2^n-1&amp;0&amp;1\end{pmatrix}.</div>
+<p class="fin"><span class="m">A^n</span> 如上。代入 <span class="m">n=1</span> 即回到 <span class="m">A</span>，可用来检查。</p></div>
+<div class="trap"><div class="b-h">易错</div><p><span class="m">P</span> 的列顺序和对角矩阵必须一致。写 <span class="m">\mathrm{diag}(2,2,1)</span>，就必须把 <span class="m">\lambda=1</span> 的向量放在第三列。</p></div>
+<h2>实对称矩阵</h2>
+<div class="thm" id="t-symeig"><div class="thm-h"><span>定理</span>实对称矩阵的性质</div><p>实对称矩阵 <span class="m">A=A^T</span>：</p>
+<p>(1) 特征值都是实数。</p>
+<p>(2) 不同特征值对应的特征向量<b>正交</b>。</p>
+<p>(3) 一定可以对角化，且存在<b>正交矩阵</b> <span class="m">Q</span>（<span class="m">Q^{-1}=Q^T</span>），使 <span class="m">Q^TAQ=\Lambda</span>。</p></div>
+<p><b>步骤</b>：求特征值 → 求特征向量 → 同一特征值内部施密特正交化（<a class="c" data-t="schmidt">施密特正交化</a>）→ 全部单位化 → 排成 <span class="m">Q</span>。</p>
+<div class="ex"><div class="ex-h">例 20.3<span class="ex-tag">正交对角化（大题）</span></div><p>设 <span class="m">A=\begin{pmatrix}0&amp;1&amp;1\\1&amp;0&amp;1\\1&amp;1&amp;0\end{pmatrix}</span>，求正交矩阵 <span class="m">Q</span>，使 <span class="m">Q^TAQ</span> 为对角矩阵。</p></div>
+<div class="think"><div class="b-h">思路</div><p>行和都是 2，<span class="m">(1,1,1)^T</span> 必是特征值 2 的特征向量。<span class="m">A+E</span> 秩为 1，<span class="m">-1</span> 是二重特征值。可用这个检查。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 特征方程（各列加到第一列后提因子）：</p>
+<div class="M">\vert\lambda E-A\vert=(\lambda-2)(\lambda+1)^2=0,</div>
+<p>特征值 <span class="m">\lambda_1=2</span>，<span class="m">\lambda_2=\lambda_3=-1</span>。<span class="pt">3分</span></p>
+<p><span class="m">\lambda=2</span>：解 <span class="m">(2E-A)x=0</span>，得 <span class="m">\xi_1=(1,1,1)^T</span>。<span class="pt">2分</span></p>
+<p><span class="m">\lambda=-1</span>：<span class="m">-E-A</span> 化为 <span class="m">\begin{pmatrix}1&amp;1&amp;1\\0&amp;0&amp;0\\0&amp;0&amp;0\end{pmatrix}</span>，得 <span class="m">\xi_2=(-1,1,0)^T</span>，<span class="m">\xi_3=(-1,0,1)^T</span>。<span class="pt">2分</span></p>
+<p>由<a class="c" data-t="schmidt">施密特正交化</a>对 <span class="m">\xi_2,\xi_3</span> 正交化：取 <span class="m">\beta_2=\xi_2</span>，</p>
+<span class="pt">2分</span><div class="M">\beta_3=\xi_3-\frac{(\xi_3,\beta_2)}{(\beta_2,\beta_2)}\beta_2=(-1,0,1)^T-\frac{1}{2}(-1,1,0)^T=\frac{1}{2}(-1,-1,2)^T.</div>
+<p>由<a class="c" data-t="symeig">实对称矩阵的性质</a>，<span class="m">\xi_1</span> 自动与 <span class="m">\beta_2,\beta_3</span> 正交。单位化并排成</p>
+<span class="pt">2分</span><div class="M">Q=\begin{pmatrix}\frac{1}{\sqrt3}&amp;-\frac{1}{\sqrt2}&amp;-\frac{1}{\sqrt6}\\\frac{1}{\sqrt3}&amp;\frac{1}{\sqrt2}&amp;-\frac{1}{\sqrt6}\\\frac{1}{\sqrt3}&amp;0&amp;\frac{2}{\sqrt6}\end{pmatrix}.</div>
+<p class="fin">则 <span class="m">Q</span> 是正交矩阵，<span class="m">Q^TAQ=\mathrm{diag}(2,-1,-1)</span>。</p></div>
+<div class="ex"><div class="ex-h">例 20.4<span class="ex-tag">反求矩阵</span></div><p><span class="m">3</span> 阶实对称矩阵 <span class="m">A</span> 的特征值为 <span class="m">1,1,4</span>，<span class="m">\lambda=4</span> 的特征向量为 <span class="m">\xi=(1,1,1)^T</span>。求 <span class="m">A</span>。</p></div>
+<div class="think"><div class="b-h">思路</div><p>不必求全部特征向量。<span class="m">\lambda=4</span> 方向已知，其余方向都是特征值 <span class="m">1</span>，把 <span class="m">A</span> 写成 <span class="m">E+</span> 秩 1 矩阵。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 令 <span class="m">e=\frac{1}{\sqrt3}\xi</span>。由<a class="c" data-t="symeig">实对称矩阵的性质</a>，<span class="m">\lambda=1</span> 的特征空间与 <span class="m">e</span> 正交。令 <span class="m">B=E+3ee^T</span>，则 <span class="m">Be=e+3e=4e</span>；对任何与 <span class="m">e</span> 正交的 <span class="m">x</span>，<span class="m">Bx=x</span>。<span class="m">B</span> 与 <span class="m">A</span> 在一组完整的基上作用相同，故 <span class="m">A=B</span>。</p>
+<p class="fin">所以 <span class="m">A=E+\xi\xi^T=\begin{pmatrix}2&amp;1&amp;1\\1&amp;2&amp;1\\1&amp;1&amp;2\end{pmatrix}</span>。</p></div>
+
+<div class="endq"><h2>今日考你</h2><p class="hint">合上前答一遍：先想，再点开。答错的会回到后面几期和温故版。</p><div class="rq" data-q="20-0"><p class="rq-q">判断 <span class="m">k</span> 重特征值 <span class="m">\lambda</span> 是否「够数」，看什么？</p><p class="rq-a"><span class="m">n-r(\lambda E-A)</span> 是否等于 <span class="m">k</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="20-1"><p class="rq-q">相似矩阵必须满足的四个不变量？</p><p class="rq-a">特征值、行列式、迹、秩。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="20-2"><p class="rq-q">实对称矩阵同一特征值的多个特征向量要怎么处理？</p><p class="rq-a">施密特正交化后再单位化。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="20-3"><p class="rq-q"><span class="m">A=P\Lambda P^{-1}</span> 时 <span class="m">A^n</span> 等于？</p><p class="rq-a"><span class="m">P\Lambda^nP^{-1}</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div></div>
+<div class="endnext" id="endnext"></div>
+<div id="sent"></div>
+</div></div>
+<aside class="rail" id="rail"><div class="rail-h">本版引用 · 定理全文</div><div id="railc"></div></aside>
+</section></main>
+<footer class="pager"><button id="pv" aria-label="上一版">‹</button><div class="pginfo"><span id="pgt"></span><div class="bar"><i id="pgb"></i></div></div><button id="nx" aria-label="下一版">›</button></footer>
+<div class="sheetup" id="sheetup" hidden><div class="sheetup-h"><span>定理全文</span><button id="sheetx">关闭</button></div><div id="sheetc"></div></div>
+<div class="drawer" id="drawer" hidden></div>
+<script src="assets/katex/katex.min.js"></script><script src="assets/data.js"></script><script src="assets/paper.js"></script>
+</body></html>

@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>方程组的全部答案都写在阶梯形里 · 第17期 · 重读报</title>
+<link rel="stylesheet" href="assets/katex/katex.min.css">
+<link rel="stylesheet" href="assets/paper.css">
+</head><body class="issue" data-no="17" data-prev="q16.html" data-next="q18.html">
+<header class="strip"><a class="brand" href="index.html">重读报</a>
+<span class="strip-m">第 17 期 · 线性代数 · 秩与线性方程组</span>
+<nav class="tools"><button data-a="toc" title="目录 (T)">目录</button><button data-a="rail" class="only-narrow">定理<i id="railn"></i></button><button data-a="hide" title="遮住卷面，先自己写 (H)">遮卷面</button><button data-a="night" title="夜读">夜读</button></nav></header>
+<main class="sheet" id="sheet">
+<section class="cover" id="cover">
+<div class="mast"><div class="mast-l">线性代数<br>第 17 期</div><div class="mast-c">重读报</div><div class="mast-r">本期约 19 分钟<br>秩与线性方程组</div></div>
+<h1>方程组的全部答案都写在阶梯形里</h1>
+<p class="deck">这是线代大题的头号来源。秩就是消元后还剩几个有效方程。解的判定、解的结构、带参数讨论，全都建立在这一个数上。</p>
+<div class="cover-grid">
+<div class="cover-keep"><h4>本期只记这几行</h4><ol><li>秩 = 行阶梯形的非零行数 = 最高阶非零子式的阶数。</li><li><span class="m">Ax=b</span>：<span class="m">r(A)\neq r(A\mid b)</span> 无解；<span class="m">=n</span> 唯一解；<span class="m">\lt n</span> 无穷多解。</li><li><span class="m">Ax=0</span> 解空间的「维数」是 <span class="m">n-r(A)</span>。</li><li>通解 = 特解 + 齐次通解。</li></ol></div>
+<div class="cover-prev"><h4>开读前，先答上期</h4><div id="prevq"></div></div>
+<div class="cover-toc"><h4>本期目录</h4><ol><li>秩</li><li>齐次方程组 <span class="m">Ax=0</span></li><li>非齐次方程组 <span class="m">Ax=b</span></li></ol><p class="hint">→ 键 / 点右缘 / 左滑翻页</p></div>
+</div></section>
+<section class="stage" id="stage" hidden>
+<div class="viewport" id="vp"><div class="flow" id="flow">
+<h2>秩</h2>
+<div class="thm" id="t-rankdef"><div class="thm-h"><span>定义</span>矩阵的秩</div><p>矩阵经初等行变换化成行阶梯形，<b>非零行的行数</b>叫矩阵的秩，记作 <span class="m">r(A)</span>。等价地，它是 <span class="m">A</span> 中不为零的子式的最高阶数。初等变换不改变秩。</p></div>
+<div class="like"><div class="b-h">打个比方</div><p>三个方程里如果第三个是前两个相加，它就没有提供新信息。秩就是这个方程组里真正独立的信息条数。</p></div>
+<div class="thm" id="t-rankprop"><div class="thm-h"><span>公式</span>秩的公式</div><ul><li><span class="m">r(A)=r(A^T)=r(A^TA)</span>；<span class="m">P,Q</span> 可逆时 <span class="m">r(PAQ)=r(A)</span>。</li><li><span class="m">r(A+B)\le r(A)+r(B)</span>；<span class="m">r(AB)\le\min\{r(A),r(B)\}</span>。</li><li><span class="m">A_{m\times n}B_{n\times s}=O</span> ⟹ <span class="m">r(A)+r(B)\le n</span>。</li><li><span class="m">r(A^*)=n</span>（<span class="m">r(A)=n</span>）；<span class="m">r(A^*)=1</span>（<span class="m">r(A)=n-1</span>）；<span class="m">r(A^*)=0</span>（<span class="m">r(A)\lt n-1</span>）。</li></ul></div>
+<div class="ex"><div class="ex-h">例 17.1<span class="ex-tag">求秩</span></div><p>已知 <span class="m">A=\begin{pmatrix}1&amp;2&amp;-1\\2&amp;5&amp;a\\1&amp;3&amp;2\end{pmatrix}</span>，<span class="m">r(A)=2</span>，求 <span class="m">a</span>。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 作初等行变换：</p>
+<div class="M">A\xrightarrow[r_3-r_1]{r_2-2r_1}\begin{pmatrix}1&amp;2&amp;-1\\0&amp;1&amp;a+2\\0&amp;1&amp;3\end{pmatrix}\xrightarrow{r_3-r_2}\begin{pmatrix}1&amp;2&amp;-1\\0&amp;1&amp;a+2\\0&amp;0&amp;1-a\end{pmatrix}.</div>
+<p>由<a class="c" data-t="rankdef">矩阵的秩</a>，<span class="m">r(A)=2</span> 要求第三行为零行，</p>
+<p class="fin">故 <span class="m">a=1</span>。</p></div>
+<h2>齐次方程组 <span class="m">Ax=0</span></h2>
+<p><span class="m">A</span> 为 <span class="m">m\times n</span>。消元后，非零行首元对应的未知数叫主变量（<span class="m">r</span> 个），其余 <span class="m">n-r</span> 个叫<b>自由变量</b>。</p>
+<div class="thm" id="t-homosys"><div class="thm-h"><span>定理</span>齐次方程组的解</div><p><span class="m">Ax=0</span> 只有零解 ⟺ <span class="m">r(A)=n</span>；有非零解 ⟺ <span class="m">r(A)\lt n</span>。</p>
+<p>令自由变量依次取 <span class="m">(1,0,\dots),(0,1,\dots),\dots</span>，得到 <span class="m">n-r</span> 个解 <span class="m">\xi_1,\dots,\xi_{n-r}</span>，称为<b>基础解系</b>。全部解是</p>
+<div class="M">x=k_1\xi_1+\cdots+k_{n-r}\xi_{n-r}.</div></div>
+<div class="ex"><div class="ex-h">例 17.2<span class="ex-tag">基础解系</span></div><p>求 <span class="m">\begin{cases}x_1+x_2-x_3-x_4=0\\2x_1+2x_2+x_3+x_4=0\end{cases}</span> 的通解。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 对系数矩阵作行变换：</p>
+<div class="M">\begin{pmatrix}1&amp;1&amp;-1&amp;-1\\2&amp;2&amp;1&amp;1\end{pmatrix}\to\begin{pmatrix}1&amp;1&amp;-1&amp;-1\\0&amp;0&amp;3&amp;3\end{pmatrix}\to\begin{pmatrix}1&amp;1&amp;0&amp;0\\0&amp;0&amp;1&amp;1\end{pmatrix}.</div>
+<p><span class="m">r(A)=2</span>，<span class="m">n=4</span>，由<a class="c" data-t="homosys">齐次方程组的解</a>基础解系含 2 个解。同解方程组为 <span class="m">x_1=-x_2</span>，<span class="m">x_3=-x_4</span>，<span class="m">x_2,x_4</span> 为自由变量。</p>
+<p>令 <span class="m">(x_2,x_4)=(1,0)</span>，得 <span class="m">\xi_1=(-1,1,0,0)^T</span>；令 <span class="m">(x_2,x_4)=(0,1)</span>，得 <span class="m">\xi_2=(0,0,-1,1)^T</span>。</p>
+<p class="fin">通解为 <span class="m">x=k_1\xi_1+k_2\xi_2</span>，<span class="m">k_1,k_2</span> 为任意常数。</p></div>
+<h2>非齐次方程组 <span class="m">Ax=b</span></h2>
+<div class="thm" id="t-nonhomo"><div class="thm-h"><span>定理</span>非齐次方程组的解</div><p>(1) <span class="m">r(A)\neq r(A\mid b)</span>：无解。</p>
+<p>(2) <span class="m">r(A)=r(A\mid b)=n</span>：唯一解。</p>
+<p>(3) <span class="m">r(A)=r(A\mid b)\lt n</span>：无穷多解，通解 = 一个特解 <span class="m">\eta^*</span> + <span class="m">Ax=0</span> 的通解。</p>
+<p>解的性质：两个 <span class="m">Ax=b</span> 的解之差是 <span class="m">Ax=0</span> 的解；<span class="m">\eta</span> 是 <span class="m">Ax=b</span> 的解、<span class="m">\xi</span> 是 <span class="m">Ax=0</span> 的解，则 <span class="m">\eta+\xi</span> 是 <span class="m">Ax=b</span> 的解。</p></div>
+<div class="ex"><div class="ex-h">例 17.3<span class="ex-tag">带参数讨论（大题）</span></div><p>讨论 <span class="m">a</span> 取何值时，方程组</p>
+<div class="M">\begin{cases}x_1+x_2+ax_3=1\\x_1+ax_2+x_3=1\\ax_1+x_2+x_3=-2\end{cases}</div>
+<p>无解、有唯一解、有无穷多解，有解时求解。</p></div>
+<div class="think"><div class="b-h">思路</div><p>方阵型，先算系数行列式（行和相等），定出 <span class="m">a</span> 的分界值。然后分情况。把三式相加能省很多事。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 系数行列式（各列加到第一列）：</p>
+<span class="pt">2分</span><div class="M">\vert A\vert=\begin{vmatrix}1&amp;1&amp;a\\1&amp;a&amp;1\\a&amp;1&amp;1\end{vmatrix}=-(a+2)(a-1)^2.</div>
+<p>(1) <span class="m">a\neq1</span> 且 <span class="m">a\neq-2</span> 时，<span class="m">\vert A\vert\neq0</span>，方程组有唯一解。三式相加得 <span class="m">(a+2)(x_1+x_2+x_3)=0</span>，故 <span class="m">x_1+x_2+x_3=0</span>。第一式减去此式得 <span class="m">(a-1)x_3=1</span>；同理 <span class="m">(a-1)x_2=1</span>，<span class="m">(a-1)x_1=-2</span>。解为</p>
+<span class="pt">4分</span><div class="M">x_1=-\frac{2}{a-1},\quad x_2=x_3=\frac{1}{a-1}.</div>
+<p>(2) <span class="m">a=1</span> 时，增广矩阵化为 <span class="m">\begin{pmatrix}1&amp;1&amp;1&amp;1\\0&amp;0&amp;0&amp;0\\0&amp;0&amp;0&amp;-3\end{pmatrix}</span>，<span class="m">r(A)=1</span>，<span class="m">r(A\mid b)=2</span>，由<a class="c" data-t="nonhomo">非齐次方程组的解</a>方程组无解。<span class="pt">2分</span></p>
+<p>(3) <span class="m">a=-2</span> 时，</p>
+<div class="M">(A\mid b)=\begin{pmatrix}1&amp;1&amp;-2&amp;1\\1&amp;-2&amp;1&amp;1\\-2&amp;1&amp;1&amp;-2\end{pmatrix}\to\begin{pmatrix}1&amp;0&amp;-1&amp;1\\0&amp;1&amp;-1&amp;0\\0&amp;0&amp;0&amp;0\end{pmatrix},</div>
+<p><span class="m">r(A)=r(A\mid b)=2\lt3</span>，有无穷多解。特解 <span class="m">(1,0,0)^T</span>，<span class="m">Ax=0</span> 的基础解系 <span class="m">(1,1,1)^T</span>。<span class="pt">3分</span></p>
+<p class="fin">综上：<span class="m">a=1</span> 时无解；<span class="m">a=-2</span> 时通解 <span class="m">x=(1,0,0)^T+k(1,1,1)^T</span>；其他情形唯一解如上。</p></div>
+<div class="ex"><div class="ex-h">例 17.4<span class="ex-tag">选择</span></div><p>设 <span class="m">A,B</span> 都是 <span class="m">4</span> 阶非零矩阵，<span class="m">AB=O</span>，<span class="m">r(A)=3</span>。则 <span class="m">r(B)=</span>（　　）。</p>
+<p>(A) 0　(B) 1　(C) 2　(D) 3</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>答案 (B)。由<a class="c" data-t="rankprop">秩的公式</a>，<span class="m">r(A)+r(B)\le4</span>，故 <span class="m">r(B)\le1</span>；又 <span class="m">B\neq O</span>，<span class="m">r(B)\ge1</span>。</p></div>
+<p><b>矩阵等价</b>：<span class="m">A</span> 经初等变换可化为 <span class="m">B</span>，等价于同型且 <span class="m">r(A)=r(B)</span>。</p>
+<p><b>两方程组同解</b>：<span class="m">Ax=0</span> 与 <span class="m">Bx=0</span> 同解 ⟺ <span class="m">r(A)=r(B)=r\begin{pmatrix}A\\B\end{pmatrix}</span>。<b>公共解</b>：把两个方程组联立求解。</p>
+<div class="note"><div class="b-h">批注</div><p><span class="m">AB=O</span> 的另一层读法：<span class="m">B</span> 的每一列都是 <span class="m">Ax=0</span> 的解。这个读法在线代大题里极其常见。</p></div>
+
+<div class="endq"><h2>今日考你</h2><p class="hint">合上前答一遍：先想，再点开。答错的会回到后面几期和温故版。</p><div class="rq" data-q="17-0"><p class="rq-q"><span class="m">r(AB)</span> 和 <span class="m">r(A),r(B)</span> 的关系？</p><p class="rq-a"><span class="m">r(AB)\le\min\{r(A),r(B)\}</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="17-1"><p class="rq-q"><span class="m">AB=O</span>（<span class="m">A</span> 为 <span class="m">m\times n</span>，<span class="m">B</span> 为 <span class="m">n\times s</span>）能得出什么？</p><p class="rq-a"><span class="m">r(A)+r(B)\le n</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="17-2"><p class="rq-q"><span class="m">r(A^*)</span> 的三种情形（<span class="m">n\ge 2</span>）？</p><p class="rq-a"><span class="m">r(A)=n</span> 时 <span class="m">n</span>；<span class="m">r(A)=n-1</span> 时 <span class="m">1</span>；<span class="m">r(A)\lt n-1</span> 时 <span class="m">0</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="17-3"><p class="rq-q"><span class="m">Ax=b</span> 有解的充要条件？</p><p class="rq-a"><span class="m">r(A)=r(A\mid b)</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="17-4"><p class="rq-q">带参数方程组（方阵）先算什么？</p><p class="rq-a">系数行列式 <span class="m">\vert A\vert</span>，<span class="m">\vert A\vert\neq0</span> 时唯一解，再逐个讨论使 <span class="m">\vert A\vert=0</span> 的参数值。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div></div>
+<div class="endnext" id="endnext"></div>
+<div id="sent"></div>
+</div></div>
+<aside class="rail" id="rail"><div class="rail-h">本版引用 · 定理全文</div><div id="railc"></div></aside>
+</section></main>
+<footer class="pager"><button id="pv" aria-label="上一版">‹</button><div class="pginfo"><span id="pgt"></span><div class="bar"><i id="pgb"></i></div></div><button id="nx" aria-label="下一版">›</button></footer>
+<div class="sheetup" id="sheetup" hidden><div class="sheetup-h"><span>定理全文</span><button id="sheetx">关闭</button></div><div id="sheetc"></div></div>
+<div class="drawer" id="drawer" hidden></div>
+<script src="assets/katex/katex.min.js"></script><script src="assets/data.js"></script><script src="assets/paper.js"></script>
+</body></html>

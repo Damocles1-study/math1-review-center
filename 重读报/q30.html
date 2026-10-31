@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>无穷多个数相加，有没有结果 · 第30期 · 重读报</title>
+<link rel="stylesheet" href="assets/katex/katex.min.css">
+<link rel="stylesheet" href="assets/paper.css">
+</head><body class="issue" data-no="30" data-prev="q29.html" data-next="q31.html">
+<header class="strip"><a class="brand" href="index.html">重读报</a>
+<span class="strip-m">第 30 期 · 多元与级数 · 常数项级数</span>
+<nav class="tools"><button data-a="toc" title="目录 (T)">目录</button><button data-a="rail" class="only-narrow">定理<i id="railn"></i></button><button data-a="hide" title="遮住卷面，先自己写 (H)">遮卷面</button><button data-a="night" title="夜读">夜读</button></nav></header>
+<main class="sheet" id="sheet">
+<section class="cover" id="cover">
+<div class="mast"><div class="mast-l">多元与级数<br>第 30 期</div><div class="mast-c">重读报</div><div class="mast-r">本期约 16 分钟<br>常数项级数</div></div>
+<h1>无穷多个数相加，有没有结果</h1>
+<p class="deck">判敛是选择题的主力。别急着套判别法，先问三件事：通项趋于零吗？是正项级数吗？能和 <span class="m">p</span> 级数比吗？流程走对了，这一部分只是读表。</p>
+<div class="cover-grid">
+<div class="cover-keep"><h4>本期只记这几行</h4><ol><li>必要条件：<span class="m">\sum u_n</span> 收敛 ⟹ <span class="m">u_n\to0</span>。<span class="m">u_n\not\to0</span> 直接发散。</li><li><span class="m">\sum\frac{1}{n^p}</span>：<span class="m">p\gt1</span> 收敛。<span class="m">\sum q^n</span>：<span class="m">\vert q\vert\lt1</span> 收敛。</li><li>正项：比较（等价无穷小阶数）；有阶乘、幂指用比值或根值。</li><li>交错：莱布尼茨。任意项：先看绝对收敛。</li></ol></div>
+<div class="cover-prev"><h4>开读前，先答上期</h4><div id="prevq"></div></div>
+<div class="cover-toc"><h4>本期目录</h4><ol><li>定义与性质</li><li>正项级数</li><li>交错与任意项</li></ol><p class="hint">→ 键 / 点右缘 / 左滑翻页</p></div>
+</div></section>
+<section class="stage" id="stage" hidden>
+<div class="viewport" id="vp"><div class="flow" id="flow">
+<h2>定义与性质</h2>
+<div class="thm" id="t-serdef"><div class="thm-h"><span>定义</span>级数收敛</div><p><span class="m">\sum\limits_{n=1}^\infty u_n</span> 的部分和 <span class="m">S_n=u_1+\cdots+u_n</span>。<span class="m">\lim\limits_{n\to\infty}S_n=S</span> 存在，称级数收敛，和为 <span class="m">S</span>。</p>
+<p><b>性质</b>：(1) 收敛 ⟹ <span class="m">u_n\to0</span>；(2) 线性；(3) 去掉有限项不改变敛散性；(4) 收敛级数任意加括号仍收敛。</p></div>
+<div class="thm" id="t-serbase"><div class="thm-h"><span>定理</span>两个基准级数</div><p><b>几何</b>：<span class="m">\sum\limits_{n=0}^\infty q^n</span> 当 <span class="m">\vert q\vert\lt1</span> 时收敛于 <span class="m">\dfrac{1}{1-q}</span>，否则发散。</p>
+<p><b><span class="m">p</span> 级数</b>：<span class="m">\sum\dfrac{1}{n^p}</span> 当 <span class="m">p\gt1</span> 时收敛，<span class="m">p\le1</span> 时发散。</p></div>
+<p><b>拆项相消</b>可以求和：</p>
+<div class="ex"><div class="ex-h">例 30.1<span class="ex-tag">求和</span></div><p>求 <span class="m">\displaystyle\sum_{n=1}^\infty\frac{1}{n(n+1)}</span>。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 <span class="m">\dfrac{1}{n(n+1)}=\dfrac{1}{n}-\dfrac{1}{n+1}</span>，部分和 <span class="m">S_n=1-\dfrac{1}{n+1}</span>。</p>
+<p class="fin">由<a class="c" data-t="serdef">级数收敛</a>，和 <span class="m">=\lim\limits_{n\to\infty}S_n=1</span>。</p></div>
+<h2>正项级数</h2>
+<div class="thm" id="t-serpos"><div class="thm-h"><span>定理</span>正项级数判别法</div><p><span class="m">u_n\ge0</span>，有：</p>
+<p><b>比较法</b>：<span class="m">u_n\le v_n</span>，<span class="m">\sum v_n</span> 收敛 ⟹ <span class="m">\sum u_n</span> 收敛；<span class="m">\sum u_n</span> 发散 ⟹ <span class="m">\sum v_n</span> 发散。</p>
+<p><b>极限比较</b>：<span class="m">\lim\frac{u_n}{v_n}=c\in(0,+\infty)</span>，则同敛散。所以<b>等价无穷小可以直接换</b>。</p>
+<p><b>比值法</b>：<span class="m">\lim\frac{u_{n+1}}{u_n}=\rho</span>；<b>根值法</b>：<span class="m">\lim\sqrt[n]{u_n}=\rho</span>。<span class="m">\rho\lt1</span> 收敛；<span class="m">\rho\gt1</span> 发散；<span class="m">\rho=1</span> 失效。</p></div>
+<figure><svg viewBox="0 0 320 200" role="img"><defs><marker id="arr2" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path class="arrh" d="M0 .8L7 4L0 7.2z"/></marker></defs><rect x="95" y="4" width="130" height="24" fill="none" stroke="var(--ink)" stroke-width=".9"/><text x="160.0" y="20" text-anchor="middle" style="font-style:normal;font-size:11px;font-family:var(--sans)" >uₙ → 0 吗？</text><line class="ln" x1="95" y1="16" x2="45" y2="16" marker-end="url(#arr2)"/><rect x="4" y="4" width="42" height="24" fill="none" stroke="var(--ink)" stroke-width=".9"/><text x="25.0" y="20" text-anchor="middle" style="font-style:normal;font-size:11px;font-family:var(--sans)" >发散</text><text x="60" y="12" style="font-style:normal;font-size:10px;font-family:var(--sans)">否</text><line class="ln" x1="160" y1="28" x2="160" y2="50" marker-end="url(#arr2)"/><text x="165" y="42" style="font-style:normal;font-size:10px;font-family:var(--sans)">是</text><rect x="95" y="50" width="130" height="24" fill="none" stroke="var(--ink)" stroke-width=".9"/><text x="160.0" y="66" text-anchor="middle" style="font-style:normal;font-size:11px;font-family:var(--sans)" >正项级数？</text><line class="ln" x1="130" y1="74" x2="80" y2="98" marker-end="url(#arr2)"/><text x="90" y="84" style="font-style:normal;font-size:10px;font-family:var(--sans)">是</text><line class="ln" x1="190" y1="74" x2="240" y2="98" marker-end="url(#arr2)"/><text x="222" y="84" style="font-style:normal;font-size:10px;font-family:var(--sans)">否</text><rect x="4" y="98" width="155" height="24" fill="none" stroke="var(--ink)" stroke-width=".9"/><text x="81.5" y="114" text-anchor="middle" style="font-style:normal;font-size:11px;font-family:var(--sans)" >等价后比较 / 比值 / 根值</text><rect x="170" y="98" width="146" height="24" fill="none" stroke="var(--ink)" stroke-width=".9"/><text x="243.0" y="114" text-anchor="middle" style="font-style:normal;font-size:11px;font-family:var(--sans)" >先取绝对值判断</text><line class="ln" x1="243" y1="122" x2="243" y2="148" marker-end="url(#arr2)"/><text x="248" y="138" style="font-style:normal;font-size:10px;font-family:var(--sans)">发散</text><rect x="170" y="148" width="146" height="24" fill="none" stroke="var(--ink)" stroke-width=".9"/><text x="243.0" y="164" text-anchor="middle" style="font-style:normal;font-size:11px;font-family:var(--sans)" >交错？用莱布尼茨</text><text x="178" y="190" style="font-style:normal;font-size:10px;font-family:var(--sans)">收敛 ⟹ 条件收敛</text></svg><figcaption>判敛流程：先看通项是否趋于 0，再分正项与任意项。</figcaption></figure>
+<div class="like"><div class="b-h">打个比方</div><p>比较法就是「找一个已知能不能过门的人比身高」。比能过门的人矮，一定能过；比过不去的人高，一定过不去。</p></div>
+<div class="ex"><div class="ex-h">例 30.2<span class="ex-tag">判敛</span></div><p>判断下列级数的敛散性：(1) <span class="m">\displaystyle\sum_{n=1}^\infty\sin\frac{1}{n}</span>；(2) <span class="m">\displaystyle\sum_{n=1}^\infty\Bigl(1-\cos\frac{1}{n}\Bigr)</span>；(3) <span class="m">\displaystyle\sum_{n=1}^\infty\frac{n}{2^n}</span>；(4) <span class="m">\displaystyle\sum_{n=1}^\infty\frac{n!}{n^n}</span>。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 均为正项级数。由<a class="c" data-t="serpos">正项级数判别法</a>：</p>
+<p>(1) <span class="m">\sin\dfrac{1}{n}\sim\dfrac{1}{n}</span>，<span class="m">\sum\frac{1}{n}</span> 发散，故原级数<b>发散</b>。</p>
+<p>(2) <span class="m">1-\cos\dfrac{1}{n}\sim\dfrac{1}{2n^2}</span>，<span class="m">p=2\gt1</span>，故原级数<b>收敛</b>。</p>
+<p>(3) <span class="m">\dfrac{u_{n+1}}{u_n}=\dfrac{n+1}{2n}\to\dfrac{1}{2}\lt1</span>，故原级数<b>收敛</b>。</p>
+<p>(4) <span class="m">\dfrac{u_{n+1}}{u_n}=\Bigl(\dfrac{n}{n+1}\Bigr)^n\to\dfrac{1}{e}\lt1</span>，故原级数<b>收敛</b>。</p></div>
+<p><b>经验</b>：通项是多项式、根式、三角等函数，用等价后比较；通项含 <span class="m">n!</span>、<span class="m">a^n</span>，用比值；通项是 <span class="m">(\cdot)^n</span>，用根值。</p>
+<h2>交错与任意项</h2>
+<div class="thm" id="t-leibniz"><div class="thm-h"><span>定理</span>莱布尼茨判别法</div><p><span class="m">\sum(-1)^{n-1}u_n</span>，<span class="m">u_n\gt0</span>。若 <span class="m">u_n</span> <b>单调递减</b>且 <span class="m">u_n\to0</span>，则级数收敛，且 <span class="m">\vert S\vert\le u_1</span>。</p></div>
+<div class="thm" id="t-absconv"><div class="thm-h"><span>定理</span>绝对收敛与条件收敛</div><p><span class="m">\sum\vert u_n\vert</span> 收敛 ⟹ <span class="m">\sum u_n</span> 收敛，称<b>绝对收敛</b>。<span class="m">\sum u_n</span> 收敛而 <span class="m">\sum\vert u_n\vert</span> 发散，称<b>条件收敛</b>。</p>
+<p>绝对收敛 + 条件收敛 = 条件收敛；绝对收敛 + 绝对收敛 = 绝对收敛；收敛 + 发散 = 发散。</p>
+<p>用比值法或根值法判出 <span class="m">\sum\vert u_n\vert</span> 发散时，<span class="m">\sum u_n</span> 也发散。</p></div>
+<div class="ex"><div class="ex-h">例 30.3<span class="ex-tag">按参数讨论</span></div><p>讨论 <span class="m">\displaystyle\sum_{n=1}^\infty\frac{(-1)^{n}}{n^p}</span>（<span class="m">p\gt0</span>）的敛散性。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 取绝对值得 <span class="m">\sum\frac{1}{n^p}</span>。由<a class="c" data-t="serbase">两个基准级数</a>，<span class="m">p\gt1</span> 时收敛，原级数绝对收敛。</p>
+<p><span class="m">0\lt p\le1</span> 时，<span class="m">\sum\frac{1}{n^p}</span> 发散，但 <span class="m">\frac{1}{n^p}</span> 单调递减趋于 <span class="m">0</span>，由<a class="c" data-t="leibniz">莱布尼茨判别法</a>，原级数收敛。</p>
+<p class="fin"><span class="m">p\gt1</span> 时绝对收敛；<span class="m">0\lt p\le1</span> 时条件收敛。</p></div>
+<div class="ex"><div class="ex-h">例 30.4<span class="ex-tag">选择</span></div><p>设 <span class="m">u_n\gt0</span>，<span class="m">\sum u_n</span> 收敛，下列级数中必收敛的是（　　）。</p>
+<p>(A) <span class="m">\sum\sqrt{u_n}</span>　(B) <span class="m">\sum u_n^2</span>　(C) <span class="m">\sum\frac{1}{u_n}</span>　(D) <span class="m">\sum(-1)^n\sqrt{u_n}</span></p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>答案 (B)。<span class="m">\sum u_n</span> 收敛，由<a class="c" data-t="serdef">级数收敛</a>，<span class="m">u_n\to0</span>，当 <span class="m">n</span> 充分大时 <span class="m">u_n\lt1</span>，于是 <span class="m">u_n^2\lt u_n</span>，由<a class="c" data-t="serpos">正项级数判别法</a>得 <span class="m">\sum u_n^2</span> 收敛。</p>
+<p>(A) 反例 <span class="m">u_n=\frac{1}{n^2}</span>，<span class="m">\sum\frac{1}{n}</span> 发散。(C) <span class="m">\frac{1}{u_n}\to+\infty</span>，发散。(D) 无法保证：<span class="m">\sqrt{u_n}</span> 不一定单调，<span class="m">\sum\sqrt{u_n}</span> 又可能发散，莱布尼茨法和绝对收敛都用不上。</p></div>
+<div class="trap"><div class="b-h">易错</div><p>去掉绝对值再看，只对「绝对收敛」成立。<span class="m">\sum u_n</span> 收敛推不出 <span class="m">\sum u_n^2</span> 收敛（任意项时）：<span class="m">u_n=\frac{(-1)^n}{\sqrt n}</span>，<span class="m">\sum u_n^2=\sum\frac{1}{n}</span> 发散。</p></div>
+
+<div class="endq"><h2>今日考你</h2><p class="hint">合上前答一遍：先想，再点开。答错的会回到后面几期和温故版。</p><div class="rq" data-q="30-0"><p class="rq-q"><span class="m">\sum\frac{1}{n}</span> 收敛吗？<span class="m">\sum\frac{(-1)^n}{n}</span> 呢？</p><p class="rq-a">前者发散；后者条件收敛。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="30-1"><p class="rq-q">比值法 <span class="m">\rho=1</span> 时？</p><p class="rq-a">失效，改用比较法。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="30-2"><p class="rq-q">莱布尼茨判别法的两个条件？</p><p class="rq-a"><span class="m">u_n</span> 单调递减，<span class="m">u_n\to0</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="30-3"><p class="rq-q">绝对收敛和收敛的关系？</p><p class="rq-a">绝对收敛 ⟹ 收敛，反之不成立。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="30-4"><p class="rq-q"><span class="m">\sum u_n</span> 收敛，<span class="m">\sum u_n^2</span> 一定收敛吗？</p><p class="rq-a">正项时一定；一般情形不一定（<span class="m">u_n=\frac{(-1)^n}{\sqrt n}</span>）。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div></div>
+<div class="endnext" id="endnext"></div>
+<div id="sent"></div>
+</div></div>
+<aside class="rail" id="rail"><div class="rail-h">本版引用 · 定理全文</div><div id="railc"></div></aside>
+</section></main>
+<footer class="pager"><button id="pv" aria-label="上一版">‹</button><div class="pginfo"><span id="pgt"></span><div class="bar"><i id="pgb"></i></div></div><button id="nx" aria-label="下一版">›</button></footer>
+<div class="sheetup" id="sheetup" hidden><div class="sheetup-h"><span>定理全文</span><button id="sheetx">关闭</button></div><div id="sheetc"></div></div>
+<div class="drawer" id="drawer" hidden></div>
+<script src="assets/katex/katex.min.js"></script><script src="assets/data.js"></script><script src="assets/paper.js"></script>
+</body></html>

@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>由样本反猜总体 · 第37期 · 重读报</title>
+<link rel="stylesheet" href="assets/katex/katex.min.css">
+<link rel="stylesheet" href="assets/paper.css">
+</head><body class="issue" data-no="37" data-prev="q36.html" data-next="index.html">
+<header class="strip"><a class="brand" href="index.html">重读报</a>
+<span class="strip-m">第 37 期 · 概率统计 · 参数估计与假设检验</span>
+<nav class="tools"><button data-a="toc" title="目录 (T)">目录</button><button data-a="rail" class="only-narrow">定理<i id="railn"></i></button><button data-a="hide" title="遮住卷面，先自己写 (H)">遮卷面</button><button data-a="night" title="夜读">夜读</button></nav></header>
+<main class="sheet" id="sheet">
+<section class="cover" id="cover">
+<div class="mast"><div class="mast-l">概率统计<br>第 37 期</div><div class="mast-c">重读报</div><div class="mast-r">本期约 22 分钟<br>参数估计与假设检验</div></div>
+<h1>由样本反猜总体</h1>
+<p class="deck">最大似然估计差不多是概率大题最后一问的固定内容，流程背下来就能拿分。无偏性就是算一个期望。区间估计和检验只考最基本的情形。读完这一期，就去做套卷。</p>
+<div class="cover-grid">
+<div class="cover-keep"><h4>本期只记这几行</h4><ol><li>矩估计：令 <span class="m">EX=\bar X</span>（两个参数再加 <span class="m">E(X^2)=\frac1n\sum X_i^2</span>），解出参数。</li><li>最大似然：写 <span class="m">L(\theta)</span>，取对数，求导令 <span class="m">0</span>；单调时取样本的端点值。</li><li>无偏：<span class="m">E\hat\theta=\theta</span>。</li><li>第一类错误（弃真）<span class="m">\alpha</span>，第二类错误（取伪）<span class="m">\beta</span>。</li></ol></div>
+<div class="cover-prev"><h4>开读前，先答上期</h4><div id="prevq"></div></div>
+<div class="cover-toc"><h4>本期目录</h4><ol><li>矩估计</li><li>最大似然估计</li><li>估计量的评价</li><li>区间估计</li><li>假设检验</li></ol><p class="hint">→ 键 / 点右缘 / 左滑翻页</p></div>
+</div></section>
+<section class="stage" id="stage" hidden>
+<div class="viewport" id="vp"><div class="flow" id="flow">
+<h2>矩估计</h2>
+<div class="thm" id="t-mom"><div class="thm-h"><span>定理</span>矩估计法</div><p>用样本矩代替总体矩。一个参数：<span class="m">EX=\bar X</span>，解出 <span class="m">\theta</span>。两个参数，再加 <span class="m">E(X^2)=\frac{1}{n}\sum X_i^2</span>。</p></div>
+<div class="ex"><div class="ex-h">例 37.1<span class="ex-tag">矩估计 + MLE（大题）</span></div><p>设总体的概率密度 <span class="m">f(x;\theta)=(\theta+1)x^\theta</span>（<span class="m">0\lt x\lt1</span>），<span class="m">\theta\gt-1</span>。<span class="m">X_1,\dots,X_n</span> 是样本。求 <span class="m">\theta</span> 的矩估计和最大似然估计。</p></div>
+<div class="think"><div class="b-h">思路</div><p>矩估计：算 <span class="m">EX</span>，令其等于 <span class="m">\bar X</span>。最大似然：连乘取对数，对 <span class="m">\theta</span> 求导。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 (1) 矩估计。</p>
+<div class="M">EX=\int_0^1(\theta+1)x^{\theta+1}\,dx=\frac{\theta+1}{\theta+2}.</div>
+<p>由<a class="c" data-t="mom">矩估计法</a>，令 <span class="m">\dfrac{\theta+1}{\theta+2}=\bar X</span>，解得 <span class="m">\hat\theta=\dfrac{2\bar X-1}{1-\bar X}</span>。<span class="pt">5分</span></p>
+<p>(2) 最大似然估计。样本值 <span class="m">x_i\in(0,1)</span> 时，似然函数为</p>
+<span class="pt">2分</span><div class="M">L(\theta)=\prod_{i=1}^n(\theta+1)x_i^\theta=(\theta+1)^n\Bigl(\prod_{i=1}^nx_i\Bigr)^\theta.</div>
+<p>取对数：</p>
+<span class="pt">1分</span><div class="M">\ln L=n\ln(\theta+1)+\theta\sum_{i=1}^n\ln x_i.</div>
+<p>求导并令其为 <span class="m">0</span>：</p>
+<span class="pt">2分</span><div class="M">\frac{d\ln L}{d\theta}=\frac{n}{\theta+1}+\sum_{i=1}^n\ln x_i=0.</div>
+<p class="fin">解得 <span class="m">\hat\theta=-\dfrac{n}{\sum_{i=1}^n\ln X_i}-1</span>。<span class="pt">1分</span></p></div>
+<h2>最大似然估计</h2>
+<div class="thm" id="t-mle"><div class="thm-h"><span>定理</span>最大似然估计</div><p><b>似然函数</b>：连续型 <span class="m">L(\theta)=\prod f(x_i;\theta)</span>，离散型 <span class="m">L(\theta)=\prod P(X=x_i;\theta)</span>。</p>
+<p><b>步骤</b>：取对数 → 求导令 <span class="m">0</span> → 解出 <span class="m">\hat\theta</span>。</p>
+<p><b>特殊情形</b>：<span class="m">L(\theta)</span> 关于 <span class="m">\theta</span> 单调时，导数无零点，要直接由定义域取端点。</p></div>
+<div class="like"><div class="b-h">打个比方</div><p>似然就是「哪个参数最能解释我看到的数据」。看到连续十次正面，你会猜这枚硬币正面概率很高，因为这样最容易产生这个结果。</p></div>
+<div class="ex"><div class="ex-h">例 37.2<span class="ex-tag">参数在定义域里（必须分清）</span></div><p>总体 <span class="m">X\sim U(0,\theta)</span>，<span class="m">\theta\gt0</span>。求 <span class="m">\theta</span> 的矩估计和最大似然估计，并判断矩估计是否无偏。</p></div>
+<div class="think"><div class="b-h">思路</div><p>密度 <span class="m">\frac{1}{\theta}</span> 对 <span class="m">\theta</span> 单调减，求导得不出零点。要让 <span class="m">L</span> 最大，<span class="m">\theta</span> 越小越好，但必须能覆盖所有样本值。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 (1) 矩估计：<span class="m">EX=\dfrac{\theta}{2}=\bar X</span>，故 <span class="m">\hat\theta_1=2\bar X</span>。<span class="pt">2分</span></p>
+<p>(2) 最大似然估计：</p>
+<div class="M">L(\theta)=\begin{cases}\theta^{-n},&amp;\theta\ge\max x_i\\0,&amp;\text{其他}\end{cases}</div>
+<p><span class="m">L</span> 在 <span class="m">\theta\ge\max x_i</span> 上单调减。由<a class="c" data-t="mle">最大似然估计</a>，<span class="m">\hat\theta_2=\max\limits_{1\le i\le n}X_i</span>。<span class="pt">4分</span></p>
+<p>(3) 由<a class="c" data-t="expect">数学期望</a>，<span class="m">E\hat\theta_1=2E\bar X=2\cdot\dfrac{\theta}{2}=\theta</span>。</p>
+<p class="fin">矩估计 <span class="m">2\bar X</span>，最大似然估计 <span class="m">\max X_i</span>，矩估计是无偏的。<span class="pt">2分</span></p></div>
+<h2>估计量的评价</h2>
+<div class="thm" id="t-estqual"><div class="thm-h"><span>定理</span>无偏性、有效性、一致性</div><p><b>无偏</b>：<span class="m">E\hat\theta=\theta</span>。</p>
+<p><b>有效</b>：两个无偏估计，方差小的更有效。</p>
+<p><b>一致</b>：<span class="m">\hat\theta\xrightarrow{P}\theta</span>。</p>
+<p><span class="m">\bar X</span> 是 <span class="m">\mu</span> 的无偏估计，<span class="m">S^2</span> 是 <span class="m">\sigma^2</span> 的无偏估计。这就是 <span class="m">S^2</span> 分母取 <span class="m">n-1</span> 的理由。</p></div>
+<div class="ex"><div class="ex-h">例 37.3<span class="ex-tag">无偏（选填）</span></div><p><span class="m">X_1,\dots,X_n</span> 来自期望为 <span class="m">\mu</span> 的总体，<span class="m">\hat\mu=aX_1+bX_2</span>，求使 <span class="m">\hat\mu</span> 无偏的条件；若 <span class="m">DX=\sigma^2</span>，<span class="m">a,b</span> 取何值时最有效？</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 由<a class="c" data-t="estqual">无偏性、有效性、一致性</a>，<span class="m">E\hat\mu=(a+b)\mu=\mu</span>，得 <span class="m">a+b=1</span>。</p>
+<p><span class="m">D\hat\mu=(a^2+b^2)\sigma^2</span>。代入 <span class="m">b=1-a</span>，<span class="m">a^2+(1-a)^2</span> 在 <span class="m">a=\frac12</span> 时最小。</p>
+<p class="fin">条件为 <span class="m">a+b=1</span>；<span class="m">a=b=\dfrac{1}{2}</span> 时最有效。</p></div>
+<h2>区间估计</h2>
+<div class="thm" id="t-ci"><div class="thm-h"><span>公式</span>正态总体的置信区间</div><p><span class="m">\mu</span> 的 <span class="m">1-\alpha</span> 置信区间：</p>
+<p><b><span class="m">\sigma</span> 已知</b>：<span class="m">\bar X\pm\dfrac{\sigma}{\sqrt n}u_{\alpha/2}</span>。</p>
+<p><b><span class="m">\sigma</span> 未知</b>：<span class="m">\bar X\pm\dfrac{S}{\sqrt n}t_{\alpha/2}(n-1)</span>。</p>
+<p><span class="m">\sigma^2</span>（<span class="m">\mu</span> 未知）：<span class="m">\Bigl(\dfrac{(n-1)S^2}{\chi^2_{\alpha/2}(n-1)},\dfrac{(n-1)S^2}{\chi^2_{1-\alpha/2}(n-1)}\Bigr)</span>。</p>
+<p><span class="m">u_{\alpha/2}</span> 是上侧分位数，即 <span class="m">P(U\gt u_{\alpha/2})=\frac{\alpha}{2}</span>。</p></div>
+<div class="ex"><div class="ex-h">例 37.4<span class="ex-tag">置信区间</span></div><p><span class="m">X\sim N(\mu,16)</span>，<span class="m">n=16</span>，<span class="m">\bar x=50</span>，<span class="m">u_{0.025}=1.96</span>。求 <span class="m">\mu</span> 的 <span class="m">95\%</span> 置信区间。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 <span class="m">\sigma=4</span> 已知。由<a class="c" data-t="ci">正态总体的置信区间</a>，半宽 <span class="m">=\dfrac{4}{\sqrt{16}}\times1.96=1.96</span>。</p>
+<p class="fin">置信区间为 <span class="m">(48.04,\ 51.96)</span>。</p></div>
+<h2>假设检验</h2>
+<div class="thm" id="t-test"><div class="thm-h"><span>定理</span>假设检验的两类错误</div><p><span class="m">H_0</span> 成立却拒绝：<b>第一类错误</b>（弃真），概率 <span class="m">\alpha</span>。<span class="m">H_0</span> 不成立却接受：<b>第二类错误</b>（取伪），概率 <span class="m">\beta</span>。</p>
+<p><span class="m">n</span> 固定时 <span class="m">\alpha,\beta</span> 此消彼长；增大 <span class="m">n</span> 可以同时减小。</p>
+<p><b><span class="m">\mu</span> 的双侧检验（<span class="m">\sigma</span> 已知）</b>：统计量 <span class="m">U=\dfrac{\bar X-\mu_0}{\sigma/\sqrt n}</span>，<span class="m">\vert U\vert\ge u_{\alpha/2}</span> 时拒绝 <span class="m">H_0</span>。<span class="m">\sigma</span> 未知时用 <span class="m">T=\dfrac{\bar X-\mu_0}{S/\sqrt n}</span> 和 <span class="m">t_{\alpha/2}(n-1)</span>。</p></div>
+<div class="ex"><div class="ex-h">例 37.5<span class="ex-tag">两类错误</span></div><p><span class="m">X\sim N(\mu,1)</span>，<span class="m">n=16</span>。检验 <span class="m">H_0:\mu=0</span>，当 <span class="m">\vert\bar X\vert\ge0.49</span> 时拒绝。求第一类错误概率，以及 <span class="m">\mu=0.5</span> 时的第二类错误概率。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 <span class="m">\bar X\sim N\bigl(\mu,\frac{1}{16}\bigr)</span>，<span class="m">\frac{\bar X-\mu}{1/4}\sim N(0,1)</span>。</p>
+<p>由<a class="c" data-t="test">假设检验的两类错误</a>，<span class="m">H_0</span> 成立时（<span class="m">\mu=0</span>），</p>
+<div class="M">\alpha=P(\vert\bar X\vert\ge0.49)=P(\vert U\vert\ge1.96)=0.05.</div>
+<p><span class="m">\mu=0.5</span> 时，</p>
+<div class="M">\beta=P(\vert\bar X\vert\lt0.49)=\Phi\bigl(4(0.49-0.5)\bigr)-\Phi\bigl(4(-0.49-0.5)\bigr)=\Phi(-0.04)-\Phi(-3.96).</div>
+<p class="fin"><span class="m">\alpha=0.05</span>，<span class="m">\beta\approx0.484</span>。</p></div>
+<div class="note"><div class="b-h">批注</div><p>本报到此全部刊完。接下来就上真题套卷。做错的题，回到对应的期号查例题和右栏定理。</p></div>
+
+<div class="endq"><h2>今日考你</h2><p class="hint">合上前答一遍：先想，再点开。答错的会回到后面几期和温故版。</p><div class="rq" data-q="37-0"><p class="rq-q">MLE 四步？</p><p class="rq-a">写 <span class="m">L(\theta)=\prod f(x_i;\theta)</span>；取对数；求导令 <span class="m">0</span>；解出 <span class="m">\hat\theta</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="37-1"><p class="rq-q"><span class="m">U(0,\theta)</span> 中 <span class="m">\theta</span> 的 MLE 和矩估计？</p><p class="rq-a">MLE 是 <span class="m">\max X_i</span>；矩估计是 <span class="m">2\bar X</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="37-2"><p class="rq-q"><span class="m">\sigma</span> 已知时，<span class="m">\mu</span> 的 <span class="m">1-\alpha</span> 置信区间？</p><p class="rq-a"><span class="m">\bar X\pm\frac{\sigma}{\sqrt n}u_{\alpha/2}</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="37-3"><p class="rq-q"><span class="m">\sigma</span> 未知时，用什么分布？</p><p class="rq-a"><span class="m">t(n-1)</span>，把 <span class="m">\sigma</span> 换成 <span class="m">S</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="37-4"><p class="rq-q">样本容量固定时，<span class="m">\alpha</span> 和 <span class="m">\beta</span> 的关系？</p><p class="rq-a">此消彼长。增大样本容量才能让两者同时减小。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div></div>
+<div class="endnext" id="endnext"></div>
+<div id="sent"></div>
+</div></div>
+<aside class="rail" id="rail"><div class="rail-h">本版引用 · 定理全文</div><div id="railc"></div></aside>
+</section></main>
+<footer class="pager"><button id="pv" aria-label="上一版">‹</button><div class="pginfo"><span id="pgt"></span><div class="bar"><i id="pgb"></i></div></div><button id="nx" aria-label="下一版">›</button></footer>
+<div class="sheetup" id="sheetup" hidden><div class="sheetup-h"><span>定理全文</span><button id="sheetx">关闭</button></div><div id="sheetc"></div></div>
+<div class="drawer" id="drawer" hidden></div>
+<script src="assets/katex/katex.min.js"></script><script src="assets/data.js"></script><script src="assets/paper.js"></script>
+</body></html>

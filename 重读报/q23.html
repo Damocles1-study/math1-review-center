@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>多一个变量，多出一堆陷阱 · 第23期 · 重读报</title>
+<link rel="stylesheet" href="assets/katex/katex.min.css">
+<link rel="stylesheet" href="assets/paper.css">
+</head><body class="issue" data-no="23" data-prev="q22.html" data-next="q24.html">
+<header class="strip"><a class="brand" href="index.html">重读报</a>
+<span class="strip-m">第 23 期 · 多元与级数 · 多元函数微分</span>
+<nav class="tools"><button data-a="toc" title="目录 (T)">目录</button><button data-a="rail" class="only-narrow">定理<i id="railn"></i></button><button data-a="hide" title="遮住卷面，先自己写 (H)">遮卷面</button><button data-a="night" title="夜读">夜读</button></nav></header>
+<main class="sheet" id="sheet">
+<section class="cover" id="cover">
+<div class="mast"><div class="mast-l">多元与级数<br>第 23 期</div><div class="mast-c">重读报</div><div class="mast-r">本期约 18 分钟<br>多元函数微分</div></div>
+<h1>多一个变量，多出一堆陷阱</h1>
+<p class="deck">多元函数的「连续、偏导、可微」互不等价，这是最常考的概念题。链式法则和隐函数求导则是大题第一步。把关系图和抽象函数写法记牢。</p>
+<div class="cover-grid">
+<div class="cover-keep"><h4>本期只记这几行</h4><ol><li>连续偏导 ⟹ 可微 ⟹ 连续，可微 ⟹ 偏导存在。偏导存在<b>推不出</b>连续。</li><li>判可微：<span class="m">\lim\frac{\Delta z-f_x\Delta x-f_y\Delta y}{\rho}=0</span>。</li><li>抽象复合：用 <span class="m">f_1',f_2'</span> 记号；<span class="m">f_{12}''=f_{21}''</span>（二阶连续时）。</li><li>隐函数：<span class="m">z_x=-\frac{F_x}{F_z}</span>，<span class="m">z_y=-\frac{F_y}{F_z}</span>。</li></ol></div>
+<div class="cover-prev"><h4>开读前，先答上期</h4><div id="prevq"></div></div>
+<div class="cover-toc"><h4>本期目录</h4><ol><li>极限与连续</li><li>偏导数与全微分</li><li>链式法则</li><li>隐函数</li></ol><p class="hint">→ 键 / 点右缘 / 左滑翻页</p></div>
+</div></section>
+<section class="stage" id="stage" hidden>
+<div class="viewport" id="vp"><div class="flow" id="flow">
+<h2>极限与连续</h2>
+<p>二元极限要求 <span class="m">(x,y)</span> <b>沿任意路径</b>趋近时都有相同的极限。一元时只有左右两条路，这里有无穷多条。</p>
+<div class="thm" id="t-limit2"><div class="thm-h"><span>定理</span>二重极限的判定</div><p>若沿两条不同路径极限不同，或沿某条路径极限不存在，则极限不存在。证明极限存在则常用夹逼（放大到 <span class="m">\vert x\vert,\vert y\vert,\rho</span>）或极坐标。连续定义同一元。</p></div>
+<div class="ex"><div class="ex-h">例 23.1<span class="ex-tag">反例</span></div><p>讨论 <span class="m">f(x,y)=\begin{cases}\dfrac{xy}{x^2+y^2},&amp;(x,y)\neq(0,0)\\0,&amp;(x,y)=(0,0)\end{cases}</span> 在原点的连续性和偏导数。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 (1) 连续性。沿 <span class="m">y=kx</span> 趋于原点，<span class="m">f=\dfrac{kx^2}{(1+k^2)x^2}=\dfrac{k}{1+k^2}</span>，随 <span class="m">k</span> 变化。由<a class="c" data-t="limit2">二重极限的判定</a>，极限不存在，<span class="m">f</span> 在原点不连续。</p>
+<p>(2) 偏导数。由定义，</p>
+<div class="M">f_x(0,0)=\lim_{x\to0}\frac{f(x,0)-f(0,0)}{x}=\lim_{x\to0}\frac{0}{x}=0,</div>
+<p>同理 <span class="m">f_y(0,0)=0</span>。</p>
+<p class="fin"><span class="m">f</span> 在原点不连续，但两个偏导数都存在且为 <span class="m">0</span>。</p></div>
+<h2>偏导数与全微分</h2>
+<p>偏导数就是把另一个变量冻住之后的一元导数。<span class="m">f_x(x_0,y_0)=\lim\limits_{\Delta x\to0}\frac{f(x_0+\Delta x,y_0)-f(x_0,y_0)}{\Delta x}</span>。</p>
+<div class="thm" id="t-totaldiff"><div class="thm-h"><span>定义</span>全微分</div><p>若 <span class="m">\Delta z=A\Delta x+B\Delta y+o(\rho)</span>，<span class="m">\rho=\sqrt{\Delta x^2+\Delta y^2}</span>，称 <span class="m">f</span> 可微，此时 <span class="m">A=f_x</span>，<span class="m">B=f_y</span>，</p>
+<div class="M">dz=f_xdx+f_ydy.</div>
+<p><b>判可微的标准写法</b>：先求 <span class="m">f_x,f_y</span>，再看</p>
+<div class="M">\lim_{\rho\to0}\frac{\Delta z-f_x\Delta x-f_y\Delta y}{\rho}</div>
+<p>是否为 <span class="m">0</span>。</p></div>
+<div class="fml"><div class="b-h">关系图（必背）</div><p>偏导连续 ⟹ <b>可微</b> ⟹ 连续；可微 ⟹ 偏导存在。除此之外，其他箭头都不成立，尤其是：偏导存在与连续之间互相推不出。</p></div>
+<div class="ex"><div class="ex-h">例 23.2<span class="ex-tag">判可微</span></div><p>讨论 <span class="m">f(x,y)=\begin{cases}\dfrac{xy}{\sqrt{x^2+y^2}},&amp;(x,y)\neq(0,0)\\0,&amp;(x,y)=(0,0)\end{cases}</span> 在原点是否可微。</p></div>
+<div class="think"><div class="b-h">思路</div><p>先连续、偏导，最后按定义。沿 <span class="m">y=x</span> 走一条路径看极限是否为 <span class="m">0</span>。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 由 <span class="m">\vert f\vert\le\vert x\vert\cdot\frac{\vert y\vert}{\sqrt{x^2+y^2}}\le\vert x\vert\to 0</span>，<span class="m">f</span> 在原点连续。又 <span class="m">f(x,0)=0</span>，<span class="m">f(0,y)=0</span>，得 <span class="m">f_x(0,0)=f_y(0,0)=0</span>。<span class="pt">4分</span></p>
+<p>由<a class="c" data-t="totaldiff">全微分</a>，考察</p>
+<div class="M">\lim_{\rho\to0}\frac{\Delta z-0-0}{\rho}=\lim_{(\Delta x,\Delta y)\to(0,0)}\frac{\Delta x\Delta y}{\Delta x^2+\Delta y^2}.</div>
+<p>沿 <span class="m">\Delta y=\Delta x</span>，比值恒为 <span class="m">\frac{1}{2}\neq0</span>。<span class="pt">4分</span></p>
+<p class="fin">所以 <span class="m">f</span> 在原点不可微。</p></div>
+<h2>链式法则</h2>
+<div class="thm" id="t-chain"><div class="thm-h"><span>定理</span>多元复合函数求导</div><p><span class="m">z=f(u,v)</span>，<span class="m">u=u(x,y)</span>，<span class="m">v=v(x,y)</span>，则</p>
+<div class="M">\frac{\partial z}{\partial x}=f_1'\frac{\partial u}{\partial x}+f_2'\frac{\partial v}{\partial x},\qquad\frac{\partial z}{\partial y}=f_1'\frac{\partial u}{\partial y}+f_2'\frac{\partial v}{\partial y}.</div>
+<p><span class="m">f_1'</span> 表示对第一个位置求偏导。若 <span class="m">f</span> 二阶偏导连续，<span class="m">f_{12}''=f_{21}''</span>。</p></div>
+<div class="like"><div class="b-h">打个比方</div><p>链式法则就是数路径。从 <span class="m">z</span> 到 <span class="m">x</span> 有几条路，就有几项；每条路上一段一段地乘。</p></div>
+<div class="ex"><div class="ex-h">例 23.3<span class="ex-tag">抽象函数二阶导（大题第一步）</span></div><p>设 <span class="m">z=f(x^2-y^2,xy)</span>，<span class="m">f</span> 有二阶连续偏导数。求 <span class="m">\dfrac{\partial z}{\partial x}</span> 和 <span class="m">\dfrac{\partial^2z}{\partial x\partial y}</span>。</p></div>
+<div class="think"><div class="b-h">思路</div><p>一阶式子里的 <span class="m">f_1',f_2'</span> 还是 <span class="m">x,y</span> 的函数。对 <span class="m">y</span> 求导时，<span class="m">2x</span> 是常数，<span class="m">y</span> 是乘积要用乘法法则。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 由<a class="c" data-t="chain">多元复合函数求导</a>，</p>
+<span class="pt">3分</span><div class="M">\frac{\partial z}{\partial x}=2xf_1'+yf_2'.</div>
+<p>对 <span class="m">y</span> 再求偏导。其中 <span class="m">\dfrac{\partial f_1'}{\partial y}=-2yf_{11}''+xf_{12}''</span>，<span class="m">\dfrac{\partial f_2'}{\partial y}=-2yf_{21}''+xf_{22}''</span>，于是</p>
+<span class="pt">5分</span><div class="M">\frac{\partial^2z}{\partial x\partial y}=2x\bigl(-2yf_{11}''+xf_{12}''\bigr)+f_2'+y\bigl(-2yf_{21}''+xf_{22}''\bigr).</div>
+<p>由 <span class="m">f_{12}''=f_{21}''</span> 合并，</p>
+<p class="fin"><span class="m">\dfrac{\partial^2z}{\partial x\partial y}=-4xyf_{11}''+2(x^2-y^2)f_{12}''+xyf_{22}''+f_2'</span>。<span class="pt">2分</span></p></div>
+<h2>隐函数</h2>
+<div class="thm" id="t-implicit"><div class="thm-h"><span>定理</span>隐函数求导</div><p><span class="m">F(x,y,z)=0</span>，<span class="m">F_z\neq0</span>，确定 <span class="m">z=z(x,y)</span>：</p>
+<div class="M">\frac{\partial z}{\partial x}=-\frac{F_x}{F_z},\qquad\frac{\partial z}{\partial y}=-\frac{F_y}{F_z}.</div>
+<p>一元情形：<span class="m">F(x,y)=0</span>，<span class="m">\dfrac{dy}{dx}=-\dfrac{F_x}{F_y}</span>。也可以直接两边求偏导，把 <span class="m">z</span> 当作 <span class="m">x,y</span> 的函数。</p></div>
+<div class="ex"><div class="ex-h">例 23.4<span class="ex-tag">隐函数全微分</span></div><p>设 <span class="m">z=z(x,y)</span> 由 <span class="m">z^3-3xyz=1</span> 确定，<span class="m">z(1,0)=1</span>。求 <span class="m">dz\big\vert_{(1,0)}</span>。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 令 <span class="m">F=z^3-3xyz-1</span>，<span class="m">F_x=-3yz</span>，<span class="m">F_y=-3xz</span>，<span class="m">F_z=3z^2-3xy</span>。在 <span class="m">(1,0,1)</span> 处 <span class="m">F_z=3\neq0</span>，由<a class="c" data-t="implicit">隐函数求导</a>，</p>
+<div class="M">z_x=-\frac{F_x}{F_z}=\frac{0}{3}=0,\qquad z_y=-\frac{F_y}{F_z}=\frac{3}{3}=1.</div>
+<p class="fin">由<a class="c" data-t="totaldiff">全微分</a>，<span class="m">dz\big\vert_{(1,0)}=dy</span>。</p></div>
+
+<div class="endq"><h2>今日考你</h2><p class="hint">合上前答一遍：先想，再点开。答错的会回到后面几期和温故版。</p><div class="rq" data-q="23-0"><p class="rq-q">证明二元极限不存在的办法？</p><p class="rq-a">取两条路径得到不同的值。常用 <span class="m">y=kx</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="23-1"><p class="rq-q">全微分公式？</p><p class="rq-a"><span class="m">dz=f_xdx+f_ydy</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="23-2"><p class="rq-q">对 <span class="m">z=f(u,v)</span>，<span class="m">u=u(x,y)</span>，<span class="m">v=v(x,y)</span> 写 <span class="m">z_x</span>。</p><p class="rq-a"><span class="m">z_x=f_1'u_x+f_2'v_x</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="23-3"><p class="rq-q">对 <span class="m">f_1'</span> 再求偏导时要注意？</p><p class="rq-a"><span class="m">f_1'</span> 仍是 <span class="m">u,v</span> 的函数，要再次用链式法则。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="23-4"><p class="rq-q">二阶混合偏导相等的条件？</p><p class="rq-a">两个混合偏导都连续。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div></div>
+<div class="endnext" id="endnext"></div>
+<div id="sent"></div>
+</div></div>
+<aside class="rail" id="rail"><div class="rail-h">本版引用 · 定理全文</div><div id="railc"></div></aside>
+</section></main>
+<footer class="pager"><button id="pv" aria-label="上一版">‹</button><div class="pginfo"><span id="pgt"></span><div class="bar"><i id="pgb"></i></div></div><button id="nx" aria-label="下一版">›</button></footer>
+<div class="sheetup" id="sheetup" hidden><div class="sheetup-h"><span>定理全文</span><button id="sheetx">关闭</button></div><div id="sheetc"></div></div>
+<div class="drawer" id="drawer" hidden></div>
+<script src="assets/katex/katex.min.js"></script><script src="assets/data.js"></script><script src="assets/paper.js"></script>
+</body></html>

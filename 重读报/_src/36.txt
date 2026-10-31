@@ -1,0 +1,86 @@
+@part 丁
+@kicker 极限定理与抽样分布
+@title 样本够大，平均数就可靠
+@deck 大数定律说平均值会稳定，中心极限定理说它的波动接近正态。然后进入统计：$\chi^2,t,F$ 三个分布各有固定的构造方式，记住定义和正态总体的结论就够了。
+@keep 切比雪夫：$P(\vert X-EX\vert\ge\varepsilon)\le\frac{DX}{\varepsilon^2}$。
+@keep 中心极限：独立同分布，$\sum X_i\approx N(n\mu,n\sigma^2)$。
+@keep $\chi^2(n)$：$n$ 个标准正态的平方和。$t(n)=\frac{N(0,1)}{\sqrt{\chi^2(n)/n}}$。$F(m,n)=\frac{\chi^2(m)/m}{\chi^2(n)/n}$。
+@keep 正态总体：$\bar X\sim N(\mu,\frac{\sigma^2}{n})$；$\frac{(n-1)S^2}{\sigma^2}\sim\chi^2(n-1)$；$\frac{\bar X-\mu}{S/\sqrt n}\sim t(n-1)$。
+@recall $\chi^2(n)$ 的期望和方差？ || $n,\ 2n$。
+@recall $\bar X$ 的期望和方差？ || $\mu,\ \frac{\sigma^2}{n}$。
+@recall $\frac{\bar X-\mu}{S/\sqrt n}$ 服从？ || $t(n-1)$。
+@recall $E(S^2)$？ || $\sigma^2$。
+@recall 若 $T\sim t(n)$，$T^2$ 服从？ || $F(1,n)$。
+
+## 切比雪夫与大数定律
+:::thm cheby | 切比雪夫不等式
+对任意 $\varepsilon\gt0$，
+$$P(\vert X-EX\vert\ge\varepsilon)\le\frac{DX}{\varepsilon^2}.$$
+:::
+:::ex 估计概率
+$EX=5,DX=2$，估计 $P(\vert X-5\vert\ge2)$。
+:::
+:::paper
+解 由[[cheby]]，$P(\vert X-5\vert\ge2)\le\dfrac{2}{4}=\dfrac{1}{2}$。
+:::
+:::thm lln | 大数定律 | 定理
+**切比雪夫大数定律**：$X_i$ 相互独立，方差一致有界，则 $\frac{1}{n}\sum X_i-\frac{1}{n}\sum EX_i\xrightarrow{P}0$。
+**辛钦**：$X_i$ 独立同分布，$EX_i=\mu$ 存在，则 $\frac{1}{n}\sum X_i\xrightarrow{P}\mu$。
+**伯努利**：$n$ 次独立试验成功 $n_A$ 次，$\frac{n_A}{n}\xrightarrow{P}p$。
+「依概率收敛」$X_n\xrightarrow{P}a$ 指：对任意 $\varepsilon\gt0$，$\lim P(\vert X_n-a\vert\lt\varepsilon)=1$。
+:::
+:::like
+抛硬币抛十次，正面可能出现七次。抛一万次，比例一定靠近一半。大数定律保证了频率的稳定。
+:::
+
+## 中心极限定理
+:::thm clt | 中心极限定理
+**列维—林德伯格**：$X_i$ 独立同分布，$EX_i=\mu$，$DX_i=\sigma^2\gt0$，则 $n$ 充分大时
+$$\sum_{i=1}^nX_i\ \dot\sim\ N(n\mu,n\sigma^2),\quad\text{即}\quad\frac{\sum X_i-n\mu}{\sqrt n\sigma}\ \dot\sim\ N(0,1).$$
+**棣莫弗—拉普拉斯**：$X\sim B(n,p)$，$n$ 充分大时 $X\ \dot\sim\ N(np,np(1-p))$。
+:::
+!fig f36_clt | 把 $n$ 个均匀分布相加：$n=1,2,4$ 时密度越来越接近钟形。不管单个分布什么形状，和都趋向正态。
+:::ex 中心极限定理
+独立同分布的 $X_1,\dots,X_{100}$，$EX_i=2$，$DX_i=4$。用 $\Phi$ 近似表示 $P\Bigl(\sum X_i\le220\Bigr)$。
+:::
+:::paper
+解 $n\mu=200$，$\sqrt n\sigma=20$。由[[clt]]，
+$$P\Bigl(\sum X_i\le220\Bigr)=P\Bigl(\frac{\sum X_i-200}{20}\le1\Bigr)\approx\Phi(1).$$
+∎ 所求概率约为 $\Phi(1)\approx0.8413$。
+:::
+
+## 三大抽样分布
+**样本**：$X_1,\dots,X_n$ 独立同分布。$\bar X=\frac{1}{n}\sum X_i$，$S^2=\frac{1}{n-1}\sum(X_i-\bar X)^2$。无论总体分布如何，$E\bar X=\mu$，$D\bar X=\frac{\sigma^2}{n}$，$E(S^2)=\sigma^2$。
+:::thm sampling | $\chi^2,t,F$ 分布
+$X_i\sim N(0,1)$ 独立：
+**$\chi^2(n)$**：$X_1^2+\cdots+X_n^2$。$E=n$，$D=2n$。可加性：$\chi^2(m)+\chi^2(n)=\chi^2(m+n)$（独立）。
+**$t(n)$**：$X\sim N(0,1)$，$Y\sim\chi^2(n)$，独立，$T=\dfrac{X}{\sqrt{Y/n}}$。密度关于 $0$ 对称，$n$ 大时接近 $N(0,1)$。
+**$F(m,n)$**：$U\sim\chi^2(m)$，$V\sim\chi^2(n)$，独立，$F=\dfrac{U/m}{V/n}$。$\frac{1}{F}\sim F(n,m)$；$T^2\sim F(1,n)$。
+:::
+:::thm normsample | 正态总体的抽样分布
+$X_i\sim N(\mu,\sigma^2)$：
+(1) $\bar X\sim N\bigl(\mu,\frac{\sigma^2}{n}\bigr)$；
+(2) $\bar X$ 与 $S^2$ **独立**；
+(3) $\dfrac{(n-1)S^2}{\sigma^2}\sim\chi^2(n-1)$；
+(4) $\dfrac{\bar X-\mu}{S/\sqrt n}\sim t(n-1)$；
+(5) $\dfrac{1}{\sigma^2}\sum(X_i-\mu)^2\sim\chi^2(n)$。
+:::
+:::ex 认分布（选填）
+$X_1,X_2,X_3,X_4$ 是来自 $N(0,\sigma^2)$ 的样本。判断 $T=\dfrac{X_1+X_2}{\sqrt{X_3^2+X_4^2}}$ 服从什么分布。
+:::
+:::think
+目标是凑 $\frac{N(0,1)}{\sqrt{\chi^2/n}}$。分子先标准化，分母的 $\sigma$ 和分子的正好约掉。
+:::
+:::paper
+解 $X_1+X_2\sim N(0,2\sigma^2)$，故 $\dfrac{X_1+X_2}{\sqrt2\sigma}\sim N(0,1)$。又 $\dfrac{X_3^2+X_4^2}{\sigma^2}\sim\chi^2(2)$，两者独立。由[[sampling]]，
+$$\frac{\frac{X_1+X_2}{\sqrt2\sigma}}{\sqrt{\frac{X_3^2+X_4^2}{2\sigma^2}}}=\frac{X_1+X_2}{\sqrt{X_3^2+X_4^2}}\sim t(2).$$
+∎ 即 $T\sim t(2)$。
+:::
+:::ex 数字特征
+$X_1,\dots,X_n$ 来自 $N(\mu,\sigma^2)$，求 $D(S^2)$。
+:::
+:::paper
+解 由[[normsample]]，$\dfrac{(n-1)S^2}{\sigma^2}\sim\chi^2(n-1)$，由[[sampling]]，方差为 $2(n-1)$。于是
+$$\frac{(n-1)^2}{\sigma^4}D(S^2)=2(n-1).$$
+∎ $D(S^2)=\dfrac{2\sigma^4}{n-1}$。
+:::

@@ -1,0 +1,86 @@
+@part 丙
+@kicker 二重积分
+@title 先画图，再选坐标系，最后定次序
+@deck 计算的全部困难都在定限和选择上。圆相关的用极坐标，其他的用直角坐标。对称性能省一半甚至全部的计算，所以动笔前必须先看对称。
+@keep 第一步永远是画积分区域。
+@keep 有 $x^2+y^2$ 或圆形区域：极坐标，$d\sigma=r\,dr\,d\theta$，别漏 $r$。
+@keep 内层积不出（$e^{y^2},\frac{\sin y}{y}$）：交换次序。
+@keep $D$ 关于 $y$ 轴对称：$f$ 对 $x$ 奇则积分为 $0$，偶则两倍。轮换对称可互换 $x,y$。
+@recall 极坐标面积微元？ || $d\sigma=r\,dr\,d\theta$。
+@recall 交换次序的步骤？ || 由限写出不等式 → 画图 → 按新次序读出新限。
+@recall $x^2+y^2\le2x$ 的极坐标范围？ || $-\frac\pi2\le\theta\le\frac\pi2$，$0\le r\le2\cos\theta$。
+@recall $\iint_{x^2+y^2\le1}y^2\,d\sigma$ 的轮换对称算法？ || $=\frac12\iint(x^2+y^2)d\sigma=\frac12\int_0^{2\pi}\int_0^1r^3dr\,d\theta=\frac\pi4$。
+
+## 定义与直角坐标
+$\iint_Df\,d\sigma$ 是以 $D$ 为底、$z=f$ 为顶的曲顶柱体的（有向）体积。性质和定积分一样：线性、区域可加、保序、估值、中值。
+:::thm iint | 二重积分的直角坐标计算
+**X 型** $D:a\le x\le b,\ \varphi_1(x)\le y\le\varphi_2(x)$：
+$$\iint_Df\,d\sigma=\int_a^bdx\int_{\varphi_1(x)}^{\varphi_2(x)}f\,dy.$$
+**Y 型**同理。定内层限的办法：在 $x$ 处画一条竖线，从下往上穿过 $D$，先碰到的是下限，后碰到的是上限。
+:::
+!fig f25_xtype | 竖线从下边界（$y=x^2$）进入，从上边界（$y=x$）穿出。
+:::ex 直角坐标
+计算 $\displaystyle\iint_Dxy\,d\sigma$，$D$ 由 $y=x$ 和 $y=x^2$ 围成。
+:::
+:::paper
+解 两曲线交于 $(0,0),(1,1)$，$D:0\le x\le1,\ x^2\le y\le x$。由[[iint]]，
+$$\iint_Dxy\,d\sigma=\int_0^1x\,dx\int_{x^2}^{x}y\,dy=\int_0^1x\cdot\frac{x^2-x^4}{2}\,dx=\frac{1}{2}\Bigl(\frac{1}{4}-\frac{1}{6}\Bigr).$$
+∎ 故原积分 $=\dfrac{1}{24}$。
+:::
+
+## 交换积分次序
+**信号**：内层积分没有初等原函数。**做法**：把限翻译成不等式 → 画 $D$ → 按另一次序重新读。
+:::ex 换序
+计算 $\displaystyle\int_0^1dx\int_x^1\frac{\sin y}{y}\,dy$。
+:::
+:::think
+$\frac{\sin y}{y}$ 对 $y$ 积不出。换成先对 $x$ 积，被积函数不含 $x$，直接出一个 $y$，正好约掉。
+:::
+:::paper
+解 积分区域 $D:0\le x\le1,\ x\le y\le1$，也可写成 $0\le y\le1,\ 0\le x\le y$。由[[iint]]，
+$$\int_0^1dx\int_x^1\frac{\sin y}{y}\,dy=\int_0^1\frac{\sin y}{y}\,dy\int_0^ydx=\int_0^1\sin y\,dy.$$
+∎ 原积分 $=1-\cos1$。
+:::
+
+## 极坐标
+:::thm polar | 二重积分的极坐标计算
+$x=r\cos\theta,\ y=r\sin\theta$，$d\sigma=r\,dr\,d\theta$：
+$$\iint_Df\,d\sigma=\int_\alpha^\beta d\theta\int_{r_1(\theta)}^{r_2(\theta)}f(r\cos\theta,r\sin\theta)\,r\,dr.$$
+**适用信号**：区域是圆、扇形、圆环；被积函数含 $x^2+y^2$、$\frac{y}{x}$。
+:::
+!fig f25_polar | $x^2+y^2\le2x$ 是圆心在 $(1,0)$ 的圆。从原点出发的射线穿出的位置是 $r=2\cos\theta$。
+:::ex 极坐标
+计算 $\displaystyle\iint_D\sqrt{x^2+y^2}\,d\sigma$，$D:x^2+y^2\le2x$。
+:::
+:::paper
+解 $x^2+y^2=2x$ 的极坐标方程为 $r=2\cos\theta$，$-\frac\pi2\le\theta\le\frac\pi2$。由[[polar]]，
+$$\iint_D\sqrt{x^2+y^2}\,d\sigma=\int_{-\pi/2}^{\pi/2}d\theta\int_0^{2\cos\theta}r\cdot r\,dr=\frac{8}{3}\int_{-\pi/2}^{\pi/2}\cos^3\theta\,d\theta.$$
+由[[sym]]，$\int_{-\pi/2}^{\pi/2}\cos^3\theta\,d\theta=2\int_0^{\pi/2}\cos^3\theta\,d\theta$；由[[wallis]]，它等于 $2\cdot\frac{2}{3}=\frac{4}{3}$。
+∎ 原积分 $=\dfrac{32}{9}$。
+:::
+:::ex 无穷区域
+利用极坐标证明 $\displaystyle\int_0^{+\infty}e^{-x^2}\,dx=\frac{\sqrt\pi}{2}$。
+:::
+:::paper
+证 设 $I=\int_{0}^{+\infty}e^{-x^2}dx$，积分收敛（在 $+\infty$ 附近 $e^{-x^2}\le e^{-x}$）。于是
+$$4I^2=\Bigl(\int_{-\infty}^{+\infty}e^{-x^2}dx\Bigr)^2=\iint_{\mathbb R^2}e^{-x^2-y^2}\,d\sigma=\int_0^{2\pi}d\theta\int_0^{+\infty}e^{-r^2}r\,dr=2\pi\cdot\frac{1}{2}=\pi.$$
+∎ 由 $I\gt0$，得 $I=\dfrac{\sqrt\pi}{2}$。证毕。
+:::
+:::note
+第 12 期直接给出的这个值，到这里才真正算出来。概率部分的钟形曲线要用它。
+:::
+
+## 对称性
+:::thm symint | 二重积分的对称性
+**普通对称**：$D$ 关于 $y$ 轴对称，$f(-x,y)=-f(x,y)$ 时积分为 $0$；$f(-x,y)=f(x,y)$ 时等于右半边的两倍。关于 $x$ 轴的情形类似。
+**轮换对称**：$D$ 关于 $y=x$ 对称，则 $\iint_Df(x,y)\,d\sigma=\iint_Df(y,x)\,d\sigma$。
+:::
+:::ex 对称性
+计算 $\displaystyle\iint_D(x+y^2)\,d\sigma$，$D:x^2+y^2\le1$。
+:::
+:::paper
+解 $D$ 关于 $y$ 轴对称，$x$ 是 $x$ 的奇函数，由[[symint]]，$\iint_Dx\,d\sigma=0$。$D$ 关于 $y=x$ 对称，由轮换对称，
+$$\iint_Dy^2\,d\sigma=\frac{1}{2}\iint_D(x^2+y^2)\,d\sigma=\frac{1}{2}\int_0^{2\pi}d\theta\int_0^1r^3\,dr=\frac{\pi}{4}.$$
+∎ 原积分 $=\dfrac{\pi}{4}$。
+:::
+**$\max,\min,\vert\cdot\vert$ 型**：用曲线把区域切成几块，每块去掉符号再算。

@@ -1,0 +1,94 @@
+@part 丙
+@kicker 多元函数微分
+@title 多一个变量，多出一堆陷阱
+@deck 多元函数的「连续、偏导、可微」互不等价，这是最常考的概念题。链式法则和隐函数求导则是大题第一步。把关系图和抽象函数写法记牢。
+@keep 连续偏导 ⟹ 可微 ⟹ 连续，可微 ⟹ 偏导存在。偏导存在**推不出**连续。
+@keep 判可微：$\lim\frac{\Delta z-f_x\Delta x-f_y\Delta y}{\rho}=0$。
+@keep 抽象复合：用 $f_1',f_2'$ 记号；$f_{12}''=f_{21}''$（二阶连续时）。
+@keep 隐函数：$z_x=-\frac{F_x}{F_z}$，$z_y=-\frac{F_y}{F_z}$。
+@recall 证明二元极限不存在的办法？ || 取两条路径得到不同的值。常用 $y=kx$。
+@recall 全微分公式？ || $dz=f_xdx+f_ydy$。
+@recall 对 $z=f(u,v)$，$u=u(x,y)$，$v=v(x,y)$ 写 $z_x$。 || $z_x=f_1'u_x+f_2'v_x$。
+@recall 对 $f_1'$ 再求偏导时要注意？ || $f_1'$ 仍是 $u,v$ 的函数，要再次用链式法则。
+@recall 二阶混合偏导相等的条件？ || 两个混合偏导都连续。
+
+## 极限与连续
+二元极限要求 $(x,y)$ **沿任意路径**趋近时都有相同的极限。一元时只有左右两条路，这里有无穷多条。
+:::thm limit2 | 二重极限的判定
+若沿两条不同路径极限不同，或沿某条路径极限不存在，则极限不存在。证明极限存在则常用夹逼（放大到 $\vert x\vert,\vert y\vert,\rho$）或极坐标。连续定义同一元。
+:::
+:::ex 反例
+讨论 $f(x,y)=\begin{cases}\dfrac{xy}{x^2+y^2},&(x,y)\neq(0,0)\\0,&(x,y)=(0,0)\end{cases}$ 在原点的连续性和偏导数。
+:::
+:::paper
+解 (1) 连续性。沿 $y=kx$ 趋于原点，$f=\dfrac{kx^2}{(1+k^2)x^2}=\dfrac{k}{1+k^2}$，随 $k$ 变化。由[[limit2]]，极限不存在，$f$ 在原点不连续。
+(2) 偏导数。由定义，
+$$f_x(0,0)=\lim_{x\to0}\frac{f(x,0)-f(0,0)}{x}=\lim_{x\to0}\frac{0}{x}=0,$$
+同理 $f_y(0,0)=0$。
+∎ $f$ 在原点不连续，但两个偏导数都存在且为 $0$。
+:::
+
+## 偏导数与全微分
+偏导数就是把另一个变量冻住之后的一元导数。$f_x(x_0,y_0)=\lim\limits_{\Delta x\to0}\frac{f(x_0+\Delta x,y_0)-f(x_0,y_0)}{\Delta x}$。
+:::thm totaldiff | 全微分 | 定义
+若 $\Delta z=A\Delta x+B\Delta y+o(\rho)$，$\rho=\sqrt{\Delta x^2+\Delta y^2}$，称 $f$ 可微，此时 $A=f_x$，$B=f_y$，
+$$dz=f_xdx+f_ydy.$$
+**判可微的标准写法**：先求 $f_x,f_y$，再看
+$$\lim_{\rho\to0}\frac{\Delta z-f_x\Delta x-f_y\Delta y}{\rho}$$
+是否为 $0$。
+:::
+:::fml 关系图（必背）
+偏导连续 ⟹ **可微** ⟹ 连续；可微 ⟹ 偏导存在。除此之外，其他箭头都不成立，尤其是：偏导存在与连续之间互相推不出。
+:::
+:::ex 判可微
+讨论 $f(x,y)=\begin{cases}\dfrac{xy}{\sqrt{x^2+y^2}},&(x,y)\neq(0,0)\\0,&(x,y)=(0,0)\end{cases}$ 在原点是否可微。
+:::
+:::think
+先连续、偏导，最后按定义。沿 $y=x$ 走一条路径看极限是否为 $0$。
+:::
+:::paper
+解 由 $\vert f\vert\le\vert x\vert\cdot\frac{\vert y\vert}{\sqrt{x^2+y^2}}\le\vert x\vert\to 0$，$f$ 在原点连续。又 $f(x,0)=0$，$f(0,y)=0$，得 $f_x(0,0)=f_y(0,0)=0$。⛳4
+由[[totaldiff]]，考察
+$$\lim_{\rho\to0}\frac{\Delta z-0-0}{\rho}=\lim_{(\Delta x,\Delta y)\to(0,0)}\frac{\Delta x\Delta y}{\Delta x^2+\Delta y^2}.$$
+沿 $\Delta y=\Delta x$，比值恒为 $\frac{1}{2}\neq0$。⛳4
+∎ 所以 $f$ 在原点不可微。
+:::
+
+## 链式法则
+:::thm chain | 多元复合函数求导
+$z=f(u,v)$，$u=u(x,y)$，$v=v(x,y)$，则
+$$\frac{\partial z}{\partial x}=f_1'\frac{\partial u}{\partial x}+f_2'\frac{\partial v}{\partial x},\qquad\frac{\partial z}{\partial y}=f_1'\frac{\partial u}{\partial y}+f_2'\frac{\partial v}{\partial y}.$$
+$f_1'$ 表示对第一个位置求偏导。若 $f$ 二阶偏导连续，$f_{12}''=f_{21}''$。
+:::
+:::like
+链式法则就是数路径。从 $z$ 到 $x$ 有几条路，就有几项；每条路上一段一段地乘。
+:::
+:::ex 抽象函数二阶导（大题第一步）
+设 $z=f(x^2-y^2,xy)$，$f$ 有二阶连续偏导数。求 $\dfrac{\partial z}{\partial x}$ 和 $\dfrac{\partial^2z}{\partial x\partial y}$。
+:::
+:::think
+一阶式子里的 $f_1',f_2'$ 还是 $x,y$ 的函数。对 $y$ 求导时，$2x$ 是常数，$y$ 是乘积要用乘法法则。
+:::
+:::paper
+解 由[[chain]]，
+$$\frac{\partial z}{\partial x}=2xf_1'+yf_2'.$$⛳3
+对 $y$ 再求偏导。其中 $\dfrac{\partial f_1'}{\partial y}=-2yf_{11}''+xf_{12}''$，$\dfrac{\partial f_2'}{\partial y}=-2yf_{21}''+xf_{22}''$，于是
+$$\frac{\partial^2z}{\partial x\partial y}=2x\bigl(-2yf_{11}''+xf_{12}''\bigr)+f_2'+y\bigl(-2yf_{21}''+xf_{22}''\bigr).$$⛳5
+由 $f_{12}''=f_{21}''$ 合并，
+∎ $\dfrac{\partial^2z}{\partial x\partial y}=-4xyf_{11}''+2(x^2-y^2)f_{12}''+xyf_{22}''+f_2'$。⛳2
+:::
+
+## 隐函数
+:::thm implicit | 隐函数求导
+$F(x,y,z)=0$，$F_z\neq0$，确定 $z=z(x,y)$：
+$$\frac{\partial z}{\partial x}=-\frac{F_x}{F_z},\qquad\frac{\partial z}{\partial y}=-\frac{F_y}{F_z}.$$
+一元情形：$F(x,y)=0$，$\dfrac{dy}{dx}=-\dfrac{F_x}{F_y}$。也可以直接两边求偏导，把 $z$ 当作 $x,y$ 的函数。
+:::
+:::ex 隐函数全微分
+设 $z=z(x,y)$ 由 $z^3-3xyz=1$ 确定，$z(1,0)=1$。求 $dz\big\vert_{(1,0)}$。
+:::
+:::paper
+解 令 $F=z^3-3xyz-1$，$F_x=-3yz$，$F_y=-3xz$，$F_z=3z^2-3xy$。在 $(1,0,1)$ 处 $F_z=3\neq0$，由[[implicit]]，
+$$z_x=-\frac{F_x}{F_z}=\frac{0}{3}=0,\qquad z_y=-\frac{F_y}{F_z}=\frac{3}{3}=1.$$
+∎ 由[[totaldiff]]，$dz\big\vert_{(1,0)}=dy$。
+:::

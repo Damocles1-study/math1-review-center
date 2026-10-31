@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>去掉交叉项，看清曲面的样子 · 第21期 · 重读报</title>
+<link rel="stylesheet" href="assets/katex/katex.min.css">
+<link rel="stylesheet" href="assets/paper.css">
+</head><body class="issue" data-no="21" data-prev="q20.html" data-next="q22.html">
+<header class="strip"><a class="brand" href="index.html">重读报</a>
+<span class="strip-m">第 21 期 · 线性代数 · 二次型</span>
+<nav class="tools"><button data-a="toc" title="目录 (T)">目录</button><button data-a="rail" class="only-narrow">定理<i id="railn"></i></button><button data-a="hide" title="遮住卷面，先自己写 (H)">遮卷面</button><button data-a="night" title="夜读">夜读</button></nav></header>
+<main class="sheet" id="sheet">
+<section class="cover" id="cover">
+<div class="mast"><div class="mast-l">线性代数<br>第 21 期</div><div class="mast-c">重读报</div><div class="mast-r">本期约 16 分钟<br>二次型</div></div>
+<h1>去掉交叉项，看清曲面的样子</h1>
+<p class="deck">二次型是实对称矩阵的另一张脸。正交变换化标准形，就是上一期的正交对角化；配方法更快但不保形。末尾的正定判别是选填常客。线代到此结束。</p>
+<div class="cover-grid">
+<div class="cover-keep"><h4>本期只记这几行</h4><ol><li><span class="m">f=x^TAx</span>，<span class="m">A</span> 实对称：<span class="m">x_i^2</span> 系数放对角线，<span class="m">x_ix_j</span> 系数<b>折半</b>放对称位置。</li><li>正交变换 <span class="m">x=Qy</span>：标准形系数就是特征值。</li><li>惯性定理：正、负惯性指数不随变换方法改变。</li><li>正定 ⟺ 特征值全正 ⟺ 顺序主子式全正。</li><li>合同 ⟺ 正负惯性指数相同（实对称）。</li></ol></div>
+<div class="cover-prev"><h4>开读前，先答上期</h4><div id="prevq"></div></div>
+<div class="cover-toc"><h4>本期目录</h4><ol><li>二次型与矩阵</li><li>正交变换法（大题主力）</li><li>配方法与惯性定理</li><li>正定</li></ol><p class="hint">→ 键 / 点右缘 / 左滑翻页</p></div>
+</div></section>
+<section class="stage" id="stage" hidden>
+<div class="viewport" id="vp"><div class="flow" id="flow">
+<h2>二次型与矩阵</h2>
+<div class="thm" id="t-qform"><div class="thm-h"><span>定义</span>二次型</div><p><span class="m">f(x_1,\dots,x_n)=x^TAx</span>，<span class="m">A</span> 实对称。规则：<span class="m">x_i^2</span> 的系数是 <span class="m">a_{ii}</span>；<span class="m">x_ix_j</span> 的系数除以 2 放在 <span class="m">a_{ij},a_{ji}</span>。<span class="m">A</span> 的秩叫二次型的秩。</p>
+<p>只含平方项的叫<b>标准形</b>；系数只有 <span class="m">1,-1,0</span> 的叫<b>规范形</b>。</p></div>
+<figure><svg viewBox="0 0 240 210" role="img"><defs><marker id="arr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path class="arrh" d="M0 .8L7 4L0 7.2z"/></marker></defs><line class="ax" x1="10.0" y1="105.0" x2="230.0" y2="105.0" marker-end="url(#arr)"/><line class="ax" x1="120.0" y1="200.0" x2="120.0" y2="10.0" marker-end="url(#arr)"/><text class="tx" x="223.0" y="119.0">x</text><text class="tx" x="128.0" y="18.0">y</text><text class="tx" x="109.0" y="118.0">O</text><path class="cv" d="M157.4 68.4 L156.1 67.2 L154.8 66.0 L153.5 64.8 L152.2 63.6 L150.8 62.4 L149.5 61.2 L148.1 60.1 L146.8 59.0 L145.4 57.9 L144.0 56.8 L142.6 55.7 L141.2 54.7 L139.8 53.6 L138.4 52.6 L137.0 51.6 L135.5 50.7 L134.1 49.7 L132.7 48.8 L131.2 47.9 L129.8 47.0 L128.3 46.1 L126.8 45.3 L125.4 44.5 L123.9 43.7 L122.4 42.9 L121.0 42.2 L119.5 41.4 L118.0 40.7 L116.6 40.1 L115.1 39.4 L113.7 38.8 L112.2 38.2 L110.7 37.6 L109.3 37.1 L107.8 36.6 L106.4 36.1 L104.9 35.6 L103.5 35.2 L102.1 34.7 L100.7 34.4 L99.2 34.0 L97.8 33.7 L96.4 33.4 L95.1 33.1 L93.7 32.8 L92.3 32.6 L91.0 32.4 L89.6 32.3 L88.3 32.1 L87.0 32.0 L85.6 31.9 L84.3 31.9 L83.1 31.9 L81.8 31.9 L80.5 31.9 L79.3 32.0 L78.1 32.1 L76.9 32.2 L75.7 32.3 L74.5 32.5 L73.4 32.7 L72.2 32.9 L71.1 33.2 L70.0 33.5 L68.9 33.8 L67.9 34.1 L66.8 34.5 L65.8 34.9 L64.8 35.3 L63.8 35.8 L62.9 36.2 L61.9 36.7 L61.0 37.3 L60.1 37.8 L59.3 38.4 L58.4 39.0 L57.6 39.6 L56.8 40.3 L56.0 41.0 L55.3 41.7 L54.6 42.4 L53.9 43.2 L53.2 43.9 L52.6 44.7 L51.9 45.6 L51.4 46.4 L50.8 47.3 L50.2 48.2 L49.7 49.1 L49.2 50.0 L48.8 51.0 L48.4 52.0 L48.0 53.0 L47.6 54.0 L47.2 55.0 L46.9 56.1 L46.6 57.1 L46.4 58.2 L46.1 59.4 L45.9 60.5 L45.7 61.6 L45.6 62.8 L45.5 64.0 L45.4 65.2 L45.3 66.4 L45.3 67.6 L45.3 68.8 L45.3 70.1 L45.4 71.4 L45.4 72.7 L45.6 73.9 L45.7 75.3 L45.9 76.6 L46.1 77.9 L46.3 79.2 L46.5 80.6 L46.8 81.9 L47.1 83.3 L47.5 84.7 L47.8 86.1 L48.2 87.5 L48.6 88.9 L49.1 90.3 L49.6 91.7 L50.1 93.1 L50.6 94.5 L51.2 95.9 L51.7 97.4 L52.4 98.8 L53.0 100.2 L53.7 101.7 L54.3 103.1 L55.1 104.5 L55.8 106.0 L56.6 107.4 L57.3 108.8 L58.1 110.3 L59.0 111.7 L59.8 113.1 L60.7 114.5 L61.6 116.0 L62.6 117.4 L63.5 118.8 L64.5 120.2 L65.5 121.6 L66.5 123.0 L67.5 124.4 L68.6 125.8 L69.6 127.1 L70.7 128.5 L71.8 129.9 L73.0 131.2 L74.1 132.5 L75.3 133.9 L76.5 135.2 L77.7 136.5 L78.9 137.8 L80.1 139.1 L81.4 140.3 L82.6 141.6 L83.9 142.8 L85.2 144.0 L86.5 145.2 L87.8 146.4 L89.2 147.6 L90.5 148.8 L91.9 149.9 L93.2 151.0 L94.6 152.1 L96.0 153.2 L97.4 154.3 L98.8 155.3 L100.2 156.4 L101.6 157.4 L103.0 158.4 L104.5 159.3 L105.9 160.3 L107.3 161.2 L108.8 162.1 L110.2 163.0 L111.7 163.9 L113.2 164.7 L114.6 165.5 L116.1 166.3 L117.6 167.1 L119.0 167.8 L120.5 168.6 L122.0 169.3 L123.4 169.9 L124.9 170.6 L126.3 171.2 L127.8 171.8 L129.3 172.4 L130.7 172.9 L132.2 173.4 L133.6 173.9 L135.1 174.4 L136.5 174.8 L137.9 175.3 L139.3 175.6 L140.8 176.0 L142.2 176.3 L143.6 176.6 L144.9 176.9 L146.3 177.2 L147.7 177.4 L149.0 177.6 L150.4 177.7 L151.7 177.9 L153.0 178.0 L154.4 178.1 L155.7 178.1 L156.9 178.1 L158.2 178.1 L159.5 178.1 L160.7 178.0 L161.9 177.9 L163.1 177.8 L164.3 177.7 L165.5 177.5 L166.6 177.3 L167.8 177.1 L168.9 176.8 L170.0 176.5 L171.1 176.2 L172.1 175.9 L173.2 175.5 L174.2 175.1 L175.2 174.7 L176.2 174.2 L177.1 173.8 L178.1 173.3 L179.0 172.7 L179.9 172.2 L180.7 171.6 L181.6 171.0 L182.4 170.4 L183.2 169.7 L184.0 169.0 L184.7 168.3 L185.4 167.6 L186.1 166.8 L186.8 166.1 L187.4 165.3 L188.1 164.4 L188.6 163.6 L189.2 162.7 L189.8 161.8 L190.3 160.9 L190.8 160.0 L191.2 159.0 L191.6 158.0 L192.0 157.0 L192.4 156.0 L192.8 155.0 L193.1 153.9 L193.4 152.9 L193.6 151.8 L193.9 150.6 L194.1 149.5 L194.3 148.4 L194.4 147.2 L194.5 146.0 L194.6 144.8 L194.7 143.6 L194.7 142.4 L194.7 141.2 L194.7 139.9 L194.6 138.6 L194.6 137.3 L194.4 136.1 L194.3 134.7 L194.1 133.4 L193.9 132.1 L193.7 130.8 L193.5 129.4 L193.2 128.1 L192.9 126.7 L192.5 125.3 L192.2 123.9 L191.8 122.5 L191.4 121.1 L190.9 119.7 L190.4 118.3 L189.9 116.9 L189.4 115.5 L188.8 114.1 L188.3 112.6 L187.6 111.2 L187.0 109.8 L186.3 108.3 L185.7 106.9 L184.9 105.5 L184.2 104.0 L183.4 102.6 L182.7 101.2 L181.9 99.7 L181.0 98.3 L180.2 96.9 L179.3 95.5 L178.4 94.0 L177.4 92.6 L176.5 91.2 L175.5 89.8 L174.5 88.4 L173.5 87.0 L172.5 85.6 L171.4 84.2 L170.4 82.9 L169.3 81.5 L168.2 80.1 L167.0 78.8 L165.9 77.5 L164.7 76.1 L163.5 74.8 L162.3 73.5 L161.1 72.2 L159.9 70.9 L158.6 69.7 L157.4 68.4"/><line class="lr" x1="60.5" y1="163.2" x2="179.5" y2="46.8"/><line class="lb" x1="46.8" y1="33.3" x2="193.2" y2="176.7"/><text class="tx tr" x="182.5" y="44.8">u</text><text class="tx tb" x="195.2" y="184.7">v</text></svg><figcaption><span class="m">f=x^2+xy+y^2=1</span> 是斜放的椭圆。转到主轴方向后变成 <span class="m">\frac32u^2+\frac12v^2=1</span>，交叉项消失。</figcaption></figure>
+<div class="like"><div class="b-h">打个比方</div><p>斜放的椭圆，公式又长又丑。把坐标轴转到椭圆的对称轴上，公式就只剩平方项。这个「转一下」就是正交变换，特征向量就是对称轴，特征值就是系数。</p></div>
+<h2>正交变换法（大题主力）</h2>
+<div class="thm" id="t-orthstd"><div class="thm-h"><span>定理</span>正交变换化标准形</div><p>对实对称 <span class="m">A</span>，存在正交矩阵 <span class="m">Q</span>，令 <span class="m">x=Qy</span>，</p>
+<div class="M">f=y^T(Q^TAQ)y=\lambda_1y_1^2+\cdots+\lambda_ny_n^2,</div>
+<p><span class="m">\lambda_i</span> 是 <span class="m">A</span> 的特征值，<span class="m">Q</span> 的列是相应的单位正交特征向量。</p></div>
+<div class="ex"><div class="ex-h">例 21.1<span class="ex-tag">正交变换（大题）</span></div><p>用正交变换化 <span class="m">f=2x_1x_2+2x_1x_3+2x_2x_3</span> 为标准形，并写出所用变换。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 由<a class="c" data-t="qform">二次型</a>，<span class="m">f</span> 的矩阵为 <span class="m">A=\begin{pmatrix}0&amp;1&amp;1\\1&amp;0&amp;1\\1&amp;1&amp;0\end{pmatrix}</span>。<span class="pt">2分</span></p>
+<p>这正是例 20.3 的矩阵，特征值为 <span class="m">2,-1,-1</span>。由<a class="c" data-t="orthstd">正交变换化标准形</a>，取</p>
+<div class="M">Q=\begin{pmatrix}\frac{1}{\sqrt3}&amp;-\frac{1}{\sqrt2}&amp;-\frac{1}{\sqrt6}\\\frac{1}{\sqrt3}&amp;\frac{1}{\sqrt2}&amp;-\frac{1}{\sqrt6}\\\frac{1}{\sqrt3}&amp;0&amp;\frac{2}{\sqrt6}\end{pmatrix},</div>
+<p>作正交变换 <span class="m">x=Qy</span>。<span class="pt">8分</span></p>
+<p class="fin">标准形为 <span class="m">f=2y_1^2-y_2^2-y_3^2</span>。</p></div>
+<div class="note"><div class="b-h">批注</div><p>真题的大题常常反着问：告诉你标准形或某个特征向量，反求参数。翻译关系是一样的：标准形系数 = 特征值，迹和行列式可列方程。</p></div>
+<h2>配方法与惯性定理</h2>
+<p>配方法：先把含 <span class="m">x_1</span> 的项配成一个完全平方，再处理 <span class="m">x_2</span>，依次进行。只有交叉项时，先令 <span class="m">x_1=y_1+y_2,x_2=y_1-y_2</span> 产生平方项。</p>
+<div class="ex"><div class="ex-h">例 21.2<span class="ex-tag">配方</span></div><p>用配方法化 <span class="m">f=x_1^2+2x_1x_2+2x_2^2+4x_2x_3+x_3^2</span> 为标准形，求其正、负惯性指数。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 先配 <span class="m">x_1</span>，再配 <span class="m">x_2</span>：</p>
+<div class="M">f=(x_1+x_2)^2+x_2^2+4x_2x_3+x_3^2=(x_1+x_2)^2+(x_2+2x_3)^2-3x_3^2.</div>
+<p>令 <span class="m">y_1=x_1+x_2</span>，<span class="m">y_2=x_2+2x_3</span>，<span class="m">y_3=x_3</span>（变换可逆），得 <span class="m">f=y_1^2+y_2^2-3y_3^2</span>。</p>
+<p class="fin">正惯性指数 <span class="m">p=2</span>，负惯性指数 <span class="m">q=1</span>。</p></div>
+<div class="thm" id="t-inertia"><div class="thm-h"><span>定理</span>惯性定理与合同</div><p>实二次型的标准形中，正、负系数的个数（<b>正、负惯性指数</b> <span class="m">p,q</span>）不随可逆变换改变。</p>
+<p><span class="m">A,B</span> <b>合同</b>：存在可逆 <span class="m">C</span>，<span class="m">C^TAC=B</span>。实对称矩阵合同 ⟺ <span class="m">p,q</span> 相同。</p>
+<p>实对称矩阵<b>相似 ⟹ 合同</b>，反之不成立。<span class="m">p</span> = 正特征值个数，<span class="m">q</span> = 负特征值个数。</p></div>
+<div class="ex"><div class="ex-h">例 21.3<span class="ex-tag">选择</span></div><p>下列矩阵中与 <span class="m">A=\begin{pmatrix}1&amp;0\\0&amp;-2\end{pmatrix}</span> 合同的是（　　）。</p>
+<p>(A) <span class="m">\begin{pmatrix}1&amp;0\\0&amp;2\end{pmatrix}</span>　(B) <span class="m">\begin{pmatrix}0&amp;1\\1&amp;0\end{pmatrix}</span>　(C) <span class="m">\begin{pmatrix}-1&amp;0\\0&amp;-1\end{pmatrix}</span>　(D) <span class="m">\begin{pmatrix}1&amp;1\\1&amp;1\end{pmatrix}</span></p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>答案 (B)。<span class="m">A</span> 的 <span class="m">p=1,q=1</span>。(B) 特征值 <span class="m">\pm1</span>，<span class="m">p=q=1</span>。(A) <span class="m">p=2</span>，(C) <span class="m">q=2</span>，(D) 特征值 <span class="m">2,0</span>，均不合。由<a class="c" data-t="inertia">惯性定理与合同</a>选 (B)。</p></div>
+<h2>正定</h2>
+<div class="thm" id="t-posdef"><div class="thm-h"><span>定理</span>正定二次型</div><p><span class="m">f=x^TAx</span>，对任意 <span class="m">x\neq0</span>，都有 <span class="m">f\gt0</span>，称 <span class="m">A</span> <b>正定</b>。下列条件等价：</p>
+<p>(1) 特征值全 <span class="m">\gt0</span>；(2) 正惯性指数 <span class="m">p=n</span>；(3) <b>顺序主子式全 <span class="m">\gt0</span></b>；(4) 存在可逆 <span class="m">C</span>，<span class="m">A=C^TC</span>。</p>
+<p>必要条件：<span class="m">a_{ii}\gt0</span>；<span class="m">\vert A\vert\gt0</span>。</p></div>
+<div class="ex"><div class="ex-h">例 21.4<span class="ex-tag">求参数范围</span></div><p><span class="m">f=x_1^2+x_2^2+5x_3^2+2tx_1x_2-2x_1x_3+4x_2x_3</span> 正定，求 <span class="m">t</span> 的范围。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 <span class="m">A=\begin{pmatrix}1&amp;t&amp;-1\\t&amp;1&amp;2\\-1&amp;2&amp;5\end{pmatrix}</span>。由<a class="c" data-t="posdef">正定二次型</a>，顺序主子式全为正：</p>
+<div class="M">D_1=1\gt0,\quad D_2=1-t^2\gt0,\quad D_3=\vert A\vert=-5t^2-4t\gt0.</div>
+<p>由 <span class="m">D_2\gt0</span> 得 <span class="m">-1\lt t\lt1</span>；由 <span class="m">D_3\gt0</span> 得 <span class="m">-\dfrac{4}{5}\lt t\lt0</span>。</p>
+<p class="fin">取交集，<span class="m">-\dfrac{4}{5}\lt t\lt0</span>。</p></div>
+
+<div class="endq"><h2>今日考你</h2><p class="hint">合上前答一遍：先想，再点开。答错的会回到后面几期和温故版。</p><div class="rq" data-q="21-0"><p class="rq-q"><span class="m">f=x_1^2+4x_1x_2</span> 的矩阵？</p><p class="rq-a"><span class="m">\begin{pmatrix}1&amp;2\\2&amp;0\end{pmatrix}</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="21-1"><p class="rq-q">相似与合同的关系（实对称）？</p><p class="rq-a">相似 ⟹ 合同，反之不然。相似看特征值全部相同，合同只看正负个数。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="21-2"><p class="rq-q">正定矩阵的等价条件写三个。</p><p class="rq-a">特征值全正；顺序主子式全正；存在可逆 <span class="m">C</span> 使 <span class="m">A=C^TC</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="21-3"><p class="rq-q">配方法的变换矩阵与正交变换有何不同？</p><p class="rq-a">只要求可逆，标准形系数不一定是特征值。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div></div>
+<div class="endnext" id="endnext"></div>
+<div id="sent"></div>
+</div></div>
+<aside class="rail" id="rail"><div class="rail-h">本版引用 · 定理全文</div><div id="railc"></div></aside>
+</section></main>
+<footer class="pager"><button id="pv" aria-label="上一版">‹</button><div class="pginfo"><span id="pgt"></span><div class="bar"><i id="pgb"></i></div></div><button id="nx" aria-label="下一版">›</button></footer>
+<div class="sheetup" id="sheetup" hidden><div class="sheetup-h"><span>定理全文</span><button id="sheetx">关闭</button></div><div id="sheetc"></div></div>
+<div class="drawer" id="drawer" hidden></div>
+<script src="assets/katex/katex.min.js"></script><script src="assets/data.js"></script><script src="assets/paper.js"></script>
+</body></html>

@@ -1,0 +1,94 @@
+@part 丙
+@kicker 第二类曲线积分与格林公式
+@title 走一圈，等于里面的旋涡加起来
+@deck 第二类曲线积分有方向，物理意义是力做的功。格林公式把封闭曲线积分变成二重积分，是这部分最值钱的工具。路径无关则告诉我们什么时候可以抄近路。
+@keep 第二类：$\int_LP\,dx+Q\,dy$，代入参数，下限对应**起点**。
+@keep 格林：$\oint_{L^+}Pdx+Qdy=\iint_D(Q_x-P_y)\,d\sigma$，正向 = 区域在左手边。
+@keep 不封闭就补线，有奇点就挖洞。
+@keep $Q_x=P_y$（单连通）⟹ 与路径无关，$Pdx+Qdy$ 是全微分。
+@recall 第二类曲线积分定限规则？ || 起点对应下限，终点对应上限，下限可以大于上限。
+@recall 格林公式的条件？ || $L$ 封闭、取正向；$P,Q$ 在 $D$ 内（含奇点要挖掉）有连续一阶偏导。
+@recall $\oint\frac{-y\,dx+x\,dy}{x^2+y^2}$ 绕原点一周？ || $2\pi$（逆时针）。原点是奇点，不能直接用格林。
+@recall 路径无关的等价条件？ || 单连通区域内：$P_y=Q_x$ ⟺ 闭路积分为 $0$ ⟺ 与路径无关 ⟺ $Pdx+Qdy=du$。
+
+## 第二类曲线积分
+:::thm line2 | 第二类曲线积分
+$\int_LP\,dx+Q\,dy$ 表示力 $(P,Q)$ 沿有向曲线 $L$ 做的功。参数式：
+$$\int_LP\,dx+Q\,dy=\int_\alpha^\beta\bigl[P(x(t),y(t))x'(t)+Q(x(t),y(t))y'(t)\bigr]dt,$$
+**$\alpha$ 对应起点，$\beta$ 对应终点**（可以 $\alpha\gt\beta$）。反向时积分变号。
+:::
+:::ex 直接计算
+计算 $\displaystyle\int_Lxy\,dx+(y-x)\,dy$，$L$ 是 $y=x^2$ 从 $(0,0)$ 到 $(1,1)$。
+:::
+:::paper
+解 以 $x$ 为参数，$y=x^2$，$dy=2x\,dx$，$x$ 从 $0$ 到 $1$。由[[line2]]，
+$$\int_L=\int_0^1\bigl[x^3+(x^2-x)\cdot2x\bigr]dx=\int_0^1(3x^3-2x^2)\,dx=\frac{3}{4}-\frac{2}{3}.$$
+∎ 原式 $=\dfrac{1}{12}$。
+:::
+
+## 格林公式
+:::thm green | 格林公式
+$D$ 是有界闭区域，边界 $L$ 取**正向**（走的时候 $D$ 在左手边），$P,Q$ 在 $D$ 上有连续一阶偏导，则
+$$\oint_LP\,dx+Q\,dy=\iint_D\Bigl(\frac{\partial Q}{\partial x}-\frac{\partial P}{\partial y}\Bigr)d\sigma.$$
+:::
+!fig f28_green | 区域被切成许多小格，相邻小格公共边上的积分方向相反、互相抵消，只剩外边界。这就是格林公式的来历。
+:::like
+把一池水里每个小旋涡的转速加起来，内部的旋转相互抵消，只有沿岸边那一圈的流动留了下来。$Q_x-P_y$ 是局部的旋转强度，闭路积分是沿岸的流动。
+:::
+:::ex 封闭曲线
+计算 $\displaystyle\oint_L(2xy-x^2)\,dx+(x+y^2)\,dy$，$L$ 是 $y=x^2$ 和 $x=y^2$ 所围区域的正向边界。
+:::
+:::paper
+解 $P=2xy-x^2$，$Q=x+y^2$，$Q_x-P_y=1-2x$。由[[green]]，
+$$\oint_L=\iint_D(1-2x)\,d\sigma=\int_0^1dx\int_{x^2}^{\sqrt x}(1-2x)\,dy=\int_0^1(1-2x)(\sqrt x-x^2)\,dx.$$
+展开积分：$\dfrac{2}{3}-\dfrac{1}{3}-2\Bigl(\dfrac{2}{5}-\dfrac{1}{4}\Bigr)=\dfrac{1}{3}-\dfrac{3}{10}$。
+∎ 原式 $=\dfrac{1}{30}$。
+:::
+
+## 不封闭：补线
+**补一段简单的线（常用平行于坐标轴的线段）构成封闭曲线**，用格林公式，再减去所补线段上的积分。注意所补线段的方向要让整圈为正向。
+:::ex 补线（大题）
+计算 $I=\displaystyle\int_L(e^x\sin y-2y)\,dx+(e^x\cos y-2)\,dy$，$L$ 是上半圆周 $x^2+y^2=2x$（$y\ge0$）从 $A(2,0)$ 到 $O(0,0)$。
+:::
+:::think
+直接参数化代进去，$e^{1+\cos t}\sin(\sin t)$ 完全没法算。$Q_x-P_y$ 中的 $e^x\cos y$ 恰好抵消，只剩常数，这是格林公式的强烈信号。$L$ 不封闭，补 $x$ 轴上的线段 $OA$。
+:::
+:::paper
+解 $Q_x-P_y=e^x\cos y-(e^x\cos y-2)=2$。⛳3
+补线段 $\overline{OA}$：$y=0$，$x$ 从 $0$ 到 $2$。$L+\overline{OA}$ 是封闭曲线，方向为逆时针，围成上半圆盘 $D$（半径 1）。由[[green]]，
+$$\oint_{L+\overline{OA}}=\iint_D2\,d\sigma=2\cdot\frac{\pi}{2}=\pi.$$⛳5
+在 $\overline{OA}$ 上 $y=0,dy=0$，$P=0$，故 $\int_{\overline{OA}}=0$。⛳2
+∎ 所以 $I=\pi-0=\pi$。
+:::
+
+## 有奇点：挖洞
+$P,Q$ 在 $D$ 内的某点没有定义，格林公式不能直接用。用小圆把奇点挖掉，在两条边界之间的区域上用格林。
+:::ex 挖洞
+计算 $\displaystyle\oint_L\frac{-y\,dx+x\,dy}{x^2+y^2}$，$L$ 是绕原点一周的光滑简单闭曲线（逆时针）。
+:::
+:::paper
+解 $P=\dfrac{-y}{x^2+y^2}$，$Q=\dfrac{x}{x^2+y^2}$，$(x,y)\neq(0,0)$ 时直接计算得 $Q_x=P_y=\dfrac{y^2-x^2}{(x^2+y^2)^2}$。原点是奇点。⛳3
+取充分小的圆 $C:x^2+y^2=\varepsilon^2$，逆时针，在 $L$ 内部。在 $L$ 与 $C$ 之间的区域上用[[green]]，由 $Q_x-P_y=0$ 得 $\oint_L=\oint_C$。⛳4
+在 $C$ 上，$x=\varepsilon\cos t,\ y=\varepsilon\sin t$，
+$$\oint_C=\int_0^{2\pi}\frac{\varepsilon^2\sin^2t+\varepsilon^2\cos^2t}{\varepsilon^2}\,dt.$$
+∎ 原式 $=2\pi$。⛳3
+:::
+
+## 路径无关与全微分
+:::thm pathind | 路径无关的条件
+在**单连通**区域 $G$ 内，$P,Q$ 有连续一阶偏导。下列四条等价：
+(1) $\dfrac{\partial Q}{\partial x}=\dfrac{\partial P}{\partial y}$；
+(2) 沿任意闭曲线的积分为 $0$；
+(3) $\int_LPdx+Qdy$ 与路径无关，只与起点、终点有关；
+(4) 存在 $u$，使 $du=Pdx+Qdy$，此时 $\int_A^BPdx+Qdy=u(B)-u(A)$。
+:::
+:::ex 求势函数
+验证 $(2xy+y^2)\,dx+(x^2+2xy)\,dy$ 是全微分，并计算它从 $(0,0)$ 到 $(1,2)$ 的积分。
+:::
+:::paper
+解 $P_y=2x+2y=Q_x$，由[[pathind]]知它是全微分。凑微分：
+$$(2xy\,dx+x^2dy)+(y^2dx+2xy\,dy)=d(x^2y)+d(xy^2),$$
+故 $u=x^2y+xy^2$。
+∎ 积分值 $=u(1,2)-u(0,0)=2+4=6$。
+:::
+**全微分方程**：$Pdx+Qdy=0$ 且 $P_y=Q_x$ 时，通解是 $u(x,y)=C$。这是一阶微分方程最后一种类型。

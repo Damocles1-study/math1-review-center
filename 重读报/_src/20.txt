@@ -1,0 +1,86 @@
+@part 乙
+@kicker 相似与对角化
+@title 换一组坐标，矩阵就变成对角
+@deck 对角矩阵的幂和行列式都是口算。相似对角化就是找到一组让 $A$ 变成对角矩阵的坐标，而这组坐标正是特征向量。实对称矩阵更好，不但一定行，还能用正交矩阵完成。
+@keep $P^{-1}AP=B$：相似矩阵有相同的特征值、行列式、迹、秩。
+@keep 可对角化 ⟺ 有 $n$ 个线性无关特征向量 ⟺ 每个 $k$ 重根 $\lambda$ 都有 $r(\lambda E-A)=n-k$。
+@keep $P$ 的列是特征向量，顺序与对角阵上的 $\lambda$ 对应。
+@keep 实对称：特征值全实，不同特征值的向量正交，一定可正交对角化。
+@recall 判断 $k$ 重特征值 $\lambda$ 是否「够数」，看什么？ || $n-r(\lambda E-A)$ 是否等于 $k$。
+@recall 相似矩阵必须满足的四个不变量？ || 特征值、行列式、迹、秩。
+@recall 实对称矩阵同一特征值的多个特征向量要怎么处理？ || 施密特正交化后再单位化。
+@recall $A=P\Lambda P^{-1}$ 时 $A^n$ 等于？ || $P\Lambda^nP^{-1}$。
+
+## 相似
+:::thm simdef | 相似矩阵 | 定义
+若存在可逆矩阵 $P$，使 $P^{-1}AP=B$，称 $A$ 与 $B$ **相似**，记 $A\sim B$。
+**不变量**：$\vert\lambda E-A\vert=\vert\lambda E-B\vert$（特征值相同），$\vert A\vert=\vert B\vert$，$\mathrm{tr}A=\mathrm{tr}B$，$r(A)=r(B)$。这些只是**必要条件**。
+:::
+:::like
+同一套家具在两张不同坐标的平面图上。数字变了，房间没变。特征值就是不随坐标变化的「房间本身的尺寸」。
+:::
+:::ex 用不变量求参数
+设 $A=\begin{pmatrix}1&a\\0&2\end{pmatrix}$ 相似于 $B=\begin{pmatrix}b&0\\0&2\end{pmatrix}$，求 $b$。
+:::
+:::paper
+解 由[[simdef]]，迹相等：$1+2=b+2$，
+∎ 故 $b=1$。
+:::
+
+## 对角化的条件和步骤
+:::thm diag | 相似对角化
+$n$ 阶 $A$ 可对角化 ⟺ $A$ 有 $n$ 个线性无关的特征向量。
+**判定**：(1) $n$ 个特征值互不相同 ⟹ 可对角化。(2) 有重根时，对每个 $k$ 重根 $\lambda$，要求 $n-r(\lambda E-A)=k$。
+**写法**：$P=(\xi_1,\dots,\xi_n)$，则 $P^{-1}AP=\mathrm{diag}(\lambda_1,\dots,\lambda_n)$，$\xi_i$ 与 $\lambda_i$ 次序对应。
+由此 $A^m=P\Lambda^mP^{-1}$。
+:::
+:::ex 判定 + 求幂
+$A=\begin{pmatrix}2&0&0\\1&2&-1\\1&0&1\end{pmatrix}$（第 19 期例 19.1）。判断 $A$ 能否对角化，若能，写出 $P$ 和对角矩阵，并求 $A^n$。
+:::
+:::paper
+解 由例 19.1，$\lambda_1=\lambda_2=2$，$\lambda_3=1$。$\lambda=2$ 时 $r(2E-A)=1$，$3-1=2$，等于重数。由[[diag]]，$A$ 可对角化。⛳3
+取 $P=(\xi_1,\xi_2,\xi_3)=\begin{pmatrix}1&0&0\\0&1&1\\1&0&1\end{pmatrix}$，则 $P^{-1}AP=\Lambda=\mathrm{diag}(2,2,1)$。⛳3
+求得 $P^{-1}=\begin{pmatrix}1&0&0\\1&1&-1\\-1&0&1\end{pmatrix}$，于是 ⛳2
+$$A^n=P\Lambda^nP^{-1}=\begin{pmatrix}2^n&0&0\\2^n-1&2^n&1-2^n\\2^n-1&0&1\end{pmatrix}.$$
+∎ $A^n$ 如上。代入 $n=1$ 即回到 $A$，可用来检查。
+:::
+:::trap
+$P$ 的列顺序和对角矩阵必须一致。写 $\mathrm{diag}(2,2,1)$，就必须把 $\lambda=1$ 的向量放在第三列。
+:::
+
+## 实对称矩阵
+:::thm symeig | 实对称矩阵的性质
+实对称矩阵 $A=A^T$：
+(1) 特征值都是实数。
+(2) 不同特征值对应的特征向量**正交**。
+(3) 一定可以对角化，且存在**正交矩阵** $Q$（$Q^{-1}=Q^T$），使 $Q^TAQ=\Lambda$。
+:::
+**步骤**：求特征值 → 求特征向量 → 同一特征值内部施密特正交化（[[schmidt]]）→ 全部单位化 → 排成 $Q$。
+:::ex 正交对角化（大题）
+设 $A=\begin{pmatrix}0&1&1\\1&0&1\\1&1&0\end{pmatrix}$，求正交矩阵 $Q$，使 $Q^TAQ$ 为对角矩阵。
+:::
+:::think
+行和都是 2，$(1,1,1)^T$ 必是特征值 2 的特征向量。$A+E$ 秩为 1，$-1$ 是二重特征值。可用这个检查。
+:::
+:::paper
+解 特征方程（各列加到第一列后提因子）：
+$$\vert\lambda E-A\vert=(\lambda-2)(\lambda+1)^2=0,$$
+特征值 $\lambda_1=2$，$\lambda_2=\lambda_3=-1$。⛳3
+$\lambda=2$：解 $(2E-A)x=0$，得 $\xi_1=(1,1,1)^T$。⛳2
+$\lambda=-1$：$-E-A$ 化为 $\begin{pmatrix}1&1&1\\0&0&0\\0&0&0\end{pmatrix}$，得 $\xi_2=(-1,1,0)^T$，$\xi_3=(-1,0,1)^T$。⛳2
+由[[schmidt]]对 $\xi_2,\xi_3$ 正交化：取 $\beta_2=\xi_2$，
+$$\beta_3=\xi_3-\frac{(\xi_3,\beta_2)}{(\beta_2,\beta_2)}\beta_2=(-1,0,1)^T-\frac{1}{2}(-1,1,0)^T=\frac{1}{2}(-1,-1,2)^T.$$⛳2
+由[[symeig]]，$\xi_1$ 自动与 $\beta_2,\beta_3$ 正交。单位化并排成
+$$Q=\begin{pmatrix}\frac{1}{\sqrt3}&-\frac{1}{\sqrt2}&-\frac{1}{\sqrt6}\\\frac{1}{\sqrt3}&\frac{1}{\sqrt2}&-\frac{1}{\sqrt6}\\\frac{1}{\sqrt3}&0&\frac{2}{\sqrt6}\end{pmatrix}.$$⛳2
+∎ 则 $Q$ 是正交矩阵，$Q^TAQ=\mathrm{diag}(2,-1,-1)$。
+:::
+:::ex 反求矩阵
+$3$ 阶实对称矩阵 $A$ 的特征值为 $1,1,4$，$\lambda=4$ 的特征向量为 $\xi=(1,1,1)^T$。求 $A$。
+:::
+:::think
+不必求全部特征向量。$\lambda=4$ 方向已知，其余方向都是特征值 $1$，把 $A$ 写成 $E+$ 秩 1 矩阵。
+:::
+:::paper
+解 令 $e=\frac{1}{\sqrt3}\xi$。由[[symeig]]，$\lambda=1$ 的特征空间与 $e$ 正交。令 $B=E+3ee^T$，则 $Be=e+3e=4e$；对任何与 $e$ 正交的 $x$，$Bx=x$。$B$ 与 $A$ 在一组完整的基上作用相同，故 $A=B$。
+∎ 所以 $A=E+\xi\xi^T=\begin{pmatrix}2&1&1\\1&2&1\\1&1&2\end{pmatrix}$。
+:::

@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>一个数，判定一张方阵有没有「塌」 · 第15期 · 重读报</title>
+<link rel="stylesheet" href="assets/katex/katex.min.css">
+<link rel="stylesheet" href="assets/paper.css">
+</head><body class="issue" data-no="15" data-prev="q14.html" data-next="q16.html">
+<header class="strip"><a class="brand" href="index.html">重读报</a>
+<span class="strip-m">第 15 期 · 线性代数 · 行列式</span>
+<nav class="tools"><button data-a="toc" title="目录 (T)">目录</button><button data-a="rail" class="only-narrow">定理<i id="railn"></i></button><button data-a="hide" title="遮住卷面，先自己写 (H)">遮卷面</button><button data-a="night" title="夜读">夜读</button></nav></header>
+<main class="sheet" id="sheet">
+<section class="cover" id="cover">
+<div class="mast"><div class="mast-l">线性代数<br>第 15 期</div><div class="mast-c">重读报</div><div class="mast-r">本期约 16 分钟<br>行列式</div></div>
+<h1>一个数，判定一张方阵有没有「塌」</h1>
+<p class="deck">线性代数不依赖微积分，从头开始。行列式就是一个算出来的数，它等于 0 表示这组向量「压扁了」。计算只靠两招：化三角形，按行展开。</p>
+<div class="cover-grid">
+<div class="cover-keep"><h4>本期只记这几行</h4><ol><li>互换两行变号；一行的 <span class="m">k</span> 倍加到另一行，值不变。</li><li>三角形行列式 = 对角线之积。</li><li>按行展开：某行元素分别乘<b>自己的</b>代数余子式，和为 <span class="m">D</span>；乘<b>别行的</b>代数余子式，和为 <span class="m">0</span>。</li><li>见到 <span class="m">A_{11}+A_{12}+A_{13}</span> 这种组合：把系数填进那一行，算新行列式。</li></ol></div>
+<div class="cover-prev"><h4>开读前，先答上期</h4><div id="prevq"></div></div>
+<div class="cover-toc"><h4>本期目录</h4><ol><li>定义</li><li>六条性质</li><li>按行展开</li><li>几个直接记结论的形状</li><li>克拉默法则：只记结论</li></ol><p class="hint">→ 键 / 点右缘 / 左滑翻页</p></div>
+</div></section>
+<section class="stage" id="stage" hidden>
+<div class="viewport" id="vp"><div class="flow" id="flow">
+<h2>定义</h2>
+<div class="M">\begin{vmatrix}a&amp;b\\c&amp;d\end{vmatrix}=ad-bc.</div>
+<figure><svg viewBox="0 0 250 150" role="img"><defs><marker id="arr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path class="arrh" d="M0 .8L7 4L0 7.2z"/></marker></defs><line class="ax" x1="10.0" y1="128.9" x2="240.0" y2="128.9" marker-end="url(#arr)"/><line class="ax" x1="22.5" y1="140.0" x2="22.5" y2="10.0" marker-end="url(#arr)"/><text class="tx" x="233.0" y="142.9">x</text><text class="tx" x="30.5" y="18.0">y</text><text class="tx" x="11.5" y="141.9">O</text><path class="fl" d="M22.5 128.9 L148.0 102.9 L198.2 28.6 L72.7 54.6 Z"/><line class="lr" x1="22.5" y1="128.9" x2="148.0" y2="102.9" marker-end="url(#arr)"/><line class="lb" x1="22.5" y1="128.9" x2="72.7" y2="54.6" marker-end="url(#arr)"/><line class="ds" x1="148.0" y1="102.9" x2="198.2" y2="28.6"/><line class="ds" x1="72.7" y1="54.6" x2="198.2" y2="28.6"/><text class="tx tr" x="150.0" y="115.9">α</text><text class="tx tb" x="61.7" y="53.6">β</text><text class="tx" x="79.6" y="82.4">面积 = |det|</text></svg><figcaption>二阶行列式是两个向量张成的平行四边形的（有向）面积。三阶则是体积。向量「共线」时面积为 <span class="m">0</span>，所以行列式等于 <span class="m">0</span> 代表压扁。</figcaption></figure>
+<div class="like"><div class="b-h">打个比方</div><p>把向量当作一张网格变形的两条边：行列式就是变形之后面积放大的倍数。倍数是 <span class="m">0</span>，整张网格塌成一条线，信息丢失，无法还原。这个直觉贯穿线性代数：<span class="m">\vert A\vert=0</span> 对应不可逆、有非零解、向量相关。</p></div>
+<p>更高阶靠「按行展开」递推定义（见下）。</p>
+<h2>六条性质</h2>
+<div class="thm" id="t-detprop"><div class="thm-h"><span>定理</span>行列式的性质</div><p>(1) 行列互换，值不变。所以行有的性质列都有。</p>
+<p>(2) 互换两行，变号。两行相同，值为 <span class="m">0</span>。</p>
+<p>(3) 某行的公因子可提到外面。两行成比例，值为 <span class="m">0</span>。</p>
+<p>(4) 某行每个元素都是两数之和，可拆成两个行列式之和。</p>
+<p>(5) 某行的 <span class="m">k</span> 倍加到另一行，值不变。</p>
+<p>(6) 上（下）三角行列式等于对角线元素之积。</p></div>
+<p><b>计算的主干</b>：用 (2)(3)(5) 把它化成三角形。</p>
+<div class="ex"><div class="ex-h">例 15.1<span class="ex-tag">行和相等</span></div><p>计算 <span class="m">D=\begin{vmatrix}a&amp;b&amp;b&amp;b\\b&amp;a&amp;b&amp;b\\b&amp;b&amp;a&amp;b\\b&amp;b&amp;b&amp;a\end{vmatrix}</span>。</p></div>
+<div class="think"><div class="b-h">思路</div><p>每行之和都是 <span class="m">a+3b</span>。把各列加到第一列，第一列全相同，提出公因子。再各行减第一行，就是三角形。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 由<a class="c" data-t="detprop">行列式的性质</a>，将第 2、3、4 列都加到第 1 列，并提出公因子：</p>
+<div class="M">D=(a+3b)\begin{vmatrix}1&amp;b&amp;b&amp;b\\1&amp;a&amp;b&amp;b\\1&amp;b&amp;a&amp;b\\1&amp;b&amp;b&amp;a\end{vmatrix}.</div>
+<p>第 2、3、4 行分别减去第 1 行：</p>
+<div class="M">D=(a+3b)\begin{vmatrix}1&amp;b&amp;b&amp;b\\0&amp;a-b&amp;0&amp;0\\0&amp;0&amp;a-b&amp;0\\0&amp;0&amp;0&amp;a-b\end{vmatrix}.</div>
+<p class="fin">故 <span class="m">D=(a+3b)(a-b)^3</span>。</p></div>
+<h2>按行展开</h2>
+<div class="thm" id="t-expand"><div class="thm-h"><span>定理</span>按行（列）展开</div><p>划掉第 <span class="m">i</span> 行第 <span class="m">j</span> 列，剩下的行列式叫<b>余子式</b> <span class="m">M_{ij}</span>，<b>代数余子式</b> <span class="m">A_{ij}=(-1)^{i+j}M_{ij}</span>。</p>
+<div class="M">D=a_{i1}A_{i1}+a_{i2}A_{i2}+\cdots+a_{in}A_{in}.</div>
+<p><b>异行展开为零</b>：<span class="m">a_{i1}A_{k1}+\cdots+a_{in}A_{kn}=0\ (i\neq k)</span>。</p></div>
+<p><b>用法</b>：先用性质 (5) 把某行变出尽量多的 <span class="m">0</span>，再按这一行展开。</p>
+<div class="ex"><div class="ex-h">例 15.2<span class="ex-tag">代数余子式的组合</span></div><p>设 <span class="m">D=\begin{vmatrix}1&amp;2&amp;3\\4&amp;5&amp;6\\7&amp;8&amp;10\end{vmatrix}</span>，求 <span class="m">A_{11}+A_{12}+A_{13}</span>。</p></div>
+<div class="think"><div class="b-h">思路</div><p>第一行的代数余子式与第一行元素的值无关。所以 <span class="m">A_{11}+A_{12}+A_{13}</span> 就是把第一行换成 <span class="m">1,1,1</span> 后的行列式。不要逐个算。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 由<a class="c" data-t="expand">按行（列）展开</a>，<span class="m">A_{1j}</span> 不依赖第一行，故</p>
+<div class="M">A_{11}+A_{12}+A_{13}=\begin{vmatrix}1&amp;1&amp;1\\4&amp;5&amp;6\\7&amp;8&amp;10\end{vmatrix}.</div>
+<p>第 2 列、第 3 列减去第 1 列：</p>
+<div class="M">\begin{vmatrix}1&amp;0&amp;0\\4&amp;1&amp;2\\7&amp;1&amp;3\end{vmatrix}=1\cdot(3-2)=1.</div>
+<p class="fin">故 <span class="m">A_{11}+A_{12}+A_{13}=1</span>。</p></div>
+<h2>几个直接记结论的形状</h2>
+<div class="thm" id="t-detspecial"><div class="thm-h"><span>公式</span>特殊行列式</div><p><b>范德蒙</b>：</p>
+<div class="M">\begin{vmatrix}1&amp;1&amp;\cdots&amp;1\\x_1&amp;x_2&amp;\cdots&amp;x_n\\\vdots&amp;&amp;&amp;\vdots\\x_1^{n-1}&amp;x_2^{n-1}&amp;\cdots&amp;x_n^{n-1}\end{vmatrix}=\prod_{1\le j\lt i\le n}(x_i-x_j).</div>
+<p><b>分块三角</b>：<span class="m">\begin{vmatrix}A&amp;C\\O&amp;B\end{vmatrix}=\vert A\vert\vert B\vert</span>（<span class="m">A,B</span> 为方块）。</p></div>
+<div class="ex"><div class="ex-h">例 15.3<span class="ex-tag">范德蒙</span></div><p>计算 <span class="m">\begin{vmatrix}1&amp;1&amp;1\\1&amp;2&amp;3\\1&amp;4&amp;9\end{vmatrix}</span>。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 这是 <span class="m">x_1=1,x_2=2,x_3=3</span> 的范德蒙行列式。由<a class="c" data-t="detspecial">特殊行列式</a>，</p>
+<p class="fin">值为 <span class="m">(2-1)(3-1)(3-2)=2</span>。</p></div>
+<div class="ex"><div class="ex-h">例 15.4<span class="ex-tag">爪形</span></div><p>计算 <span class="m">D=\begin{vmatrix}1&amp;1&amp;1\\1&amp;2&amp;0\\1&amp;0&amp;3\end{vmatrix}</span>。</p></div>
+<div class="think"><div class="b-h">思路</div><p>第一行、第一列之外只有对角线有数，这是「爪形」。用对角元把第一列的 <span class="m">1</span> 消掉。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 由<a class="c" data-t="detprop">行列式的性质</a>，第 1 列减去第 2 列的 <span class="m">\frac{1}{2}</span> 倍、再减去第 3 列的 <span class="m">\frac{1}{3}</span> 倍：</p>
+<div class="M">D=\begin{vmatrix}1-\frac12-\frac13&amp;1&amp;1\\0&amp;2&amp;0\\0&amp;0&amp;3\end{vmatrix}=\frac{1}{6}\cdot2\cdot3.</div>
+<p class="fin">故 <span class="m">D=1</span>。</p></div>
+<h2>克拉默法则：只记结论</h2>
+<p>方程个数等于未知数个数的方程组，系数行列式 <span class="m">D\neq0</span> 时有唯一解，<span class="m">x_j=D_j/D</span>（<span class="m">D_j</span> 把第 <span class="m">j</span> 列换成常数项）。齐次方程组有非零解 ⟺ <span class="m">D=0</span>。这句结论比解法本身有用。</p>
+<div class="skip"><div class="b-h">本报不刊</div><p>不写全排列定义和逆序数。选择题里偶尔有逆序的影子，用展开就能算。高阶递推型（三对角）费时低效，不练。</p></div>
+
+<div class="endq"><h2>今日考你</h2><p class="hint">合上前答一遍：先想，再点开。答错的会回到后面几期和温故版。</p><div class="rq" data-q="15-0"><p class="rq-q">代数余子式 <span class="m">A_{ij}</span> 和余子式 <span class="m">M_{ij}</span> 的关系？</p><p class="rq-a"><span class="m">A_{ij}=(-1)^{i+j}M_{ij}</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="15-1"><p class="rq-q">每行元素之和都相等的行列式怎么算？</p><p class="rq-a">各列加到第一列，提出公因子，再化简。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="15-2"><p class="rq-q">三阶范德蒙行列式的值？</p><p class="rq-a"><span class="m">\prod_{i\gt j}(x_i-x_j)</span>，即 <span class="m">(x_2-x_1)(x_3-x_1)(x_3-x_2)</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="15-3"><p class="rq-q">第一行元素乘第二行对应的代数余子式，和是多少？</p><p class="rq-a"><span class="m">0</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div></div>
+<div class="endnext" id="endnext"></div>
+<div id="sent"></div>
+</div></div>
+<aside class="rail" id="rail"><div class="rail-h">本版引用 · 定理全文</div><div id="railc"></div></aside>
+</section></main>
+<footer class="pager"><button id="pv" aria-label="上一版">‹</button><div class="pginfo"><span id="pgt"></span><div class="bar"><i id="pgb"></i></div></div><button id="nx" aria-label="下一版">›</button></footer>
+<div class="sheetup" id="sheetup" hidden><div class="sheetup-h"><span>定理全文</span><button id="sheetx">关闭</button></div><div id="sheetc"></div></div>
+<div class="drawer" id="drawer" hidden></div>
+<script src="assets/katex/katex.min.js"></script><script src="assets/data.js"></script><script src="assets/paper.js"></script>
+</body></html>

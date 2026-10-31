@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>先分情况，再加权求和 · 第32期 · 重读报</title>
+<link rel="stylesheet" href="assets/katex/katex.min.css">
+<link rel="stylesheet" href="assets/paper.css">
+</head><body class="issue" data-no="32" data-prev="q31.html" data-next="q33.html">
+<header class="strip"><a class="brand" href="index.html">重读报</a>
+<span class="strip-m">第 32 期 · 概率统计 · 事件与概率</span>
+<nav class="tools"><button data-a="toc" title="目录 (T)">目录</button><button data-a="rail" class="only-narrow">定理<i id="railn"></i></button><button data-a="hide" title="遮住卷面，先自己写 (H)">遮卷面</button><button data-a="night" title="夜读">夜读</button></nav></header>
+<main class="sheet" id="sheet">
+<section class="cover" id="cover">
+<div class="mast"><div class="mast-l">概率统计<br>第 32 期</div><div class="mast-c">重读报</div><div class="mast-r">本期约 18 分钟<br>事件与概率</div></div>
+<h1>先分情况，再加权求和</h1>
+<p class="deck">概率统计和前面的联系只有积分。这一期要拿到的是两个工具：条件概率的乘法公式，和「先把样本空间切开再加权」的全概率公式。贝叶斯就是把它倒过来。</p>
+<div class="cover-grid">
+<div class="cover-keep"><h4>本期只记这几行</h4><ol><li><span class="m">P(A\cup B)=P(A)+P(B)-P(AB)</span>；<span class="m">P(A-B)=P(A)-P(AB)</span>。</li><li><span class="m">P(B\vert A)=\frac{P(AB)}{P(A)}</span>；<span class="m">P(AB)=P(A)P(B\vert A)</span>。</li><li>全概率：<span class="m">P(B)=\sum P(A_i)P(B\vert A_i)</span>；贝叶斯：<span class="m">P(A_i\vert B)=\frac{P(A_i)P(B\vert A_i)}{P(B)}</span>。</li><li>独立：<span class="m">P(AB)=P(A)P(B)</span>。互斥不是独立。</li></ol></div>
+<div class="cover-prev"><h4>开读前，先答上期</h4><div id="prevq"></div></div>
+<div class="cover-toc"><h4>本期目录</h4><ol><li>事件运算与概率公式</li><li>条件概率与乘法公式</li><li>全概率公式与贝叶斯公式</li><li>独立性</li></ol><p class="hint">→ 键 / 点右缘 / 左滑翻页</p></div>
+</div></section>
+<section class="stage" id="stage" hidden>
+<div class="viewport" id="vp"><div class="flow" id="flow">
+<h2>事件运算与概率公式</h2>
+<p>事件是样本空间的子集，运算就是集合运算。<span class="m">\bar A</span> 是对立事件。<b>对偶律</b>：<span class="m">\overline{A\cup B}=\bar A\bar B</span>，<span class="m">\overline{AB}=\bar A\cup\bar B</span>。</p>
+<div class="thm" id="t-probbasic"><div class="thm-h"><span>定理</span>概率的基本公式</div><p><span class="m">0\le P(A)\le1</span>，<span class="m">P(\Omega)=1</span>，<span class="m">P(\bar A)=1-P(A)</span>。</p>
+<p><b>加法</b>：<span class="m">P(A\cup B)=P(A)+P(B)-P(AB)</span>；三个事件：<span class="m">P(A\cup B\cup C)=\sum P(A)-\sum P(AB)+P(ABC)</span>。</p>
+<p><b>减法</b>：<span class="m">P(A-B)=P(A\bar B)=P(A)-P(AB)</span>。</p></div>
+<div class="thm" id="t-classic"><div class="thm-h"><span>定理</span>古典概型与几何概型</div><p><b>古典</b>：等可能的有限个结果，<span class="m">P(A)=\dfrac{A\text{ 包含的结果数}}{\text{结果总数}}</span>。</p>
+<p><b>几何</b>：等可能地落在区域 <span class="m">\Omega</span> 内，<span class="m">P(A)=\dfrac{A\text{ 的度量}}{\Omega\text{ 的度量}}</span>。</p></div>
+<figure><svg viewBox="0 0 200 190" role="img"><defs><marker id="arr" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path class="arrh" d="M0 .8L7 4L0 7.2z"/></marker></defs><line class="ax" x1="10.0" y1="164.5" x2="190.0" y2="164.5" marker-end="url(#arr)"/><line class="ax" x1="26.4" y1="180.0" x2="26.4" y2="10.0" marker-end="url(#arr)"/><text class="tx" x="183.0" y="178.5">x</text><text class="tx" x="34.4" y="18.0">y</text><text class="tx" x="15.4" y="177.5">O</text><path class="fr" d="M26.4 164.5 L71.8 164.5 L162.7 78.7 L162.7 35.8 L117.3 35.8 L26.4 121.6 Z"/><path class="ln" d="M26.4 164.5 L162.7 164.5 L162.7 35.8 L26.4 35.8 L26.4 164.5"/><line class="lr" x1="26.4" y1="121.6" x2="117.3" y2="35.8"/><line class="lr" x1="71.8" y1="164.5" x2="162.7" y2="78.7"/><text class="tx" x="159.7" y="177.5">1</text><text class="tx" x="16.4" y="39.8">1</text><text class="tx" x="63.8" y="177.5">1/3</text><text class="tx" x="4.4" y="125.6">1/3</text></svg><figcaption>约会问题：<span class="m">x,y</span> 各自在 <span class="m">[0,1]</span> 上均匀，<span class="m">\vert x-y\vert\le\frac13</span> 的区域就是相遇。</figcaption></figure>
+<div class="ex"><div class="ex-h">例 32.1<span class="ex-tag">几何概型</span></div><p>两人在 <span class="m">[0,1]</span>（小时）内独立且等可能地到达，先到者等 <span class="m">\frac{1}{3}</span> 小时。求相遇的概率。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 设到达时刻为 <span class="m">x,y</span>，样本空间是单位正方形，面积为 <span class="m">1</span>。相遇 ⟺ <span class="m">\vert x-y\vert\le\dfrac{1}{3}</span>。不相遇部分是两个直角边为 <span class="m">\dfrac{2}{3}</span> 的直角三角形，面积 <span class="m">\Bigl(\dfrac{2}{3}\Bigr)^2=\dfrac{4}{9}</span>。</p>
+<p class="fin">由<a class="c" data-t="classic">古典概型与几何概型</a>，所求概率 <span class="m">=1-\dfrac{4}{9}=\dfrac{5}{9}</span>。</p></div>
+<h2>条件概率与乘法公式</h2>
+<div class="thm" id="t-condprob"><div class="thm-h"><span>定理</span>条件概率与乘法公式</div><p><span class="m">P(A)\gt0</span> 时，<span class="m">P(B\vert A)=\dfrac{P(AB)}{P(A)}</span>。</p>
+<p><b>乘法公式</b>：<span class="m">P(AB)=P(A)P(B\vert A)</span>；<span class="m">P(ABC)=P(A)P(B\vert A)P(C\vert AB)</span>。</p></div>
+<div class="like"><div class="b-h">打个比方</div><p>条件概率是「把样本空间缩小到 <span class="m">A</span> 之后」再看 <span class="m">B</span>。知道今天下雨（<span class="m">A</span>），再问堵车的概率，范围已经只剩下雨天。</p></div>
+<h2>全概率公式与贝叶斯公式</h2>
+<div class="thm" id="t-totalprob"><div class="thm-h"><span>定理</span>全概率公式与贝叶斯公式</div><p><span class="m">A_1,\dots,A_n</span> 两两互斥、并为 <span class="m">\Omega</span>（<b>完备事件组</b>），<span class="m">P(A_i)\gt0</span>：</p>
+<div class="M">P(B)=\sum_{i=1}^nP(A_i)P(B\vert A_i),</div>
+<div class="M">P(A_i\vert B)=\frac{P(A_i)P(B\vert A_i)}{\sum_jP(A_j)P(B\vert A_j)}.</div></div>
+<figure><svg viewBox="0 0 300 150" role="img"><line class="ln" x1="25" y1="75" x2="115" y2="25"/><text x="64.0" y="47.0" style="font-size:10.5px">P(A₁)</text><text x="118" y="29">A₁</text><line class="ln" x1="135" y1="25" x2="225" y2="13"/><text x="174.0" y="16.0" style="font-size:10.5px">P(B|A₁)</text><line class="ln" x1="135" y1="25" x2="225" y2="37"/><text x="229" y="17">B</text><text x="229" y="41">B̄</text><line class="ln" x1="25" y1="75" x2="115" y2="75"/><text x="64.0" y="72.0" style="font-size:10.5px">P(A₂)</text><text x="118" y="79">A₂</text><line class="ln" x1="135" y1="75" x2="225" y2="63"/><text x="174.0" y="66.0" style="font-size:10.5px">P(B|A₂)</text><line class="ln" x1="135" y1="75" x2="225" y2="87"/><text x="229" y="67">B</text><text x="229" y="91">B̄</text><line class="lr" x1="25" y1="75" x2="115" y2="125"/><text x="64.0" y="97.0" style="font-size:10.5px">P(A₃)</text><text x="118" y="129">A₃</text><line class="lr" x1="135" y1="125" x2="225" y2="113"/><text x="174.0" y="116.0" style="font-size:10.5px">P(B|A₃)</text><line class="ln" x1="135" y1="125" x2="225" y2="137"/><text x="229" y="117">B</text><text x="229" y="141">B̄</text></svg><figcaption>概率树：第一层是原因，第二层是结果。全概率把所有通向 <span class="m">B</span> 的路径相加；贝叶斯算其中一条路占多少比例。</figcaption></figure>
+<p><b>信号</b>：事情分两个阶段发生，问第二阶段的结果，用全概率；已知结果，反问原因，用贝叶斯。</p>
+<div class="ex"><div class="ex-h">例 32.2<span class="ex-tag">全概率 + 贝叶斯</span></div><p>甲、乙、丙三台机器的产量占比为 <span class="m">50\%,30\%,20\%</span>，次品率分别为 <span class="m">1\%,2\%,5\%</span>。任取一件：(1) 求它是次品的概率；(2) 已知是次品，求它来自丙的概率。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 设 <span class="m">A_1,A_2,A_3</span> 分别表示产品来自甲、乙、丙，<span class="m">B</span> 表示次品。</p>
+<p>(1) 由<a class="c" data-t="totalprob">全概率公式与贝叶斯公式</a>，</p>
+<div class="M">P(B)=0.5\times0.01+0.3\times0.02+0.2\times0.05=0.021.</div>
+<p>(2) 由<a class="c" data-t="totalprob">全概率公式与贝叶斯公式</a>，</p>
+<div class="M">P(A_3\vert B)=\frac{P(A_3)P(B\vert A_3)}{P(B)}=\frac{0.01}{0.021}.</div>
+<p class="fin">故 <span class="m">P(B)=0.021</span>，<span class="m">P(A_3\vert B)=\dfrac{10}{21}</span>。</p></div>
+<div class="ex"><div class="ex-h">例 32.3<span class="ex-tag">抓阄</span></div><p>袋中 <span class="m">3</span> 红 <span class="m">2</span> 白，不放回地取两次。求第二次取到红球的概率。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 设 <span class="m">A</span> 为第一次取红。由<a class="c" data-t="totalprob">全概率公式与贝叶斯公式</a>，</p>
+<div class="M">P(\text{第二次红})=P(A)\cdot\frac{2}{4}+P(\bar A)\cdot\frac{3}{4}=\frac{3}{5}\cdot\frac{1}{2}+\frac{2}{5}\cdot\frac{3}{4}.</div>
+<p class="fin">所求概率 <span class="m">=\dfrac{3}{5}</span>，与第一次相同。</p></div>
+<h2>独立性</h2>
+<div class="thm" id="t-indep"><div class="thm-h"><span>定理</span>事件的独立性</div><p><span class="m">P(AB)=P(A)P(B)</span> 称 <span class="m">A,B</span> <b>独立</b>。此时 <span class="m">A,\bar B</span> 等也都独立。</p>
+<p>三个事件<b>相互独立</b>：两两独立，且 <span class="m">P(ABC)=P(A)P(B)P(C)</span>。<b>两两独立不能推出相互独立。</b></p></div>
+<div class="ex"><div class="ex-h">例 32.4<span class="ex-tag">用条件判断独立</span></div><p><span class="m">P(A)=0.5,\ P(B)=0.4,\ P(A\vert B)=0.5</span>。求 <span class="m">P(A\cup B)</span>，判断 <span class="m">A,B</span> 是否独立。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 由<a class="c" data-t="condprob">条件概率与乘法公式</a>，<span class="m">P(AB)=P(B)P(A\vert B)=0.2</span>。由<a class="c" data-t="probbasic">概率的基本公式</a>，<span class="m">P(A\cup B)=0.5+0.4-0.2=0.7</span>。</p>
+<p class="fin"><span class="m">P(AB)=0.2=P(A)P(B)</span>，由<a class="c" data-t="indep">事件的独立性</a>，<span class="m">A,B</span> 独立。</p></div>
+<div class="ex"><div class="ex-h">例 32.5<span class="ex-tag">至少一个</span></div><p>三门炮独立射击，命中率为 <span class="m">0.8,0.7,0.5</span>，求目标被击中的概率。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 对立事件是三门都未命中，由<a class="c" data-t="indep">事件的独立性</a>，</p>
+<p class="fin">所求概率 <span class="m">=1-0.2\times0.3\times0.5=0.97</span>。</p></div>
+<div class="trap"><div class="b-h">易错</div><p>「互斥」和「独立」是两回事。<span class="m">P(A),P(B)\gt0</span> 时，互斥则 <span class="m">P(AB)=0\neq P(A)P(B)</span>，一定不独立。</p></div>
+
+<div class="endq"><h2>今日考你</h2><p class="hint">合上前答一遍：先想，再点开。答错的会回到后面几期和温故版。</p><div class="rq" data-q="32-0"><p class="rq-q">互斥和独立的关系？</p><p class="rq-a">不同的概念。互斥 <span class="m">AB=\varnothing</span>；独立 <span class="m">P(AB)=P(A)P(B)</span>。<span class="m">P(A),P(B)\gt0</span> 时，互斥必不独立。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="32-1"><p class="rq-q">独立事件 <span class="m">A_1,\dots,A_n</span> 至少发生一个的概率？</p><p class="rq-a"><span class="m">1-\prod(1-P(A_i))</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="32-2"><p class="rq-q">对偶律？</p><p class="rq-a"><span class="m">\overline{A\cup B}=\bar A\bar B</span>，<span class="m">\overline{AB}=\bar A\cup\bar B</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="32-3"><p class="rq-q">不放回抽签，第 <span class="m">k</span> 次抽中的概率？</p><p class="rq-a">与 <span class="m">k</span> 无关，等于第一次抽中的概率（抓阄公平）。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div></div>
+<div class="endnext" id="endnext"></div>
+<div id="sent"></div>
+</div></div>
+<aside class="rail" id="rail"><div class="rail-h">本版引用 · 定理全文</div><div id="railc"></div></aside>
+</section></main>
+<footer class="pager"><button id="pv" aria-label="上一版">‹</button><div class="pginfo"><span id="pgt"></span><div class="bar"><i id="pgb"></i></div></div><button id="nx" aria-label="下一版">›</button></footer>
+<div class="sheetup" id="sheetup" hidden><div class="sheetup-h"><span>定理全文</span><button id="sheetx">关闭</button></div><div id="sheetc"></div></div>
+<div class="drawer" id="drawer" hidden></div>
+<script src="assets/katex/katex.min.js"></script><script src="assets/data.js"></script><script src="assets/paper.js"></script>
+</body></html>

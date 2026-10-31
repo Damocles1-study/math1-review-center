@@ -1,0 +1,87 @@
+@part 丁
+@kicker 二维随机变量
+@title 概率就是区域上的二重积分
+@deck 概率大题的主战场，靠的全部是第 25 期的二重积分。$P((X,Y)\in D)$ 就是在 $D$ 与密度非零区域的公共部分上积分。题目的难点其实只有一个：把区域画对。
+@keep $P((X,Y)\in D)=\iint_Df\,dx\,dy$。第一步画密度非零的区域。
+@keep 边缘：$f_X(x)=\int f\,dy$。条件：$f_{Y\vert X}=\frac{f}{f_X}$。
+@keep 独立 ⟺ $f(x,y)=f_X(x)f_Y(y)$。必要条件：非零区域是矩形。
+@keep $Z=X+Y$：$f_Z(z)=\int f(x,z-x)\,dx$；$\max$：$F_{\max}=F_XF_Y$；$\min$：$F_{\min}=1-(1-F_X)(1-F_Y)$。
+@recall 边缘密度怎么求？ || 对另一个变量积分。$f_X(x)=\int_{-\infty}^{+\infty}f(x,y)\,dy$。
+@recall $X,Y$ 独立同分布，$\max(X,Y)$ 的分布函数？ || $[F(z)]^2$。
+@recall 卷积公式？ || $f_Z(z)=\int_{-\infty}^{+\infty}f_X(x)f_Y(z-x)\,dx$（独立时）。
+@recall 独立的正态变量之和仍是？ || 正态，参数相加：$N(\mu_1+\mu_2,\sigma_1^2+\sigma_2^2)$。
+
+## 联合分布
+:::thm joint | 二维分布
+**联合分布函数**：$F(x,y)=P(X\le x,Y\le y)$。
+**离散**：$P(X=x_i,Y=y_j)=p_{ij}$。**连续**：$F=\iint f$，$f\ge0$，$\iint_{\mathbb R^2}f=1$，$\frac{\partial^2F}{\partial x\partial y}=f$。
+$$P((X,Y)\in D)=\iint_Df(x,y)\,dx\,dy.$$
+:::
+:::thm marginal | 边缘分布与条件分布
+**边缘**：$f_X(x)=\displaystyle\int_{-\infty}^{+\infty}f(x,y)\,dy$，$f_Y(y)=\displaystyle\int_{-\infty}^{+\infty}f(x,y)\,dx$。离散时行、列分别求和。
+**条件**：$f_{Y\vert X}(y\vert x)=\dfrac{f(x,y)}{f_X(x)}$（$f_X(x)\gt0$）。
+:::
+:::thm rvindep | 随机变量的独立性
+$X,Y$ 独立 ⟺ $F(x,y)=F_X(x)F_Y(y)$ ⟺ $f(x,y)=f_X(x)f_Y(y)$（连续） ⟺ $p_{ij}=p_{i\cdot}p_{\cdot j}$（离散，每个格都要成立）。
+:::
+:::ex 离散型
+$(X,Y)$ 的分布律为下表。求 $a$，并判断 $X,Y$ 是否独立。
+| $X\backslash Y$ | $0$ | $1$ |
+| $0$ | $0.2$ | $0.3$ |
+| $1$ | $0.2$ | $a$ |
+:::
+:::paper
+解 由分布律之和为 $1$，$a=0.3$。边缘：$P(X=0)=0.5$，$P(X=1)=0.5$，$P(Y=0)=0.4$，$P(Y=1)=0.6$。
+逐格检验：$0.5\times0.4=0.2$，$0.5\times0.6=0.3$，$0.5\times0.4=0.2$，$0.5\times0.6=0.3$。
+∎ 由[[rvindep]]，$a=0.3$，$X,Y$ 独立。
+:::
+:::ex 连续型全套（大题）
+$(X,Y)$ 的概率密度为 $f(x,y)=\begin{cases}cx,&0\lt x\lt y\lt1\\0,&\text{其他}\end{cases}$。求 (1) $c$；(2) 边缘密度，判断是否独立；(3) $P(X+Y\lt1)$；(4) $f_{Y\vert X}(y\vert x)$。
+:::
+:::think
+先画三角形 $0\lt x\lt y\lt1$。所有积分都按这个三角形定限，$P(X+Y\lt1)$ 再与直线 $x+y=1$ 切一刀。
+:::
+:::paper
+解 (1) 由[[joint]]，
+$$1=\int_0^1dy\int_0^ycx\,dx=\int_0^1\frac{cy^2}{2}\,dy=\frac{c}{6},\quad\text{所以 }c=6.$$⛳2
+(2) 由[[marginal]]，$0\lt x\lt1$ 时，$f_X(x)=\displaystyle\int_x^16x\,dy=6x(1-x)$；$0\lt y\lt1$ 时，$f_Y(y)=\displaystyle\int_0^y6x\,dx=3y^2$；其余为 $0$。因 $f\neq f_Xf_Y$，由[[rvindep]]，$X,Y$ **不独立**。⛳4
+(3) 区域为 $0\lt x\lt\frac12$，$x\lt y\lt1-x$：
+$$P(X+Y\lt1)=\int_0^{1/2}dx\int_x^{1-x}6x\,dy=\int_0^{1/2}6x(1-2x)\,dx=\frac{1}{4}.$$⛳3
+(4) 由[[marginal]]，对 $0\lt x\lt1$，
+$$f_{Y\vert X}(y\vert x)=\frac{6x}{6x(1-x)}=\frac{1}{1-x},\quad x\lt y\lt1.$$⛳2
+∎ 所以 $c=6$；不独立；$P=\dfrac{1}{4}$；$Y\mid X=x$ 服从 $(x,1)$ 上的均匀分布。
+:::
+!fig f34_region | 密度非零的三角形（灰），以及 $x+y\lt1$ 切下的部分（红）。
+
+## 函数的分布：$Z=g(X,Y)$
+一般方法与一维相同：$F_Z(z)=P(g(X,Y)\le z)=\iint_{g\le z}f\,dx\,dy$。
+:::thm conv | 和的分布、max 与 min
+**和（卷积）**：$Z=X+Y$，
+$$f_Z(z)=\int_{-\infty}^{+\infty}f(x,z-x)\,dx.$$
+独立时 $f(x,z-x)=f_X(x)f_Y(z-x)$。
+**极值**：$X,Y$ 独立时，
+$$F_{\max}(z)=F_X(z)F_Y(z),\qquad F_{\min}(z)=1-[1-F_X(z)][1-F_Y(z)].$$
+**可加性**（独立）：$B(n_1,p)+B(n_2,p)=B(n_1+n_2,p)$；$P(\lambda_1)+P(\lambda_2)=P(\lambda_1+\lambda_2)$；正态的线性组合仍正态。
+:::
+:::ex 卷积（大题）
+$X,Y$ 独立，都服从 $E(1)$。求 $Z=X+Y$ 的概率密度。
+:::
+:::paper
+解 由[[conv]]，$f_Z(z)=\displaystyle\int_{-\infty}^{+\infty}f_X(x)f_Y(z-x)\,dx$。被积函数非零，要求 $x\gt0$ 且 $z-x\gt0$，即 $0\lt x\lt z$。⛳3
+$z\le0$ 时，$f_Z(z)=0$。$z\gt0$ 时，
+$$f_Z(z)=\int_0^ze^{-x}e^{-(z-x)}\,dx=\int_0^ze^{-z}\,dx=ze^{-z}.$$⛳4
+∎ $f_Z(z)=\begin{cases}ze^{-z},&z\gt0\\0,&z\le0\end{cases}$。⛳1
+:::
+:::ex max 与 min
+$X,Y$ 独立，都服从 $U(0,1)$。求 $\max(X,Y)$ 和 $\min(X,Y)$ 的概率密度。
+:::
+:::paper
+解 $F(z)=z$（$0\le z\le1$）。由[[conv]]，$0\le z\le1$ 时，
+$$F_{\max}(z)=z^2,\qquad F_{\min}(z)=1-(1-z)^2.$$
+∎ $0\lt z\lt1$ 上，$f_{\max}(z)=2z$，$f_{\min}(z)=2(1-z)$，其余为 $0$。
+:::
+:::thm bvn | 二维正态的结论
+$(X,Y)\sim N(\mu_1,\mu_2;\sigma_1^2,\sigma_2^2;\rho)$：
+(1) 边缘分布都是正态。(2) $aX+bY$ 仍是正态（$a,b$ 不全为 $0$）。(3) 若 $Z_1,Z_2$ 都是 $X,Y$ 的线性组合，则 $(Z_1,Z_2)$ 仍服从二维正态。
+注意：$X,Y$ 各自正态，不一定联合正态。
+:::

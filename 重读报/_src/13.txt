@@ -1,0 +1,87 @@
+@part 甲
+@day 第二天
+@kicker 一阶微分方程
+@title 认型：三种方程，三把钥匙
+@deck 微分方程的题分两步：认出是哪一型，代进公式。一阶只要认可分离、齐次、线性三种。应用题读出的方程也逃不出这三种。
+@keep 可分离：$y'=f(x)g(y)$，分开两边积分。
+@keep 齐次：$y'=\varphi(\frac{y}{x})$，令 $u=\frac{y}{x}$。
+@keep 一阶线性：$y'+P(x)y=Q(x)$，通解公式 $y=e^{-\int P}\bigl(\int Qe^{\int P}dx+C\bigr)$。
+@keep 解完代初值确定 $C$；公式里的 $\int$ 不用再加常数。
+@recall 一阶线性通解公式？ || $y=e^{-\int P\,dx}\bigl(\int Qe^{\int P\,dx}dx+C\bigr)$。
+@recall 齐次方程的换元以及 $y'$ 变成什么？ || $u=\frac yx$，$y'=u+xu'$。
+@recall 什么叫通解、特解？ || 通解含的独立常数个数等于阶数；特解是确定了常数的解。
+@recall 由「切线在 $y$ 轴截距」列方程，截距怎么写？ || 切线 $Y-y=y'(X-x)$，令 $X=0$，得截距 $y-xy'$。
+
+## 基本概念
+含未知函数导数的方程叫**微分方程**，最高阶导数的阶数是方程的阶。**通解**中独立常数的个数等于阶数；由初值条件确定常数后得到**特解**。
+
+## 可分离变量
+:::thm sep | 可分离变量方程
+$\dfrac{dy}{dx}=f(x)g(y)$，分离为 $\dfrac{dy}{g(y)}=f(x)\,dx$，两边积分：
+$$\int\frac{dy}{g(y)}=\int f(x)\,dx+C.$$
+:::
+:::ex 可分离
+求 $y'=2xy$ 满足 $y(0)=3$ 的特解。
+:::
+:::paper
+解 由[[sep]]，$y\neq0$ 时 $\dfrac{dy}{y}=2x\,dx$，两边积分，
+$$\ln\vert y\vert=x^2+C_1,\quad\text{即 }y=Ce^{x^2}.$$
+代入 $y(0)=3$，得 $C=3$。
+∎ 所求特解为 $y=3e^{x^2}$。
+:::
+
+## 齐次方程
+:::thm homo | 齐次方程
+$\dfrac{dy}{dx}=\varphi\Bigl(\dfrac{y}{x}\Bigr)$。令 $u=\dfrac{y}{x}$，则 $y'=u+xu'$，方程化为可分离的
+$$x\frac{du}{dx}=\varphi(u)-u.$$
+:::
+:::ex 齐次
+求方程 $xy'=y+x\tan\dfrac{y}{x}$ 的通解。
+:::
+:::paper
+解 两边除以 $x$：$y'=\dfrac{y}{x}+\tan\dfrac{y}{x}$。由[[homo]]，令 $u=\dfrac{y}{x}$，得 $u+xu'=u+\tan u$，即
+$$\frac{\cos u}{\sin u}\,du=\frac{dx}{x}.$$
+两边积分，$\ln\vert\sin u\vert=\ln\vert x\vert+C_1$，即 $\sin u=Cx$。
+∎ 回代得通解 $\sin\dfrac{y}{x}=Cx$。
+:::
+
+## 一阶线性
+:::thm fol | 一阶线性方程
+$y'+P(x)y=Q(x)$ 的通解为
+$$y=e^{-\int P(x)\,dx}\Bigl(\int Q(x)e^{\int P(x)\,dx}\,dx+C\Bigr).$$
+:::
+:::like
+方程左边 $y'+Py$ 差一点就是某个乘积的导数。两边乘上 $e^{\int P}$（「积分因子」），左边恰好变成 $\bigl(ye^{\int P}\bigr)'$，然后两边积分。这就是公式的全部来历。
+:::
+:::ex 线性
+求 $y'+\dfrac{y}{x}=\dfrac{\sin x}{x}$ 满足 $y(\pi)=1$ 的特解。
+:::
+:::paper
+解 $P=\dfrac{1}{x}$，$Q=\dfrac{\sin x}{x}$，$e^{\int P\,dx}=x$（取 $x\gt0$）。由[[fol]]，
+$$y=\frac{1}{x}\Bigl(\int\frac{\sin x}{x}\cdot x\,dx+C\Bigr)=\frac{1}{x}(-\cos x+C).$$
+代入 $y(\pi)=1$：$\dfrac{1+C}{\pi}=1$，$C=\pi-1$。
+∎ 所求特解为 $y=\dfrac{\pi-1-\cos x}{x}$。
+:::
+:::trap
+先把 $y'$ 的系数化为 $1$，再读 $P,Q$。$xy'+y=\sin x$ 要先除以 $x$。
+:::
+**有时把 $x$ 看成 $y$ 的函数才线性**：如 $\frac{dy}{dx}=\frac{1}{x+y}$，写成 $\frac{dx}{dy}-x=y$，关于 $x$ 是线性的。
+
+## 应用题：从几何条件列方程
+:::ex 建模
+曲线 $y=y(x)$ 过点 $(1,1)$，$x\gt0$，其上任一点处的切线在 $y$ 轴上的截距等于该点的横坐标。求曲线方程。
+:::
+:::think
+点 $(x,y)$ 处的切线：$Y-y=y'(X-x)$。令 $X=0$ 得截距 $y-xy'$，它等于 $x$。
+:::
+:::paper
+解 过曲线上点 $(x,y)$ 的切线为 $Y-y=y'(X-x)$。令 $X=0$，截距为 $y-xy'$。由题设，$y-xy'=x$，即
+$$y'-\frac{y}{x}=-1.$$
+这是一阶线性方程，$P=-\frac{1}{x}$，$Q=-1$，$e^{\int P}=\frac{1}{x}$。由[[fol]]，
+$$y=x\Bigl(\int-\frac{1}{x}\,dx+C\Bigr)=x(C-\ln x).$$
+代入 $(1,1)$：$C=1$。
+∎ 曲线方程为 $y=x(1-\ln x)$。
+:::
+:::skip
+伯努利方程 $y'+Py=Qy^n$：令 $z=y^{1-n}$ 化成线性。知道这一句就够，近年几乎不考。
+:::

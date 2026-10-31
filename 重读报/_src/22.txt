@@ -1,0 +1,88 @@
+@part 丙
+@kicker 向量与空间解析几何
+@title 进入三维：向量、平面、直线、曲面
+@deck 多元微积分要在空间里画图，所以先把三维语言备好。叉积直接用上一部分的三阶行列式。曲面只认五六种，能画就够了。
+@keep 点积判垂直：$a\cdot b=0$。叉积判平行：$a\times b=0$，$\vert a\times b\vert$ 是平行四边形面积。
+@keep 平面 $Ax+By+Cz+D=0$，法向量 $(A,B,C)$。
+@keep 直线 $\frac{x-x_0}{l}=\frac{y-y_0}{m}=\frac{z-z_0}{n}$，方向向量 $(l,m,n)$。
+@keep $yOz$ 面上 $f(y,z)=0$ 绕 $z$ 轴转：$y\to\pm\sqrt{x^2+y^2}$。
+@recall 平面的法向量怎么求？ || 从一般式直接读；或用面内两个不平行向量的叉积。
+@recall 点 $(x_0,y_0,z_0)$ 到平面的距离？ || $\frac{\vert Ax_0+By_0+Cz_0+D\vert}{\sqrt{A^2+B^2+C^2}}$。
+@recall $z=x^2+y^2$ 和 $z=\sqrt{x^2+y^2}$ 各是什么曲面？ || 旋转抛物面（开口向上）和圆锥面（上半）。
+@recall 曲线 $z=f(x,y),x^2+y^2=1$ 向 $xOy$ 面的投影？ || 消去 $z$ 得柱面，再加 $z=0$。
+
+## 向量运算
+:::thm vecops | 点积与叉积 | 公式
+$a=(a_1,a_2,a_3)$，$b=(b_1,b_2,b_3)$。
+**点积**：$a\cdot b=a_1b_1+a_2b_2+a_3b_3=\vert a\vert\vert b\vert\cos\theta$。$a\perp b$ ⟺ $a\cdot b=0$。
+**叉积**：
+$$a\times b=\begin{vmatrix}i&j&k\\a_1&a_2&a_3\\b_1&b_2&b_3\end{vmatrix},$$
+方向按右手系垂直于 $a,b$，长度 $\vert a\vert\vert b\vert\sin\theta$，等于平行四边形面积。$a\parallel b$ ⟺ $a\times b=0$。
+**混合积**：$(a\times b)\cdot c$ 等于三行向量的行列式，是平行六面体（有向）体积。三向量共面 ⟺ 混合积 $=0$。
+:::
+
+## 平面与直线
+:::thm planeline | 平面与直线方程 | 公式
+**平面**：点法式 $A(x-x_0)+B(y-y_0)+C(z-z_0)=0$；一般式 $Ax+By+Cz+D=0$，法向量 $n=(A,B,C)$。
+**直线**：对称式 $\dfrac{x-x_0}{l}=\dfrac{y-y_0}{m}=\dfrac{z-z_0}{n}$，方向向量 $s=(l,m,n)$；参数式 $x=x_0+lt$，等等；两平面交线的方向向量 $s=n_1\times n_2$。
+**点到平面距离**：$d=\dfrac{\vert Ax_0+By_0+Cz_0+D\vert}{\sqrt{A^2+B^2+C^2}}$。
+**夹角**：平面夹角看 $n_1,n_2$；直线夹角看 $s_1,s_2$；线面夹角 $\sin\varphi=\dfrac{\vert s\cdot n\vert}{\vert s\vert\vert n\vert}$。
+:::
+:::ex 过三点的平面
+求过 $A(1,0,0)$，$B(0,1,0)$，$C(0,0,2)$ 的平面方程。
+:::
+:::paper
+解 $\overrightarrow{AB}=(-1,1,0)$，$\overrightarrow{AC}=(-1,0,2)$。由[[vecops]]，
+$$n=\overrightarrow{AB}\times\overrightarrow{AC}=\begin{vmatrix}i&j&k\\-1&1&0\\-1&0&2\end{vmatrix}=(2,2,1).$$
+由[[planeline]]，$2(x-1)+2y+z=0$。
+∎ 即 $2x+2y+z=2$。
+:::
+:::ex 线面交点
+求直线 $\dfrac{x-1}{1}=\dfrac{y}{2}=\dfrac{z+1}{-1}$ 与平面 $x+y+z=3$ 的交点。
+:::
+:::paper
+解 化为参数式：$x=1+t,\ y=2t,\ z=-1-t$。代入平面：
+$$(1+t)+2t+(-1-t)=3,\quad\text{即 }2t=3,\ t=\frac{3}{2}.$$
+∎ 交点为 $\Bigl(\dfrac{5}{2},3,-\dfrac{5}{2}\Bigr)$。
+:::
+
+## 曲面：认形状
+!fig f22_surf | 左：旋转抛物面 $z=x^2+y^2$。右：圆锥面 $z=\sqrt{x^2+y^2}$。后面算体积、算流量时，它们和球面最常出现。
+:::thm surfaces | 常见曲面 | 公式
+| 方程 | 曲面 |
+| $x^2+y^2+z^2=R^2$ | 球面 |
+| $\frac{x^2}{a^2}+\frac{y^2}{b^2}+\frac{z^2}{c^2}=1$ | 椭球面 |
+| $z=x^2+y^2$ | 旋转抛物面 |
+| $z=\sqrt{x^2+y^2}$ | 圆锥面（上半） |
+| $x^2+y^2=R^2$ | 圆柱面（缺 $z$，平行于 $z$ 轴） |
+| $z=xy$，$z=x^2-y^2$ | 马鞍面 |
+| $x^2+y^2-z^2=1$ | 单叶双曲面 |
+| $x^2+y^2-z^2=-1$ | 双叶双曲面 |
+缺哪个变量，就是平行于哪个轴的柱面。
+:::
+:::thm rotsurf | 旋转曲面
+$yOz$ 面上的曲线 $f(y,z)=0$ 绕 $z$ 轴旋转：$z$ 不变，$y$ 换成 $\pm\sqrt{x^2+y^2}$，得 $f(\pm\sqrt{x^2+y^2},z)=0$。绕 $y$ 轴类似（$y$ 不变，$z$ 换）。
+:::
+:::like
+旋转一圈，曲线上每一点的「高度」不变，它到轴的距离也不变。原来的距离是 $\vert y\vert$，空间里到 $z$ 轴的距离是 $\sqrt{x^2+y^2}$，把它们画等号就是这条规则。
+:::
+:::ex 旋转曲面
+求曲线 $z=y^2$（$x=0$）绕 $z$ 轴旋转一周的曲面方程。
+:::
+:::paper
+解 由[[rotsurf]]，把 $y$ 换成 $\pm\sqrt{x^2+y^2}$，
+∎ 得 $z=x^2+y^2$，这是旋转抛物面。
+:::
+
+## 空间曲线的投影
+曲线 $\begin{cases}F(x,y,z)=0\\G(x,y,z)=0\end{cases}$ 向 $xOy$ 面投影：消去 $z$ 得到投影柱面 $H(x,y)=0$，再联立 $z=0$。重积分定积分区域时就是这个动作。
+:::ex 投影
+求 $z=x^2+y^2$ 与 $z=2-x^2-y^2$ 的交线在 $xOy$ 面上的投影。
+:::
+:::paper
+解 消去 $z$：$x^2+y^2=2-x^2-y^2$，即 $x^2+y^2=1$。
+∎ 投影曲线为 $\begin{cases}x^2+y^2=1\\z=0\end{cases}$。
+:::
+:::skip
+点到直线距离、异面直线距离、平面束：公式能现推（叉积除以长度），不单独背。
+:::

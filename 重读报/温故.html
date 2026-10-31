@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>温故版 · 重读报</title>
+<link rel="stylesheet" href="assets/katex/katex.min.css">
+<link rel="stylesheet" href="assets/paper.css">
+</head><body class="front">
+<div class="front-wrap">
+
+<div class="front-top"><span>温故版</span><span><a href="index.html">总版</a><a href="定理索引.html">定理索引</a><a href="温故.html">温故版</a><a href="../index.html">旧版复盘中心</a><a href="#" onclick="CDNight();return false">夜读</a></span></div>
+<h1 class="pg-h" style="border-top:5px solid var(--rule);padding-top:.2em">记不住，就再考一次</h1>
+<p class="sub-lead">只从你已经读过的期号里出题。答错的和隔得久的优先。每轮 10 道，约 5 分钟。建议每读完一天的内容做两轮，上套卷前再过一遍「只看答错过的」。</p>
+<div class="wg"><div class="wg-tools"><button data-m="due" class="on">到期优先</button><button data-m="wrong">只看答错过的</button><button data-m="all">全部随机</button><span id="wgs" style="margin-left:auto;color:var(--ink3)"></span></div><div id="wgl"></div><div class="wg-tools" style="margin-top:12px"><button id="wgn">再来 10 道</button></div></div>
+<script src="assets/katex/katex.min.js"></script><script src="assets/data.js"></script><script src="assets/paper.js"></script>
+<script>
+(function(){
+ const D=window.CD,S=window.CDStore;let mode='due';const box=document.getElementById('wgl');
+ CDBindRecall(box);
+ function draw(){
+  const rec=S.get('recall',{}),rd=S.get('read',{}),now=Date.now();
+  let pool=D.recall.filter(r=>rd[r.no]);
+  const ever=pool.length;
+  if(mode==='wrong')pool=pool.filter(r=>rec[r.id]&&rec[r.id].ok===0);
+  const pr=r=>{const o=rec[r.id];if(!o)return 50+Math.random()*20;const h=(now-o.t)/36e5;return (o.ok===0?100:0)+Math.min(h,72)/(o.n||1)+Math.random()*10};
+  const pick=(mode==='all'?pool.slice().sort(()=>Math.random()-.5):pool.slice().sort((a,b)=>pr(b)-pr(a))).slice(0,10);
+  const wrong=D.recall.filter(r=>rec[r.id]&&rec[r.id].ok===0).length,seen=Object.keys(rec).length;
+  document.getElementById('wgs').textContent=`可考 ${ever} · 答过 ${seen} · 待巩固 ${wrong}`;
+  if(!pick.length){box.innerHTML='<p class="hint">'+(ever?'没有答错过的题，换个模式吧。':'还没有读完的期。读完一期后，它的题才会进入这里。')+'</p>';return}
+  box.innerHTML=pick.map(r=>`<div class="rq" data-q="${r.id}"><small>第 ${r.no} 期</small><p class="rq-q">${r.q}</p><p class="rq-a">${r.a}</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div>`).join('');
+  CDRender(box);
+ }
+ document.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-m]').forEach(x=>x.classList.remove('on'));b.classList.add('on');mode=b.dataset.m;draw()});
+ document.getElementById('wgn').onclick=draw;draw();
+})();
+</script>
+</div></body></html>

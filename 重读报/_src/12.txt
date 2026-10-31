@@ -1,0 +1,98 @@
+@part 甲
+@day 第二天
+@kicker 反常积分与几何应用
+@title 积到无穷，也积出面积和体积
+@deck 反常积分就是定积分再取一次极限。判敛只看两个标准：$p$ 积分和比较法。几何应用只需要记住微元怎么取，面积、体积、弧长各一张公式。
+@keep $\int_1^{+\infty}\frac{dx}{x^p}$：$p\gt1$ 收敛。$\int_0^1\frac{dx}{x^p}$：$p\lt1$ 收敛。
+@keep 瑕点在区间内部时必须拆开算，一处发散整个发散。
+@keep 绕 $x$ 轴：$V=\pi\int y^2dx$；绕 $y$ 轴（柱壳）：$V=2\pi\int x\vert y\vert dx$。
+@keep 极坐标面积：$S=\frac12\int r^2d\theta$。
+@recall $\int_0^{+\infty}\frac{dx}{x^p}$ 收敛吗？ || 对任何 $p$ 都发散，因为两头需要的条件 $p\gt1$ 和 $p\lt1$ 矛盾。
+@recall $\int_0^{+\infty}e^{-x^2}dx$ 和 $\int_0^{+\infty}x^ne^{-x}dx$？ || $\frac{\sqrt\pi}{2}$ 和 $n!$。
+@recall 弧长公式三种形式？ || $\int\sqrt{1+y'^2}dx$；$\int\sqrt{x'^2+y'^2}dt$；$\int\sqrt{r^2+r'^2}d\theta$。
+@recall 柱壳法公式？ || $V_y=2\pi\int_a^bx\vert f(x)\vert dx$。
+
+## 反常积分
+:::thm improper | 反常积分 | 定义
+**无穷限**：$\int_a^{+\infty}f\,dx=\lim\limits_{b\to+\infty}\int_a^bf\,dx$，极限存在叫收敛。
+**瑕积分**：$f$ 在 $a$ 附近无界（$a$ 是瑕点），$\int_a^bf\,dx=\lim\limits_{\varepsilon\to0^+}\int_{a+\varepsilon}^bf\,dx$。
+区间内部有瑕点或两端都无穷时，必须拆开，**每一段都收敛**才算收敛。
+:::
+:::trap
+$\int_{-1}^{1}\frac{dx}{x^3}$ 不能用「奇函数积分为 0」，因为 $x=0$ 是瑕点，$\int_0^1\frac{dx}{x^3}$ 发散，所以整个发散。对称性只适用于已知收敛的积分。
+:::
+:::thm pint | $p$ 积分与比较判别
+$$\int_1^{+\infty}\frac{dx}{x^p}\text{：}p\gt1\text{ 收敛，}p\le1\text{ 发散}；\quad\int_0^1\frac{dx}{x^p}\text{：}p\lt1\text{ 收敛，}p\ge1\text{ 发散}.$$
+**极限比较**：$f,g\gt0$，$\lim\frac{f}{g}=c\in(0,+\infty)$，则同敛散。因此判敛时只看奇点处的等价无穷小（或无穷大）即可。
+:::
+:::like
+无穷远处要**衰减得足够快**（$p\gt1$）才能积出有限面积；瑕点处要**爆炸得足够慢**（$p\lt1$）。一快一慢，方向相反，$p=1$ 的 $\frac{1}{x}$ 两边都发散。
+:::
+常用结果：$\int_0^{+\infty}x^ne^{-x}dx=n!$（连续分部 $n$ 次即得）；$\int_0^{+\infty}e^{-x^2}dx=\frac{\sqrt\pi}{2}$（一元方法算不出，先记结果，第 25 期用极坐标给出证明）。
+:::ex 计算
+计算 $\displaystyle\int_1^{+\infty}\frac{dx}{x(1+x^2)}$。
+:::
+:::paper
+解 拆项得 $\dfrac{1}{x(1+x^2)}=\dfrac{1}{x}-\dfrac{x}{1+x^2}$。由[[improper]]，
+$$\int_1^{+\infty}\frac{dx}{x(1+x^2)}=\lim_{b\to+\infty}\Bigl[\ln x-\frac{1}{2}\ln(1+x^2)\Bigr]_1^b=\lim_{b\to+\infty}\frac{1}{2}\ln\frac{b^2}{1+b^2}+\frac{1}{2}\ln2.$$
+∎ 第一项极限为 $0$，故原式 $=\dfrac{1}{2}\ln2$。
+:::
+:::ex 判敛
+判断 $\displaystyle\int_0^1\frac{\ln x}{\sqrt x}\,dx$ 是否收敛，收敛时求值。
+:::
+:::paper
+解 $x=0$ 为瑕点。由[[byparts]]，
+$$\int_\varepsilon^1\frac{\ln x}{\sqrt x}\,dx=2\sqrt x\ln x\Big\vert_\varepsilon^1-\int_\varepsilon^1\frac{2}{\sqrt x}\,dx=-2\sqrt\varepsilon\ln\varepsilon-4(1-\sqrt\varepsilon).$$
+令 $\varepsilon\to0^+$，由于 $\sqrt\varepsilon\ln\varepsilon\to0$（同[[lhopital]]的做法），
+∎ 积分收敛，且值为 $-4$。
+:::
+
+## 面积
+:::thm area | 平面图形面积 | 公式
+**直角坐标**：$S=\int_a^b[f(x)-g(x)]\,dx$，$f\ge g$。
+**极坐标**：$S=\dfrac{1}{2}\int_\alpha^\beta r^2(\theta)\,d\theta$。
+:::
+!fig f12_polar | 极坐标微元是小扇形，面积 $\frac12r^2d\theta$。图为心形线 $r=1+\cos\theta$。
+:::ex 极坐标面积
+求心形线 $r=1+\cos\theta$ 围成的面积。
+:::
+:::paper
+解 图形关于极轴对称，由[[area]]，
+$$S=2\cdot\frac{1}{2}\int_0^\pi(1+\cos\theta)^2\,d\theta=\int_0^\pi(1+2\cos\theta+\cos^2\theta)\,d\theta.$$
+其中 $\int_0^\pi\cos\theta\,d\theta=0$，$\int_0^\pi\cos^2\theta\,d\theta=\frac{\pi}{2}$，
+∎ 故 $S=\pi+\dfrac{\pi}{2}=\dfrac{3\pi}{2}$。
+:::
+
+## 体积
+!fig f12_shell | 绕 $x$ 轴：切成圆片，体积 $\pi y^2dx$。绕 $y$ 轴：切成圆筒，展开是一张薄板，体积 $2\pi x\cdot y\cdot dx$。
+:::thm volume | 旋转体体积 | 公式
+$y=f(x)$，$x\in[a,b]$ 与 $x$ 轴围成的图形：
+**绕 $x$ 轴**：$V_x=\pi\int_a^bf^2(x)\,dx$；
+**绕 $y$ 轴**（柱壳，$a\ge0$）：$V_y=2\pi\int_a^bx\vert f(x)\vert\,dx$。
+:::
+:::ex 旋转体
+$y=\sin x$，$x\in[0,\pi]$ 与 $x$ 轴围成的图形，分别求绕 $x$ 轴和绕 $y$ 轴的旋转体体积。
+:::
+:::paper
+解 由[[volume]]，
+$$V_x=\pi\int_0^\pi\sin^2x\,dx=\pi\cdot\frac{\pi}{2}=\frac{\pi^2}{2}.$$
+$$V_y=2\pi\int_0^\pi x\sin x\,dx=2\pi\cdot\pi=2\pi^2.$$
+∎ $V_x=\dfrac{\pi^2}{2}$，$V_y=2\pi^2$。
+:::
+
+## 弧长与旋转面面积（数一）
+:::thm arclen | 弧长与旋转曲面面积 | 公式
+$$s=\int_a^b\sqrt{1+y'^2}\,dx=\int_\alpha^\beta\sqrt{x'^2+y'^2}\,dt=\int_\alpha^\beta\sqrt{r^2+r'^2}\,d\theta.$$
+绕 $x$ 轴的旋转曲面面积：$S=2\pi\int\vert y\vert\,ds$。
+:::
+:::ex 弧长
+求摆线 $x=t-\sin t,\ y=1-\cos t$（$0\le t\le2\pi$）一拱的长度。
+:::
+:::paper
+解 $x'=1-\cos t$，$y'=\sin t$，$x'^2+y'^2=2(1-\cos t)=4\sin^2\frac{t}{2}$。由[[arclen]]，
+$$s=\int_0^{2\pi}2\sin\frac{t}{2}\,dt=-4\cos\frac{t}{2}\Big\vert_0^{2\pi}.$$
+∎ $s=8$。
+:::
+:::skip
+物理应用（做功、压力、引力）近年极少考。出题时用「微元 = 力 × 位移」的思路列式即可，这里不展开。质心公式放到重积分。
+:::

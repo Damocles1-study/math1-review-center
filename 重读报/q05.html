@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>一张公式表和五种场合 · 第5期 · 重读报</title>
+<link rel="stylesheet" href="assets/katex/katex.min.css">
+<link rel="stylesheet" href="assets/paper.css">
+</head><body class="issue" data-no="5" data-prev="q04.html" data-next="q06.html">
+<header class="strip"><a class="brand" href="index.html">重读报</a>
+<span class="strip-m">第 5 期 · 一元微积分 · 求导法则</span>
+<nav class="tools"><button data-a="toc" title="目录 (T)">目录</button><button data-a="rail" class="only-narrow">定理<i id="railn"></i></button><button data-a="hide" title="遮住卷面，先自己写 (H)">遮卷面</button><button data-a="night" title="夜读">夜读</button></nav></header>
+<main class="sheet" id="sheet">
+<section class="cover" id="cover">
+<div class="mast"><div class="mast-l">一元微积分<br>第 5 期</div><div class="mast-c">重读报</div><div class="mast-r">本期约 20 分钟<br>求导法则</div></div>
+<h1>一张公式表和五种场合</h1>
+<p class="deck">求导是纯技术活。公式表必须背死，然后只需要分清场合：复合、反函数、隐函数、参数方程、幂指函数。高阶导数记五个公式就够。</p>
+<div class="cover-grid">
+<div class="cover-keep"><h4>本期只记这几行</h4><ol><li>复合函数：一层一层乘。<span class="m">[f(g(x))]'=f'(g(x))g'(x)</span>。</li><li>隐函数：两边对 <span class="m">x</span> 求导，<span class="m">y</span> 看作 <span class="m">x</span> 的函数。</li><li>参数方程：<span class="m">\frac{dy}{dx}=\frac{y'_t}{x'_t}</span>；二阶是 <span class="m">\frac{d}{dt}\bigl(\frac{dy}{dx}\bigr)\Big/x'_t</span>，不是 <span class="m">y''_t/x''_t</span>。</li><li>幂指函数：先取对数，或者写成 <span class="m">e^{v\ln u}</span>。</li></ol></div>
+<div class="cover-prev"><h4>开读前，先答上期</h4><div id="prevq"></div></div>
+<div class="cover-toc"><h4>本期目录</h4><ol><li>公式表</li><li>反函数</li><li>隐函数</li><li>参数方程</li><li>幂指函数与连乘</li><li>高阶导数：记公式</li></ol><p class="hint">→ 键 / 点右缘 / 左滑翻页</p></div>
+</div></section>
+<section class="stage" id="stage" hidden>
+<div class="viewport" id="vp"><div class="flow" id="flow">
+<h2>公式表</h2>
+<div class="thm" id="t-dertable"><div class="thm-h"><span>公式</span>基本求导公式</div><p><span class="m">(x^a)'=ax^{a-1}</span>，<span class="m">(e^x)'=e^x</span>，<span class="m">(a^x)'=a^x\ln a</span>，</p>
+<p><span class="m">(\ln x)'=\frac{1}{x}</span>，<span class="m">(\log_ax)'=\frac{1}{x\ln a}</span>，</p>
+<p><span class="m">(\sin x)'=\cos x</span>，<span class="m">(\cos x)'=-\sin x</span>，</p>
+<p><span class="m">(\tan x)'=\sec^2x</span>，<span class="m">(\cot x)'=-\csc^2x</span>，</p>
+<p><span class="m">(\sec x)'=\sec x\tan x</span>，<span class="m">(\csc x)'=-\csc x\cot x</span>，</p>
+<p><span class="m">(\arcsin x)'=\frac{1}{\sqrt{1-x^2}}</span>，<span class="m">(\arccos x)'=-\frac{1}{\sqrt{1-x^2}}</span>，</p>
+<p><span class="m">(\arctan x)'=\frac{1}{1+x^2}</span>，<span class="m">(\ln\vert x\vert)'=\frac{1}{x}</span>。</p></div>
+<div class="thm" id="t-derarith"><div class="thm-h"><span>定理</span>四则与复合</div><p><span class="m">(u\pm v)'=u'\pm v'</span>，<span class="m">(uv)'=u'v+uv'</span>，<span class="m">\Bigl(\dfrac{u}{v}\Bigr)'=\dfrac{u'v-uv'}{v^2}</span>。</p>
+<p><b>复合（链式法则）</b>：<span class="m">y=f(u),u=g(x)</span> 时，<span class="m">\dfrac{dy}{dx}=\dfrac{dy}{du}\cdot\dfrac{du}{dx}</span>。</p></div>
+<div class="like"><div class="b-h">打个比方</div><p>链式法则就是齿轮传动。第一个齿轮转一圈带第二个转 3 圈，第二个转一圈带第三个转 2 圈，那么第一个转一圈，第三个转 <span class="m">3\times2</span> 圈。</p></div>
+<div class="ex"><div class="ex-h">例 5.1<span class="ex-tag">复合函数</span></div><p>求 <span class="m">y=\ln\bigl(x+\sqrt{1+x^2}\bigr)</span> 的导数。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 由<a class="c" data-t="derarith">四则与复合</a>，</p>
+<div class="M">y'=\frac{1}{x+\sqrt{1+x^2}}\Bigl(1+\frac{2x}{2\sqrt{1+x^2}}\Bigr)=\frac{1}{x+\sqrt{1+x^2}}\cdot\frac{\sqrt{1+x^2}+x}{\sqrt{1+x^2}}.</div>
+<p class="fin">约分得 <span class="m">y'=\dfrac{1}{\sqrt{1+x^2}}</span>。</p></div>
+<div class="note"><div class="b-h">批注</div><p>这个结果值得记住：<span class="m">\int\frac{dx}{\sqrt{1+x^2}}</span> 将来就要用它。</p></div>
+<h2>反函数</h2>
+<p>若 <span class="m">y=f(x)</span> 单调可导，<span class="m">f'(x)\neq0</span>，反函数 <span class="m">x=\varphi(y)</span> 的导数就是倒数：</p>
+<div class="thm" id="t-derinv"><div class="thm-h"><span>定理</span>反函数求导</div><div class="M">\varphi'(y)=\frac{1}{f'(x)},\qquad \varphi''(y)=-\frac{f''(x)}{[f'(x)]^3}.</div></div>
+<p>二阶公式这样来：<span class="m">\varphi''(y)=\frac{d}{dy}\bigl(\frac{1}{f'(x)}\bigr)=\frac{d}{dx}\bigl(\frac{1}{f'(x)}\bigr)\cdot\frac{dx}{dy}=-\frac{f''(x)}{[f'(x)]^2}\cdot\frac{1}{f'(x)}</span>。</p>
+<h2>隐函数</h2>
+<p>方程 <span class="m">F(x,y)=0</span> 确定 <span class="m">y=y(x)</span>。<b>不需要解出 <span class="m">y</span></b>：两边对 <span class="m">x</span> 求导，把 <span class="m">y</span> 看作 <span class="m">x</span> 的函数，用链式法则。</p>
+<div class="ex"><div class="ex-h">例 5.2<span class="ex-tag">隐函数</span></div><p>设 <span class="m">y=y(x)</span> 由 <span class="m">e^y+xy=e</span> 确定，求 <span class="m">y'(0)</span> 和 <span class="m">y''(0)</span>。</p></div>
+<div class="think"><div class="b-h">思路</div><p>先求 <span class="m">x=0</span> 对应的 <span class="m">y</span>：<span class="m">e^y=e</span>，<span class="m">y=1</span>。求导一次代入得 <span class="m">y'(0)</span>，再求导一次代入得 <span class="m">y''(0)</span>。不要先解出 <span class="m">y'</span> 的表达式再求导，那样繁。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 <span class="m">x=0</span> 时，由原方程得 <span class="m">e^y=e</span>，所以 <span class="m">y(0)=1</span>。</p>
+<p>两边对 <span class="m">x</span> 求导：</p>
+<div class="M">e^yy'+y+xy'=0. \tag{1}</div>
+<p>以 <span class="m">x=0,y=1</span> 代入 (1)：<span class="m">ey'(0)+1=0</span>，得 <span class="m">y'(0)=-\dfrac{1}{e}</span>。</p>
+<p>(1) 式两边再对 <span class="m">x</span> 求导：</p>
+<div class="M">e^y(y')^2+e^yy''+2y'+xy''=0. \tag{2}</div>
+<p>以 <span class="m">x=0,y=1,y'=-\frac{1}{e}</span> 代入 (2)：<span class="m">e\cdot\frac{1}{e^2}+ey''(0)-\frac{2}{e}=0</span>，解得 <span class="m">y''(0)=\dfrac{1}{e^2}</span>。</p>
+<p class="fin"><span class="m">y'(0)=-\dfrac{1}{e}</span>，<span class="m">y''(0)=\dfrac{1}{e^2}</span>。</p></div>
+<h2>参数方程</h2>
+<div class="thm" id="t-derparam"><div class="thm-h"><span>定理</span>参数方程求导</div><p>设 <span class="m">x=x(t),y=y(t)</span> 可导，<span class="m">x'(t)\neq0</span>，则</p>
+<div class="M">\frac{dy}{dx}=\frac{y'(t)}{x'(t)},\qquad\frac{d^2y}{dx^2}=\frac{\frac{d}{dt}\bigl(\frac{dy}{dx}\bigr)}{x'(t)}.</div></div>
+<div class="trap"><div class="b-h">易错</div><p>二阶导不是 <span class="m">\frac{y''(t)}{x''(t)}</span>。一阶导 <span class="m">\frac{dy}{dx}</span> 仍是 <span class="m">t</span> 的函数，再对 <span class="m">x</span> 求导要用链式法则，因此必须再除一个 <span class="m">x'(t)</span>。</p></div>
+<div class="ex"><div class="ex-h">例 5.3<span class="ex-tag">参数方程</span></div><p>设 <span class="m">x=\ln(1+t^2),\ y=t-\arctan t</span>，求 <span class="m">\dfrac{dy}{dx}</span> 和 <span class="m">\dfrac{d^2y}{dx^2}</span>。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 <span class="m">x'(t)=\dfrac{2t}{1+t^2}</span>，<span class="m">y'(t)=1-\dfrac{1}{1+t^2}=\dfrac{t^2}{1+t^2}</span>。由<a class="c" data-t="derparam">参数方程求导</a>，</p>
+<div class="M">\frac{dy}{dx}=\frac{t^2/(1+t^2)}{2t/(1+t^2)}=\frac{t}{2}.</div>
+<div class="M">\frac{d^2y}{dx^2}=\frac{\frac{d}{dt}(\frac{t}{2})}{x'(t)}=\frac{\frac12}{\frac{2t}{1+t^2}}=\frac{1+t^2}{4t}.</div>
+<p class="fin"><span class="m">\dfrac{dy}{dx}=\dfrac{t}{2}</span>，<span class="m">\dfrac{d^2y}{dx^2}=\dfrac{1+t^2}{4t}</span>（<span class="m">t\neq0</span>）。</p></div>
+<h2>幂指函数与连乘</h2>
+<p><span class="m">y=u^v</span> 不是幂函数也不是指数函数。<b>写成 <span class="m">y=e^{v\ln u}</span> 再求导</b>。多个因子连乘或开方，也可以取对数后再求导。</p>
+<div class="ex"><div class="ex-h">例 5.4<span class="ex-tag">幂指函数</span></div><p>求 <span class="m">y=x^{\sin x}\ (x\gt0)</span> 的导数。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 <span class="m">y=e^{\sin x\ln x}</span>，由<a class="c" data-t="derarith">四则与复合</a>，</p>
+<div class="M">y'=e^{\sin x\ln x}\Bigl(\cos x\ln x+\frac{\sin x}{x}\Bigr).</div>
+<p class="fin">即 <span class="m">y'=x^{\sin x}\Bigl(\cos x\ln x+\dfrac{\sin x}{x}\Bigr)</span>。</p></div>
+<h2>高阶导数：记公式</h2>
+<div class="thm" id="t-highder"><div class="thm-h"><span>公式</span>高阶导数公式</div><p><span class="m">(e^{ax})^{(n)}=a^ne^{ax}</span>，<span class="m">\bigl(\frac{1}{x+a}\bigr)^{(n)}=\frac{(-1)^nn!}{(x+a)^{n+1}}</span>，</p>
+<p><span class="m">(\sin x)^{(n)}=\sin(x+\frac{n\pi}{2})</span>，<span class="m">(\cos x)^{(n)}=\cos(x+\frac{n\pi}{2})</span>，</p>
+<p><span class="m">[\ln(1+x)]^{(n)}=\frac{(-1)^{n-1}(n-1)!}{(1+x)^n}</span>。</p>
+<p><b>莱布尼茨公式</b>：<span class="m">(uv)^{(n)}=\sum\limits_{k=0}^{n}C_n^ku^{(n-k)}v^{(k)}</span>。</p></div>
+<p>分式先拆项，再套第二个公式。乘积里如果有多项式，莱布尼茨只需写前几项，因为多项式求导几次就变成 <span class="m">0</span>。</p>
+<div class="ex"><div class="ex-h">例 5.5<span class="ex-tag">莱布尼茨</span></div><p>求 <span class="m">y=x^2e^{x}</span> 的 <span class="m">n</span> 阶导数。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 令 <span class="m">u=e^x,v=x^2</span>，则 <span class="m">v'=2x,v''=2</span>，<span class="m">v^{(k)}=0\ (k\ge3)</span>。由<a class="c" data-t="highder">高阶导数公式</a>中的莱布尼茨公式，</p>
+<div class="M">y^{(n)}=e^xx^2+C_n^1e^x\cdot2x+C_n^2e^x\cdot2.</div>
+<p class="fin">整理得 <span class="m">y^{(n)}=e^x\bigl[x^2+2nx+n(n-1)\bigr]</span>。</p></div>
+
+<div class="endq"><h2>今日考你</h2><p class="hint">合上前答一遍：先想，再点开。答错的会回到后面几期和温故版。</p><div class="rq" data-q="5-0"><p class="rq-q">参数方程二阶导的公式？</p><p class="rq-a"><span class="m">\frac{d^2y}{dx^2}=\frac{\frac{d}{dt}(\frac{dy}{dx})}{x'(t)}</span>，分母只有一个 <span class="m">x'(t)</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="5-1"><p class="rq-q"><span class="m">(\arctan x)'</span> 和 <span class="m">(\arcsin x)'</span>？</p><p class="rq-a"><span class="m">\frac{1}{1+x^2}</span> 和 <span class="m">\frac{1}{\sqrt{1-x^2}}</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="5-2"><p class="rq-q"><span class="m">(x^x)'</span>？</p><p class="rq-a"><span class="m">x^x(\ln x+1)</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="5-3"><p class="rq-q"><span class="m">(uv)^{(n)}</span> 的公式？</p><p class="rq-a"><span class="m">\sum_{k=0}^nC_n^ku^{(n-k)}v^{(k)}</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div></div>
+<div class="endnext" id="endnext"></div>
+<div id="sent"></div>
+</div></div>
+<aside class="rail" id="rail"><div class="rail-h">本版引用 · 定理全文</div><div id="railc"></div></aside>
+</section></main>
+<footer class="pager"><button id="pv" aria-label="上一版">‹</button><div class="pginfo"><span id="pgt"></span><div class="bar"><i id="pgb"></i></div></div><button id="nx" aria-label="下一版">›</button></footer>
+<div class="sheetup" id="sheetup" hidden><div class="sheetup-h"><span>定理全文</span><button id="sheetx">关闭</button></div><div id="sheetc"></div></div>
+<div class="drawer" id="drawer" hidden></div>
+<script src="assets/katex/katex.min.js"></script><script src="assets/data.js"></script><script src="assets/paper.js"></script>
+</body></html>

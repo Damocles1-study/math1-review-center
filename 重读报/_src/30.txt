@@ -1,0 +1,83 @@
+@part 丙
+@kicker 常数项级数
+@title 无穷多个数相加，有没有结果
+@deck 判敛是选择题的主力。别急着套判别法，先问三件事：通项趋于零吗？是正项级数吗？能和 $p$ 级数比吗？流程走对了，这一部分只是读表。
+@keep 必要条件：$\sum u_n$ 收敛 ⟹ $u_n\to0$。$u_n\not\to0$ 直接发散。
+@keep $\sum\frac{1}{n^p}$：$p\gt1$ 收敛。$\sum q^n$：$\vert q\vert\lt1$ 收敛。
+@keep 正项：比较（等价无穷小阶数）；有阶乘、幂指用比值或根值。
+@keep 交错：莱布尼茨。任意项：先看绝对收敛。
+@recall $\sum\frac{1}{n}$ 收敛吗？$\sum\frac{(-1)^n}{n}$ 呢？ || 前者发散；后者条件收敛。
+@recall 比值法 $\rho=1$ 时？ || 失效，改用比较法。
+@recall 莱布尼茨判别法的两个条件？ || $u_n$ 单调递减，$u_n\to0$。
+@recall 绝对收敛和收敛的关系？ || 绝对收敛 ⟹ 收敛，反之不成立。
+@recall $\sum u_n$ 收敛，$\sum u_n^2$ 一定收敛吗？ || 正项时一定；一般情形不一定（$u_n=\frac{(-1)^n}{\sqrt n}$）。
+
+## 定义与性质
+:::thm serdef | 级数收敛 | 定义
+$\sum\limits_{n=1}^\infty u_n$ 的部分和 $S_n=u_1+\cdots+u_n$。$\lim\limits_{n\to\infty}S_n=S$ 存在，称级数收敛，和为 $S$。
+**性质**：(1) 收敛 ⟹ $u_n\to0$；(2) 线性；(3) 去掉有限项不改变敛散性；(4) 收敛级数任意加括号仍收敛。
+:::
+:::thm serbase | 两个基准级数
+**几何**：$\sum\limits_{n=0}^\infty q^n$ 当 $\vert q\vert\lt1$ 时收敛于 $\dfrac{1}{1-q}$，否则发散。
+**$p$ 级数**：$\sum\dfrac{1}{n^p}$ 当 $p\gt1$ 时收敛，$p\le1$ 时发散。
+:::
+**拆项相消**可以求和：
+:::ex 求和
+求 $\displaystyle\sum_{n=1}^\infty\frac{1}{n(n+1)}$。
+:::
+:::paper
+解 $\dfrac{1}{n(n+1)}=\dfrac{1}{n}-\dfrac{1}{n+1}$，部分和 $S_n=1-\dfrac{1}{n+1}$。
+∎ 由[[serdef]]，和 $=\lim\limits_{n\to\infty}S_n=1$。
+:::
+
+## 正项级数
+:::thm serpos | 正项级数判别法
+$u_n\ge0$，有：
+**比较法**：$u_n\le v_n$，$\sum v_n$ 收敛 ⟹ $\sum u_n$ 收敛；$\sum u_n$ 发散 ⟹ $\sum v_n$ 发散。
+**极限比较**：$\lim\frac{u_n}{v_n}=c\in(0,+\infty)$，则同敛散。所以**等价无穷小可以直接换**。
+**比值法**：$\lim\frac{u_{n+1}}{u_n}=\rho$；**根值法**：$\lim\sqrt[n]{u_n}=\rho$。$\rho\lt1$ 收敛；$\rho\gt1$ 发散；$\rho=1$ 失效。
+:::
+!fig f30_flow | 判敛流程：先看通项是否趋于 0，再分正项与任意项。
+:::like
+比较法就是「找一个已知能不能过门的人比身高」。比能过门的人矮，一定能过；比过不去的人高，一定过不去。
+:::
+:::ex 判敛
+判断下列级数的敛散性：(1) $\displaystyle\sum_{n=1}^\infty\sin\frac{1}{n}$；(2) $\displaystyle\sum_{n=1}^\infty\Bigl(1-\cos\frac{1}{n}\Bigr)$；(3) $\displaystyle\sum_{n=1}^\infty\frac{n}{2^n}$；(4) $\displaystyle\sum_{n=1}^\infty\frac{n!}{n^n}$。
+:::
+:::paper
+解 均为正项级数。由[[serpos]]：
+(1) $\sin\dfrac{1}{n}\sim\dfrac{1}{n}$，$\sum\frac{1}{n}$ 发散，故原级数**发散**。
+(2) $1-\cos\dfrac{1}{n}\sim\dfrac{1}{2n^2}$，$p=2\gt1$，故原级数**收敛**。
+(3) $\dfrac{u_{n+1}}{u_n}=\dfrac{n+1}{2n}\to\dfrac{1}{2}\lt1$，故原级数**收敛**。
+(4) $\dfrac{u_{n+1}}{u_n}=\Bigl(\dfrac{n}{n+1}\Bigr)^n\to\dfrac{1}{e}\lt1$，故原级数**收敛**。
+:::
+**经验**：通项是多项式、根式、三角等函数，用等价后比较；通项含 $n!$、$a^n$，用比值；通项是 $(\cdot)^n$，用根值。
+
+## 交错与任意项
+:::thm leibniz | 莱布尼茨判别法
+$\sum(-1)^{n-1}u_n$，$u_n\gt0$。若 $u_n$ **单调递减**且 $u_n\to0$，则级数收敛，且 $\vert S\vert\le u_1$。
+:::
+:::thm absconv | 绝对收敛与条件收敛
+$\sum\vert u_n\vert$ 收敛 ⟹ $\sum u_n$ 收敛，称**绝对收敛**。$\sum u_n$ 收敛而 $\sum\vert u_n\vert$ 发散，称**条件收敛**。
+绝对收敛 + 条件收敛 = 条件收敛；绝对收敛 + 绝对收敛 = 绝对收敛；收敛 + 发散 = 发散。
+用比值法或根值法判出 $\sum\vert u_n\vert$ 发散时，$\sum u_n$ 也发散。
+:::
+:::ex 按参数讨论
+讨论 $\displaystyle\sum_{n=1}^\infty\frac{(-1)^{n}}{n^p}$（$p\gt0$）的敛散性。
+:::
+:::paper
+解 取绝对值得 $\sum\frac{1}{n^p}$。由[[serbase]]，$p\gt1$ 时收敛，原级数绝对收敛。
+$0\lt p\le1$ 时，$\sum\frac{1}{n^p}$ 发散，但 $\frac{1}{n^p}$ 单调递减趋于 $0$，由[[leibniz]]，原级数收敛。
+∎ $p\gt1$ 时绝对收敛；$0\lt p\le1$ 时条件收敛。
+:::
+:::ex 选择
+设 $u_n\gt0$，$\sum u_n$ 收敛，下列级数中必收敛的是（　　）。
+(A) $\sum\sqrt{u_n}$　(B) $\sum u_n^2$　(C) $\sum\frac{1}{u_n}$　(D) $\sum(-1)^n\sqrt{u_n}$
+:::
+:::paper
+答案 (B)。$\sum u_n$ 收敛，由[[serdef]]，$u_n\to0$，当 $n$ 充分大时 $u_n\lt1$，于是 $u_n^2\lt u_n$，由[[serpos]]得 $\sum u_n^2$ 收敛。
+(A) 反例 $u_n=\frac{1}{n^2}$，$\sum\frac{1}{n}$ 发散。(C) $\frac{1}{u_n}\to+\infty$，发散。(D) 无法保证：$\sqrt{u_n}$ 不一定单调，$\sum\sqrt{u_n}$ 又可能发散，莱布尼茨法和绝对收敛都用不上。
+:::
+:::trap
+去掉绝对值再看，只对「绝对收敛」成立。$\sum u_n$ 收敛推不出 $\sum u_n^2$ 收敛（任意项时）：$u_n=\frac{(-1)^n}{\sqrt n}$，$\sum u_n^2=\sum\frac{1}{n}$ 发散。
+:::

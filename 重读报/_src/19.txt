@@ -1,0 +1,94 @@
+@part 乙
+@kicker 特征值与特征向量
+@title 只被拉伸、不被转动的方向
+@deck 每年必考。矩阵作用在大多数向量上都会改变方向，只有特征向量方向不变，只被拉伸 $\lambda$ 倍。求法是固定的两步，性质则是选择填空的富矿。
+@keep $A\xi=\lambda\xi$（$\xi\neq0$）；$\vert\lambda E-A\vert=0$ 求 $\lambda$，$(\lambda E-A)x=0$ 求 $\xi$。
+@keep $\sum\lambda_i=\mathrm{tr}A$，$\prod\lambda_i=\vert A\vert$。
+@keep $f(A)$ 的特征值是 $f(\lambda)$，特征向量不变。
+@keep 不同特征值对应的特征向量线性无关。
+@recall 特征值之和、积分别等于什么？ || 迹 $\mathrm{tr}A$（主对角线之和）；行列式 $\vert A\vert$。
+@recall $A$ 的特征值是 $\lambda$，$A^*$ 的特征值？ || $\frac{\vert A\vert}{\lambda}$（$A$ 可逆时）。
+@recall $A^T$ 与 $A$ 的特征值、特征向量有什么关系？ || 特征值相同，特征向量一般不同。
+@recall $A$ 不可逆等价于什么特征值条件？ || $0$ 是 $A$ 的特征值。
+@recall $A=\alpha\beta^T$（$n$ 阶，秩 1）的特征值？ || $\beta^T\alpha$（一个）和 $0$（$n-1$ 重）。
+
+## 定义与求法
+:::thm eigdef | 特征值与特征向量 | 定义
+$A$ 是 $n$ 阶方阵，$A\xi=\lambda\xi$，$\xi\neq0$，称 $\lambda$ 为**特征值**，$\xi$ 为对应的**特征向量**。
+**求法**：(1) 解特征方程 $\vert\lambda E-A\vert=0$ 得全部 $\lambda$（$n$ 个，含重根）；(2) 对每个 $\lambda$ 解 $(\lambda E-A)x=0$，非零解都是特征向量。
+:::
+!fig f19_eig | 矩阵 $\begin{pmatrix}2&1\\1&2\end{pmatrix}$ 把单位圆变成椭圆：普通向量 $v$ 的方向会偏转，特征向量（红）只被拉长 3 倍或保持不变。
+:::like
+转动地球仪，绝大多数点都在移动方向，只有地轴的方向不变。地轴方向就是这次旋转的特征向量。
+:::
+:::ex 具体矩阵
+求 $A=\begin{pmatrix}2&0&0\\1&2&-1\\1&0&1\end{pmatrix}$ 的特征值和特征向量。
+:::
+:::think
+第一行只有一个非零元，按第一行展开，特征多项式直接分解。这种现成的因式不要展开破坏。
+:::
+:::paper
+解 特征方程：
+$$\vert\lambda E-A\vert=\begin{vmatrix}\lambda-2&0&0\\-1&\lambda-2&1\\-1&0&\lambda-1\end{vmatrix}=(\lambda-2)^2(\lambda-1)=0.$$
+由[[eigdef]]，特征值 $\lambda_1=\lambda_2=2$，$\lambda_3=1$。⛳4
+$\lambda=2$ 时，解 $(2E-A)x=0$：
+$$2E-A=\begin{pmatrix}0&0&0\\-1&0&1\\-1&0&1\end{pmatrix}\to\begin{pmatrix}1&0&-1\\0&0&0\\0&0&0\end{pmatrix},$$
+基础解系 $\xi_1=(1,0,1)^T$，$\xi_2=(0,1,0)^T$。⛳4
+$\lambda=1$ 时，解 $(E-A)x=0$：
+$$E-A=\begin{pmatrix}-1&0&0\\-1&-1&1\\-1&0&0\end{pmatrix}\to\begin{pmatrix}1&0&0\\0&1&-1\\0&0&0\end{pmatrix},$$
+基础解系 $\xi_3=(0,1,1)^T$。⛳2
+∎ $\lambda=2$ 的全部特征向量为 $k_1\xi_1+k_2\xi_2$（$k_1,k_2$ 不全为 $0$）；$\lambda=1$ 的全部特征向量为 $k_3\xi_3$（$k_3\neq0$）。
+:::
+:::trap
+全部特征向量要写「不全为 $0$」或「$k\neq0$」。特征向量不能是零向量，这是扣分点。
+:::
+
+## 性质
+:::thm eigprop | 特征值的性质
+(1) $\lambda_1+\cdots+\lambda_n=a_{11}+\cdots+a_{nn}=\mathrm{tr}A$；$\lambda_1\cdots\lambda_n=\vert A\vert$。
+(2) $A$ 可逆 ⟺ 所有 $\lambda_i\neq0$。
+(3) 不同特征值对应的特征向量线性无关。$k$ 重特征值的无关特征向量个数 $\le k$。
+(4) 三角矩阵的特征值就是对角元。
+:::
+:::thm eigf | 派生矩阵的特征值 | 公式
+设 $A\xi=\lambda\xi$：
+| 矩阵 | 特征值 | 特征向量 |
+| $kA,\ A^m,\ f(A)$ | $k\lambda,\ \lambda^m,\ f(\lambda)$ | $\xi$ |
+| $A^{-1}$ | $\frac{1}{\lambda}$ | $\xi$ |
+| $A^*$ | $\frac{\vert A\vert}{\lambda}$ | $\xi$ |
+| $A^T$ | $\lambda$ | 一般不同 |
+| $P^{-1}AP$ | $\lambda$ | $P^{-1}\xi$ |
+:::
+:::ex 抽象矩阵
+$3$ 阶矩阵 $A$ 的特征值为 $1,2,3$。求 $\vert A^*+E\vert$ 和 $\vert A^2-2A\vert$。
+:::
+:::think
+行列式 = 特征值之积。分别把矩阵的特征值算出来再相乘。
+:::
+:::paper
+解 由[[eigprop]]，$\vert A\vert=1\cdot2\cdot3=6$。由[[eigf]]，$A^*$ 的特征值是 $\frac{6}{\lambda}$，即 $6,3,2$，于是 $A^*+E$ 的特征值为 $7,4,3$。
+$A^2-2A$ 的特征值 $\lambda^2-2\lambda$ 分别为 $-1,0,3$。
+∎ 故 $\vert A^*+E\vert=7\cdot4\cdot3=84$，$\vert A^2-2A\vert=0$。
+:::
+:::ex 由向量反求
+设 $A=\begin{pmatrix}1&1\\a&b\end{pmatrix}$ 有特征向量 $(1,2)^T$，对应特征值 $\lambda$，且 $\vert A\vert=-2$。求 $a,b,\lambda$。
+:::
+:::paper
+解 由[[eigdef]]，$A\begin{pmatrix}1\\2\end{pmatrix}=\lambda\begin{pmatrix}1\\2\end{pmatrix}$，即
+$$\begin{pmatrix}3\\a+2b\end{pmatrix}=\begin{pmatrix}\lambda\\2\lambda\end{pmatrix}.$$
+得 $\lambda=3$，$a+2b=6$。又 $\vert A\vert=b-a=-2$。
+∎ 联立解得 $a=\dfrac{10}{3}$，$b=\dfrac{4}{3}$，$\lambda=3$。
+:::
+
+## 秩 1 矩阵：一眼读出
+:::thm rank1eig | 秩 1 矩阵的特征值
+$A=\alpha\beta^T$（$n$ 阶，$\alpha,\beta\neq0$）：特征值为 $\beta^T\alpha$ 和 $0$（$n-1$ 重）。
+理由：$A\alpha=\alpha(\beta^T\alpha)=(\beta^T\alpha)\alpha$，所以 $\alpha$ 是特征向量；$r(A)=1$，$Ax=0$ 有 $n-1$ 个无关解，$0$ 至少 $n-1$ 重；最后由迹 = $\beta^T\alpha$ 确认。
+:::
+:::ex 秒杀
+求 $A=\begin{pmatrix}1&1&1\\1&1&1\\1&1&1\end{pmatrix}$ 的特征值。
+:::
+:::paper
+解 $A=\alpha\alpha^T$，$\alpha=(1,1,1)^T$，$\alpha^T\alpha=3$。
+∎ 由[[rank1eig]]，特征值为 $3,0,0$。
+:::

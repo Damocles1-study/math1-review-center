@@ -1,0 +1,82 @@
+@part 丙
+@kicker 三重积分
+@title 三种坐标，一个「穿针」动作
+@deck 三重积分题目不难，主要是选对方法，而且它马上就会成为大题里的计算终点。被积函数只含 $z$ 时用截面法最快；旋转体用柱坐标；球和锥用球坐标。
+@keep 只含 $z$：**截面法**，$\int dz\iint_{D_z}$。
+@keep 柱坐标：$dV=r\,dr\,d\theta\,dz$。
+@keep 球坐标：$dV=\rho^2\sin\varphi\,d\rho\,d\varphi\,d\theta$，$\varphi$ 从 $z$ 轴往下量。
+@keep 形心：$\bar z=\frac{\iiint z\,dV}{V}$。
+@recall 球坐标下 $x,y,z$ 的公式？ || $x=\rho\sin\varphi\cos\theta,\ y=\rho\sin\varphi\sin\theta,\ z=\rho\cos\varphi$。
+@recall 圆锥 $z=\sqrt{x^2+y^2}$ 对应的 $\varphi$？ || $\varphi=\frac\pi4$。
+@recall 截面法适用什么情况？ || 被积函数只含一个变量，且截面面积好算。
+@recall 三重积分的对称性？ || 关于 $xOy$ 面对称，被积函数对 $z$ 为奇函数时积分为 $0$。
+
+## 直角坐标：投影法和截面法
+:::thm iiint | 三重积分的直角坐标计算
+**投影法（先一后二）**：$\Omega$ 向 $xOy$ 面投影为 $D$，从下曲面 $z_1$ 穿入、从上曲面 $z_2$ 穿出：
+$$\iiint_\Omega f\,dV=\iint_Dd\sigma\int_{z_1(x,y)}^{z_2(x,y)}f\,dz.$$
+**截面法（先二后一）**：$z$ 从 $c$ 到 $d$，水平截面为 $D_z$：
+$$\iiint_\Omega f\,dV=\int_c^ddz\iint_{D_z}f\,d\sigma.$$
+:::
+!fig f26_para | 旋转抛物面 $z=x^2+y^2$ 被 $z=1$ 截下的部分。高度为 $z$ 的水平截面是半径 $\sqrt z$ 的圆。
+:::ex 截面法
+计算 $\displaystyle\iiint_\Omega z\,dV$，$\Omega$ 由 $z=x^2+y^2$ 和 $z=1$ 围成。
+:::
+:::think
+被积函数只含 $z$，截面是圆，面积 $\pi z$。立刻变成一元积分。
+:::
+:::paper
+解 对 $z\in[0,1]$，截面 $D_z:x^2+y^2\le z$，面积为 $\pi z$。由[[iiint]]，
+$$\iiint_\Omega z\,dV=\int_0^1z\,dz\iint_{D_z}d\sigma=\int_0^1z\cdot\pi z\,dz.$$
+∎ 原积分 $=\dfrac{\pi}{3}$。
+:::
+
+## 柱坐标
+:::thm cyl | 柱坐标
+$x=r\cos\theta,y=r\sin\theta,z=z$，$dV=r\,dr\,d\theta\,dz$。相当于「投影法 + 底面用极坐标」。
+**信号**：旋转体、圆柱、抛物面；被积函数含 $x^2+y^2$。
+:::
+:::ex 柱坐标
+计算 $\displaystyle\iiint_\Omega(x^2+y^2)\,dV$，$\Omega$ 同上例。
+:::
+:::paper
+解 $\Omega$ 投影为 $D:x^2+y^2\le1$，$r^2\le z\le1$。由[[cyl]]，
+$$\iiint_\Omega(x^2+y^2)\,dV=\int_0^{2\pi}d\theta\int_0^1r^2\cdot r\,dr\int_{r^2}^1dz=2\pi\int_0^1r^3(1-r^2)\,dr=2\pi\Bigl(\frac{1}{4}-\frac{1}{6}\Bigr).$$
+∎ 原积分 $=\dfrac{\pi}{6}$。
+:::
+
+## 球坐标
+:::thm sph | 球坐标
+$x=\rho\sin\varphi\cos\theta$，$y=\rho\sin\varphi\sin\theta$，$z=\rho\cos\varphi$。$dV=\rho^2\sin\varphi\,d\rho\,d\varphi\,d\theta$。
+$\rho\ge0$，$\varphi\in[0,\pi]$ 从 $z$ 轴正向往下量，$\theta\in[0,2\pi]$。
+**信号**：球、半球、锥；被积函数含 $x^2+y^2+z^2$。
+:::
+!fig f26_sph | $\rho$ 是到原点的距离，$\varphi$ 是与 $z$ 轴的夹角，$\theta$ 是投影到底面后的极角。
+:::ex 球坐标
+计算 $\displaystyle\iiint_\Omega(x^2+y^2+z^2)\,dV$，$\Omega:x^2+y^2+z^2\le1$。
+:::
+:::paper
+解 由[[sph]]，
+$$\iiint_\Omega(x^2+y^2+z^2)\,dV=\int_0^{2\pi}d\theta\int_0^\pi\sin\varphi\,d\varphi\int_0^1\rho^2\cdot\rho^2\,d\rho=2\pi\cdot2\cdot\frac{1}{5}.$$
+∎ 原积分 $=\dfrac{4\pi}{5}$。
+:::
+
+## 对称性与形心
+:::thm symtrip | 三重积分的对称性
+$\Omega$ 关于 $xOy$ 面对称：$f$ 对 $z$ 为奇函数时积分为 $0$，为偶函数时等于上半部分的两倍。关于其他坐标面同理。$\Omega$ 关于 $x,y,z$ 轮换不变时，$\iiint x^2=\iiint y^2=\iiint z^2$。
+:::
+:::thm centroid | 形心与质心 | 公式
+**形心**：$\bar x=\dfrac{\iiint_\Omega x\,dV}{V}$，$\bar y,\bar z$ 同理。质量分布不均时，分子分母都乘密度 $\mu$，得到质心。平面图形把三重积分换成二重积分。
+:::
+:::ex 形心
+求半球 $\Omega:x^2+y^2+z^2\le1,z\ge0$ 的形心。
+:::
+:::paper
+解 由对称性，$\bar x=\bar y=0$。体积 $V=\dfrac{2\pi}{3}$。由[[sph]]，
+$$\iiint_\Omega z\,dV=\int_0^{2\pi}d\theta\int_0^{\pi/2}\cos\varphi\sin\varphi\,d\varphi\int_0^1\rho^3\,d\rho=2\pi\cdot\frac{1}{2}\cdot\frac{1}{4}=\frac{\pi}{4}.$$
+由[[centroid]]，$\bar z=\dfrac{\pi/4}{2\pi/3}=\dfrac{3}{8}$。
+∎ 形心为 $\Bigl(0,0,\dfrac{3}{8}\Bigr)$。
+:::
+:::skip
+转动惯量、引力：真题上只要记 $I_z=\iiint(x^2+y^2)\mu\,dV$ 这一个公式，就够应付罕见的填空。
+:::
