@@ -1,7 +1,7 @@
 @part 乙
 @kicker 特征值与特征向量
 @title 只被拉伸、不被转动的方向
-@deck 每年必考。矩阵作用在大多数向量上都会改变方向，只有特征向量方向不变，只被拉伸 $\lambda$ 倍。求法是固定的两步，性质则是选择填空的富矿。
+@deck 矩阵作用在大多数向量上都会改变方向，只有特征向量方向不变，只被拉伸 $\lambda$ 倍。求法是固定的两步，性质很多，都从定义一步推出。
 @keep $A\xi=\lambda\xi$（$\xi\neq0$）；$\vert\lambda E-A\vert=0$ 求 $\lambda$，$(\lambda E-A)x=0$ 求 $\xi$。
 @keep $\sum\lambda_i=\mathrm{tr}A$，$\prod\lambda_i=\vert A\vert$。
 @keep $f(A)$ 的特征值是 $f(\lambda)$，特征向量不变。

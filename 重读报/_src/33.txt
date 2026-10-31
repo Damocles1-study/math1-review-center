@@ -77,6 +77,8 @@ $$P(X\gt s+t\mid X\gt s)=\frac{P(X\gt s+t)}{P(X\gt s)}=\frac{e^{-\lambda(s+t)}}{
 ∎ 所求概率 $=e^{-\lambda t}$，与已工作的时间 $s$ 无关。
 :::
 
+**泊松定理**：$n$ 大、$p$ 小时，$B(n,p)\approx P(np)$。
+
 ## 随机变量函数的分布
 :::thm funcdist | $Y=g(X)$ 的分布：分布函数法
 **离散**：列出 $Y$ 的所有取值，把对应的概率相加。

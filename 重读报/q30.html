@@ -10,13 +10,13 @@
 <nav class="tools"><button data-a="toc" title="目录 (T)">目录</button><button data-a="rail" class="only-narrow">定理<i id="railn"></i></button><button data-a="hide" title="遮住卷面，先自己写 (H)">遮卷面</button><button data-a="night" title="夜读">夜读</button></nav></header>
 <main class="sheet" id="sheet">
 <section class="cover" id="cover">
-<div class="mast"><div class="mast-l">多元与级数<br>第 30 期</div><div class="mast-c">重读报</div><div class="mast-r">本期约 16 分钟<br>常数项级数</div></div>
+<div class="mast"><div class="mast-l">多元与级数<br>第 30 期</div><div class="mast-c">重读报</div><div class="mast-r">本期约 24 分钟<br>常数项级数</div></div>
 <h1>无穷多个数相加，有没有结果</h1>
-<p class="deck">判敛是选择题的主力。别急着套判别法，先问三件事：通项趋于零吗？是正项级数吗？能和 <span class="m">p</span> 级数比吗？流程走对了，这一部分只是读表。</p>
+<p class="deck">别急着套判别法，先问三件事：通项趋于零吗？是正项级数吗？能和 <span class="m">p</span> 级数比吗？流程走对了，这一部分只是读表。</p>
 <div class="cover-grid">
 <div class="cover-keep"><h4>本期只记这几行</h4><ol><li>必要条件：<span class="m">\sum u_n</span> 收敛 ⟹ <span class="m">u_n\to0</span>。<span class="m">u_n\not\to0</span> 直接发散。</li><li><span class="m">\sum\frac{1}{n^p}</span>：<span class="m">p\gt1</span> 收敛。<span class="m">\sum q^n</span>：<span class="m">\vert q\vert\lt1</span> 收敛。</li><li>正项：比较（等价无穷小阶数）；有阶乘、幂指用比值或根值。</li><li>交错：莱布尼茨。任意项：先看绝对收敛。</li></ol></div>
 <div class="cover-prev"><h4>开读前，先答上期</h4><div id="prevq"></div></div>
-<div class="cover-toc"><h4>本期目录</h4><ol><li>定义与性质</li><li>正项级数</li><li>交错与任意项</li></ol><p class="hint">→ 键 / 点右缘 / 左滑翻页</p></div>
+<div class="cover-toc"><h4>本期目录</h4><ol><li>定义与性质</li><li>正项级数</li><li>交错与任意项</li><li>数列的收敛，可以交给级数</li></ol><p class="hint">读完做 2 道实战。→ 键 / 点右缘 / 左滑翻页</p></div>
 </div></section>
 <section class="stage" id="stage" hidden>
 <div class="viewport" id="vp"><div class="flow" id="flow">
@@ -57,7 +57,15 @@
 <div class="paper"><div class="b-h">考场卷面</div><p>答案 (B)。<span class="m">\sum u_n</span> 收敛，由<a class="c" data-t="serdef">级数收敛</a>，<span class="m">u_n\to0</span>，当 <span class="m">n</span> 充分大时 <span class="m">u_n\lt1</span>，于是 <span class="m">u_n^2\lt u_n</span>，由<a class="c" data-t="serpos">正项级数判别法</a>得 <span class="m">\sum u_n^2</span> 收敛。</p>
 <p>(A) 反例 <span class="m">u_n=\frac{1}{n^2}</span>，<span class="m">\sum\frac{1}{n}</span> 发散。(C) <span class="m">\frac{1}{u_n}\to+\infty</span>，发散。(D) 无法保证：<span class="m">\sqrt{u_n}</span> 不一定单调，<span class="m">\sum\sqrt{u_n}</span> 又可能发散，莱布尼茨法和绝对收敛都用不上。</p></div>
 <div class="trap"><div class="b-h">易错</div><p>去掉绝对值再看，只对「绝对收敛」成立。<span class="m">\sum u_n</span> 收敛推不出 <span class="m">\sum u_n^2</span> 收敛（任意项时）：<span class="m">u_n=\frac{(-1)^n}{\sqrt n}</span>，<span class="m">\sum u_n^2=\sum\frac{1}{n}</span> 发散。</p></div>
+<h2>数列的收敛，可以交给级数</h2>
+<p><span class="m">x_n=x_1+\sum\limits_{k=1}^{n-1}(x_{k+1}-x_k)</span>，所以 <span class="m">\sum(x_{k+1}-x_k)</span> 收敛，数列 <span class="m">\{x_n\}</span> 就收敛。递推式 <span class="m">x_{n+1}=f(x_n)</span> 且 <span class="m">\vert f'\vert\le k\lt1</span> 时，用拉格朗日中值定理就能压住相邻两项的差。</p>
+<div class="ex"><div class="ex-h">例 30.5<span class="ex-tag">压缩的递推</span></div><p><span class="m">x_1=0</span>，<span class="m">x_{n+1}=\frac12\cos x_n</span>。证明 <span class="m">\lim\limits_{n\to\infty}x_n</span> 存在。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>证 由拉格朗日中值定理，存在 <span class="m">\xi</span> 使</p>
+<div class="M">\vert x_{n+1}-x_n\vert=\frac12\vert\cos x_n-\cos x_{n-1}\vert=\frac12\vert\sin\xi\vert\,\vert x_n-x_{n-1}\vert\le\frac12\vert x_n-x_{n-1}\vert.</div>
+<p>所以 <span class="m">\vert x_{n+1}-x_n\vert\le\bigl(\frac12\bigr)^{n-1}\vert x_2-x_1\vert</span>。由比较判别法，<span class="m">\sum(x_{n+1}-x_n)</span> 绝对收敛。</p>
+<p class="fin">前 <span class="m">n</span> 项和 <span class="m">x_{n+1}-x_1</span> 有极限，故 <span class="m">\lim\limits_{n\to\infty}x_n</span> 存在。证毕。</p></div>
 
+<div class="shizhan"><h2>实战</h2><p class="hint">先自己做，再看点评。选择题点选项就判，填空写完再看答案，做错的进错题版。本期内容在 2016–2026 的卷子上平均每卷约 2.2 分。</p><div class="qz" data-q="z30-0" data-a="C"><div class="qz-h">同型练习<i class="qz-r"></i></div><p>下列级数绝对收敛的是</p><div class="qz-o"><button data-o="A">A. <span class="m">\sum\dfrac{(-1)^n}{\sqrt n}</span></button><button data-o="B">B. <span class="m">\sum(-1)^n\dfrac{n}{n+1}</span></button><button data-o="C">C. <span class="m">\sum\dfrac{(-1)^n}{n^{3/2}}</span></button><button data-o="D">D. <span class="m">\sum\dfrac{(-1)^n}{\ln(n+1)}</span></button></div><div class="qz-n"><p class="qz-ans">答案：C</p><p>取绝对值看 <span class="m">p</span> 级数。B 的通项不趋于零，直接发散。</p></div></div><div class="qz" data-q="z30-1" data-a="B"><div class="qz-h">同型练习<i class="qz-r"></i></div><p>若 <span class="m">\sum u_n</span> 收敛，则一定有</p><div class="qz-o"><button data-o="A">A. <span class="m">\sum\vert u_n\vert</span> 收敛</button><button data-o="B">B. <span class="m">\lim u_n=0</span></button><button data-o="C">C. <span class="m">\sum u_n^2</span> 收敛</button><button data-o="D">D. <span class="m">\{u_n\}</span> 单调</button></div><div class="qz-n"><p class="qz-ans">答案：B</p><p>只有必要条件是一定成立的。A、C 都有反例 <span class="m">u_n=\frac{(-1)^n}{\sqrt n}</span>。</p></div></div></div>
 <div class="endq"><h2>今日考你</h2><p class="hint">合上前答一遍：先想，再点开。答错的会回到后面几期和温故版。</p><div class="rq" data-q="30-0"><p class="rq-q"><span class="m">\sum\frac{1}{n}</span> 收敛吗？<span class="m">\sum\frac{(-1)^n}{n}</span> 呢？</p><p class="rq-a">前者发散；后者条件收敛。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="30-1"><p class="rq-q">比值法 <span class="m">\rho=1</span> 时？</p><p class="rq-a">失效，改用比较法。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="30-2"><p class="rq-q">莱布尼茨判别法的两个条件？</p><p class="rq-a"><span class="m">u_n</span> 单调递减，<span class="m">u_n\to0</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="30-3"><p class="rq-q">绝对收敛和收敛的关系？</p><p class="rq-a">绝对收敛 ⟹ 收敛，反之不成立。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="30-4"><p class="rq-q"><span class="m">\sum u_n</span> 收敛，<span class="m">\sum u_n^2</span> 一定收敛吗？</p><p class="rq-a">正项时一定；一般情形不一定（<span class="m">u_n=\frac{(-1)^n}{\sqrt n}</span>）。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div></div>
 <div class="endnext" id="endnext"></div>
 <div id="sent"></div>

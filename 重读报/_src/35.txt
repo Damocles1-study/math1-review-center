@@ -56,6 +56,8 @@ $$E(e^X)=\int_0^12xe^x\,dx=2\bigl[(x-1)e^x\bigr]_0^1=2.$$
 ∎ $EX=\dfrac{2}{3}$，$DX=\dfrac{1}{18}$，$E(e^X)=2$。
 :::
 
+**绝对值的期望**：$Z\sim N(0,1)$ 时 $E\vert Z\vert=\sqrt{\dfrac2\pi}$，所以 $X\sim N(\mu,\sigma^2)$ 时 $E\vert X-\mu\vert=\sigma\sqrt{\dfrac2\pi}$。由 $E\vert Z\vert=2\displaystyle\int_0^{+\infty}z\varphi(z)\,dz$ 算出。
+
 ## 协方差与相关系数
 :::thm cov | 协方差与相关系数
 $\mathrm{Cov}(X,Y)=E[(X-EX)(Y-EY)]=E(XY)-EX\cdot EY$。

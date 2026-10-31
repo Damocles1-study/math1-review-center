@@ -10,13 +10,13 @@
 <nav class="tools"><button data-a="toc" title="目录 (T)">目录</button><button data-a="rail" class="only-narrow">定理<i id="railn"></i></button><button data-a="hide" title="遮住卷面，先自己写 (H)">遮卷面</button><button data-a="night" title="夜读">夜读</button></nav></header>
 <main class="sheet" id="sheet">
 <section class="cover" id="cover">
-<div class="mast"><div class="mast-l">多元与级数<br>第 26 期</div><div class="mast-c">重读报</div><div class="mast-r">本期约 16 分钟<br>三重积分</div></div>
+<div class="mast"><div class="mast-l">多元与级数<br>第 26 期</div><div class="mast-c">重读报</div><div class="mast-r">本期约 21 分钟<br>三重积分</div></div>
 <h1>三种坐标，一个「穿针」动作</h1>
 <p class="deck">三重积分题目不难，主要是选对方法，而且它马上就会成为大题里的计算终点。被积函数只含 <span class="m">z</span> 时用截面法最快；旋转体用柱坐标；球和锥用球坐标。</p>
 <div class="cover-grid">
 <div class="cover-keep"><h4>本期只记这几行</h4><ol><li>只含 <span class="m">z</span>：<b>截面法</b>，<span class="m">\int dz\iint_{D_z}</span>。</li><li>柱坐标：<span class="m">dV=r\,dr\,d\theta\,dz</span>。</li><li>球坐标：<span class="m">dV=\rho^2\sin\varphi\,d\rho\,d\varphi\,d\theta</span>，<span class="m">\varphi</span> 从 <span class="m">z</span> 轴往下量。</li><li>形心：<span class="m">\bar z=\frac{\iiint z\,dV}{V}</span>。</li></ol></div>
 <div class="cover-prev"><h4>开读前，先答上期</h4><div id="prevq"></div></div>
-<div class="cover-toc"><h4>本期目录</h4><ol><li>直角坐标：投影法和截面法</li><li>柱坐标</li><li>球坐标</li><li>对称性与形心</li></ol><p class="hint">→ 键 / 点右缘 / 左滑翻页</p></div>
+<div class="cover-toc"><h4>本期目录</h4><ol><li>直角坐标：投影法和截面法</li><li>柱坐标</li><li>球坐标</li><li>对称性与形心</li></ol><p class="hint">读完做 2 道实战。→ 键 / 点右缘 / 左滑翻页</p></div>
 </div></section>
 <section class="stage" id="stage" hidden>
 <div class="viewport" id="vp"><div class="flow" id="flow">
@@ -57,6 +57,7 @@
 <p class="fin">形心为 <span class="m">\Bigl(0,0,\dfrac{3}{8}\Bigr)</span>。</p></div>
 <div class="skip"><div class="b-h">本报不刊</div><p>转动惯量、引力：真题上只要记 <span class="m">I_z=\iiint(x^2+y^2)\mu\,dV</span> 这一个公式，就够应付罕见的填空。</p></div>
 
+<div class="shizhan"><h2>实战</h2><p class="hint">先自己做，再看点评。选择题点选项就判，填空写完再看答案，做错的进错题版。本期内容在 2016–2026 的卷子上平均每卷约 1.4 分。</p><div class="qz" data-q="2010-12" data-a=""><div class="qz-h">2010 年第 12 题<i class="qz-r"></i></div><p>设 <span class="m">\Omega=\{(x,y,z)\vert x^2+y^2\le z\le1\}</span>，则 <span class="m">\Omega</span> 的形心的竖坐标 <span class="m">\bar z=</span>____。</p><div class="qz-s"><button class="qz-show">写完了，看答案</button></div><div class="qz-n"><p class="qz-ans">答案：<span class="m">\dfrac23</span></p><p>截面法：<span class="m">z</span> 高度的截面面积是 <span class="m">\pi z</span>。<span class="m">\bar z=\frac{\int_0^1z\cdot\pi z\,dz}{\int_0^1\pi z\,dz}</span>。</p><div class="qz-b"><button data-v="1">做对了</button><button data-v="0">做错了</button></div></div></div><div class="qz" data-q="2015-12" data-a=""><div class="qz-h">2015 年第 12 题<i class="qz-r"></i></div><p>设 <span class="m">\Omega</span> 是由平面 <span class="m">x+y+z=1</span> 与三个坐标平面所围成的空间区域，则 <span class="m">\iiint_\Omega(x+2y+3z)\,dx\,dy\,dz=</span>____。</p><div class="qz-s"><button class="qz-show">写完了，看答案</button></div><div class="qz-n"><p class="qz-ans">答案：<span class="m">\dfrac14</span></p><p>轮换对称：<span class="m">\iiint x=\iiint y=\iiint z</span>，所以是 <span class="m">6\iiint z</span>。再用截面法，<span class="m">\iiint z=\int_0^1z\cdot\frac{(1-z)^2}{2}\,dz=\frac1{24}</span>。</p><div class="qz-b"><button data-v="1">做对了</button><button data-v="0">做错了</button></div></div></div></div>
 <div class="endq"><h2>今日考你</h2><p class="hint">合上前答一遍：先想，再点开。答错的会回到后面几期和温故版。</p><div class="rq" data-q="26-0"><p class="rq-q">球坐标下 <span class="m">x,y,z</span> 的公式？</p><p class="rq-a"><span class="m">x=\rho\sin\varphi\cos\theta,\ y=\rho\sin\varphi\sin\theta,\ z=\rho\cos\varphi</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="26-1"><p class="rq-q">圆锥 <span class="m">z=\sqrt{x^2+y^2}</span> 对应的 <span class="m">\varphi</span>？</p><p class="rq-a"><span class="m">\varphi=\frac\pi4</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="26-2"><p class="rq-q">截面法适用什么情况？</p><p class="rq-a">被积函数只含一个变量，且截面面积好算。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="26-3"><p class="rq-q">三重积分的对称性？</p><p class="rq-a">关于 <span class="m">xOy</span> 面对称，被积函数对 <span class="m">z</span> 为奇函数时积分为 <span class="m">0</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div></div>
 <div class="endnext" id="endnext"></div>
 <div id="sent"></div>

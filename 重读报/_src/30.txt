@@ -1,7 +1,7 @@
 @part 丙
 @kicker 常数项级数
 @title 无穷多个数相加，有没有结果
-@deck 判敛是选择题的主力。别急着套判别法，先问三件事：通项趋于零吗？是正项级数吗？能和 $p$ 级数比吗？流程走对了，这一部分只是读表。
+@deck 别急着套判别法，先问三件事：通项趋于零吗？是正项级数吗？能和 $p$ 级数比吗？流程走对了，这一部分只是读表。
 @keep 必要条件：$\sum u_n$ 收敛 ⟹ $u_n\to0$。$u_n\not\to0$ 直接发散。
 @keep $\sum\frac{1}{n^p}$：$p\gt1$ 收敛。$\sum q^n$：$\vert q\vert\lt1$ 收敛。
 @keep 正项：比较（等价无穷小阶数）；有阶乘、幂指用比值或根值。
@@ -80,4 +80,16 @@ $0\lt p\le1$ 时，$\sum\frac{1}{n^p}$ 发散，但 $\frac{1}{n^p}$ 单调递减
 :::
 :::trap
 去掉绝对值再看，只对「绝对收敛」成立。$\sum u_n$ 收敛推不出 $\sum u_n^2$ 收敛（任意项时）：$u_n=\frac{(-1)^n}{\sqrt n}$，$\sum u_n^2=\sum\frac{1}{n}$ 发散。
+:::
+
+## 数列的收敛，可以交给级数
+$x_n=x_1+\sum\limits_{k=1}^{n-1}(x_{k+1}-x_k)$，所以 $\sum(x_{k+1}-x_k)$ 收敛，数列 $\{x_n\}$ 就收敛。递推式 $x_{n+1}=f(x_n)$ 且 $\vert f'\vert\le k\lt1$ 时，用拉格朗日中值定理就能压住相邻两项的差。
+:::ex 压缩的递推
+$x_1=0$，$x_{n+1}=\frac12\cos x_n$。证明 $\lim\limits_{n\to\infty}x_n$ 存在。
+:::
+:::paper
+证 由拉格朗日中值定理，存在 $\xi$ 使
+$$\vert x_{n+1}-x_n\vert=\frac12\vert\cos x_n-\cos x_{n-1}\vert=\frac12\vert\sin\xi\vert\,\vert x_n-x_{n-1}\vert\le\frac12\vert x_n-x_{n-1}\vert.$$
+所以 $\vert x_{n+1}-x_n\vert\le\bigl(\frac12\bigr)^{n-1}\vert x_2-x_1\vert$。由比较判别法，$\sum(x_{n+1}-x_n)$ 绝对收敛。
+∎ 前 $n$ 项和 $x_{n+1}-x_1$ 有极限，故 $\lim\limits_{n\to\infty}x_n$ 存在。证毕。
 :::

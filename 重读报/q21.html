@@ -10,13 +10,13 @@
 <nav class="tools"><button data-a="toc" title="目录 (T)">目录</button><button data-a="rail" class="only-narrow">定理<i id="railn"></i></button><button data-a="hide" title="遮住卷面，先自己写 (H)">遮卷面</button><button data-a="night" title="夜读">夜读</button></nav></header>
 <main class="sheet" id="sheet">
 <section class="cover" id="cover">
-<div class="mast"><div class="mast-l">线性代数<br>第 21 期</div><div class="mast-c">重读报</div><div class="mast-r">本期约 16 分钟<br>二次型</div></div>
+<div class="mast"><div class="mast-l">线性代数<br>第 21 期</div><div class="mast-c">重读报</div><div class="mast-r">本期约 24 分钟<br>二次型</div></div>
 <h1>去掉交叉项，看清曲面的样子</h1>
-<p class="deck">二次型是实对称矩阵的另一张脸。正交变换化标准形，就是上一期的正交对角化；配方法更快但不保形。末尾的正定判别是选填常客。线代到此结束。</p>
+<p class="deck">二次型是实对称矩阵的另一张脸。正交变换化标准形，就是上一期的正交对角化；配方法更快但不保形。末尾是正定判别。线代到此结束。</p>
 <div class="cover-grid">
 <div class="cover-keep"><h4>本期只记这几行</h4><ol><li><span class="m">f=x^TAx</span>，<span class="m">A</span> 实对称：<span class="m">x_i^2</span> 系数放对角线，<span class="m">x_ix_j</span> 系数<b>折半</b>放对称位置。</li><li>正交变换 <span class="m">x=Qy</span>：标准形系数就是特征值。</li><li>惯性定理：正、负惯性指数不随变换方法改变。</li><li>正定 ⟺ 特征值全正 ⟺ 顺序主子式全正。</li><li>合同 ⟺ 正负惯性指数相同（实对称）。</li></ol></div>
 <div class="cover-prev"><h4>开读前，先答上期</h4><div id="prevq"></div></div>
-<div class="cover-toc"><h4>本期目录</h4><ol><li>二次型与矩阵</li><li>正交变换法（大题主力）</li><li>配方法与惯性定理</li><li>正定</li></ol><p class="hint">→ 键 / 点右缘 / 左滑翻页</p></div>
+<div class="cover-toc"><h4>本期目录</h4><ol><li>二次型与矩阵</li><li>正交变换法（大题主力）</li><li>配方法与惯性定理</li><li>正定</li></ol><p class="hint">读完做 3 道实战。→ 键 / 点右缘 / 左滑翻页</p></div>
 </div></section>
 <section class="stage" id="stage" hidden>
 <div class="viewport" id="vp"><div class="flow" id="flow">
@@ -35,7 +35,7 @@
 <div class="M">Q=\begin{pmatrix}\frac{1}{\sqrt3}&amp;-\frac{1}{\sqrt2}&amp;-\frac{1}{\sqrt6}\\\frac{1}{\sqrt3}&amp;\frac{1}{\sqrt2}&amp;-\frac{1}{\sqrt6}\\\frac{1}{\sqrt3}&amp;0&amp;\frac{2}{\sqrt6}\end{pmatrix},</div>
 <p>作正交变换 <span class="m">x=Qy</span>。<span class="pt">8分</span></p>
 <p class="fin">标准形为 <span class="m">f=2y_1^2-y_2^2-y_3^2</span>。</p></div>
-<div class="note"><div class="b-h">批注</div><p>真题的大题常常反着问：告诉你标准形或某个特征向量，反求参数。翻译关系是一样的：标准形系数 = 特征值，迹和行列式可列方程。</p></div>
+<div class="note"><div class="b-h">批注</div><p>反过来也一样：已知标准形或某个特征向量，可以反求参数。翻译关系是：标准形系数 = 特征值，迹和行列式可列方程。</p></div>
 <h2>配方法与惯性定理</h2>
 <p>配方法：先把含 <span class="m">x_1</span> 的项配成一个完全平方，再处理 <span class="m">x_2</span>，依次进行。只有交叉项时，先令 <span class="m">x_1=y_1+y_2,x_2=y_1-y_2</span> 产生平方项。</p>
 <div class="ex"><div class="ex-h">例 21.2<span class="ex-tag">配方</span></div><p>用配方法化 <span class="m">f=x_1^2+2x_1x_2+2x_2^2+4x_2x_3+x_3^2</span> 为标准形，求其正、负惯性指数。</p></div>
@@ -59,6 +59,7 @@
 <p>由 <span class="m">D_2\gt0</span> 得 <span class="m">-1\lt t\lt1</span>；由 <span class="m">D_3\gt0</span> 得 <span class="m">-\dfrac{4}{5}\lt t\lt0</span>。</p>
 <p class="fin">取交集，<span class="m">-\dfrac{4}{5}\lt t\lt0</span>。</p></div>
 
+<div class="shizhan"><h2>实战</h2><p class="hint">先自己做，再看点评。选择题点选项就判，填空写完再看答案，做错的进错题版。本期内容在 2016–2026 的卷子上平均每卷约 8.8 分。</p><div class="qz" data-q="2011-13" data-a=""><div class="qz-h">2011 年第 13 题<i class="qz-r"></i></div><p>若二次曲面的方程 <span class="m">x^2+3y^2+z^2+2axy+2xz+2yz=4</span> 经正交变换化为 <span class="m">y_1^2+4z_1^2=4</span>，则 <span class="m">a=</span>____。</p><div class="qz-s"><button class="qz-show">写完了，看答案</button></div><div class="qz-n"><p class="qz-ans">答案：<span class="m">1</span></p><p>特征值 <span class="m">0,1,4</span>，所以 <span class="m">\vert A\vert=0</span>，解出 <span class="m">a=1</span>。标准形系数就是特征值。</p><div class="qz-b"><button data-v="1">做对了</button><button data-v="0">做错了</button></div></div></div><div class="qz" data-q="2014-13" data-a=""><div class="qz-h">2014 年第 13 题<i class="qz-r"></i></div><p>设二次型 <span class="m">f(x_1,x_2,x_3)=x_1^2-x_2^2+2ax_1x_3+4x_2x_3</span> 的负惯性指数为 <span class="m">1</span>，则 <span class="m">a</span> 的取值范围是____。</p><div class="qz-s"><button class="qz-show">写完了，看答案</button></div><div class="qz-n"><p class="qz-ans">答案：<span class="m">[-2,2]</span></p><p>配方得 <span class="m">(x_1+ax_3)^2-(x_2-2x_3)^2+(4-a^2)x_3^2</span>。负惯性指数已经占了 <span class="m">1</span>，所以 <span class="m">4-a^2\ge0</span>。</p><div class="qz-b"><button data-v="1">做对了</button><button data-v="0">做错了</button></div></div></div><div class="qz" data-q="2015-6" data-a="A"><div class="qz-h">2015 年第 6 题<i class="qz-r"></i></div><p>设二次型 <span class="m">f(x_1,x_2,x_3)</span> 在正交变换 <span class="m">x=Py</span> 下的标准形为 <span class="m">2y_1^2+y_2^2-y_3^2</span>，其中 <span class="m">P=(e_1,e_2,e_3)</span>。若 <span class="m">Q=(e_1,-e_3,e_2)</span>，则 <span class="m">f</span> 在正交变换 <span class="m">x=Qy</span> 下的标准形为</p><div class="qz-o"><button data-o="A">A. <span class="m">2y_1^2-y_2^2+y_3^2</span></button><button data-o="B">B. <span class="m">2y_1^2+y_2^2-y_3^2</span></button><button data-o="C">C. <span class="m">2y_1^2-y_2^2-y_3^2</span></button><button data-o="D">D. <span class="m">2y_1^2+y_2^2+y_3^2</span></button></div><div class="qz-n"><p class="qz-ans">答案：A</p><p>列的顺序就是特征值的顺序，乘 <span class="m">-1</span> 不改变特征值。</p></div></div></div>
 <div class="endq"><h2>今日考你</h2><p class="hint">合上前答一遍：先想，再点开。答错的会回到后面几期和温故版。</p><div class="rq" data-q="21-0"><p class="rq-q"><span class="m">f=x_1^2+4x_1x_2</span> 的矩阵？</p><p class="rq-a"><span class="m">\begin{pmatrix}1&amp;2\\2&amp;0\end{pmatrix}</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="21-1"><p class="rq-q">相似与合同的关系（实对称）？</p><p class="rq-a">相似 ⟹ 合同，反之不然。相似看特征值全部相同，合同只看正负个数。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="21-2"><p class="rq-q">正定矩阵的等价条件写三个。</p><p class="rq-a">特征值全正；顺序主子式全正；存在可逆 <span class="m">C</span> 使 <span class="m">A=C^TC</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="21-3"><p class="rq-q">配方法的变换矩阵与正交变换有何不同？</p><p class="rq-a">只要求可逆，标准形系数不一定是特征值。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div></div>
 <div class="endnext" id="endnext"></div>
 <div id="sent"></div>

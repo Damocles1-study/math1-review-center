@@ -10,13 +10,13 @@
 <nav class="tools"><button data-a="toc" title="目录 (T)">目录</button><button data-a="rail" class="only-narrow">定理<i id="railn"></i></button><button data-a="hide" title="遮住卷面，先自己写 (H)">遮卷面</button><button data-a="night" title="夜读">夜读</button></nav></header>
 <main class="sheet" id="sheet">
 <section class="cover" id="cover">
-<div class="mast"><div class="mast-l">概率统计<br>第 36 期</div><div class="mast-c">重读报</div><div class="mast-r">本期约 16 分钟<br>极限定理与抽样分布</div></div>
+<div class="mast"><div class="mast-l">概率统计<br>第 36 期</div><div class="mast-c">重读报</div><div class="mast-r">本期约 19 分钟<br>极限定理与抽样分布</div></div>
 <h1>样本够大，平均数就可靠</h1>
 <p class="deck">大数定律说平均值会稳定，中心极限定理说它的波动接近正态。然后进入统计：<span class="m">\chi^2,t,F</span> 三个分布各有固定的构造方式，记住定义和正态总体的结论就够了。</p>
 <div class="cover-grid">
 <div class="cover-keep"><h4>本期只记这几行</h4><ol><li>切比雪夫：<span class="m">P(\vert X-EX\vert\ge\varepsilon)\le\frac{DX}{\varepsilon^2}</span>。</li><li>中心极限：独立同分布，<span class="m">\sum X_i\approx N(n\mu,n\sigma^2)</span>。</li><li><span class="m">\chi^2(n)</span>：<span class="m">n</span> 个标准正态的平方和。<span class="m">t(n)=\frac{N(0,1)}{\sqrt{\chi^2(n)/n}}</span>。<span class="m">F(m,n)=\frac{\chi^2(m)/m}{\chi^2(n)/n}</span>。</li><li>正态总体：<span class="m">\bar X\sim N(\mu,\frac{\sigma^2}{n})</span>；<span class="m">\frac{(n-1)S^2}{\sigma^2}\sim\chi^2(n-1)</span>；<span class="m">\frac{\bar X-\mu}{S/\sqrt n}\sim t(n-1)</span>。</li></ol></div>
 <div class="cover-prev"><h4>开读前，先答上期</h4><div id="prevq"></div></div>
-<div class="cover-toc"><h4>本期目录</h4><ol><li>切比雪夫与大数定律</li><li>中心极限定理</li><li>三大抽样分布</li></ol><p class="hint">→ 键 / 点右缘 / 左滑翻页</p></div>
+<div class="cover-toc"><h4>本期目录</h4><ol><li>切比雪夫与大数定律</li><li>中心极限定理</li><li>三大抽样分布</li></ol><p class="hint">读完做 1 道实战。→ 键 / 点右缘 / 左滑翻页</p></div>
 </div></section>
 <section class="stage" id="stage" hidden>
 <div class="viewport" id="vp"><div class="flow" id="flow">
@@ -61,6 +61,7 @@
 <div class="M">\frac{(n-1)^2}{\sigma^4}D(S^2)=2(n-1).</div>
 <p class="fin"><span class="m">D(S^2)=\dfrac{2\sigma^4}{n-1}</span>。</p></div>
 
+<div class="shizhan"><h2>实战</h2><p class="hint">先自己做，再看点评。选择题点选项就判，填空写完再看答案，做错的进错题版。本期内容在 2016–2026 的卷子上平均每卷约 1.6 分。</p><div class="qz" data-q="2013-8" data-a="C"><div class="qz-h">2013 年第 8 题<i class="qz-r"></i></div><p>设随机变量 <span class="m">X\sim t(n)</span>，<span class="m">Y\sim F(1,n)</span>，给定 <span class="m">\alpha\ (0\lt\alpha\lt0.5)</span>，常数 <span class="m">c</span> 满足 <span class="m">P\{X\gt c\}=\alpha</span>，则 <span class="m">P\{Y\gt c^2\}=</span></p><div class="qz-o"><button data-o="A">A. <span class="m">\alpha</span></button><button data-o="B">B. <span class="m">1-\alpha</span></button><button data-o="C">C. <span class="m">2\alpha</span></button><button data-o="D">D. <span class="m">1-2\alpha</span></button></div><div class="qz-n"><p class="qz-ans">答案：C</p><p><span class="m">t^2(n)=F(1,n)</span>。<span class="m">P\{X^2\gt c^2\}</span> 是两侧之和。</p></div></div></div>
 <div class="endq"><h2>今日考你</h2><p class="hint">合上前答一遍：先想，再点开。答错的会回到后面几期和温故版。</p><div class="rq" data-q="36-0"><p class="rq-q"><span class="m">\chi^2(n)</span> 的期望和方差？</p><p class="rq-a"><span class="m">n,\ 2n</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="36-1"><p class="rq-q"><span class="m">\bar X</span> 的期望和方差？</p><p class="rq-a"><span class="m">\mu,\ \frac{\sigma^2}{n}</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="36-2"><p class="rq-q"><span class="m">\frac{\bar X-\mu}{S/\sqrt n}</span> 服从？</p><p class="rq-a"><span class="m">t(n-1)</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="36-3"><p class="rq-q"><span class="m">E(S^2)</span>？</p><p class="rq-a"><span class="m">\sigma^2</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="36-4"><p class="rq-q">若 <span class="m">T\sim t(n)</span>，<span class="m">T^2</span> 服从？</p><p class="rq-a"><span class="m">F(1,n)</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div></div>
 <div class="endnext" id="endnext"></div>
 <div id="sent"></div>

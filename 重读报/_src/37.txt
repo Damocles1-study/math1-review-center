@@ -97,6 +97,11 @@ $H_0$ 成立却拒绝：**第一类错误**（弃真），概率 $\alpha$。$H_0
 $n$ 固定时 $\alpha,\beta$ 此消彼长；增大 $n$ 可以同时减小。
 **$\mu$ 的双侧检验（$\sigma$ 已知）**：统计量 $U=\dfrac{\bar X-\mu_0}{\sigma/\sqrt n}$，$\vert U\vert\ge u_{\alpha/2}$ 时拒绝 $H_0$。$\sigma$ 未知时用 $T=\dfrac{\bar X-\mu_0}{S/\sqrt n}$ 和 $t_{\alpha/2}(n-1)$。
 :::
+:::thm onesided | 单侧检验与显著性水平
+$H_0:\mu\le\mu_0$，$H_1:\mu\gt\mu_0$（$\sigma$ 已知）：拒绝域为 $\bar X\ge\mu_0+\dfrac{\sigma}{\sqrt n}u_\alpha$。$\sigma$ 未知时把 $\sigma$ 换成 $S$，$u_\alpha$ 换成 $t_\alpha(n-1)$。$H_1$ 指向哪边，拒绝域就在哪边。
+$\alpha$ 越小，拒绝域越小：在 $\alpha=0.01$ 下拒绝，则 $\alpha=0.05$ 下必拒绝；在 $\alpha=0.05$ 下接受，则 $\alpha=0.01$ 下必接受。
+:::
+
 :::ex 两类错误
 $X\sim N(\mu,1)$，$n=16$。检验 $H_0:\mu=0$，当 $\vert\bar X\vert\ge0.49$ 时拒绝。求第一类错误概率，以及 $\mu=0.5$ 时的第二类错误概率。
 :::

@@ -60,6 +60,28 @@ function bindRecall(root){
 }
 window.CDBindRecall=bindRecall;
 
+/* 实战：记录形如 {id:{ok:0|1,t,n,p:选的项}}。opt.fresh=true 时不恢复旧结果（错题版重做用） */
+function bindPrac(root,opt){
+  opt=opt||{};
+  const save=(id,ok,p)=>{const r=store.get('prac',{}),o=r[id]||{n:0};o.ok=ok;o.t=Date.now();o.n=(o.n||0)+1;if(p)o.p=p;r[id]=o;store.set('prac',r)};
+  const mark=(qz,ok,p)=>{
+    qz.classList.add('open');
+    const flag=qz.querySelector('.qz-r');if(flag){flag.textContent=ok?'〇':'✕';flag.className='qz-r '+(ok?'ok':'no')}
+    const a=qz.dataset.a;
+    qz.querySelectorAll('.qz-o button').forEach(b=>{b.classList.toggle('right',b.dataset.o===a);b.classList.toggle('wrong',b.dataset.o===p&&p!==a)});
+  };
+  root.addEventListener('click',e=>{
+    const o=e.target.closest('.qz-o button');
+    if(o){const qz=o.closest('.qz');if(qz.classList.contains('open'))return;const ok=o.dataset.o===qz.dataset.a?1:0;mark(qz,ok,o.dataset.o);save(qz.dataset.q,ok,o.dataset.o);return}
+    const sh=e.target.closest('.qz-show');
+    if(sh){sh.closest('.qz').classList.add('open');return}
+    const b=e.target.closest('.qz-b button');
+    if(b){const qz=b.closest('.qz'),ok=+b.dataset.v;mark(qz,ok);b.parentNode.querySelectorAll('button').forEach(x=>x.classList.toggle('sel',x===b));save(qz.dataset.q,ok)}
+  });
+  if(!opt.fresh){const r=store.get('prac',{});root.querySelectorAll('.qz').forEach(qz=>{const o=r[qz.dataset.q];if(o){mark(qz,o.ok,o.p);qz.querySelectorAll('.qz-b button').forEach(x=>x.classList.toggle('sel',+x.dataset.v===o.ok))}})}
+}
+window.CDBindPrac=bindPrac;
+
 if(!document.body.classList.contains('issue'))return;
 
 const no=+document.body.dataset.no,D=window.CD;
@@ -100,7 +122,7 @@ function layout(){
 }
 
 function firstVisible(){
-  const kids=flow.querySelectorAll('p,h2,h3,.M,.thm,.ex,figure,.tab,li');
+  const kids=flow.querySelectorAll('p,h2,h3,.M,.thm,.ex,.qz,figure,.tab,li');
   const b=vp.getBoundingClientRect();
   for(const k of kids){const r=k.getBoundingClientRect();if(r.left>=b.left-2&&r.left<b.right)return k}
   return null;
@@ -192,7 +214,7 @@ sheet.addEventListener('touchend',e=>{
   if(Math.abs(dx)>50&&Math.abs(dx)>Math.abs(dy)*1.4&&!e.target.closest('.M,.tab'))(dx<0?next:prev)();
 },{passive:true});
 sheet.addEventListener('click',e=>{
-  if(e.target.closest('a,button,.rq,.paper,.rail,.M,.tab'))return;
+  if(e.target.closest('a,button,.rq,.qz,.paper,.rail,.M,.tab'))return;
   if(String(getSelection()))return;
   if(e.target.closest('.cover'))return;
   const b=vp.getBoundingClientRect();
@@ -217,7 +239,7 @@ document.addEventListener('click',e=>{
   if(pp&&document.body.classList.contains('hidepaper')){pp.classList.toggle('open')}
 });
 $('sheetx').onclick=()=>{$('sheetup').hidden=true};
-bindRecall(document.body);
+bindRecall(document.body);bindPrac(flow);
 
 /* 工具条 */
 function hideToggle(){
@@ -233,7 +255,7 @@ function toc(){
     if(i.partname!==last){h+=`<h4>${i.partname}</h4>`;last=i.partname}
     h+=`<a href="q${String(i.no).padStart(2,'0')}.html" class="${i.no===no?'cur':''} ${rd[i.no]?'done':''}"><i>${i.no}</i>${i.title}</a>`;
   });
-  dr.innerHTML=h+'<h4>工具</h4><a href="定理索引.html"><i>§</i>定理索引</a><a href="温故.html"><i>?</i>温故版（自测复习）</a></div>';
+  dr.innerHTML=h+'<h4>工具</h4><a href="套卷.html"><i>卷</i>套卷台</a><a href="错题.html"><i>✕</i>错题版</a><a href="速记.html"><i>记</i>速记版</a><a href="定理索引.html"><i>§</i>定理索引</a><a href="温故.html"><i>?</i>温故版（自测复习）</a></div>';
   dr.hidden=false;
 }
 $('drawer').addEventListener('click',e=>{if(e.target===e.currentTarget)e.currentTarget.hidden=true});
@@ -255,7 +277,7 @@ if(store.get('hide',false))hideToggle();
 /* 末版：下一期 */
 (function(){
   const i=D.issues.findIndex(x=>x.no===no),n=D.issues[i+1];
-  $('endnext').innerHTML=n?`明日预告 · 第 ${n.no} 期<a href="q${String(n.no).padStart(2,'0')}.html">${n.title}</a>`:'全报刊完。可以上真题套卷了。<a href="温故.html">再过一遍温故版</a>';
+  $('endnext').innerHTML=n?`明日预告 · 第 ${n.no} 期<a href="q${String(n.no).padStart(2,'0')}.html">${n.title}</a>`:'全报刊完。可以上真题套卷了。<a href="套卷.html">打开套卷台</a>';
 })();
 
 /* 初始化 */

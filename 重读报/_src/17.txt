@@ -6,6 +6,7 @@
 @keep $Ax=b$：$r(A)\neq r(A\mid b)$ 无解；$=n$ 唯一解；$\lt n$ 无穷多解。
 @keep $Ax=0$ 解空间的「维数」是 $n-r(A)$。
 @keep 通解 = 特解 + 齐次通解。
+@recall $r(A,AB)$ 等于多少？ || $r(A)$，$AB$ 的列都是 $A$ 的列的组合。
 @recall $r(AB)$ 和 $r(A),r(B)$ 的关系？ || $r(AB)\le\min\{r(A),r(B)\}$。
 @recall $AB=O$（$A$ 为 $m\times n$，$B$ 为 $n\times s$）能得出什么？ || $r(A)+r(B)\le n$。
 @recall $r(A^*)$ 的三种情形（$n\ge 2$）？ || $r(A)=n$ 时 $n$；$r(A)=n-1$ 时 $1$；$r(A)\lt n-1$ 时 $0$。
@@ -24,6 +25,20 @@
 - $r(A+B)\le r(A)+r(B)$；$r(AB)\le\min\{r(A),r(B)\}$。
 - $A_{m\times n}B_{n\times s}=O$ ⟹ $r(A)+r(B)\le n$。
 - $r(A^*)=n$（$r(A)=n$）；$r(A^*)=1$（$r(A)=n-1$）；$r(A^*)=0$（$r(A)\lt n-1$）。
+:::
+:::thm rankblock | 分块矩阵的秩 | 公式
+分块矩阵也能做初等变换：一块行左乘某矩阵后加到另一块行，一块列右乘某矩阵后加到另一块列，秩不变。
+- $\max\{r(A),r(B)\}\le r(A,B)\le r(A)+r(B)$；$r\begin{pmatrix}A&O\\O&B\end{pmatrix}=r(A)+r(B)$。
+- $r(A,AB)=r(A)$，因为 $AB$ 的列都是 $A$ 的列的组合。同理 $r\begin{pmatrix}A\\BA\end{pmatrix}=r(A)$。
+- $A,B$ 都是 $n$ 阶时，$r(AB)\ge r(A)+r(B)-n$。
+:::
+:::ex 分块变换
+$A,B$ 为 $n$ 阶矩阵，求 $r\begin{pmatrix}A&AB\\O&B\end{pmatrix}$。
+:::
+:::paper
+解 第一块列右乘 $-B$ 加到第二块列：
+$$\begin{pmatrix}A&AB\\O&B\end{pmatrix}\to\begin{pmatrix}A&O\\O&B\end{pmatrix}.$$
+∎ 由[[rankblock]]，秩为 $r(A)+r(B)$。
 :::
 :::ex 求秩
 已知 $A=\begin{pmatrix}1&2&-1\\2&5&a\\1&3&2\end{pmatrix}$，$r(A)=2$，求 $a$。

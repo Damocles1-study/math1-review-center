@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>错题版 · 重读报</title>
+<link rel="stylesheet" href="assets/katex/katex.min.css">
+<link rel="stylesheet" href="assets/paper.css">
+</head><body class="front">
+<div class="front-wrap">
+<div class="front-top"><span>错题版</span><span><a href="index.html">总版</a><a href="套卷.html">套卷台</a><a href="错题.html">错题版</a><a href="速记.html">速记版</a><a href="定理索引.html">定理索引</a><a href="温故.html">温故版</a><a href="#" onclick="CDNight();return false">夜读</a></span></div>
+<h1 class="pg-h" style="border-top:5px solid var(--rule);padding-top:.2em">做错的实战题</h1>
+<p class="sub-lead">重做一遍，做对就从这里消失。题目下面的期号可以点回去。</p>
+<div class="wg"><div class="wg-tools"><button data-m="wrong" class="on">错题</button><button data-m="all">全部实战</button><span id="wgs" style="margin-left:auto;color:var(--ink3)"></span></div><div id="wgl" class="wq"></div></div>
+<script src="assets/katex/katex.min.js"></script><script src="assets/data.js"></script><script src="assets/paper.js"></script>
+<script>
+(function(){
+ const D=window.CD,S=window.CDStore;let mode='wrong';const box=document.getElementById('wgl');
+ const pad=n=>String(n).padStart(2,'0');
+ CDBindPrac(box,{fresh:true});
+ function draw(){
+  const rec=S.get('prac',{}),wrong=D.prac.filter(q=>rec[q.id]&&rec[q.id].ok===0),done=Object.keys(rec).length;
+  document.getElementById('wgs').textContent=`实战 ${D.prac.length} · 做过 ${done} · 错着的 ${wrong.length}`;
+  const list=mode==='wrong'?wrong:D.prac;
+  box.innerHTML=list.length?list.map(q=>`<div class="wq-it"><a class="wq-no" href="q${pad(q.no)}.html">第 ${q.no} 期</a>${q.html}</div>`).join(''):'<p class="hint">现在没有错着的题。</p>';
+  CDRender(box);
+ }
+ document.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-m]').forEach(x=>x.classList.remove('on'));b.classList.add('on');mode=b.dataset.m;draw()});
+ draw();
+})();
+</script>
+</div></body></html>

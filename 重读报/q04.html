@@ -10,13 +10,13 @@
 <nav class="tools"><button data-a="toc" title="目录 (T)">目录</button><button data-a="rail" class="only-narrow">定理<i id="railn"></i></button><button data-a="hide" title="遮住卷面，先自己写 (H)">遮卷面</button><button data-a="night" title="夜读">夜读</button></nav></header>
 <main class="sheet" id="sheet">
 <section class="cover" id="cover">
-<div class="mast"><div class="mast-l">一元微积分<br>第 4 期</div><div class="mast-c">重读报</div><div class="mast-r">本期约 16 分钟<br>导数与微分</div></div>
+<div class="mast"><div class="mast-l">一元微积分<br>第 4 期</div><div class="mast-c">重读报</div><div class="mast-r">本期约 19 分钟<br>导数与微分</div></div>
 <h1>导数是一种极限：瞬时变化率</h1>
 <p class="deck">导数的定义比求导公式更值分。分段点、抽象函数、只给一点信息的题，只能回定义。这一期把定义、几何意义和可导条件讲清楚。</p>
 <div class="cover-grid">
 <div class="cover-keep"><h4>本期只记这几行</h4><ol><li><span class="m">f'(x_0)=\lim\limits_{\Delta x\to0}\frac{f(x_0+\Delta x)-f(x_0)}{\Delta x}</span>；分段点<b>必须</b>用定义。</li><li>可导 ⟹ 连续，反过来不行（<span class="m">\vert x\vert</span> 在 <span class="m">0</span> 处）。</li><li>可导 ⟺ 左导数、右导数存在且相等。</li><li>一元函数：可微 ⟺ 可导，<span class="m">dy=f'(x_0)\,dx</span>。</li></ol></div>
 <div class="cover-prev"><h4>开读前，先答上期</h4><div id="prevq"></div></div>
-<div class="cover-toc"><h4>本期目录</h4><ol><li>定义</li><li>可导与连续</li><li>微分</li></ol><p class="hint">→ 键 / 点右缘 / 左滑翻页</p></div>
+<div class="cover-toc"><h4>本期目录</h4><ol><li>定义</li><li>可导与连续</li><li>微分</li></ol><p class="hint">读完做 1 道实战。→ 键 / 点右缘 / 左滑翻页</p></div>
 </div></section>
 <section class="stage" id="stage" hidden>
 <div class="viewport" id="vp"><div class="flow" id="flow">
@@ -57,6 +57,7 @@
 <div class="paper"><div class="b-h">考场卷面</div><p>答案 (B)。<span class="m">dy=\frac12\Delta x</span>，<span class="m">\frac{dy}{\Delta x}=\frac{1}{2}\neq0,1</span>。</p></div>
 <div class="skip"><div class="b-h">本报不刊</div><p>函数在区间上「可导」的定义（端点取单侧导数）只需知道；物理中的变化率题放到建模里一句带过。</p></div>
 
+<div class="shizhan"><h2>实战</h2><p class="hint">先自己做，再看点评。选择题点选项就判，填空写完再看答案，做错的进错题版。本期内容在 2016–2026 的卷子上平均每卷约 2.9 分。</p><div class="qz" data-q="2012-2" data-a="A"><div class="qz-h">2012 年第 2 题<i class="qz-r"></i></div><p>设 <span class="m">f(x)=(e^x-1)(e^{2x}-2)\cdots(e^{nx}-n)</span>，<span class="m">n</span> 为正整数，则 <span class="m">f'(0)=</span></p><div class="qz-o"><button data-o="A">A. <span class="m">(-1)^{n-1}(n-1)!</span></button><button data-o="B">B. <span class="m">(-1)^n(n-1)!</span></button><button data-o="C">C. <span class="m">(-1)^{n-1}n!</span></button><button data-o="D">D. <span class="m">(-1)^nn!</span></button></div><div class="qz-n"><p class="qz-ans">答案：A</p><p>别用乘积公式展开。回到定义：<span class="m">f'(0)=\lim\frac{f(x)-0}{x}=\lim\frac{e^x-1}{x}\cdot(1-2)(1-3)\cdots(1-n)</span>。连乘式在零点求导，都是这个做法。</p></div></div></div>
 <div class="endq"><h2>今日考你</h2><p class="hint">合上前答一遍：先想，再点开。答错的会回到后面几期和温故版。</p><div class="rq" data-q="4-0"><p class="rq-q">写出导数定义的两种形式。</p><p class="rq-a"><span class="m">\lim_{\Delta x\to0}\frac{f(x_0+\Delta x)-f(x_0)}{\Delta x}</span> 和 <span class="m">\lim_{x\to x_0}\frac{f(x)-f(x_0)}{x-x_0}</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="4-1"><p class="rq-q"><span class="m">f(x)=x\vert x\vert</span> 在 <span class="m">x=0</span> 可导吗？</p><p class="rq-a">可导，<span class="m">f'(0)=\lim_{x\to0}\vert x\vert=0</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="4-2"><p class="rq-q">切线与法线方程？</p><p class="rq-a">切线 <span class="m">y-y_0=f'(x_0)(x-x_0)</span>；法线 <span class="m">y-y_0=-\frac{1}{f'(x_0)}(x-x_0)</span>（<span class="m">f'(x_0)\neq0</span>）。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="4-3"><p class="rq-q"><span class="m">\Delta y-dy</span> 是什么量级？</p><p class="rq-a">当 <span class="m">\Delta x\to0</span> 时是 <span class="m">o(\Delta x)</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div></div>
 <div class="endnext" id="endnext"></div>
 <div id="sent"></div>

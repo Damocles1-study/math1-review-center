@@ -10,13 +10,13 @@
 <nav class="tools"><button data-a="toc" title="目录 (T)">目录</button><button data-a="rail" class="only-narrow">定理<i id="railn"></i></button><button data-a="hide" title="遮住卷面，先自己写 (H)">遮卷面</button><button data-a="night" title="夜读">夜读</button></nav></header>
 <main class="sheet" id="sheet">
 <section class="cover" id="cover">
-<div class="mast"><div class="mast-l">线性代数<br>第 19 期</div><div class="mast-c">重读报</div><div class="mast-r">本期约 18 分钟<br>特征值与特征向量</div></div>
+<div class="mast"><div class="mast-l">线性代数<br>第 19 期</div><div class="mast-c">重读报</div><div class="mast-r">本期约 23 分钟<br>特征值与特征向量</div></div>
 <h1>只被拉伸、不被转动的方向</h1>
-<p class="deck">每年必考。矩阵作用在大多数向量上都会改变方向，只有特征向量方向不变，只被拉伸 <span class="m">\lambda</span> 倍。求法是固定的两步，性质则是选择填空的富矿。</p>
+<p class="deck">矩阵作用在大多数向量上都会改变方向，只有特征向量方向不变，只被拉伸 <span class="m">\lambda</span> 倍。求法是固定的两步，性质很多，都从定义一步推出。</p>
 <div class="cover-grid">
 <div class="cover-keep"><h4>本期只记这几行</h4><ol><li><span class="m">A\xi=\lambda\xi</span>（<span class="m">\xi\neq0</span>）；<span class="m">\vert\lambda E-A\vert=0</span> 求 <span class="m">\lambda</span>，<span class="m">(\lambda E-A)x=0</span> 求 <span class="m">\xi</span>。</li><li><span class="m">\sum\lambda_i=\mathrm{tr}A</span>，<span class="m">\prod\lambda_i=\vert A\vert</span>。</li><li><span class="m">f(A)</span> 的特征值是 <span class="m">f(\lambda)</span>，特征向量不变。</li><li>不同特征值对应的特征向量线性无关。</li></ol></div>
 <div class="cover-prev"><h4>开读前，先答上期</h4><div id="prevq"></div></div>
-<div class="cover-toc"><h4>本期目录</h4><ol><li>定义与求法</li><li>性质</li><li>秩 1 矩阵：一眼读出</li></ol><p class="hint">→ 键 / 点右缘 / 左滑翻页</p></div>
+<div class="cover-toc"><h4>本期目录</h4><ol><li>定义与求法</li><li>性质</li><li>秩 1 矩阵：一眼读出</li></ol><p class="hint">读完做 2 道实战。→ 键 / 点右缘 / 左滑翻页</p></div>
 </div></section>
 <section class="stage" id="stage" hidden>
 <div class="viewport" id="vp"><div class="flow" id="flow">
@@ -62,6 +62,7 @@
 <div class="paper"><div class="b-h">考场卷面</div><p>解 <span class="m">A=\alpha\alpha^T</span>，<span class="m">\alpha=(1,1,1)^T</span>，<span class="m">\alpha^T\alpha=3</span>。</p>
 <p class="fin">由<a class="c" data-t="rank1eig">秩 1 矩阵的特征值</a>，特征值为 <span class="m">3,0,0</span>。</p></div>
 
+<div class="shizhan"><h2>实战</h2><p class="hint">先自己做，再看点评。选择题点选项就判，填空写完再看答案，做错的进错题版。本期内容在 2016–2026 的卷子上平均每卷约 1.6 分。</p><div class="qz" data-q="z19-0" data-a=""><div class="qz-h">同型练习<i class="qz-r"></i></div><p><span class="m">3</span> 阶矩阵 <span class="m">A</span> 的特征值为 <span class="m">1,2,3</span>，则 <span class="m">\vert A^2-2E\vert=</span>____。</p><div class="qz-s"><button class="qz-show">写完了，看答案</button></div><div class="qz-n"><p class="qz-ans">答案：<span class="m">-14</span></p><p><span class="m">A^2-2E</span> 的特征值是 <span class="m">\lambda^2-2</span>，即 <span class="m">-1,2,7</span>，相乘。</p><div class="qz-b"><button data-v="1">做对了</button><button data-v="0">做错了</button></div></div></div><div class="qz" data-q="z19-1" data-a=""><div class="qz-h">同型练习<i class="qz-r"></i></div><p><span class="m">\alpha=(1,2,2)^T</span>，<span class="m">A=\alpha\alpha^T</span>，则 <span class="m">A</span> 的唯一非零特征值是____。</p><div class="qz-s"><button class="qz-show">写完了，看答案</button></div><div class="qz-n"><p class="qz-ans">答案：<span class="m">9</span></p><p>秩 1 矩阵：非零特征值 <span class="m">=\mathrm{tr}A=\alpha^T\alpha</span>。</p><div class="qz-b"><button data-v="1">做对了</button><button data-v="0">做错了</button></div></div></div></div>
 <div class="endq"><h2>今日考你</h2><p class="hint">合上前答一遍：先想，再点开。答错的会回到后面几期和温故版。</p><div class="rq" data-q="19-0"><p class="rq-q">特征值之和、积分别等于什么？</p><p class="rq-a">迹 <span class="m">\mathrm{tr}A</span>（主对角线之和）；行列式 <span class="m">\vert A\vert</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="19-1"><p class="rq-q"><span class="m">A</span> 的特征值是 <span class="m">\lambda</span>，<span class="m">A^*</span> 的特征值？</p><p class="rq-a"><span class="m">\frac{\vert A\vert}{\lambda}</span>（<span class="m">A</span> 可逆时）。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="19-2"><p class="rq-q"><span class="m">A^T</span> 与 <span class="m">A</span> 的特征值、特征向量有什么关系？</p><p class="rq-a">特征值相同，特征向量一般不同。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="19-3"><p class="rq-q"><span class="m">A</span> 不可逆等价于什么特征值条件？</p><p class="rq-a"><span class="m">0</span> 是 <span class="m">A</span> 的特征值。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="19-4"><p class="rq-q"><span class="m">A=\alpha\beta^T</span>（<span class="m">n</span> 阶，秩 1）的特征值？</p><p class="rq-a"><span class="m">\beta^T\alpha</span>（一个）和 <span class="m">0</span>（<span class="m">n-1</span> 重）。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div></div>
 <div class="endnext" id="endnext"></div>
 <div id="sent"></div>

@@ -2,7 +2,7 @@
 @day 第二天
 @kicker 二阶微分方程
 @title 特征根定一切
-@deck 二阶常系数线性方程是真题常客。齐次通解由特征根决定，非齐次特解按右端的形式待定。把这张表记住，一元微积分就此收官。
+@deck 齐次通解由特征根决定，非齐次特解按右端的形式待定。把这张表记住，一元微积分就此收官。
 @keep 通解 = 齐次通解 + 非齐次特解。
 @keep 两不等实根 $C_1e^{r_1x}+C_2e^{r_2x}$；重根 $(C_1+C_2x)e^{rx}$；复根 $e^{\alpha x}(C_1\cos\beta x+C_2\sin\beta x)$。
 @keep $f=P_m(x)e^{\lambda x}$：设 $y^*=x^kQ_m(x)e^{\lambda x}$，$k$ 是 $\lambda$ 作为特征根的重数。
@@ -36,7 +36,7 @@ $$-\frac{1}{y}=x+C_2.$$
 (3) 两个非齐次解之差是齐次解。
 (4) 若 $y_1^*,y_2^*$ 分别是右端 $f_1,f_2$ 的解，则 $y_1^*+y_2^*$ 是右端 $f_1+f_2$ 的解。
 :::
-第 (3) 条是选择题的常客：已知非齐次方程的三个解，两两相减得到齐次解。
+第 (3) 条最好用：已知非齐次方程的三个解，两两相减就得到齐次解。
 
 ## 常系数齐次：特征方程
 $y=e^{rx}$ 代入 $y''+py'+qy=0$，得 $r^2+pr+q=0$（特征方程）。
@@ -83,6 +83,18 @@ $\alpha+i\beta=i$ 是单根，由[[undet]]，设 $y^*=x(a\cos x+b\sin x)$。求�
 $$y^{*\prime\prime}=2(-a\sin x+b\cos x)-x(a\cos x+b\sin x).$$
 代入方程，$y^{*\prime\prime}+y^*=-2a\sin x+2b\cos x=\cos x$，得 $a=0,\ b=\dfrac{1}{2}$。
 ∎ 通解为 $y=C_1\cos x+C_2\sin x+\dfrac{x}{2}\sin x$。
+:::
+
+## 不解方程，直接积分
+要求 $\int_0^{+\infty}y\,dx$ 时，不一定要先解出 $y$。特征根实部都为负时，$y,y'$ 都趋于 $0$，把方程两边积分就行。
+:::ex 两边积分
+$y''+3y'+2y=0$，$y(0)=1$，$y'(0)=0$。求 $\displaystyle\int_0^{+\infty}y\,dx$。
+:::
+:::paper
+解 特征根 $-1,-2$，所以 $x\to+\infty$ 时 $y,y'\to0$，反常积分收敛。方程两边在 $[0,+\infty)$ 上积分：
+$$\bigl[y'\bigr]_0^{+\infty}+3\bigl[y\bigr]_0^{+\infty}+2\int_0^{+\infty}y\,dx=0,$$
+即 $-0-3+2\displaystyle\int_0^{+\infty}y\,dx=0$。
+∎ $\displaystyle\int_0^{+\infty}y\,dx=\dfrac32$。
 :::
 
 ## 欧拉方程（数一）

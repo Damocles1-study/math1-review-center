@@ -61,6 +61,7 @@ $$f_Z(z)=\int_{-\infty}^{+\infty}f(x,z-x)\,dx.$$
 独立时 $f(x,z-x)=f_X(x)f_Y(z-x)$。
 **极值**：$X,Y$ 独立时，
 $$F_{\max}(z)=F_X(z)F_Y(z),\qquad F_{\min}(z)=1-[1-F_X(z)][1-F_Y(z)].$$
+$n$ 个独立同分布时，$F_{\max}=F^n$，$F_{\min}=1-(1-F)^n$，求导得密度。
 **可加性**（独立）：$B(n_1,p)+B(n_2,p)=B(n_1+n_2,p)$；$P(\lambda_1)+P(\lambda_2)=P(\lambda_1+\lambda_2)$；正态的线性组合仍正态。
 :::
 :::ex 卷积（大题）
@@ -80,6 +81,18 @@ $X,Y$ 独立，都服从 $U(0,1)$。求 $\max(X,Y)$ 和 $\min(X,Y)$ 的概率密
 $$F_{\max}(z)=z^2,\qquad F_{\min}(z)=1-(1-z)^2.$$
 ∎ $0\lt z\lt1$ 上，$f_{\max}(z)=2z$，$f_{\min}(z)=2(1-z)$，其余为 $0$。
 :::
+## 离散混连续：先按离散的分情况
+给了 $X$ 的分布和「$X=x$ 时 $Y$ 的条件分布」，两种情形：$X$ 连续时，$f(x,y)=f_X(x)f_{Y\vert X}(y\vert x)$；$X$ 离散时，用第 32 期的全概率公式求 $Y$ 的分布函数。
+:::ex 离散混连续（大题）
+$P(X=1)=\frac13$，$P(X=2)=\frac23$。在 $X=i$ 的条件下，$Y$ 服从 $(0,i)$ 上的均匀分布。求 $Y$ 的分布函数。
+:::
+:::paper
+解 由全概率公式，
+$$F_Y(y)=\frac13P(Y\le y\vert X=1)+\frac23P(Y\le y\vert X=2).$$⛳3
+$y\lt0$ 时 $F_Y=0$；$0\le y\lt1$ 时 $F_Y=\frac13y+\frac23\cdot\frac y2=\frac23y$；$1\le y\lt2$ 时 $F_Y=\frac13+\frac23\cdot\frac y2=\frac{1+y}{3}$；$y\ge2$ 时 $F_Y=1$。⛳5
+∎ $F_Y(y)=\begin{cases}0,&y\lt0\\\frac23y,&0\le y\lt1\\\frac{1+y}{3},&1\le y\lt2\\1,&y\ge2\end{cases}$。
+:::
+
 :::thm bvn | 二维正态的结论
 $(X,Y)\sim N(\mu_1,\mu_2;\sigma_1^2,\sigma_2^2;\rho)$：
 (1) 边缘分布都是正态。(2) $aX+bY$ 仍是正态（$a,b$ 不全为 $0$）。(3) 若 $Z_1,Z_2$ 都是 $X,Y$ 的线性组合，则 $(Z_1,Z_2)$ 仍服从二维正态。

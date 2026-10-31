@@ -10,13 +10,13 @@
 <nav class="tools"><button data-a="toc" title="目录 (T)">目录</button><button data-a="rail" class="only-narrow">定理<i id="railn"></i></button><button data-a="hide" title="遮住卷面，先自己写 (H)">遮卷面</button><button data-a="night" title="夜读">夜读</button></nav></header>
 <main class="sheet" id="sheet">
 <section class="cover" id="cover">
-<div class="mast"><div class="mast-l">概率统计<br>第 37 期</div><div class="mast-c">重读报</div><div class="mast-r">本期约 22 分钟<br>参数估计与假设检验</div></div>
+<div class="mast"><div class="mast-l">概率统计<br>第 37 期</div><div class="mast-c">重读报</div><div class="mast-r">本期约 25 分钟<br>参数估计与假设检验</div></div>
 <h1>由样本反猜总体</h1>
 <p class="deck">最大似然估计差不多是概率大题最后一问的固定内容，流程背下来就能拿分。无偏性就是算一个期望。区间估计和检验只考最基本的情形。读完这一期，就去做套卷。</p>
 <div class="cover-grid">
 <div class="cover-keep"><h4>本期只记这几行</h4><ol><li>矩估计：令 <span class="m">EX=\bar X</span>（两个参数再加 <span class="m">E(X^2)=\frac1n\sum X_i^2</span>），解出参数。</li><li>最大似然：写 <span class="m">L(\theta)</span>，取对数，求导令 <span class="m">0</span>；单调时取样本的端点值。</li><li>无偏：<span class="m">E\hat\theta=\theta</span>。</li><li>第一类错误（弃真）<span class="m">\alpha</span>，第二类错误（取伪）<span class="m">\beta</span>。</li></ol></div>
 <div class="cover-prev"><h4>开读前，先答上期</h4><div id="prevq"></div></div>
-<div class="cover-toc"><h4>本期目录</h4><ol><li>矩估计</li><li>最大似然估计</li><li>估计量的评价</li><li>区间估计</li><li>假设检验</li></ol><p class="hint">→ 键 / 点右缘 / 左滑翻页</p></div>
+<div class="cover-toc"><h4>本期目录</h4><ol><li>矩估计</li><li>最大似然估计</li><li>估计量的评价</li><li>区间估计</li><li>假设检验</li></ol><p class="hint">读完做 1 道实战。→ 键 / 点右缘 / 左滑翻页</p></div>
 </div></section>
 <section class="stage" id="stage" hidden>
 <div class="viewport" id="vp"><div class="flow" id="flow">
@@ -69,6 +69,9 @@
 <div class="thm" id="t-test"><div class="thm-h"><span>定理</span>假设检验的两类错误</div><p><span class="m">H_0</span> 成立却拒绝：<b>第一类错误</b>（弃真），概率 <span class="m">\alpha</span>。<span class="m">H_0</span> 不成立却接受：<b>第二类错误</b>（取伪），概率 <span class="m">\beta</span>。</p>
 <p><span class="m">n</span> 固定时 <span class="m">\alpha,\beta</span> 此消彼长；增大 <span class="m">n</span> 可以同时减小。</p>
 <p><b><span class="m">\mu</span> 的双侧检验（<span class="m">\sigma</span> 已知）</b>：统计量 <span class="m">U=\dfrac{\bar X-\mu_0}{\sigma/\sqrt n}</span>，<span class="m">\vert U\vert\ge u_{\alpha/2}</span> 时拒绝 <span class="m">H_0</span>。<span class="m">\sigma</span> 未知时用 <span class="m">T=\dfrac{\bar X-\mu_0}{S/\sqrt n}</span> 和 <span class="m">t_{\alpha/2}(n-1)</span>。</p></div>
+<div class="thm" id="t-onesided"><div class="thm-h"><span>定理</span>单侧检验与显著性水平</div><p><span class="m">H_0:\mu\le\mu_0</span>，<span class="m">H_1:\mu\gt\mu_0</span>（<span class="m">\sigma</span> 已知）：拒绝域为 <span class="m">\bar X\ge\mu_0+\dfrac{\sigma}{\sqrt n}u_\alpha</span>。<span class="m">\sigma</span> 未知时把 <span class="m">\sigma</span> 换成 <span class="m">S</span>，<span class="m">u_\alpha</span> 换成 <span class="m">t_\alpha(n-1)</span>。<span class="m">H_1</span> 指向哪边，拒绝域就在哪边。</p>
+<p><span class="m">\alpha</span> 越小，拒绝域越小：在 <span class="m">\alpha=0.01</span> 下拒绝，则 <span class="m">\alpha=0.05</span> 下必拒绝；在 <span class="m">\alpha=0.05</span> 下接受，则 <span class="m">\alpha=0.01</span> 下必接受。</p></div>
+
 <div class="ex"><div class="ex-h">例 37.5<span class="ex-tag">两类错误</span></div><p><span class="m">X\sim N(\mu,1)</span>，<span class="m">n=16</span>。检验 <span class="m">H_0:\mu=0</span>，当 <span class="m">\vert\bar X\vert\ge0.49</span> 时拒绝。求第一类错误概率，以及 <span class="m">\mu=0.5</span> 时的第二类错误概率。</p></div>
 <div class="paper"><div class="b-h">考场卷面</div><p>解 <span class="m">\bar X\sim N\bigl(\mu,\frac{1}{16}\bigr)</span>，<span class="m">\frac{\bar X-\mu}{1/4}\sim N(0,1)</span>。</p>
 <p>由<a class="c" data-t="test">假设检验的两类错误</a>，<span class="m">H_0</span> 成立时（<span class="m">\mu=0</span>），</p>
@@ -78,6 +81,7 @@
 <p class="fin"><span class="m">\alpha=0.05</span>，<span class="m">\beta\approx0.484</span>。</p></div>
 <div class="note"><div class="b-h">批注</div><p>本报到此全部刊完。接下来就上真题套卷。做错的题，回到对应的期号查例题和右栏定理。</p></div>
 
+<div class="shizhan"><h2>实战</h2><p class="hint">先自己做，再看点评。选择题点选项就判，填空写完再看答案，做错的进错题版。本期内容在 2016–2026 的卷子上平均每卷约 11.3 分。</p><div class="qz" data-q="2014-14" data-a=""><div class="qz-h">2014 年第 14 题<i class="qz-r"></i></div><p>设总体 <span class="m">X</span> 的概率密度为 <span class="m">f(x;\theta)=\begin{cases}\dfrac{2x}{3\theta^2},&amp;\theta\lt x\lt2\theta\\0,&amp;\text{其他}\end{cases}</span>，其中 <span class="m">\theta</span> 是未知参数，<span class="m">X_1,X_2,\dots,X_n</span> 为来自总体 <span class="m">X</span> 的简单随机样本。若 <span class="m">c\sum\limits_{i=1}^nX_i^2</span> 是 <span class="m">\theta^2</span> 的无偏估计，则 <span class="m">c=</span>____。</p><div class="qz-s"><button class="qz-show">写完了，看答案</button></div><div class="qz-n"><p class="qz-ans">答案：<span class="m">\dfrac{2}{5n}</span></p><p><span class="m">EX^2=\frac52\theta^2</span>，<span class="m">c\cdot n\cdot\frac52\theta^2=\theta^2</span>。无偏估计题只算期望。</p><div class="qz-b"><button data-v="1">做对了</button><button data-v="0">做错了</button></div></div></div></div>
 <div class="endq"><h2>今日考你</h2><p class="hint">合上前答一遍：先想，再点开。答错的会回到后面几期和温故版。</p><div class="rq" data-q="37-0"><p class="rq-q">MLE 四步？</p><p class="rq-a">写 <span class="m">L(\theta)=\prod f(x_i;\theta)</span>；取对数；求导令 <span class="m">0</span>；解出 <span class="m">\hat\theta</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="37-1"><p class="rq-q"><span class="m">U(0,\theta)</span> 中 <span class="m">\theta</span> 的 MLE 和矩估计？</p><p class="rq-a">MLE 是 <span class="m">\max X_i</span>；矩估计是 <span class="m">2\bar X</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="37-2"><p class="rq-q"><span class="m">\sigma</span> 已知时，<span class="m">\mu</span> 的 <span class="m">1-\alpha</span> 置信区间？</p><p class="rq-a"><span class="m">\bar X\pm\frac{\sigma}{\sqrt n}u_{\alpha/2}</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="37-3"><p class="rq-q"><span class="m">\sigma</span> 未知时，用什么分布？</p><p class="rq-a"><span class="m">t(n-1)</span>，把 <span class="m">\sigma</span> 换成 <span class="m">S</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="37-4"><p class="rq-q">样本容量固定时，<span class="m">\alpha</span> 和 <span class="m">\beta</span> 的关系？</p><p class="rq-a">此消彼长。增大样本容量才能让两者同时减小。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div></div>
 <div class="endnext" id="endnext"></div>
 <div id="sent"></div>

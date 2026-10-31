@@ -10,13 +10,13 @@
 <nav class="tools"><button data-a="toc" title="目录 (T)">目录</button><button data-a="rail" class="only-narrow">定理<i id="railn"></i></button><button data-a="hide" title="遮住卷面，先自己写 (H)">遮卷面</button><button data-a="night" title="夜读">夜读</button></nav></header>
 <main class="sheet" id="sheet">
 <section class="cover" id="cover">
-<div class="mast"><div class="mast-l">一元微积分<br>第 14 期</div><div class="mast-c">重读报</div><div class="mast-r">本期约 19 分钟<br>二阶微分方程</div></div>
+<div class="mast"><div class="mast-l">一元微积分<br>第 14 期</div><div class="mast-c">重读报</div><div class="mast-r">本期约 29 分钟<br>二阶微分方程</div></div>
 <h1>特征根定一切</h1>
-<p class="deck">二阶常系数线性方程是真题常客。齐次通解由特征根决定，非齐次特解按右端的形式待定。把这张表记住，一元微积分就此收官。</p>
+<p class="deck">齐次通解由特征根决定，非齐次特解按右端的形式待定。把这张表记住，一元微积分就此收官。</p>
 <div class="cover-grid">
 <div class="cover-keep"><h4>本期只记这几行</h4><ol><li>通解 = 齐次通解 + 非齐次特解。</li><li>两不等实根 <span class="m">C_1e^{r_1x}+C_2e^{r_2x}</span>；重根 <span class="m">(C_1+C_2x)e^{rx}</span>；复根 <span class="m">e^{\alpha x}(C_1\cos\beta x+C_2\sin\beta x)</span>。</li><li><span class="m">f=P_m(x)e^{\lambda x}</span>：设 <span class="m">y^*=x^kQ_m(x)e^{\lambda x}</span>，<span class="m">k</span> 是 <span class="m">\lambda</span> 作为特征根的重数。</li><li>欧拉方程令 <span class="m">x=e^t</span>，变常系数。</li></ol></div>
 <div class="cover-prev"><h4>开读前，先答上期</h4><div id="prevq"></div></div>
-<div class="cover-toc"><h4>本期目录</h4><ol><li>可降阶的两种</li><li>线性方程解的结构</li><li>常系数齐次：特征方程</li><li>常系数非齐次：待定特解</li><li>欧拉方程（数一）</li></ol><p class="hint">→ 键 / 点右缘 / 左滑翻页</p></div>
+<div class="cover-toc"><h4>本期目录</h4><ol><li>可降阶的两种</li><li>线性方程解的结构</li><li>常系数齐次：特征方程</li><li>常系数非齐次：待定特解</li><li>不解方程，直接积分</li><li>欧拉方程（数一）</li></ol><p class="hint">读完做 3 道实战。→ 键 / 点右缘 / 左滑翻页</p></div>
 </div></section>
 <section class="stage" id="stage" hidden>
 <div class="viewport" id="vp"><div class="flow" id="flow">
@@ -34,7 +34,7 @@
 <p>(2) 非齐次通解 = 齐次通解 + 非齐次的一个特解。</p>
 <p>(3) 两个非齐次解之差是齐次解。</p>
 <p>(4) 若 <span class="m">y_1^*,y_2^*</span> 分别是右端 <span class="m">f_1,f_2</span> 的解，则 <span class="m">y_1^*+y_2^*</span> 是右端 <span class="m">f_1+f_2</span> 的解。</p></div>
-<p>第 (3) 条是选择题的常客：已知非齐次方程的三个解，两两相减得到齐次解。</p>
+<p>第 (3) 条最好用：已知非齐次方程的三个解，两两相减就得到齐次解。</p>
 <h2>常系数齐次：特征方程</h2>
 <p><span class="m">y=e^{rx}</span> 代入 <span class="m">y''+py'+qy=0</span>，得 <span class="m">r^2+pr+q=0</span>（特征方程）。</p>
 <div class="thm" id="t-charroot"><div class="thm-h"><span>定理</span>常系数齐次方程的通解</div><div class="tab"><table><thead><tr><th>特征根</th><th>通解</th></tr></thead><tbody><tr><td>两不等实根 <span class="m">r_1,r_2</span></td><td><span class="m">C_1e^{r_1x}+C_2e^{r_2x}</span></td></tr><tr><td>二重根 <span class="m">r</span></td><td><span class="m">(C_1+C_2x)e^{rx}</span></td></tr><tr><td>共轭复根 <span class="m">\alpha\pm i\beta</span></td><td><span class="m">e^{\alpha x}(C_1\cos\beta x+C_2\sin\beta x)</span></td></tr></tbody></table></div>
@@ -61,14 +61,22 @@
 <div class="M">y^{*\prime\prime}=2(-a\sin x+b\cos x)-x(a\cos x+b\sin x).</div>
 <p>代入方程，<span class="m">y^{*\prime\prime}+y^*=-2a\sin x+2b\cos x=\cos x</span>，得 <span class="m">a=0,\ b=\dfrac{1}{2}</span>。</p>
 <p class="fin">通解为 <span class="m">y=C_1\cos x+C_2\sin x+\dfrac{x}{2}\sin x</span>。</p></div>
+<h2>不解方程，直接积分</h2>
+<p>要求 <span class="m">\int_0^{+\infty}y\,dx</span> 时，不一定要先解出 <span class="m">y</span>。特征根实部都为负时，<span class="m">y,y'</span> 都趋于 <span class="m">0</span>，把方程两边积分就行。</p>
+<div class="ex"><div class="ex-h">例 14.4<span class="ex-tag">两边积分</span></div><p><span class="m">y''+3y'+2y=0</span>，<span class="m">y(0)=1</span>，<span class="m">y'(0)=0</span>。求 <span class="m">\displaystyle\int_0^{+\infty}y\,dx</span>。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 特征根 <span class="m">-1,-2</span>，所以 <span class="m">x\to+\infty</span> 时 <span class="m">y,y'\to0</span>，反常积分收敛。方程两边在 <span class="m">[0,+\infty)</span> 上积分：</p>
+<div class="M">\bigl[y'\bigr]_0^{+\infty}+3\bigl[y\bigr]_0^{+\infty}+2\int_0^{+\infty}y\,dx=0,</div>
+<p>即 <span class="m">-0-3+2\displaystyle\int_0^{+\infty}y\,dx=0</span>。</p>
+<p class="fin"><span class="m">\displaystyle\int_0^{+\infty}y\,dx=\dfrac32</span>。</p></div>
 <h2>欧拉方程（数一）</h2>
 <div class="thm" id="t-euler"><div class="thm-h"><span>定理</span>欧拉方程</div><p><span class="m">x^2y''+pxy'+qy=f(x)</span>。令 <span class="m">x=e^t</span>（<span class="m">x\gt0</span>），记 <span class="m">D=\frac{d}{dt}</span>，则 <span class="m">xy'=Dy</span>，<span class="m">x^2y''=D(D-1)y</span>，方程化为常系数：</p>
 <div class="M">[D(D-1)+pD+q]y=f(e^t).</div></div>
-<div class="ex"><div class="ex-h">例 14.4<span class="ex-tag">欧拉</span></div><p>求 <span class="m">x^2y''-2xy'+2y=0</span>（<span class="m">x\gt0</span>）的通解。</p></div>
+<div class="ex"><div class="ex-h">例 14.5<span class="ex-tag">欧拉</span></div><p>求 <span class="m">x^2y''-2xy'+2y=0</span>（<span class="m">x\gt0</span>）的通解。</p></div>
 <div class="paper"><div class="b-h">考场卷面</div><p>解 由<a class="c" data-t="euler">欧拉方程</a>，令 <span class="m">x=e^t</span>，方程化为 <span class="m">[D(D-1)-2D+2]y=0</span>，即 <span class="m">y_{tt}-3y_t+2y=0</span>。</p>
 <p>特征根 <span class="m">r=1,2</span>，<span class="m">y=C_1e^t+C_2e^{2t}</span>。</p>
 <p class="fin">回代 <span class="m">e^t=x</span>，通解为 <span class="m">y=C_1x+C_2x^2</span>。</p></div>
 
+<div class="shizhan"><h2>实战</h2><p class="hint">先自己做，再看点评。选择题点选项就判，填空写完再看答案，做错的进错题版。本期内容在 2016–2026 的卷子上平均每卷约 2.9 分。</p><div class="qz" data-q="2012-9" data-a=""><div class="qz-h">2012 年第 9 题<i class="qz-r"></i></div><p>若函数 <span class="m">f(x)</span> 满足方程 <span class="m">f''(x)+f'(x)-2f(x)=0</span> 及 <span class="m">f''(x)+f(x)=2e^x</span>，则 <span class="m">f(x)=</span>____。</p><div class="qz-s"><button class="qz-show">写完了，看答案</button></div><div class="qz-n"><p class="qz-ans">答案：<span class="m">e^x</span></p><p>第一个给通解 <span class="m">C_1e^x+C_2e^{-2x}</span>，代入第二个比较系数：<span class="m">2C_1=2</span>，<span class="m">5C_2=0</span>。</p><div class="qz-b"><button data-v="1">做对了</button><button data-v="0">做错了</button></div></div></div><div class="qz" data-q="2013-10" data-a=""><div class="qz-h">2013 年第 10 题<i class="qz-r"></i></div><p>已知 <span class="m">y_1=e^{3x}-xe^{2x}</span>，<span class="m">y_2=e^x-xe^{2x}</span>，<span class="m">y_3=-xe^{2x}</span> 是某二阶常系数非齐次线性微分方程的 <span class="m">3</span> 个解，则该方程的通解为 <span class="m">y=</span>____。</p><div class="qz-s"><button class="qz-show">写完了，看答案</button></div><div class="qz-n"><p class="qz-ans">答案：<span class="m">y=C_1e^{3x}+C_2e^x-xe^{2x}</span></p><p>两两相减得齐次解 <span class="m">e^{3x},e^x</span>，<span class="m">y_3</span> 是特解。不用反求方程。</p><div class="qz-b"><button data-v="1">做对了</button><button data-v="0">做错了</button></div></div></div><div class="qz" data-q="2015-2" data-a="A"><div class="qz-h">2015 年第 2 题<i class="qz-r"></i></div><p>设 <span class="m">y=\frac12e^{2x}+\bigl(x-\frac13\bigr)e^x</span> 是二阶常系数非齐次线性微分方程 <span class="m">y''+ay'+by=ce^x</span> 的一个特解，则</p><div class="qz-o"><button data-o="A">A. <span class="m">a=-3,b=2,c=-1</span></button><button data-o="B">B. <span class="m">a=3,b=2,c=-1</span></button><button data-o="C">C. <span class="m">a=-3,b=2,c=1</span></button><button data-o="D">D. <span class="m">a=3,b=2,c=1</span></button></div><div class="qz-n"><p class="qz-ans">答案：A</p><p><span class="m">e^{2x}</span> 和 <span class="m">e^x</span> 都是特征根对应的（<span class="m">xe^x</span> 说明 <span class="m">1</span> 是单根），特征方程 <span class="m">(r-1)(r-2)=0</span>。再把 <span class="m">xe^x</span> 代入求 <span class="m">c</span>。</p></div></div></div>
 <div class="endq"><h2>今日考你</h2><p class="hint">合上前答一遍：先想，再点开。答错的会回到后面几期和温故版。</p><div class="rq" data-q="14-0"><p class="rq-q"><span class="m">y''-2y'+y=0</span> 的通解？</p><p class="rq-a">特征根 <span class="m">r=1</span>（二重），<span class="m">y=(C_1+C_2x)e^x</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="14-1"><p class="rq-q"><span class="m">y''+y=\cos x</span> 特解怎么设？</p><p class="rq-a"><span class="m">\pm i</span> 是特征根，<span class="m">k=1</span>：<span class="m">y^*=x(a\cos x+b\sin x)</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="14-2"><p class="rq-q">不显含 <span class="m">y</span> 的 <span class="m">y''=f(x,y')</span> 怎么降阶？</p><p class="rq-a">令 <span class="m">p=y'</span>，<span class="m">y''=p'</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="14-3"><p class="rq-q">不显含 <span class="m">x</span> 的 <span class="m">y''=f(y,y')</span> 怎么降阶？</p><p class="rq-a">令 <span class="m">p=y'</span>，<span class="m">y''=p\frac{dp}{dy}</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div></div>
 <div class="endnext" id="endnext"></div>
 <div id="sent"></div>

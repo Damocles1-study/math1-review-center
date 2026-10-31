@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>套卷台 · 重读报</title>
+<link rel="stylesheet" href="assets/katex/katex.min.css">
+<link rel="stylesheet" href="assets/paper.css">
+</head><body class="front">
+<div class="front-wrap">
+<div class="front-top"><span>套卷台</span><span><a href="index.html">总版</a><a href="套卷.html">套卷台</a><a href="错题.html">错题版</a><a href="速记.html">速记版</a><a href="定理索引.html">定理索引</a><a href="温故.html">温故版</a><a href="#" onclick="CDNight();return false">夜读</a></span></div>
+<h1 class="pg-h" style="border-top:5px solid var(--rule);padding-top:.2em">读完报，上真题</h1>
+<p class="sub-lead" id="sum"></p>
+<div class="xm-grid">
+ <section>
+  <h3>120 分账本</h3>
+  <p>按 2021 起的卷面（选择 10×5、填空 6×5、解答 6 题 70 分）：</p>
+  <div class="tab"><table><thead><tr><th></th><th>满分</th><th>120 线</th><th>130 线</th></tr></thead><tbody>
+  <tr><td>选择</td><td>50</td><td>40（错 2 题）</td><td>45</td></tr>
+  <tr><td>填空</td><td>30</td><td>25（错 1 题）</td><td>25</td></tr>
+  <tr><td>解答</td><td>70</td><td>55</td><td>60</td></tr>
+  </tbody></table></div>
+  <p>解答 55 分的算法：计算大题写满（积分、极值、线代、概率），证明题第一问拿到，第二问写到哪算哪。写不出的题也要写前几步，步骤有分。</p>
+ </section>
+ <section>
+  <h3>分值落在哪</h3>
+  <p>2016–2026 共 11 卷，逐题归到本报的期，平均每卷：</p>
+  <div class="tab"><table><thead><tr><th>部分</th><th>选填</th><th>解答</th><th>合计</th></tr></thead><tbody><tr><td>一元微积分</td><td>20</td><td>19</td><td><b>39</b></td></tr><tr><td>线性代数</td><td>15</td><td>17</td><td><b>32</b></td></tr><tr><td>多元与级数</td><td>17</td><td>29</td><td><b>46</b></td></tr><tr><td>概率统计</td><td>16</td><td>17</td><td><b>33</b></td></tr></tbody></table></div>
+  <p class="hint">每期的分值见总版的条形。</p>
+ </section>
+ <section>
+  <h3>做卷规矩</h3>
+  <ol class="steps"><li>限时 3 小时，手机拿开，写在纸上。</li><li>对解析登分：选填对错，大题估分。</li><li>交卷后这里才显示每题属于第几期。错题回对应的期，把例题重写一遍，再重做这道题。</li><li>每周 2 套，从 2016 做到 2023；2024–2026 留到 12 月按考试时间做。</li></ol>
+  <p class="hint">卷子和解析都是本机文件，只有从本机打开这个页面时链接才通。</p>
+ </section>
+</div>
+<h2 class="xm-h">整卷 · 2016–2026</h2>
+<div id="papers" class="xm-list"></div>
+<h2 class="xm-h">解答题专练 · 2010–2015 <small>这六年的选填已拆进每期实战，解答题没有用过</small></h2>
+<div id="drills" class="xm-list"></div>
+<div id="card"></div>
+<h2 class="xm-h">失分回到哪几期</h2>
+<div id="loss"><p class="hint">登过分之后，这里按失分从多到少列出该回去看的期。</p></div>
+<h2 class="xm-h">搬家</h2>
+<p class="hint">记录只存在这个浏览器里。换设备时导出再导入。 <button class="mask-btn" id="exp">导出记录</button> <label class="mask-btn">导入记录<input type="file" id="imp" accept=".json" hidden></label></p>
+<script src="assets/katex/katex.min.js"></script><script src="assets/data.js"></script><script src="assets/paper.js"></script>
+<script>
+(function(){
+ const D=window.CD,S=window.CDStore,$=i=>document.getElementById(i),pad=n=>String(n).padStart(2,'0');
+ const TAGS=['没记住','没想到方法','算错','审题错','没时间'];
+ const issue=n=>D.issues.find(i=>i.no===n);
+ const pdf=y=>`../../真题复盘中心易识别版/按年份/${y}/${y}_数学一_真题_图像保真版.pdf`;
+ const sol=y=>'../../真题/'+(y<=2019?`${y}数学一解析.pdf`:y<=2025?`${y}数一真题解析.pdf`:`${y}考研数学（一）答案解析.pdf`);
+ const get=()=>S.get('exam',{});
+ const range=y=>{const e=D.exam[y];return D.drillYears.includes(y)?e.m.map((_,i)=>i).filter(i=>i>=e.n):e.m.map((_,i)=>i)};
+ const full=y=>range(y).reduce((a,i)=>a+D.exam[y].s[i],0);
+ function list(el,ys){
+  const r=get();
+  el.innerHTML=ys.map(y=>{const o=r[y],f=full(y);return `<div class="xm-it ${o?'dn':''}"><b>${y}</b><a href="${pdf(y)}" target="_blank">卷子</a><a href="${sol(y)}" target="_blank">解析</a><button data-y="${y}">${o?'改分':'登分'}</button><span>${o?`${o.tot} / ${f}`:''}</span></div>`}).join('');
+ }
+ function draw(){
+  list($('papers'),D.paperYears);list($('drills'),D.drillYears);
+  const r=get(),done=D.paperYears.filter(y=>r[y]);
+  const last=done.slice(-3).map(y=>r[y].tot),avg=last.length?Math.round(last.reduce((a,b)=>a+b,0)/last.length):null;
+  const left=Math.ceil((new Date('2026-12-19T08:30:00+08:00')-Date.now())/864e5);
+  $('sum').textContent=(left>0?`距初试 ${left} 天。`:'')+(done.length?`整卷做了 ${done.length} / ${D.paperYears.length} 套，最近 ${last.length} 套平均 ${avg} 分，目标 120。`:'目标 120，能更高就更高。先把报读完，再从 2016 开始。');
+  const loss={},tag={};
+  Object.keys(r).forEach(y=>{const e=D.exam[y],o=r[y];range(+y).forEach(i=>{const lost=e.s[i]-(o.s[i]??0);if(lost>0){loss[e.m[i]]=(loss[e.m[i]]||0)+lost;if(o.t[i])tag[o.t[i]]=(tag[o.t[i]]||0)+lost}})});
+  const k=Object.entries(loss).sort((a,b)=>b[1]-a[1]).slice(0,10);
+  if(k.length){const mx=k[0][1];
+   $('loss').innerHTML='<div class="xm-loss">'+k.map(([n,v])=>`<a href="q${pad(+n)}.html"><span>第 ${n} 期 · ${issue(+n).kicker}</span><i style="width:${100*v/mx}%"></i><em>${v} 分</em></a>`).join('')+'</div>'
+    +(Object.keys(tag).length?'<p class="hint">失分原因：'+Object.entries(tag).sort((a,b)=>b[1]-a[1]).map(([t,v])=>`${t} ${v} 分`).join('，')+'。</p>':'');
+  }
+ }
+ function card(y){
+  const e=D.exam[y],o=get()[y]||{s:{},t:{}},idx=range(y);
+  const hasS=i=>o.s[i]!=null;
+  const row=i=>{const sc=e.s[i],n=i+1,big=i>=e.n;
+   const val=hasS(i)?o.s[i]:'';
+   const inp=big?`<input type="number" min="0" max="${sc}" step="1" data-i="${i}" value="${val}" placeholder="0–${sc}">`
+     :`<button class="tk ${val===sc?'ok':''}" data-i="${i}" data-v="${sc}">对</button><button class="tk ${val===0?'no':''}" data-i="${i}" data-v="0">错</button>`;
+   const sel=`<select data-t="${i}"><option value="">失分原因</option>${TAGS.map(t=>`<option ${o.t[i]===t?'selected':''}>${t}</option>`).join('')}</select>`;
+   const where=get()[y]?`<a class="wh" href="q${pad(e.m[i])}.html">第 ${e.m[i]} 期</a>`:'';
+   return `<div class="xr" data-r="${i}"><b>${n}</b><span class="xs">${inp}</span>${sel}${where}</div>`};
+  $('card').innerHTML=`<div class="xm-card"><div class="xm-card-h"><b>${y} 年答题卡</b><span>共 ${full(y)} 分</span><button id="xclose">收起</button></div><div class="xrows">${idx.map(row).join('')}</div><div class="xm-card-f"><span id="xtot"></span><button id="xsave" class="lead-go">交卷，看失分</button></div></div>`;
+  const box=$('card');
+  const collect=()=>{const s={},t={};box.querySelectorAll('input[data-i]').forEach(x=>{if(x.value!=='')s[x.dataset.i]=Math.max(0,Math.min(+x.max,+x.value))});box.querySelectorAll('.tk.ok,.tk.no').forEach(x=>{s[x.dataset.i]=+x.dataset.v});box.querySelectorAll('select').forEach(x=>{if(x.value)t[x.dataset.t]=x.value});return{s,t}};
+  const tot=()=>{const c=collect();$('xtot').textContent=`已登 ${Object.keys(c.s).length} / ${idx.length} 题，${Object.values(c.s).reduce((a,b)=>a+b,0)} 分`};
+  box.onclick=ev=>{const b=ev.target.closest('.tk');if(b){b.parentNode.querySelectorAll('.tk').forEach(x=>x.classList.remove('ok','no'));b.classList.add(+b.dataset.v?'ok':'no');tot();return}
+   if(ev.target.id==='xclose'){box.innerHTML='';return}
+   if(ev.target.id==='xsave'){const c=collect(),r=get();r[y]={s:c.s,t:c.t,tot:Object.values(c.s).reduce((a,b)=>a+b,0),at:Date.now()};S.set('exam',r);draw();card(y);box.scrollIntoView({block:'start'})}};
+  box.oninput=tot;tot();box.scrollIntoView({block:'start',behavior:'smooth'});
+ }
+ document.addEventListener('click',ev=>{const b=ev.target.closest('.xm-it button');if(b)card(+b.dataset.y)});
+ $('exp').onclick=()=>{const o={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k.startsWith('cd_'))o[k]=localStorage.getItem(k)}const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(o)],{type:'application/json'}));a.download='重读报记录.json';a.click()};
+ $('imp').onchange=async ev=>{const f=ev.target.files[0];if(!f)return;const o=JSON.parse(await f.text());Object.keys(o).forEach(k=>{if(k.startsWith('cd_'))localStorage.setItem(k,o[k])});location.reload()};
+ draw();
+})();
+</script>
+</div></body></html>

@@ -10,13 +10,13 @@
 <nav class="tools"><button data-a="toc" title="目录 (T)">目录</button><button data-a="rail" class="only-narrow">定理<i id="railn"></i></button><button data-a="hide" title="遮住卷面，先自己写 (H)">遮卷面</button><button data-a="night" title="夜读">夜读</button></nav></header>
 <main class="sheet" id="sheet">
 <section class="cover" id="cover">
-<div class="mast"><div class="mast-l">多元与级数<br>第 27 期</div><div class="mast-c">重读报</div><div class="mast-r">本期约 17 分钟<br>第一类曲线、曲面积分</div></div>
+<div class="mast"><div class="mast-l">多元与级数<br>第 27 期</div><div class="mast-c">重读报</div><div class="mast-r">本期约 20 分钟<br>第一类曲线、曲面积分</div></div>
 <h1>沿着一根铁丝、一张薄膜求和</h1>
 <p class="deck">第一类积分没有方向，物理意义是质量。计算只有一招：把曲线或曲面代进去，换成普通积分。还有一招专属的省力技巧：被积函数可以先用曲线或曲面的方程化简。</p>
 <div class="cover-grid">
 <div class="cover-keep"><h4>本期只记这几行</h4><ol><li>第一类曲线：<span class="m">ds=\sqrt{x'^2+y'^2}\,dt</span>，下限 <span class="m">\lt</span> 上限。</li><li>第一类曲面：<span class="m">dS=\sqrt{1+z_x^2+z_y^2}\,d\sigma</span>。</li><li>积分在曲线/曲面上进行，<b>可以把方程代入被积函数</b>。</li><li>对称性（奇零偶倍）和轮换对称同样适用。</li></ol></div>
 <div class="cover-prev"><h4>开读前，先答上期</h4><div id="prevq"></div></div>
-<div class="cover-toc"><h4>本期目录</h4><ol><li>第一类曲线积分</li><li>第一类曲面积分</li></ol><p class="hint">→ 键 / 点右缘 / 左滑翻页</p></div>
+<div class="cover-toc"><h4>本期目录</h4><ol><li>第一类曲线积分</li><li>第一类曲面积分</li></ol><p class="hint">读完做 1 道实战。→ 键 / 点右缘 / 左滑翻页</p></div>
 </div></section>
 <section class="stage" id="stage" hidden>
 <div class="viewport" id="vp"><div class="flow" id="flow">
@@ -52,6 +52,7 @@
 <p class="fin">原式 <span class="m">=\dfrac{\sqrt2\pi}{2}</span>。</p></div>
 <div class="trap"><div class="b-h">易错</div><p>第一类积分和后两期的第二类积分，长得很像。判断依据：第一类写 <span class="m">ds,dS</span>，没有方向；第二类写 <span class="m">dx,dy,dydz</span>，有方向。</p></div>
 
+<div class="shizhan"><h2>实战</h2><p class="hint">先自己做，再看点评。选择题点选项就判，填空写完再看答案，做错的进错题版。本期内容在 2016–2026 的卷子上平均每卷约 1.3 分。</p><div class="qz" data-q="2012-12" data-a=""><div class="qz-h">2012 年第 12 题<i class="qz-r"></i></div><p>设 <span class="m">\Sigma=\{(x,y,z)\vert x+y+z=1,x\ge0,y\ge0,z\ge0\}</span>，则 <span class="m">\iint_\Sigma y^2\,dS=</span>____。</p><div class="qz-s"><button class="qz-show">写完了，看答案</button></div><div class="qz-n"><p class="qz-ans">答案：<span class="m">\dfrac{\sqrt3}{12}</span></p><p><span class="m">dS=\sqrt3\,dx\,dy</span>，化成 <span class="m">\sqrt3\int_0^1y^2(1-y)\,dy</span>。</p><div class="qz-b"><button data-v="1">做对了</button><button data-v="0">做错了</button></div></div></div></div>
 <div class="endq"><h2>今日考你</h2><p class="hint">合上前答一遍：先想，再点开。答错的会回到后面几期和温故版。</p><div class="rq" data-q="27-0"><p class="rq-q"><span class="m">\oint_{x^2+y^2=1}(x^2+y^2)ds</span>？</p><p class="rq-a">代入方程，<span class="m">=\oint1\,ds=2\pi</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="27-1"><p class="rq-q">上半球面 <span class="m">z=\sqrt{1-x^2-y^2}</span> 的 <span class="m">dS</span>？</p><p class="rq-a"><span class="m">\frac{d\sigma}{z}</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="27-2"><p class="rq-q">第一类曲线积分定限有什么要求？</p><p class="rq-a">下限必须小于上限，因为 <span class="m">ds\gt0</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="27-3"><p class="rq-q">圆锥面 <span class="m">z=\sqrt{x^2+y^2}</span> 的 <span class="m">dS</span>？</p><p class="rq-a"><span class="m">\sqrt2\,d\sigma</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div></div>
 <div class="endnext" id="endnext"></div>
 <div id="sent"></div>

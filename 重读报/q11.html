@@ -10,13 +10,13 @@
 <nav class="tools"><button data-a="toc" title="目录 (T)">目录</button><button data-a="rail" class="only-narrow">定理<i id="railn"></i></button><button data-a="hide" title="遮住卷面，先自己写 (H)">遮卷面</button><button data-a="night" title="夜读">夜读</button></nav></header>
 <main class="sheet" id="sheet">
 <section class="cover" id="cover">
-<div class="mast"><div class="mast-l">一元微积分<br>第 11 期</div><div class="mast-c">重读报</div><div class="mast-r">本期约 23 分钟<br>定积分</div></div>
+<div class="mast"><div class="mast-l">一元微积分<br>第 11 期</div><div class="mast-c">重读报</div><div class="mast-r">本期约 44 分钟<br>定积分</div></div>
 <h1>无限切细再加起来</h1>
 <p class="deck">定积分有两副面孔：一副是面积（和式极限），一副是原函数之差（牛顿—莱布尼茨）。连接它们的是变限积分。这一期还要收下对称性和点火公式这两个省时利器。</p>
 <div class="cover-grid">
 <div class="cover-keep"><h4>本期只记这几行</h4><ol><li>牛顿—莱布尼茨：<span class="m">\int_a^bf=F(b)-F(a)</span>。</li><li>变限积分求导：<span class="m">\frac{d}{dx}\int_{a}^{\varphi(x)}f(t)\,dt=f(\varphi(x))\varphi'(x)</span>。</li><li>奇函数在对称区间积分为 <span class="m">0</span>；偶函数等于两倍半区间。</li><li>和式极限：<span class="m">\lim\limits_{n\to\infty}\frac1n\sum f(\frac kn)=\int_0^1f(x)\,dx</span>。</li></ol></div>
 <div class="cover-prev"><h4>开读前，先答上期</h4><div id="prevq"></div></div>
-<div class="cover-toc"><h4>本期目录</h4><ol><li>定义：和式的极限</li><li>性质</li><li>变限积分与牛—莱公式</li><li>计算：换元与分部的定积分版</li></ol><p class="hint">→ 键 / 点右缘 / 左滑翻页</p></div>
+<div class="cover-toc"><h4>本期目录</h4><ol><li>定义：和式的极限</li><li>性质</li><li>比较两个积分，以及区间再现</li><li>变限积分与牛—莱公式</li><li>计算：换元与分部的定积分版</li></ol><p class="hint">读完做 6 道实战。→ 键 / 点右缘 / 左滑翻页</p></div>
 </div></section>
 <section class="stage" id="stage" hidden>
 <div class="viewport" id="vp"><div class="flow" id="flow">
@@ -33,21 +33,31 @@
 <p><b>估值</b>：<span class="m">m\le f\le M</span>，则 <span class="m">m(b-a)\le\int_a^bf\le M(b-a)</span>。</p>
 <p><b>积分中值定理</b>：<span class="m">f</span> 在 <span class="m">[a,b]</span> 上连续，则存在 <span class="m">\xi\in[a,b]</span>，使 <span class="m">\int_a^bf(x)\,dx=f(\xi)(b-a)</span>。</p></div>
 <p>中值定理的理由：由估值，<span class="m">\frac{1}{b-a}\int_a^bf</span> 夹在最小值、最大值之间，再用<a class="c" data-t="ivt">介值定理</a>。</p>
+<h2>比较两个积分，以及区间再现</h2>
+<p>积分限相同，只比被积函数。积分限不同，先拆成相同的部分，再看多出来那段的符号。算不出来的积分，通常也不需要算。</p>
+<div class="ex"><div class="ex-h">例 11.1<span class="ex-tag">比较大小</span></div><p>设 <span class="m">I=\int_0^1\frac{x}{1+x}\,dx</span>，<span class="m">J=\int_0^1\ln(1+x)\,dx</span>，比较 <span class="m">I,J</span>。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 令 <span class="m">g(x)=\ln(1+x)-\dfrac{x}{1+x}</span>，<span class="m">g(0)=0</span>，<span class="m">g'(x)=\dfrac{x}{(1+x)^2}\gt0</span>，所以 <span class="m">(0,1)</span> 上 <span class="m">g\gt0</span>。由<a class="c" data-t="intprop">定积分的性质</a>的保序性，</p>
+<p class="fin"><span class="m">I\lt J</span>。</p></div>
+<div class="thm" id="t-reflect"><div class="thm-h"><span>定理</span>区间再现</div><div class="M">\int_a^bf(x)\,dx=\int_a^bf(a+b-x)\,dx.</div>
+<p>令 <span class="m">t=a+b-x</span> 即得。把两种写法相加，常常能消掉分母。</p></div>
+<div class="ex"><div class="ex-h">例 11.2<span class="ex-tag">区间再现</span></div><p>计算 <span class="m">I=\displaystyle\int_0^{\pi/2}\frac{\sin x}{\sin x+\cos x}\,dx</span>。</p></div>
+<div class="paper"><div class="b-h">考场卷面</div><p>解 由<a class="c" data-t="reflect">区间再现</a>，<span class="m">I=\displaystyle\int_0^{\pi/2}\frac{\cos x}{\cos x+\sin x}\,dx</span>。两式相加，<span class="m">2I=\displaystyle\int_0^{\pi/2}1\,dx=\frac\pi2</span>。</p>
+<p class="fin"><span class="m">I=\dfrac\pi4</span>。</p></div>
 <h2>变限积分与牛—莱公式</h2>
 <div class="thm" id="t-ftc"><div class="thm-h"><span>定理</span>变限积分求导</div><p><span class="m">f</span> 连续，则 <span class="m">\Phi(x)=\int_a^xf(t)\,dt</span> 可导，且 <span class="m">\Phi'(x)=f(x)</span>。一般地，</p>
 <div class="M">\frac{d}{dx}\int_{\psi(x)}^{\varphi(x)}f(t)\,dt=f(\varphi(x))\varphi'(x)-f(\psi(x))\psi'(x).</div></div>
 <div class="thm" id="t-nl"><div class="thm-h"><span>定理</span>牛顿—莱布尼茨公式</div><p><span class="m">f</span> 在 <span class="m">[a,b]</span> 上连续，<span class="m">F</span> 是它的一个原函数，则</p>
 <div class="M">\int_a^bf(x)\,dx=F(b)-F(a).</div></div>
-<div class="ex"><div class="ex-h">例 11.1<span class="ex-tag">和式极限</span></div><p>求 <span class="m">\displaystyle\lim_{n\to\infty}\sum_{k=1}^n\frac{1}{n+k}</span>。</p></div>
+<div class="ex"><div class="ex-h">例 11.3<span class="ex-tag">和式极限</span></div><p>求 <span class="m">\displaystyle\lim_{n\to\infty}\sum_{k=1}^n\frac{1}{n+k}</span>。</p></div>
 <div class="think"><div class="b-h">思路</div><p>提一个 <span class="m">\frac1n</span> 出来，看剩下的是否是 <span class="m">f(\frac kn)</span> 的形状。</p></div>
 <div class="paper"><div class="b-h">考场卷面</div><p>解 <span class="m">\displaystyle\sum_{k=1}^n\frac{1}{n+k}=\frac{1}{n}\sum_{k=1}^n\frac{1}{1+\frac{k}{n}}</span>。由<a class="c" data-t="defint">定积分</a>，</p>
 <p class="fin">原式 <span class="m">=\displaystyle\int_0^1\frac{dx}{1+x}=\ln(1+x)\Big\vert_0^1=\ln2</span>，最后一步用<a class="c" data-t="nl">牛顿—莱布尼茨公式</a>。</p></div>
 <div class="trap"><div class="b-h">易错</div><p>被积函数里含求导变量 <span class="m">x</span> 时不能直接用公式。比如 <span class="m">\int_0^xxf(t)\,dt</span>，要先把 <span class="m">x</span> 提出去；<span class="m">\int_0^xf(x-t)\,dt</span> 要先换元 <span class="m">u=x-t</span>。</p></div>
-<div class="ex"><div class="ex-h">例 11.2<span class="ex-tag">变限积分的极限</span></div><p>求 <span class="m">\displaystyle\lim_{x\to0}\frac{\int_0^{x^2}\sin t\,dt}{x^4}</span>。</p></div>
+<div class="ex"><div class="ex-h">例 11.4<span class="ex-tag">变限积分的极限</span></div><p>求 <span class="m">\displaystyle\lim_{x\to0}\frac{\int_0^{x^2}\sin t\,dt}{x^4}</span>。</p></div>
 <div class="paper"><div class="b-h">考场卷面</div><p>解 这是 <span class="m">\frac00</span> 型。由<a class="c" data-t="lhopital">洛必达法则</a>和<a class="c" data-t="ftc">变限积分求导</a>，</p>
 <div class="M">\lim_{x\to0}\frac{\int_0^{x^2}\sin t\,dt}{x^4}=\lim_{x\to0}\frac{2x\sin x^2}{4x^3}=\lim_{x\to0}\frac{\sin x^2}{2x^2}.</div>
 <p class="fin">由<a class="c" data-t="equiv">等价无穷小替换</a>，<span class="m">\sin x^2\sim x^2</span>，故原式 <span class="m">=\dfrac{1}{2}</span>。</p></div>
-<div class="ex"><div class="ex-h">例 11.3<span class="ex-tag">提 <span class="m">x</span> 再求导</span></div><p>设 <span class="m">F(x)=\displaystyle\int_0^x(x-t)f(t)\,dt</span>，<span class="m">f</span> 连续，求 <span class="m">F''(x)</span>。</p></div>
+<div class="ex"><div class="ex-h">例 11.5<span class="ex-tag">提 <span class="m">x</span> 再求导</span></div><p>设 <span class="m">F(x)=\displaystyle\int_0^x(x-t)f(t)\,dt</span>，<span class="m">f</span> 连续，求 <span class="m">F''(x)</span>。</p></div>
 <div class="paper"><div class="b-h">考场卷面</div><p>解 拆开提出 <span class="m">x</span>：<span class="m">F(x)=x\displaystyle\int_0^xf(t)\,dt-\int_0^xtf(t)\,dt</span>。由<a class="c" data-t="ftc">变限积分求导</a>，</p>
 <div class="M">F'(x)=\int_0^xf(t)\,dt+xf(x)-xf(x)=\int_0^xf(t)\,dt.</div>
 <p class="fin">再求导，<span class="m">F''(x)=f(x)</span>。</p></div>
@@ -56,21 +66,22 @@
 <div class="thm" id="t-sym"><div class="thm-h"><span>定理</span>对称性与周期性</div><p><span class="m">f</span> 连续：若 <span class="m">f</span> 为奇函数，<span class="m">\int_{-a}^af=0</span>；若 <span class="m">f</span> 为偶函数，<span class="m">\int_{-a}^af=2\int_0^af</span>。</p>
 <p>若 <span class="m">f</span> 周期为 <span class="m">T</span>，则 <span class="m">\int_a^{a+T}f=\int_0^Tf</span>。</p></div>
 <div class="thm" id="t-wallis"><div class="thm-h"><span>定理</span>点火公式（华里士）</div><div class="M">\int_0^{\pi/2}\sin^nx\,dx=\int_0^{\pi/2}\cos^nx\,dx=\begin{cases}\dfrac{n-1}{n}\cdot\dfrac{n-3}{n-2}\cdots\dfrac{1}{2}\cdot\dfrac{\pi}{2},&amp;n\text{ 为偶数}\\[2mm]\dfrac{n-1}{n}\cdot\dfrac{n-3}{n-2}\cdots\dfrac{2}{3},&amp;n\text{ 为奇数}\end{cases}</div></div>
-<div class="ex"><div class="ex-h">例 11.4<span class="ex-tag">对称 + 面积</span></div><p>计算 <span class="m">\displaystyle\int_{-1}^{1}\bigl(x^3+\sqrt{1-x^2}\bigr)\,dx</span>。</p></div>
+<div class="ex"><div class="ex-h">例 11.6<span class="ex-tag">对称 + 面积</span></div><p>计算 <span class="m">\displaystyle\int_{-1}^{1}\bigl(x^3+\sqrt{1-x^2}\bigr)\,dx</span>。</p></div>
 <div class="paper"><div class="b-h">考场卷面</div><p>解 <span class="m">x^3</span> 为奇函数，由<a class="c" data-t="sym">对称性与周期性</a>其积分为 <span class="m">0</span>。<span class="m">\int_{-1}^1\sqrt{1-x^2}\,dx</span> 是半径为 <span class="m">1</span> 的上半圆的面积。</p>
 <p class="fin">原式 <span class="m">=\dfrac{\pi}{2}</span>。</p></div>
 <div class="note"><div class="b-h">批注</div><p>被积函数是圆的方程时，直接看面积，比三角换元快得多。</p></div>
-<div class="ex"><div class="ex-h">例 11.5<span class="ex-tag">分部</span></div><p>计算 <span class="m">\displaystyle\int_0^{\pi}x\sin x\,dx</span>。</p></div>
+<div class="ex"><div class="ex-h">例 11.7<span class="ex-tag">分部</span></div><p>计算 <span class="m">\displaystyle\int_0^{\pi}x\sin x\,dx</span>。</p></div>
 <div class="paper"><div class="b-h">考场卷面</div><p>解 由<a class="c" data-t="byparts">分部积分</a>的定积分形式，</p>
 <div class="M">\int_0^\pi x\sin x\,dx=-x\cos x\Big\vert_0^\pi+\int_0^\pi\cos x\,dx=\pi+\sin x\Big\vert_0^\pi.</div>
 <p class="fin">原式 <span class="m">=\pi</span>。</p></div>
-<div class="ex"><div class="ex-h">例 11.6<span class="ex-tag">绝对值拆区间</span></div><p>计算 <span class="m">\displaystyle\int_0^2x\vert x-1\vert\,dx</span>。</p></div>
+<div class="ex"><div class="ex-h">例 11.8<span class="ex-tag">绝对值拆区间</span></div><p>计算 <span class="m">\displaystyle\int_0^2x\vert x-1\vert\,dx</span>。</p></div>
 <div class="paper"><div class="b-h">考场卷面</div><p>解 由<a class="c" data-t="intprop">定积分的性质</a>在 <span class="m">x=1</span> 处拆开：</p>
 <div class="M">\int_0^2x\vert x-1\vert\,dx=\int_0^1x(1-x)\,dx+\int_1^2x(x-1)\,dx=\frac{1}{6}+\frac{5}{6}.</div>
 <p class="fin">原式 <span class="m">=1</span>。</p></div>
-<div class="ex"><div class="ex-h">例 11.7<span class="ex-tag">点火</span></div><p>计算 <span class="m">\displaystyle\int_0^{\pi/2}\sin^4x\,dx</span>。</p></div>
+<div class="ex"><div class="ex-h">例 11.9<span class="ex-tag">点火</span></div><p>计算 <span class="m">\displaystyle\int_0^{\pi/2}\sin^4x\,dx</span>。</p></div>
 <div class="paper"><div class="b-h">考场卷面</div><p>解 由<a class="c" data-t="wallis">点火公式（华里士）</a>，<span class="m">n=4</span> 为偶数，原式 <span class="m">=\dfrac{3}{4}\cdot\dfrac{1}{2}\cdot\dfrac{\pi}{2}=\dfrac{3\pi}{16}</span>。</p></div>
 
+<div class="shizhan"><h2>实战</h2><p class="hint">先自己做，再看点评。选择题点选项就判，填空写完再看答案，做错的进错题版。本期内容在 2016–2026 的卷子上平均每卷约 6.8 分。</p><div class="qz" data-q="2010-10" data-a=""><div class="qz-h">2010 年第 10 题<i class="qz-r"></i></div><p><span class="m">\displaystyle\int_0^{\pi^2}\sqrt x\cos\sqrt x\,dx=</span>____。</p><div class="qz-s"><button class="qz-show">写完了，看答案</button></div><div class="qz-n"><p class="qz-ans">答案：<span class="m">-4\pi</span></p><p>令 <span class="m">t=\sqrt x</span>，化为 <span class="m">2\int_0^\pi t^2\cos t\,dt</span>，分部两次。换元要同时换上下限。</p><div class="qz-b"><button data-v="1">做对了</button><button data-v="0">做错了</button></div></div></div><div class="qz" data-q="2012-10" data-a=""><div class="qz-h">2012 年第 10 题<i class="qz-r"></i></div><p><span class="m">\displaystyle\int_0^2x\sqrt{2x-x^2}\,dx=</span>____。</p><div class="qz-s"><button class="qz-show">写完了，看答案</button></div><div class="qz-n"><p class="qz-ans">答案：<span class="m">\dfrac\pi2</span></p><p>配方后令 <span class="m">x-1=t</span>：<span class="m">\int_{-1}^1(t+1)\sqrt{1-t^2}\,dt</span>。奇函数那项为 <span class="m">0</span>，剩下是半圆面积。先配方、再看奇偶和几何意义。</p><div class="qz-b"><button data-v="1">做对了</button><button data-v="0">做错了</button></div></div></div><div class="qz" data-q="2015-10" data-a=""><div class="qz-h">2015 年第 10 题<i class="qz-r"></i></div><p><span class="m">\displaystyle\int_{-\pi/2}^{\pi/2}\Bigl(\frac{\sin x}{1+\cos x}+\vert x\vert\Bigr)\,dx=</span>____。</p><div class="qz-s"><button class="qz-show">写完了，看答案</button></div><div class="qz-n"><p class="qz-ans">答案：<span class="m">\dfrac{\pi^2}{4}</span></p><p>前一项是奇函数，后一项是偶函数。对称区间先分奇偶。</p><div class="qz-b"><button data-v="1">做对了</button><button data-v="0">做错了</button></div></div></div><div class="qz" data-q="2011-4" data-a="B"><div class="qz-h">2011 年第 4 题<i class="qz-r"></i></div><p>设 <span class="m">I=\int_0^{\pi/4}\ln(\sin x)\,dx</span>，<span class="m">J=\int_0^{\pi/4}\ln(\cot x)\,dx</span>，<span class="m">K=\int_0^{\pi/4}\ln(\cos x)\,dx</span>，则 <span class="m">I,J,K</span> 的大小关系为</p><div class="qz-o"><button data-o="A">A. <span class="m">I\lt J\lt K</span></button><button data-o="B">B. <span class="m">I\lt K\lt J</span></button><button data-o="C">C. <span class="m">J\lt I\lt K</span></button><button data-o="D">D. <span class="m">K\lt J\lt I</span></button></div><div class="qz-n"><p class="qz-ans">答案：B</p><p>积分限相同，只比被积函数。在 <span class="m">(0,\frac\pi4)</span> 上 <span class="m">\sin x\lt\cos x\lt1\lt\cot x</span>。这三个积分都算不出来，也不需要算。</p></div></div><div class="qz" data-q="2012-4" data-a="D"><div class="qz-h">2012 年第 4 题<i class="qz-r"></i></div><p>设 <span class="m">I_k=\int_0^{k\pi}e^{x^2}\sin x\,dx\ (k=1,2,3)</span>，则有</p><div class="qz-o"><button data-o="A">A. <span class="m">I_1\lt I_2\lt I_3</span></button><button data-o="B">B. <span class="m">I_3\lt I_2\lt I_1</span></button><button data-o="C">C. <span class="m">I_2\lt I_3\lt I_1</span></button><button data-o="D">D. <span class="m">I_2\lt I_1\lt I_3</span></button></div><div class="qz-n"><p class="qz-ans">答案：D</p><p>限不同就拆：<span class="m">I_2-I_1=\int_\pi^{2\pi}\lt0</span>；<span class="m">I_3-I_1=\int_\pi^{2\pi}+\int_{2\pi}^{3\pi}</span>，后一段上 <span class="m">e^{x^2}</span> 更大，所以差 <span class="m">\gt0</span>。</p></div></div><div class="qz" data-q="2014-10" data-a=""><div class="qz-h">2014 年第 10 题<i class="qz-r"></i></div><p>设 <span class="m">f(x)</span> 是周期为 <span class="m">4</span> 的可导奇函数，且 <span class="m">f'(x)=2(x-1)</span>，<span class="m">x\in[0,2]</span>，则 <span class="m">f(7)=</span>____。</p><div class="qz-s"><button class="qz-show">写完了，看答案</button></div><div class="qz-n"><p class="qz-ans">答案：<span class="m">1</span></p><p><span class="m">f(7)=f(-1)=-f(1)</span>。奇函数 <span class="m">f(0)=0</span>，<span class="m">f(1)=\int_0^12(x-1)\,dx=-1</span>。周期、奇偶把点挪回已知区间。</p><div class="qz-b"><button data-v="1">做对了</button><button data-v="0">做错了</button></div></div></div></div>
 <div class="endq"><h2>今日考你</h2><p class="hint">合上前答一遍：先想，再点开。答错的会回到后面几期和温故版。</p><div class="rq" data-q="11-0"><p class="rq-q"><span class="m">\frac{d}{dx}\int_0^{x^2}\sin t\,dt</span>？</p><p class="rq-a"><span class="m">2x\sin x^2</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="11-1"><p class="rq-q"><span class="m">\int_0^{\pi/2}\sin^nx\,dx</span>（点火公式）？</p><p class="rq-a"><span class="m">\frac{n-1}{n}\cdot\frac{n-3}{n-2}\cdots</span>；<span class="m">n</span> 为偶数末尾乘 <span class="m">\frac\pi2</span>，奇数末尾到 <span class="m">1</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="11-2"><p class="rq-q">换元法做定积分要注意什么？</p><p class="rq-a">上下限跟着换，不必回代。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="11-3"><p class="rq-q">积分中值定理？</p><p class="rq-a"><span class="m">f</span> 连续时，存在 <span class="m">\xi\in[a,b]</span>，<span class="m">\int_a^bf=f(\xi)(b-a)</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div></div>
 <div class="endnext" id="endnext"></div>
 <div id="sent"></div>

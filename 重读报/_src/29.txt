@@ -32,6 +32,24 @@ $$\iint_\Sigma z\,dxdy=\iint_D\sqrt{1-x^2-y^2}\,d\sigma=\int_0^{2\pi}d\theta\int
 ∎ 原式 $=\dfrac{2\pi}{3}$。
 :::
 
+## 一次投到一个面
+三个面分别投影很繁。$\Sigma$ 是 $z=z(x,y)$ 时，可以全部换到 $xOy$ 面上。
+:::thm surfone | 转换投影
+$\Sigma:z=z(x,y)$ 取上侧，投影区域 $D_{xy}$：
+$$\iint_\Sigma P\,dydz+Q\,dzdx+R\,dxdy=\iint_{D_{xy}}\bigl(-Pz_x-Qz_y+R\bigr)\,dx\,dy,$$
+$P,Q,R$ 中的 $z$ 用 $z(x,y)$ 代入。下侧时右端整体变号。
+理由：上侧的法向量与 $(-z_x,-z_y,1)$ 同向，所以 $dydz:dzdx:dxdy=(-z_x):(-z_y):1$。
+:::
+:::ex 转换投影
+$\Sigma$ 为 $z=x^2+y^2\ (x^2+y^2\le1)$ 的上侧，计算 $I=\displaystyle\iint_\Sigma x\,dydz+y\,dzdx+z\,dxdy$。
+:::
+:::paper
+解 $z_x=2x$，$z_y=2y$。由[[surfone]]，
+$$I=\iint_{D}\bigl(-2x^2-2y^2+x^2+y^2\bigr)\,dx\,dy=-\iint_D(x^2+y^2)\,dx\,dy.$$
+由[[polar]]，$\displaystyle\iint_D(x^2+y^2)\,dx\,dy=\int_0^{2\pi}d\theta\int_0^1r^3\,dr=\frac\pi2$。
+∎ $I=-\dfrac\pi2$。
+:::
+
 ## 高斯公式
 :::thm gauss | 高斯公式
 $\Omega$ 是有界闭区域，$\Sigma$ 是其**外侧**边界，$P,Q,R$ 有连续一阶偏导，则
@@ -50,7 +68,7 @@ $$\oiint_\Sigma=3\iiint_\Omega(x^2+y^2+z^2)\,dV=3\int_0^{2\pi}d\theta\int_0^\pi\
 ∎ 原式 $=\dfrac{12\pi}{5}$。
 :::
 
-## 不封闭：补面（最常考）
+## 不封闭：补面
 !fig f29_gauss | 旋转抛物面本身不封闭，补上顶面 $z=1$（取上侧）。整体构成封闭曲面的外侧。
 :::ex 补面（大题）
 计算 $I=\displaystyle\iint_\Sigma x\,dydz+y\,dzdx+z\,dxdy$，$\Sigma$ 是 $z=x^2+y^2$（$z\le1$），取下侧。
@@ -76,7 +94,7 @@ $L$ 是曲面 $\Sigma$ 的边界，方向与 $\Sigma$ 的侧成右手系，则
 $$\oint_LPdx+Qdy+Rdz=\iint_\Sigma\begin{vmatrix}\cos\alpha&\cos\beta&\cos\gamma\\\frac{\partial}{\partial x}&\frac{\partial}{\partial y}&\frac{\partial}{\partial z}\\P&Q&R\end{vmatrix}dS.$$
 **旋度**：$\mathrm{rot}F=(R_y-Q_z,\ P_z-R_x,\ Q_x-P_y)$。公式右端即 $\iint_\Sigma\mathrm{rot}F\cdot n\,dS$。格林公式是它在平面上的特例。
 :::
-**考法固定**：$L$ 是平面与曲面的交线，取这张平面上被 $L$ 围住的部分作 $\Sigma$，法向量是常向量。
+**做法固定**：$L$ 是平面与曲面的交线，取这张平面上被 $L$ 围住的部分作 $\Sigma$，法向量是常向量。
 :::ex 斯托克斯
 计算 $\displaystyle\oint_Ly\,dx+z\,dy+x\,dz$，$L$ 是球面 $x^2+y^2+z^2=1$ 与平面 $x+y+z=0$ 的交线，从 $z$ 轴正向看去为逆时针。
 :::

@@ -10,13 +10,13 @@
 <nav class="tools"><button data-a="toc" title="目录 (T)">目录</button><button data-a="rail" class="only-narrow">定理<i id="railn"></i></button><button data-a="hide" title="遮住卷面，先自己写 (H)">遮卷面</button><button data-a="night" title="夜读">夜读</button></nav></header>
 <main class="sheet" id="sheet">
 <section class="cover" id="cover">
-<div class="mast"><div class="mast-l">一元微积分<br>第 9 期</div><div class="mast-c">重读报</div><div class="mast-r">本期约 21 分钟<br>不等式、根、辅助函数</div></div>
+<div class="mast"><div class="mast-l">一元微积分<br>第 9 期</div><div class="mast-c">重读报</div><div class="mast-r">本期约 26 分钟<br>不等式、根、辅助函数</div></div>
 <h1>证明题就三件事：移项、求导、看符号</h1>
 <p class="deck">导数学完，一元微分学最后的硬骨头是证明题。不等式和根的个数都有固定流程；中值等式的关键是把要证的式子「还原」成某个函数的导数。</p>
 <div class="cover-grid">
 <div class="cover-keep"><h4>本期只记这几行</h4><ol><li>证不等式：令 <span class="m">F=</span> 左 <span class="m">-</span> 右，用单调性或最值。</li><li>根的个数：分离参数，画 <span class="m">g(x)</span> 的图，数交点。</li><li>辅助函数口诀：<span class="m">f'+gf</span> 乘 <span class="m">e^{\int g}</span>；<span class="m">xf'+nf</span> 乘 <span class="m">x^{n-1}</span>；<span class="m">xf'-f</span> 除 <span class="m">x^2</span>。</li><li>两个中值 <span class="m">\xi,\eta</span>：分段用两次拉格朗日。</li></ol></div>
 <div class="cover-prev"><h4>开读前，先答上期</h4><div id="prevq"></div></div>
-<div class="cover-toc"><h4>本期目录</h4><ol><li>证不等式</li><li>根的个数</li><li>中值等式：还原辅助函数</li><li>两个中值</li></ol><p class="hint">→ 键 / 点右缘 / 左滑翻页</p></div>
+<div class="cover-toc"><h4>本期目录</h4><ol><li>证不等式</li><li>根的个数</li><li>中值等式：还原辅助函数</li><li>两个中值</li></ol><p class="hint">读完做 2 道实战。→ 键 / 点右缘 / 左滑翻页</p></div>
 </div></section>
 <section class="stage" id="stage" hidden>
 <div class="viewport" id="vp"><div class="flow" id="flow">
@@ -61,6 +61,7 @@
 <p class="fin">所以 <span class="m">f'(\eta)f'(\zeta)=1</span>，且 <span class="m">\eta\lt\xi\lt\zeta</span>，二者不同。证毕。<span class="pt">6分</span></p></div>
 <div class="note"><div class="b-h">批注</div><p>每次用中值定理之前，「连续、可导」这句都要写，这是采分点。</p></div>
 
+<div class="shizhan"><h2>实战</h2><p class="hint">先自己做，再看点评。选择题点选项就判，填空写完再看答案，做错的进错题版。本期内容在 2016–2026 的卷子上平均每卷约 7.3 分。</p><div class="qz" data-q="z9-0" data-a=""><div class="qz-h">同型练习<i class="qz-r"></i></div><p>方程 <span class="m">xe^{-x}=k</span> 在 <span class="m">(0,+\infty)</span> 内恰有两个不同实根，则 <span class="m">k</span> 的范围是____。</p><div class="qz-s"><button class="qz-show">写完了，看答案</button></div><div class="qz-n"><p class="qz-ans">答案：<span class="m">0\lt k\lt\dfrac1e</span></p><p><span class="m">g(x)=xe^{-x}</span>：<span class="m">g(0^+)=0</span>，<span class="m">x=1</span> 处取最大值 <span class="m">\frac1e</span>，<span class="m">x\to+\infty</span> 时趋于 <span class="m">0</span>。画出山形，数水平线的交点。</p><div class="qz-b"><button data-v="1">做对了</button><button data-v="0">做错了</button></div></div></div><div class="qz" data-q="z9-1" data-a="B"><div class="qz-h">同型练习<i class="qz-r"></i></div><p><span class="m">f</span> 在 <span class="m">[0,1]</span> 上连续，在 <span class="m">(0,1)</span> 内可导，<span class="m">f(1)=0</span>。要证存在 <span class="m">\xi\in(0,1)</span> 使 <span class="m">\xi f'(\xi)+2f(\xi)=0</span>，应取辅助函数</p><div class="qz-o"><button data-o="A">A. <span class="m">xf(x)</span></button><button data-o="B">B. <span class="m">x^2f(x)</span></button><button data-o="C">C. <span class="m">\dfrac{f(x)}{x^2}</span></button><button data-o="D">D. <span class="m">e^xf(x)</span></button></div><div class="qz-n"><p class="qz-ans">答案：B</p><p><span class="m">(x^2f)'=x(xf'+2f)</span>。<span class="m">F(0)=F(1)=0</span>，用罗尔。先把要证的式子还原成某个函数的导数，这是这类题的全部动作。</p></div></div></div>
 <div class="endq"><h2>今日考你</h2><p class="hint">合上前答一遍：先想，再点开。答错的会回到后面几期和温故版。</p><div class="rq" data-q="9-0"><p class="rq-q">证明 <span class="m">\ln x-kx=0</span> 的根个数的第一步？</p><p class="rq-a">分离参数：<span class="m">k=\frac{\ln x}{x}</span>，研究 <span class="m">g(x)=\frac{\ln x}{x}</span> 的单调性和极限。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="9-1"><p class="rq-q"><span class="m">xf'(\xi)+f(\xi)=0</span> 的辅助函数？</p><p class="rq-a"><span class="m">F(x)=xf(x)</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="9-2"><p class="rq-q"><span class="m">f'(\xi)=f(\xi)</span> 的辅助函数？</p><p class="rq-a"><span class="m">F(x)=e^{-x}f(x)</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="9-3"><p class="rq-q">什么情况用两次拉格朗日？</p><p class="rq-a">结论里有两个不同的中值，通常先找一个分点 <span class="m">c</span>，再在 <span class="m">[a,c]</span>、<span class="m">[c,b]</span> 上分别用。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div></div>
 <div class="endnext" id="endnext"></div>
 <div id="sent"></div>

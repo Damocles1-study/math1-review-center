@@ -31,6 +31,27 @@ $$\lim_{n\to\infty}\frac{1}{n}\sum_{k=1}^{n}f\Bigl(\frac{k}{n}\Bigr)=\int_0^1f(x
 :::
 中值定理的理由：由估值，$\frac{1}{b-a}\int_a^bf$ 夹在最小值、最大值之间，再用[[ivt]]。
 
+## 比较两个积分，以及区间再现
+积分限相同，只比被积函数。积分限不同，先拆成相同的部分，再看多出来那段的符号。算不出来的积分，通常也不需要算。
+:::ex 比较大小
+设 $I=\int_0^1\frac{x}{1+x}\,dx$，$J=\int_0^1\ln(1+x)\,dx$，比较 $I,J$。
+:::
+:::paper
+解 令 $g(x)=\ln(1+x)-\dfrac{x}{1+x}$，$g(0)=0$，$g'(x)=\dfrac{x}{(1+x)^2}\gt0$，所以 $(0,1)$ 上 $g\gt0$。由[[intprop]]的保序性，
+∎ $I\lt J$。
+:::
+:::thm reflect | 区间再现
+$$\int_a^bf(x)\,dx=\int_a^bf(a+b-x)\,dx.$$
+令 $t=a+b-x$ 即得。把两种写法相加，常常能消掉分母。
+:::
+:::ex 区间再现
+计算 $I=\displaystyle\int_0^{\pi/2}\frac{\sin x}{\sin x+\cos x}\,dx$。
+:::
+:::paper
+解 由[[reflect]]，$I=\displaystyle\int_0^{\pi/2}\frac{\cos x}{\cos x+\sin x}\,dx$。两式相加，$2I=\displaystyle\int_0^{\pi/2}1\,dx=\frac\pi2$。
+∎ $I=\dfrac\pi4$。
+:::
+
 ## 变限积分与牛—莱公式
 :::thm ftc | 变限积分求导
 $f$ 连续，则 $\Phi(x)=\int_a^xf(t)\,dt$ 可导，且 $\Phi'(x)=f(x)$。一般地，

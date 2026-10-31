@@ -15,7 +15,7 @@
 ## 先认形状：考试只用这几类函数
 考研里的函数都是基本初等函数经四则、复合拼出来的。你需要的不是背定义域，而是**闭眼能画出下面这张图**，尤其是每条曲线在无穷远和 $0$ 附近的走向。
 !fig f01_exp_log | 指数与对数互为反函数，关于 $y=x$ 对称。$\ln x$ 在 $x\to0^+$ 时趋于 $-\infty$。
-!fig f01_arctan | $\arctan x$ 夹在两条水平线之间。它的两个「尽头」不同，这是判断极限时的常客。
+!fig f01_arctan | $\arctan x$ 夹在两条水平线之间。它的两个「尽头」不同，判断极限时要分开看。
 | 函数 | 定义域 | 必记走向 |
 | $e^x$ | $\mathbb R$ | $x\to+\infty$ 趋于 $+\infty$；$x\to-\infty$ 趋于 $0$ |
 | $\ln x$ | $x\gt0$ | $x\to0^+$ 趋于 $-\infty$；$\ln1=0$ |
@@ -99,7 +99,7 @@ $\lim f(x)=A$ 当且仅当 $f(x)=A+\alpha(x)$，其中 $\alpha(x)$ 是同一过�
 :::
 无穷大是无穷小的倒数（非零时）。$x\to+\infty$ 时增长速度排序要熟：
 $$\ln^\alpha x\ll x^\beta\ll a^x\ (a\gt1)\ll x^x\qquad(\alpha,\beta\gt0)$$
-数列同样：$\ln n\ll n^\beta\ll a^n\ll n!\ll n^n$。这个排序足以秒掉很多选择题。
+数列同样：$\ln n\ll n^\beta\ll a^n\ll n!\ll n^n$。这个排序很有用。
 :::ex 选择
 $x\to0$ 时，下列无穷小中阶数最高的是（　　）。
 (A) $x+x^2$　(B) $x^3+x^4$　(C) $x\vert x\vert$　(D) $\sqrt{x^4+x^6}$

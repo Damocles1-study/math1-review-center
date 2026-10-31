@@ -10,13 +10,13 @@
 <nav class="tools"><button data-a="toc" title="目录 (T)">目录</button><button data-a="rail" class="only-narrow">定理<i id="railn"></i></button><button data-a="hide" title="遮住卷面，先自己写 (H)">遮卷面</button><button data-a="night" title="夜读">夜读</button></nav></header>
 <main class="sheet" id="sheet">
 <section class="cover" id="cover">
-<div class="mast"><div class="mast-l">一元微积分<br>第 10 期</div><div class="mast-c">重读报</div><div class="mast-r">本期约 19 分钟<br>不定积分</div></div>
+<div class="mast"><div class="mast-l">一元微积分<br>第 10 期</div><div class="mast-c">重读报</div><div class="mast-r">本期约 24 分钟<br>不定积分</div></div>
 <h1>求导的逆运算，靠认形状</h1>
 <p class="deck">积分没有万能算法，但题目用来用去就四招：凑微分、换元、分部、有理函数拆项。把公式表背死，再练会判断该走哪一招。</p>
 <div class="cover-grid">
 <div class="cover-keep"><h4>本期只记这几行</h4><ol><li>先想凑微分，再想换元，然后分部，分式最后拆项。</li><li>分部口诀：「反对幂指三」，靠前的留作 <span class="m">u</span>，靠后的放进 <span class="m">d</span>。</li><li>根号换元：<span class="m">\sqrt{a^2-x^2}</span> 用 <span class="m">x=a\sin t</span>；<span class="m">\sqrt{a^2+x^2}</span> 用 <span class="m">x=a\tan t</span>；<span class="m">\sqrt{x^2-a^2}</span> 用 <span class="m">x=a\sec t</span>。</li><li>不定积分结果<b>必须带 <span class="m">+C</span></b>。</li></ol></div>
 <div class="cover-prev"><h4>开读前，先答上期</h4><div id="prevq"></div></div>
-<div class="cover-toc"><h4>本期目录</h4><ol><li>原函数与公式表</li><li>第一招：凑微分</li><li>第二招：换元去根号</li><li>第三招：分部积分</li><li>第四招：有理函数拆项</li></ol><p class="hint">→ 键 / 点右缘 / 左滑翻页</p></div>
+<div class="cover-toc"><h4>本期目录</h4><ol><li>原函数与公式表</li><li>第一招：凑微分</li><li>第二招：换元去根号</li><li>第三招：分部积分</li><li>第四招：有理函数拆项</li></ol><p class="hint">读完做 2 道实战。→ 键 / 点右缘 / 左滑翻页</p></div>
 </div></section>
 <section class="stage" id="stage" hidden>
 <div class="viewport" id="vp"><div class="flow" id="flow">
@@ -71,6 +71,7 @@
 <p class="fin">由<a class="c" data-t="inttable">基本积分表</a>，原式 <span class="m">=\ln\vert x\vert-\dfrac{1}{2}\ln(1+x^2)+C</span>。</p></div>
 <div class="skip"><div class="b-h">本报不刊</div><p>万能代换 <span class="m">t=\tan\frac{x}{2}</span> 计算太长，只在其他方法都失败时才用。复杂的三角有理式不单独练。</p></div>
 
+<div class="shizhan"><h2>实战</h2><p class="hint">先自己做，再看点评。选择题点选项就判，填空写完再看答案，做错的进错题版。本期内容在 2016–2026 的卷子上平均每卷约 1.3 分。</p><div class="qz" data-q="z10-0" data-a=""><div class="qz-h">同型练习<i class="qz-r"></i></div><p><span class="m">\displaystyle\int x\cos x\,dx=</span>____。</p><div class="qz-s"><button class="qz-show">写完了，看答案</button></div><div class="qz-n"><p class="qz-ans">答案：<span class="m">x\sin x+\cos x+C</span></p><p>幂函数留作 <span class="m">u</span>，三角函数放进 <span class="m">d</span>。别漏 <span class="m">+C</span>。</p><div class="qz-b"><button data-v="1">做对了</button><button data-v="0">做错了</button></div></div></div><div class="qz" data-q="z10-1" data-a=""><div class="qz-h">同型练习<i class="qz-r"></i></div><p><span class="m">\displaystyle\int\frac{dx}{x(x+1)}=</span>____。</p><div class="qz-s"><button class="qz-show">写完了，看答案</button></div><div class="qz-n"><p class="qz-ans">答案：<span class="m">\ln\Bigl\vert\dfrac{x}{x+1}\Bigr\vert+C</span></p><p><span class="m">\frac{1}{x(x+1)}=\frac1x-\frac{1}{x+1}</span>。分母能因式分解就拆项。</p><div class="qz-b"><button data-v="1">做对了</button><button data-v="0">做错了</button></div></div></div></div>
 <div class="endq"><h2>今日考你</h2><p class="hint">合上前答一遍：先想，再点开。答错的会回到后面几期和温故版。</p><div class="rq" data-q="10-0"><p class="rq-q"><span class="m">\int\frac{dx}{x^2+a^2}</span> 等于？</p><p class="rq-a"><span class="m">\frac1a\arctan\frac xa+C</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="10-1"><p class="rq-q"><span class="m">\int\frac{dx}{\sqrt{x^2+a^2}}</span> 等于？</p><p class="rq-a"><span class="m">\ln(x+\sqrt{x^2+a^2})+C</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="10-2"><p class="rq-q"><span class="m">\int\sec x\,dx</span> 等于？</p><p class="rq-a"><span class="m">\ln\vert\sec x+\tan x\vert+C</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="10-3"><p class="rq-q"><span class="m">\int\ln x\,dx</span> 等于？</p><p class="rq-a"><span class="m">x\ln x-x+C</span>，分部。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div><div class="rq" data-q="10-4"><p class="rq-q">分部口诀「反对幂指三」谁当 <span class="m">u</span>？</p><p class="rq-a">靠前的当 <span class="m">u</span>（反三角、对数优先），靠后的放进 <span class="m">dv</span>。</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div></div>
 <div class="endnext" id="endnext"></div>
 <div id="sent"></div>

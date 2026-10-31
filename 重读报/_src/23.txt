@@ -1,7 +1,7 @@
 @part 丙
 @kicker 多元函数微分
 @title 多一个变量，多出一堆陷阱
-@deck 多元函数的「连续、偏导、可微」互不等价，这是最常考的概念题。链式法则和隐函数求导则是大题第一步。把关系图和抽象函数写法记牢。
+@deck 多元函数的「连续、偏导、可微」互不等价，要分清。链式法则和隐函数求导是后面所有计算的第一步。把关系图和抽象函数写法记牢。
 @keep 连续偏导 ⟹ 可微 ⟹ 连续，可微 ⟹ 偏导存在。偏导存在**推不出**连续。
 @keep 判可微：$\lim\frac{\Delta z-f_x\Delta x-f_y\Delta y}{\rho}=0$。
 @keep 抽象复合：用 $f_1',f_2'$ 记号；$f_{12}''=f_{21}''$（二阶连续时）。
@@ -76,6 +76,17 @@ $$\frac{\partial z}{\partial x}=2xf_1'+yf_2'.$$⛳3
 $$\frac{\partial^2z}{\partial x\partial y}=2x\bigl(-2yf_{11}''+xf_{12}''\bigr)+f_2'+y\bigl(-2yf_{21}''+xf_{22}''\bigr).$$⛳5
 由 $f_{12}''=f_{21}''$ 合并，
 ∎ $\dfrac{\partial^2z}{\partial x\partial y}=-4xyf_{11}''+2(x^2-y^2)f_{12}''+xyf_{22}''+f_2'$。⛳2
+:::
+
+## 含变限积分的偏导
+把积分限看作中间变量：$\dfrac{\partial}{\partial x}\displaystyle\int_0^{u(x,y)}g(t)\,dt=g(u)\,u_x$。被积函数里也含 $x$ 时，先换元把 $x$ 挪到积分限上或积分号外。
+:::ex 变限积分的混合偏导
+$F(x,y)=\displaystyle\int_0^{xy}e^{t^2}\,dt$，求 $F_{xy}(1,1)$。
+:::
+:::paper
+解 $F_x=ye^{x^2y^2}$。再对 $y$ 求导，
+$$F_{xy}=e^{x^2y^2}+y\cdot2x^2y\,e^{x^2y^2}=(1+2x^2y^2)e^{x^2y^2}.$$
+∎ $F_{xy}(1,1)=3e$。
 :::
 
 ## 隐函数

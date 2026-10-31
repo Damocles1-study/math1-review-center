@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """重读报构建器：_src/NN.txt → qNN.html + assets/data.js
 硬校验（任何一条不过就退出码 1）：
   1. [[定理]] 只能引用「此前已刊登」的定理（同期也要在引用位置之前）
@@ -9,6 +10,8 @@ import html, json, re, sys, glob, os, datetime
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from figs import FIG
+import exam_map as EX
+import pages as PG
 
 PARTS = {'甲': '一元微积分', '乙': '线性代数', '丙': '多元与级数', '丁': '概率统计'}
 PAPER = '重读报'
@@ -46,7 +49,7 @@ class Ctx:
 
 
 THM, THM_SEEN = {}, []   # id → dict；出现顺序
-RECALL = []
+RECALL, PRAC, TRAPS = [], [], []
 
 
 def tex(s, display=False):
@@ -159,6 +162,8 @@ def container(kind, args, lines, ctx):
         return f'<div class="ex"><div class="ex-h">例 {ctx.no}.{ctx.ex}{tag}</div>{body(lines, ctx)}</div>'
     if kind in LABEL:
         lab = a[0] if a else LABEL[kind]
+        if kind == 'trap':
+            TRAPS.append(dict(no=ctx.no, html=body(lines, ctx)))
         return f'<div class="{kind}"><div class="b-h">{inline(lab, ctx)}</div>{body(lines, ctx)}</div>'
     ERR.append(f'第{ctx.no}期：未知容器 {kind}')
     return ''
@@ -208,17 +213,98 @@ def parse(no, text):
     return meta, heads, '\n'.join(html_blocks), ctx
 
 
+SPOIL_FROM = 2016  # 2016 及以后整卷留给套卷
+QS, QIDS = {}, set()
+QTYPE_MIN = 2.5   # 一道选填按 2.5 分钟算
+
+
+def load_q():
+    """_src/shizhan.txt → {期: [题]}。格式见该文件开头。"""
+    path = os.path.join(ROOT, '_src', 'shizhan.txt')
+    cur, lines = None, []
+    for raw in open(path, encoding='utf-8').read().split('\n'):
+        if cur is None:
+            m = re.match(r':::q\s+(\d+)\s*\|\s*([^|]+?)\s*\|\s*(.+?)\s*$', raw)
+            if m:
+                cur, lines = (int(m.group(1)), m.group(2), m.group(3)), []
+            continue
+        if raw.strip() == ':::':
+            no, src, ans = cur
+            cur = None
+            if '---' not in lines:
+                ERR.append(f'实战 {src} 缺 ---')
+                continue
+            k = lines.index('---')
+            stem, note = lines[:k], lines[k + 1:]
+            opts = [l for l in stem if re.match(r'^[A-D]\. ', l)]
+            stem = [l for l in stem if not re.match(r'^[A-D]\. ', l)]
+            ym = re.match(r'(\d{4})-(\d+)$', src)
+            if ym:
+                y = int(ym.group(1))
+                if y >= SPOIL_FROM:
+                    ERR.append(f'实战 {src}：{SPOIL_FROM} 年及以后的题留给套卷，不许进讲义')
+                if EX.MAP[y][int(ym.group(2)) - 1] != no:
+                    ERR.append(f'实战 {src} 放在第 {no} 期，与 exam_map 记的第 {EX.MAP[y][int(ym.group(2)) - 1]} 期不一致')
+            if opts and ans not in 'ABCD':
+                ERR.append(f'实战 {src}：选择题答案应为字母')
+            QS.setdefault(no, []).append(dict(no=no, src=src, ans=ans, stem=stem, opts=opts, note=note))
+            continue
+        lines.append(raw)
+    for no, qs in QS.items():
+        for i, q in enumerate(qs):
+            q['id'] = q['src'] if q['src'] != '自编' else f'z{no}-{i}'
+            if q['id'] in QIDS:
+                ERR.append(f'实战 {q["id"]} 重复')
+            QIDS.add(q['id'])
+            text = ' '.join(q['stem'] + q['opts'] + q['note'])
+            for term, first in TERMS.items():
+                probe = text.replace('不定积分', '') if term == '定积分' else text
+                if no < first and term in probe:
+                    ERR.append(f'实战 {q["id"]}（第{no}期）用了第{first}期才讲的「{term}」')
+
+
+def q_html(q, ctx):
+    src = q['src']
+    m = re.match(r'(\d{4})-(\d+)$', src)
+    lab = f'{m.group(1)} 年第 {m.group(2)} 题' if m else '同型练习'
+    stem = body(q['stem'], ctx)
+    note = body(q['note'], ctx)
+    if q['opts']:
+        ob = ''.join(f'<button data-o="{o[0]}">{inline(o.replace(chr(92) + "frac", chr(92) + "dfrac"), ctx)}</button>' for o in q['opts'])
+        act = f'<div class="qz-o">{ob}</div>'
+        ans = q['ans']
+        fin = ''
+    else:
+        act = '<div class="qz-s"><button class="qz-show">写完了，看答案</button></div>'
+        ans = inline(q['ans'], ctx)
+        fin = '<div class="qz-b"><button data-v="1">做对了</button><button data-v="0">做错了</button></div>'
+    return (f'<div class="qz" data-q="{q["id"]}" data-a="{q["ans"] if q["opts"] else ""}"><div class="qz-h">{lab}<i class="qz-r"></i></div>'
+            f'{stem}{act}<div class="qz-n"><p class="qz-ans">答案：{ans}</p>{note}{fin}</div></div>')
+
+
+LINT = re.compile(r'真题|常考|必考|考法|每年|常客|命题|每两三年|选择题(的主力|常问)|选填常')
+SKIPLINT = re.compile(r'^:::skip.*?^:::$', re.S | re.M)
+
+
+def lint(no, raw):
+    """问法考法不进知识部分：只许出现在实战点评里（:::skip 是取舍声明，不算）"""
+    t = SKIPLINT.sub('', raw)
+    t = '\n'.join(l for l in t.split('\n') if not l.startswith('本报到此'))
+    for m in LINT.finditer(t):
+        ERR.append(f'第{no}期：知识部分不写考法，把「{t[max(0, m.start()-12):m.end()+12]}」挪到实战点评')
+
+
 def strip_tags(s):
     return re.sub(r'<[^>]+>', '', s)
 
 
-def minutes(raw):
-    """阅读时长估算：可见中文 280 字/分；展示公式 20 秒；行内公式 3 秒；每道例题再加 2 分钟自己想/对照"""
+def minutes(raw, nq=0):
+    """阅读时长估算：可见中文 280 字/分；展示公式 20 秒；行内公式 3 秒；每道例题再加 2 分钟自己想/对照；实战每题 2.5 分钟"""
     no_math = re.sub(r'\$\$.*?\$\$|\$[^$]+\$', '', raw)
     cn = len(re.findall(r'[一-鿿]', no_math))
     disp, inl = raw.count('$$') // 2, len(re.findall(r'(?<!\$)\$(?!\$)[^$]+\$', raw))
     ex = raw.count(':::ex')
-    return round(cn / 280 + disp / 3 + inl * 0.05 + ex * 2)
+    return round(cn / 280 + disp / 3 + inl * 0.05 + ex * 2 + nq * QTYPE_MIN)
 
 
 PAGE = '''<!doctype html>
@@ -239,11 +325,12 @@ PAGE = '''<!doctype html>
 <div class="cover-grid">
 <div class="cover-keep"><h4>本期只记这几行</h4><ol>{keep}</ol></div>
 <div class="cover-prev"><h4>开读前，先答上期</h4><div id="prevq"></div></div>
-<div class="cover-toc"><h4>本期目录</h4><ol>{toc}</ol><p class="hint">→ 键 / 点右缘 / 左滑翻页</p></div>
+<div class="cover-toc"><h4>本期目录</h4><ol>{toc}</ol><p class="hint">读完做{nqs}。→ 键 / 点右缘 / 左滑翻页</p></div>
 </div></section>
 <section class="stage" id="stage" hidden>
 <div class="viewport" id="vp"><div class="flow" id="flow">
 {content}
+{shizhan}
 <div class="endq"><h2>今日考你</h2><p class="hint">合上前答一遍：先想，再点开。答错的会回到后面几期和温故版。</p>{recall}</div>
 <div class="endnext" id="endnext"></div>
 <div id="sent"></div>
@@ -267,128 +354,9 @@ def recall_html(no, items, ctx):
     return ''.join(r)
 
 
-HEAD = '''<!doctype html>
-<html lang="zh-CN"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>{title}</title>
-<link rel="stylesheet" href="assets/katex/katex.min.css">
-<link rel="stylesheet" href="assets/paper.css">
-</head><body class="front">
-<div class="front-wrap">
-'''
-FOOT = '''<script src="assets/katex/katex.min.js"></script><script src="assets/data.js"></script><script src="assets/paper.js"></script>
-{script}
-</div></body></html>
-'''
-NAV = '<a href="index.html">总版</a><a href="定理索引.html">定理索引</a><a href="温故.html">温故版</a><a href="../index.html">旧版复盘中心</a><a href="#" onclick="CDNight();return false">夜读</a>'
-
-
-def write_front(idx):
-    tot = sum(i['mins'] for i in idx)
-    n_ex = sum(i['ex'] for i in idx)
-    parts = ''
-    for p, name in PARTS.items():
-        items = [i for i in idx if i['part'] == p]
-        if not items:
-            continue
-        parts += f'<section class="part"><h2>{name}<small>{sum(i["mins"] for i in items)} 分钟</small></h2>'
-        for i in items:
-            parts += (f'<a class="it" data-no="{i["no"]}" href="q{i["no"]:02d}.html"><span class="t">{esc(i["title"])}</span>'
-                      f'<span class="s"><span>第 {i["no"]} 期 · {esc(i["kicker"])}</span><span>{i["mins"]} 分</span></span></a>')
-        parts += '</section>'
-    days = ''
-    for d in (1, 2, 3):
-        its = [i for i in idx if i['day'] == d]
-        days += (f'<li data-day="{d}"><b>第{"一二三"[d-1]}天</b><span>第 {its[0]["no"]}–{its[-1]["no"]} 期 · 约 {sum(i["mins"] for i in its)/60:.1f} 小时</span></li>')
-    html_ = HEAD.format(title='重读报 · 数学一') + f'''
-<div class="front-top"><span id="today"></span><span>数学一 · 重捋一遍，然后上套卷</span></div>
-<div class="front-mast">重读报</div>
-<div class="front-sub"><span>全 {len(idx)} 期 · 例题 {n_ex} 道 · 预计 {tot/60:.1f} 小时</span><span>{NAV}</span></div>
-<div class="lead-wrap">
-  <div>
-    <div class="kick" id="leadkick">创刊号</div>
-    <h1><a id="leadt" href="q01.html"></a></h1>
-    <p id="leadd"></p>
-    <a class="lead-go" id="leadgo" href="q01.html">开始阅读 →</a>
-    <p class="hint" style="margin-top:.8em">→ 键翻页，T 目录，H 遮住卷面。文中蓝色虚线的定理名，右栏自动显示全文。</p>
-  </div>
-  <aside class="lead-side">
-    <h3>三日行程</h3><ul>{days}</ul>
-    <h3 style="margin-top:.9em">这份报怎么读</h3>
-    <ul style="display:block"><li style="display:block">每期先答头版的三道旧题，治「读完就忘」。</li>
-    <li style="display:block">每个知识点只用已经刊登过的内容，构建时有程序检查。</li>
-    <li style="display:block">大题先合上卷面自己写，再对照标准格式。</li>
-    <li style="display:block">例题走教材常见题型，不照搬近年真题卷，把新鲜感留给套卷。</li></ul>
-  </aside>
-</div>
-<div class="parts">{parts}</div>
-''' + FOOT.format(script='''<script>
-(function(){
- const D=window.CD,S=window.CDStore,rd=S.get('read',{}),last=S.get('last',0);
- document.getElementById('today').textContent=new Date().toLocaleDateString('zh-CN',{year:'numeric',month:'long',day:'numeric',weekday:'long'});
- let nx=D.issues.find(i=>!rd[i.no])||D.issues[0];
- const lastI=last&&!rd[last]?D.issues.find(i=>i.no===last):null;
- const cur=lastI||nx,done=Object.keys(rd).length;
- const pad=n=>String(n).padStart(2,'0');
- document.getElementById('leadkick').textContent=(done?`已读 ${done} / ${D.issues.length} 期 · `:'创刊号 · ')+`今日头条 · 第 ${cur.no} 期 · ${cur.partname}`;
- const t=document.getElementById('leadt');t.textContent=cur.title;t.href=`q${pad(cur.no)}.html`;
- document.getElementById('leadd').textContent=cur.deck;
- const g=document.getElementById('leadgo');g.href=t.href;g.textContent=(lastI?'继续阅读':'开始阅读')+` →（约 ${cur.mins} 分钟）`;
- document.querySelectorAll('.it').forEach(a=>{const n=+a.dataset.no;if(rd[n])a.classList.add('done');if(n===cur.no)a.classList.add('now')});
- const dd={};D.issues.forEach(i=>{dd[i.day]=dd[i.day]||[0,0];dd[i.day][1]++;if(rd[i.no])dd[i.day][0]++});
- document.querySelectorAll('[data-day]').forEach(li=>{const v=dd[li.dataset.day];if(v[0])li.querySelector('b').textContent+=` ${v[0]}/${v[1]}`});
-})();
-</script>''')
-    open(os.path.join(ROOT, 'index.html'), 'w', encoding='utf-8').write(html_)
-
-    # 定理索引
-    body_ = ''
-    last = None
-    meta = {i['no']: i for i in idx}
-    for tid, t in THM.items():
-        if t['no'] != last:
-            last = t['no']
-            body_ += f'<h3><a href="q{last:02d}.html" style="text-decoration:none">第 {last} 期 · {esc(meta[last]["kicker"])}</a></h3>'
-        body_ += f'<div class="rcard"><h5>{t["name"]}<span>{t["lab"]}</span></h5>{t["html"]}</div>'
-    html_ = HEAD.format(title='定理索引 · 重读报') + f'''
-<div class="front-top"><span>定理索引</span><span>{NAV}</span></div>
-<h1 class="pg-h" style="border-top:5px solid var(--rule);padding-top:.2em">全部定理与公式，按首次刊登排列</h1>
-<p class="sub-lead">共 {len(THM)} 条。做套卷卡住时来这里查。⌘F 可搜定理名。</p>
-<div class="thm-grid">{body_}</div>
-''' + FOOT.format(script="<script>CDRender(document);CDFit(document)</script>")
-    open(os.path.join(ROOT, '定理索引.html'), 'w', encoding='utf-8').write(html_)
-
-    # 温故版：间隔复习
-    html_ = HEAD.format(title='温故版 · 重读报') + f'''
-<div class="front-top"><span>温故版</span><span>{NAV}</span></div>
-<h1 class="pg-h" style="border-top:5px solid var(--rule);padding-top:.2em">记不住，就再考一次</h1>
-<p class="sub-lead">只从你已经读过的期号里出题。答错的和隔得久的优先。每轮 10 道，约 5 分钟。建议每读完一天的内容做两轮，上套卷前再过一遍「只看答错过的」。</p>
-<div class="wg"><div class="wg-tools"><button data-m="due" class="on">到期优先</button><button data-m="wrong">只看答错过的</button><button data-m="all">全部随机</button><span id="wgs" style="margin-left:auto;color:var(--ink3)"></span></div><div id="wgl"></div><div class="wg-tools" style="margin-top:12px"><button id="wgn">再来 10 道</button></div></div>
-''' + FOOT.format(script='''<script>
-(function(){
- const D=window.CD,S=window.CDStore;let mode='due';const box=document.getElementById('wgl');
- CDBindRecall(box);
- function draw(){
-  const rec=S.get('recall',{}),rd=S.get('read',{}),now=Date.now();
-  let pool=D.recall.filter(r=>rd[r.no]);
-  const ever=pool.length;
-  if(mode==='wrong')pool=pool.filter(r=>rec[r.id]&&rec[r.id].ok===0);
-  const pr=r=>{const o=rec[r.id];if(!o)return 50+Math.random()*20;const h=(now-o.t)/36e5;return (o.ok===0?100:0)+Math.min(h,72)/(o.n||1)+Math.random()*10};
-  const pick=(mode==='all'?pool.slice().sort(()=>Math.random()-.5):pool.slice().sort((a,b)=>pr(b)-pr(a))).slice(0,10);
-  const wrong=D.recall.filter(r=>rec[r.id]&&rec[r.id].ok===0).length,seen=Object.keys(rec).length;
-  document.getElementById('wgs').textContent=`可考 ${ever} · 答过 ${seen} · 待巩固 ${wrong}`;
-  if(!pick.length){box.innerHTML='<p class="hint">'+(ever?'没有答错过的题，换个模式吧。':'还没有读完的期。读完一期后，它的题才会进入这里。')+'</p>';return}
-  box.innerHTML=pick.map(r=>`<div class="rq" data-q="${r.id}"><small>第 ${r.no} 期</small><p class="rq-q">${r.q}</p><p class="rq-a">${r.a}</p><div class="rq-b"><button data-v="1">答对了</button><button data-v="0">没答上</button></div></div>`).join('');
-  CDRender(box);
- }
- document.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>{document.querySelectorAll('[data-m]').forEach(x=>x.classList.remove('on'));b.classList.add('on');mode=b.dataset.m;draw()});
- document.getElementById('wgn').onclick=draw;draw();
-})();
-</script>''')
-    open(os.path.join(ROOT, '温故.html'), 'w', encoding='utf-8').write(html_)
-
-
 def main():
+    load_q()
+    W = EX.weights()
     files = sorted(glob.glob(os.path.join(ROOT, '_src', '[0-9][0-9].txt')))
     nos = [int(os.path.basename(f)[:2]) for f in files]
     issues = []
@@ -406,8 +374,10 @@ def main():
                 if bad:
                     idx = probe.find(term)
                     ERR.append(f'第{no}期：术语「{term}」应从第{first}期才出现 …{probe[max(0, idx-18):idx+18]!r}')
+        lint(no, raw)
         meta, heads, content, ctx = parse(no, raw)
-        issues.append(dict(no=no, meta=meta, heads=heads, content=content, ctx=ctx, raw=raw, mins=minutes(raw)))
+        qs = QS.get(no, [])
+        issues.append(dict(no=no, meta=meta, heads=heads, content=content, ctx=ctx, raw=raw, mins=minutes(raw, len(qs)), qs=qs))
     for it in issues:
         no, m = it['no'], it['meta']
         ctx = it['ctx']
@@ -420,25 +390,29 @@ def main():
         nxt = f'q{nos[idx+1]:02d}.html' if idx + 1 < len(nos) else 'index.html'
         if not m['title']:
             ERR.append(f'第{no}期缺标题')
-        page = PAGE.format(no=no, paper=PAPER, title=inline(m['title'], ctx), partname=PARTS.get(m['part'], ''),
+        sz = ''
+        if it['qs']:
+            sz = ('<div class="shizhan"><h2>实战</h2><p class="hint">先自己做，再看点评。选择题点选项就判，填空写完再看答案，做错的进错题版。'
+                  + (f'本期内容在 2016–2026 的卷子上平均每卷约 {W[no]:g} 分。' if W.get(no) else '') + '</p>'
+                  + ''.join(q_html(q, ctx) for q in it['qs']) + '</div>')
+            for q in it['qs']:
+                PRAC.append(dict(id=q['id'], no=no, html=q_html(q, ctx), ans=q['ans']))
+        page = PAGE.format(no=no, shizhan=sz, nqs=f' {len(it["qs"])} 道实战' if it['qs'] else '今日考你', paper=PAPER, title=inline(m['title'], ctx), partname=PARTS.get(m['part'], ''),
                            kicker=esc(m['kicker']), mins=it['mins'], deck=inline(m['deck'], ctx), keep=keep,
                            toc=toc, content=it['content'], recall=recall_html(no, m['recall'], ctx),
                            prev=prev, next=nxt)
         page = page.replace('<title>' + inline(m['title'], ctx), '<title>' + strip_tags(inline(m['title'], ctx)))
         open(os.path.join(ROOT, f'q{no:02d}.html'), 'w', encoding='utf-8').write(page)
-    # 三日行程：按预计时长三等分
     tot = sum(i['mins'] for i in issues)
-    cum, day_of = 0, {}
-    for i in issues:
-        day_of[i['no']] = min(3, int(cum / (tot / 3)) + 1)
-        cum += i['mins']
     idx = [dict(no=i['no'], part=i['meta']['part'], partname=PARTS.get(i['meta']['part'], ''),
                 title=strip_tags(i['meta']['title']), kicker=i['meta']['kicker'], deck=strip_tags(i['meta']['deck']),
-                mins=i['mins'], day=day_of[i['no']], ex=i['ctx'].ex) for i in issues]
-    data = 'window.CD=' + json.dumps({'issues': idx, 'thm': THM, 'recall': RECALL}, ensure_ascii=False) + ';\n'
+                mins=i['mins'], ex=i['ctx'].ex, nq=len(i['qs']), w=W.get(i['no'], 0)) for i in issues]
+    exam = {y: dict(m=EX.MAP[y], s=EX.scores(y), n=len(EX.OLD if y <= 2020 else EX.NEW)) for y in EX.MAP}
+    data = 'window.CD=' + json.dumps({'issues': idx, 'thm': THM, 'recall': RECALL, 'prac': PRAC, 'exam': exam,
+                                      'paperYears': EX.PAPER_YEARS, 'drillYears': EX.DRILL_YEARS}, ensure_ascii=False) + ';\n'
     open(os.path.join(ROOT, 'assets', 'data.js'), 'w', encoding='utf-8').write(data)
-    write_front(idx)
-    print(f'{len(issues)} 期 · {tot} 分钟 ≈ {tot/60:.1f} 小时 · 例题 {sum(i["ctx"].ex for i in issues)} · 定理 {len(THM)} · 自测 {len(RECALL)}')
+    PG.write_all(ROOT, idx, issues, THM, inline, esc, EX, TRAPS)
+    print(f'{len(issues)} 期 · {tot} 分钟 ≈ {tot/60:.1f} 小时 · 例题 {sum(i["ctx"].ex for i in issues)} · 定理 {len(THM)} · 自测 {len(RECALL)} · 实战 {len(PRAC)}')
     for p in PARTS:
         s = [i for i in issues if i['meta']['part'] == p]
         if s:
