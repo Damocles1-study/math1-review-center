@@ -16,7 +16,7 @@ FOOT = '''<script src="assets/katex/katex.min.js"></script><script src="assets/d
 {script}
 </div></body></html>
 '''
-NAV = ('<a href="index.html">总版</a><a href="套卷.html">套卷台</a><a href="错题.html">错题版</a><a href="速记.html">速记版</a>'
+NAV = ('<a href="index.html">总版</a><a href="真题套卷.html">在线套卷</a><a href="套卷.html">套卷台</a><a href="错题.html">错题版</a><a href="速记.html">速记版</a>'
        '<a href="定理索引.html">定理索引</a><a href="温故.html">温故版</a><a href="#" onclick="CDNight();return false">夜读</a>')
 
 
@@ -80,7 +80,7 @@ def front(idx, esc, EX):
     <h3 style="margin-top:.9em">每期四步</h3>
     <ol class="steps"><li>头版先答三道旧题。</li><li>读讲解。卷面按 H 遮住，自己写完再对。</li><li>末尾做实战，题和考法都只放在这里。</li><li>合上前答「今日考你」，答错的会回来。</li></ol>
     <h3 style="margin-top:.9em">工具</h3>
-    <ul class="tools-l"><li><a href="套卷.html">套卷台</a>：120 分账本、卷子顺序、答题卡、失分回到第几期</li><li><a href="错题.html">错题版</a>：实战做错的</li><li><a href="速记.html">速记版</a>：每期要记的行和易错，考前过</li><li><a href="定理索引.html">定理索引</a>：全部定理，可遮住自测</li><li><a href="温故.html">温故版</a>：旧题循环</li></ul>
+    <ul class="tools-l"><li><a href="真题套卷.html">在线套卷</a>：2010–2026 整卷，可开解答按钮、当场结算、计时</li><li><a href="套卷.html">套卷台</a>：120 分账本、卷子顺序、答题卡、失分回到第几期</li><li><a href="错题.html">错题版</a>：实战做错的</li><li><a href="速记.html">速记版</a>：每期要记的行和易错，考前过</li><li><a href="定理索引.html">定理索引</a>：全部定理，可遮住自测</li><li><a href="温故.html">温故版</a>：旧题循环</li></ul>
   </aside>
 </div>
 <p class="hint" style="margin:.3em 0 .8em">每期右下的数字是这部分内容在 2016–2026 的卷子上平均每卷多少分。按顺序读，别跳：后面的期会直接用前面的结论。</p>
@@ -211,6 +211,7 @@ def quick(idx, issues, inline, esc, TRAPS):
 def exams(idx, EX):
     return HEAD.format(title='套卷台 · 重读报') + top('套卷台') + f'''
 <h1 class="pg-h" style="border-top:5px solid var(--rule);padding-top:.2em">读完报，上真题</h1>
+<p class="sub-lead"><a href="真题套卷.html" style="font-weight:700">→ 打开在线套卷：不用 PDF，网页上直接做，交卷后成绩自动进下面的账本</a></p>
 <p class="sub-lead" id="sum"></p>
 <div class="xm-grid">
  <section>
