@@ -8,6 +8,10 @@ for i,(t,c) in enumerate((('① 经理换不掉','k'),('② 生产率低 → 工
 :::
 contractual notice：合同规定的解雇通知；Long gone are the days … 倒装，老板发一纸通知就能辞人的日子过去了。
 
+**记下的句型**：Long gone are the days when + 旧现象，完全倒装，把 Long gone 提前强调一去不返。作文可以直接搬。
+
+**一句拆开**：a handbrake on boosting productivity，handbrake 是比喻，等于拖后腿。全文主线：保护工人的法 → 误伤企业 → 反噬经理和工人 → 拖累社会 → 澳新补救。
+
 :::q 2022 T4 | ✗ | 36D 37A 38D 39B 40C，我错 37、38。
 37 没把 But 那层读出来；38 推断太远。限时 18 分写不完，这篇用了 26 分。
 :::

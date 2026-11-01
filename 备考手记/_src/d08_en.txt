@@ -17,6 +17,10 @@ s.text(14,20,'不要全译成「在…的时候」',12,'r')
 
 **我的三个扣分**：came out of the war 译成「从战争中出来」，别扭；within five-year periods 漏掉「每五年」；by which 没拆。
 
+**记下的词**：watershed（分水岭）、enrollment、arising out of、resulted in、unevenly。
+
+**翻译的结构信号**：But after the war 转折换主语；These demands resulted in 结果句，These 回指前面一串。
+
 :::q 2021 翻译 | △ | 自评 6 分 / 10。
 意思都有，但时间说不准。
 :::

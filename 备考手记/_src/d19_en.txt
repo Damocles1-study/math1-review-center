@@ -14,6 +14,10 @@ for i,(a,b) in enumerate((('很多大人带','母亲一人'),('十几个照料�
 
 坑全在「对比的另一边」。
 
+**记下的词**：hunter-gatherers、contented、baby-wearing、the norm、alloparenting。
+
+**一句拆开**：Parenting tips … may be the key to …, researchers have suggested，新闻稿先说结论、消息来源放句末；前面一整句其实是宾语。to 是介词，后接 bringing up。全文口气都是 may、could、likely，作者不说死。
+
 :::q 2024 T2 | ✓ | 26A 27B 28D 29C 30B，我全对。
 第 19 天第一次限时内全对。文章好读是一部分原因。
 :::

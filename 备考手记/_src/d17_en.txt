@@ -1,11 +1,16 @@
 @read 英语 2023 Text 2：短租热与住房荒（评级 S）
 @spent 实用 1 小时 30 分
 **主旨**：个人短租无妨，开发商借短租之名开酒店才要管；登记治标，多建房治本。
+
 **骨架**：问题 → 一州之例 → 正反两人 → 专家定性 → 对策 + 评价。和同卷 T1 同一副骨架（Hardy/Quinn/Branch ≈ Taylor/Castle/Horn）。
 
 - **27 双重否定**：prevent … from 否定，要翻两次。
 - **28** 选项把 Castle 的话安错人。
 - **30 让步转折**：态度题，取转折后。
+
+**记下的词**：took off、record-high、inventory、swaths of、flip for a fortune、vacancy rate、unchecked、strained。
+
+**一句拆开**：with record-high home prices … 是原因状语，主干 there's an increased urgency；that 从句里三个动作连成链：come in → buy up swaths of housing → to flip for a fortune。
 
 :::q 2023 T2 | ✗ | 26A 27D 28B 29C 30D，我 27、30 错。
 双重否定没翻；30 把让步当态度，和第二天那道同一个错。

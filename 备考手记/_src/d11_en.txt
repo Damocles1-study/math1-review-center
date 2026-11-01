@@ -12,6 +12,8 @@ s.text(70,60,'41F',11,'r','middle');s.text(200,60,'42C',11,'k','middle');s.text(
 - 42 C 前半让步 While … deserve sympathy 对她的 I agree … sad and cruel；后半对 led them to major in biological science。
 - B、E 多余。
 
+**记下的办法**：先读六个人名后的第一句定立场；红色虚线是对应线索句，每人答完回去对线索链，别只对字母。
+
 :::q 2022 新题型 | ✓ | 41F 42C 43A 44D 45G，我全对，用了 12 分钟。
 这个题型好拿分，以后放在阅读前做。
 :::

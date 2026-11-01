@@ -10,6 +10,10 @@ school leaver = 中学毕业直接工作的人，不是辍学者。这词不认�
 :::sk 400 66 | 全文态度画在一把尺上：既不是学位万能，也不是学位无用
 s.arrow(14,36,386,36,'k',1.1);s.dot(40,36,3);s.dot(360,36,3);s.dot(200,36,4,'r');s.text(40,24,'万能',12,'k','middle');s.text(360,24,'无用',12,'k','middle');s.text(200,24,'不适合所有人',12,'r','middle');s.text(200,58,'作者在这',11,'r','middle')
 :::
+**记下的词**：pen（动词，填写）、weigh up、the third stage（高等教育）。
+
+**一句拆开**：句首 As 从句里 pen 和 weigh up 并列，主句 it may be worth considering，后接两个并列宾语从句；26 题干就化用了这两个从句。我第一遍把 pen 读成了名词。
+
 :::q 2022 T2 | ✗ | 26C 27B 28C 29D 30A，我 28 选 B。
 school leaver 读偏。选项同义替换密集，今天词比题难。
 :::

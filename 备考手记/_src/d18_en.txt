@@ -14,6 +14,10 @@ s.text(14,50,'Algorithms used to simulate … are creating',12,'r');s.under(14,5
 :::
 **一句话**：翻译不是查字典，先定这篇是哪一行。
 
+**记下的词**：digital marketing、target customer group、revealing、preferences、put out、generate content。
+
+全文 5 个画线句之外还有 6 个长句，它们给画线句定义项和指代，翻译前要先读。
+
 :::q 2023 翻译 | △ | 自评 7/10。
 「营销人员」对了，但 49 的 If 条件后的两个谓语漏了一个。
 :::

@@ -10,6 +10,10 @@ s.arrow(184,23,216,23,'r');s.arrow(184,55,216,55,'b');s.text(222,27,'11 As a res
 :::
 说明文没有转折立场，这条语义链几乎是直的。每个空先问和谁是什么关系。
 
+**记下的词**：caravan、pilgrims、strategically placed、served as、commodities。
+
+**一句拆开**：C is a combination of A and B，A 后面挂 which 从句，B 后面贴同位语。and 连的是两个波斯词，中间一大串只是释义。
+
 :::q 2023 完形 | ✓ | 1C 2A 3D 4C 5C 6A 7B 8B 9A 10D 11D 12C 13C 14B 15A 16B 17D 18A 19D 20A，我错 4 个。
 比 2020 好，已经会先读首句和判断关系。
 :::

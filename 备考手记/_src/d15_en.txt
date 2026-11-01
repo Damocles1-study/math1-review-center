@@ -10,6 +10,10 @@
 :::sk 400 72 | 人物题就拼「谁说的、说谁」。我习惯边读边在卷边写立场
 s.box(30,14,110,26,'r');s.text(85,32,'Hardy 能源',12,'r','middle',rot=0);s.box(250,14,110,26,'b');s.text(305,32,'Quinn 反对',12,'b','middle',rot=0);s.bend(140,28,250,28,k=-8,c='k');s.text(180,62,'22A 把话安错人',12,'r','middle')
 :::
+**记下的词**：sympathises with、where your bread is buttered、sharply dispute、casually dismiss、barely half、disproportionate influence。
+
+**一句拆开**：首句 may have cooled … but … 是让步转折，since 是介词「自……以来」。temperature 双关，前半说天气，后半落到会议的火药味，21 题 C 的 atmosphere 就是这层意思。
+
 :::q 2023 T1 | ✗ | 21C 22B 23A 24C 25D，我 22 选 A。
 把 Hardy 的话安到 Quinn 头上。
 :::
