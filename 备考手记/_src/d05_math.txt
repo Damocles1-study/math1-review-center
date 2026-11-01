@@ -1,0 +1,94 @@
+@read 重读报 第 09–10 期：证明题三件事；不定积分
+@spent 实用 3 小时（积分表默写 25 分钟）
+# 一、证不等式
+固定流程：**移项令差函数 → 求导 → 看符号**，看不出就再求一阶。
+
+- 单调法：$F=(1+x)\ln(1+x)-\arctan x$，$F(0)=0$，$F'=\ln(1+x)+\dfrac{x^2}{1+x^2}\gt0$。
+- 最值法：$e^x\ge1+x$，$F=e^x-1-x$ 在 0 处取最小值 0。
+
+# 二、根的个数：画山形数交点
+存在靠零点定理，唯一靠单调，**带参数先分离**。
+:::sk 310 120 | $\ln x=kx$ 分离成 $k=\frac{\ln x}{x}$：山顶 $(e,\frac1e)$。水平线 $y=k$ 和山有几个交点，就有几个根
+ox,oy=40,86;X=lambda x:ox+x*30;Y=lambda y:oy-y*150
+s.axes(ox,oy,14,298,116,8,yl='')
+s.plot(lambda x:math.log(x)/x,0.65,8.4,X,Y,n=11)
+s.dot(X(math.e),Y(1/math.e),2.6,'r');s.text(X(math.e)+6,Y(1/math.e)-3,'(e, 1/e)',12,'r')
+s.line(16,Y(.2),294,Y(.2),'b',1,dash='5 3');s.text(262,Y(.2)-4,'0<k<1/e',11,'b')
+s.line(16,Y(-.1),294,Y(-.1),'g',1,dash='5 3');s.text(236,Y(-.1)+13,'k≤0 一个根',11,'g')
+s.line(16,Y(.46),294,Y(.46),'g',1,dash='5 3');s.text(180,Y(.46)+2,'k>1/e 无根',11,'g')
+:::
+结论：$k\gt\frac1e$ 无根；$k=\frac1e$ 或 $k\le0$ 一个；$0\lt k\lt\frac1e$ 两个。
+
+# 三、中值等式：还原辅助函数
+把 $\xi$ 换成 $x$，反问这是谁的导数的因子，然后用罗尔。**今天解决了三天前的卡点**：
+| 要证 | $F(x)$ |
+| $f'+\lambda f=0$ | $e^{\lambda x}f$ |
+| $f'+g'f=0$ | $e^{g}f$ |
+| $\xi f'+nf=0$ | $x^nf$ |
+| $\xi f'-nf=0$ | $f/x^n$ |
+| $f'g+fg'=0$ | $fg$ |
+| $f'g-fg'=0$ | $f/g$ |
+
+记法：$(x^nf)'=x^{n-1}(xf'+nf)$；$(e^{g}f)'=e^g(f'+g'f)$。全是乘积求导，提公因子。
+
+:::eg 例：两个中值。$f(0)=0,f(1)=1$
+(1) 零点定理得 $f(\xi)=1-\xi$。
+(2) 在 $[0,\xi],[\xi,1]$ 上各用拉格朗日：$f'(\eta)=\frac{1-\xi}{\xi}$，$f'(\zeta)=\frac{\xi}{1-\xi}$，相乘为 1。
+第 (1) 问就是为第 (2) 问准备的分点。
+:::
+:::sk 240 120 | 分点 $\xi$ 把区间切成两段，两条割线的斜率正好互为倒数
+s.line(20,106,226,106,'k',1);s.line(30,114,30,12,'k',1)
+s.curve([(30,106),(60,70),(110,50),(150,40),(210,20)])
+s.line(30,106,110,50,'r',1.1,dash='4 3');s.line(110,50,210,20,'b',1.1,dash='4 3')
+s.line(110,50,110,106,'g',.8,dash='3 3');s.text(106,118,'ξ',13);s.text(206,118,'1',12);s.text(18,118,'0',12)
+s.text(52,70,'η段',12,'r');s.text(156,28,'ζ段',12,'b')
+:::
+==每次用中值定理前「连续、可导」这句都要写，这是采分点。==
+
+# 四、不定积分：求导的逆运算，靠认形状
+$F'=f$，$\int f\,dx=F+C$。连续函数一定有原函数。积分表比导数表多这几个要专门背：
+| 被积 | 结果 |
+| $\tan x$ | $-\ln\vert\cos x\vert+C$ |
+| $\cot x$ | $\ln\vert\sin x\vert+C$ |
+| $\sec x$ | $\ln\vert\sec x+\tan x\vert+C$ |
+| $\csc x$ | $\ln\vert\csc x-\cot x\vert+C$ |
+| $\frac{1}{a^2+x^2}$ | $\frac1a\arctan\frac xa+C$ |
+| $\frac{1}{\sqrt{a^2-x^2}}$ | $\arcsin\frac xa+C$ |
+| $\frac{1}{\sqrt{x^2+a^2}}$ | $\ln(x+\sqrt{x^2+a^2})+C$ |
+| $\frac{1}{x^2-a^2}$ | $\frac{1}{2a}\ln\vert\frac{x-a}{x+a}\vert+C$ |
+
+## 四招
+1. **凑微分**：复合函数 × 里层导数。$\int\frac{\ln^2x}{x}dx=\frac{\ln^3x}{3}+C$。配方：$\int\frac{dx}{x^2+2x+5}=\frac12\arctan\frac{x+1}{2}+C$。
+2. **换元去根号**：$\sqrt{a^2-x^2}$ 令 $x=a\sin t$；$\sqrt{a^2+x^2}$ 令 $x=a\tan t$；$\sqrt{x^2-a^2}$ 令 $x=a\sec t$；$\sqrt[n]{ax+b}$ 令它 $=t$。
+3. **分部**：$\int u\,dv=uv-\int v\,du$，「反对幂指三」靠前的当 $u$。循环型解方程：$\int e^x\sin x\,dx=\frac12e^x(\sin x-\cos x)+C$。
+4. **有理拆项**：$(x-a)$ 对 $\frac{A}{x-a}$；$(x-a)^2$ 对两项；不可约二次对 $\frac{Ax+B}{x^2+px+q}$。
+
+:::sk 240 110 | 换元后回代用直角三角形：$x=\tan t$ 时画一个，$\sin t$ 直接读出来
+s.line(40,90,190,90,'k',1.2);s.line(190,90,190,20,'k',1.2);s.line(40,90,190,20,'k',1.2)
+s.line(180,90,180,80,'k',.9,over=False);s.line(180,80,190,80,'k',.9,over=False)
+s.text(112,106,'1',13);s.text(196,60,'x',14);s.text(76,46,'√(1+x²)',13,'r',rot=-22);s.text(62,86,'t',13)
+:::
+
+# 五、做题
+:::q 实战 09 · 自编 | △ | $xe^{-x}=k$ 在 $(0,+\infty)$ 内恰有两根，$k$ 范围？
+画山形：$g(0^+)=0$，$x=1$ 山顶 $\frac1e$，$+\infty$ 时趋 0。我写成 $k\lt\frac1e$，漏了 $k\gt0$。答案 $0\lt k\lt\frac1e$。
+:::
+:::q 实战 09 · 自编 | ✓ | 证 $\xi f'(\xi)+2f(\xi)=0$（$f(1)=0$）的辅助函数？
+查表 $x^2f$，$F(0)=F(1)=0$，选 B。
+:::
+:::q 实战 10 · 自编 | ✓ | $\int x\cos x\,dx$
+$x\sin x+\cos x+C$。
+:::
+:::q 实战 10 · 自编 | ✓ | $\int\frac{dx}{x(x+1)}$
+$\ln\vert\frac{x}{x+1}\vert+C$。
+:::
+:::q 例题 · 三角换元 | ✗ | $\int\frac{dx}{x^2\sqrt{1+x^2}}$
+令 $x=\tan t$ 到 $\int\frac{\cos t}{\sin^2t}dt$ 都对，然后这一步我不会，其实是 $\int\frac{d\sin t}{\sin^2t}=-\frac{1}{\sin t}$，又是凑微分。回代 $\sin t=\frac{x}{\sqrt{1+x^2}}$，结果 $-\frac{\sqrt{1+x^2}}{x}+C$。
+:::
+:::stuck
+积分表背了很快会忘，明早单词后加 10 分钟默写。
+:::
+@recall $\int\frac{dx}{\sqrt{x^2+a^2}}$？ || $\ln(x+\sqrt{x^2+a^2})+C$。
+@recall $f'(\xi)=f(\xi)$ 的辅助函数？ || $e^{-x}f(x)$。
+@recall $\int\ln x\,dx$？ || $x\ln x-x+C$。
+@recall 什么情况用两次拉格朗日？ || 结论有两个不同中值，先找分点。

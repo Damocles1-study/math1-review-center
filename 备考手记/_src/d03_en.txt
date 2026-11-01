@@ -1,0 +1,17 @@
+@read 英语 2018 Text 4：美国邮政（评级 S，公共政策范本）
+@spent 实用 1 小时 30 分
+**骨架**：算账（连亏十年，1200 亿未备资金负债）→ 病根（技术砍需求 + 监管不许灵活）→ 利益集团施压，改革失败 → 新法案是创可贴 → 真问题还在。
+
+- **36 果—因配对**：财务问题的成因，要找 a regulatory structure that denies flexibility，不是银行。
+- **37** 施压 → 改革失败 → 推迟现代化，顺链找。
+- **38 the latter 单挑**：回指最后提到的那个。
+- **39 同框两个 sign**：一个是好迹象，一个是坏迹象，看清题干问哪个。
+- **40 标题**：只是创可贴。
+
+:::note
+unfunded liabilities 不是短期债务，是已承诺、没备钱的长期负债。
+:::
+:::q 2018 T4 | △ | 36B 37A 38A 39C 40D，我 39 在 C、D 之间猜对。
+没读透 sign 的对象。
+:::
+**生词**：unfunded、liabilities、stakeholders、modernization。

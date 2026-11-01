@@ -1,0 +1,19 @@
+@read 英语 2021 Text 4：网络中立要靠国会立法（评级 S）
+@spent 实用 1 小时 35 分（句子长，平均 28 词）
+**骨架**：担心宽带商偏袒 → FCC 2017 令废规则 → 法院插一手，没解决 → 只有国会能定。首尾镜像。
+
+- **36** 担忧取首段具体行为：favor affiliated websites ⟹ show partiality。C 是末段词搬过来。
+- **37 立场看动作**：anti-regulatory 原文形容保守派，但 FCC 三个动作（废规则、否认权力、不许州管）加起来就是。
+- **38 such as 挂靠**：举的是 behavior 的例子，AT&T 是反竞争样本。
+- **39** 同义改写 unhinged ⟹ out of touch。
+- **40 授权链**：国会 → 授权 FCC → 管住宽带商。
+
+:::sk 400 54 | 授权链谁对谁，选项爱换人
+for i,t in enumerate(('国会','FCC','宽带商')):
+    s.box(30+i*130,14,90,26,'r' if i==0 else 'k',1);s.text(75+i*130,32,t,12.5,'r' if i==0 else 'k','middle',rot=0)
+    if i<2: s.arrow(120+i*130,27,160+i*130,27)
+:::
+:::q 2021 T4 | ✗ | 36A 37D 38D 39B 40C，我 38 选 C。
+把 protect against 的主语换了。
+:::
+**生词**：affiliated、partiality、unhinged、explicit authority。

@@ -1,0 +1,118 @@
+@read 重读报 第 11–12 期：定积分；反常积分与应用
+@spent 实用 3 小时 30 分（今天实战题多，超时半小时，午饭晚了）
+# 一、定积分是和式的极限
+$$\int_a^bf(x)dx=\lim_{\lambda\to0}\sum f(\xi_i)\Delta x_i$$
+:::sk 280 120 | 切细再加：矩形越窄，锯齿越贴曲线。见到 $n$ 项和就想这张图
+s.line(16,102,270,102,'k',1);s.line(30,110,30,10,'k',1)
+s.curve([(30,70),(90,42),(160,34),(220,46),(258,60)])
+xs=[60+22*i for i in range(9)];ys=[58,48,42,38,35,36,39,44,50]
+for x,y in zip(xs,ys):
+    s.line(x,102,x,y,'p',.8);s.line(x,y,x+22,y,'p',.8);s.line(x+22,y,x+22,102,'p',.8)
+s.text(106,88,'f(ξ_{i})Δx_{i}',12,'b');s.text(58,116,'a',12);s.text(256,116,'b',12)
+:::
+**实用形式**：$\lim\limits_{n\to\infty}\dfrac1n\sum\limits_{k=1}^{n}f(\frac kn)=\int_0^1f(x)dx$。$\sum\frac{1}{n+k}=\frac1n\sum\frac{1}{1+k/n}\to\int_0^1\frac{dx}{1+x}=\ln2$。
+
+性质：线性、可加、保序、估值。**积分中值定理**：$f$ 连续 ⟹ 存在 $\xi\in[a,b]$，$\int_a^bf=f(\xi)(b-a)$。
+
+算不出来的积分通常也不用算：限相同比被积函数，限不同拆开看多出来那段的符号。
+
+:::def 区间再现
+$\int_a^bf(x)dx=\int_a^bf(a+b-x)dx$，两种写法相加常能消分母。
+例：$I=\int_0^{\pi/2}\dfrac{\sin x}{\sin x+\cos x}dx$，再现后相加 $2I=\frac\pi2$，$I=\frac\pi4$。
+:::
+
+# 二、把微分和积分接起来
+:::def 变限积分求导 + 牛—莱
+$\dfrac{d}{dx}\int_{\psi(x)}^{\varphi(x)}f(t)dt=f(\varphi)\varphi'-f(\psi)\psi'$
+$\int_a^bf=F(b)-F(a)$
+:::
+==被积函数含 $x$ 时不能直接套==：$\int_0^x(x-t)f(t)dt$ 先拆开提 $x$，得 $F'=\int_0^xf$，$F''=f(x)$；$\int_0^xf(x-t)dt$ 先换元 $u=x-t$。
+
+例：$\lim\limits_{x\to0}\dfrac{\int_0^{x^2}\sin t\,dt}{x^4}$ 洛一次 $\frac{2x\sin x^2}{4x^3}\to\frac12$。第三天那道 2010-9 现在才真懂。
+
+# 三、计算工具
+- 换元**换上下限，不回代**；分部 $uv\vert_a^b-\int v\,du$。
+- 对称：奇函数 $\int_{-a}^a=0$；偶函数 $=2\int_0^a$。周期：$\int_a^{a+T}=\int_0^T$。
+- 圆的方程看面积：$\int_{-1}^1\sqrt{1-x^2}dx=\frac\pi2$。
+- 绝对值在零点拆区间。
+- 点火：$\int_0^{\pi/2}\sin^nx\,dx=\dfrac{n-1}{n}\cdot\dfrac{n-3}{n-2}\cdots$，偶数末尾 $\frac12\cdot\frac\pi2$，奇数末尾 $\frac23$。$\sin^4$：$\frac34\cdot\frac12\cdot\frac\pi2=\frac{3\pi}{16}$。
+
+# 四、反常积分：一快一慢
+:::def 定义
+无穷限和瑕积分都是取极限。==区间内部有瑕点或两端无穷必须拆开，每段都收敛才算收敛。==
+:::
+| $p$ 积分 | 收敛 | 发散 |
+| $\int_1^{+\infty}\frac{dx}{x^p}$ | $p\gt1$ | $p\le1$ |
+| $\int_0^1\frac{dx}{x^p}$ | $p\lt1$ | $p\ge1$ |
+
+:::sk 300 110 | 无穷远要衰减得足够快，瑕点要爆炸得足够慢。$\frac1x$ 正好卡在中间，两边都发散
+ox,oy=70,92;X=lambda x:ox+x*50;Y=lambda y:oy-y*26
+s.axes(ox,oy,50,294,102,6,yl='')
+s.plot(lambda x:1/x,0.31,4.3,X,Y,n=9)
+s.plot(lambda x:1/x**2,0.56,4.3,X,Y,n=8,c='b')
+s.plot(lambda x:1/x**.5,0.1,4.3,X,Y,n=8,c='r')
+s.line(X(1),oy,X(1),Y(1),'g',.9,dash='3 3');s.text(X(1)-3,oy+13,'1',12)
+s.text(X(4.3)-8,Y(1/4.3**.5)-5,'1/√x',12,'r');s.text(X(4.3)-8,Y(1/4.3)-2,'1/x',12);s.text(X(3.3),oy-3,'1/x²',12,'b')
+:::
+判敛只看奇点处的等价无穷小。**对数奇点从不影响收敛。**
+记住：$\int_0^{+\infty}x^ne^{-x}dx=n!$，$\int_0^{+\infty}e^{-x^2}dx=\frac{\sqrt\pi}{2}$（推导要等后面学极坐标）。
+:::note
+$\int_{-1}^{1}\frac{dx}{x^3}$ 不能说奇函数得 0！0 是瑕点，发散。对称性只用于已知收敛的积分。
+:::
+
+# 五、面积、体积、弧长
+| 量 | 公式 |
+| 面积 | $\int(f-g)dx$；极坐标 $\frac12\int r^2d\theta$ |
+| 绕 $x$ 轴 | $\pi\int f^2dx$ |
+| 绕 $y$ 轴（柱壳） | $2\pi\int x\vert f\vert dx$ |
+| 弧长 | $\int\sqrt{1+y'^2}dx=\int\sqrt{x'^2+y'^2}dt=\int\sqrt{r^2+r'^2}d\theta$ |
+| 旋转面 | $2\pi\int\vert y\vert ds$ |
+
+:::sk 330 110 | 左：极坐标扇形 $\frac12r^2d\theta$。右：柱壳，一层薄壳展开是 $2\pi x\cdot f(x)\cdot dx$
+s.line(30,90,150,90,'k',1);s.dot(30,90,2)
+s.line(30,90,124,44,'k',1);s.line(30,90,136,62,'k',1);s.curve([(124,44),(132,53),(136,62)],'r',1.5)
+s.text(84,52,'r',13);s.text(108,96,'dθ',0.1);s.text(60,84,'dθ',12,'b')
+s.circle(240,70,50,'k',1,ry=14);s.circle(240,70,28,'r',1,ry=8);s.circle(240,70,34,'r',1,ry=10)
+s.line(190,70,190,28,'g',.9);s.line(290,70,290,28,'g',.9);s.circle(240,28,50,'g',.9,ry=14,dash='3 3')
+s.line(240,14,240,104,'k',1,dash='4 3');s.text(246,104,'x',12,'r');s.text(296,48,'f(x)',12,'g')
+:::
+心形线 $r=1+\cos\theta$ 面积：$\int_0^\pi(1+\cos\theta)^2d\theta=\frac{3\pi}{2}$。$y=\sin x$：$V_x=\frac{\pi^2}{2}$，$V_y=2\pi^2$。摆线一拱长 8。
+
+# 六、做题
+:::q 实战 11 · 2010-10 | ✗ | $\int_0^{\pi^2}\sqrt x\cos\sqrt x\,dx$
+令 $t=\sqrt x$，$dx=2t\,dt$，得 $2\int_0^\pi t^2\cos t\,dt$。第一次上限忘了换，还写 $\pi^2$。分部两次得 $-4\pi$。
+:::
+:::q 实战 11 · 2012-10 | ✓ | $\int_0^2x\sqrt{2x-x^2}dx$
+配方，$t=x-1$：$\int_{-1}^1(t+1)\sqrt{1-t^2}dt$，奇函数那项 0，剩半圆 $\frac\pi2$。这题很爽。
+:::
+:::q 实战 11 · 2015-10 | ✓ | $\int_{-\pi/2}^{\pi/2}(\frac{\sin x}{1+\cos x}+\vert x\vert)dx$
+前奇后偶，$2\int_0^{\pi/2}x\,dx=\frac{\pi^2}{4}$。
+:::
+:::q 实战 11 · 2011-4 | ✓ | 比较 $\int_0^{\pi/4}\ln\sin x$、$\ln\cot x$、$\ln\cos x$
+$\sin x\lt\cos x\lt1\lt\cot x$，$I\lt K\lt J$。
+:::
+:::q 实战 11 · 2012-4 | ✗ | $I_k=\int_0^{k\pi}e^{x^2}\sin x\,dx$，比较 $I_1,I_2,I_3$。
+不知从哪下手。拆开：$I_2-I_1=\int_\pi^{2\pi}\lt0$；$I_3-I_1$ 是两段相加，后段 $e^{x^2}$ 更大，$\gt0$。$I_2\lt I_1\lt I_3$。
+:::
+:::sk 300 74 | 2012-4 我画的 $e^{x^2}\sin x$：波越来越高，后一拱压过前一拱
+s.line(14,40,290,40,'k',1)
+s.curve([(24,40),(54,31),(84,40)]);s.curve([(84,40),(124,56),(164,40)]);s.curve([(164,40),(214,8),(264,40)])
+s.text(54,28,'+',12,'b');s.text(120,70,'−  (更大)',12,'r');s.text(210,6,'',1);s.text(214,24,'+ (再大)',12,'b')
+s.text(84,54,'π',11);s.text(160,34,'2π',11);s.text(264,54,'3π',11)
+:::
+:::q 实战 11 · 2014-10 | ✗ | 周期 4 的可导奇函数，$f'=2(x-1)$，$x\in[0,2]$，求 $f(7)$。
+$f(7)=f(-1)=-f(1)$。$f(0)=0$，$f(1)=\int_0^12(x-1)dx=-1$，所以 1。我把周期挪到 $f(3)$ 就停了。
+:::
+:::q 实战 12 · 2013-12 | ✓ | $\int_1^{+\infty}\frac{\ln x}{(1+x)^2}dx$
+分部，第一项 0，拆项得 $\ln2$。
+:::
+:::q 实战 12 · 2011-9 | ✓ | $y=\int_0^x\tan t\,dt$（$0\le x\le\frac\pi4$）的弧长
+$\sqrt{1+\tan^2x}=\sec x$，$\int_0^{\pi/4}\sec x\,dx=\ln(1+\sqrt2)$。
+:::
+:::q 实战 12 · 2010-3 | △ | $\int_0^1\frac{\sqrt[m]{\ln^2(1-x)}}{\sqrt[n]{x}}dx$ 的敛散与 $m,n$ 的关系？
+选了 D（都无关），但 $x\to1^-$ 那段是看点评才确定的。对数奇点不影响收敛，记。
+:::
+@recall $\frac{d}{dx}\int_0^{x^2}\sin t\,dt$？ || $2x\sin x^2$。
+@recall $\int_0^{+\infty}\frac{dx}{x^p}$ 收敛吗？ || 对任何 $p$ 都发散，两头条件矛盾。
+@recall 柱壳法公式？ || $2\pi\int_a^bx\vert f(x)\vert dx$。
+@recall 换元做定积分要注意？ || 上下限跟着换，不回代。

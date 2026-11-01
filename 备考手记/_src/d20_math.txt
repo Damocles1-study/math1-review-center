@@ -1,0 +1,85 @@
+@read 重读报 第 36–37 期：大数定律与抽样；估计与检验。全部 37 期读完
+@spent 实用 3 小时（读完最后一页时看了下时间，正好 11:30）
+# 一、切比雪夫与大数定律
+$P(\vert X-EX\vert\ge\varepsilon)\le\dfrac{DX}{\varepsilon^2}$。$EX=5,DX=2$：$P(\vert X-5\vert\ge2)\le\frac12$。
+
+依概率收敛：$\lim P(\vert X_n-a\vert\lt\varepsilon)=1$。
+| 定律 | 条件 | 结论 |
+| 切比雪夫 | 独立，方差一致有界 | $\frac1n\sum X_i-\frac1n\sum EX_i\to0$ |
+| 辛钦 | 独立同分布，$\mu$ 存在 | $\frac1n\sum X_i\to\mu$ |
+| 伯努利 | 独立重复 | $\frac{n_A}{n}\to p$ |
+
+# 二、中心极限定理
+独立同分布：$\sum X_i\ \dot\sim\ N(n\mu,n\sigma^2)$。$B(n,p)\ \dot\sim\ N(np,np(1-p))$。
+例：$n=100,\mu=2,\sigma^2=4$：$P(\sum\le220)\approx\Phi(\frac{220-200}{20})=\Phi(1)$。
+
+:::sk 340 88 | 大数定律说平均值往 $\mu$ 收；中心极限定理进一步说，和的形状总是钟形，不管原来长什么样
+s.line(10,72,90,72,'k',1);s.box(22,40,54,32,'k');s.text(50,84,'单个 均匀',11,'k','middle')
+s.arrow(98,56,124,56,'r');s.text(100,48,'相加',11,'r')
+s.line(130,72,210,72,'k',1);s.curve([(136,72),(170,28),(204,72)]);s.text(170,84,'两个 三角',11,'k','middle')
+s.arrow(218,56,244,56,'r');s.text(220,48,'很多',11,'r')
+s.line(250,72,332,72,'k',1);s.curve([(256,72),(274,64),(290,24),(306,64),(326,72)],'b');s.text(292,84,'钟形',11,'b','middle')
+:::
+
+# 三、三大抽样分布
+样本独立同分布。$E\bar X=\mu$，$D\bar X=\frac{\sigma^2}{n}$，$E(S^2)=\sigma^2$（$S^2$ 分母 $n-1$）。
+:::def $\chi^2,t,F$（$X_i\sim N(0,1)$）
+$\chi^2(n)=\sum X_i^2$，$E=n$，$D=2n$，可加。
+$t(n)=\dfrac{X}{\sqrt{Y/n}}$，$Y\sim\chi^2(n)$，关于 0 对称。
+$F(m,n)=\dfrac{U/m}{V/n}$。$\frac1F\sim F(n,m)$；$T^2\sim F(1,n)$。
+:::
+:::def 正态总体
+$\bar X\sim N(\mu,\frac{\sigma^2}{n})$；$\bar X,S^2$ ==独立==；
+$\frac{(n-1)S^2}{\sigma^2}\sim\chi^2(n-1)$；$\frac{\bar X-\mu}{S/\sqrt n}\sim t(n-1)$；$\frac{1}{\sigma^2}\sum(X_i-\mu)^2\sim\chi^2(n)$。
+:::
+**认分布**：凑 $\dfrac{N(0,1)}{\sqrt{\chi^2/n}}$。$\dfrac{X_1+X_2}{\sqrt{X_3^2+X_4^2}}\sim t(2)$。
+$D(S^2)=\frac{2\sigma^4}{n-1}$。
+
+# 四、由样本反猜总体
+**矩估计**：$EX=\bar X$。
+**MLE 四步**：写 $L=\prod f$；取对数；求导令 0；解。
+:::eg 大题：$f=(\theta+1)x^\theta$（$0\lt x\lt1$）
+矩：$EX=\frac{\theta+1}{\theta+2}=\bar X$ ⟹ $\hat\theta=\frac{2\bar X-1}{1-\bar X}$。
+MLE：$\ln L=n\ln(\theta+1)+\theta\sum\ln x_i$，求导 ⟹ $\hat\theta=-\frac{n}{\sum\ln X_i}-1$。
+:::
+:::eg 必须分清：$U(0,\theta)$
+矩 $2\bar X$（无偏）。MLE：$L=\theta^{-n}$ 单调减，求导得不出零点，$\theta$ 越小越好但要盖住所有样本 ⟹ $\max X_i$。
+:::
+:::sk 300 84 | 为什么是 $\max$：$\theta$ 再小就盖不住最大的那个样本，$L$ 变 0
+s.line(14,50,286,50,'k',1.1);s.dot(30,50,2);s.text(26,66,'0',12)
+for x in (64,92,130,152,196): s.dot(x,50,2.6)
+s.dot(226,50,3,'r');s.text(208,40,'max x_{i}',12,'r')
+s.line(226,50,226,20,'r',1,dash='3 3');s.arrow(226,24,262,24,'p',1);s.text(266,28,'θ',13);s.text(120,16,'θ 只能从这里往右',12,'p')
+s.text(150,76,'L=θ^{-n} 随 θ 变小而变大',12,'k','middle')
+:::
+**评价**：无偏 $E\hat\theta=\theta$；有效，方差小；一致，依概率收敛。$aX_1+bX_2$：$a+b=1$ 无偏，$a=b=\frac12$ 最有效。
+
+**置信区间**（$1-\alpha$）：
+| 情形 | 区间 |
+| $\mu$，$\sigma$ 已知 | $\bar X\pm\frac{\sigma}{\sqrt n}u_{\alpha/2}$ |
+| $\mu$，$\sigma$ 未知 | $\bar X\pm\frac{S}{\sqrt n}t_{\alpha/2}(n-1)$ |
+| $\sigma^2$ | $\Bigl(\frac{(n-1)S^2}{\chi^2_{\alpha/2}},\frac{(n-1)S^2}{\chi^2_{1-\alpha/2}}\Bigr)$ |
+
+例：$N(\mu,16)$，$n=16$，$\bar x=50$，半宽 $1.96$，$(48.04,51.96)$。
+
+**假设检验**：弃真 $\alpha$；取伪 $\beta$。$n$ 固定此消彼长，增大 $n$ 才能都小。
+双侧 $\vert U\vert\ge u_{\alpha/2}$ 拒绝。单侧 $H_1:\mu\gt\mu_0$：$\bar X\ge\mu_0+\frac{\sigma}{\sqrt n}u_\alpha$。
+$\alpha=0.01$ 下拒绝 ⟹ $0.05$ 下必拒绝。
+
+# 五、做题
+:::q 实战 36 · 2013-8 | ✗ | $X\sim t(n)$，$Y\sim F(1,n)$，$P(X\gt c)=\alpha$，$P(Y\gt c^2)$
+选 A。$X^2\sim F(1,n)$，$P(X^2\gt c^2)$ 是==两侧之和==，$2\alpha$。
+:::
+:::q 实战 37 · 2014-14 | ✓ | $f=\frac{2x}{3\theta^2}$（$\theta\lt x\lt2\theta$），$c\sum X_i^2$ 无偏，求 $c$。
+$EX^2=\frac52\theta^2$，$c\cdot n\cdot\frac52=1$，$c=\frac{2}{5n}$。
+:::
+:::q 例题 · 两类错误 | △ | $N(\mu,1)$，$n=16$，$\vert\bar X\vert\ge.49$ 拒绝，求 $\alpha$ 及 $\mu=.5$ 时 $\beta$。
+$\alpha=.05$ 对了。$\beta$ 里 $\Phi(4(.49-.5))-\Phi(4(-.49-.5))$ 我把第二项漏了，它虽小（$\Phi(-3.96)$）但要写出来。$\beta\approx.484$。
+:::
+:::stuck
+这三周数学读完一遍。正确率前半（极限、导数）今天回头做已经有点慢。按计划接下来是整卷，错题要回到对应期。
+:::
+@recall $\chi^2(n)$ 的 $E,D$？ || $n,2n$。
+@recall $\frac{\bar X-\mu}{S/\sqrt n}$？ || $t(n-1)$。
+@recall $U(0,\theta)$ 的 MLE？ || $\max X_i$。
+@recall $\sigma$ 未知时 $\mu$ 的区间用？ || $t(n-1)$，$\sigma$ 换 $S$。

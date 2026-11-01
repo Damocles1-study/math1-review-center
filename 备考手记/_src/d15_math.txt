@@ -1,0 +1,99 @@
+@read 重读报 第 25–27 期：二重积分；三重积分；第一类线面积分
+@spent 实用 3 小时 30 分（今天安排了三期，都是「定限」一个动作，所以读得动）
+# 一、二重积分：先画图
+$\iint_Df\,d\sigma$ 是曲顶柱体体积。
+
+:::sk 330 112 | 定限的动作：在 $x$ 处画一条竖线从下往上穿，先碰下限后碰上限
+s.axes(30,96,14,170,108,6,yl='y')
+s.curve([(30,96),(70,86),(110,62),(150,20)]);s.line(30,96,150,20,'k',1.1)
+s.line(92,108,92,28,'r',1.2);s.arrow(92,86,92,60,'r',1.2)
+s.text(100,88,'y=x²',12);s.text(58,60,'y=x',12);s.dot(92,76,2,'r');s.dot(92,57,2,'r')
+s.text(92,106,'',1)
+s.hatch([(30,96),(70,86),(110,62),(150,20)],gap=8)
+s.axes(210,96,194,318,108,6,yl='')
+s.circle(258,70,0.1,'k',.1)
+pts=[(210+48+48*math.cos(t*.42),96-48*math.sin(t*.42)*.0-0) for t in range(0)]
+s.curve([(210,96),(226,62),(258,48),(290,62),(306,96)]);s.line(210,96,258,48,'r',1.1);s.text(232,52,'θ',12,'r')
+s.text(262,44,'r=2cosθ',12);s.text(258,108,'先写 r 的上界',11,'r','middle')
+:::
+| 方式 | 写法 | 信号 |
+| 直角 | $\int_a^bdx\int_{\varphi_1}^{\varphi_2}f\,dy$ | 边界是直线、抛物线 |
+| 极坐标 | $\int_\alpha^\beta d\theta\int_{r_1}^{r_2}f\,r\,dr$（==别漏 $r$==） | 圆、扇形；含 $x^2+y^2$、$\frac yx$ |
+
+**换序**：内层积不出（$\frac{\sin y}{y}$）。限 → 不等式 → 画 $D$ → 重读。$\int_0^1dx\int_x^1\frac{\sin y}{y}dy=\int_0^1\sin y\,dy=1-\cos1$。
+
+$x^2+y^2\le2x$：$r\le2\cos\theta$，$\theta\in[-\frac\pi2,\frac\pi2]$。例：$\iint\sqrt{x^2+y^2}d\sigma=\frac83\int\cos^3\theta\,d\theta=\frac{32}{9}$。
+
+**$\int_0^{+\infty}e^{-x^2}dx=\frac{\sqrt\pi}{2}$ 今天终于证了**：$4I^2=\iint_{\mathbb R^2}e^{-r^2}r\,dr\,d\theta=\pi$。第六天只是记结果。
+
+**对称性**：
+- 普通：$D$ 关于 $y$ 轴对称，$f$ 对 $x$ 奇 ⟹ 0；偶 ⟹ 2 倍。
+- 轮换：$D$ 关于 $y=x$ 对称，$x,y$ 可互换。$\iint y^2=\frac12\iint(x^2+y^2)$。单位圆上 $\iint(x+y^2)d\sigma=\frac\pi4$。
+- $\max,\min,\vert\cdot\vert$：切区域，去符号。
+
+# 二、三重积分
+:::def 三种坐标
+**直角**：投影法 $\iint_Dd\sigma\int_{z_1}^{z_2}f\,dz$（穿针）；截面法 $\int_c^ddz\iint_{D_z}f\,d\sigma$（被积只含 $z$ 且截面好算）。
+**柱**：$dV=r\,dr\,d\theta\,dz$。旋转体、含 $x^2+y^2$。
+**球**：$x=\rho\sin\varphi\cos\theta,\ y=\rho\sin\varphi\sin\theta,\ z=\rho\cos\varphi$，$dV=\rho^2\sin\varphi\,d\rho\,d\varphi\,d\theta$。球、锥、含 $x^2+y^2+z^2$。
+:::
+:::sk 340 130 | 左：穿针，从下面穿入从上面穿出。右：球坐标的 $\rho,\varphi,\theta$，$\varphi$ 从 $z$ 轴往下量
+s.circle(72,28,44,'k',1,ry=10);s.curve([(28,28),(44,72),(72,90),(100,72),(116,28)])
+s.arrow(72,118,72,14,'r',1.3);s.dot(72,90,2.2,'r');s.dot(72,28,2.2,'r');s.text(78,92,'z=x²+y²',11);s.text(78,24,'z=1',11)
+s.circle(72,118,30,'p',.9,ry=7,dash='3 3');s.text(120,120,'投影 D',11,'p')
+ox,oy=236,90
+s.arrow(ox,oy,ox,8,'k',1.1);s.arrow(ox,oy,ox+82,oy,'k',1.1);s.arrow(ox,oy,ox-46,oy+32,'k',1.1)
+s.text(ox+5,14,'z',12);s.text(ox+84,oy+13,'y',12);s.text(ox-58,oy+36,'x',12)
+px,py=ox+40,oy-52
+s.line(ox,oy,px,py,'r',1.3);s.line(px,py,px,oy+14,'g',.8,dash='3 3');s.line(ox,oy,px,oy+14,'g',.8,dash='3 3')
+s.dot(px,py,2.4,'r');s.text(px-6,py-5,'ρ',14,'r');s.bend(ox,oy-30,ox+14,oy-26,k=-3,c='b',arrow=False);s.text(ox+4,oy-36,'φ',13,'b')
+s.bend(ox-18,oy+12,ox+18,oy+6,k=-7,c='b',arrow=False);s.text(ox-4,oy+28,'θ',13,'b')
+:::
+- 截面：$\iiint z\,dV$（$x^2+y^2\le z\le1$）$=\int_0^1z\cdot\pi z\,dz=\frac\pi3$。
+- 柱：同一区域 $\iiint(x^2+y^2)=\frac\pi6$。
+- 球：单位球 $\iiint(x^2+y^2+z^2)=2\pi\cdot2\cdot\frac15=\frac{4\pi}{5}$。
+
+形心：$\bar z=\frac{\iiint z\,dV}{V}$。半球 $\bar z=\frac{\pi/4}{2\pi/3}=\frac38$。
+
+# 三、第一类曲线积分：给铁丝称重
+$\int_Lf\,ds=\int_\alpha^\beta f\sqrt{x'^2+y'^2}dt$，==$\alpha\lt\beta$==，$ds$ 恒正，与走向无关。
+**先代方程**：$\oint_{x^2+y^2=4}(x^2+y^2)ds=4\cdot4\pi=16\pi$。对称和轮换一样能用：$\oint_{x^2+y^2=1}(x^2+xy)ds=\pi$。
+
+# 四、第一类曲面积分：给薄膜称重
+$\iint_\Sigma f\,dS=\iint_Df\sqrt{1+z_x^2+z_y^2}d\sigma$。
+| 曲面 | $dS$ |
+| 上半球面 $z=\sqrt{1-x^2-y^2}$ | $\frac{d\sigma}{z}$ |
+| 锥面 $z=\sqrt{x^2+y^2}$ | $\sqrt2d\sigma$ |
+| 平面 $x+y+z=1$ | $\sqrt3d\sigma$ |
+
+$\iint_{\text{半球}}z\,dS=\pi$；锥面 $\iint(x^2+y^2)dS=\frac{\sqrt2\pi}{2}$。
+
+# 五、做题
+:::q 实战 25 · 2010-4 | ✗ | $\lim\sum\sum\frac{n}{(n+i)(n^2+j^2)}$
+提 $\frac{1}{n^2}$：$\frac{1}{1+i/n}\cdot\frac{1}{1+(j/n)^2}$，单位正方形。我选 A，把限写成了 $\int_0^x$。答案 D。
+:::
+:::q 实战 25 · 2014-3 | ✗ | $\int_0^1dy\int_{-\sqrt{1-y^2}}^{1-y}f\,dx$ 的等价写法。
+没画图硬写，错。画了才看见：第一象限三角形 + 第二象限四分之一圆。C 漏 $r$，选 D。==先画图，今天第一句话。==
+:::
+:::sk 200 96 | 2014-3 的区域：一块三角，一块四分之一圆
+s.axes(100,78,20,190,92,6)
+s.line(100,20,158,78,'k',1.2);s.curve([(42,78),(52,48),(72,28),(100,20)])
+s.hatch([(100,20),(158,78),(100,78)],gap=9);s.hatch([(42,78),(52,48),(72,28),(100,20),(100,78)],gap=9,c='b')
+s.text(160,92,'1',11);s.text(38,92,'−1',11);s.text(104,18,'1',11)
+:::
+:::q 实战 25 · 2015-4 | ✓ | $2xy=1,4xy=1,y=x,y=\sqrt3x$ 围成区域的极坐标。
+$r^2\sin2\theta=1$ ⟹ $r=\frac{1}{\sqrt{\sin2\theta}}$，带 $r$，选 B。
+:::
+:::q 实战 26 · 2010-12 | ✓ | $x^2+y^2\le z\le1$ 的形心竖坐标。
+截面 $\pi z$：$\frac{\int z\cdot\pi z}{\int\pi z}=\frac23$。
+:::
+:::q 实战 26 · 2015-12 | △ | $x+y+z\le1$ 第一卦限，$\iiint(x+2y+3z)dV$
+轮换 $=6\iiint z$，这招很爽。但 $\iiint z=\int_0^1z\frac{(1-z)^2}{2}dz=\frac{1}{24}$ 截面面积我算成 $(1-z)^2$，第二次才对。答案 $\frac14$。
+:::
+:::q 实战 27 · 2012-12 | ✓ | $x+y+z=1$ 第一卦限，$\iint y^2dS$
+$\sqrt3\int_0^1y^2(1-y)dy=\frac{\sqrt3}{12}$。
+:::
+@recall 极坐标面积微元？ || $r\,dr\,d\theta$。
+@recall 圆锥 $z=\sqrt{x^2+y^2}$ 对应的 $\varphi$？ || $\frac\pi4$。
+@recall 第一类曲线积分定限要求？ || 下限小于上限。
+@recall 上半球面的 $dS$？ || $\frac{d\sigma}{z}$。

@@ -1,0 +1,17 @@
+@read 英语 2019 Text 3：赋予 AI 以良知（评级 S，抽象难篇）
+@spent 实用 1 小时 30 分
+**骨架**：《弗兰肯斯坦》两百年 → 通用 AI 造不出 → 但伦理问题已经到了 → 大公司表态 → 作者：难，但绕不开。
+
+- **31 引子的桥**：This year marks two centuries 只是时间钩，真正的桥在下一句 foreshadow … ethical questions。开篇引子题看桥接动词。
+- **32 let alone**：神经科学家说连人怎么想都没搞懂，更别提复制。对象太难 = 认识太浅。
+- **33 眼下难 ≠ 永远无解**。
+- **34 作者自己的让步取主句**：让步后面那半句才是态度。
+- **35 标题** Complex But Inevitable。
+
+:::sk 400 66 | 让步句的读法：前半是作者让出去的，态度在后半
+s.box(14,18,190,28,'g');s.text(109,36,'虽然承诺值得肯定',12,'g','middle',rot=0);s.box(204,18,180,28,'r');s.text(294,36,'但还不够',12.5,'r','middle',rot=0);s.text(294,60,'取这里',11.5,'r','middle')
+:::
+:::q 2019 T3 | ✗ | 31A 32B 33C 34D 35A，我 34 选 C。
+34 把让步当态度。
+:::
+**生词**：consciousness、autonomous、reflexes、surveillance、explainable、transparent。

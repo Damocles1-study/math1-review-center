@@ -1,0 +1,18 @@
+@read 英语 2020 Text 3：董事会配额强化特权（评级 S，反方论证范本）
+@spent 实用 1 小时 30 分
+**骨架**：多样性指令是虚伪的道德表态，只利特权者 → 麻州法案是例子 → 合法吗？（不） → 必要吗？（不） → 后果好吗？（不）→ 又骂一遍。
+
+:::sk 400 92 | 驳论文的尺子：作者从三面驳，首尾骂表态。35 题取这把尺
+s.box(150,8,100,24,'r');s.text(200,25,'只是表态',12,'r','middle',rot=0)
+for i,(t,d) in enumerate((('合法性','probably unconstitutional'),('必要性','so what? 自己也在涨'),('后果','Norway 没经验'))):
+    x=14+i*128;s.box(x,50,118,24);s.text(x+59,67,t,12,'k','middle',rot=0);s.text(x+59,88,d,10,'b','middle',rot=0);s.line(200,32,x+59,50,'g',.8)
+:::
+- **31** 例子挂回论点；作者转述时偷塞 elite women。
+- **32** 推测链：probably → likely，所以 may go against。
+- **33** 设问后面那段是在答题。
+- **34** That 回指前句的果。
+
+:::q 2020 T3 | △ | 31A 32C 33D 34C 35B，我全对但 34 猜。
+unqualified 和 less experienced 不敢等同。
+:::
+**生词**：diversity mandates、virtue-signaling、quotas、parity、self-serving。

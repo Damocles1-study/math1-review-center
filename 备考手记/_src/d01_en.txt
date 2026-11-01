@@ -1,0 +1,22 @@
+@read 英语 2018 Text 1：机器人与中产阶级（评级 A，开局找手感）
+@spent 实用 1 小时 30 分（限时 18 分做题，错 2；其余精读）
+**骨架**：提问 → 定性（近一半岗位高风险，中产首当其冲）→ 不是危言耸听 → 三剂药方（教育、创业、缩差距）→ 政策不可或缺。
+
+:::sk 400 84 | 21 题是一把三档尺。问「最」就取顶格。A 是出现过但不在尺子上的人
+s.arrow(14,50,380,50,'k',1.1)
+for x,t,d,c in ((60,'富人','will be fine','k'),(190,'低收入','don’t appeal','k'),(320,'中产','disproportionately','r')):
+    s.dot(x,50,3.5,c);s.text(x,38,t,12.5,c,'middle',rot=0);s.text(x,70,d,10.5,c,'middle',rot=0)
+:::
+**这篇学到的三招**
+- 「最」字题先排尺。
+- 两头挡：先挡悲观（不是危言耸听），再让乐观一步，But 落回中间。A groundless、D can be avoided 都跌到极端。
+- 问题已给，答案数篇幅：题干已写 a problem，方案四段占全文六成，选 possible solutions。
+
+**生词**：disproportionately、upheaval、Luddites、dynamism、indispensable。
+
+:::q 2018 T1 | ✗ | 21D 22C 23A 24D 25B，我 21 选 A、22 选 A。
+21 把点名的政客当群体。22 被第三段前半乐观带跑。其他三个对了。
+:::
+:::stuck
+时间花在读，做题 25 分钟，超时 7 分钟。
+:::

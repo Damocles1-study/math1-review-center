@@ -1,0 +1,16 @@
+@read 英语 2020 完形：别碰我们的烤土豆（评级 B，看考点类型）
+@spent 实用 1 小时 20 分（第一次做完形，错 6）
+完形不是 20 道小题，是一条语义链。首句不设空，先读。
+
+**认文体**：社论，驳论。as we report 是报社自己说话；food police 是给对方起的外号。
+
+:::sk 400 92 | 三声部：每句先标是谁在说，再填空。让步的空只让半步
+for i,(t,c,d) in enumerate((('对方','k','4 guaranteed 替对方说狠话'),('作者驳','r','But where is the evidence'),('作者让','b','11 likely、13 advisable，不是 bound、urgent'))):
+    s.box(14,8+i*26,70,22,c,1);s.text(49,23+i*26,t,12,c,'middle',rot=0);s.text(94,23+i*26,d,12,c)
+:::
+- 作者的转折词一个没挖（Yet、But、However 都在明处）；挖的是让步侧：9 While、14 After all、17 To be fair。
+- 档位尺：likely/bound、advisable/urgent、partially、entirely、conclusive。考的是说到几分。
+
+:::q 2020 完形 | ✗ | 1B 2A 3D 4B 5C 6D 7B 8C 9C 10A 11A 12C 13D 14B 15A 16D 17C 18A 19D 20B，我错 4、8、11、14、17、19。
+都错在不知道这句是谁在说。
+:::

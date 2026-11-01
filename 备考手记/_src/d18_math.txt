@@ -1,0 +1,90 @@
+@read 重读报 第 32–33 期：事件与概率；随机变量。概率（丁篇）开始
+@spent 实用 2 小时 50 分（比积分轻松，是这几天第一次提前结束）
+# 一、事件就是集合
+对偶律：$\overline{A\cup B}=\bar A\bar B$，$\overline{AB}=\bar A\cup\bar B$。
+- 加法 $P(A\cup B)=P(A)+P(B)-P(AB)$；减法 $P(A-B)=P(A)-P(AB)$。
+- 古典：数个数。几何：比度量。
+
+:::sk 220 130 | 约会题：单位正方形，$\vert x-y\vert\le\frac13$ 是中间那条带子，两角三角形不相遇，$1-\frac49=\frac59$
+ox,oy=30,116;L=90
+s.box(ox,oy-L,L,L,'k');s.text(ox-10,oy+12,'0',11);s.text(ox+L-2,oy+12,'1',11);s.text(ox-12,oy-L+6,'1',11)
+s.line(ox+30,oy,ox+L,oy-60,'r',1);s.line(ox,oy-30,ox+60,oy-L,'r',1)
+s.hatch([(ox+30,oy),(ox+L,oy),(ox+L,oy-60)],gap=7,c='g');s.hatch([(ox,oy-30),(ox,oy-L),(ox+60,oy-L)],gap=7,c='g')
+s.text(ox+L+8,oy-70,'相遇',13,'r');s.text(ox+L+8,oy-54,'|x−y|≤1/3',12,'r')
+:::
+
+# 二、条件概率：把样本空间缩小
+$P(B\vert A)=\dfrac{P(AB)}{P(A)}$。乘法 $P(AB)=P(A)P(B\vert A)$。
+
+:::sk 330 118 | 先分情况再加权：画成树，第一层权重，第二层条件概率
+s.dot(20,58,2.5)
+for y,a,b,lab in ((16,'甲 .5','.01','.005'),(58,'乙 .3','.02','.006'),(100,'丙 .2','.05','.010')):
+    s.arrow(20,58,110,y,'k',1);s.text(52,(58+y)/2-4,a,12)
+    s.arrow(112,y,212,y,'r',1);s.text(146,y-4,'次品 '+b,12,'r');s.text(220,y+4,lab,12,'b')
+s.line(216,112,262,112,'b',1);s.text(216,116+0,'',1);s.text(268,62,'求和 .021',12,'b');s.text(268,100,'丙占 10/21',12,'r')
+:::
+:::def 全概率 / 贝叶斯
+完备事件组 $A_i$：$P(B)=\sum P(A_i)P(B\vert A_i)$；$P(A_i\vert B)=\dfrac{P(A_i)P(B\vert A_i)}{P(B)}$。
+信号：两阶段，问结果用全概率；已知结果问原因用贝叶斯。
+:::
+抓阄公平：不放回，第 $k$ 次抽中概率与 $k$ 无关。3 红 2 白第二次红 $=\frac35$。
+
+# 三、独立
+$P(AB)=P(A)P(B)$。两两独立推不出相互独立。至少一个：$1-\prod(1-P(A_i))$。例 $1-0.2\cdot0.3\cdot0.5=0.97$。
+==互斥和独立是两回事==：$P(A),P(B)\gt0$ 时互斥必不独立。
+
+# 四、随机变量
+$F(x)=P(X\le x)$：单调不减、右连续、$F(-\infty)=0,F(+\infty)=1$。$P(a\lt X\le b)=F(b)-F(a)$，$P(X=a)=F(a)-F(a^-)$ ==跳跃高度==。
+
+连续型：$F=\int f$，$\int f=1$，$F'=f$，$P(X=a)=0$。
+
+例：$F=A+B\arctan x$ ⟹ $A=\frac12,B=\frac1\pi$，$f=\frac{1}{\pi(1+x^2)}$。
+
+| 名称 | 分布 | 背景 |
+| $B(n,p)$ | $C_n^kp^k(1-p)^{n-k}$ | $n$ 次试验成功次数 |
+| $P(\lambda)$ | $\frac{\lambda^k}{k!}e^{-\lambda}$ | 稀有事件计数 |
+| $G(p)$ | $(1-p)^{k-1}p$ | 首次成功 |
+| $U(a,b)$ | $\frac{1}{b-a}$ | 等可能 |
+| $E(\lambda)$ | $\lambda e^{-\lambda x}$ | 寿命，无记忆 |
+| $N(\mu,\sigma^2)$ | $\frac{1}{\sqrt{2\pi}\sigma}e^{-\frac{(x-\mu)^2}{2\sigma^2}}$ | 大量因素之和 |
+
+:::sk 300 106 | 钟形曲线：$\sigma$ 小更高更瘦。$\frac{X-\mu}{\sigma}\sim N(0,1)$，$\Phi(-x)=1-\Phi(x)$
+ox,oy=120,90;X=lambda x:ox+x*22;Y=lambda y:oy-y*170
+s.line(10,oy,290,oy,'k',1.1)
+g=lambda m,sd:(lambda x:math.exp(-(x-m)**2/2/sd**2)/(2.5066*sd))
+s.plot(g(0,1),-3.6,3.6,X,Y,n=12,c='k');s.plot(g(0,2),-5,5,X,Y,n=12,c='b');s.plot(g(5,3),-1.2,7.6,X,Y,n=10,c='r',w=1)
+s.line(X(-2),oy,X(-2),oy-48,'g',.8,dash='3 3');s.line(X(2),oy,X(2),oy-48,'g',.8,dash='3 3')
+s.text(X(-2)-8,oy+13,'−2',11);s.text(X(2)-2,oy+13,'2',11);s.text(X(0)+6,18,'N(0,1)',11);s.text(X(-5)-12,oy-24,'N(0,4)',11,'b');s.text(X(5),oy-26,'N(5,9)',11,'r')
+:::
+**$Y=g(X)$ 分布函数法**：$F_Y(y)=P(g(X)\le y)$ 翻译成 $X$ 的范围，积分，求导。别背公式。
+例：$X\sim U(-1,1)$，$Y=X^2$：$F_Y=\sqrt y$，$f_Y=\frac{1}{2\sqrt y}$（$0\lt y\lt1$）。
+
+# 五、做题
+:::q 实战 32 · 2012-14 | ✓ | $A,C$ 互不相容，$P(AB)=\frac12,P(C)=\frac13$，$P(AB\vert\bar C)$
+$AB\subset\bar C$，$\frac{1/2}{2/3}=\frac34$。
+:::
+:::q 实战 32 · 2014-7 | ✓ | $A,B$ 独立，$P(B)=.5,P(A-B)=.3$，$P(B-A)$
+$P(A)\cdot.5=.3$，$P(A)=.6$，$.4\times.5=.2$。
+:::
+:::q 实战 32 · 2015-7 | ✗ | 任意 $A,B$ 恒成立的？
+我选 A 把任意当独立。$P(AB)\le P(A),P(B)$，相加除 2，选 C。
+:::
+:::q 实战 33 · 2010-7 | ✓ | 分段 $F$，$P(X=1)$
+跳跃 $1-e^{-1}-\frac12$，选 C。
+:::
+:::q 实战 33 · 2010-8 | ✓ | $af_1$（$x\le0$）与 $bf_2$（$x\gt0$）拼成密度
+$a\cdot\frac12+b\cdot\frac34=1$，$2a+3b=4$。
+:::
+:::q 实战 33 · 2011-7 | ✗ | 哪个必为密度？
+试函数没试出来。D 是 $(F_1F_2)'$，而 $F_1F_2$ 还是分布函数。==认导数。==
+:::
+:::q 实战 33 · 2013-7 | ✓ | $p_i=P(-2\le X_i\le2)$ 比大小
+画钟形，$p_1\gt p_2\gt p_3$，不查表。
+:::
+:::q 实战 33 · 2013-14 | ✓ | $Y\sim E(1)$，$P(Y\le a+1\vert Y\gt a)$
+无记忆，$P(Y\le1)=1-\frac1e$。
+:::
+@recall 互斥和独立？ || 不同概念，正概率时互斥必不独立。
+@recall $P(X=a)$ 连续型？ || 0。
+@recall 分布函数三条性质？ || 单调不减、右连续、两端 0 和 1。
+@recall 泊松分布律？ || $\frac{\lambda^k}{k!}e^{-\lambda}$。

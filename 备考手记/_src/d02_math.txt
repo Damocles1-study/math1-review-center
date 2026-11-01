@@ -1,0 +1,101 @@
+@read 重读报 第 03–04 期：算极限的工具；导数是一种极限
+@spent 实用 3 小时（读 1:40，例题 0:50，实战 0:30）
+# 一、两个重要极限
+夹逼准则：$g\le f\le h$，两头极限都是 $A$，则 $\lim f=A$。
+
+:::sk 240 150 | 单位圆上比长度：$\sin x\lt x\lt\tan x$（弧长夹在两条竖线之间），由此 $\cos x\lt\frac{\sin x}{x}\lt1$
+ox,oy=36,130;R=150
+s.line(ox,oy,ox+R+24,oy,'k',1.1);s.line(ox,oy,ox,14,'k',1.1)
+a=0.75;pts=[(ox+R*math.cos(t*.2),oy-R*math.sin(t*.2)) for t in range(0,8)]
+s.curve(pts,'k',1.2)
+px,py=ox+R*math.cos(a),oy-R*math.sin(a);tx,ty=ox+R,oy-R*math.tan(a)
+s.line(ox,oy,tx,ty,'k',1.1);s.line(px,py,px,oy,'b',1.4);s.line(ox+R,oy,tx,ty,'r',1.4)
+s.text(px-34,oy-30,'sin x',12,'b');s.text(tx+5,oy-50,'tan x',12,'r');s.text(ox+R-30,oy-55,'x',13,'k');s.text(ox+28,oy-7,'x',11,'g');s.text(ox-3,oy+14,'O',11)
+:::
+$$\lim_{x\to0}\frac{\sin x}{x}=1,\qquad\lim_{x\to\infty}\Bigl(1+\frac1x\Bigr)^x=\lim_{t\to0}(1+t)^{1/t}=e.$$
+
+# 二、等价替换表（今天最重要的一张）
+:::def $x\to0$ 时
+$\sin x\sim\tan x\sim\arcsin x\sim\arctan x\sim\ln(1+x)\sim e^x-1\sim x$
+$1-\cos x\sim\dfrac{x^2}{2}$，$(1+x)^a-1\sim ax$，$a^x-1\sim x\ln a$
+$x$ 可以换成任何趋于 0 的式子。
+:::
+==只能换乘除因子，不能换加减中的一项。==
+:::eg 例：$\lim\limits_{x\to0}\dfrac{\tan x-\sin x}{x^3}$
+我第一反应各换成 $x$，得 0，错。先提因子：$\tan x(1-\cos x)\sim x\cdot\frac{x^2}{2}$，答案 $\frac12$。
+:::
+两招把差变成因子：$e^a-e^b=e^b(e^{a-b}-1)$；$\ln u=\ln(1+u-1)\sim u-1$（$u\to1$）。
+
+# 三、$1^\infty$ 与其他型
+- $1^\infty$：$\lim u^v=e^{\lim(u-1)v}$。例：$(\cos x)^{1/x^2}\to e^{-1/2}$。
+- $\infty/\infty$ 抓大头；$\infty-\infty$ 有理化或通分。$\sqrt{x^2+x}-x\to\frac12$。
+- $n$ 项和用夹逼：$n\cdot$最小项 $\le$ 和 $\le n\cdot$最大项。
+
+# 四、递推数列：三步固定
+:::def 单调有界准则
+单调增有上界、单调减有下界的数列必有极限。
+:::
+证有界 → 证单调 → 两边取极限解方程。==没证存在就取极限要扣分。==
+:::eg 例：$x_1=1,\ x_{n+1}=\sqrt{2+x_n}$
+先猜：$a=\sqrt{2+a}$，$a=2$。归纳证 $0\lt x_n\lt2$。作差 $x_{n+1}-x_n=\dfrac{(2-x_n)(1+x_n)}{\sqrt{2+x_n}+x_n}\gt0$，单调增。取极限解得 $a=2$，$a=-1$ 舍去（==由有界性 $a\ge0$，理由要写==）。
+:::
+:::sk 300 130 | 蛛网图是自己加的：$y=\sqrt{2+x}$ 和 $y=x$ 来回折，点一路爬向交点 2，一看就知道单调有界
+ox,oy=28,104;X=lambda x:ox+x*96;Y=lambda y:oy-y*40
+s.axes(ox,oy,16,ox+270,112,6,xl='x',yl='')
+s.plot(lambda x:math.sqrt(2+x),0,2.7,X,Y,n=6,c='k')
+s.line(X(0),Y(0),X(2.4),Y(2.4),'g',1)
+x=1.0
+for i in range(3):
+    y=math.sqrt(2+x);s.line(X(x),Y(x),X(x),Y(y),'r',1);s.line(X(x),Y(y),X(y),Y(y),'r',1);x=y
+s.dot(X(2),Y(2),2.8,'k');s.text(X(2)+3,oy+15,'2',12);s.line(X(2),Y(2),X(2),oy,'g',.8,dash='3 3')
+s.text(X(1)-3,oy+15,'x_{1}',12);s.text(X(2.45),Y(2.4)+13,'y=x',12,'g')
+:::
+
+# 五、导数 = 瞬时变化率
+:::def 导数的定义
+$f'(x_0)=\lim\limits_{\Delta x\to0}\dfrac{f(x_0+\Delta x)-f(x_0)}{\Delta x}=\lim\limits_{x\to x_0}\dfrac{f(x)-f(x_0)}{x-x_0}$
+:::
+平均速度 → 仪表盘上的瞬时速度。几何上是切线斜率：$y-y_0=f'(x_0)(x-x_0)$；法线斜率取负倒数。
+
+- 可导 ⟹ 连续，反过来不行：$\vert x\vert$ 在 0 处左导数 $-1$、右导数 $1$，一个尖角。
+- 可导 ⟺ 左右导数存在且相等。
+- **分段点必须回定义。** 例：$x^2\sin\frac1x$，$f'(0)=\lim x\sin\frac1x=0$。
+
+定义的变形要会拆：$\dfrac{f(a+2h)-f(a-h)}{h}$ 中间加减 $f(a)$，得 $2f'(a)+f'(a)=3f'(a)$。
+:::note
+$\frac{f(a+h)-f(a-h)}{2h}$ 存在不能推出可导！$\vert x\vert$ 就是反例。定义里必须有定点 $f(a)$。
+:::
+
+# 六、微分
+$\Delta y=A\Delta x+o(\Delta x)$，$dy=A\,dx$。一元：可微 ⟺ 可导，$A=f'(x_0)$。局部用切线代替曲线，误差比 $\Delta x$ 还小一级。
+
+:::sk 240 110 | $\Delta y$ 是曲线涨的，$dy$ 是切线涨的，差的那一小截就是 $o(\Delta x)$
+s.line(16,96,226,96,'k',1)
+s.curve([(24,88),(70,74),(120,56),(170,28),(206,10)])
+s.line(52,88,194,40,'b',1.1)
+s.line(100,63,100,96,'g',.8,dash='3 3');s.line(180,23,180,96,'g',.8,dash='3 3')
+s.line(100,64,180,64,'k',1);s.line(180,64,180,37,'b',1.6);s.line(186,64,186,24,'k',1.1)
+s.text(190,50,'Δy',12);s.text(160,56,'dy',12,'b');s.text(132,78,'Δx',12)
+s.dot(100,64,2.2)
+:::
+
+# 七、做题
+:::q 实战 03 · 2010-1 | ✓ | $\lim\limits_{x\to\infty}\Bigl[\dfrac{x^2}{(x-a)(x+b)}\Bigr]^x$
+$1^\infty$，指数上算 $x\Bigl[\dfrac{x^2}{(x-a)(x+b)}-1\Bigr]\to a-b$，选 $e^{a-b}$。今天第一道真题，就是公式直接套，开心。
+:::
+:::q 实战 04 · 2012-2 | ✗ | $f(x)=(e^x-1)(e^{2x}-2)\cdots(e^{nx}-n)$，求 $f'(0)$。
+我开始想展开或用乘积公式，写到第三项就乱了。答案回定义：$f'(0)=\lim\dfrac{e^x-1}{x}\cdot(1-2)(1-3)\cdots(1-n)=(-1)^{n-1}(n-1)!$。==连乘式在零点求导，回定义，别展开。==
+:::
+:::q 例题 · 反推导数 | △ | $f$ 在 0 连续，$\lim\frac{f(x)}{x}=2$，求 $f(0)$、$f'(0)$。
+$f(0)=0$ 是套昨天的推论（分母→0 分子必→0），但 $f'(0)=2$ 我是猜的，看解答才知道正好代入定义。
+:::
+:::q 例题 · 选择 | ✓ | $f'(x_0)=\frac12$，$dy$ 与 $\Delta x$ 的关系？
+比值 $\frac12$，同阶但不等价。
+:::
+:::stuck
+递推数列的「证单调」用作差，那个因式分解是怎么想到的？作差有理化以后分子是 $2+x-x^2$，这里我是看解答才分解出来的。
+:::
+@recall $\sqrt[3]{1+x}-1$ 的等价无穷小？ || $\frac{x}{3}$。
+@recall $1^\infty$ 公式？ || $e^{\lim(u-1)v}$。
+@recall $x\vert x\vert$ 在 0 可导吗？ || 可导，$f'(0)=\lim\vert x\vert=0$。
+@recall $\Delta y-dy$ 是什么量级？ || $o(\Delta x)$。
