@@ -2,6 +2,8 @@
  * 题目字段：no 题号 / type choice|blank|essay / score / subj / stem(html) 或 img(题面图) / opts / ans
  *           sol(html，解答) / more(html，详解，可省) / solImg(解答图数组) / tag(考点) / back({href,text})
  * 精研（可选）：C.deepPath 指向 deep/dYYYY.js，设 EXAM_DEEP[年] = {time,look,route[],core[],q:{题号:{lv,k,core,how,vary,link,back}}}，交卷后才显示。
+ * 精解（可选）：C.richPath 指向 rich/rYYYY.js，设 EXAM_RICH[年]={q:{题号:{stem,opts,ans,sol,tpl}},kp:{}}，加载卷子时合并：有 stem 就换掉题面图（原图收进「看原卷」），有 sol 就换掉解析图。
+ *   知识点/套路弹窗：<button class="kpb" data-kp="id">，内容在 window.EXAM_KP（rich/kp.js）与各年 kp。
  * 做卷顺序（可选）：C.plan = {order:[[年,档]],tiers:{档:{name,min,desc}},rhythm,cut,pace} */
 (function(){
   'use strict';
@@ -141,8 +143,33 @@
     if (window.EXAM_PAPERS[y]) return cb();
     var s=document.createElement('script');
     s.src=C.dataPath.replace('{Y}',y)+'?v='+(C.ver||1);
-    s.onload=cb; s.onerror=function(){ root.innerHTML='<p style="padding:2em">这一年的卷子加载失败。</p>'; };
+    s.onload=function(){ loadRich(y, cb); }; s.onerror=function(){ root.innerHTML='<p style="padding:2em">这一年的卷子加载失败。</p>'; };
     document.head.appendChild(s);
+  }
+  function loadRich(y, cb){
+    var ys=window.EXAM_RICH_YEARS||[];
+    if (!C.richPath || ys.indexOf(y)<0) return cb();
+    window.EXAM_RICH=window.EXAM_RICH||{};
+    if (window.EXAM_RICH[y]) { mergeRich(y); return cb(); }
+    var s=document.createElement('script');
+    s.src=C.richPath.replace('{Y}',y)+'?v='+(C.richVer||C.ver||1);
+    s.onload=function(){ mergeRich(y); cb(); }; s.onerror=function(){ cb(); };
+    document.head.appendChild(s);
+  }
+  function mergeRich(y){
+    var R=window.EXAM_RICH[y], P0=window.EXAM_PAPERS[y];
+    if (!R||!P0||P0._rich) return;
+    P0._rich=1;
+    window.EXAM_KP=window.EXAM_KP||{};
+    for (var k in (R.kp||{})) window.EXAM_KP[k]=R.kp[k];
+    P0.q.forEach(function(q){
+      var r=R.q&&R.q[q.no]; if(!r) return;
+      if (r.stem) { if(q.img){ q.origImg=q.img; delete q.img; } q.stem=r.stem; }
+      if (r.opts) q.opts=r.opts;
+      if (r.ans) q.ansText=r.ans;
+      if (r.tpl) q.tpl=r.tpl;
+      if (r.sol) { q.rich=r.sol; if(q.solImg){ q.solOrig=q.solImg; delete q.solImg; } if(q.sol){ q.solBook=q.sol; delete q.sol; } if(q.more){ q.moreBook=q.more; delete q.more; } }
+    });
   }
   function deepOf(no){ var D=cur&&window.EXAM_DEEP&&window.EXAM_DEEP[cur]; return D&&D.q&&D.q[no]; }
   function loadDeep(y){
@@ -190,9 +217,14 @@
   function solHtml(q){
     var h='';
     if (q.type==='choice' && q.ans) h+='<div class="ansline">答案 <b>'+q.ans+'</b></div>';
+    else if (q.ansText) h+='<div class="ansline">答案 <b>'+q.ansText+'</b></div>';
+    if (q.tpl) h+='<div class="tplrow"><i>用到的套路</i>'+q.tpl.map(function(t){ var K=window.EXAM_KP&&window.EXAM_KP[t]; return '<button class="kpb tplb" data-kp="'+esc(t)+'">'+(K?K.t:esc(t))+'</button>'; }).join('')+'</div>';
+    if (q.rich) h+='<div class="rich"><div class="rlegend"><span><span class="omit">灰底</span> 考场可省</span><span><span class="fast">橙</span> 秒杀</span><span><span class="kpb">蓝虚线</span> 点开看知识点</span><span><span class="r">红</span> 必记</span><span>举一反三的答案点一下才显示</span></div>'+q.rich+'</div>';
     if (q.solImg) h+=q.solImg.map(function(s){ return '<img class="pimg" loading="lazy" src="'+s+'" alt="解答">'; }).join('');
     if (q.sol) h+='<div class="sol-b">'+q.sol+'</div>';
     if (q.more) h+='<details class="more"><summary>详解与辨析</summary><div class="sol-b">'+q.more+'</div></details>';
+    if (q.solOrig) h+='<details class="more orig"><summary>原书解析（扫描版，备查）</summary>'+q.solOrig.map(function(s){ return '<img class="pimg" loading="lazy" src="'+s+'" alt="原书解析">'; }).join('')+'</details>';
+    if (q.solBook) h+='<details class="more orig"><summary>题库原解析（备查）</summary><div class="sol-b">'+q.solBook+(q.moreBook?'<hr>'+q.moreBook:'')+'</div></details>';
     if (q.tag) h+='<div class="kp">考点：'+esc(q.tag)+'</div>';
     var D=ss.done&&deepOf(q.no);
     if (D) h+=deepHtml(D);
@@ -225,6 +257,7 @@
       + '<button class="flag" data-flag="'+q.no+'" title="标记">'+(ss.flag[q.no]?'★ 已标记':'☆ 标记')+'</button></div>';
     if (q.img) h += '<img class="pimg qi" src="'+q.img+'" alt="第 '+q.no+' 题题面">';
     if (q.stem) h += '<div class="stem">'+q.stem+'</div>';
+    if (q.origImg) h += '<details class="orig oq"><summary>看原卷题面</summary><img class="pimg" loading="lazy" src="'+q.origImg+'" alt="原卷"></details>';
     if (q.type==='choice') {
       h += '<div class="opts'+(q.opts?'':' opts-l')+'">';
       var L=['A','B','C','D'];
@@ -406,9 +439,33 @@
   }
   function showReport(){ drawPaper(); }
 
+  /* —— 知识点 / 套路弹窗 —— */
+  function kpClose(){ var o=$('kpop'); if(o) o.remove(); }
+  function kpOpen(btn){
+    var id=btn.getAttribute('data-kp'), K=window.EXAM_KP&&window.EXAM_KP[id];
+    kpClose(); if(!K) return;
+    var u=K.u||(window.EXAM_TPL_USES&&window.EXAM_TPL_USES[id]);
+    var o=document.createElement('div'); o.id='kpop'; o.className='kpop'+(K.k==='tpl'?' tpl':'');
+    o.innerHTML='<div class="kph"><i>'+(K.k==='tpl'?'套路':'知识点')+'</i><b>'+K.t+'</b><button class="kpx" data-kpx>×</button></div><div class="kpc">'+K.h+'</div>'
+      +(u&&u.length?'<div class="kpu"><i>真题里出现在</i>'+u.map(function(x){ return '<a href="#y='+x[0]+'&q='+x[1]+'">'+x[0]+' 第 '+x[1]+' 题</a>'; }).join('')+'</div>':'');
+    document.body.appendChild(o);
+    if (window.renderMathInElement) try{ window.renderMathInElement(o); }catch(x){}
+    var r=btn.getBoundingClientRect(), W=Math.min(460, window.innerWidth-24);
+    o.style.width=W+'px';
+    var left=Math.max(12, Math.min(r.left+window.scrollX, window.scrollX+window.innerWidth-W-12));
+    o.style.left=left+'px';
+    var top=r.bottom+window.scrollY+6;
+    if (r.bottom+o.offsetHeight+12>window.innerHeight && r.top>o.offsetHeight+12) top=r.top+window.scrollY-o.offsetHeight-6;
+    o.style.top=top+'px';
+  }
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape') kpClose(); });
   /* —— 事件 —— */
   document.addEventListener('click', function(e){
     var t=e.target, b;
+    if ((b=t.closest&&t.closest('.kpb'))) { e.preventDefault(); kpOpen(b); return; }
+    if (t.closest&&t.closest('[data-kpx]')) { kpClose(); return; }
+    if ((b=t.closest&&t.closest('.va'))) { b.classList.toggle('on'); return; }
+    if (!(t.closest&&t.closest('#kpop'))) kpClose();
     if (t.id==='night'||t.closest&&t.closest('#night')) { var n=document.documentElement.getAttribute('data-theme')==='night'?'':'night'; document.documentElement.setAttribute('data-theme',n); try{localStorage.setItem(C.key+'_night',n);}catch(x){} return; }
     if (!cur) return;
     if ((b=t.closest('[data-ans]'))) {

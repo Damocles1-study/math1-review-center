@@ -35,7 +35,7 @@
 #4 ★★★
 考 定积分的定义（黎曼和）。
 本 $\int_0^1f(x)dx=\lim\sum f(\xi_k)\Delta x$：==区间被分成几份，$\Delta x$ 就是几分之一；$\xi_k$ 必须落在第 $k$ 个小区间里==。B：分 $n$ 份、$\Delta x=\frac1n$，$\xi_k=\frac{2k-1}{2n}$ 正是第 $k$ 个小区间的中点。
-出 每个选项都「长得像」：A 的 $\Delta x$ 少了一半（极限是 $\frac12\int$）；C、D 分了 $2n$ 份却配 $\frac1n$ 或 $\frac2n$（极限是 $2\int$）。
+出 每个选项都「长得像」：A 的 $\Delta x$ 少了一半（极限是 $\frac12\int$）；C、D 分了 $2n$ 份却配 $\frac1n$ 或 $\frac2n$（极限分别是 $2\int$、$4\int$）。
 变 - $\lim\limits_{n\to\infty}\sum_{k=1}^n\frac{n}{n^2+k^2}=\int_0^1\frac{dx}{1+x^2}=\frac\pi4$：先提出 $\frac1n$，把剩下的凑成 $f(\frac kn)$。
 - 求和下标从 $0$ 到 $n-1$ 还是 $1$ 到 $n$，极限相同。
 - 区间换成 $[a,b]$：$\Delta x=\frac{b-a}n$，$\xi_k=a+\frac{k(b-a)}n$。

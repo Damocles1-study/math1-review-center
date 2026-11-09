@@ -112,3 +112,48 @@ table{border-collapse:collapse}.qtab,.stem table,.sol-b table{display:block;over
 .pl-cut{font-size:13px;color:var(--ink3)}
 .pl-t{font-size:13.5px;padding-left:1.1em;color:var(--ink2)}.pl-t li{margin:4px 0}
 .pl-why{font-size:14px;color:var(--ink2);margin-top:6px}.pl-why summary{cursor:pointer;font-family:var(--head);font-weight:700;color:var(--ink)}
+/* —— 精解（rich）：文字题面 + 逐步详解 + 纸笔标记 —— */
+:root{--om:#8b9097;--omb:rgba(139,144,151,.13);--fa:#c25a00;--fab:rgba(232,140,40,.16);--pen:#1f4e9c;--hl:rgba(255,214,64,.42);--tp:#6b3fa0;--tpb:rgba(107,63,160,.1)}
+html[data-theme="night"]{--om:#8d939b;--omb:rgba(160,166,175,.12);--fa:#ffab5c;--fab:rgba(255,160,70,.16);--pen:#8fb4ff;--hl:rgba(255,214,64,.22);--tp:#c6a5f0;--tpb:rgba(198,165,240,.13)}
+.stem .m.md,.rich .m.md{display:block;text-align:center;margin:6px 0;overflow-x:auto;overflow-y:hidden}
+.stem p{margin:.35em 0}.stem .katex{font-size:1.06em}
+.orig{margin:4px 0 6px;font-size:13px;color:var(--ink3)}.orig summary{cursor:pointer;font-family:var(--head)}.orig img{margin-top:6px}
+.tplrow{margin:6px 0 2px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-family:var(--head);font-size:13px}.tplrow>i{font-style:normal;color:var(--ink3)}
+.rich{margin-top:6px;font-size:15.5px}
+.rich .rb{margin:10px 0 0;padding:8px 12px 6px;background:var(--bg);border:1px solid var(--hair);border-left:4px solid var(--ink)}
+.rich .rb h5{margin:0 0 4px;font-family:var(--head);font-size:14px;font-weight:900;display:flex;gap:6px;align-items:center}.rich .rb h5 i{font-style:normal}
+.rich .rb p{margin:.3em 0}.rich ul,.rich ol{margin:.3em 0;padding-left:1.5em}.rich li{margin:.18em 0}
+.rb-read{border-left-color:#d4a514!important}.rb-think{border-left-color:var(--pen)!important}.rb-fast{border-left-color:var(--fa)!important;background:var(--fab)!important}
+.rb-steps{border-left-color:var(--ink)!important}.rb-paper{border-left-color:var(--ok)!important}.rb-note{border-left-color:var(--ac)!important}.rb-vary{border-left-color:var(--tp)!important}
+.rd{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:2px 14px;padding:5px 0;border-bottom:1px dashed var(--hair)}.rd:last-child{border-bottom:0}
+.rq{background:linear-gradient(transparent 38%,var(--hl) 38%,var(--hl) 88%,transparent 88%);padding:0 2px;align-self:start;justify-self:start}
+.ra{color:var(--pen);font-family:"Kaiti SC","STKaiti","KaiTi",var(--body)}.ra:before{content:"→ ";color:var(--ink3)}
+@media (max-width:640px){.rd{grid-template-columns:1fr}.ra{padding-left:10px}}
+.steps{list-style:none;counter-reset:st;padding-left:0!important}.steps>li{counter-increment:st;position:relative;padding:3px 0 3px 30px;border-bottom:1px dotted var(--hair)}.steps>li:last-child{border-bottom:0}
+.steps>li:before{content:counter(st);position:absolute;left:0;top:5px;width:21px;height:21px;border:1.5px solid var(--ink);border-radius:50%;font:700 12px/18px var(--head);text-align:center}
+.steps>li p{margin:.15em 0}
+.steps>li.omit-s{color:var(--om);background:var(--omb);padding-right:78px}.steps>li.omit-s:before{border-color:var(--om);border-style:dashed}
+.steps>li.omit-s:after{content:"考场可省";position:absolute;right:4px;top:4px;font:12px var(--head);color:var(--om);border:1px dashed var(--om);padding:0 5px;background:var(--bg)}
+.omit{color:var(--om);background:var(--omb);border-bottom:1px dashed var(--om);padding:0 2px}
+.fast{background:var(--fab);color:var(--fa);font-weight:700;padding:0 3px;border-radius:2px}.fast:before{content:"⚡";font-weight:400}
+.circ{border:1.6px solid var(--ac);border-radius:255px 18px 225px 18px/18px 225px 18px 255px;padding:0 5px;margin:0 1px}
+.wavy{text-decoration:underline wavy var(--ac);text-underline-offset:4px;text-decoration-thickness:1.3px}
+.dock{border:1px solid var(--ac);color:var(--ac);padding:0 4px;font-size:.92em}.dock:before{content:"扣分点 · ";font-size:.85em}
+.hand{color:var(--ac);font-family:"Kaiti SC","STKaiti","KaiTi",var(--body);font-size:1.02em}
+.rich .r{color:var(--ac);font-weight:700}
+.pt{display:inline-block;font:700 12px/1.6 var(--head);color:var(--ok);border:1px solid var(--ok);padding:0 5px;margin:0 3px;white-space:nowrap}
+.rb-paper{font-family:var(--body)}
+.vary>li{margin:.35em 0}.vq{display:block}.va{display:block;color:var(--ink2);filter:blur(4.5px);cursor:pointer;transition:filter .15s;padding-left:10px;border-left:2px solid var(--tpb)}.va:before{content:"答：";color:var(--tp)}.va.on,.va:focus{filter:none}
+.rb-sk{border:0!important;background:transparent!important;padding:2px 0!important;text-align:center}.rb-sk svg{max-width:100%;height:auto}.rb-sk figcaption{font-size:13px;color:var(--ink2);font-family:"Kaiti SC","STKaiti",var(--body)}
+html[data-theme="night"] .rb-sk svg{filter:invert(.9) hue-rotate(180deg)}
+.rich pre.code,.stem pre{font-family:var(--mono);font-size:13px;background:var(--bg2);padding:7px 10px;overflow-x:auto;line-height:1.5;margin:6px 0}
+.rich .tabw{margin:6px 0}.rt{border-collapse:collapse;font-size:14px}.rt th,.rt td{border:1px solid var(--hair);padding:3px 9px;text-align:left}.rt th{background:var(--bg2)}
+.rlegend{font:12.5px var(--head);color:var(--ink3);margin:4px 0 0;display:flex;flex-wrap:wrap;gap:4px 12px}
+/* 弹窗按钮与卡片 */
+.kpb{font:inherit;color:var(--pen);border-bottom:1.5px dotted var(--pen);padding:0 1px;cursor:help;text-align:left}.kpb:after{content:"ⓘ";font-size:.72em;vertical-align:super;margin-left:1px}
+.kpb.tplb{color:var(--tp);border:1px solid var(--tp);background:var(--tpb);padding:0 7px;font-family:var(--head);font-size:.92em;border-radius:2px}.kpb.tplb:after{content:" ▸";vertical-align:baseline;font-size:.85em}
+.kpop{position:absolute;z-index:60;background:var(--bg);border:2px solid var(--ink);box-shadow:5px 5px 0 var(--ink);padding:9px 13px 10px;font-size:14.5px;line-height:1.7;max-height:70vh;overflow:auto}
+.kpop.tpl{border-color:var(--tp);box-shadow:5px 5px 0 var(--tp)}
+.kph{display:flex;gap:8px;align-items:baseline;font-family:var(--head);border-bottom:1px solid var(--hair);padding-bottom:4px;margin-bottom:4px}.kph i{font-style:normal;font-size:12px;color:var(--bg);background:var(--ink);padding:0 6px}.kpop.tpl .kph i{background:var(--tp)}.kph b{flex:1;font-size:15px}.kpx{font-size:20px;line-height:1;color:var(--ink3)}
+.kpc p{margin:.3em 0}.kpc ol,.kpc ul{margin:.3em 0;padding-left:1.4em}.kpc .m.md{display:block;text-align:center;margin:4px 0;overflow-x:auto}
+.kpu{margin-top:6px;border-top:1px dashed var(--hair);padding-top:4px;font:13px var(--head);display:flex;flex-wrap:wrap;gap:3px 10px}.kpu i{font-style:normal;color:var(--ink3);width:100%}.kpu a{color:var(--tp)}
