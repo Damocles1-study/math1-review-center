@@ -1,6 +1,8 @@
 /* 在线真题套卷引擎：408 与数学一共用，各自的 EXAM_CONF 写在页面里，卷子数据按年放在 assets/exam/yYYYY.js。
  * 题目字段：no 题号 / type choice|blank|essay / score / subj / stem(html) 或 img(题面图) / opts / ans
- *           sol(html，解答) / more(html，详解，可省) / solImg(解答图数组) / tag(考点) / back({href,text}) */
+ *           sol(html，解答) / more(html，详解，可省) / solImg(解答图数组) / tag(考点) / back({href,text})
+ * 精研（可选）：C.deepPath 指向 deep/dYYYY.js，设 EXAM_DEEP[年] = {time,look,route[],core[],q:{题号:{lv,k,core,how,vary,link,back}}}，交卷后才显示。
+ * 做卷顺序（可选）：C.plan = {order:[[年,档]],tiers:{档:{name,min,desc}},rhythm,cut,pace} */
 (function(){
   'use strict';
   var C = window.EXAM_CONF, KEY = C.key + '_exam_v1';
@@ -69,7 +71,8 @@
       var info = (C.yearNote && C.yearNote[y]) || '';
       return '<a class="yr'+(best!=null?' dn':'')+(going?' go':'')+'" href="#y='+y+'"><b>'+y+'</b>'
         + '<span>'+(going?'做到 '+Object.keys(ss.a).length+' 题，继续':best!=null?'最高 '+best+' 分':'未做')+'</span>'
-        + (info?'<em>'+esc(info)+'</em>':'')+'</a>';
+        + (info?'<em>'+esc(info)+'</em>':'')
+        + (C.deepYears&&C.deepYears.indexOf(y)>=0?'<em class="dpb">已精研</em>':'')+'</a>';
     }).join('');
     var hist = S.hist.slice().reverse().slice(0,12).map(function(h){
       return '<tr><td>'+h.y+'</td><td><b>'+h.score+'</b> / '+h.full+'</td><td>'+fmt(h.secs)+'</td><td>'+new Date(h.at).toLocaleDateString('zh-CN')+'</td></tr>';
@@ -78,6 +81,7 @@
       + '<div class="hm-top"><a href="'+C.backHref+'">← '+esc(C.backText)+'</a><span>'+esc(C.title)+'</span><button class="ghost" id="night">夜</button></div>'
       + '<div class="hero"><div class="cd"><i>距 '+esc(C.examName)+'</i><strong>'+(left>0?left:0)+'</strong><i>天</i></div>'
       + '<div class="hero-t"><h1>'+esc(C.heading)+'</h1><p>'+C.lead+'</p><p class="cdx" id="cdx">'+esc(countText())+'　·　'+esc(C.examWhen)+'</p></div></div>'
+      + (C.plan?'<h2>按这个顺序做</h2><div id="plan">'+planHtml()+'</div>':'')
       + '<h2>开关</h2><div class="tgs">'+togglesHtml()+'</div>'
       + '<h2>选一年</h2><div class="yrs">'+rows+'</div>'
       + (hist?'<h2>做过的卷子</h2><div class="tabw"><table class="hst"><thead><tr><th>年份</th><th>得分</th><th>用时</th><th>日期</th></tr></thead><tbody>'+hist+'</tbody></table></div>':'')
@@ -85,6 +89,50 @@
       + '</div>';
     window.scrollTo(0,0);
   }
+
+  /* —— 做卷顺序 —— */
+  function pget(){ var o={}; try{ o=JSON.parse(localStorage.getItem(C.key+'_plan'))||{}; }catch(e){} return o; }
+  function pset(o){ try{ localStorage.setItem(C.key+'_plan',JSON.stringify(o)); }catch(e){} }
+  function ymd(d){ return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2); }
+  function planHtml(){
+    var L=C.plan, o=pget(), pace=+(o.pace||L.pace||1.5);
+    var start=o.start||L.start||ymd(new Date());
+    if (!o.start) { o.start=start; pset(o); }   /* 第一次打开时钉住，免得日期每天往后漂 */
+    var d0=new Date(start+'T00:00:00'), cut=new Date(L.cut+'T00:00:00');
+    var slots=Math.max(0,Math.floor((cut-d0)/864e5/pace)+1);
+    var order=L.order.slice(), keep=order.slice(), cutList=[];
+    while (keep.length>slots) {   /* 时间不够：保住末尾的模考卷，从模考前一张往前砍 */
+      var k=keep.length-1; while(k>=0&&keep[k][1]==='mock') k--;
+      if (k<0) break; cutList.unshift(keep[k]); keep.splice(k,1);
+    }
+    var doneY={}; S.hist.forEach(function(h){ doneY[h.y]=1; });
+    var nextShown=false;
+    var rows=keep.map(function(it,i){
+      var y=it[0], t=L.tiers[it[1]]||{}, dt=new Date(d0.getTime()+Math.floor(i*pace)*864e5);
+      var st=doneY[y]?'dn':(!nextShown?(nextShown=true,'nx'):'');
+      var dp=C.deepYears&&C.deepYears.indexOf(y)>=0;
+      return '<tr class="'+st+'"><td>'+(i+1)+'</td><td>'+(dt.getMonth()+1)+'/'+dt.getDate()+'</td><td><a href="#y='+y+'"><b>'+y+'</b></a>'+(it[2]?'<small>'+it[2]+'</small>':'')+'</td>'
+        + '<td><span class="tier t-'+it[1]+'">'+esc(t.name||it[1])+'</span></td><td>'+(t.min?'复盘 '+t.min+' 分':'')+'</td>'
+        + '<td>'+(st==='dn'?'✓ 做过':st==='nx'?'← 下一张':'')+(dp?'':' <small class="nod">精研待写</small>')+'</td></tr>';
+    }).join('');
+    var tiers=Object.keys(L.tiers).map(function(k){ var t=L.tiers[k]; return '<li><span class="tier t-'+k+'">'+esc(t.name)+'</span> '+t.desc+'</li>'; }).join('');
+    return '<div class="pl-set"><label>开始做卷的日子 <input type="date" id="pl-start" value="'+start+'"></label>'
+      + '<span class="seg">'+[[1.5,'一天半一张（推荐）'],[1,'一天一张']].map(function(p){ return '<button data-pace="'+p[0]+'" class="'+(pace===p[0]?'on':'')+'">'+p[1]+'</button>'; }).join('')+'</span>'
+      + '<small>到 '+L.cut.slice(5).replace('-','/')+' 能做 '+keep.length+' 张'+(cutList.length?'，砍掉 '+cutList.length+' 张':'')+'；之后两天只回看错题，不开新卷。</small></div>'
+      + (L.rhythm?'<div class="pl-rh">'+L.rhythm+'</div>':'')
+      + '<div class="tabw"><table class="pl"><thead><tr><th>#</th><th>日期</th><th>卷</th><th>档</th><th>复盘</th><th></th></tr></thead><tbody>'+rows+'</tbody></table></div>'
+      + (cutList.length?'<p class="pl-cut">时间不够、先砍的：'+cutList.map(function(it){ return '<a href="#y='+it[0]+'">'+it[0]+'</a>'; }).join(' ')+'（价值最低，有空再补）</p>':'')
+      + '<ul class="pl-t">'+tiers+'</ul>'
+      + (L.why?'<details class="pl-why"><summary>为什么是这个顺序</summary>'+L.why+'</details>':'');
+  }
+  document.addEventListener('change', function(e){
+    if (e.target.id!=='pl-start') return;
+    var o=pget(); o.start=e.target.value; pset(o); var p=$('plan'); if(p) p.innerHTML=planHtml();
+  });
+  document.addEventListener('click', function(e){
+    var b=e.target.closest&&e.target.closest('[data-pace]'); if(!b) return;
+    var o=pget(); o.pace=+b.getAttribute('data-pace'); pset(o); var p=$('plan'); if(p) p.innerHTML=planHtml();
+  });
 
   /* —— 卷子 —— */
   var cur=null, P=null, ss=null, tm=null, lastTick=0, paused=false, warned=false;
@@ -96,7 +144,19 @@
     s.onload=cb; s.onerror=function(){ root.innerHTML='<p style="padding:2em">这一年的卷子加载失败。</p>'; };
     document.head.appendChild(s);
   }
+  function deepOf(no){ var D=cur&&window.EXAM_DEEP&&window.EXAM_DEEP[cur]; return D&&D.q&&D.q[no]; }
+  function loadDeep(y){
+    window.EXAM_DEEP = window.EXAM_DEEP||{};
+    if (!C.deepPath || window.EXAM_DEEP[y] || loadDeep['_'+y]) return;
+    loadDeep['_'+y]=1;
+    var s=document.createElement('script');
+    s.src=C.deepPath.replace('{Y}',y)+'?v='+(C.deepVer||C.ver||1);
+    s.onload=function(){ if(cur===y&&ss&&ss.done) redrawPaper(); };
+    s.onerror=function(){};
+    document.head.appendChild(s);
+  }
   function open(y){
+    loadDeep(y);
     loadPaper(y, function(){
       P = window.EXAM_PAPERS[y]; cur = y;
       ss = S.sess[y];
@@ -134,8 +194,20 @@
     if (q.sol) h+='<div class="sol-b">'+q.sol+'</div>';
     if (q.more) h+='<details class="more"><summary>详解与辨析</summary><div class="sol-b">'+q.more+'</div></details>';
     if (q.tag) h+='<div class="kp">考点：'+esc(q.tag)+'</div>';
-    if (q.back && ss.done) h+='<a class="bk" href="'+q.back.href+'">'+esc(q.back.text)+'</a>';
+    var D=ss.done&&deepOf(q.no);
+    if (D) h+=deepHtml(D);
+    var bk=q.back||(D&&D.back);
+    if (bk && ss.done) h+='<a class="bk" href="'+bk.href+'">'+esc(bk.text)+'</a>';
     return h;
+  }
+  var DEEP_ROWS=[['k','考什么'],['core','本质'],['how','怎么出的'],['vary','举一反三'],['link','联想搭配']];
+  var LV={3:['★★★','吃透：错了要重做，举一反三逐条口答'],2:['★★','看懂：读本质和怎么出的'],1:['★','扫过：看一眼本质']};
+  function deepHtml(D){
+    var rows=DEEP_ROWS.filter(function(r){ return D[r[0]]; });
+    if (!rows.length) return '';
+    var lv=LV[D.lv]||LV[2];
+    return '<div class="deep lv'+(D.lv||2)+'"><div class="dp-h"><b>精研</b><span class="dp-lv">'+lv[0]+'</span><small>'+lv[1]+'</small></div>'
+      + rows.map(function(r){ return '<div class="dp-r"><i>'+r[1]+'</i><div>'+D[r[0]]+'</div></div>'; }).join('')+'</div>';
   }
   function selfHtml(q){
     if (q.type==='choice') return '';
@@ -220,6 +292,7 @@
       if (q.type!==last) { h+='<h3 class="sech">'+esc(nm[q.type]||'')+'</h3>'; last=q.type; }
       if (ss.done && filter==='wrong' && (qScore(q)===q.score)) return;
       if (ss.done && filter==='flag' && !ss.flag[q.no]) return;
+      if (ss.done && filter==='core') { var cd=curDeep(); if(cd&&cd.core&&cd.core.indexOf(q.no)<0&&!(qScore(q)!=null&&qScore(q)<q.score)) return; }
       h += qHtml(q);
     });
     if (!ss.done) h += '<button class="sub sub-end" id="submit2">交卷</button>';
@@ -313,7 +386,23 @@
     return '<section class="rep" id="report"><div class="rep-h"><div class="big"><strong>'+score+'</strong><span>/ '+full+'</span></div><div><b>'+cur+' 年真题'+(C.target?'，目标 '+C.target:'')+'</b><br>用时 '+fmt(ss.secs)+(pend?'<br><em>还有 '+pend+' 题没登分，在下面每题解答下自评，分数会跟着变</em>':'')+'</div></div>'
       + '<div class="tabw"><table class="rp"><tbody>'+rows+'</tbody></table></div>'
       + (wrong.length?'<p class="wr">失分题：'+wrong.map(function(q){ return '<a href="javascript:;" data-go="'+q.no+'">'+q.no+'</a>'; }).join(' ')+'</p>':'')
-      + '<div class="rep-a"><span class="seg">'+[['all','全部'],['wrong','只看失分'],['flag','只看标记']].map(function(o){ return '<button data-filter="'+o[0]+'" class="'+((ss.filter||'all')===o[0]?'on':'')+'">'+o[1]+'</button>'; }).join('')+'</span><button class="ghost" id="redo">重做这一年</button></div></section>';
+      + studyHtml()
+      + '<div class="rep-a"><span class="seg">'+[['all','全部'],['wrong','只看失分'],['flag','只看标记']].concat(curDeep()&&curDeep().core?[['core','只看必吃透']]:[]).map(function(o){ return '<button data-filter="'+o[0]+'" class="'+((ss.filter||'all')===o[0]?'on':'')+'">'+o[1]+'</button>'; }).join('')+'</span><button class="ghost" id="redo">重做这一年</button></div></section>';
+  }
+  function curDeep(){ return cur&&window.EXAM_DEEP&&window.EXAM_DEEP[cur]; }
+  function studyHtml(){
+    var D=curDeep();
+    if (!D) return C.deepPath?'<div class="study st0">这张卷的精研还没写，先按通用路线复盘：对答案 → 错题不看解析重做 → 读解答找卡点 → 记一行到错题本。</div>':'';
+    var wrong=P.q.filter(function(q){ var v=qScore(q); return v!=null&&v<q.score; }).map(function(q){ return q.no; });
+    var core=(D.core||[]), must=core.slice();
+    wrong.forEach(function(n){ if(must.indexOf(n)<0) must.push(n); });
+    must.sort(function(a,b){ return a-b; });
+    var lnk=function(n){ var w=wrong.indexOf(n)>=0, c=core.indexOf(n)>=0; return '<a href="javascript:;" data-go="'+n+'" class="'+(w?'w':'')+(c?' c':'')+'">'+n+'</a>'; };
+    return '<div class="study"><div class="st-h"><b>这张卷怎么复盘</b>'+(D.time?'<span>限时 '+D.time+' 分钟，到点就停</span>':'')+'</div>'
+      + (D.look?'<p class="st-look">'+D.look+'</p>':'')
+      + '<div class="st-must"><i>今天必过</i><div>'+must.map(lnk).join('')+'</div><small>必吃透 '+core.length+' 题（下划线）＋ 你的失分题（红）。其余题只扫「本质」一行。</small></div>'
+      + (D.route&&D.route.length?'<ol class="st-r">'+D.route.map(function(r){ return '<li>'+r+'</li>'; }).join('')+'</ol>':'')
+      + '</div>';
   }
   function showReport(){ drawPaper(); }
 
