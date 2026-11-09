@@ -56,4 +56,4 @@ $$公式$$⛳3                      （展示公式必须独占一行，可带�
 
 - 精研卡写在 `_build/deep/YYYY.txt`（公式写 `$…$`），跑 `python3 _build/deep_build.py` 生成 `assets/exam/deep/dYYYY.js`，页面用本地 KaTeX 渲染。回第几期的链接卷子数据里本来就有。
 - 做卷顺序写在 `真题套卷.html` 的 `EXAM_CONF.plan`（模板 `_build/exam_page.html` 同步改）。
-- 已写：2019–2023。顺序里的下一张是 2018，然后 2017、2016…
+- 已写：2018–2023。顺序里的下一张是 2017，然后 2016。
