@@ -51,3 +51,9 @@ $$公式$$⛳3                      （展示公式必须独占一行，可带�
 ## 在线真题套卷
 
 `真题套卷.html` + `assets/exam/`。`engine.js`、`exam.css` 与术式408共用一份，改了要同步。`python3 _build/exam_build.py` 从本机 PDF 裁题面和解析（切分位置和选择题答案在 `_build/exam_cuts.json`）。页面模板副本在 `_build/exam_page.html`。
+
+## 真题精研与做卷顺序
+
+- 精研卡写在 `_build/deep/YYYY.txt`（公式写 `$…$`），跑 `python3 _build/deep_build.py` 生成 `assets/exam/deep/dYYYY.js`，页面用本地 KaTeX 渲染。回第几期的链接卷子数据里本来就有。
+- 做卷顺序写在 `真题套卷.html` 的 `EXAM_CONF.plan`（模板 `_build/exam_page.html` 同步改）。
+- 已写：2021、2022。顺序里的下一张是 2023，然后 2020、2019…
