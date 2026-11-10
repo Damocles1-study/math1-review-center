@@ -179,7 +179,8 @@ def parse_defs(text, fname, store, local=False):
             continue
         if cur is not None and (l.startswith('#') or (l.startswith('@') and not l.startswith('@kp') and not l.startswith('@tpl'))):
             cur = None
-        if cur is not None: cur['src'].append(l)
+        if cur is not None:
+            if not l.startswith('//'): cur['src'].append(l)   # 卡与卡之间的 // 注释不算进卡片内容
         else: rest.append((ln, l))
     return rest
 
