@@ -115,6 +115,20 @@ def lines_html(lines, where, ids):
         i += 1
     return ''.join(out)
 
+def fit_svg(svg, w, h):
+    """按文字的估算外框把 viewBox 撑大，避免标注被画板边缘裁掉（中文按 1 个字号宽、其余按 0.58）"""
+    x0, y0, x1, y1 = 0.0, 0.0, float(w), float(h)
+    for m in re.finditer(r'<text x="([\d.-]+)" y="([\d.-]+)" font-size="([\d.]+)"[^>]*text-anchor="(\w+)"[^>]*>(.*?)</text>', svg):
+        x, y, fs, an = float(m.group(1)), float(m.group(2)), float(m.group(3)), m.group(4)
+        t = re.sub(r'<tspan[^>]*font-size[^>]*>(.*?)</tspan>', lambda k: k.group(1)[:max(1, len(k.group(1)) * 3 // 4)], m.group(5))
+        t = html.unescape(re.sub(r'<[^>]+>', '', t)).replace('\u200b', '')
+        tw = sum(fs if ord(c) > 0x2e80 else fs * 0.58 for c in t)
+        a = x - tw / 2 if an == 'middle' else x - tw if an == 'end' else x
+        x0, x1, y0, y1 = min(x0, a - 2), max(x1, a + tw + 2), min(y0, y - fs - 2), max(y1, y + fs * 0.3 + 2)
+    if (x0, y0, x1, y1) == (0, 0, w, h): return svg
+    W, H = x1 - x0, y1 - y0
+    return re.sub(r'viewBox="0 0 \d+ \d+" width="\d+"', 'viewBox="%.0f %.0f %.0f %.0f" width="%d"' % (x0, y0, W, H, round(W * 1.22)), svg, count=1)
+
 # ───────────── 块 ─────────────
 HEAD = {'read': ('📖', '读题 · 圈画'), 'think': ('💭', '思路'), 'fast': ('⚡', '秒杀 · 考场快法'), 'steps': ('🧮', '详解（每一步）'),
         'paper': ('✍️', '考场卷面'), 'note': ('📌', '批注'), 'vary': ('🔁', '举一反三'), 'sk': ('✏️', '草图')}
@@ -131,7 +145,7 @@ def block_html(kind, arg, lines, where, ids, seed):
             exec('\n'.join(lines), {'s': s, 'math': math, 'random': random, 'Sk': Sk})
         except Exception as e:
             err(where, '草图代码出错：%r' % e); return ''
-        return '<figure class="rb rb-sk">%s%s</figure>' % (s.svg(cls='sk', alt=cap), ('<figcaption>%s</figcaption>' % inline(cap, where, ids)) if cap else '')
+        return '<figure class="rb rb-sk">%s%s</figure>' % (fit_svg(s.svg(cls='sk', alt=cap), w, h), ('<figcaption>%s</figcaption>' % inline(cap, where, ids)) if cap else '')
     title = inline(arg, where, ids) if arg else nm
     if kind == 'read':
         body = ''
