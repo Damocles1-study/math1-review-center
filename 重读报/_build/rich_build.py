@@ -261,7 +261,7 @@ def main():
     gp = os.path.join(SRC, 'kp.txt')
     if os.path.exists(gp): parse_defs(open(gp, encoding='utf-8').read(), 'kp.txt', G)
     files = sorted(glob.glob(os.path.join(SRC, '[12][09][0-9][0-9].txt')))
-    uses, years, summary = {}, [], []
+    uses, years, summary, cues = {}, [], [], {}
     for f in files:
         y = int(os.path.basename(f)[:4]); years.append(y)
         L = {}
@@ -275,6 +275,19 @@ def main():
         for no, q in Q.items():
             for t in q['tpl']:
                 uses.setdefault(t, []).append([y, no])
+            if q['tpl']:   # 跨年字眼：本题读题块的第一句「原句 >> 想到什么」＋复盘块的「带走」，挂到它用的每张套路卡上
+                w0 = '%d 第 %d 题（字眼）' % (y, no); cq = ca = tk = ''
+                for b in q['blocks']:
+                    if b[0] == 'read' and not cq:
+                        for l in b[2]:
+                            if '>>' in l:
+                                x, z = l.split('>>', 1); cq, ca = inline(x.strip(), w0, ids), inline(z.strip(), w0, ids); break
+                    if b[0] == 'rev' and not tk:
+                        for l in b[2]:
+                            m2 = re.match(r'-\s*\*\*带走\*\*\s*(.*)$', l.strip())
+                            if m2: tk = inline(m2.group(1), w0, ids)
+                if cq or tk:
+                    for t in q['tpl']: cues.setdefault(t, []).append([y, no, cq, ca, tk])
         if want and y not in want:
             del ERR[n0:]   # 只编指定年份时，别的年份（可能正被别的会话改着）报的错不算
             continue
@@ -313,8 +326,8 @@ def main():
     for k, v in gk.items():
         if k in uses: v['u'] = sorted(uses[k])
     # 本年局部套路的用处也记下（弹窗里显示）
-    open(os.path.join(OUT, 'kp.js'), 'w', encoding='utf-8').write('window.EXAM_KP=%s;\nwindow.EXAM_RICH_YEARS=%s;\nwindow.EXAM_TPL_USES=%s;\n' % (
-        json.dumps(gk, ensure_ascii=False, separators=(',', ':')), json.dumps(years), json.dumps(uses, ensure_ascii=False, separators=(',', ':'))))
+    open(os.path.join(OUT, 'kp.js'), 'w', encoding='utf-8').write('window.EXAM_KP=%s;\nwindow.EXAM_RICH_YEARS=%s;\nwindow.EXAM_TPL_USES=%s;\nwindow.EXAM_TPL_CUES=%s;\n' % (
+        json.dumps(gk, ensure_ascii=False, separators=(',', ':')), json.dumps(years), json.dumps(uses, ensure_ascii=False, separators=(',', ':')), json.dumps({k: sorted(v, key=lambda x: (-x[0], x[1])) for k, v in cues.items()}, ensure_ascii=False, separators=(',', ':'))))
     print('\n'.join(summary))
     if ERR:
         print('\n✗ %d 处问题：' % len(ERR)); print('\n'.join('  ' + e for e in ERR)); sys.exit(1)

@@ -4,6 +4,7 @@
  * 精研（可选）：C.deepPath 指向 deep/dYYYY.js，设 EXAM_DEEP[年] = {time,look,route[],core[],q:{题号:{lv,k,core,how,vary,link,back}}}，交卷后才显示。
  * 精解（可选）：C.richPath 指向 rich/rYYYY.js，设 EXAM_RICH[年]={q:{题号:{stem,opts,ans,sol,tpl}},kp:{}}，加载卷子时合并：有 stem 就换掉题面图（原图收进「看原卷」），有 sol 就换掉解析图。
  *   知识点/套路弹窗：<button class="kpb" data-kp="id">，内容在 window.EXAM_KP（rich/kp.js）与各年 kp。
+ * 分档（可选）：页面先引 assets/exam/tier.js，设 EXAM_TIER[年]={line:[保底,正常,冲刺],mins,note,q:{题号:{m:限时分钟,p:[必,常,冲,弃],n:说明}}}（_build/tier_build.py 生成）。
  * 做卷顺序（可选）：C.plan = {order:[[年,档]],tiers:{档:{name,min,desc}},rhythm,cut,pace} */
 (function(){
   'use strict';
@@ -11,7 +12,7 @@
   var $ = function(i){ return document.getElementById(i); };
   var root = $('app');
   var DEF = { showSol:false, mustAll:false, instant:false, timer:'down', autoEnd:false, showCount:true,
-    read:false, autoSol:true, hint:false, kpOpen:false, layer:false, view:'scroll', fs:'m', hide:{} };
+    read:false, autoSol:true, hint:false, kpOpen:false, layer:false, tier:true, view:'scroll', fs:'m', hide:{} };
 
   function load(){
     var o = {};
@@ -37,6 +38,7 @@
     ['autoSol','判完自动摊开解析','「练习」模式下选完或点「对答案」后，解析直接出现，不用再点一次。'],
     ['hint','做题时可以先看「要用的知识点」','卡住时点题目下面的「提示」，只给这题要用的知识点和套路，不给答案。看过的题会记一笔。'],
     ['kpOpen','知识点卡默认全部展开','解析顶上「这题要用到的」那一栏：开着时每张卡的公式、结论直接摊开；关着时只列标题，点哪张开哪张。'],
+    ['tier','做题时显示分档和每题限时','题号旁标「必拿 / 应得 / 冲刺 / 后放」和这题最多给几分钟，顶栏显示本题已用时间，超了变红。最后三张模考卷建议关掉，自己判断。'],
     ['layer','解析分两层揭开','先只给读题和思路，合上自己写；写完再点一下看每一步和考场卷面。'],
     ['mustAll','必须全部答完才能交卷','有题没答时交卷按钮只列出缺的题，不让交。解答题写在纸上的，点「已写完」就算答过。'],
     ['showCount','显示距考试倒计时','顶栏一直显示还剩多少天。'],
@@ -105,6 +107,7 @@
       return '<a class="yr'+(best!=null?' dn':'')+(going?' go':'')+'" href="#y='+y+'"><b>'+y+'</b>'
         + '<span>'+(going?'做到 '+Object.keys(ss.a).length+' 题，继续':best!=null?'最高 '+best+' 分':'未做')+'</span>'
         + (info?'<em>'+esc(info)+'</em>':'')
+        + (tierY(y)?'<em class="ln">'+lineText(y)+'</em>':'')
         + (C.deepYears&&C.deepYears.indexOf(y)>=0?'<em class="dpb">已精研</em>':'')+'</a>';
     }).join('');
     var hist = S.hist.slice().reverse().slice(0,12).map(function(h){
@@ -116,7 +119,7 @@
       + '<div class="hero-t"><h1>'+esc(C.heading)+'</h1><p>'+C.lead+'</p><p class="cdx" id="cdx">'+esc(countText())+'　·　'+esc(C.examWhen)+'</p></div></div>'
       + (C.plan?'<h2>按这个顺序做</h2><div id="plan">'+planHtml()+'</div>':'')
       + '<h2>模式与开关</h2><div class="tgs tgbox">'+togglesHtml()+'</div>'
-      + '<h2>选一年</h2><div class="yrs">'+rows+'</div>'
+      + '<h2>选一年</h2>'+(window.EXAM_TIER?'<p class="lnlead">每年下面一行是这张卷的<b>三条线</b>，按预期得分率算，不按全对算：<b>保</b>＝必拿题拿到九成（低于它说明基础题在丢，先补这些，别碰难题）；<b>常</b>＝必拿题基本全拿、应得题拿七成（正常发挥该到的分）；<b>冲</b>＝再加上应得题九成、冲刺题一半（尽力能到的分）。做题时每题标着档和限时：<b>冲刺题超过限时就蒙一个、点标记，做完综合题再回来</b>；标「后放」或写着「取舍」的部分先跳过。交卷后成绩单告诉你分丢在哪一档、哪几题超时。</p>':'')+'<div class="yrs">'+rows+'</div>'
       + (window.EXAM_KP?'<h2>知识点与套路速查</h2><p class="kpent"><a href="#kp">翻开速查本 →</a><span>精解里出现过的 '+Object.keys(window.EXAM_KP).length+' 张卡：公式、常用结论、跨年套路，每张标着真题里在哪出现过。可以搜。</span></p>':'')
       + (hist?'<h2>做过的卷子</h2><div class="tabw"><table class="hst"><thead><tr><th>年份</th><th>得分</th><th>用时</th><th>日期</th></tr></thead><tbody>'+hist+'</tbody></table></div>':'')
       + (C.footHtml?'<div class="foot">'+C.footHtml+'</div>':'')
@@ -146,7 +149,7 @@
       var st=doneY[y]?'dn':(!nextShown?(nextShown=true,'nx'):'');
       var dp=C.deepYears&&C.deepYears.indexOf(y)>=0;
       return '<tr class="'+st+'"><td>'+(i+1)+'</td><td>'+(dt.getMonth()+1)+'/'+dt.getDate()+'</td><td><a href="#y='+y+'"><b>'+y+'</b></a>'+(it[2]?'<small>'+it[2]+'</small>':'')+'</td>'
-        + '<td><span class="tier t-'+it[1]+'">'+esc(t.name||it[1])+'</span></td><td>'+(t.min?'复盘 '+t.min+' 分':'')+'</td>'
+        + '<td><span class="tier t-'+it[1]+'">'+esc(t.name||it[1])+'</span></td><td>'+(t.min?'复盘 '+t.min+' 分':'')+'</td><td class="pln">'+(lineText(y)||'<small class="nod">—</small>')+'</td>'
         + '<td>'+(st==='dn'?'✓ 做过':st==='nx'?'← 下一张':'')+(dp?'':' <small class="nod">精研待写</small>')+'</td></tr>';
     }).join('');
     var tiers=Object.keys(L.tiers).map(function(k){ var t=L.tiers[k]; return '<li><span class="tier t-'+k+'">'+esc(t.name)+'</span> '+t.desc+'</li>'; }).join('');
@@ -154,7 +157,7 @@
       + '<span class="seg">'+[[1.5,'一天半一张（推荐）'],[1,'一天一张']].map(function(p){ return '<button data-pace="'+p[0]+'" class="'+(pace===p[0]?'on':'')+'">'+p[1]+'</button>'; }).join('')+'</span>'
       + '<small>到 '+L.cut.slice(5).replace('-','/')+' 能做 '+keep.length+' 张'+(cutList.length?'，砍掉 '+cutList.length+' 张':'')+'；之后两天只回看错题，不开新卷。</small></div>'
       + (L.rhythm?'<div class="pl-rh">'+L.rhythm+'</div>':'')
-      + '<div class="tabw"><table class="pl"><thead><tr><th>#</th><th>日期</th><th>卷</th><th>档</th><th>复盘</th><th></th></tr></thead><tbody>'+rows+'</tbody></table></div>'
+      + '<div class="tabw"><table class="pl"><thead><tr><th>#</th><th>日期</th><th>卷</th><th>档</th><th>复盘</th><th>保 · 常 · 冲</th><th></th></tr></thead><tbody>'+rows+'</tbody></table></div>'
       + (cutList.length?'<p class="pl-cut">时间不够、先砍的：'+cutList.map(function(it){ return '<a href="#y='+it[0]+'">'+it[0]+'</a>'; }).join(' ')+'（价值最低，有空再补）</p>':'')
       + '<ul class="pl-t">'+tiers+'</ul>'
       + (L.why?'<details class="pl-why"><summary>为什么是这个顺序</summary>'+L.why+'</details>':'');
@@ -246,6 +249,65 @@
   }
   function judged(q){ return ss.done || (S.set.instant && (q.type==='choice' ? !!ss.a[q.no] : !!ss.open[q.no])); }
 
+  /* —— 分档 · 限时 · 三条线 —— */
+  var TN=['必拿','应得','冲刺','后放'], TS=['保','常','冲','弃'], TC=['a','b','c','x'];
+  function tierY(y){ return window.EXAM_TIER&&window.EXAM_TIER[y]; }
+  function tierOf(no){ var T=cur&&tierY(cur); return T&&T.q&&T.q[no]; }
+  function isOver(u,t){ return u>t.m*60*1.25+20; }
+  function tierChip(q){
+    var t=tierOf(q.no); if(!t||(!ss.done&&!S.set.tier)) return '';
+    var i=t.p.indexOf(q.score), h, jd=judged(q)||ss.done, u=(ss.qt&&ss.qt[q.no])||0;
+    if (i>=0) h='<span class="tr tr-'+TC[i]+'">'+TN[i]+'</span>';
+    else h='<span class="tr tr-s">'+t.p.map(function(x,k){ return x?'<i class="tr-'+TC[k]+'">'+TS[k]+' '+x+'</i>':''; }).join('')+'</span>';
+    h+='<span class="tm'+(jd&&isOver(u,t)?' ov':'')+'">限 '+t.m+' 分'+(jd&&u>=5?' · 用了 '+fmt(u):'')+'</span>';
+    return h;
+  }
+  function tierNote(q){
+    var t=tierOf(q.no); if(!t||!t.n||(!ss.done&&!S.set.tier)) return '';
+    if (!(judged(q)||ss.done) && !t.p[3]) return '';   /* 做题时只提前给「先跳过」这类取舍建议，别的说明判完再给 */
+    if (!(judged(q)||ss.done)) return '<div class="trn"><i>取舍</i>这题有 '+t.p[3]+' 分不值得硬啃：能写的先写上，卡住 3 分钟就走，先做后面的题。具体放哪一问，对完答案再看。</div>';
+    return '<div class="trn"><i>'+(t.p[3]?'取舍':'分档说明')+'</i>'+t.n+'</div>';
+  }
+  function refreshTier(){ var el=document.querySelector('.trp'); if(!el) return; var d=document.createElement('div'); d.innerHTML=tierRep(); if(d.firstChild) el.parentNode.replaceChild(d.firstChild, el); }
+  function lineText(y){ var T=tierY(y); return T?'保 '+T.line[0]+' · 常 '+T.line[1]+' · 冲 '+T.line[2]:''; }
+  function tierRep(){
+    var T=cur&&tierY(cur); if(!T) return '';
+    var full=[0,0,0,0], got=[0,0,0,0], lost=[[],[],[],[]], over=[], xt=0, any=0, pend=0;
+    P.q.forEach(function(q){
+      var t=T.q[q.no]; if(!t) return;
+      var u=(ss.qt&&ss.qt[q.no])||0;
+      if (u) any=1;
+      if (isOver(u,t)) over.push([q.no,u,t.m]);
+      if (t.p[3]===q.score) xt+=u;
+      if (qScore(q)==null) { pend++; return; }
+      var r=qScore(q);
+      t.p.forEach(function(p,i){ if(!p) return; var g=Math.min(r,p); r-=g; full[i]+=p; got[i]+=g; if(g<p) lost[i].push(q.no); });
+    });
+    var sc=liveScore(), L=T.line, F=fullScore(), msg;
+    var lk=function(n){ return '<a href="javascript:;" data-go="'+n+'">'+n+'</a>'; };
+    if (pend) msg='<b>还有 '+pend+' 道题没登分。</b>在下面每题解答底下自评，登完这里才算数；下表暂时只统计已登分的题。';
+    else if (sc<L[0]) msg='<b>低于保底线 '+(L[0]-sc)+' 分。</b>必拿题丢了 '+(full[0]-got[0])+' 分，先把这些补回来；冲刺题这一轮不用管。';
+    else if (sc<L[1]) msg='<b>过了保底线，离正常线差 '+(L[1]-sc)+' 分。</b>'+(full[0]-got[0]?'必拿题还丢了 '+(full[0]-got[0])+' 分，这是最便宜的分。':'必拿题全拿到了，差的分在「应得」题上。');
+    else if (sc<L[2]) msg='<b>到了正常线，离冲刺线差 '+(L[2]-sc)+' 分。</b>'+(full[0]-got[0]+full[1]-got[1]?'必拿、应得题里还丢了 '+(full[0]-got[0]+full[1]-got[1])+' 分，先补它们再啃冲刺题。':'剩下的分都在冲刺题上。');
+    else msg='<b>到了冲刺线。</b>保持这个节奏，别再加量。';
+    var pos=function(v){ return (100*v/F).toFixed(1)+'%'; };
+    var h='<div class="trp"><div class="trp-h"><b>三条线</b><span>保底 '+L[0]+'　正常 '+L[1]+'　冲刺 '+L[2]+'　你 '+sc+'</span></div>'
+      + '<div class="trk"><i class="z za" style="width:'+pos(L[0])+'"></i><i class="z zb" style="left:'+pos(L[0])+';width:'+pos(L[1]-L[0])+'"></i><i class="z zc" style="left:'+pos(L[1])+';width:'+pos(L[2]-L[1])+'"></i><i class="me" style="left:'+pos(sc)+'"><u>'+sc+'</u></i></div>'
+      + '<p class="trm">'+msg+'</p>'
+      + '<div class="tabw"><table class="rp trt"><tbody>'+[0,1,2,3].map(function(i){
+          if (!full[i]) return '';
+          return '<tr><td><span class="tr tr-'+TC[i]+'">'+TN[i]+'</span></td><td><b>'+got[i]+'</b> / '+full[i]+'</td><td>'+(lost[i].length?(i<3?'丢在 ':'没拿 ')+lost[i].map(lk).join(' '):'全拿到')+'</td></tr>';
+        }).join('')+'</tbody></table></div>';
+    if (any) {
+      over.sort(function(a,b){ return (b[1]-b[2]*60)-(a[1]-a[2]*60); });
+      var ex=over.reduce(function(a,o){ return a+o[1]-o[2]*60; },0);
+      h+='<p class="tro">'+(over.length?'<b>超时 '+over.length+' 题，多花 '+Math.round(ex/60)+' 分钟：</b>'+over.slice(0,8).map(function(o){ return lk(o[0])+' '+fmt(o[1])+'（限 '+o[2]+'）'; }).join('　'):'<b>没有明显超时的题。</b>')
+        + (xt>=60?'　「后放」题上花了 '+Math.round(xt/60)+' 分钟。':'')+'</p>';
+    }
+    if (T.note) h+='<p class="trnote">'+T.note+'</p>';
+    return h+'</div>';
+  }
+
   /* 这题要用到的知识点、套路：q.tpl ＋ 精解里出现过的 data-kp，按出现顺序去重 */
   function kpIds(q){
     if (q._kp) return q._kp;
@@ -254,10 +316,18 @@
     String(q.rich||'').replace(/data-kp="([^"]+)"/g, function(_,id){ id=id.replace(/&amp;/g,'&'); if(K[id]&&!seen[id]){ seen[id]=1; ids.push(id); } });
     return (q._kp=ids);
   }
+  /* 跨年字眼：同一张套路卡下，各年真题题干里的原话 → 该想到什么 ＋ 那道题带走的一句（rich_build 自动汇总，写新年份就自动变长） */
+  function cueHtml(id, skipNo){
+    var c=(window.EXAM_TPL_CUES&&window.EXAM_TPL_CUES[id])||[];
+    c=c.filter(function(x){ return !(x[0]===cur&&x[1]===skipNo); });
+    if (!c.length) return '';
+    return '<details class="cue"'+(c.length<=3?' open':'')+'><summary>真题里的字眼：看到这些话就想到这张卡（'+c.length+' 题）</summary>'+c.map(function(x){
+      return '<div class="cue-r"><a href="#y='+x[0]+'&q='+x[1]+'">'+x[0]+'·'+x[1]+'</a><div>'+(x[2]?'<span class="rq">'+x[2]+'</span> <span class="ra">'+x[3]+'</span>':'')+(x[4]?'<p class="cue-t">带走：'+x[4]+'</p>':'')+'</div></div>'; }).join('')+'</details>';
+  }
   function kpCard(id, open, skipNo, from){
     var K=window.EXAM_KP[id], u=K.u||(window.EXAM_TPL_USES&&window.EXAM_TPL_USES[id])||[];
     u=u.filter(function(x){ return !(x[0]===cur&&x[1]===skipNo); });
-    return '<details class="kc'+(K.k==='tpl'?' tpl':'')+'"'+(open?' open':'')+'><summary><i>'+(K.k==='tpl'?'套路':'知识点')+'</i><b>'+K.t+'</b>'+(from||'')+'</summary><div class="kpc">'+K.h+'</div>'
+    return '<details class="kc'+(K.k==='tpl'?' tpl':'')+'"'+(open?' open':'')+'><summary><i>'+(K.k==='tpl'?'套路':'知识点')+'</i><b>'+K.t+'</b>'+(from||'')+'</summary><div class="kpc">'+K.h+'</div>'+(K.k==='tpl'?cueHtml(id,skipNo):'')
       + (u.length?'<div class="kpu"><i>'+(skipNo?'别的真题里也用到':'真题里出现在')+'</i>'+u.map(function(x){ return '<a href="#y='+x[0]+'&q='+x[1]+'">'+x[0]+' 第 '+x[1]+' 题</a>'; }).join('')+'</div>':'')+'</details>';
   }
   function kpPanel(q, hint){
@@ -329,10 +399,11 @@
   function qHtml(q){
     var ans = ss.a[q.no], jd = judged(q);
     var h = '<article class="q'+(ss.flag[q.no]?' fl':'')+(ss.at===q.no?' cur':'')+'" id="q'+q.no+'" data-no="'+q.no+'"><div class="qh"><span class="no">'+q.no+'</span>'
-      + '<span class="sc">'+q.score+' 分</span>'+(ss.done&&q.subj&&C.subjects?'<span class="sb">'+esc(C.subjects[q.subj]||q.subj)+'</span>':'')
+      + '<span class="sc">'+q.score+' 分</span>'+tierChip(q)+(ss.done&&q.subj&&C.subjects?'<span class="sb">'+esc(C.subjects[q.subj]||q.subj)+'</span>':'')
       + (P.flagNote&&P.flagNote[q.no]?'<span class="wn">'+esc(P.flagNote[q.no])+'</span>':'')
       + (ss.hint[q.no]?'<span class="hn">看过提示</span>':'')
       + '<button class="flag" data-flag="'+q.no+'" title="标记">'+(ss.flag[q.no]?'★ 已标记':'☆ 标记')+'</button></div>';
+    h += tierNote(q);
     if (q.img) h += '<img class="pimg qi" src="'+q.img+'" alt="第 '+q.no+' 题题面">';
     if (q.stem) h += '<div class="stem">'+q.stem+'</div>';
     if (q.origImg) h += '<details class="orig oq"><summary>看原卷题面</summary><img class="pimg" loading="lazy" src="'+q.origImg+'" alt="原卷"></details>';
@@ -384,10 +455,10 @@
     }).join('');
   }
   function drawPaper(){
-    ss.hint=ss.hint||{}; ss.why=ss.why||{}; ss.lay=ss.lay||{}; ss.show=ss.show||{};
+    ss.hint=ss.hint||{}; ss.why=ss.why||{}; ss.lay=ss.lay||{}; ss.show=ss.show||{}; ss.qt=ss.qt||{};
     var answered = P.q.filter(isDone).length;
     root.innerHTML = '<div class="bar"><a class="bk0" href="#">← 选卷</a><b class="ttl">'+cur+'</b>'
-      + '<span class="timer" id="timer"></span><button class="ghost" id="pause"></button>'
+      + '<span class="timer" id="timer"></span><span class="qtm" id="qtm"></span><button class="ghost" id="pause"></button>'
       + '<span class="prog" id="prog"></span><span class="live" id="live"></span>'
       + '<span class="cdb" id="cdb"></span>'
       + '<span class="rt"><button class="ghost" id="night">夜</button><button class="ghost" id="gear">模式 · 开关</button><button class="ghost sh-b" id="shb">答题卡</button><button class="sub" id="submit">'+(ss.done?'成绩':'交卷')+'</button></span></div>'
@@ -480,6 +551,10 @@
     if (!cur||!ss) { var cx=$('cdx'); if(cx) cx.textContent=countText()+'　·　'+C.examWhen; return; }
     var now=Date.now();
     if (!paused && !ss.done && S.set.timer!=='off') ss.secs+=(now-lastTick)/1000;
+    var qn=ss.at, qq=qn!=null&&P&&qOf(qn), qt=$('qtm');
+    if (qq && !paused && !ss.done && !S.set.read && !judged(qq) && now-lastTick<5000) { ss.qt=ss.qt||{}; ss.qt[qn]=(ss.qt[qn]||0)+(now-lastTick)/1000; }
+    if (qt) { var tq=qq&&tierOf(qn), uq=(ss.qt&&ss.qt[qn])||0;
+      if (tq&&S.set.tier&&!ss.done&&!S.set.read) { qt.textContent='本题 '+fmt(uq)+' / '+tq.m+' 分'; qt.classList.toggle('ov', uq>tq.m*60); } else qt.textContent=''; }
     lastTick=now;
     var t=$('timer'), lim=C.minutes*60;
     if (t) {
@@ -541,7 +616,7 @@
     return '<section class="rep" id="report"><div class="rep-h"><div class="big"><strong>'+score+'</strong><span>/ '+full+'</span></div><div><b>'+cur+' 年真题'+(C.target?'，目标 '+C.target:'')+'</b><br>用时 '+fmt(ss.secs)+(pend?'<br><em>还有 '+pend+' 题没登分，在下面每题解答下自评，分数会跟着变</em>':'')+'</div></div>'
       + '<div class="tabw"><table class="rp"><tbody>'+rows+'</tbody></table></div>'
       + (wrong.length?'<p class="wr">失分题：'+wrong.map(function(q){ return '<a href="javascript:;" data-go="'+q.no+'">'+q.no+'</a>'; }).join(' ')+'</p>':'')
-      + whyStat() + studyHtml() + kpListHtml(wrong)
+      + tierRep() + whyStat() + studyHtml() + kpListHtml(wrong)
       + '<p class="repn">下面只把<b>失分、标记过、看过提示、必吃透</b>的题摊开；做对的题收成一行「本质」，要看再点开。解析太长就在「模式 · 开关」里点「精简」。</p>'
       + '<div class="rep-a"><span class="seg">'+[['all','全部'],['wrong','只看失分'],['flag','只看标记']].concat(curDeep()&&curDeep().core?[['core','只看必吃透']]:[]).map(function(o){ return '<button data-filter="'+o[0]+'" class="'+((ss.filter||'all')===o[0]?'on':'')+'">'+o[1]+'</button>'; }).join('')+'</span><button class="ghost" id="redo">重做这一年</button></div></section>';
   }
@@ -604,7 +679,7 @@
     kpClose(); if(!K) return;
     var u=K.u||(window.EXAM_TPL_USES&&window.EXAM_TPL_USES[id]);
     var o=document.createElement('div'); o.id='kpop'; o.className='kpop'+(K.k==='tpl'?' tpl':'');
-    o.innerHTML='<div class="kph"><i>'+(K.k==='tpl'?'套路':'知识点')+'</i><b>'+K.t+'</b><button class="kpx" data-kpx>×</button></div><div class="kpc">'+K.h+'</div>'
+    o.innerHTML='<div class="kph"><i>'+(K.k==='tpl'?'套路':'知识点')+'</i><b>'+K.t+'</b><button class="kpx" data-kpx>×</button></div><div class="kpc">'+K.h+'</div>'+(K.k==='tpl'?cueHtml(id,null):'')
       +(u&&u.length?'<div class="kpu"><i>真题里出现在</i>'+u.map(function(x){ return '<a href="#y='+x[0]+'&q='+x[1]+'">'+x[0]+' 第 '+x[1]+' 题</a>'; }).join('')+'</div>':'');
     document.body.appendChild(o);
     typeset(o);
@@ -675,7 +750,7 @@
     if ((b=t.closest('[data-wrote]'))) { var wn=+b.getAttribute('data-wrote'); if(ss.a[wn]==='✓') delete ss.a[wn]; else ss.a[wn]='✓'; save(); redrawQ(wn); return; }
     if ((b=t.closest('[data-self]'))) { var fn2=+b.getAttribute('data-self'); ss.self[fn2]=+b.getAttribute('data-v'); if(ss.done) recordHist(); save();
       b.parentNode.querySelectorAll('button').forEach(function(x){ var on=x===b; x.classList.toggle('ok', on&&+x.getAttribute('data-v')>0); x.classList.toggle('no', on&&+x.getAttribute('data-v')===0); });
-      updateSide(); setCur(ss.at); var bg=document.querySelector('.rep .big strong'); if(bg) bg.textContent=liveScore(); return; }
+      updateSide(); setCur(ss.at); var bg=document.querySelector('.rep .big strong'); if(bg) bg.textContent=liveScore(); refreshTier(); return; }
     if ((b=t.closest('[data-filter]'))) { ss.filter=b.getAttribute('data-filter'); redrawPaper(); return; }
     if (t.id==='submit'||t.id==='submit2') { askSubmit(); return; }
     if (t.id==='confirm') { doSubmit(); return; }
@@ -699,7 +774,7 @@
       if (t.value==='') delete ss.self[k]; else ss.self[k]=Math.max(0,Math.min(q.score,+t.value));
       if (ss.done) recordHist();
       lazySave(); updateSide();
-      var big=document.querySelector('.rep .big strong'); if(big) big.textContent=liveScore();
+      var big=document.querySelector('.rep .big strong'); if(big) big.textContent=liveScore(); refreshTier();
     }
   });
   var lz; function lazySave(){ clearTimeout(lz); lz=setTimeout(save,400); }
