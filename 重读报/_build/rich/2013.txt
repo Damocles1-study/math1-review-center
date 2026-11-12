@@ -92,22 +92,11 @@ $f=x^TAx$ 且 **$A$ 对称**，这个 $A$ 才叫 $f$ 的矩阵（唯一）；对
 「$x-\arctan x$」 >> 两个等价无穷小相减，一阶项抵消——{{波|减法里不能直接用等价代换}}（$x-x=0$ 是错的），要泰勒展开到第一个不抵消的项（[[泰勒常用]]）
 「$\arctan x$」 >> 必背：$\arctan x=x-\frac{x^3}3+o(x^3)$，和 $\tan x=x+\frac{x^3}3$ 只差一个符号
 选项 >> $k$ 只有 2、3 两种，$c$ 只有正负两种 ⟹ 定出阶数和符号就选完了
-::sk 340 200 看 | $y=x$（红）与 $y=\arctan x$（黑）在 0 附近贴得很紧：缝隙 $x-\arctan x\approx\frac{x^3}3$，是三阶小、而且是正的
-ox,oy=30,178;X=lambda x:ox+x*120;Y=lambda y:oy-y*75
-s.axes(ox,oy,14,325,192,8,xl='x',yl='y')
-s.line(X(0),Y(0),X(2.1),Y(2.1),'r',1.2)
-s.plot(lambda x:math.atan(x),0,2.4,X,Y,n=12)
-for xx in (0.6,1.0,1.4):
-    s.line(X(xx),Y(math.atan(xx)),X(xx),Y(xx),'b',1.0,dash='2 3')
-s.text(X(2.1)+4,Y(2.1)+14,'y=x',11,'r')
-s.text(X(2.25),Y(math.atan(2.25))+16,'y=arctan x',11,'k','middle')
-s.text(X(1.42)+6,Y(1.2),'缝 ≈ x³/3 ＞0',11,'b')
-s.text(X(0.25),Y(2.25),'x−(x−x³/3+x⁵/5−…)=x³/3−…',10,'p')
 ::think
 1. 泰勒：$x-\arctan x=x-\left(x-\frac{x^3}3+o(x^3)\right)=\frac{x^3}3+o(x^3)$。
 2. 所以 $x-\arctan x\sim\frac{x^3}3$，除以 $x^k$ 得非零常数只能 $k=3$，$c=\frac13$。
 ::fast
-{{秒|看符号}}：$x\gt0$ 时 $\arctan x\lt x$（图上 $\arctan$ 在直线下方），分子为正、$x^3$ 为正 ⟹ $c\gt0$，A、C 先排除；再由「两等价量相减至少差到三阶」⟹ $k=3$，选 D。
+{{秒|看符号}}：$x\gt0$ 时 $\arctan x\lt x$，分子为正、$x^3$ 为正 ⟹ $c\gt0$，A、C 先排除；再由「两等价量相减至少差到三阶」⟹ $k=3$，选 D。
 ::steps
 $x\to0$ 时分子 $x-\arctan x\to0$、分母 $x^k\to0$（$k\gt0$），是 $\frac00$ 型（[[T极限]]：先代入 → 定型 → 选工具）。
 分子是「两个等价无穷小之差」，等价代换失效，选泰勒展开：$\arctan x=x-\dfrac{x^3}{3}+o(x^3)$（[[泰勒常用]]）。
@@ -139,20 +128,12 @@ $\arctan x-\sin x$ 是几阶无穷小 >> 两者的一次项抵消、三次项 $-
 「曲面 $x^2+\cos(xy)+yz+x=0$」 >> 隐式曲面 $F(x,y,z)=0$ ⟹ 法向量 $\boldsymbol n=(F_x',F_y',F_z')$（[[切平面]]）
 「在点 $(0,1,-1)$ 处」 >> 先验点在曲面上：$0+\cos0+1\cdot(-1)+0=0$ ✓。四个选项都应该过这个点——{{圈|代点能先排除}}
 「切平面方程」 >> 点法式：$F_x'(x-x_0)+F_y'(y-y_0)+F_z'(z-z_0)=0$
-::sk 330 190 看 | 切平面（平行四边形）贴在曲面的 $M_0$ 处，法向量 $\boldsymbol n=(1,-1,1)$ 垂直于它；四个选项代点全都通过，代点排除不了
-s.poly([(40,120),(230,150),(300,90),(110,62),(40,120)],'k',1.2)
-s.curve([(55,150),(120,112),(175,104),(240,118),(300,148)],'p',1.0,dash='4 3')
-s.dot(170,106,2.8,'r');s.text(150,128,'M₀(0, 1, −1)',11,'r','middle')
-s.arrow(170,106,196,30,'r',1.4)
-s.text(204,30,'n=(F_{x}, F_{y}, F_{z})=(1,−1,1)',11,'r')
-s.text(268,112,'切平面',11,'k')
-s.text(20,178,'代点：A 0−1−1=−2 ✓  B 0+1−1=0 ✓  C 0−2−1=−3 ✓  D 0−1+1=0 ✓',9,'p')
 ::think
 1. $F=x^2+\cos(xy)+yz+x$，$F_x=2x-y\sin(xy)+1$，$F_y=-x\sin(xy)+z$，$F_z=y$。
 2. 在 $(0,1,-1)$：$\boldsymbol n=(1,-1,1)$。
 3. 切平面 $1\cdot(x-0)-(y-1)+(z+1)=0$，即 $x-y+z=-2$，选 A。
 ::fast
-{{秒|只看法向量方向}}：四个选项代点**全都**通过（见图），所以代点排除不了，只能比法向量。$F_z'=y=1$、$F_x'=2x-y\sin xy+1=1$ ⟹ 法向量形如 $(1,?,1)$，只剩 A、C；再算 $F_y'=-x\sin xy+z=-1$ ⟹ A。
+{{秒|只看法向量方向}}：四个选项代点**全都**通过，所以代点排除不了，只能比法向量。$F_z'=y=1$、$F_x'=2x-y\sin xy+1=1$ ⟹ 法向量形如 $(1,?,1)$，只剩 A、C；再算 $F_y'=-x\sin xy+z=-1$ ⟹ A。
 ::steps
 令 $F(x,y,z)=x^2+\cos(xy)+yz+x$，曲面即 $F=0$；验证 $F(0,1,-1)=0+1-1+0=0$，点在曲面上。
 求三个偏导（$\cos(xy)$ 对 $x$ 求导时 $y$ 当常数，链式出一个 $y$）：
@@ -481,21 +462,6 @@ $c\gt0$ 时 $\{X^2\gt c^2\}=\{X\gt c\}\cup\{X\lt-c\}$（互斥）⟹ $P\{X^2\gt 
 「$\lim n\left[f\left(\frac1n\right)-1\right]$」 >> 「$n\times$（函数差）」= $\dfrac{f(\frac1n)-1}{\frac1n}$：{{圈|差商}}，自变量增量 $\frac1n\to0$ ⟹ 凑导数定义（[[T凑导数定义]]、[[导数定义]]）
 「减去的是 1」 >> 必须核对 $1=f(0)$——不是的话极限是 $\infty$ 或要另算。$x=0$ 代入方程：$y-0=e^0=1$ ⟹ $f(0)=1$ ✓（[[T隐函数先定点]]）
 「$y=f(x)$ 由方程确定」 >> 隐函数求导：两边对 $x$ 求导，$y$ 当 $x$ 的函数（[[隐函数求导]]）；只要 $x=0$ 一个点的导数
-::sk 340 200 看 | 曲线 $y=f(x)$ 过 $(0,1)$、切线斜率 1（红）；$n[f(\frac1n)-1]$ 是到 $(\frac1n,f(\frac1n))$ 的割线斜率，$n\to\infty$ 时转成切线
-ox,oy=110,180;X=lambda x:ox+x*160;Y=lambda y:oy-y*95
-s.axes(ox,oy,14,330,194,8,xl='x',yl='y')
-def yv(x):
-    y=1+x
-    for _ in range(40):
-        g=y-x-math.exp(x*(1-y));y-=g/(1+x*math.exp(x*(1-y)))
-    return y
-s.plot(yv,-0.55,1.25,X,Y,n=14)
-s.line(X(-0.5),Y(0.5),X(0.75),Y(1.75),'r',1.1,dash='5 4')
-s.dot(X(0),Y(1),2.8,'r');s.text(X(0)-8,Y(1)-6,'(0, 1)',11,'r','end')
-h=0.6;s.dot(X(h),Y(yv(h)),2.4,'b');s.line(X(0),Y(1),X(h),Y(yv(h)),'b',1.0)
-s.text(X(h)+6,Y(yv(h))+14,'(1/n, f(1/n))',10,'b')
-s.text(X(0.78),Y(1.8),'切线 y=1+x',10,'r')
-s.text(X(0.55),Y(0.62),'y−x=e^{x(1−y)}',10,'k')
 ::think
 1. $x=0$ ⟹ $f(0)=1$，所求 $=\lim\dfrac{f(\frac1n)-f(0)}{\frac1n}=f'(0)$。
 2. 方程两边求导：$y'-1=e^{x(1-y)}\,[(1-y)-xy']$；代 $x=0,y=1$：$y'-1=1\cdot(0-0)=0$ ⟹ $f'(0)=1$。
@@ -565,17 +531,6 @@ $$y=C_1e^{3x}+C_2e^{x}-xe^{2x}\quad(C_1,C_2\text{ 为任意常数}).$$
 「参数方程求二阶导」 >> {{圈|二阶导 = 一阶导对 $t$ 求导，再除一次 $x'(t)$}}（[[T参数方程二阶导]]、[[参数方程求导]]）——最常见的错是「对 $t$ 求导后忘了再除」
 「$y=t\sin t+\cos t$」 >> $y'(t)=\sin t+t\cos t-\sin t=t\cos t$：$\sin t$ {{波|抵消}}——命题人设计好的
 「$x=\sin t$」 >> $x'(t)=\cos t$ ⟹ $\frac{dy}{dx}=\frac{t\cos t}{\cos t}=t$，一阶导化简成 $t$，二阶导立刻是 $\frac{1}{\cos t}$
-::sk 330 190 看 | 曲线 $x=\sin t,\ y=t\sin t+\cos t$：在 $t=\frac\pi4$ 处切线斜率 $=t=\frac\pi4$，曲线向上弯（$y''=\sqrt2\gt0$）
-ox,oy=165,182;X=lambda x:ox+x*140;Y=lambda y:oy-y*100
-s.axes(ox,oy,14,322,190,8,xl='x',yl='y')
-pts=[(X(math.sin(t)),Y(t*math.sin(t)+math.cos(t))) for t in [-1.4+0.2*i for i in range(15)]]
-s.curve(pts,'k',1.35)
-t0=math.pi/4;x0,y0=math.sin(t0),t0*math.sin(t0)+math.cos(t0)
-s.dot(X(x0),Y(y0),2.8,'r')
-s.line(X(x0-0.45),Y(y0-0.45*t0),X(x0+0.25),Y(y0+0.25*t0),'r',1.0,dash='4 3')
-s.text(X(x0)+8,Y(y0)+16,'t=π/4：(√2/2, √2/2·(1+π/4))',10,'r')
-s.text(X(-0.95),Y(1.62),'dy/dx = t',11,'b')
-s.text(X(0),Y(1)+16,'t=0',10,'p','middle');s.dot(X(0),Y(1),2.2,'p')
 ::think
 1. $\frac{dy}{dt}=t\cos t$，$\frac{dx}{dt}=\cos t$ ⟹ $\frac{dy}{dx}=t$。
 2. $\frac{d^2y}{dx^2}=\frac{\frac{d}{dt}(t)}{\frac{dx}{dt}}=\frac1{\cos t}$。
@@ -607,16 +562,6 @@ $\displaystyle\int_1^{+\infty}\frac{\ln x}{(1+x)^2}\,dx=$ ______.
 「$\int_1^{+\infty}$」 >> 无穷限反常积分（[[反常积分]]）：先求原函数，再取极限；$\ln x$ 增长远慢于 $(1+x)^2$，收敛没悬念
 「$\ln x\cdot\frac{1}{(1+x)^2}$」 >> 对数 × 有理函数 ⟹ {{圈|分部积分，$\ln x$ 留着求导}}（[[T分部反对幂]]）；$\frac1{(1+x)^2}$ 的原函数是 $-\frac1{1+x}$
 「原函数选哪一个」 >> $\frac1{(1+x)^2}$ 的原函数可以加常数：选 $-\frac1{1+x}$ 让 $x\to+\infty$ 那端的边界项 {{波|$\to0$}}；若选 $\frac{x}{1+x}$，无穷远处 $\ln x\cdot\frac x{1+x}\to\infty$，拆不开
-::sk 340 170 看 | 被积函数 $\frac{\ln x}{(1+x)^2}$：从 $x=1$ 的 0 起，涨到约 $x\approx3.6$ 后慢慢回落，面积（灰）$=\ln2$
-ox,oy=20,150;X=lambda x:ox+x*24;Y=lambda y:oy-y*1800
-s.axes(ox,oy,10,335,162,8,xl='x',yl='')
-g=lambda x:math.log(x)/(1+x)**2
-s.hatch([(X(1),oy)]+[(X(1+i*0.5),Y(g(1+i*0.5))) for i in range(25)]+[(X(13),oy)],7,'g',0.6)
-s.plot(g,1,13.2,X,Y,n=16)
-s.text(X(1),oy+14,'1',10,'k','middle')
-s.text(X(4.3),Y(g(3.6))+2,'峰值 ≈0.06',10,'p')
-s.text(X(8.5),Y(0.036),'∫ = ln 2',12,'r','middle')
-s.text(X(8.5),Y(0.074),'分部：u=ln x，dv=dx/(1+x)²',10,'b','middle')
 ::think
 1. 分部：$\int\frac{\ln x}{(1+x)^2}dx=-\frac{\ln x}{1+x}+\int\frac{dx}{x(1+x)}$。
 2. $\frac1{x(1+x)}=\frac1x-\frac1{1+x}$ ⟹ $\int=\ln\frac{x}{1+x}$。
@@ -651,18 +596,6 @@ $\int_1^{+\infty}\frac{\ln x}{1+x^2}dx$ 收敛吗 >> 收敛（被积函数 $\lt\
 「求 $|A|$」 >> 万能关系 $AA^*=|A|E$ ⟹ $-AA^T=|A|E$，两边取行列式
 「3 阶」 >> $|-AA^T|=(-1)^3|A|^2=-|A|^2$；$||A|E|=|A|^3$
 「非零矩阵」 >> 是用来{{波|排除 $|A|=0$}}的：若 $|A|=0$，则 $AA^T=O$，于是 $A=O$，矛盾
-::sk 340 170 看 | 推理链：条件翻译成矩阵等式 → 取行列式 → 用「非零」排除 0
-s.text(20,26,'a_{ij}=−A_{ij}（全部 i, j）',12,'k')
-s.arrow(60,34,60,52,'k',1.0)
-s.text(20,68,'A* = −Aᵀ（A* 第 i 行第 j 列放 A_{ji}）',12,'k')
-s.arrow(60,76,60,94,'k',1.0)
-s.text(20,110,'AA* = |A|E ⟹ −AAᵀ = |A|E',12,'k')
-s.arrow(60,118,60,136,'k',1.0)
-s.text(20,152,'取行列式：−|A|² = |A|³ ⟹ |A|=0 或 −1',12,'k')
-s.text(250,60,'|A|=0 ⟹ AAᵀ=O',11,'r','middle')
-s.text(250,80,'⟹ 对角元 Σa²=0 ⟹ A=O',11,'r','middle')
-s.text(250,100,'与「非零」矛盾',11,'r','middle')
-s.text(300,152,'⟹ |A| = −1',13,'r','middle')
 ::think
 1. $a_{ij}=-A_{ij}$ ⟹ $A^*=(A_{ji})=(-a_{ji})=-A^T$。
 2. $AA^*=|A|E$ ⟹ $-AA^T=|A|E$ ⟹ 取行列式 $-|A|^2=|A|^3$ ⟹ $|A|^2(|A|+1)=0$。
@@ -854,19 +787,6 @@ $$S''(x)=\sum_{n=2}^\infty a_{n-2}x^{n-2}=\sum_{n=0}^\infty a_nx^n=S(x),$$ ⛳2
 「$\left(y+\frac{x^3}3\right)e^{x+y}$」 >> 「多项式 × $e^{x+y}$」：求偏导后 $e^{x+y}$ 是公因子、永不为 0 ⟹ {{圈|驻点方程里直接约掉}}
 「$e^{x+y}$ 对 $x$、对 $y$ 求导都出它自己」 >> $f_x$、$f_y$ 结构相同：$(\text{括号对该变量求导}+\text{括号})e^{x+y}$，两式一减消掉 $y$
 「极值」 >> {{波|每个驻点都要判}}，判出「不是极值」的那个也要写结论
-::sk 340 215 看 | 两条驻点曲线 $f_x=0$（红）与 $f_y=0$（蓝）交于 $x=\pm1$；黑线 $y=-\frac{x^3}3$ 是 $f=0$ 的分界，上方 $f\gt0$、下方 $f\lt0$
-ox,oy=180,90;X=lambda x:ox+x*70;Y=lambda y:oy-y*28
-s.axes(ox,oy,20,330,208,10,xl='x',yl='y')
-s.plot(lambda x:-x**3/3,-2.25,1.65,X,Y,n=12,c='k')
-s.plot(lambda x:-x*x-x**3/3,-2.25,1.45,X,Y,n=12,c='r')
-s.plot(lambda x:-1-x**3/3,-2.2,1.6,X,Y,n=12,c='b')
-s.dot(X(1),Y(-4/3),3,'r');s.dot(X(-1),Y(-2/3),3,'p')
-s.text(X(1)-10,Y(-4/3)+18,'(1,−4/3) 极小',10,'r','end')
-s.text(X(-1)-6,Y(-2/3)+16,'(−1,−2/3) 鞍点',10,'p','end')
-s.text(X(-2.2),Y(2.4),'f_{y}=0：y=−1−x³/3',10,'b')
-s.text(X(0.25),Y(-3.6),'f_{x}=0：y=−x²−x³/3',10,'r')
-s.text(X(-2.25),Y(1.0)+4,'f=0',10,'k')
-s.text(X(0.9),Y(0.9),'f＞0',10,'k');s.text(X(-0.4),Y(-1.9),'f＜0',10,'k')
 ::think
 1. $f_x=\left(x^2+y+\frac{x^3}3\right)e^{x+y}$，$f_y=\left(1+y+\frac{x^3}3\right)e^{x+y}$。
 2. 两式（约去 $e^{x+y}$）相减：$x^2-1=0$ ⟹ $x=\pm1$，再代回得 $y=-\frac43$、$-\frac23$。
@@ -1109,17 +1029,6 @@ $$(x_1,x_2,x_3,x_4)^T=k_1(1,-1,1,0)^T+k_2(1,0,0,1)^T+(1,0,0,0)^T.$$ ⛳2
 「对应的矩阵」 >> 二次型的矩阵必须是{{波|对称}}的（[[二次型的矩阵]]）：写成 $x^TMx$ 之后还要验 $M^T=M$——这是 (I) 的采分点
 「$\alpha,\beta$ 正交且均为单位向量」 >> $\alpha^T\alpha=\beta^T\beta=1$，$\alpha^T\beta=\beta^T\alpha=0$ ⟹ $A\alpha=2\alpha(\alpha^T\alpha)+\beta(\beta^T\alpha)=2\alpha$，$A\beta=\beta$：$\alpha$、$\beta$ 就是特征向量
 「正交变换下的标准形」 >> 系数 = 特征值（[[实对称矩阵]]）；已有 2、1，第三个：$r(A)\le2$ ⟹ 0 是特征值（[[T标准形缺项]] 反过来用）
-::sk 330 200 看 | 三个两两正交的方向：$A$ 把 $\alpha$ 拉长成 $2\alpha$（红）、$\beta$ 原样不动（蓝）、与两者都垂直的 $\gamma$ 压成 0 ⟹ 特征值 2、1、0
-ox,oy=130,140
-s.arrow(ox,oy,ox+70,oy,'k',1.2);s.arrow(ox,oy,ox+140,oy,'r',1.0,dash='4 3')
-s.arrow(ox,oy,ox,oy-75,'b',1.4)
-s.arrow(ox,oy,ox-52,oy+40,'p',1.2)
-s.text(ox+70,oy+16,'α',13,'k','middle');s.text(ox+150,oy+4,'Aα=2α',11,'r')
-s.text(ox+8,oy-80,'β = Aβ',12,'b')
-s.text(ox-60,oy+56,'γ ⟂ α, β：Aγ = 0',11,'p','middle')
-s.text(18,24,'A = 2αα^{T} + ββ^{T}',12,'k')
-s.text(18,44,'αᵀα = βᵀβ = 1，αᵀβ = 0',11,'p')
-s.dot(ox,oy,2.4,'k')
 ::think
 1. (I) $f=2(\alpha^Tx)^2+(\beta^Tx)^2=x^T(2\alpha\alpha^T+\beta\beta^T)x$，且 $2\alpha\alpha^T+\beta\beta^T$ 对称 ⟹ 它就是 $f$ 的矩阵。
 2. (II) $A\alpha=2\alpha$、$A\beta=\beta$；$r(A)\le r(\alpha\alpha^T)+r(\beta\beta^T)=2\lt3$ ⟹ 0 是特征值；特征值 $2,1,0$ ⟹ 标准形 $2y_1^2+y_2^2$。
@@ -1244,16 +1153,6 @@ $$P\{X\le Y\}=P\{X\lt2\}=\int_0^2\frac{x^2}9dx=\frac8{27}.$$ ⛳2
 「$\frac{\theta^2}{x^3}e^{-\theta/x}$」 >> 指数里是 $\frac\theta x$ ⟹ {{圈|换元 $t=\frac\theta x$}}，积分立刻变成 $\int e^{-t}$ 型；这个分布就是「$\frac1X$ 服从 $\Gamma(2,\theta)$」
 「求最大似然估计量」 >> 连乘 → 取对数 → 求导令 0 → 写估计量（大写）（[[T最大似然]]、[[最大似然估计]]）
 「$\theta\gt0$」 >> $\ln\theta$ 有意义；似然方程有唯一正根，二阶导 $-\frac{2n}{\theta^2}\lt0$ 确认是最大
-::sk 340 190 看 | $\theta=1$ 时的密度 $\frac{1}{x^3}e^{-1/x}$：峰在 $x=\frac13$，右边拖着 $\frac1{x^3}$ 的长尾——均值 $\theta=1$ 存在，但二阶矩是无穷
-ox,oy=24,170;X=lambda x:ox+x*72;Y=lambda y:oy-y*105
-s.axes(ox,oy,10,335,182,8,xl='x',yl='')
-g=lambda x:x**-3*math.exp(-1/x)
-s.plot(g,0.08,4.2,X,Y,n=26)
-s.line(X(1),oy,X(1),Y(g(1)),'r',1.0,dash='4 3')
-s.text(X(1)+4,oy+14,'EX=θ=1',10,'r')
-s.dot(X(1/3),Y(g(1/3)),2.4,'b');s.text(X(1/3)+8,Y(g(1/3))+4,'峰 x=θ/3',10,'b')
-s.text(X(2.3),Y(0.6),'θ²/x³ · e^{−θ/x}',11,'k','middle')
-s.text(X(2.3),Y(0.38),'1/X ~ Γ(2, θ)：E(1/X)=2/θ',10,'p','middle')
 ::think
 1. $EX=\int_0^{+\infty}\frac{\theta^2}{x^2}e^{-\theta/x}dx$，令 $t=\frac\theta x$ ⟹ $=\theta\int_0^{+\infty}e^{-t}dt=\theta$ ⟹ 矩估计 $\hat\theta=\bar X$。
 2. $\ln L=2n\ln\theta-3\sum\ln x_i-\theta\sum\frac1{x_i}$，$\frac{d}{d\theta}\ln L=\frac{2n}\theta-\sum\frac1{x_i}=0$ ⟹ $\hat\theta=\dfrac{2n}{\sum\frac1{X_i}}$。

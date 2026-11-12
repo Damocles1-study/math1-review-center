@@ -102,19 +102,6 @@ C 正面证：$f$ 在 0 处可导 ⟹ 连续 ⟹ $f(0)=\lim\limits_{x\to0}f(x)=0
 「$\boldsymbol n\cdot(x,y,f)$」 >> 展开就是 $f_xx+f_yy-f(x,y)$——{{波|正好是可微定义里那个余项（差个负号）}}
 「分母 $\sqrt{x^2+y^2}$」 >> 就是 $\rho$ ⟹ A 是「余项 / $\rho$」，即可微定义原文
 「$\boldsymbol\alpha\perp\boldsymbol n$」 >> $\boldsymbol\alpha$ 平行于切平面，是一个切向量；C、D 是迷惑项
-::sk 330 160 看 | 沿某个方向切一刀看截面：曲面（黑）与切平面（红虚线）在原点相切；$\boldsymbol n\cdot(x,y,f)$ 恰好是两者的竖直落差，比 $\rho$ 高阶
-ox,oy=60,132;X=lambda u:ox+u*85;Y=lambda v:oy-v*56
-s.axes(ox,oy,14,320,150,10,xl='ρ',yl='z')
-g=lambda u:0.4*u+0.15*u*u
-s.plot(g,-0.55,2.95,X,Y,n=10)
-s.line(X(-0.55),Y(-0.22),X(3.05),Y(1.22),'r',1.2,dash='6 4')
-s.line(X(2.4),Y(0.96),X(2.4),Y(g(2.4)),'b',2.0,over=False)
-s.dot(X(2.4),Y(g(2.4)),2.6)
-s.text(X(2.4)-8,Y(1.32),'落差 = |n·(x,y,f)|',12,'b','end')
-s.text(X(2.4)-8,Y(1.32)+16,'= o(ρ)',12,'b','end')
-s.text(X(1.2),Y(0.48)+18,'切平面 z=f_{x}x+f_{y}y',12,'r')
-s.text(X(0.1),Y(1.05),'曲面 z=f(x,y)',12)
-s.line(X(0),oy+22,X(2.4),oy+22,'g',1,dash='3 3');s.text(X(1.1),oy+18,'ρ',12,'g')
 ::think
 1. 可微 ⟹ 写出定义式，把四个选项分子里的向量运算展开，看哪个能和定义式对上。
 2. 点积 $\boldsymbol n\cdot(x,y,f)$ 是一个数，叉积是一个向量（取模）。
@@ -413,17 +400,6 @@ $\lim\limits_{x\to0}\left[\frac1{\sin^2x}-\frac1{x^2}\right]$ >> 分母 $\sim x^
 「参数方程求 $\frac{d^2y}{dx^2}$」 >> [[T参数方程二阶导]]：$\frac{dy}{dx}=\frac{y'(t)}{x'(t)}$，二阶导 ==对 $t$ 求完还要再除一次 $x'(t)$==
 「$y=\ln(t+\sqrt{t^2+1})$」 >> 这个函数的导数是背过的：$\frac{1}{\sqrt{t^2+1}}$（它是 $\operatorname{arsinh}t$）
 「$x=\sqrt{t^2+1}$」 >> $x'(t)=\frac{t}{\sqrt{t^2+1}}$，和 $y'(t)$ 分母一样 ⟹ {{圈|一阶导会化得很干净}}
-::sk 320 160 看 | 消参后 $y=\ln(x+\sqrt{x^2-1})$（$x\ge1$）：一条向下弯的曲线 ⟹ 二阶导应为负，答案的符号先对上
-ox,oy=30,138;X=lambda x:ox+x*90;Y=lambda y:oy-y*58
-s.axes(ox,oy,14,312,150,10)
-s.plot(lambda x:math.log(x+math.sqrt(max(x*x-1,0))),1.0,3.0,X,Y,n=12)
-x0=math.sqrt(2);y0=math.log(x0+1)
-s.line(X(x0-0.55),Y(y0-0.55),X(x0+0.75),Y(y0+0.75),'r',1.1,dash='5 4')
-s.dot(X(x0),Y(y0),2.8)
-s.line(X(x0),oy,X(x0),Y(y0),'g',1,dash='3 3');s.text(X(x0),oy+14,'√2',12,'g','middle')
-s.text(X(x0)+8,Y(y0)+18,'t=1：斜率 1/t = 1',12,'r')
-s.text(X(2.05),Y(1.75),'凹向下 ⟹ y″<0',12,'b')
-s.text(X(1)-4,oy+14,'1',12,'k','middle')
 ::think
 1. $x'(t)=\frac{t}{\sqrt{t^2+1}}$，$y'(t)=\frac1{\sqrt{t^2+1}}$ ⟹ $\frac{dy}{dx}=\frac1t$。
 2. 先化简再求导：$\frac{d}{dt}\frac1t=-\frac1{t^2}$。
@@ -439,7 +415,7 @@ $\dfrac{d^2y}{dx^2}=\dfrac{\frac{d}{dt}\left(\frac1t\right)}{x'(t)}=\dfrac{-\fra
 代 $t=1$：$-\dfrac{\sqrt2}{1}=-\sqrt2$。
 ::note
 - {{扣|$\frac{d^2y}{dx^2}=\frac{d}{dt}\left(\frac1t\right)=-\frac1{t^2}$，得 $-1$}}：忘了再除 $x'(t)$。$\frac{d}{dx}=\frac{d}{dt}\cdot\frac{dt}{dx}$，那个 $\frac{dt}{dx}=\frac1{x'(t)}$ 不能丢。
-- 草图核对符号：曲线 $y=\operatorname{arcosh}x$ 凹向下，二阶导为负 ✓。
+- 核对符号：曲线 $y=\operatorname{arcosh}x$ 凹向下，二阶导为负 ✓。
 ::vary
 求 $\frac{dy}{dx}\big|_{t=1}$ >> $1$
 把 $x$ 改成 $x=t^2+1$，$y$ 不变，求 $\frac{d^2y}{dx^2}\big|_{t=1}$ >> $\frac{dy}{dx}=\frac{1}{2t\sqrt{t^2+1}}$，对 $t$ 求导得 $-\frac{2t^2+1}{2t^2(t^2+1)^{3/2}}$，再除 $2t$，$t=1$ 时 $-\frac{3}{8\sqrt2}=-\frac{3\sqrt2}{16}$
@@ -455,14 +431,6 @@ $x=\cos t$，$y=\sin t$，求 $\frac{d^2y}{dx^2}$ >> $\frac{dy}{dx}=-\cot t$，$
 「$a>0$，没说 $a$ 与 2 的大小」 >> 特征根是实根、重根还是复根不确定 ⟹ ==别去解方程==（要分三种情况）
 「求 $\int_0^{+\infty}f$」 >> 方程里本来就有 $f$ ⟹ [[T方程直接积分|两边直接积分]]，$f''$、$f'$ 的积分都是端点值
 「$f(0)=m$，$f'(0)=n$」 >> 正好就是两边积分后要的端点值
-::sk 330 170 看 | 不管哪种特征根，解都衰减到 0（这里画 $a=0.8$ 的振荡衰减）：$f(+\infty)=f'(+\infty)=0$，积分只剩端点 $0$ 处的值
-ox,oy=30,100;X=lambda x:ox+x*30;Y=lambda y:oy-y*50
-s.axes(ox,oy,14,322,165,10)
-b=math.sqrt(1-0.16);ff=lambda x:math.exp(-0.4*x)*(math.cos(b*x)+(0.5+0.4)/b*math.sin(b*x))
-s.plot(ff,0,9.4,X,Y,n=26)
-s.dot(X(0),Y(1),2.8);s.text(X(0)+8,Y(1)+20,'f(0)=m',12)
-s.line(X(0),Y(1),X(0.7),Y(1+0.35),'r',1.2);s.text(X(0.75),Y(1.45),'斜率 n',12,'r')
-s.text(X(5.2),Y(-0.85),'→ 0（实部 −a/2 < 0）',12,'b')
 ::think
 1. 要的是 $\int_0^{+\infty}f$，方程里 $f$ 单独一项 ⟹ 方程两边从 0 积到 $+\infty$。
 2. $\int f''=f'\big|_0^{+\infty}$，$\int f'=f\big|_0^{+\infty}$，只要知道 $f(+\infty)$、$f'(+\infty)$。
@@ -562,16 +530,6 @@ $a$ 取何值时该矩阵不可逆 >> $a^4-4a^2=0$ ⟹ $a=0,\pm2$
 「$Y=\sin X$」 >> $Y$ 是 $X$ 的函数，求期望不用先求 $Y$ 的分布（[[T函数期望]]）
 「$\mathrm{Cov}(X,Y)$」 >> [[协方差]] $=E(XY)-EX\cdot EY$；$EX=0$ ⟹ {{圈|只要算 $E(X\sin X)$}}
 「$x\sin x$」 >> [[奇偶性|奇 × 奇 = 偶]] ⟹ 对称区间上 = 2 倍半边积分
-::sk 320 150 看 | $Y=\sin X$ 在区间上单调增：$X$ 大 $Y$ 也大 ⟹ 协方差为正，先把符号定下来
-ox,oy=160,85;X=lambda x:ox+x*80;Y=lambda y:oy-y*42
-s.axes(ox,oy,14,306,145,10)
-s.plot(math.sin,-math.pi/2,math.pi/2,X,Y,n=10)
-s.plot(lambda x:x*math.sin(x),-math.pi/2,math.pi/2,X,Y,n=10,c='r',dash='5 4')
-for v,t in ((-math.pi/2,'−π/2'),(math.pi/2,'π/2')):
-    s.line(X(v),oy-3,X(v),oy+3);s.text(X(v),oy+16,t,12,'k','middle')
-s.text(X(0.75),Y(0.95)-4,'y=sin x',12)
-s.text(X(-1.45),16,'x sin x（偶）',12,'r')
-s.text(X(0.2),Y(-0.6),'X↑ ⟹ Y↑：Cov>0',12,'b')
 ::think
 1. $EX=0$ ⟹ $\mathrm{Cov}(X,Y)=E(XY)$，不用算 $EY$（它也为 0，奇函数）。
 2. $E(X\sin X)=\int_{-\pi/2}^{\pi/2}x\sin x\cdot\frac1\pi dx$，偶函数 ⟹ $\frac2\pi\int_0^{\pi/2}x\sin x\,dx$。
@@ -701,14 +659,6 @@ $$I=\frac1{\varepsilon^2}\iint_{D_\varepsilon}2\,dxdy=\frac{2}{\varepsilon^2}\cd
 「证明 $|x|<1$ 时收敛」 >> 就是证 $R\ge1$，比值法一行
 「求和函数」，没给通项 >> 不去求 $a_n$ 的公式，走[[T递推求和函数|递推 → 微分方程]]：$S'=\sum(n+1)a_{n+1}x^n$，用递推换掉系数
 「$a_n$ 前面有 $n$ 和常数 $\frac12$」 >> $\sum na_nx^n=xS'$，$\sum\frac12a_nx^n=\frac12S$ ⟹ 得到一阶线性方程
-::sk 320 160 看 | 和函数 $S(x)=\frac{2}{\sqrt{1-x}}-2$：过原点，$x\to1^-$ 时冲向无穷——收敛区间右端正好是 $R=1$
-ox,oy=170,128;X=lambda x:ox+x*120;Y=lambda y:oy-y*24
-s.axes(ox,oy,14,312,150,10)
-s.plot(lambda x:2/math.sqrt(1-x)-2,-1,0.9,X,Y,n=14)
-s.line(X(1),oy+6,X(1),18,'r',1.1,dash='5 4');s.text(X(1)+4,oy+16,'1',12,'r')
-s.line(X(-1),oy-3,X(-1),oy+3);s.text(X(-1),oy+16,'−1',12,'k','middle')
-s.dot(X(-1),Y(2/math.sqrt(2)-2),2.4);s.text(X(-1)+4,Y(2/math.sqrt(2)-2)+16,'√2−2',11)
-s.text(X(0.25),Y(4.1),'S=2/√(1−x) − 2',12,'b')
 ::think
 1. 收敛：$a_n>0$，比值极限为 1 ⟹ $R=1$ ⟹ $|x|<1$ 时收敛。
 2. 设 $S(x)=\sum_{n\ge1}a_nx^n$，逐项求导 $S'(x)=\sum_{n\ge0}(n+1)a_{n+1}x^n$，把 $n=0$ 那项（$a_1=1$）单独拿出来，其余用递推替换。
@@ -878,15 +828,6 @@ $$|f'(\eta)|=\frac{M}{2-c}>M.\qquad(2)$$ ⛳1
 「经{{圈|正交}}变换化为」 >> $Q^TAQ=B$ 且 $Q^T=Q^{-1}$ ⟹ $A$、$B$ [[相似矩阵|相似]] ⟹ 迹、行列式相同（[[T正交变换互化]]）
 「$a\ge b$」 >> 迹和行列式给出 $a,b$ 是某个二次方程的两根，用它挑出哪个是 $a$
 「求正交矩阵 $Q$」 >> $A$、$B$ 都化成同一个对角阵：$Q_1^TAQ_1=\Lambda=Q_2^TBQ_2$ ⟹ {{波|$Q=Q_1Q_2^T$}}
-::sk 320 190 看 | $A$ 与 $B$ 的特征方向恰好互换：$A$ 的 5-方向是 $(-1,2)$，$B$ 的 5-方向是 $(2,1)$。$Q$ 就是关于直线 $y=3x$ 的反射，把 $B$ 的方向送到 $A$ 的方向
-ox,oy=160,105;X=lambda u:ox+u*38;Y=lambda v:oy-v*38
-s.axes(ox,oy,20,306,182,10,xl='',yl='',o=False)
-s.line(X(-0.6),Y(-1.8),X(0.78),Y(2.34),'g',1.1,dash='5 4');s.text(X(0.8)+4,Y(2.3)+6,'y=3x（镜子）',11,'g')
-s.arrow(ox,oy,X(-1),Y(2),'r',1.6);s.text(X(-1)-8,Y(2)+2,'A: λ=5',12,'r','end')
-s.arrow(ox,oy,X(2),Y(1),'b',1.6);s.text(X(2)+4,Y(1)-4,'B: λ=5',12,'b')
-s.arrow(ox,oy,X(2),Y(1)+6,'r',1.0,dash='3 3');s.text(X(2)+4,Y(1)+16,'A: λ=0',11,'r')
-s.arrow(ox,oy,X(-1)-5,Y(2)+3,'b',1.0,dash='3 3');s.text(X(-1)-8,Y(2)+18,'B: λ=0',11,'b','end')
-s.bend(X(1.6),Y(0.95),X(-0.75),Y(1.75),k=-28,c='k',w=1.0);s.text(X(0.55),Y(1.25),'Q',13,'k','middle')
 ::think
 1. 写出两个矩阵；正交变换 ⟹ 相似 ⟹ 迹、行列式相等，两个方程定 $a,b$。
 2. $A$、$B$ 特征值相同（$5,0$），各求单位特征向量，**按同一顺序**排成 $Q_1$、$Q_2$。
@@ -942,16 +883,6 @@ $$Q=Q_1Q_2^T=\frac15\begin{pmatrix}-4&3\\3&4\end{pmatrix},$$
 「$\boldsymbol\alpha$ 不是 $A$ 的特征向量」 >> 正好是说 {{圈|$A\boldsymbol\alpha\ne k\boldsymbol\alpha$}}——（Ⅰ）几乎就是这句话的翻译，用反证写
 「$A^2\boldsymbol\alpha+A\boldsymbol\alpha-6\boldsymbol\alpha=\boldsymbol0$」 >> 把 $A^2\boldsymbol\alpha$ 写成 $6\boldsymbol\alpha-A\boldsymbol\alpha$，正好是 $P$ 两列的组合
 「求 $P^{-1}AP$」 >> [[T构造P相似]]：写 $AP=(A\boldsymbol\alpha,A^2\boldsymbol\alpha)=P\cdot(\ast)$，==不用求 $P^{-1}$==
-::sk 320 160 看 | $P$ 的两列不共线就可逆；$A$ 作用一次，$\boldsymbol\alpha\mapsto A\boldsymbol\alpha$，$A\boldsymbol\alpha\mapsto6\boldsymbol\alpha-A\boldsymbol\alpha$——在 $(\boldsymbol\alpha,A\boldsymbol\alpha)$ 这组基下读坐标，就是矩阵的两列
-ox,oy=40,130
-s.arrow(ox,oy,ox+70,oy,'k',1.6);s.text(ox+72,oy+14,'α',13)
-s.arrow(ox,oy,ox+30,oy-60,'b',1.6);s.text(ox+18,oy-66,'Aα',13,'b')
-s.text(ox,oy+26,'不共线 ⟹ P 可逆',12,'g')
-s.text(150,30,'A·α  = 0·α + 1·Aα',13)
-s.text(150,58,'A·Aα = 6·α − 1·Aα',13)
-s.cells(206,76,[['0','6'],['1','−1']],cw=34,ch=24,size=13,c='r')
-s.text(196,104,'=',13,'r','end');s.text(150,104,'P⁻¹AP',13,'r')
-s.text(150,148,'第 1 列 ↑      第 2 列 ↑',11,'g')
 ::think
 1. （Ⅰ）反证：$P$ 不可逆 ⟹ $\boldsymbol\alpha,A\boldsymbol\alpha$ 线性相关 ⟹ $A\boldsymbol\alpha=k\boldsymbol\alpha$ ⟹ $\boldsymbol\alpha$ 是特征向量，矛盾。
 2. （Ⅱ）$AP=(A\boldsymbol\alpha,A^2\boldsymbol\alpha)=(A\boldsymbol\alpha,6\boldsymbol\alpha-A\boldsymbol\alpha)=(\boldsymbol\alpha,A\boldsymbol\alpha)\begin{pmatrix}0&6\\1&-1\end{pmatrix}$。
@@ -1049,16 +980,6 @@ $X_1$ 与 $Y$ 独立吗 >> 不独立：$F(x,y)\ne\Phi(x)\Phi(y)$（如 $x=y=0$�
 「$P\{T>s+t\mid T>s\}$」 >> [[条件概率]]：$\{T>s+t\}\subset\{T>s\}$ ⟹ 分子的交集就是 $\{T>s+t\}$
 「$m$ 已知，求 $\theta$ 的最大似然估计」 >> [[T最大似然]] 四步；连续型要{{圈|先求密度}} $f=F'$
 「$t_1,\dots,t_n$，估计值」 >> 用小写 $t_i$ 写成估计值；分布只在 $t\gt0$ 上有密度，样本值都为正
-::sk 330 165 看 | 三条生存曲线 $P\{T>t\}=e^{-(t/\theta)^m}$（$\theta=1$）：都过 $(\theta,\frac1e)$；$m=1$ 是无记忆的指数分布，$m>1$ 会「老化」
-ox,oy=36,140;X=lambda t:ox+t*92;Y=lambda p:oy-p*110
-s.axes(ox,oy,14,322,160,10,xl='t',yl='')
-for m,c,lab,tx,yy in ((0.5,'g','m=0.5',2.4,0.33),(1,'k','m=1',1.9,0.25),(3,'r','m=3',0.6,1.04)):
-    s.plot(lambda t,m=m:math.exp(-t**m),0.001,3.0,X,Y,n=16,c=c)
-    s.text(X(tx),Y(yy)-3,lab,12,c)
-s.dot(X(1),Y(math.exp(-1)),2.6)
-s.line(X(1),oy,X(1),Y(math.exp(-1)),'b',1,dash='3 3');s.text(X(1),oy+14,'θ',12,'b','middle')
-s.text(X(1)+6,Y(math.exp(-1))-8,'1/e',12,'b')
-s.text(ox-6,Y(1)+4,'1',12,'k','end')
 ::think
 1. （Ⅰ）$P\{T>t\}=1-F(t)$；条件概率用定义，分子化简。
 2. （Ⅱ）先求密度 $f(t)=F'(t)$，写似然 $L(\theta)=\prod f(t_i)$。
@@ -1087,7 +1008,7 @@ $$\hat\theta=\Big(\frac1n\sum_{i=1}^nt_i^m\Big)^{\frac1m}.$$ ⛳2
 ::note
 - {{扣|似然函数直接用分布函数 $F$ 连乘}}：连续型要用密度。
 - {{扣|求导时 $\theta^{-m}$ 的导数符号}}：$-\theta^{-m}\sum t_i^m$ 求导是 $+m\theta^{-m-1}\sum t_i^m$，符号错了会解出负的 $\theta^m$。
-- （Ⅰ）的潜台词：条件概率 $e^{(s/\theta)^m-((s+t)/\theta)^m}$ 一般**依赖 $s$**。只有 $m=1$ 时它等于 $e^{-t/\theta}=P\{T>t\}$（无记忆性）；$m>1$ 时随 $s$ 增大而减小（越用越容易坏，草图红线），$m<1$ 时随 $s$ 增大而增大（「磨合期」）。
+- （Ⅰ）的潜台词：条件概率 $e^{(s/\theta)^m-((s+t)/\theta)^m}$ 一般**依赖 $s$**。只有 $m=1$ 时它等于 $e^{-t/\theta}=P\{T>t\}$（无记忆性）；$m>1$ 时随 $s$ 增大而减小（越用越容易坏），$m<1$ 时随 $s$ 增大而增大（「磨合期」）。
 - 题目说「估计值」，用小写 $t_i$；若说「估计量」，要写成大写 $T_i$。
 ::vary
 $m=1$ 时 $\hat\theta$ 是什么 >> $\bar t=\frac1n\sum t_i$（指数分布均值的 MLE）

@@ -43,7 +43,7 @@
     ['autoEnd','时间到自动交卷','倒计时走完直接交卷，不看有没有答完。关着时只提醒，可继续写。']
   ];
   var MODES = [['exam','考试','整卷做完再交，交卷后统一判分、看解析。'],['practice','练习','做一题对一题：选完立刻判对错，填空和解答写完点「对答案」。'],['read','读解析','不用作答，每题的解析直接摊开，适合二刷和考前翻看。']];
-  var HIDES = [['read','读题圈画'],['sk','草稿图（考场上画的、列的）'],['see','示意图（看懂就行、考场不画的）'],['think','思路'],['steps','每一步'],['omit','考场可省的步骤'],['fast','秒杀'],['paper','考场卷面'],['note','批注'],['vary','举一反三']];
+  var HIDES = [['rev','复盘'],['read','读题圈画'],['sk','草稿图（考场上画的、列的）'],['see','示意图（看懂就行、考场不画的）'],['think','思路'],['steps','每一步'],['omit','考场可省的步骤'],['fast','秒杀'],['paper','考场卷面'],['note','批注'],['vary','举一反三']];
   function modeOf(){ return S.set.read?'read':S.set.instant?'practice':'exam'; }
   function segHtml(attr, list, on){ return '<span class="seg" role="group">'+list.map(function(o){ return '<button data-'+attr+'="'+o[0]+'" class="'+(on===o[0]?'on':'')+'">'+o[1]+'</button>'; }).join('')+'</span>'; }
   function togglesHtml(){

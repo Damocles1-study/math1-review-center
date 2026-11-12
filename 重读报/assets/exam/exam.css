@@ -272,3 +272,7 @@ html[data-theme="night"] .rb-sk svg,html[data-theme="night"] .optsvg{filter:inve
 .chips button.pre{text-decoration:none;color:var(--bg);background:var(--ink);border-color:var(--ink);font-weight:700}
 .gist{margin-top:8px;padding:4px 10px 4px 12px;border-left:3px solid var(--ok);font-size:14.5px;color:var(--ink2);line-height:1.7}.gist i{display:block;font:700 12.5px var(--hand);color:var(--ok);font-style:normal}
 .repn{font-size:13px;color:var(--ink3);margin:8px 0 0}
+/* 复盘块：每题第一块，四行——该花多久、卡点、错了说明什么、带走什么 */
+.rich .rb.rb-rev{margin-top:12px;padding:10px 14px 8px;background:var(--stk)!important;box-shadow:1px 2px 5px var(--shadow);--mk:rgba(60,170,100,.3)}
+.rb-rev ul{list-style:none;padding-left:0!important;margin:.2em 0}.rb-rev li{margin:.25em 0;line-height:1.7}.rb-rev li b:first-child{font-family:var(--hand);color:var(--ac);margin-right:6px}
+.hide-rev .rb-rev{display:none!important}

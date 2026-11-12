@@ -65,19 +65,6 @@ $\int_0^{+\infty}\frac{\ln(1+x)}{x^p}dx$ 何时收敛 >> 0 端 $\sim x^{1-p}$ �
 「一个原函数」 >> [[T分段原函数]]：两段各积一次，常数靠「$F$ 在 $x=1$ 处连续」定
 「四个选项左段全是 $(x-1)^2$」 >> {{圈|左段不用管}}，$x=1$ 处左边的值是 0；只看右段
 「右段只有 $\ln x\pm1$ 与 $\pm1$ 的区别」 >> 两步淘汰：① $(\cdots)'=\ln x$ 吗？② $x=1$ 处等于 0 吗？
-::sk 320 200 看 | 实线是原函数 $F$：左边抛物线 $(x-1)^2$、右边 $x(\ln x-1)+1$，在 $(1,0)$ 处接上；虚线是 $f$ 本身（左边直线、右边 $\ln x$）
-ox,oy=60,120;X=lambda x:ox+x*75;Y=lambda y:oy-y*30
-s.axes(ox,oy,14,312,196,12,xl='x',yl='y')
-s.plot(lambda x:(x-1)**2,-0.4,1,X,Y,n=8,c='k')
-s.plot(lambda x:x*(math.log(x)-1)+1,1,3.2,X,Y,n=8,c='k')
-s.line(X(0),Y(-2),X(1),Y(0),'b',1.0,dash='4 3')
-s.plot(lambda x:math.log(x),1,3.2,X,Y,n=6,c='b',dash='4 3')
-s.dot(X(1),Y(0),3,'r')
-s.text(X(1)+4,Y(0)+16,'(1,0) 接上',11,'r')
-s.text(X(-0.35),Y(1.9)-6,'(x−1)²',11)
-s.text(X(2.3),Y(1.5),'x(ln x−1)+1',11)
-s.text(X(0.15),Y(-1.4),'f=2(x−1)',10,'b')
-s.text(X(2.6),Y(0.9)+16,'f=ln x',10,'b')
 ::think
 1. 右段原函数：$\int\ln x\,dx=x\ln x-x+C=x(\ln x-1)+C$——先排除导数不对的 B、C。
 2. 剩 A、D 只差常数：用 $F$ 在 $x=1$ 处连续定 $C$。
@@ -115,16 +102,6 @@ $f=\begin{cases}1,&x\lt0\\2,&x\ge0\end{cases}$ 在 $(-1,1)$ 上有原函数吗 >
 「$(1+x^2)^2\mp\sqrt{1+x^2}$」 >> {{圈|两解只差 $\sqrt{1+x^2}$ 前的符号}} ⟹ 差 $=2\sqrt{1+x^2}$ 是齐次解，平均 $=(1+x^2)^2$ 是特解
 「求 $q(x)$」 >> 先由齐次解求 $p$，再把特解 $(1+x^2)^2$ 代回求 $q$
 「C、D 是 $\pm\frac{x}{1+x^2}$」 >> 这是 $p$ 的长相，命题人拿 $p$ 冒充 $q$；A、B 只差符号
-::sk 400 190 看 | 两个解（实线）上下对称地夹着中间那条 $(1+x^2)^2$（虚线）：中间线是非齐次的特解，上下的距离 $2\sqrt{1+x^2}$ 是齐次解
-ox,oy=140,170;X=lambda x:ox+x*95;Y=lambda y:oy-y*23
-s.axes(ox,oy,20,262,180,8,xl='x',yl='y')
-s.plot(lambda x:(1+x*x)**2-math.sqrt(1+x*x),-1.1,1.1,X,Y,n=10)
-s.plot(lambda x:(1+x*x)**2+math.sqrt(1+x*x),-1.1,1.1,X,Y,n=10)
-s.plot(lambda x:(1+x*x)**2,-1.1,1.1,X,Y,n=10,c='b',dash='4 3')
-s.arrow(X(0.55),Y((1.3025)**2-math.sqrt(1.3025))+1,X(0.55),Y((1.3025)**2+math.sqrt(1.3025))-1,'r',1.0)
-s.text(X(1.1)+8,Y(6.37)+4,'y₂',11);s.text(X(1.1)+8,Y(3.4)+4,'y₁',11)
-s.text(X(1.1)+8,Y(4.88)+4,'平均 (1+x²)²：特解',11,'b')
-s.text(X(1.1)+8,Y(2.1),'红箭头 = 差 2√(1+x²)',11,'r');s.text(X(1.1)+8,Y(2.1)+15,'= 齐次解',11,'r')
 ::think
 1. $y_2-y_1=2\sqrt{1+x^2}$ 满足 $y'+py=0$ ⟹ $p=-\frac{y'}{y}=-\frac{x}{1+x^2}$。
 2. $\frac{y_1+y_2}2=(1+x^2)^2$ 满足原方程 ⟹ $q=[(1+x^2)^2]'+p(1+x^2)^2$。
@@ -674,18 +651,6 @@ $$(2)=\frac{16}3\left(3\cdot\frac\pi4+3\cdot\frac23+\frac{3\pi}{16}\right)=\frac
 「$0\lt k\lt1$」 >> 判别式 $4-4k>0$：{{圈|两个不同实根}} $-1\pm\sqrt{1-k}$；又 $\sqrt{1-k}\lt1$ ⟹ 两根都是负数 ⟹ 解是两个衰减指数之和（[[T有界解]]）
 「（Ⅰ）$\int_0^{+\infty}y$ 收敛」 >> 每个 $e^{\lambda x}$（$\lambda\lt0$）在 $[0,+\infty)$ 上都可积 ⟹ 线性组合可积
 「（Ⅱ）求 $\int_0^{+\infty}y$」 >> {{波|不用解出 $y$}}：方程两边从 0 积到 $+\infty$（[[T方程直接积分]]），只用 $y(+\infty)=y'(+\infty)=0$ 和初值
-::sk 330 160 看 | $k=\frac12$、$y(0)=y'(0)=1$ 时的解：先上升一点再指数衰减到 0，曲线下的面积就是所求积分 $\frac3k=6$
-ox,oy=30,140;X=lambda x:ox+x*27;Y=lambda y:oy-y*82
-l1=-1+math.sqrt(0.5);l2=-1-math.sqrt(0.5);C1=(1-l2)/(l1-l2);C2=1-C1
-f=lambda x:C1*math.exp(l1*x)+C2*math.exp(l2*x)
-s.axes(ox,oy,14,322,152,10,xl='x',yl='y')
-s.plot(f,0,10.5,X,Y,n=16)
-pts=[(X(x),Y(f(x))) for x in [i*0.7 for i in range(16)]]+[(X(10.5),oy),(X(0),oy)]
-s.hatch(pts,gap=8,c='b')
-s.dot(X(0),Y(1),2.6,'r');s.text(X(0)+6,Y(1)+16,'y(0)=1',10,'r')
-s.text(X(2.6),Y(1.45),'斜率 y′(0)=1',10,'r')
-s.text(X(5.2),Y(0.85),'面积 ∫₀^{+∞}y dx = 3/k',11,'b')
-s.text(X(6.5),Y(0.2)-4,'y、y′ → 0',10)
 ::think
 （Ⅰ）
 1. 特征根 $\lambda_{1,2}=-1\pm\sqrt{1-k}$，$0\lt k\lt1$ ⟹ $0\lt\sqrt{1-k}\lt1$ ⟹ $\lambda_1,\lambda_2\lt0$ 且不等。
@@ -1134,15 +1099,6 @@ $U$ 的分布与 $EU$ >> $P(U=0)=P(U=1)=\frac12$，$EU=\frac12$
 「简单随机样本，$T=\max\{X_1,X_2,X_3\}$」 >> 独立同分布的最大值 ⟹ [[T最大值分布]]：$F_T(t)=[F(t)]^3=\frac{t^9}{\theta^9}$
 「$aT$ 为 $\theta$ 的无偏估计」 >> $E(aT)=\theta$（[[无偏估计]]）⟹ 先求 $ET$，$a=\frac{\theta}{ET}$
 「最大值」 >> {{圈|$T\le\theta$ 恒成立}} ⟹ $ET\lt\theta$，$T$ 系统性偏小，$a$ 必大于 1
-::sk 320 160 看 | 单个 $X$ 的密度 $\frac{3x^2}{\theta^3}$（虚线）与最大值 $T$ 的密度 $\frac{9t^8}{\theta^9}$（实线，按 $\theta=1$ 画）：取最大把概率挤到右端，$ET=\frac9{10}\theta$ 仍比 $\theta$ 小一点
-ox,oy=40,140;X=lambda x:ox+x*240;Y=lambda y:oy-y*13
-s.axes(ox,oy,14,312,152,10,xl='t',yl='f')
-s.plot(lambda x:3*x*x,0,1,X,Y,n=8,c='b',dash='4 3')
-s.plot(lambda x:9*x**8,0,1,X,Y,n=14)
-s.line(X(1),oy,X(1),Y(9),'g',0.8,dash='3 3');s.text(X(1),oy+14,'θ',11,'k','middle')
-s.line(X(0.9),oy,X(0.9),Y(9*0.9**8),'r',1.0);s.text(X(0.9),oy+14,'0.9θ',10,'r','middle')
-s.text(X(0.55),Y(2.6),'3x^{2}/θ^{3}',10,'b');s.text(X(0.72),Y(7.4),'9t^{8}/θ^{9}',11)
-s.text(X(0.62),Y(9.4),'ET=0.9θ',10,'r')
 ::think
 （Ⅰ）
 1. $F_X(x)=\int_0^x\frac{3u^2}{\theta^3}du=\frac{x^3}{\theta^3}$（$0\le x\lt\theta$），$x\lt0$ 时 0，$x\ge\theta$ 时 1。

@@ -15,15 +15,6 @@
 「$x\le0$ 时 $f=b$」 >> {{圈|左边是常数}} ⟹ 左极限 $=f(0)=b$，左边不用算
 「$\frac{1-\cos\sqrt x}{ax}$，$x>0$」 >> 只在右侧有定义（根号要求 $x\ge0$），所以只要右极限；$\frac00$ 型、乘除结构 ⟹ [[等价无穷小]]：$1-\cos u\sim\frac{u^2}{2}$，$u=\sqrt x$
 「选项全是 $ab=$ 某数」 >> 提示右极限会算出 $\frac{1}{2a}$ 这种「含 $a$ 的分式」，和 $b$ 一乘就消掉
-::sk 320 150 看 | 连续 = 右边曲线伸到 0 时的高度 $\frac1{2a}$ 恰好接上左边常数 $b$（图按 $a=1$，$b=\frac12$ 画）
-ox,oy=170,125;X=lambda x:ox+x*40;Y=lambda y:oy-y*160
-s.axes(ox,oy,14,312,140,10,xl='x',yl='y')
-s.line(X(-3.8),Y(0.5),X(0),Y(0.5),'b',1.5)
-s.plot(lambda x:(1-math.cos(math.sqrt(x)))/x,0.05,3.4,X,Y,n=9,c='k')
-s.dot(X(0),Y(0.5),3,'r')
-s.text(X(-3.6),Y(0.5)-8,'x≤0：常数 b',11,'b')
-s.text(X(1.2),Y(0.5)-26,'(1−cos√x)/(ax) → 1/(2a)',11)
-s.text(X(0)+8,Y(0.5)+30,'对接点：1/(2a)=b',11,'r')
 ::think
 1. 连续的定义：$\lim_{x\to0^+}f(x)=\lim_{x\to0^-}f(x)=f(0)$（[[T分段点]]）。
 2. 左边常数 $b$，$f(0)=b$；右边用等价无穷小算出 $\frac{1}{2a}$。
@@ -110,17 +101,6 @@ s.text(X(-1.55),Y(1.6),'|f| 都在变大',12,'k')
 「$(1,2,2)$」 >> 模 $=\sqrt{1+4+4}=3$，正好是整数，单位化后 $\frac13(1,2,2)$——命题人特意挑的
 「$f=x^2y+z^2$」 >> 多项式，处处可微，方向导数可以用梯度点乘算
 「选项 6 和 2 差 3 倍」 >> 6 = 没单位化，是专门给漏步的人准备的
-::sk 300 150 看 | 方向导数 = 梯度在单位方向上的投影长度：$\nabla f=(4,1,0)$ 投到 $\boldsymbol e=\frac13(1,2,2)$ 上，得 $\frac{4+2+0}{3}=2$
-O=(30,135);u=(0.9,-0.436);g=(240,-50)
-pl=u[0]*g[0]+u[1]*g[1];F=(O[0]+pl*u[0],O[1]+pl*u[1]);G=(O[0]+g[0],O[1]+g[1])
-s.line(O[0],O[1],F[0],F[1],'r',0.9,dash='4 3')
-s.arrow(O[0],O[1],G[0],G[1],'b',1.6)
-s.arrow(O[0],O[1],O[0]+110*u[0],O[1]+110*u[1],'r',1.8)
-s.line(G[0],G[1],F[0],F[1],'p',0.9,dash='3 3')
-s.text(G[0]-60,G[1]+18,'∇f=(4,1,0)',12,'b')
-s.text(O[0]+40,O[1]-52,'e=(1,2,2)/3',12,'r')
-s.text(F[0]-10,F[1]-6,'投影长 = ∇f·e = 2',11,'r','end')
-s.dot(O[0],O[1],2.5)
 ::think
 1. 求梯度：$\nabla f=(2xy,\ x^2,\ 2z)$，代点 $(1,2,0)$ 得 $(4,1,0)$。
 2. 单位化方向：$\boldsymbol e=\frac{\boldsymbol n}{\lvert\boldsymbol n\rvert}=\left(\frac13,\frac23,\frac23\right)$。
@@ -419,13 +399,6 @@ $f(x)=x^2\ln(1+x)$，求 $f^{(5)}(0)$ >> $x^2(x-\frac{x^2}2+\frac{x^3}{3}-\cdots
 「$y''+2y'+3y=0$」 >> 二阶常系数齐次线性方程 ⟹ 写[[特征方程]] $r^2+2r+3=0$
 「通解」 >> 两个独立常数 $C_1,C_2$ 都要写上
 「系数 2、3」 >> 判别式 $4-12=-8\lt0$ ⟹ {{圈|共轭复根}} ⟹ 指数乘三角
-::sk 280 110 看 | 特征根落在复平面左半边：实部 $-1$ 决定 $e^{-x}$，虚部 $\pm\sqrt2$ 决定 $\cos\sqrt2x$、$\sin\sqrt2x$
-ox,oy=150,58;X=lambda a:ox+a*55;Y=lambda b:oy-b*30
-s.axes(ox,oy,20,270,104,10,xl='Re',yl='Im')
-s.dot(X(-1),Y(1.414),3,'r');s.dot(X(-1),Y(-1.414),3,'r')
-s.line(X(-1),Y(1.414),X(-1),Y(0),'p',0.8,dash='3 3')
-s.text(X(-1)-6,Y(1.414)-4,'−1+√2 i',11,'r','end');s.text(X(-1)-6,Y(-1.414)+12,'−1−√2 i',11,'r','end')
-s.text(X(-1),oy+14,'−1',10,'k','middle')
 ::think
 1. 特征方程 $r^2+2r+3=0$，求根公式 $r=\frac{-2\pm\sqrt{4-12}}{2}=-1\pm\sqrt2\,i$。
 2. 复根 $\alpha\pm\beta i$ ⟹ $y=e^{\alpha x}(C_1\cos\beta x+C_2\sin\beta x)$，$\alpha=-1$、$\beta=\sqrt2$。
@@ -556,15 +529,6 @@ $\alpha_1,\alpha_2,\alpha_3$ 线性无关 ⟹ $P=(\alpha_1,\alpha_2,\alpha_3)$ �
 「$\Phi(x)$」 >> $N(0,1)$ 的分布函数，均值 0
 「$\Phi(\frac{x-4}{2})$」 >> $N(4,2^2)$ 的分布函数（$\Phi(\frac{x-\mu}{\sigma})$），均值 4
 「$E(X)$」 >> 密度是两个密度的加权和 ⟹ 期望也是加权和：$0.5\times0+0.5\times4$
-::sk 320 140 看 | 两个正态各占一半：$N(0,1)$ 高而窄、$N(4,4)$ 矮而宽；混合后的期望是两个中心按权重的平均 $2$
-ox,oy=100,120;X=lambda x:ox+x*30;Y=lambda y:oy-y*480
-s.axes(ox,oy,14,312,134,10,xl='x',yl='')
-s.plot(lambda x:0.5*math.exp(-x*x/2)/math.sqrt(2*math.pi),-2.8,2.8,X,Y,n=12,c='b',dash='4 3')
-s.plot(lambda x:0.25*math.exp(-(x-4)**2/8)/math.sqrt(2*math.pi),-1,7,X,Y,n=12,c='r',dash='4 3')
-s.plot(lambda x:0.5*math.exp(-x*x/2)/math.sqrt(2*math.pi)+0.25*math.exp(-(x-4)**2/8)/math.sqrt(2*math.pi),-2.8,7,X,Y,n=18,c='k')
-s.line(X(2),Y(0),X(2),Y(0.2),'r',1.0,dash='2 3');s.text(X(2),oy+14,'EX=2',11,'r','middle')
-s.text(X(0),oy+14,'0',10,'k','middle');s.text(X(4),oy+14,'4',10,'k','middle')
-s.text(X(0.6),Y(0.205),'0.5·φ(x)',11,'b');s.text(X(4.6),Y(0.12),'0.25·φ((x−4)/2)',11,'r')
 ::think
 1. 求导得密度：$f(x)=0.5\varphi(x)+0.5\cdot\frac12\varphi\big(\frac{x-4}{2}\big)$（链式法则的 $\frac12$ 别丢）。
 2. $f=0.5f_1+0.5f_2$，$f_1$ 是 $N(0,1)$ 的密度，$f_2=\frac12\varphi(\frac{x-4}2)$ 是 $N(4,4)$ 的密度。
@@ -699,21 +663,6 @@ $\lim_{n\to\infty}\sum_{k=1}^n\frac{k}{n^2}\ln\big(1+\frac{k}{n}\big)$ 改为 $\
 「$y(x)$ 由方程……确定」 >> 隐函数 ⟹ [[隐函数求导]]：两边对 $x$ 求导，$y$ 看作 $x$ 的函数
 「求 $y(x)$ 的极值」 >> [[T隐函数极值]]：$y'=0$ 找驻点 → 代回原方程求 $y$ → 判号
 「$3y$、$y^3$」 >> 对 $y$ 求导得 $3y^2+3$，{{圈|恒正}} ⟹ $y'$ 的分母永不为 0，$y'$ 处处存在，符号只看分子
-::sk 320 170 看 | 曲线 $x^3+y^3-3x+3y-2=0$ 的大致形状：$x=-1$ 处是谷底 $(−1,0)$，$x=1$ 处是峰顶 $(1,1)$
-ox,oy=160,110;X=lambda x:ox+x*55;Y=lambda y:oy-y*55
-s.axes(ox,oy,14,312,165,10,xl='x',yl='y')
-def yy(x):
-    c=x**3-3*x-2;lo,hi=-5.0,5.0
-    for _ in range(60):
-        m=(lo+hi)/2
-        if m**3+3*m+c>0: hi=m
-        else: lo=m
-    return lo
-s.plot(yy,-2.4,2.4,X,Y,n=16)
-s.dot(X(1),Y(1),3,'r');s.dot(X(-1),Y(0),3,'b')
-s.text(X(1)+6,Y(1)-8,'极大 (1,1)',11,'r');s.text(X(-1)-6,Y(0)+16,'极小 (−1,0)',11,'b','end')
-s.line(X(1),Y(1),X(1),Y(0),'p',0.8,dash='3 3')
-s.text(X(1),oy+14,'1',10,'k','middle');s.text(X(-1),oy-6,'−1',10,'k','middle')
 ::think
 1. 求导：$3x^2+3y^2y'-3+3y'=0$ ⟹ $y'=\frac{1-x^2}{1+y^2}$。
 2. $y'=0$ ⟹ $x=\pm1$；分别代回原方程解 $y$。

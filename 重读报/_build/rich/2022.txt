@@ -121,19 +121,6 @@ $z=f(x^2+y^2)$，问 $y z_x-xz_y$ >> $2xyf'-2xyf'=0$：旋转对称函数沿圆�
 「若外层函数的极限存在，则里层的极限存在」 >> 这是在问[[连续与数列极限|「能不能反推」]]：外层函数在里层的取值范围上必须严格单调才能反推
 「$\cos(\sin x_n)$」 >> 外层 $\cos$ 是偶函数，$\sin x_n=\pm\sin1$ 都打到同一个值 ⟹ 不能反推出 $\sin x_n$ 收敛 ⟹ C 错
 「$\sin(\cos x_n)$」 >> 外层 $\sin$ 作用在 $\cos x_n\in[0,1]$ 上，$\sin$ 在这里严格增、连续 ⟹ 可以反推出 $\cos x_n$ 收敛；但 $\cos$ 又是偶函数，不能再往里推出 $x_n$ ⟹ D
-::sk 330 175 看 | $x_n=(-1)^n$ 在 $\pm1$ 之间跳，可 $\cos$ 是偶函数，两个点打到同一高度 $\cos1$：外面看是常数列，里面根本不收敛
-ox,oy=165,150;X=lambda x:ox+x*62;Y=lambda y:oy-y*95
-s.axes(ox,oy,50,290,166,22)
-s.plot(math.cos,-1.5708,1.5708,X,Y,n=10)
-s.dot(X(-1),Y(math.cos(1)),3,'r');s.dot(X(1),Y(math.cos(1)),3,'r')
-s.line(X(-1),Y(math.cos(1)),X(1),Y(math.cos(1)),'r',1,dash='4 3')
-s.line(X(-1),Y(math.cos(1)),X(-1),oy,'g',1,dash='3 3');s.line(X(1),Y(math.cos(1)),X(1),oy,'g',1,dash='3 3')
-s.text(X(-1),oy+15,'−1',12,'k','middle');s.text(X(1),oy+15,'1',12,'k','middle')
-s.text(X(-1.57),oy+15,'−π/2',11,'g','middle');s.text(X(1.57),oy+15,'π/2',11,'g','middle')
-s.text(X(1)+8,Y(math.cos(1))-4,'cos 1',12,'r')
-s.bend(X(-1)-4,oy-4,X(1)+4,oy-4,k=22,c='b')
-s.text(ox,oy-12,'x_{n} 来回跳',11,'b','middle')
-s.text(X(0.25),Y(1)-5,'y = cos x（偶）',12)
 ::think
 1. 判断型选项 ⟹ [[T举反例]]：最简单的不收敛数列就是 $(-1)^n$，而且它正好落在 $[-\frac\pi2,\frac\pi2]$ 里。
 2. 用它打一遍：$\cos(\sin x_n)=\cos(\sin1)$、$\sin(\cos x_n)=\sin(\cos1)$ 都是常数列（极限存在），而 $x_n$ 不收敛 ⟹ A、B 错；$\sin x_n=\pm\sin1$ 不收敛 ⟹ C 前半句错。
@@ -431,17 +418,6 @@ $X_i\sim N(0,1)$ 时把 $\mu_2,\mu_4$ 代进 A >> $\mu_2=1$，$\mu_4=3$，上界
 「在 $X=x$ 的条件下，$Y\sim N(x,1)$」 >> [[T条件正态拆分|均值跟着 $x$ 走、方差恒为 1]] ⟹ $Y=X+Z$，$Z\sim N(0,1)$ 且 {{圈|与 $X$ 独立}}
 「相关系数」 >> [[相关系数|$\rho=\frac{\mathrm{Cov}(X,Y)}{\sqrt{DX}\sqrt{DY}}$]]，要 $\mathrm{Cov}(X,Y)$ 和 $DY$
 「$X\sim N(0,1)$」 >> $DX=1$
-::sk 330 225 看 | 草图：$Y$ 的条件分布是沿着直线 $y=x$ 滑动的一个个「钟」，钟的宽度不变——这就是「$Y=X+$ 独立噪声」
-ox,oy=150,104;X=lambda x:ox+x*52;Y=lambda y:oy-y*24
-s.axes(ox,oy,16,318,198,8)
-s.line(X(-2.5),Y(-2.5),X(2.5),Y(2.5),'r',1.2,dash='5 4')
-s.text(X(2.5)+4,Y(2.5)+4,'y = x',12,'r')
-for x0 in (-1.5,0,1.5):
-    s.line(X(x0),Y(x0-2.2),X(x0),Y(x0+2.2),'g',.8,dash='2 3')
-    s.curve([(X(x0)+28*math.exp(-t*t/2),Y(x0+t)) for t in (-2.2,-1.5,-0.8,0,0.8,1.5,2.2)],'b',1.2)
-    s.dot(X(x0),Y(x0),2.4,'r')
-s.text(X(1.5)+32,Y(1.5)+18,'N(x,1)',12,'b')
-s.text(12,218,'钟的宽度处处一样 ⟹ 噪声与 X 无关',11,'g')
 ::think
 1. 翻译条件分布：令 $Z=Y-X$，则在 $X=x$ 条件下 $Z\sim N(0,1)$，这个条件分布与 $x$ 无关 ⟹ $Z$ 与 $X$ 独立，且 $Z\sim N(0,1)$。
 2. $Y=X+Z$：$\mathrm{Cov}(X,Y)=DX+\mathrm{Cov}(X,Z)=1$，$DY=DX+DZ=2$。
@@ -511,17 +487,6 @@ $\displaystyle\int_1^{e^2}\frac{\ln x}{\sqrt x}\,dx=$ ________.
 ::read
 「$\ln x$ 乘一个幂函数 $x^{-1/2}$」 >> [[T分部反对幂|「反对幂指三」]]：$\ln x$ 留着求导，$\frac1{\sqrt x}$ 先积出来 ⟹ [[分部积分]]
 「上限 $e^2$」 >> 代进去 $\sqrt{e^2}=e$，$\ln e^2=2$，都是整数级别的数，答案应该很干净
-::sk 320 175 看 | 被积函数从 0 爬升，在 $x=e^2$ 处刚好到最高 $\frac2e\approx0.74$；要的是阴影面积
-ox,oy=30,152;X=lambda x:ox+x*36;Y=lambda y:oy-y*160
-s.axes(ox,oy,14,312,166,16)
-g=lambda x:math.log(x)/math.sqrt(x)
-s.hatch([(X(1),Y(0))]+[(X(1+i*0.8),Y(g(1+i*0.8))) for i in range(9)]+[(X(math.e**2),Y(g(math.e**2))),(X(math.e**2),Y(0))],gap=8)
-s.plot(g,1,7.39,X,Y,n=8)
-s.plot(g,7.39,7.9,X,Y,n=2,dash='3 3')
-s.line(X(math.e**2),oy,X(math.e**2),Y(g(math.e**2)),'g',1,dash='3 3')
-s.text(X(1),oy+15,'1',12,'k','middle');s.text(X(math.e**2),oy+15,'e²',12,'k','middle')
-s.text(X(math.e**2)-14,Y(g(math.e**2))-8,'2/e',12,'r')
-s.text(X(3.2),Y(0.22),'面积 = 4',13,'r')
 ::think
 1. 分部：$u=\ln x$，$dv=x^{-1/2}dx$，$v=2\sqrt x$。
 2. $\int2\sqrt x\cdot\frac1x\,dx=\int\frac{2}{\sqrt x}dx=4\sqrt x$，没有新麻烦。
@@ -551,16 +516,6 @@ $\int_1^{e^2}\frac{\ln^2x}{\sqrt x}dx$ >> 分部两次，原函数 $2\sqrt x\ln^
 「恒成立，求 $k$ 的范围」 >> [[T恒成立求参|分离参数]]：$k\ge(x^2+y^2)e^{-(x+y)}$ 对所有 $x,y\ge0$ 成立 ⟺ {{圈|$k\ge$ 它的最大值}}
 「$x\ge0,y\ge0$」 >> 第一象限**带边界、无界**：最值要查 ①内部驻点 ②两条边界 ③无穷远——[[多元最值|三处都要查]]
 「$x^2+y^2$ 和 $x+y$」 >> 对称；而且 $x^2+y^2\le(x+y)^2$——{{波|可以把两个变量压成一个 $s=x+y$}}
-::sk 330 185 看 | 把问题压到一元上看：边界 $y=0$ 上的 $x^2e^{-x}$ 在 $x=2$ 处高 $4e^{-2}\approx0.54$；内部驻点所在的对角线 $x=y$ 上只有 $2e^{-2}\approx0.27$
-ox,oy=30,160;X=lambda x:ox+x*36;Y=lambda y:oy-y*210
-s.axes(ox,oy,14,318,176,16,xl='t',yl='')
-s.plot(lambda x:x*x*math.exp(-x),0,7.6,X,Y,n=12,c='r')
-s.plot(lambda t:2*t*t*math.exp(-2*t),0,7.6,X,Y,n=12,c='b')
-s.dot(X(2),Y(4*math.exp(-2)),2.8,'r');s.dot(X(1),Y(2*math.exp(-2)),2.8,'b')
-s.line(X(2),oy,X(2),Y(4*math.exp(-2)),'g',1,dash='3 3')
-s.text(X(2)+6,Y(4*math.exp(-2))-6,'4e^{−2}（边界 y=0）',12,'r')
-s.text(X(1)+10,Y(2*math.exp(-2))+22,'2e^{−2}（对角线 x=y）',12,'b')
-s.text(X(2),oy+15,'2',12,'k','middle');s.text(X(1),oy+15,'1',12,'k','middle')
 ::think
 1. 分离参数：$k\ge g(x,y)=(x^2+y^2)e^{-(x+y)}$，求 $g$ 在闭第一象限上的最大值。
 2. 内部驻点：$g_x=g_y=0$ ⟹ $x=y=1$，$g=2e^{-2}$。
@@ -717,17 +672,6 @@ $A$ 与 $B$、$C$ 都互不相容 ⟹ $A\cap(B\cup C)=AB\cup AC=\varnothing$ ⟹
 「$\frac1{2\sqrt x}$、$\sqrt x$」 >> 方程只在 $x>0$ 上有意义 ⟹ 解的定义域是 $(0,+\infty)$——渐近线只看 $x\to0^+$ 与 $x\to+\infty$
 「$y(1)=3$」 >> 定常数 $C$
 「求渐近线」 >> [[T渐近线三查|三类逐个查]]：铅直（$x\to0^+$ 时 $y$ 是否 →∞）、水平（$x\to+\infty$ 时 $y$ 是否 → 常数）、斜（$k=\lim\frac yx$，$b=\lim(y-kx)$）
-::sk 320 200 看 | 解曲线 $y=2x+e^{1-\sqrt x}$：左端从 $(0,e)$ 出发（有限，不是铅直渐近线），往右贴向直线 $y=2x$
-ox,oy=30,180;X=lambda x:ox+x*62;Y=lambda y:oy-y*17
-s.axes(ox,oy,14,312,192,10)
-f=lambda x:2*x+math.exp(1-math.sqrt(x))
-s.line(X(0),Y(0),X(4.3),Y(8.6),'r',1.1,dash='5 4')
-s.plot(f,0.02,4.3,X,Y,n=10)
-s.dot(X(0),Y(math.e),2.6,hollow=True)
-s.text(X(0)+8,Y(math.e)+4,'(0, e)',12)
-s.dot(X(1),Y(3),2.8);s.text(X(1)-8,Y(3)-10,'(1, 3)',12,'k','end')
-s.text(X(3.4)+6,Y(6.8)+18,'y = 2x',12,'r')
-s.text(X(1.6),Y(7.6),'y = 2x + e^{1−√x}',12)
 ::think
 1. 解方程：积分因子 $e^{\sqrt x}$，左边变成 $(ye^{\sqrt x})'$，右边 $(2+\sqrt x)e^{\sqrt x}$ 积分——换元 $t=\sqrt x$ 后是多项式乘 $e^t$，分部积分。
 2. 积出来恰好是 $2xe^{\sqrt x}$（这是命题人配好的），所以 $y=2x+Ce^{-\sqrt x}$，代初值得 $C=e$。
@@ -963,15 +907,6 @@ $$R(x)=\frac{f''(\eta)}{2}(x-x_0)^2<0\quad(\eta\text{ 介于 }x\text{ 与 }x_0\t
 「$a_{ij}=ij$」 >> $A=\alpha\alpha^T$，$\alpha=(1,2,3)^T$ ⟹ [[T秩一矩阵|秩 1 矩阵]]：特征值 $\alpha^T\alpha=14$ 和两个 0
 「正交变换」 >> [[T正交对角化|正交对角化]]：特征值 0 的两个特征向量要[[T施密特|施密特正交化]]，最后全部单位化
 「$f=0$ 的解」 >> 完全平方等于 0 ⟺ 括号里等于 0 ⟹ 一个齐次线性方程的通解
-::sk 340 182 看 | 秩 1 的二次型 $f=(\alpha^Tx)^2$：$f=0$ 的点就是与 $\alpha$ 垂直的那张平面——也正是特征值 0 的特征空间
-s.poly([(40,140),(210,140),(290,88),(120,88),(40,140)],'b',1.2)
-s.hatch([(40,140),(210,140),(290,88),(120,88)],gap=11,c='b')
-s.arrow(165,114,172,24,'r',1.6)
-s.text(178,34,'α = (1,2,3)ᵀ，特征值 14',12,'r')
-s.text(232,154,'x₁+2x₂+3x₃=0',12,'b')
-s.text(232,172,'特征值 0（二维）',12,'b')
-s.text(14,172,'f = (αᵀx)² ≥ 0，只在这张平面上等于 0',12)
-s.text(150,114,'⊥',14,'r')
 ::think
 1. (Ⅰ) 系数直接读：$A=(ij)_{3\times3}=\begin{pmatrix}1&2&3\\2&4&6\\3&6&9\end{pmatrix}=\alpha\alpha^T$。
 2. (Ⅱ) $r(A)=1$ ⟹ 0 是二重特征值（$r(0E-A)=1$，特征空间 2 维）；非零特征值 = 迹 = 14，对应特征向量 $\alpha$。0 的特征向量 = 与 $\alpha$ 正交的向量：解 $x_1+2x_2+3x_3=0$。

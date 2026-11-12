@@ -384,14 +384,6 @@ $\displaystyle\lim_{x\to0}\frac{\ln(\cos x)}{x^2}=$\_\_\_\_\_\_\_\_.
 「$x\to0$，$\ln(\cos x)$」 >> 先代入：$\ln\cos0=\ln1=0$，分母也是 0 ⟹ $\frac00$ 型（[[T极限]]）
 「$\ln(\cos x)$」 >> 写成 {{圈|$\ln[1+(\cos x-1)]$}}：括号里 $\cos x-1\to0$ ⟹ $\ln(1+u)\sim u$（[[等价无穷小]]）
 「$\cos x-1$」 >> 再接一个等价：$\cos x-1\sim-\frac{x^2}2$ ⟹ 分子 $\sim-\frac{x^2}{2}$，与分母同阶
-::sk 340 170 看 | $x=0$ 附近 $y=\ln\cos x$（黑）几乎和抛物线 $y=-\frac{x^2}{2}$（红虚线）重合：分子就是「$-\frac12$ 倍的 $x^2$」
-ox,oy=170,30;X=lambda x:ox+x*120;Y=lambda y:oy-y*150
-s.axes(ox,oy,20,330,160,10,xl='x',yl='y')
-s.plot(lambda x:math.log(math.cos(x)),-1.2,1.2,X,Y,n=14)
-s.plot(lambda x:-x*x/2,-1.2,1.2,X,Y,n=14,c='r',dash='4 3')
-s.text(X(1.2)+4,Y(math.log(math.cos(1.2))),'ln cos x',11,'k')
-s.text(X(1.2)+4,Y(-0.72)-6,'−x²/2',11,'r')
-s.text(X(0)+8,Y(-0.75),'越靠近 0 越贴合',10,'p')
 ::think
 1. 代入得 $\frac00$；分子是「$\ln(1+\text{小量})$」⟹ 用等价无穷小。
 2. $\ln\cos x=\ln[1+(\cos x-1)]\sim\cos x-1\sim-\frac{x^2}2$。

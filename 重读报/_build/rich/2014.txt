@@ -185,16 +185,6 @@ $\iint_D y\,dxdy$ >> $\int_{-1}^0\frac{1-x^2}2dx+\int_0^1\frac{(1-x)^2}2dx=\frac
 「$\int_{-\pi}^{\pi}$、$\cos x$、$\sin x$」 >> 傅里叶的味道：$\cos x$、$\sin x$ 在 $[-\pi,\pi]$ 上正交，最小值点就是 $x$ 的傅里叶系数 $a_1$、$b_1$（[[T最佳平方逼近]]）
 「被逼近的函数是 $x$」 >> {{波|奇函数}} ⟹ 余弦系数 $a_1=0$，只剩 $\sin x$ ⟹ C、D 不对一半，B 直接出局
 「选项 $2\sin x$ vs $2\pi\sin x$」 >> 算 $b_1=\frac1\pi\int_{-\pi}^\pi x\sin x\,dx$，$\frac1\pi$ 别丢
-::sk 350 190 看 | $y=x$（黑）和它的最佳逼近 $2\sin x$（红）在 $[-\pi,\pi]$ 上：都是奇函数，所以 $\cos x$ 的系数是 0
-ox,oy=175,95;X=lambda x:ox+x*48;Y=lambda y:oy-y*24
-s.axes(ox,oy,14,340,186,6,xl='x',yl='y')
-s.plot(lambda x:x,-math.pi,math.pi,X,Y,n=4)
-s.plot(lambda x:2*math.sin(x),-math.pi,math.pi,X,Y,n=13,c='r')
-s.text(X(math.pi)+2,Y(math.pi)+4,'y=x',11,'k')
-s.text(X(1.6),Y(2.0)-6,'2 sin x',11,'r','middle')
-s.text(X(math.pi),oy+14,'π',10,'k','middle');s.text(X(-math.pi),oy+14,'−π',10,'k','middle')
-s.line(X(math.pi),oy-3,X(math.pi),oy+3,'k',1)
-s.line(X(-math.pi),oy-3,X(-math.pi),oy+3,'k',1)
 ::think
 1. 令 $J(a,b)=\int_{-\pi}^\pi(x-a\cos x-b\sin x)^2dx$，求驻点。
 2. $J_a=-2\int(x-a\cos x-b\sin x)\cos x\,dx=0$，$J_b=-2\int(x-a\cos x-b\sin x)\sin x\,dx=0$。
@@ -709,21 +699,6 @@ $\lim\limits_{x\to+\infty}\dfrac{\int_1^x\left[t^2\ln\left(1+\frac1t\right)-t\ri
 「求极值」 >> 一元函数极值：驻点 $y'=0$（以及不可导点）→ 判别（[[一元极值判别]]）。隐函数的驻点要{{圈|和原方程联立}}才能定出 $x,y$（[[T隐函数极值]]）
 「$y'$ 的分母 $3y^2+2xy+x^2$」 >> 配方 $=2y^2+(x+y)^2\ge0$，只在 $x=y=0$ 时为 0，而 $(0,0)$ 不在曲线上（$6\ne0$）⟹ {{波|处处可导，没有不可导点}}
 「判别」 >> 第二充分条件：求 $y''$ 时代入 $y'=0$，一大半项直接消失
-::sk 340 170 看 | 方程确定的曲线 $y=f(x)$：处处在 $x$ 轴下方，唯一的低谷在 $(1,-2)$——极小值 $-2$
-ox,oy=150,22;X=lambda x:ox+x*40;Y=lambda y:oy-y*62
-s.axes(ox,oy,14,330,160,8,xl='x',yl='y')
-def yv(x):
-    lo,hi=-10.0,10.0
-    for _ in range(60):
-        m=(lo+hi)/2
-        if m**3+x*m*m+x*x*m+6>0: hi=m
-        else: lo=m
-    return lo
-s.plot(yv,-3.2,4.4,X,Y,n=16)
-s.dot(X(1),Y(-2),2.8,'r');s.text(X(1)+8,Y(-2)+14,'(1, −2) 极小',11,'r')
-s.line(X(1),oy,X(1),Y(-2),'p',0.8,dash='3 3');s.line(ox,Y(-2),X(1),Y(-2),'p',0.8,dash='3 3')
-s.text(ox-6,Y(-2)+4,'−2',10,'k','end');s.text(X(1),oy-6,'1',10,'k','middle')
-s.text(X(-3.1),Y(-1.9),'y³+xy²+x²y+6=0',10,'k')
 ::think
 1. 两边对 $x$ 求导：$(3y^2+2xy+x^2)y'+y^2+2xy=0$ ⟹ $y'=-\dfrac{y(y+2x)}{3y^2+2xy+x^2}$。
 2. $y'=0$ ⟹ $y=0$（代回原方程 $6=0$，舍）或 $y=-2x$（代回得 $-6x^3+6=0$，$x=1$，$y=-2$）。
@@ -757,7 +732,7 @@ $$(3y^2+2xy+x^2)y''+2(x+3y)y'^2+4(x+y)y'+2y=0.\qquad(2)$$ ⛳2
 ::vary
 $y=y(x)$ 由 $x^2+xy+y^2=3$ 确定，求极值 >> $y'=0$ ⟹ $2x+y=0$，代回得 $x=\mp1$，$y=\pm2$；$y''=-\frac{F_{xx}}{F_y}=-\frac{2}{x+2y}$：$(-1,2)$ 处 $y''=-\frac23\lt0$ 极大值 2；$(1,-2)$ 处 $y''=\frac23\gt0$ 极小值 $-2$
 本题中 $f(x)$ 当 $x\to\pm\infty$ 时的极限 >> 设 $y\sim kx$：$k^3+k^2+k=0$ 只有 $k=0$ ⟹ $y\to0^-$（$y\approx-\frac6{x^2}$）
-本题中 $y=f(x)$ 有拐点吗（只说思路） >> 令 $y''=0$ 与原方程、(1) 联立；图上曲线两侧趋于 0、中间下凹成谷，凹凸必然改变 ⟹ 至少两个拐点
+本题中 $y=f(x)$ 有拐点吗（只说思路） >> 令 $y''=0$ 与原方程、(1) 联立；曲线两侧趋于 0、中间下凹成谷，凹凸必然改变 ⟹ 至少两个拐点
 若方程改成 $y^3+xy^2+x^2y-6=0$，极值 >> 对称：$y\to-y,x\to-x$ ⟹ 极大值 $f(-1)=2$
 
 #17
@@ -889,19 +864,6 @@ $\iint_\Sigma z\,dxdy$（$\Sigma$ 上侧） >> 合一投影：$\iint_D(x^2+y^2)d
 「$\sum b_n$ 收敛」 >> 两个用途：$b_n\to0$（[[级数必要条件]]）；可作比较判别法的「大级数」
 「(Ⅰ) $a_n\to0$」 >> $0\lt a_n\lt b_n\to0$，夹逼（[[夹逼准则]]）
 「(Ⅱ) $\sum\frac{a_n}{b_n}$」 >> 要把 $\frac{a_n}{b_n}$ 压到 $b_n$ 的量级：$a_n=\cos a_n-\cos b_n$ 用{{圈|和差化积}}，再用 $\sin x\lt x$ ⟹ $a_n\lt\frac{b_n^2}{2}$
-::sk 340 190 看 | $y=\cos x$ 在 $(0,\frac\pi2)$：$\cos a_n$ 比 $\cos b_n$ 高出恰好 $a_n$（红竖线），曲线递减 ⟹ $b_n$ 在 $a_n$ 右边。$a_n$ 很小时那段高度差 ≈ 曲线在 $b_n$ 附近下降的量 ≈ $\frac{b_n^2}2$
-ox,oy=40,168;X=lambda x:ox+x*170;Y=lambda y:oy-y*150
-s.axes(ox,oy,20,330,180,8,xl='x',yl='y')
-s.plot(math.cos,0,1.6,X,Y,n=10)
-a=0.5;b=math.acos(math.cos(a)-a)
-s.line(X(a),oy,X(a),Y(math.cos(a)),'p',0.8,dash='3 3');s.line(X(b),oy,X(b),Y(math.cos(b)),'p',0.8,dash='3 3')
-s.dot(X(a),Y(math.cos(a)),2.6,'k');s.dot(X(b),Y(math.cos(b)),2.6,'k')
-s.line(X(b)+16,Y(math.cos(a)),X(b)+16,Y(math.cos(b)),'r',1.6)
-s.line(X(a),Y(math.cos(a)),X(b)+20,Y(math.cos(a)),'r',0.8,dash='2 3')
-s.text(X(b)+22,Y((math.cos(a)+math.cos(b))/2)+4,'高度差 = aₙ',11,'r')
-s.text(X(a),oy+14,'aₙ',11,'k','middle');s.text(X(b),oy+14,'bₙ',11,'k','middle')
-s.text(X(math.pi/2),oy+14,'π/2',10,'k','middle')
-s.text(X(0.12),Y(0.8),'y=cos x',11,'k')
 ::think
 1. (Ⅰ) $a_n=\cos a_n-\cos b_n\gt0$ ⟹ $\cos a_n\gt\cos b_n$ ⟹ $a_n\lt b_n$；$\sum b_n$ 收敛 ⟹ $b_n\to0$ ⟹ 夹逼 $a_n\to0$。
 2. (Ⅱ) $a_n=2\sin\frac{b_n+a_n}2\sin\frac{b_n-a_n}2\lt2\cdot\frac{b_n+a_n}2\cdot\frac{b_n-a_n}2=\frac{b_n^2-a_n^2}2\lt\frac{b_n^2}2$。
@@ -1003,14 +965,6 @@ $$B=\begin{pmatrix}2-k_1&6-k_2&-1-k_3\\-1+2k_1&-3+2k_2&1+2k_3\\-1+3k_1&-4+3k_2&1
 「全 1 矩阵 $A$」 >> 实对称 ⟹ 一定可对角化（[[实对称矩阵]]）；它是 $\alpha\alpha^T$（$\alpha$ 全 1），{{圈|秩 1}} ⟹ 特征值 $\mathrm{tr}A=n$ 与 $n-1$ 个 0（[[T秩一矩阵]]）
 「$B$：只有最后一列非零，$(1,2,\dots,n)^T$」 >> $B$ 是{{波|上三角}}矩阵！对角线 $0,\dots,0,n$ ⟹ 特征值直接读出，与 $A$ 相同
 「$B$ 不对称」 >> 可对角化要验：0 是 $n-1$ 重根，需 $r(0E-B)=r(B)=n-(n-1)=1$——$B$ 只有一列非零，秩恰为 1 ✓（[[T对角化判别]]）
-::sk 340 120 看 | 证相似的「两条腿」：$A$、$B$ 各自相似于同一个 $\Lambda$，再把两个箭头接起来；$P=P_1P_2^{-1}$
-s.box(10,40,80,36,'k');s.text(50,63,'A（对称）',11,'k','middle')
-s.box(250,40,80,36,'k');s.text(290,63,'B（三角）',11,'k','middle')
-s.box(118,40,104,36,'r');s.text(170,63,'Λ=diag(n,0,…,0)',10,'r','middle')
-s.arrow(92,58,116,58,'b',1.3);s.text(104,34,'P₁',11,'b','middle')
-s.arrow(248,58,224,58,'b',1.3);s.text(236,34,'P₂',11,'b','middle')
-s.text(50,100,'实对称 ⟹ 可对角化',10,'p','middle');s.text(290,100,'r(B)=1=n−(n−1)',10,'p','middle')
-s.text(170,112,'A ∼ Λ ∼ B',12,'r','middle')
 ::think
 1. $A$：$|\lambda E-A|=\lambda^{n-1}(\lambda-n)$，特征值 $n$（1 重）、$0$（$n-1$ 重）。
 2. $B$：上三角，$|\lambda E-B|=\lambda^{n-1}(\lambda-n)$，特征值相同。
@@ -1124,15 +1078,6 @@ $$f_Y(y)=F_Y'(y)=\begin{cases}\dfrac34,&0\lt y\lt1,\\\dfrac14,&1\lt y\lt2,\\0,&\
 「$e^{-x^2/\theta}$」 >> 看到 $x^2$ 在指数上，{{圈|令 $t=\frac{x^2}\theta$}}：$E(X)$ 变成 $\Gamma(\frac32)$（[[伽马函数]]），$E(X^2)$ 变成 $\Gamma(2)$；更快的是注意到 $P\{X^2\le s\}=1-e^{-s/\theta}$ ⟹ $X^2$ 服从均值 $\theta$ 的指数分布
 「最大似然」 >> 连乘 → 取对数 → 对 $\theta$ 求导 → 写成估计量（[[T最大似然]]）
 「$\lim P\{|\hat\theta_n-a|\ge\varepsilon\}=0$」 >> 这就是 {{波|依概率收敛}} $\hat\theta_n\xrightarrow{P}a$（问 $\hat\theta_n$ 是不是相合估计）。$\hat\theta_n=\frac1n\sum X_i^2$ 是 $X_i^2$ 的样本均值 ⟹ 辛钦大数定律（[[辛钦大数定律]]，[[T谁在平均]]）⟹ $a=E(X^2)=\theta$
-::sk 340 160 看 | 总体密度 $f(x)=\frac{2x}\theta e^{-x^2/\theta}$（图取 $\theta=1$）：峰在 $x=\sqrt{\theta/2}$，均值 $E X=\frac{\sqrt{\pi\theta}}2\approx0.886$（红虚线）稍偏右——右尾拖得长
-ox,oy=40,140;X=lambda x:ox+x*95;Y=lambda y:oy-y*130
-s.axes(ox,oy,14,330,150,10,xl='x',yl='f')
-s.plot(lambda x:2*x*math.exp(-x*x),0,3,X,Y,n=16)
-mx=math.sqrt(0.5);s.dot(X(mx),Y(2*mx*math.exp(-0.5)),2.6,'k')
-s.text(X(mx)-4,Y(2*mx*math.exp(-0.5))-8,'峰 √(θ/2)',10,'k','end')
-m=math.sqrt(math.pi)/2;s.line(X(m),oy,X(m),Y(2*m*math.exp(-m*m))-4,'r',1.0,dash='3 3')
-s.text(X(m)+4,oy-6,'EX',10,'r')
-s.text(X(1.7),Y(0.5),'f=(2x/θ)e^{−x²/θ}',11,'k')
 ::think
 1. 密度 $f=\frac{2x}\theta e^{-x^2/\theta}$（$x\gt0$）。令 $t=\frac{x^2}\theta$：$E(X)=\sqrt\theta\,\Gamma(\frac32)=\frac{\sqrt{\pi\theta}}2$，$E(X^2)=\theta\,\Gamma(2)=\theta$。
 2. $\ln L=n\ln2+\sum\ln x_i-n\ln\theta-\frac1\theta\sum x_i^2$，求导令 0 ⟹ $\hat\theta_n=\frac1n\sum X_i^2$。
