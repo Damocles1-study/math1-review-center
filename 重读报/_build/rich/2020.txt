@@ -10,6 +10,11 @@
 @D $\displaystyle\int_0^{1-\cos x}\sqrt{\sin^3t}\,dt$
 @ans D
 @tpl T变限积分阶数
+::rev
+- **该花** 1 分钟。阶数＝（被积函数的阶＋1）×上限的阶：3、$\frac52$、3、5。
+- **卡点** 只看被积函数，D 的 $t^{3/2}$ 阶最低，以为 D 最低阶；忘了上限 $1-\cos x$ 是 2 阶。
+- **错了说明** 变限积分的阶要把上限的阶乘进去。
+- **带走** $\int_0^{\varphi(x)}t^p\,dt$ 的阶是 $(p+1)\times\varphi$ 的阶；同阶的两个选项都不是答案。
 ::read
 「$x\to0^+$，最高阶」 >> 四个都是[[变限积分求导|变限积分]]，比阶 ⟹ 每个都化成「$\sim Cx^k$」，比 $k$ 的大小
 「被积函数 $e^{t^2}-1$、$\ln(1+\sqrt{t^3})$、$\sin t^2$、$\sqrt{\sin^3t}$」 >> 全部换[[等价无穷小]]：$t^2$、$t^{3/2}$、$t^2$、$t^{3/2}$
@@ -18,10 +23,6 @@
 ::sk 350 150 画 | 草稿上列一张「阶数账本」：被积函数的阶加 1，再乘上限的阶
 s.cells(10,10,[['','被积 ~','+1','上限 ~','阶'],['A','t²','3','x','3'],['B','t^{3/2}','5/2','x','5/2'],['C','t²','3','sin x ~ x','3'],['D','t^{3/2}','5/2','!1−cos x ~ x²/2','!5']],cw=[30,70,44,130,50],ch=25,size=12)
 s.circle(300,123,16,'r',ry=11)
-::think
-1. 比阶 ⟹ 把每个变限积分写成 $\sim Cx^k$。
-2. 变限积分的阶：被积函数 $\sim t^k$ ⟹ 积出来 $\sim\frac{u^{k+1}}{k+1}$；上限 $u\sim x^m$ ⟹ 整体 $\sim x^{(k+1)m}$。
-3. 四个算完比 $k$ 就行，不用算系数。
 ::fast
 {{秒|阶数 = (被积阶 + 1) × 上限阶}}：A $3\times1$，B $\frac52\times1$，C $3\times1$，D $\frac52\times2=5$ ⟹ D。
 A、C 同阶（都是 3），选择题里同阶的两个一定都不是答案——这一眼就能排除 A、C。
@@ -37,9 +38,7 @@ D：$\sqrt{\sin^3t}\sim t^{3/2}$，$\int_0^{1-\cos x}t^{3/2}dt=\frac25(1-\cos x)
 - 洛必达验证 D：$\frac{d}{dx}\int_0^{1-\cos x}\sqrt{\sin^3t}dt=\sqrt{\sin^3(1-\cos x)}\cdot\sin x\sim\left(\frac{x^2}{2}\right)^{3/2}\cdot x\sim x^4$，求导后 4 阶，原函数 5 阶 ✓。
 ::vary
 $\int_0^{x^2}\sin t\,dt$ 是几阶 >> 被积 $t$（1 阶），$+1$ 得 2，上限 $x^2$（2 阶），$2\times2=4$ 阶
-$\int_0^{\tan x}(\sqrt{1+t}-1)dt$ 是几阶 >> $\sqrt{1+t}-1\sim\frac t2$，$(1+1)\times1=2$ 阶
 已知 $\int_0^{x}(e^{t^k}-1)dt$ 与 $x^5$ 同阶，求 $k$ >> $(k+1)\times1=5$ ⟹ $k=4$
-把 D 的上限改成 $\sin x-x$ >> $\sin x-x\sim-\frac{x^3}{6}$，上限变负；在 $x\to0^+$ 时被积函数 $\sqrt{\sin^3t}$ 在 $t<0$ 无定义——所以出题人用 $1-\cos x$（恒 $\ge0$）而不是它
 
 #2
 @stem
@@ -50,24 +49,15 @@ $\int_0^{\tan x}(\sqrt{1+t}-1)dt$ 是几阶 >> $\sqrt{1+t}-1\sim\frac t2$，$(1+
 @D 当 $f(x)$ 在 $x=0$ 处可导时，$\lim\limits_{x\to0}\dfrac{f(x)}{x^2}=0$
 @ans C
 @tpl T举反例, T分段点
+::rev
+- **该花** 1 分半。A、B 用「只把 $f(0)$ 抬到 1」的函数打掉，D 用 $f=x$ 打掉。
+- **卡点** 把 $\lim f(x)=0$ 当成 $f(0)=0$，于是觉得 B 对。
+- **错了说明** 极限不管该点的函数值；可导的定义里有 $f(0)$，条件没给就推不出可导。
+- **带走** 「由极限推可导」先看有没有给函数值；「由可导推极限」直接写 $f(x)=f'(0)x+o(x)$ 代进去。
 ::read
 「$\lim\limits_{x\to0}f(x)=0$」 >> {{圈|只给了极限，没说 $f(0)=0$}}——极限不管 $x=0$ 那一点本身。这是全题的机关
 「A、B：某个比值极限为 0 ⟹ 可导」 >> 可导要回[[导数定义]] $\lim\frac{f(x)-f(0)}{x}$，里面有 $f(0)$；条件里根本没有 $f(0)$ ⟹ 多半推不出
 「C、D：可导 ⟹ 某个比值 → 0」 >> 可导 ⟹ 连续 ⟹ $f(0)=\lim f=0$，于是 $f(x)=f'(0)x+o(x)$，就看除以 $\sqrt{|x|}$、$x^2$ 谁还能趋于 0
-::sk 320 150 画 | 打 A、B 的反例：$f$ 在 $x\ne0$ 处恒为 0，只把 $f(0)$ 抬到 1。两个比值都恒为 0，可是 $f$ 在 0 处根本不连续
-ox,oy=160,112;X=lambda x:ox+x*120;Y=lambda y:oy-y*62
-s.axes(ox,oy,14,306,140,10)
-s.line(X(-1.15),Y(0)-1,X(-0.03),Y(0)-1,'r',2.0,over=False);s.line(X(0.03),Y(0)-1,X(1.15),Y(0)-1,'r',2.0,over=False)
-s.dot(X(0),Y(0),3,'r',hollow=True)
-s.dot(X(0),Y(1),3.2,'r')
-s.text(X(0)+8,Y(1)+4,'f(0)=1',12,'r')
-s.text(X(0.25),Y(0)-10,'x≠0 时 f(x)=0',12)
-s.text(X(-1.15),Y(1.25),'lim f=0 ✓，f/√|x| ≡ 0 ✓，f/x² ≡ 0 ✓',12,'b')
-s.text(X(0.22),Y(0.55),'但不连续 ⟹ 不可导',12,'r')
-::think
-1. A、B 是「比值 → 0 ⟹ 可导」，C、D 是「可导 ⟹ 比值 → 0」，两组方向相反。
-2. A、B 的条件里只有 $x\ne0$ 时的信息，管不到 $f(0)$ ⟹ 用「只改一点」的函数打掉。
-3. C、D：可导先推出 $f(0)=0$，再看 $\frac{f(x)}{x}$ 有界 ⟹ 除以比 $x$ 低阶的 $\sqrt{|x|}$ 才会趋于 0。
 ::fast
 {{秒|[[T举反例|举反例]]}}：$f(x)=\begin{cases}0,&x\ne0\\1,&x=0\end{cases}$ 打掉 A、B（条件全满足但不连续）；$f(x)=x$ 打掉 D（$\frac{x}{x^2}=\frac1x\to\infty$）⟹ 只剩 C。
 ::steps
@@ -82,7 +72,6 @@ C 正面证：$f$ 在 0 处可导 ⟹ 连续 ⟹ $f(0)=\lim\limits_{x\to0}f(x)=0
 - 若题目补上 $f(0)=0$：B 就对了（$\frac{f(x)-0}{x}=\frac{f(x)}{x^2}\cdot x\to0$，且 $f'(0)=0$）；A 仍错，反例 $f(x)=|x|^{3/4}$：$\frac{f}{\sqrt{|x|}}=|x|^{1/4}\to0$，但 $\frac{f(x)}{x}$ 趋于 $\pm\infty$。
 - 判断「比值 → 0 能不能推可导」：分母比 $x$ **高阶**（如 $x^2$）才有希望，比 $x$ **低阶**（如 $\sqrt{|x|}$）不行。
 ::vary
-补条件 $f(0)=0$，四个选项哪些对 >> B、C 对；A 反例 $|x|^{3/4}$，D 反例 $f(x)=x$
 把 A 改成「$\lim\frac{f(x)}{x}=0$ 时可导」（仍不给 $f(0)$） >> 仍错，同一个反例（$f(0)=1$）
 把 C 的 $\sqrt{|x|}$ 换成 $x$ >> $\lim\frac{f(x)}{x}=f'(0)$，不一定是 0（$f=x$ 时为 1），错
 「$f$ 在 0 处可导且 $f'(0)=0$」能推出 $\lim\frac{f(x)}{x^2}=0$ 吗 >> 不能：$f=x^2$ 时为 1；$f=|x|^{3/2}$ 时 $\frac{f}{x^2}\to\infty$
@@ -96,16 +85,17 @@ C 正面证：$f$ 在 0 处可导 ⟹ 连续 ⟹ $f(0)=\lim\limits_{x\to0}f(x)=0
 @D $\lim\limits_{(x,y)\to(0,0)}\dfrac{|\boldsymbol\alpha\times(x,y,f(x,y))|}{\sqrt{x^2+y^2}}$ 存在
 @ans A
 @tpl T举反例
+::rev
+- **该花** 1 分半。$\boldsymbol n\cdot(x,y,f)=f_xx+f_yy-f$，正是可微定义的余项。
+- **卡点** 没把点积展开，被叉积、$\boldsymbol\alpha$ 的记号吓住。
+- **错了说明** 可微定义 $f-f_xx-f_yy=o(\rho)$ 没有背到能认出变形。
+- **带走** 见「可微」＋分母 $\sqrt{x^2+y^2}$，先把可微定义写出来再对选项。
 ::read
 「$f$ 在 $(0,0)$ 可微，$f(0,0)=0$」 >> 立刻写[[可微定义]]：$f(x,y)=f_xx+f_yy+o(\rho)$，$\rho=\sqrt{x^2+y^2}$
 「$\boldsymbol n=(f_x,f_y,-1)$」 >> 这是切平面 $z=f_xx+f_yy$ 的{{圈|法向量}}
 「$\boldsymbol n\cdot(x,y,f)$」 >> 展开就是 $f_xx+f_yy-f(x,y)$——{{波|正好是可微定义里那个余项（差个负号）}}
 「分母 $\sqrt{x^2+y^2}$」 >> 就是 $\rho$ ⟹ A 是「余项 / $\rho$」，即可微定义原文
 「$\boldsymbol\alpha\perp\boldsymbol n$」 >> $\boldsymbol\alpha$ 平行于切平面，是一个切向量；C、D 是迷惑项
-::think
-1. 可微 ⟹ 写出定义式，把四个选项分子里的向量运算展开，看哪个能和定义式对上。
-2. 点积 $\boldsymbol n\cdot(x,y,f)$ 是一个数，叉积是一个向量（取模）。
-3. 对不上的，用最简单的 $f\equiv0$ 或 $f=x$ 试，看极限是否随方向变化。
 ::fast
 {{秒|$\boldsymbol n\cdot(x,y,f)=f_xx+f_yy-f$ 就是可微定义的余项（反号）}} ⟹ A 的极限是 0，存在。
 B、C、D 用 $f\equiv0$（或 $f=x$）一代就出现「随方向变化」的极限，不存在。
@@ -123,10 +113,8 @@ B：取 $f(x,y)=x$，$\boldsymbol n=(1,0,-1)$，$\boldsymbol n\times(x,y,x)=\beg
 - {{扣|找反例时只试 $f\equiv0$}}：B 恰好在 $f\equiv0$ 时比值恒为 1，会误以为 B 也对。反例要能「打穿」，换一个不对称的。
 - 几何：$\frac{|\boldsymbol n\cdot P|}{|\boldsymbol n|}$ 是曲面上点 $P$ 到切平面的距离，A 说的是「这个距离比 $\rho$ 高阶」。
 ::vary
-A 的极限值是多少 >> 0
 把条件「可微」降成「两个偏导存在」，A 还对吗 >> 不一定：$f=\frac{xy}{\sqrt{x^2+y^2}}$（$f(0,0)=0$）偏导都为 0，$\frac{|f|}{\rho}=\frac{|xy|}{x^2+y^2}$ 随方向变，极限不存在
 把 A 的分母换成 $x^2+y^2$ >> 不一定存在：$f=x^2+y^2+x^3$ 可以，但 $f=(x^2+y^2)^{3/4}$ 时 $\frac{\rho^{3/2}}{\rho^2}\to\infty$
-问切平面方程 >> $z=f_x(0,0)x+f_y(0,0)y$，即 $\boldsymbol n\cdot(x,y,z)=0$
 
 #4
 @stem
@@ -137,24 +125,15 @@ A 的极限值是多少 >> 0
 @D 当 $|r|\le R$ 时，$\displaystyle\sum_{n=1}^\infty a_{2n}r^{2n}$ 收敛
 @ans A
 @tpl T举反例
+::rev
+- **该花** 1 分钟。$|r|\lt R$ ⟹ 绝对收敛 ⟹ 偶数项子级数收敛；A 是它的逆否命题。
+- **卡点** 选 D：以为 $|r|\le R$ 也能保证收敛（边界点不确定）。
+- **错了说明** 阿贝尔定理只管开区间内外，$|x|=R$ 处什么都可能。
+- **带走** 幂级数题里带等号的「$\le R$ 收敛」「$\ge R$ 发散」基本都错；确定的结论只有开区间内绝对收敛。
 ::read
 「$R$ 是 $\sum a_nx^n$ 的收敛半径」 >> [[阿贝尔定理]]：$|x|<R$ ==绝对==收敛，$|x|>R$ 发散，$|x|=R$ 不确定
 「$\sum a_{2n}r^{2n}$」 >> 这是原级数在 $x=r$ 处的{{圈|偶数项子级数}}。原级数绝对收敛 ⟹ 子级数也绝对收敛；但原级数发散时子级数可能收敛（奇数项全被扔了）
 「四个选项：A、B 是『子级数怎样 ⟹ $r$ 在哪』，C、D 是『$r$ 在哪 ⟹ 子级数怎样』」 >> 唯一能确定的是：$|r|<R$ ⟹ 子级数收敛。它的逆否命题就是 A
-::sk 350 120 画 | 数轴上画出原级数的收敛情况：开区间里绝对收敛，边界点打问号，外面发散——偶数项子级数只能「继承」开区间里那一段
-ox,oy=175,62
-s.arrow(14,oy,340,oy,'k',1.1);s.text(336,oy+16,'r',13)
-s.line(ox,oy-5,ox,oy+5);s.text(ox,oy+18,'0',12,'k','middle')
-for xx,t in ((ox-110,'−R'),(ox+110,'R')):
-    s.dot(xx,oy,3.4,'k',hollow=True);s.text(xx,oy+20,t,12,'k','middle');s.text(xx,oy-12,'?',14,'r','middle')
-s.line(ox-104,oy-3,ox+104,oy-3,'b',2.4,over=False)
-s.text(ox,oy-24,'|r|<R：绝对收敛 ⟹ 子级数也收敛',12,'b','middle')
-s.text(30,oy+40,'|r|>R：原级数发散，',12,'g');s.text(30,oy+54,'子级数仍可能收敛',12,'g')
-s.text(232,oy+40,'|r|=R：什么都',12,'r');s.text(232,oy+54,'可能',12,'r')
-::think
-1. 能确定的只有一句：$|r|<R$ ⟹ $\sum|a_nr^n|$ 收敛 ⟹ 它的一部分 $\sum|a_{2n}r^{2n}|$ 也收敛。
-2. 这句话的逆否：子级数发散 ⟹ $|r|\ge R$，就是 A。
-3. 其余三个各找一个反例。
 ::fast
 {{秒|A 是「$|r|<R$ ⟹ 收敛」的逆否命题}}，直接选 A。
 反例：$a_n=1$（$R=1$）在 $r=1$ 处子级数 $\sum1$ 发散 ⟹ 打掉 D；只有奇数项的级数（$a_{2n}=0$）子级数恒为 0 ⟹ 打掉 B、C。
@@ -170,8 +149,6 @@ D 反例：$a_n=1$，$R=1$，取 $r=1$：$\sum a_{2n}r^{2n}=\sum1$ 发散，但 
 ::vary
 已知 $\sum a_nx^n$ 在 $x=-2$ 收敛、在 $x=3$ 发散，求 $R$ 的范围 >> 收敛 ⟹ $2\le R$；发散 ⟹ $R\le3$；故 $2\le R\le3$
 已知 $\sum a_n(x-1)^n$ 在 $x=-1$ 条件收敛，求 $R$ >> $x=-1$ 到中心 1 的距离是 2；条件收敛只能发生在边界 ⟹ $R=2$
-$\sum a_nx^n$ 的 $R=4$，求 $\sum a_nx^{2n}$ 的收敛半径 >> $x^2<4$ ⟹ $|x|<2$，$R=2$
-把 A 换成「当 $\sum a_{2n}r^{2n}$ 收敛时，$\sum a_nr^n$ 收敛」 >> 错：奇数项可能发散，同上 $x+x^3+\cdots$ 在 $r=2$
 
 #5
 @stem
@@ -182,29 +159,23 @@ $\sum a_nx^n$ 的 $R=4$，求 $\sum a_nx^{2n}$ 的收敛半径 >> $x^2<4$ ⟹ $|
 @D 方程组 $AX=0$ 与 $BX=0$ 同解
 @ans B
 @tpl T行左列右
+::rev
+- **该花** 30 秒。列变换＝右乘可逆阵：$AQ=B$ ⟹ $A=BQ^{-1}$。
+- **卡点** 把列变换记成左乘选 A；或认为列变换后方程组同解选 D。
+- **错了说明** 行变换左乘、列变换右乘；只有行变换保持 $AX=0$ 同解。
+- **带走** 行左列右；同解是行变换的性质。
 ::read
 「初等{{圈|列}}变换」 >> [[T行左列右|行左列右]]：列变换 = 右乘若干个初等矩阵 ⟹ $AQ=B$，$Q$ 可逆
 「存在矩阵 $P$，$PA=B$ / $PB=A$」 >> $P$ 在左边 = 行变换，和「列变换」对不上 ⟹ A、C 先存疑
 「$BP=A$」 >> 由 $AQ=B$ 两边右乘 $Q^{-1}$：$BQ^{-1}=A$，取 $P=Q^{-1}$ 正好
 「$AX=0$ 与 $BX=0$ 同解」 >> 同解是**行**变换才保证的性质（行变换 = 方程组的同解变形）。列变换会打乱未知数 ⟹ D 存疑
-::sk 330 150 画 | 一个反例同时打掉 A、C、D：把 $A=\begin{pmatrix}1&0\\0&0\end{pmatrix}$ 的两列互换得 $B$
-s.text(16,22,'A',14,'k','middle');s.cells(30,8,[['1','0'],['0','0']],cw=30,ch=24)
-s.arrow(100,32,178,32,'r',1.3);s.text(139,24,'c₁ ↔ c₂',12,'r','middle');s.text(139,52,'右乘 Q',12,'r','middle')
-s.text(196,22,'B',14,'k','middle');s.cells(210,8,[['0','1'],['0','0']],cw=30,ch=24)
-s.text(10,86,'A 错：PA 的第 2 列 = P·0 = 0，可 B 的第 2 列是 (1,0)ᵀ',12)
-s.text(10,108,'C 错：PB 的第 1 列 = P·0 = 0，可 A 的第 1 列是 (1,0)ᵀ',12)
-s.text(10,130,'D 错：AX=0 的解是 (0,k)ᵀ，BX=0 的解是 (k,0)ᵀ',12)
-::think
-1. 先把文字翻译成矩阵乘法：列变换 ⟹ $AQ=B$，$Q$ 可逆。
-2. 四个选项逐个对：能由 $AQ=B$ 推出来的就对。
-3. 推不出来的，用一个 2 阶小矩阵举反例。
 ::fast
 {{秒|列变换 = 右乘}}：$AQ=B$ ⟹ $A=BQ^{-1}$，$P$ 在 $B$ 的**右边** ⟹ B。四个选项里只有 B 的 $P$ 在右边。
 ::steps
 初等列变换相当于右乘初等矩阵。设 $A$ 经过若干次初等列变换化成 $B$，对应初等矩阵 $E_1,\dots,E_k$，则 $AE_1E_2\cdots E_k=B$。
 记 $Q=E_1E_2\cdots E_k$，初等矩阵都可逆 ⟹ $Q$ 可逆，且 $AQ=B$。
 两边右乘 $Q^{-1}$：$A=BQ^{-1}$。取 $P=Q^{-1}$，就有 $BP=A$ ⟹ B 对。
-A、C、D 用同一个反例：$A=\begin{pmatrix}1&0\\0&0\end{pmatrix}$，交换两列得 $B=\begin{pmatrix}0&1\\0&0\end{pmatrix}$（草图）。
+A、C、D 用同一个反例：$A=\begin{pmatrix}1&0\\0&0\end{pmatrix}$，交换两列得 $B=\begin{pmatrix}0&1\\0&0\end{pmatrix}$。
   A：任意 $P$，$PA$ 的第 2 列 $=P\cdot\boldsymbol 0=\boldsymbol 0$，而 $B$ 的第 2 列不是 $\boldsymbol 0$ ⟹ 不存在 $P$，A 错。
   C：$PB$ 的第 1 列 $=\boldsymbol 0$，而 $A$ 的第 1 列不是 $\boldsymbol 0$ ⟹ C 错。
   D：$AX=0$ 即 $x_1=0$，解为 $(0,k)^T$；$BX=0$ 即 $x_2=0$，解为 $(k,0)^T$，不同解 ⟹ D 错。
@@ -216,7 +187,6 @@ A、C、D 用同一个反例：$A=\begin{pmatrix}1&0\\0&0\end{pmatrix}$，交换
 ::vary
 把「列变换」改成「行变换」，哪些对 >> A、C、D 对；B 错（反例：$A=\begin{pmatrix}1&0\\0&0\end{pmatrix}$，行互换得 $B=\begin{pmatrix}0&0\\1&0\end{pmatrix}$，$BP$ 的第 1 行恒为 0，而 $A$ 的第 1 行不是）
 $A$ 经列变换化成 $B$，$A$、$B$ 的行向量组是什么关系 >> 等价（可互相线性表示），且行向量之间的线性关系不变
-$A$ 经初等变换（行列都可）化成 $B$，能推出什么 >> 只能推出 $r(A)=r(B)$（$A$、$B$ 等价），即存在可逆 $P$、$Q$ 使 $PAQ=B$
 
 #6
 @stem
@@ -227,25 +197,15 @@ $A$ 经初等变换（行列都可）化成 $B$，能推出什么 >> 只能推�
 @D $\boldsymbol\alpha_1,\boldsymbol\alpha_2,\boldsymbol\alpha_3$ 线性无关
 @ans C
 @tpl T举反例
+::rev
+- **该花** 2 分钟。$L_1$：过点 $\boldsymbol\alpha_2$、方向 $\boldsymbol\alpha_1$；$L_2$：过点 $\boldsymbol\alpha_3$、方向 $\boldsymbol\alpha_2$；交点处两式相等。
+- **卡点** 分不清分子里减的是点、分母是方向，$\boldsymbol\alpha_2$ 的两个身份弄混。
+- **错了说明** 点向式没读熟；「相交」没翻译成 $\boldsymbol\alpha_2+s\boldsymbol\alpha_1=\boldsymbol\alpha_3+t\boldsymbol\alpha_2$。
+- **带走** 两直线相交：令参数式相等，移项即得 $\boldsymbol\alpha_3=s\boldsymbol\alpha_1+(1-t)\boldsymbol\alpha_2$。
 ::read
 「$L_1:\frac{x-a_2}{a_1}=\cdots$」 >> [[直线点向式]]：分子减掉的是{{圈|点}} $\boldsymbol\alpha_2$，分母是{{圈|方向}} $\boldsymbol\alpha_1$
 「$L_2:\frac{x-a_3}{a_2}=\cdots$」 >> 过点 $\boldsymbol\alpha_3$、方向 $\boldsymbol\alpha_2$。==同一个 $\boldsymbol\alpha_2$ 在 $L_1$ 里当点、在 $L_2$ 里当方向==，字母排得故意绕
 「相交于一点」 >> ① 存在 $s,t$ 使两个参数式相等；② 两直线不平行 ⟹ 方向 $\boldsymbol\alpha_1,\boldsymbol\alpha_2$ {{波|线性无关}}
-::sk 340 175 画 | 把两条直线写成「点 + 参数 × 方向」：交点同时在两条线上，一列等式就把 $\boldsymbol\alpha_3$ 表示出来了
-P1=(80,115);P2=(110,30)
-s.line(30,132.5,322,30.3,'k',1.3);s.line(70,6,262,121.2,'b',1.3)
-s.dot(*P1,2.8);s.dot(*P2,2.8,'b')
-s.arrow(80,115,128,98.2,'r',1.6);s.arrow(110,30,152.9,55.7,'r',1.6)
-s.text(58,135,'点 α_{2}',12);s.text(118,94,'方向 α_{1}',12,'r')
-s.text(70,25,'点 α_{3}',12,'b');s.text(150,47,'方向 α_{2}',12,'r')
-s.dot(188.4,77.1,3.4,'r');s.circle(188.4,77.1,8,'r')
-s.text(194,58,'交点',12,'r')
-s.text(28,162,'α_{2}+sα_{1} = α_{3}+tα_{2} ⟹ α_{3}=sα_{1}+(1−t)α_{2}',13,'r')
-s.text(260,40,'L_{1}',12);s.text(258,112,'L_{2}',12,'b')
-::think
-1. 写参数式：$L_1$：$\boldsymbol\alpha_2+s\boldsymbol\alpha_1$；$L_2$：$\boldsymbol\alpha_3+t\boldsymbol\alpha_2$。
-2. 相交 ⟹ 某组 $s,t$ 使两者相等 ⟹ 移项就是一个线性表示。
-3. 再看其余选项的系数可不可能为 0——为 0 时就不能反解，举反例打掉。
 ::fast
 {{秒|交点 $=\boldsymbol\alpha_2+s\boldsymbol\alpha_1=\boldsymbol\alpha_3+t\boldsymbol\alpha_2$}} ⟹ $\boldsymbol\alpha_3=s\boldsymbol\alpha_1+(1-t)\boldsymbol\alpha_2$，C 无条件成立；D 与之矛盾。A、B 要求系数 $s\ne0$、$1-t\ne0$，不保证。
 ::steps
@@ -261,11 +221,9 @@ B 反例：$\boldsymbol\alpha_1=(1,0,0)^T$，$\boldsymbol\alpha_2=(0,1,0)^T$，$
 ::note
 - 先把每条直线的「点」和「方向」用括号标出来再动笔，否则 $\boldsymbol\alpha_2$ 的两重身份很容易搞混。
 - 还可以多说一句：$\boldsymbol\alpha_1,\boldsymbol\alpha_2$ 线性无关（两直线不平行），所以 C 中的表示法唯一。
-- 判断两条空间直线位置的通用工具：方向 $\boldsymbol s_1,\boldsymbol s_2$，两点连线 $\boldsymbol v$。共面 ⟺ $(\boldsymbol s_1\times\boldsymbol s_2)\cdot\boldsymbol v=0$；共面且 $\boldsymbol s_1\nparallel\boldsymbol s_2$ ⟹ 相交。
 ::vary
 若改成「$L_1$ 与 $L_2$ 平行（不重合）」 >> $\boldsymbol\alpha_1\parallel\boldsymbol\alpha_2$，即 $\boldsymbol\alpha_1,\boldsymbol\alpha_2$ 线性相关
 若改成「$L_1$ 与 $L_2$ 异面」 >> 不共面 ⟺ $\boldsymbol\alpha_1,\boldsymbol\alpha_2,\boldsymbol\alpha_3-\boldsymbol\alpha_2$ 线性无关 ⟺ $\boldsymbol\alpha_1,\boldsymbol\alpha_2,\boldsymbol\alpha_3$ 线性无关，即 D
-已知相交，再给 $\boldsymbol\alpha_1=(1,0,1)^T$，$\boldsymbol\alpha_2=(0,1,1)^T$，$\boldsymbol\alpha_3=(1,a,3)^T$，求 $a$ >> $\boldsymbol\alpha_3=s\boldsymbol\alpha_1+u\boldsymbol\alpha_2$：$s=1$，$u=a$，$s+u=3$ ⟹ $a=2$（也可令行列式为 0）
 
 #7
 @stem
@@ -276,6 +234,11 @@ B 反例：$\boldsymbol\alpha_1=(1,0,0)^T$，$\boldsymbol\alpha_2=(0,1,0)^T$，$
 @D $\dfrac5{12}$
 @ans D
 @tpl T恰有一个
+::rev
+- **该花** 1 分半。$P(ABC)=0$；恰有一个＝$\frac34-2\cdot\frac16+0=\frac5{12}$。
+- **卡点** 只减了一次两两交，得 $\frac7{12}$（那是「至少一个」）。
+- **错了说明** 「恰有一个」要把两两交的部分减两次；韦恩图没画。
+- **带走** 恰有一个＝$\sum P(A)-2\sum P(AB)+3P(ABC)$；或画韦恩图从里往外填。
 ::read
 「$P(AB)=0$」 >> $ABC\subset AB$ ⟹ {{圈|$P(ABC)=0$}}。没有它就算不了任何「三个一起」的量
 「$P(AC)=P(BC)=\frac1{12}$」 >> 两两交的量；由于 $P(ABC)=0$，$AC$ 整块就是「只有 A、C」的那块
@@ -286,10 +249,6 @@ s.text(48,44,'A',14,'k','middle');s.text(292,44,'B',14,'k','middle');s.text(170,
 s.text(70,80,'1/6',14,'r','middle');s.text(270,80,'1/6',14,'r','middle');s.text(170,160,'1/12',14,'r','middle')
 s.text(131,112,'1/12',11,'k','middle');s.text(209,112,'1/12',11,'k','middle')
 s.text(170,30,'A∩B=∅ ⟹ ABC=∅',12,'g','middle')
-::think
-1. 先补出 $P(ABC)=0$。
-2. 「只有 A」= $A$ 减去它和别人重叠的部分：$P(A)-P(AB)-P(AC)+P(ABC)$。
-3. 三块相加；或者直接套「恰有一个」的公式核对。
 ::fast
 {{秒|恰有一个 $=\sum P(A)-2\sum P(AB)+3P(ABC)=\frac34-2\cdot\frac16+0=\frac5{12}$}} ⟹ D。
 ::steps
@@ -303,9 +262,7 @@ $ABC\subset AB$ ⟹ $0\le P(ABC)\le P(AB)=0$ ⟹ $P(ABC)=0$。
 - {{扣|不写 $P(ABC)=0$ 的理由}}：选择题不扣分，但大题里这一步是采分点——「$P(AB)=0$ 不等于 $AB=\varnothing$，但概率为 0 的事件的子事件概率也为 0」。
 - 选项 A $\frac34$ 是直接把三个概率相加（忘了扣重叠），B、C 是只扣了一次重叠的结果——干扰项就是这么造的。
 ::vary
-求 A、B、C 至少有一个发生的概率 >> $\frac34-\frac16+0=\frac7{12}$
 求恰有两个发生的概率 >> $\sum P(AB)-3P(ABC)=\frac16$；核对：$\frac5{12}+\frac16+0=\frac7{12}$ ✓
-求 A、B、C 都不发生的概率 >> $1-\frac7{12}=\frac5{12}$
 若把 $P(AB)=0$ 改成 $A$、$B$ 独立，其余不变 >> $P(AB)=\frac1{16}$，$P(ABC)$ 未知（只知 $\le\frac1{16}$），恰有一个的概率不能唯一确定——题目必须给 $P(ABC)$
 
 #8
@@ -317,26 +274,15 @@ $ABC\subset AB$ ⟹ $0\le P(ABC)\le P(AB)=0$ ⟹ $P(ABC)=0$。
 @D $\Phi(0.2)$
 @ans B
 @tpl T中心极限
+::rev
+- **该花** 40 秒。和的均值 50、标准差 5，$\frac{55-50}5=1$ ⟹ $\Phi(1)$。
+- **卡点** 标准化时除以方差 25 得 $\Phi(0.2)$（D）。
+- **错了说明** 标准化除的是标准差 $\sqrt{n\,DX}$。
+- **带走** 中心极限：$\sum X_i$ 近似 $N(n\mu,n\sigma^2)$，先写均值和标准差两个数再标准化。
 ::read
 「$P\{X=0\}=P\{X=1\}=\frac12$」 >> 0-1 分布（抛硬币），$EX=\frac12$，$DX=\frac14$
 「简单随机样本、100 个」 >> 独立同分布 ⟹ 可以用[[中心极限定理]]
 「$\sum X_i\le55$」 >> 和的均值 $50$、方差 $25$、{{圈|标准差 5}} ⟹ 55 比均值多一个标准差
-::sk 320 150 画 | 和近似服从 $N(50,5^2)$：55 正好在均值右边一个标准差处，阴影就是 $\Phi(1)\approx0.84$
-ox,oy=170,128;X=lambda v:ox+(v-50)*8;Y=lambda d:oy-d*100
-s.arrow(30,oy,312,oy,'k',1.1)
-g=lambda v:math.exp(-(v-50)**2/50)
-s.hatch([(X(33),Y(0))]+[(X(33+k),Y(g(33+k))) for k in range(0,23)]+[(X(55),Y(0))],gap=7)
-s.plot(g,32,68,X,Y,n=14)
-for v in (50,55):
-    s.line(X(v),oy-3,X(v),oy+3);s.text(X(v),oy+16,str(v),12,'k','middle')
-s.line(X(55),oy,X(55),Y(g(55)),'r',1.3,dash='4 3')
-s.text(X(50)+2,Y(1.05),'均值 50',12,'b','middle')
-s.arrow(X(50),Y(0.35),X(55),Y(0.35),'r',1.2);s.text(X(52.5),Y(0.35)-6,'σ=5',11,'r','middle')
-s.text(X(36),Y(0.45),'Φ(1)',13,'r')
-::think
-1. 单个：$EX=\frac12$，$DX=E(X^2)-(EX)^2=\frac12-\frac14=\frac14$。
-2. 和：均值 $100\times\frac12=50$，方差 $100\times\frac14=25$。
-3. 标准化：$\frac{55-50}{\sqrt{25}}=1$。
 ::fast
 {{秒|和是二项分布 $B(100,\frac12)$，均值 50、标准差 $\sqrt{100\cdot\frac12\cdot\frac12}=5$}}，$\frac{55-50}{5}=1$ ⟹ $\Phi(1)$，B。
 「$\le$」对应 $\Phi$ 本身、不是 $1-\Phi$，先排除 A、C。
@@ -351,29 +297,21 @@ $P\{\sum X_i\le55\}=P\Big\{\dfrac{\sum X_i-50}{5}\le\dfrac{55-50}{5}\Big\}\appro
 ::vary
 求 $P\{45\le\sum X_i\le55\}$ 的近似值 >> $\Phi(1)-\Phi(-1)=2\Phi(1)-1$
 把 $P\{X=1\}$ 改成 $0.2$，求 $P\{\sum X_i\le24\}$ >> 均值 20、方差 $100\times0.2\times0.8=16$、标准差 4 ⟹ $\Phi(1)$
-求 $P\{\bar X\le0.55\}$ >> $\bar X\le0.55$ ⟺ $\sum X_i\le55$，仍是 $\Phi(1)$；或 $\bar X$ 近似 $N(\frac12,\frac1{400})$，$\frac{0.05}{0.05}=1$
 
 #9
 @stem
 $\displaystyle\lim_{x\to0}\left[\frac{1}{e^x-1}-\frac{1}{\ln(1+x)}\right]=$ ________.
 @ans $-1$
 @tpl T极限, T通分
+::rev
+- **该花** 1 分半。通分，分母 $\sim x^2$，分子 $\ln(1+x)-(e^x-1)=-x^2+o(x^2)$。
+- **卡点** 分子里把两项都换成 $x$ 得 0。
+- **错了说明** 加减结构不能做等价替换，要泰勒到分母的阶。
+- **带走** $\infty-\infty$ 先通分；只算分子里与分母同阶那一项的系数。
 ::read
 「$x\to0$，两个分式相减」 >> 先[[T极限|代入]]：两项都是 $\frac10$ ⟹ {{圈|$\infty-\infty$}} ⟹ 第一步[[T通分|通分]]
 「分母 $e^x-1$、$\ln(1+x)$」 >> 都 $\sim x$（[[等价无穷小]]）⟹ 通分后分母 $\sim x^2$ ⟹ {{波|分子只要展开到 $x^2$}}
 「分子会是 $\ln(1+x)-(e^x-1)$」 >> 加减结构、一次项会抵消 ⟹ 不能换等价，要[[泰勒常用|泰勒]]
-::sk 340 130 画 | 抵消账本：两块的一次项都是 $x$，划掉；剩下 $x^2$ 系数 $-\frac12-\frac12=-1$
-s.text(10,24,'分母：(eˣ−1)·ln(1+x) ~ x · x = x²',13,'b')
-s.text(10,56,'ln(1+x) = x − x²/2 + o(x²)',13)
-s.text(10,84,'eˣ − 1  = x + x²/2 + o(x²)',13)
-s.line(10,94,330,94,'k',1.1)
-s.text(10,120,'相减：x 划掉，−x²/2 − x²/2 = −x²',13)
-s.line(59,49,73,59,'r',1.4);s.line(56,77,70,87,'r',1.4)
-s.circle(186,115,24,'r',ry=12)
-::think
-1. 代入 ⟹ $\infty-\infty$ ⟹ 通分。
-2. 分母是乘积 ⟹ 换等价，$\sim x^2$。
-3. 分子是差 ⟹ 泰勒到 $x^2$，读出 $x^2$ 系数，就是答案。
 ::fast
 {{秒|分母 $\sim x^2$，只算分子的 $x^2$ 系数}}：$\ln(1+x)$ 的是 $-\frac12$，$e^x-1$ 的是 $+\frac12$，相减 $-1$。
 ::steps
@@ -385,10 +323,8 @@ s.circle(186,115,24,'r',ry=12)
 ~也可以洛必达：$\lim\frac{\frac1{1+x}-e^x}{2x}=\lim\frac{-\frac1{(1+x)^2}-e^x}{2}=\frac{-1-1}{2}=-1$。
 ::note
 - {{扣|分子里把 $\ln(1+x)$ 和 $e^x-1$ 都换成 $x$}}：得 $\frac0{x^2}=0$，错。加减里的等价替换会把主项一起抵消掉。
-- 与 2021 第 17 题同一个模子：$\infty-\infty$ → 通分 → 分母等价定阶 → 分子泰勒。
 ::vary
 $\lim\limits_{x\to0}\left[\frac1x-\frac1{e^x-1}\right]$ >> $\frac{e^x-1-x}{x^2}\to\frac12$
-$\lim\limits_{x\to0}\left[\frac1{\sin x}-\frac1{\ln(1+x)}\right]$ >> 分子 $\ln(1+x)-\sin x=-\frac{x^2}2+o(x^2)$，结果 $-\frac12$
 $\lim\limits_{x\to0}\left[\frac1{\sin^2x}-\frac1{x^2}\right]$ >> 分母 $\sim x^4$，分子 $x^2-\sin^2x=\frac{x^4}3+o(x^4)$，结果 $\frac13$（要展到 4 阶）
 
 #10
@@ -396,14 +332,15 @@ $\lim\limits_{x\to0}\left[\frac1{\sin^2x}-\frac1{x^2}\right]$ >> 分母 $\sim x^
 设 $\begin{cases}x=\sqrt{t^2+1},\\ y=\ln\left(t+\sqrt{t^2+1}\right),\end{cases}$ 则 $\dfrac{d^2y}{dx^2}\Big|_{t=1}=$ ________.
 @ans $-\sqrt2$
 @tpl T参数方程二阶导
+::rev
+- **该花** 2 分钟。$\frac{dy}{dx}=\frac1t$，$\frac{d^2y}{dx^2}=\frac{-1/t^2}{x'(t)}$，代 $t=1$ 得 $-\sqrt2$。
+- **卡点** 二阶导只对 $t$ 求导得 $-1$，忘了再除以 $x'(t)=\frac1{\sqrt2}$。
+- **错了说明** $\frac{d}{dx}=\frac{d}{dt}\div x'(t)$，二阶导公式没写全。
+- **带走** 参数方程二阶导＝$\frac{d}{dt}\left(\frac{dy}{dx}\right)\div x'(t)$，每次都把「除以 $x'(t)$」写出来。
 ::read
 「参数方程求 $\frac{d^2y}{dx^2}$」 >> [[T参数方程二阶导]]：$\frac{dy}{dx}=\frac{y'(t)}{x'(t)}$，二阶导 ==对 $t$ 求完还要再除一次 $x'(t)$==
 「$y=\ln(t+\sqrt{t^2+1})$」 >> 这个函数的导数是背过的：$\frac{1}{\sqrt{t^2+1}}$（它是 $\operatorname{arsinh}t$）
 「$x=\sqrt{t^2+1}$」 >> $x'(t)=\frac{t}{\sqrt{t^2+1}}$，和 $y'(t)$ 分母一样 ⟹ {{圈|一阶导会化得很干净}}
-::think
-1. $x'(t)=\frac{t}{\sqrt{t^2+1}}$，$y'(t)=\frac1{\sqrt{t^2+1}}$ ⟹ $\frac{dy}{dx}=\frac1t$。
-2. 先化简再求导：$\frac{d}{dt}\frac1t=-\frac1{t^2}$。
-3. 再除以 $x'(t)$，最后代 $t=1$。
 ::fast
 {{秒|消参}}：$t=\sqrt{x^2-1}$（$t>0$ 一支），$y=\ln(x+\sqrt{x^2-1})$ ⟹ $y'=\frac1{\sqrt{x^2-1}}$，$y''=-\frac{x}{(x^2-1)^{3/2}}$。$t=1$ 对应 $x=\sqrt2$：$y''=-\frac{\sqrt2}{1}=-\sqrt2$。
 ::steps
@@ -417,7 +354,6 @@ $\dfrac{d^2y}{dx^2}=\dfrac{\frac{d}{dt}\left(\frac1t\right)}{x'(t)}=\dfrac{-\fra
 - {{扣|$\frac{d^2y}{dx^2}=\frac{d}{dt}\left(\frac1t\right)=-\frac1{t^2}$，得 $-1$}}：忘了再除 $x'(t)$。$\frac{d}{dx}=\frac{d}{dt}\cdot\frac{dt}{dx}$，那个 $\frac{dt}{dx}=\frac1{x'(t)}$ 不能丢。
 - 核对符号：曲线 $y=\operatorname{arcosh}x$ 凹向下，二阶导为负 ✓。
 ::vary
-求 $\frac{dy}{dx}\big|_{t=1}$ >> $1$
 把 $x$ 改成 $x=t^2+1$，$y$ 不变，求 $\frac{d^2y}{dx^2}\big|_{t=1}$ >> $\frac{dy}{dx}=\frac{1}{2t\sqrt{t^2+1}}$，对 $t$ 求导得 $-\frac{2t^2+1}{2t^2(t^2+1)^{3/2}}$，再除 $2t$，$t=1$ 时 $-\frac{3}{8\sqrt2}=-\frac{3\sqrt2}{16}$
 $x=\cos t$，$y=\sin t$，求 $\frac{d^2y}{dx^2}$ >> $\frac{dy}{dx}=-\cot t$，$\frac{d^2y}{dx^2}=\frac{\csc^2t}{-\sin t}=-\frac1{\sin^3t}$（上半圆凹向下 ✓）
 
@@ -426,15 +362,16 @@ $x=\cos t$，$y=\sin t$，求 $\frac{d^2y}{dx^2}$ >> $\frac{dy}{dx}=-\cot t$，$
 设函数 $f(x)$ 满足 $f''(x)+af'(x)+f(x)=0\ (a>0)$，且 $f(0)=m$，$f'(0)=n$，则 $\displaystyle\int_0^{+\infty}f(x)\,dx=$ ________.
 @ans $n+am$
 @tpl T方程直接积分
+::rev
+- **该花** 2 分钟。方程两边从 0 到 $+\infty$ 积分：$-n-am+\int_0^{+\infty}f=0$。
+- **卡点** 去解特征方程，要按 $a$ 与 2 的大小分三种情况，超时。
+- **错了说明** 没想到「方程里本来就有 $f$，直接两边积分」；$f(+\infty)=f'(+\infty)=0$ 来自特征根实部为负。
+- **带走** 求解的无穷积分：对方程两边积分，导数项变成端点值；填空可取 $a=2$ 验。
 ::read
 「$f''+af'+f=0$」 >> 二阶常系数齐次方程，[[特征方程]] $r^2+ar+1=0$：两根之和 $-a<0$、之积 $1>0$ ⟹ {{圈|实部都为负}} ⟹ $f$、$f'$ 在 $+\infty$ 处都 → 0
 「$a>0$，没说 $a$ 与 2 的大小」 >> 特征根是实根、重根还是复根不确定 ⟹ ==别去解方程==（要分三种情况）
 「求 $\int_0^{+\infty}f$」 >> 方程里本来就有 $f$ ⟹ [[T方程直接积分|两边直接积分]]，$f''$、$f'$ 的积分都是端点值
 「$f(0)=m$，$f'(0)=n$」 >> 正好就是两边积分后要的端点值
-::think
-1. 要的是 $\int_0^{+\infty}f$，方程里 $f$ 单独一项 ⟹ 方程两边从 0 积到 $+\infty$。
-2. $\int f''=f'\big|_0^{+\infty}$，$\int f'=f\big|_0^{+\infty}$，只要知道 $f(+\infty)$、$f'(+\infty)$。
-3. 用特征根实部为负说明它们都是 0（顺带保证反常积分收敛）。
 ::fast
 {{秒|取特例 $a=2$}}：重根 $-1$，$f=(m+(n+m)x)e^{-x}$，$\int_0^{+\infty}f=m+(n+m)=n+2m$——与 $n+am$ 在 $a=2$ 时吻合。填空题可以用特例核对公式。
 ::steps
@@ -457,14 +394,15 @@ $\int_0^{+\infty}f''dx=f'(+\infty)-f'(0)=0-n=-n$；$\int_0^{+\infty}f'dx=f(+\inf
 设函数 $f(x,y)=\displaystyle\int_0^{xy}e^{xt^2}\,dt$，则 $\dfrac{\partial^2f}{\partial x\partial y}\Big|_{(1,1)}=$ ________.
 @ans $4e$
 @tpl T含参变限求导
+::rev
+- **该花** 1 分半。先对 $y$ 求导积分号消失：$f_y=xe^{x^3y^2}$，再对 $x$ 求导代 $(1,1)$。
+- **卡点** 先对 $x$ 求导时漏了被积函数里的 $x$，少一项得 $3e$。
+- **错了说明** 被积函数含参变量时，对它求导要多出积分号下求导的一项；没想到换求导顺序。
+- **带走** 混合偏导先对「只出现在上限里」的那个变量求导。
 ::read
 「$\int_0^{xy}e^{xt^2}dt$」 >> 上限里有 $x$、$y$，{{圈|被积函数里也有 $x$}} ⟹ 对 $x$ 求偏导要用[[含参积分求导]]，多出一个积分项
 「$\frac{\partial^2f}{\partial x\partial y}$」 >> 混合偏导连续 ⟹ $f_{xy}=f_{yx}$，求导顺序可以自己挑
 「$y$ 只出现在上限」 >> ==先对 $y$ 求导==，积分号直接消失（[[变限积分求导]]），剩下一个普通函数再对 $x$ 求导
-::think
-1. 先对 $y$：$f_y=e^{x(xy)^2}\cdot x=xe^{x^3y^2}$。
-2. 再对 $x$：普通乘积求导。
-3. 代 $(1,1)$。
 ::fast
 {{秒|先对 $y$ 求偏导}}：$f_y=xe^{x^3y^2}$，$f_{yx}=e^{x^3y^2}+x\cdot3x^2y^2e^{x^3y^2}=(1+3x^3y^2)e^{x^3y^2}$，代 $(1,1)$ 得 $4e$。两行写完。
 ::steps
@@ -478,7 +416,6 @@ $\int_0^{+\infty}f''dx=f'(+\infty)-f'(0)=0-n=-n$；$\int_0^{+\infty}f'dx=f(+\inf
 - 记号：$\frac{\partial^2f}{\partial x\partial y}$ 在多数教材里表示先 $x$ 后 $y$，但只要混合偏导连续就不必在意顺序。
 ::vary
 求 $\frac{\partial f}{\partial x}\big|_{(1,1)}$ >> $e+\int_0^1t^2e^{t^2}dt$（积分项算不出初等值，保留）——所以题目只问混合偏导
-$f(x,y)=\int_0^{x+y}e^{-t^2}dt$，求 $f_{xy}$ >> $f_x=e^{-(x+y)^2}$，$f_{xy}=-2(x+y)e^{-(x+y)^2}$
 $f(x,y)=\int_0^{y}\sin(xt)\,dt$，求 $f_{xy}$ >> 先对 $y$：$f_y=\sin(xy)$，$f_{yx}=y\cos(xy)$
 
 #13
@@ -486,20 +423,15 @@ $f(x,y)=\int_0^{y}\sin(xt)\,dt$，求 $f_{xy}$ >> 先对 $y$：$f_y=\sin(xy)$，
 行列式 $\begin{vmatrix}a&0&-1&1\\0&a&1&-1\\-1&1&a&0\\1&-1&0&a\end{vmatrix}=$ ________.
 @ans $a^4-4a^2$
 @tpl T行列式凑零
+::rev
+- **该花** 2 分钟。$r_1+r_2$、$r_3+r_4$ 凑零后展开，得 $a^2(a^2-4)$。
+- **卡点** 直接按第一行展开四阶行列式，算三个三阶行列式出错。
+- **错了说明** 没先观察「两行相加后一半元素变 0」的结构。
+- **带走** 四阶行列式先找相反或相同的行列凑零；用 $a=0$ 时两行成比例值为 0 验算。
 ::read
 「第 1、2 行：$(a,0,-1,1)$、$(0,a,1,-1)$」 >> 后两列正好相反 ⟹ {{圈|$r_1+r_2$}} 后两列变 0
 「第 3、4 行：$(-1,1,a,0)$、$(1,-1,0,a)$」 >> 前两列正好相反 ⟹ {{圈|$r_3+r_4$}} 前两列变 0
 「左上、右下是 $aE$，右上、左下是同一块 $\begin{pmatrix}-1&1\\1&-1\end{pmatrix}$」 >> 分块对称，还可以用特征值秒
-::sk 360 135 画 | 两步凑零：先 $r_1+r_2$、$r_3+r_4$（左），再 $c_2-c_1$、$c_4-c_3$（右），第 1 行、第 3 行都只剩一个非零元
-s.cells(10,10,[['!a','!a','!0','!0'],['0','a','1','−1'],['!0','!0','!a','!a'],['1','−1','0','a']],cw=30,ch=26,size=12)
-s.text(64,128,'r₁+r₂，r₃+r₄',12,'r','middle')
-s.arrow(140,62,200,62,'r',1.3);s.text(170,52,'c₂−c₁',12,'r','middle');s.text(170,82,'c₄−c₃',12,'r','middle')
-s.cells(212,10,[['!a','0','0','0'],['0','a','1','−2'],['0','0','!a','0'],['1','−2','0','a']],cw=34,ch=26,size=12)
-s.text(280,128,'按第 1 行、再按第 3 行展开',12,'b','middle')
-::think
-1. 观察成对相反的行，相加凑零。
-2. 再用列变换把凑出的 $(a,a,0,0)$ 变成 $(a,0,0,0)$。
-3. 按只剩一个非零元的行展开，降到 3 阶、再降到 2 阶。
 ::fast
 {{秒|特征值}}：原矩阵 $=aE+M$，$M=\begin{pmatrix}O&C\\C&O\end{pmatrix}$，$C=\begin{pmatrix}-1&1\\1&-1\end{pmatrix}$ 的特征值是 $0,-2$ ⟹ $M$ 的特征值是 $\pm0,\pm2$，即 $0,0,2,-2$ ⟹ 行列式 $=a\cdot a\cdot(a+2)(a-2)=a^4-4a^2$。
 核对：$a=0$ 时第 1、2 行成比例，行列式为 0 ✓。
@@ -518,22 +450,22 @@ $$D=\begin{vmatrix}a&0&0&0\\0&a&1&-2\\0&0&a&0\\1&-2&0&a\end{vmatrix}.$$
 ::vary
 $a$ 取何值时该矩阵不可逆 >> $a^4-4a^2=0$ ⟹ $a=0,\pm2$
 把右上、左下两块都换成 $\begin{pmatrix}1&1\\1&1\end{pmatrix}$ >> $C$ 特征值 $0,2$，$M$ 特征值 $0,0,2,-2$，行列式仍是 $a^4-4a^2$
-求该矩阵（$a=1$）的特征值 >> $1+\{0,0,2,-2\}$ 即 $1,1,3,-1$
 
 #14
 @stem
 设 $X$ 服从区间 $\left(-\dfrac\pi2,\dfrac\pi2\right)$ 上的均匀分布，$Y=\sin X$，则 $\mathrm{Cov}(X,Y)=$ ________.
 @ans $\dfrac2\pi$
 @tpl T函数期望
+::rev
+- **该花** 1 分半。$EX=0$，$\mathrm{Cov}=E(X\sin X)=\frac2\pi\int_0^{\pi/2}x\sin x\,dx=\frac2\pi$。
+- **卡点** 密度写成 $\frac1{2\pi}$ 或 $\frac2\pi$；分部积分 $\int x\sin x$ 符号错。
+- **错了说明** 均匀分布密度＝1÷区间长度（这里是 $\frac1\pi$）；偶函数对称区间取 2 倍半边。
+- **带走** $Y=g(X)$ 的协方差：$E[Xg(X)]-EX\cdot Eg(X)$，直接用 $X$ 的密度积分。
 ::read
 「$X\sim U(-\frac\pi2,\frac\pi2)$」 >> 密度 $\frac1\pi$；区间关于 0 对称 ⟹ $EX=0$
 「$Y=\sin X$」 >> $Y$ 是 $X$ 的函数，求期望不用先求 $Y$ 的分布（[[T函数期望]]）
 「$\mathrm{Cov}(X,Y)$」 >> [[协方差]] $=E(XY)-EX\cdot EY$；$EX=0$ ⟹ {{圈|只要算 $E(X\sin X)$}}
 「$x\sin x$」 >> [[奇偶性|奇 × 奇 = 偶]] ⟹ 对称区间上 = 2 倍半边积分
-::think
-1. $EX=0$ ⟹ $\mathrm{Cov}(X,Y)=E(XY)$，不用算 $EY$（它也为 0，奇函数）。
-2. $E(X\sin X)=\int_{-\pi/2}^{\pi/2}x\sin x\cdot\frac1\pi dx$，偶函数 ⟹ $\frac2\pi\int_0^{\pi/2}x\sin x\,dx$。
-3. 分部积分。
 ::fast
 {{秒|$\int_0^{\pi/2}x\sin x\,dx=[\sin x-x\cos x]_0^{\pi/2}=1$}} ⟹ $\mathrm{Cov}=\frac2\pi\times1=\frac2\pi$。
 ::steps
@@ -548,23 +480,23 @@ $\int_0^{\pi/2}x\sin x\,dx=\left[-x\cos x+\sin x\right]_0^{\pi/2}=(0+1)-(0+0)=1$
 - 另一个常考版本：$Y=\cos X$ ⟹ $x\cos x$ 是奇函数，协方差为 0，但 $Y$ 由 $X$ 完全决定，**不相关 ≠ 独立**。
 ::vary
 把 $Y$ 换成 $\cos X$ >> $E(X\cos X)=0$（奇函数），协方差 0，但 $X$、$Y$ 不独立
-求 $DY$ >> $EY=0$，$E(Y^2)=\frac1\pi\int_{-\pi/2}^{\pi/2}\sin^2x\,dx=\frac12$，$DY=\frac12$
 求相关系数 $\rho_{XY}$ >> $DX=\frac{\pi^2}{12}$，$\rho=\frac{2/\pi}{\sqrt{\pi^2/12}\sqrt{1/2}}=\frac{4\sqrt6}{\pi^2}\approx0.99$——几乎线性相关
 
 #15
 @stem
 （本题满分 10 分）求函数 $f(x,y)=x^3+8y^3-xy$ 的极值.
 @tpl T二元极值
+::rev
+- **该花** 9 分钟（10 分题）。解驻点 4 分钟，两个驻点各判别 2 分钟，算极值 1 分钟。
+- **卡点** $x=216x^4$ 两边约掉 $x$，漏了驻点 $(0,0)$；只写 $AC-B^2\gt0$ 不写 $A\gt0$。
+- **错了说明** 约分前没讨论因子为 0；极大极小要由 $A$ 的符号定。
+- **带走** 驻点 $(0,0)$（非极值）与 $\left(\frac16,\frac1{12}\right)$（极小值 $-\frac1{216}$）；每个驻点都要写结论。
 ::read
 「求函数的极值」，没给约束 >> 无条件极值 ⟹ [[T二元极值]]：驻点 → $A,B,C$ → 看 $AC-B^2$
 「$x^3+8y^3-xy$」 >> 多项式，处处可微 ⟹ 极值点只可能是驻点，{{圈|不用担心不可导点}}
 「$x^3$、$8y^3$」 >> 偏导方程一个是 $3x^2=y$、一个是 $24y^2=x$，代入消元会得到 $x=216x^4$ ==别把 $x$ 约掉==
 ::sk 340 110 列 | 两个驻点列一张表：原点处 $AC-B^2<0$ 是马鞍点，另一点是极小值点
 s.cells(8,8,[['驻点','A=6x','B','C=48y','AC−B²','结论'],['(0,0)','0','−1','0','!−1','不是极值'],['(1/6, 1/12)','1','−1','4','3','!极小']],cw=[78,48,34,56,56,62],ch=28,size=12)
-::think
-1. 求一阶偏导，令为 0，解方程组（两个曲线 $y=3x^2$ 与 $x=24y^2$ 的交点）。
-2. 求二阶偏导 $f_{xx}=6x$，$f_{xy}=-1$，$f_{yy}=48y$。
-3. 每个驻点代入判别；极小值点代回原函数求值。
 ::steps
 $f_x=3x^2-y$，$f_y=24y^2-x$。令 $f_x=0$、$f_y=0$：$y=3x^2$，$x=24y^2$。
 把 $y=3x^2$ 代入第二式：$x=24\cdot9x^4=216x^4$，即 $x(216x^3-1)=0$ ⟹ $x=0$ 或 $x=\frac16$。
@@ -584,18 +516,20 @@ $$f\left(\frac16,\frac1{12}\right)=-\frac1{216}.$$ ⛳2
 ::note
 - {{扣|漏掉驻点 $(0,0)$}}：$x=216x^4$ 两边除以 $x$ 就丢了一个根；虽然它不是极值点，但「判断它不是」也有分。
 - {{扣|只写「$AC-B^2>0$」不写「$A>0$」}}：大于 0 只说明有极值，极大极小要看 $A$ 的符号。
-- 提速：$\frac1{216}=\frac{8}{1728}$，三项通分到 216 一眼算完。
 - 原点不是极值的直观理由：沿 $y=x$，$f=9x^3-x^2$，在 0 附近为负；沿 $y=-x$，$f=-7x^3+x^2$，在 0 附近为正 ⟹ 马鞍点。
 ::vary
-$f(x,y)=x^3+y^3-3xy$ 的极值 >> 驻点 $(0,0)$、$(1,1)$；$(0,0)$ 处 $AC-B^2=-9<0$ 非极值；$(1,1)$ 处 $A=6,C=6,B=-3$，极小值 $-1$
 本题有没有最大值、最小值 >> 都没有：$y=0$ 时 $f=x^3$ 取遍全体实数
 $f(x,y)=x^3+8y^3-xy$ 在约束 $x=2y$ 下的极值 >> 代入 $f=16y^3-2y^2$，$f'=48y^2-4y=0$ ⟹ $y=0$（极大 0）、$y=\frac1{12}$（极小 $-\frac1{216}$）——恰好经过同一个点
-把 $8y^3$ 改成 $8y^2$ >> $f_y=16y-x$，驻点 $(0,0)$、$\left(\frac1{48},\frac1{768}\right)$；后者 $A=\frac18,B=-1,C=16$，$AC-B^2=1>0$ 极小——要重新算，不能套
 
 #16
 @stem
 （本题满分 10 分）计算曲线积分 $I=\displaystyle\oint_L\frac{4x-y}{4x^2+y^2}\,dx+\frac{x+y}{4x^2+y^2}\,dy$，其中 $L$ 是 $x^2+y^2=2$，方向为逆时针方向.
 @tpl T格林挖洞
+::rev
+- **该花** 10 分钟。验 $Q_x=P_y$ 4 分钟，挖椭圆并在小椭圆上算 6 分钟。
+- **卡点** 直接对圆盘用格林得 0；或挖圆 $x^2+y^2=\varepsilon^2$ 后分母不是常数算不下去。
+- **错了说明** 原点是奇点且在 $L$ 内；挖洞曲线要取「分母＝$\varepsilon^2$」即椭圆 $4x^2+y^2=\varepsilon^2$。
+- **带走** 小椭圆上分母成常数 $\varepsilon^2$，再用一次格林：$\frac1{\varepsilon^2}\iint2\,dxdy=\frac{2}{\varepsilon^2}\cdot\frac{\pi\varepsilon^2}2=\pi$。
 ::read
 「$L$ 是闭曲线 $x^2+y^2=2$，逆时针」 >> 闭曲线积分 ⟹ 第一反应[[格林公式]]
 「分母 $4x^2+y^2$」 >> 在原点为 0 ⟹ {{圈|奇点 $(0,0)$}}，而且原点在圆内 ⟹ 不能直接对圆盘用格林
@@ -614,10 +548,6 @@ s.dot(cx,cy,2.6,'r');s.text(cx+5,cy+14,'O',11,'r')
 s.text(cx+52,cy-62,'L: x²+y²=2',12)
 s.text(196,190,'C_{ε}: 4x²+y²=ε²（蓝）',12,'b')
 s.text(8,190,'环形区域：Q_{x}−P_{y}=0',12,'g')
-::think
-1. 算 $Q_x$、$P_y$，验证原点外相等。
-2. 原点在 $L$ 内 ⟹ 挖一个包住原点的小曲线 $C_\varepsilon$，环形区域上用格林 ⟹ $\oint_L=\oint_{C_\varepsilon}$。
-3. 小曲线选 $4x^2+y^2=\varepsilon^2$：分母变成常数 $\varepsilon^2$，提出去，剩下的积分在 $C_\varepsilon$ 内部再用一次格林（这次没有奇点了）。
 ::steps
 记 $P=\dfrac{4x-y}{4x^2+y^2}$，$Q=\dfrac{x+y}{4x^2+y^2}$，$D=4x^2+y^2$。
 $Q_x=\dfrac{1\cdot D-(x+y)\cdot8x}{D^2}=\dfrac{4x^2+y^2-8x^2-8xy}{D^2}=\dfrac{y^2-4x^2-8xy}{D^2}$。
@@ -643,10 +573,8 @@ $$I=\frac1{\varepsilon^2}\iint_{D_\varepsilon}2\,dxdy=\frac{2}{\varepsilon^2}\cd
 - {{扣|直接对圆盘用格林得 0}}：原点是奇点，$P$、$Q$ 在圆盘上偏导不连续，格林公式的条件不满足。这是最常见的 0 分写法。
 - {{扣|挖圆 $x^2+y^2=\varepsilon^2$}}：方法没错，但分母不是常数，要用极坐标硬积 $\int_0^{2\pi}\frac{\cdots}{4\cos^2\theta+\sin^2\theta}d\theta$，很难算完。
 - 卷面上「$\varepsilon$ 足够小使 $L_\varepsilon$ 在 $L$ 内部」必须写，它是用格林的前提。
-- 与 2021 第 20 题同一个模子（那题分母 $x^2+4y^2$，挖 $x^2+4y^2=\varepsilon^2$）——[[T格林挖洞]] 是近年最稳定的大题套路之一。
 ::vary
 若 $L$ 改为 $(x-2)^2+y^2=1$（逆时针） >> 不包含原点，环内 $Q_x=P_y$，直接格林得 $I=0$
-若 $L$ 改为 $x^2+y^2=2$ 顺时针 >> $-\pi$
 把 $P$、$Q$ 的分子改成 $-y$、$x$（分母不变） >> $\frac1{\varepsilon^2}\oint x\,dy-y\,dx=\frac1{\varepsilon^2}\cdot2\cdot\frac{\pi\varepsilon^2}{2}=\pi$（仍需先验 $Q_x=P_y$ 成立）
 问 $\oint_L$ 与路径的关系 >> 绕原点一圈（逆时针）的任意分段光滑闭曲线积分都等于 $\pi$；不绕原点的都等于 0
 
@@ -654,15 +582,16 @@ $$I=\frac1{\varepsilon^2}\iint_{D_\varepsilon}2\,dxdy=\frac{2}{\varepsilon^2}\cd
 @stem
 （本题满分 10 分）设数列 $\{a_n\}$ 满足：$a_1=1$，$(n+1)a_{n+1}=\left(n+\dfrac12\right)a_n$，证明：当 $|x|<1$ 时，幂级数 $\displaystyle\sum_{n=1}^\infty a_nx^n$ 收敛，并求其和函数.
 @tpl T递推求和函数, T一阶线性
+::rev
+- **该花** 10 分钟。证收敛 2 分钟，由递推建微分方程 4 分钟，解方程 4 分钟。
+- **卡点** 把 $S'=\sum(n+1)a_{n+1}x^n$ 整体代换时漏了 $n=0$ 那项 $a_1=1$，方程少了常数 1；和函数没写定义域。
+- **错了说明** 求导后下标从 0 起，首项要单独拿出来；一阶线性方程的初值 $S(0)=0$ 没用。
+- **带走** 递推求和函数：$S'$ 用递推换成 $xS'$ 与 $S$ 的组合，得 $(1-x)S'-\frac12S=1$，解出 $S=\frac2{\sqrt{1-x}}-2$。
 ::read
 「$(n+1)a_{n+1}=(n+\frac12)a_n$」 >> 一举两得：① 比值 $\frac{a_{n+1}}{a_n}=\frac{n+1/2}{n+1}\to1$ ⟹ [[幂级数收敛域|收敛半径]] $R=1$；② {{圈|$(n+1)a_{n+1}$ 正是 $S'(x)$ 的系数}}
 「证明 $|x|<1$ 时收敛」 >> 就是证 $R\ge1$，比值法一行
 「求和函数」，没给通项 >> 不去求 $a_n$ 的公式，走[[T递推求和函数|递推 → 微分方程]]：$S'=\sum(n+1)a_{n+1}x^n$，用递推换掉系数
 「$a_n$ 前面有 $n$ 和常数 $\frac12$」 >> $\sum na_nx^n=xS'$，$\sum\frac12a_nx^n=\frac12S$ ⟹ 得到一阶线性方程
-::think
-1. 收敛：$a_n>0$，比值极限为 1 ⟹ $R=1$ ⟹ $|x|<1$ 时收敛。
-2. 设 $S(x)=\sum_{n\ge1}a_nx^n$，逐项求导 $S'(x)=\sum_{n\ge0}(n+1)a_{n+1}x^n$，把 $n=0$ 那项（$a_1=1$）单独拿出来，其余用递推替换。
-3. 得 $(1-x)S'-\frac12S=1$，$S(0)=0$，用一阶线性方程解出。
 ::steps
 由 $a_1=1>0$ 及递推，$a_{n+1}=\frac{n+1/2}{n+1}a_n$，归纳得所有 $a_n>0$。
 $\lim\limits_{n\to\infty}\dfrac{a_{n+1}}{a_n}=\lim\dfrac{n+\frac12}{n+1}=1$ ⟹ 收敛半径 $R=1$ ⟹ $|x|<1$ 时幂级数绝对收敛。
@@ -691,18 +620,21 @@ $$S(x)=\frac{2}{\sqrt{1-x}}-2,\quad -1<x<1.$$ ⛳2
 - {{扣|和函数不写定义域}}：结尾的 $-1<x<1$ 是采分点。
 - {{扣|把 $S'(x)$ 写成 $\sum(n+1)a_{n+1}x^n$ 后直接整体替换}}：忘了 $n=0$ 那一项 $a_1=1$，方程变成 $(1-x)S'=\frac12S$，解出 $S=0$ 或丢了常数 1。
 - 另一条路：先求通项 $a_n=\frac{(2n-1)!!}{(2n)!!}\cdot2=\frac{2\binom{2n}{n}}{4^n}$，再对照 $(1-x)^{-1/2}=\sum\frac{\binom{2n}n}{4^n}x^n$——要背二项式级数，不如微分方程稳。
-- 端点：$x=-1$ 时级数收敛（交错、$a_n\to0$ 单调），和为 $\sqrt2-2$；$x=1$ 时发散（$a_n\sim\frac{2}{\sqrt{\pi n}}$）。题目只问 $|x|<1$，不必讨论。
 ::vary
 递推改成 $(n+1)a_{n+1}=a_n$，$a_1=1$ >> $S'=1+S$，$S(0)=0$ ⟹ $S=e^x-1$（$a_n=\frac1{n!}$）
 递推改成 $a_{n+1}=\frac{n}{n+1}a_n$，$a_1=1$ >> $a_n=\frac1n$，$S=-\ln(1-x)$；用方程法：$(n+1)a_{n+1}=na_n$ ⟹ $S'=1+xS'$ ⟹ $S'=\frac1{1-x}$
 求 $\sum\limits_{n=1}^\infty\frac{a_n}{2^n}$ >> $S\left(\frac12\right)=\frac{2}{\sqrt{1/2}}-2=2\sqrt2-2$
-本题的 $a_n$ 能写成什么 >> $a_n=\frac{2\binom{2n}{n}}{4^n}=\frac{2\cdot(2n-1)!!}{(2n)!!}$
 
 #18
 @stem
 （本题满分 10 分）设 $\Sigma$ 为曲面 $z=\sqrt{x^2+y^2}\ (1\le x^2+y^2\le4)$ 的下侧，$f(x)$ 是连续函数，计算
 $$I=\iint_\Sigma\left[xf(xy)+2x-y\right]dydz+\left[yf(xy)+2y+x\right]dzdx+\left[zf(xy)+z\right]dxdy.$$
 @tpl T合一投影
+::rev
+- **该花** 10 分钟。合一投影 5 分钟，化简后在圆环上积分 5 分钟。
+- **卡点** 下侧没变号得 $-\frac{14\pi}3$；或想用高斯，要对未知的 $f$ 求导。
+- **错了说明** $f$ 只连续不可导时不能用高斯；下侧时公式是 $\iint_D(Pz_x+Qz_y-R)\,dxdy$。
+- **带走** 被积式含未知函数的曲面积分用合一投影，未知函数必然消掉；本题剩 $\iint_Dr\cdot r\,dr\,d\theta=\frac{14\pi}3$。
 ::read
 「$z=\sqrt{x^2+y^2}$，$1\le x^2+y^2\le4$」 >> 圆锥面被两个柱面截下的一圈「锥台侧面」，投影到 $xOy$ 面是圆环 $D:1\le x^2+y^2\le4$
 「下侧」 >> [[第二类曲面积分|法向量]] $z$ 分量为负：$(z_x,z_y,-1)=\left(\frac xz,\frac yz,-1\right)$
@@ -719,10 +651,6 @@ s.text(282,36,'z=2',12);s.text(228,100,'z=1',12)
 s.circle(60,175,14,ry=6,c='b');s.circle(60,175,28,ry=12,c='b')
 s.text(96,180,'投影 D：1 ≤ x²+y² ≤ 4',12,'b')
 s.text(14,20,'z=√(x²+y²)',12)
-::think
-1. 下侧 ⟹ $\iint_\Sigma P\,dydz+Q\,dzdx+R\,dxdy=\iint_D\left(Pz_x+Qz_y-R\right)dxdy$。
-2. $z_x=\frac xz$，$z_y=\frac yz$；合并 $Pz_x+Qz_y$ 时 $x^2+y^2=z^2$，$f$ 的项会凑成 $zf$，与 $R$ 里的 $zf$ 抵消。
-3. 剩下 $\iint_D\sqrt{x^2+y^2}dxdy$，极坐标。
 ::fast
 {{秒|先只看 $f$ 的项}}：$xf\cdot\frac xz+yf\cdot\frac yz-zf=\frac{x^2+y^2}{z}f-zf=0$ ⟹ 合一投影后 $f$ 消失；再看其余：$(2x-y)\frac xz+(2y+x)\frac yz-z=\frac{2z^2}{z}-z=z$。
 ::steps
@@ -749,7 +677,6 @@ $$I=\iint_D\sqrt{x^2+y^2}\,dxdy=\int_0^{2\pi}d\theta\int_1^2r^2\,dr=\frac{14\pi}
 - {{扣|$z$ 不代成 $\sqrt{x^2+y^2}$ 就去做二重积分}}：投影到 $xOy$ 面后被积函数只能含 $x,y$。
 - 为什么不用高斯：要补上 $z=1$（$r\le1$）、$z=2$（$r\le2$）两个圆盘，且 $\frac{\partial P}{\partial x}$ 含 $f'(xy)$——题目只说 $f$ 连续，$f'$ 可能不存在。这正是出题人「只给连续」的用意。
 ::vary
-改成取上侧 >> $I=-\frac{14\pi}3$
 去掉所有 $f$ 的项，其余不变 >> 被积函数仍是 $z$，结果不变 $\frac{14\pi}3$——$f$ 本来就对答案没贡献
 把曲面换成 $z=x^2+y^2$（$1\le x^2+y^2\le4$，下侧），$R$ 换成 $zf(xy)+z$ 不变 >> $z_x=2x$，$z_y=2y$，$f$ 的项为 $2(x^2+y^2)f-zf=zf\ne0$，消不掉——所以锥面 $z^2=x^2+y^2$ 是「消 $f$」的关键，换曲面要重新配系数
 曲面不变，求 $\iint_\Sigma z\,dS$ >> $dS=\sqrt2\,dxdy$，$\iint_D\sqrt2 r\cdot r\,dr\,d\theta=\frac{14\sqrt2\pi}{3}$
@@ -760,6 +687,11 @@ $$I=\iint_D\sqrt{x^2+y^2}\,dxdy=\int_0^{2\pi}d\theta\int_1^2r^2\,dr=\frac{14\pi}
 （Ⅰ）存在 $\xi\in(0,2)$，使得 $|f'(\xi)|\ge M$；
 （Ⅱ）若对任意的 $x\in(0,2)$，$|f'(x)|\le M$，则 $M=0$.
 @tpl T最值点劈区间
+::rev
+- **该花** 10 分钟。（Ⅰ）5 分钟，（Ⅱ）5 分钟。
+- **卡点** （Ⅰ）没按最值点 $c$ 在左半还是右半分情况选区间；$M=0$ 没单独处理。
+- **错了说明** $c\le1$ 时用 $[0,c]$ 得 $\frac Mc\ge M$，$c\gt1$ 时用 $[c,2]$；直接用一个区间推不出。
+- **带走** 「端点为 0、最大值 $M$」的题：设最值点 $c$，在较短的那一段上用拉格朗日；（Ⅱ）用 $\int f'$ 取等逼出 $f'$ 在 1 处间断。
 ::read
 「$f(0)=f(2)=0$，$M=\max|f|$」 >> 设最值点 $c$：$|f(c)|=M$。$M>0$ 时 $c$ 不是端点 ⟹ {{圈|$c\in(0,2)$}}
 「证 $|f'(\xi)|\ge M$」 >> 导数与函数值的联系 ⟹ [[拉格朗日中值定理]]：在 $[0,c]$ 上 $|f'(\xi)|=\frac Mc$，在 $[c,2]$ 上 $|f'(\eta)|=\frac{M}{2-c}$
@@ -777,11 +709,6 @@ s.text(X(2),oy+14,'2',12,'k','middle');s.text(X(1),oy+14,'1',12,'b','middle')
 s.text(X(0.7)-6,Y(1)-8,'M',12,'k','end')
 s.text(X(0.05),Y(0.62),'M/c',12,'r');s.text(X(1.45),Y(0.55),'M/(2−c)',12,'r')
 s.text(X(1.05),Y(1.08),'M(1−|x−1|)',11,'b')
-::think
-1. $M=0$ 时 $f\equiv0$，任取 $\xi$ 都行；下面设 $M>0$。
-2. 取 $c$ 使 $|f(c)|=M$，端点函数值为 0 ⟹ $c\in(0,2)$。
-3. （Ⅰ）$c\le1$ 用 $[0,c]$，$c>1$ 用 $[c,2]$，各一次拉格朗日。
-4. （Ⅱ）反证 $M>0$：$c\ne1$ 时（Ⅰ）里的不等式是**严格**的，直接矛盾；$c=1$ 时用单调性把 $f$ 逼成折线，与导数连续矛盾。
 ::steps
 若 $M=0$：$f\equiv0$，$f'\equiv0$，任取 $\xi\in(0,2)$ 都有 $|f'(\xi)|=0\ge M$，（Ⅰ）成立。以下设 $M>0$。
 $|f|$ 在 $[0,2]$ 上连续，必取到最大值：存在 $c\in[0,2]$，$|f(c)|=M>0$。因为 $f(0)=f(2)=0$，所以 $c\ne0,2$，即 $c\in(0,2)$。
@@ -809,12 +736,10 @@ $$|f'(\eta)|=\frac{M}{2-c}>M.\qquad(2)$$ ⛳1
 - {{扣|（Ⅰ）不讨论 $c$ 的位置，直接在 $[0,c]$ 上用}}：$c>1$ 时 $\frac Mc<M$，推不出结论。**分情况选区间**是本题第一个采分点。
 - {{扣|忘了说 $c\in(0,2)$}}：拉格朗日要求区间非退化，$c=0$ 时 $[0,c]$ 不成区间。$M>0$ 才保证 $c$ 不是端点，所以要先把 $M=0$ 单独处理。
 - （Ⅱ）的另一种写法：$M=f(1)-f(0)=\int_0^1f'(x)dx\le\int_0^1|f'|\le M$，取等迫使 $f'\equiv M$ 于 $[0,1]$；同理 $f'\equiv-M$ 于 $[1,2]$，$f'$ 在 1 处不连续。用单调性写更不容易出漏洞。
-- 草图里的蓝色折线就是（Ⅱ）的「唯一可能」：$|f'|=M$ 处处取等、又要从 0 爬到 $M$ 再落回 0，只能在中点转折。
 ::vary
 区间改成 $[0,a]$，结论（Ⅰ）怎么改 >> 存在 $\xi$ 使 $|f'(\xi)|\ge\frac{2M}{a}$（$c$ 在左半用 $[0,c]$，右半用 $[c,a]$）
 只给 $f(0)=0$（不给 $f(2)=0$），（Ⅰ）还成立吗 >> 不成立：$f(x)=\frac x2$，$M=1$，$|f'|\equiv\frac12<1$
 去掉「导数连续」（只要求可导），（Ⅱ）还成立吗 >> 仍成立：$f$ 在 1 处可导就要求左右导数相等，折线照样矛盾；但若连可导都不要求，$f=M(1-|x-1|)$ 就是反例
-证明：存在 $\xi\in(0,2)$ 使 $|f'(\xi)|\ge\frac12\int_0^2|f(x)|dx$ 的类似结论 >> 由 $\int_0^2|f|\le2M$ 得 $\frac12\int_0^2|f|\le M\le|f'(\xi)|$，直接用（Ⅰ）
 
 #20
 @stem
@@ -822,16 +747,17 @@ $$|f'(\eta)|=\frac{M}{2-c}>M.\qquad(2)$$ ⛳1
 （Ⅰ）求 $a,b$ 的值；
 （Ⅱ）求正交矩阵 $Q$.
 @tpl T正交变换互化, T正交对角化
+::rev
+- **该花** 11 分钟。（Ⅰ）3 分钟，（Ⅱ）8 分钟。
+- **卡点** （Ⅱ）把化 $f$ 为标准形的 $Q_1$ 当答案；$Q_1$、$Q_2$ 的特征值顺序不一致就相乘。
+- **错了说明** $g$ 不是标准形，要把 $A$、$B$ 各自正交对角化到同一个 $\Lambda$，再 $Q=Q_1Q_2^T$。
+- **带走** 正交变换互化：迹、行列式相等定参数（$a+b=5$，$ab=4$ ⟹ $a=4,b=1$）；$Q=Q_1Q_2^T$，最后验 $Q^TAQ=B$。
 ::read
 「$f=x_1^2-4x_1x_2+4x_2^2$」 >> 矩阵 $A=\begin{pmatrix}1&-2\\-2&4\end{pmatrix}$（交叉项系数 $-4$ 对半分到两个位置）
 「$g=ay_1^2+4y_1y_2+by_2^2$」 >> 矩阵 $B=\begin{pmatrix}a&2\\2&b\end{pmatrix}$。==$g$ 不是标准形==（有交叉项），所以 $Q$ 不是把 $A$ 对角化的那个矩阵
 「经{{圈|正交}}变换化为」 >> $Q^TAQ=B$ 且 $Q^T=Q^{-1}$ ⟹ $A$、$B$ [[相似矩阵|相似]] ⟹ 迹、行列式相同（[[T正交变换互化]]）
 「$a\ge b$」 >> 迹和行列式给出 $a,b$ 是某个二次方程的两根，用它挑出哪个是 $a$
 「求正交矩阵 $Q$」 >> $A$、$B$ 都化成同一个对角阵：$Q_1^TAQ_1=\Lambda=Q_2^TBQ_2$ ⟹ {{波|$Q=Q_1Q_2^T$}}
-::think
-1. 写出两个矩阵；正交变换 ⟹ 相似 ⟹ 迹、行列式相等，两个方程定 $a,b$。
-2. $A$、$B$ 特征值相同（$5,0$），各求单位特征向量，**按同一顺序**排成 $Q_1$、$Q_2$。
-3. $Q=Q_1Q_2^T$，验证正交：正交矩阵的乘积仍正交。
 ::steps
 （Ⅰ）$f$ 的矩阵 $A=\begin{pmatrix}1&-2\\-2&4\end{pmatrix}$，$g$ 的矩阵 $B=\begin{pmatrix}a&2\\2&b\end{pmatrix}$。
 $x=Qy$ 代入：$f=x^TAx=y^T(Q^TAQ)y=g=y^TBy$，二次型的矩阵是对称的、唯一确定 ⟹ $Q^TAQ=B$。
@@ -864,12 +790,10 @@ $$Q=Q_1Q_2^T=\frac15\begin{pmatrix}-4&3\\3&4\end{pmatrix},$$
 - {{扣|把 $Q_1$ 当答案}}：$Q_1$ 把 $f$ 化成 $5y_1^2$，不是 $g$。题目要的是把 $A$ 变成 $B$ 的正交矩阵，要「两次对角化再拼」。
 - {{扣|$Q_1$、$Q_2$ 的特征值顺序不一致}}：比如 $Q_2$ 先排 0 后排 5，两个对角阵不相等，拼出来的 $Q$ 是错的。
 - $Q$ 不唯一：每个特征向量可以取反号，$Q=Q_1DQ_2^T$（$D=\mathrm{diag}(\pm1,\pm1)$）共 4 个，如 $\frac15\begin{pmatrix}4&-3\\-3&-4\end{pmatrix}$ 也对。写出一个并核对 $Q^TAQ=B$ 即可。
-- 原书解析用未单位化的 $P_1,P_2$ 算 $P_1P_2^{-1}$，碰巧也正交（两组特征向量模长都是 $\sqrt5$）；换一组数字就不一定，==稳妥做法是先单位化==。
 - 提速：$A$ 秩 1，$A=\begin{pmatrix}1\\-2\end{pmatrix}(1,-2)$ ⟹ 非零特征值 $=1+4=5$，属于它的特征向量就是 $(1,-2)^T$ 方向，属于 0 的与之正交——一行写完。
 ::vary
 若把「正交变换」改成「可逆线性变换」，能求出 $a,b$ 吗 >> 不能：只能知道 $g$ 的正、负惯性指数为 1、0，即 $B$ 半正定、秩 1 ⟹ $ab=4$、$a+b>0$，不唯一
 若题目只说 $a,b$ 满足 $a+b=5$ 且 $f$、$g$ 规范形相同，求 $a,b$ >> 秩 1 ⟹ $ab=4$，又 $a+b=5$ ⟹ $\{4,1\}$（再由 $a\ge b$ 定 $a=4,b=1$）
-求正交变换 $x=Qy$ 把 $f$ 化成标准形 >> $Q_1$，$f=5y_1^2$
 本题 $Q$ 的几何意义 >> $|Q|=-1$，对称正交 ⟹ 关于直线 $y=3x$（$Q$ 属于特征值 1 的方向 $(1,3)$）的反射
 
 #21
@@ -878,15 +802,16 @@ $$Q=Q_1Q_2^T=\frac15\begin{pmatrix}-4&3\\3&4\end{pmatrix},$$
 （Ⅰ）证明 $P$ 为可逆矩阵；
 （Ⅱ）若 $A^2\boldsymbol\alpha+A\boldsymbol\alpha-6\boldsymbol\alpha=\boldsymbol0$，求 $P^{-1}AP$，并判断 $A$ 是否相似于对角矩阵.
 @tpl T构造P相似, T对角化判别
+::rev
+- **该花** 10 分钟。（Ⅰ）3 分钟，（Ⅱ）7 分钟。
+- **卡点** $P^{-1}AP$ 的系数按行放成 $\begin{pmatrix}0&1\\6&-1\end{pmatrix}$；（Ⅰ）没说清为什么线性无关。
+- **错了说明** $AP=P B$ 中 $B$ 的第 $j$ 列是 $AP$ 第 $j$ 列在 $\boldsymbol\alpha,A\boldsymbol\alpha$ 下的坐标，要按列写。
+- **带走** $A(\boldsymbol\alpha,A\boldsymbol\alpha)=(A\boldsymbol\alpha,6\boldsymbol\alpha-A\boldsymbol\alpha)$ ⟹ $B=\begin{pmatrix}0&6\\1&-1\end{pmatrix}$，特征值 $2,-3$ 互异 ⟹ 可对角化。
 ::read
 「$P=(\boldsymbol\alpha,A\boldsymbol\alpha)$，2 阶」 >> $P$ 可逆 ⟺ 两列线性无关 ⟺ $A\boldsymbol\alpha$ 不是 $\boldsymbol\alpha$ 的倍数
 「$\boldsymbol\alpha$ 不是 $A$ 的特征向量」 >> 正好是说 {{圈|$A\boldsymbol\alpha\ne k\boldsymbol\alpha$}}——（Ⅰ）几乎就是这句话的翻译，用反证写
 「$A^2\boldsymbol\alpha+A\boldsymbol\alpha-6\boldsymbol\alpha=\boldsymbol0$」 >> 把 $A^2\boldsymbol\alpha$ 写成 $6\boldsymbol\alpha-A\boldsymbol\alpha$，正好是 $P$ 两列的组合
 「求 $P^{-1}AP$」 >> [[T构造P相似]]：写 $AP=(A\boldsymbol\alpha,A^2\boldsymbol\alpha)=P\cdot(\ast)$，==不用求 $P^{-1}$==
-::think
-1. （Ⅰ）反证：$P$ 不可逆 ⟹ $\boldsymbol\alpha,A\boldsymbol\alpha$ 线性相关 ⟹ $A\boldsymbol\alpha=k\boldsymbol\alpha$ ⟹ $\boldsymbol\alpha$ 是特征向量，矛盾。
-2. （Ⅱ）$AP=(A\boldsymbol\alpha,A^2\boldsymbol\alpha)=(A\boldsymbol\alpha,6\boldsymbol\alpha-A\boldsymbol\alpha)=(\boldsymbol\alpha,A\boldsymbol\alpha)\begin{pmatrix}0&6\\1&-1\end{pmatrix}$。
-3. 求这个 2 阶矩阵的特征值；两个不同 ⟹ 可对角化，$A$ 与它相似也可对角化。
 ::steps
 （Ⅰ）设 $P$ 不可逆，则 $\boldsymbol\alpha,A\boldsymbol\alpha$ 线性相关：存在不全为 0 的 $k_1,k_2$，$k_1\boldsymbol\alpha+k_2A\boldsymbol\alpha=\boldsymbol0$。
 若 $k_2=0$，则 $k_1\boldsymbol\alpha=\boldsymbol0$，$\boldsymbol\alpha\ne\boldsymbol0$ ⟹ $k_1=0$，与「不全为 0」矛盾。所以 $k_2\ne0$。
@@ -922,6 +847,11 @@ $|\lambda E-B|=(\lambda-2)(\lambda+3)$，$B$ 的特征值为 $2,-3$，互不相�
 （Ⅰ）求二维随机变量 $(X_1,Y)$ 的分布函数，结果用标准正态分布函数 $\Phi(x)$ 表示；
 （Ⅱ）证明随机变量 $Y$ 服从标准正态分布.
 @tpl T离散变量全概率
+::rev
+- **该花** 11 分钟。（Ⅰ）8 分钟，（Ⅱ）3 分钟。
+- **卡点** $X_3=1$ 那一支写成 $\Phi(x)\Phi(y)$：此时 $Y=X_1$，应是 $P\{X_1\le\min(x,y)\}$。
+- **错了说明** 同一个随机变量的两个条件要取交集，不能当成两个独立变量相乘。
+- **带走** 含离散「开关」变量的题按它的取值全概率展开：$F=\frac12\Phi(\min\{x,y\})+\frac12\Phi(x)\Phi(y)$。
 ::read
 「$Y=X_3X_1+(1-X_3)X_2$，$X_3$ 只取 0、1」 >> $X_3$ 是一个{{圈|开关}}：$X_3=1$ 时 $Y=X_1$，$X_3=0$ 时 $Y=X_2$ ⟹ [[T离散变量全概率|按 $X_3$ 分两支]]（[[全概率公式]]）
 「$X_1,X_2,X_3$ 相互独立」 >> 每一支里条件 $X_3=k$ 可以直接去掉；$X_3=0$ 那支 $X_1$、$X_2$ 独立，概率可以乘开
@@ -935,10 +865,6 @@ s.text(80,44,'½',13,'r');s.text(80,124,'½',13,'r')
 s.text(126,30,'X₃=0：Y = X₂',12,'b');s.text(126,48,'P{X₁≤x, X₂≤y} = Φ(x)Φ(y)',12)
 s.text(126,114,'X₃=1：Y = X₁',12,'b');s.text(126,132,'P{X₁≤x, X₁≤y} = Φ(min{x,y})',12)
 s.circle(254,128,62,'r',ry=10)
-::think
-1. $F(x,y)=P\{X_1\le x,Y\le y\}$，用全概率按 $X_3=0,1$ 拆。
-2. 每一支代入 $Y$ 的具体形式，利用独立性去掉条件。
-3. （Ⅱ）$F_Y(y)=\lim\limits_{x\to+\infty}F(x,y)$。
 ::steps
 （Ⅰ）$F(x,y)=P\{X_1\le x,Y\le y\}$。由全概率公式：
 $$F(x,y)=P\{X_3=0\}P\{X_1\le x,Y\le y\mid X_3=0\}+P\{X_3=1\}P\{X_1\le x,Y\le y\mid X_3=1\}.$$
@@ -964,7 +890,6 @@ $$F_Y(y)=\lim_{x\to+\infty}F(x,y)=\frac12\Phi(y)+\frac12\Phi(y)=\Phi(y),$$ ⛳3
 - $(X_1,Y)$ 不是二维正态（$F$ 里有 $\min$，在 $x=y$ 这条线上有概率质量 $\frac12$），但两个边缘都是标准正态——经典的「边缘正态 ⇏ 联合正态」例子。
 ::vary
 求 $\mathrm{Cov}(X_1,Y)$ >> $E(X_1Y)=\frac12E(X_1^2)+\frac12E(X_1X_2)=\frac12$，$EX_1=EY=0$ ⟹ $\frac12$
-$X_1$ 与 $Y$ 独立吗 >> 不独立：$F(x,y)\ne\Phi(x)\Phi(y)$（如 $x=y=0$：$\frac18+\frac14=\frac38\ne\frac14$）
 求 $P\{X_1=Y\}$ >> $X_3=1$ 时必相等，$X_3=0$ 时 $P\{X_1=X_2\}=0$ ⟹ $\frac12$
 若 $P\{X_3=1\}=p$，$Y$ 还服从 $N(0,1)$ 吗 >> 是：$F_Y=p\Phi+(1-p)\Phi=\Phi$，与 $p$ 无关
 
@@ -974,16 +899,17 @@ $X_1$ 与 $Y$ 独立吗 >> 不独立：$F(x,y)\ne\Phi(x)\Phi(y)$（如 $x=y=0$�
 （Ⅰ）求概率 $P\{T>t\}$ 与 $P\{T>s+t\mid T>s\}$，其中 $s>0,t>0$；
 （Ⅱ）任取 $n$ 个这种元件做寿命试验，测得它们的寿命分别为 $t_1,t_2,\cdots,t_n$，若 $m$ 已知，求 $\theta$ 的最大似然估计值 $\hat\theta$.
 @tpl T最大似然
+::rev
+- **该花** 10 分钟。（Ⅰ）3 分钟，（Ⅱ）7 分钟。
+- **卡点** 似然函数用分布函数 $F$ 连乘；对 $\theta$ 求导时 $\theta^{-m}$ 的符号错。
+- **错了说明** 连续型的似然是密度连乘，要先对 $F$ 求导得密度。
+- **带走** 条件概率直接用 $\frac{1-F(s+t)}{1-F(s)}$；MLE 四步后得 $\hat\theta=\left(\frac1n\sum t_i^m\right)^{1/m}$。
 ::read
 「$F(t)=1-e^{-(t/\theta)^m}$」 >> 威布尔分布；$m=1$ 时就是[[指数分布]]（参数 $\frac1\theta$）
 「$P\{T>t\}$」 >> $=1-F(t)$，直接读出来 $e^{-(t/\theta)^m}$
 「$P\{T>s+t\mid T>s\}$」 >> [[条件概率]]：$\{T>s+t\}\subset\{T>s\}$ ⟹ 分子的交集就是 $\{T>s+t\}$
 「$m$ 已知，求 $\theta$ 的最大似然估计」 >> [[T最大似然]] 四步；连续型要{{圈|先求密度}} $f=F'$
 「$t_1,\dots,t_n$，估计值」 >> 用小写 $t_i$ 写成估计值；分布只在 $t\gt0$ 上有密度，样本值都为正
-::think
-1. （Ⅰ）$P\{T>t\}=1-F(t)$；条件概率用定义，分子化简。
-2. （Ⅱ）先求密度 $f(t)=F'(t)$，写似然 $L(\theta)=\prod f(t_i)$。
-3. 取对数，对 $\theta$ 求导令 0，解出 $\theta$。
 ::steps
 （Ⅰ）$t>0$ 时 $P\{T>t\}=1-F(t)=e^{-\left(\frac t\theta\right)^m}$。
 $\{T>s+t\}\subset\{T>s\}$，所以 $P\{T>s+t,T>s\}=P\{T>s+t\}$。
@@ -1011,7 +937,5 @@ $$\hat\theta=\Big(\frac1n\sum_{i=1}^nt_i^m\Big)^{\frac1m}.$$ ⛳2
 - （Ⅰ）的潜台词：条件概率 $e^{(s/\theta)^m-((s+t)/\theta)^m}$ 一般**依赖 $s$**。只有 $m=1$ 时它等于 $e^{-t/\theta}=P\{T>t\}$（无记忆性）；$m>1$ 时随 $s$ 增大而减小（越用越容易坏），$m<1$ 时随 $s$ 增大而增大（「磨合期」）。
 - 题目说「估计值」，用小写 $t_i$；若说「估计量」，要写成大写 $T_i$。
 ::vary
-$m=1$ 时 $\hat\theta$ 是什么 >> $\bar t=\frac1n\sum t_i$（指数分布均值的 MLE）
 求 $\theta^m$ 的最大似然估计 >> 由不变性，$\widehat{\theta^m}=\frac1n\sum t_i^m$
 $m=2$ 时求 $P\{T>s+t\mid T>s\}$，并说明它比 $P\{T>t\}$ 大还是小 >> $e^{-\frac{2st+t^2}{\theta^2}}\lt e^{-\frac{t^2}{\theta^2}}$，更小——用过 $s$ 时间的元件更容易在接下来 $t$ 时间内坏
-已知 $\theta$、求 $m$ 的最大似然估计能写出显式解吗 >> 不能：$\frac{n}{m}+\sum\ln\frac{t_i}{\theta}-\sum\left(\frac{t_i}\theta\right)^m\ln\frac{t_i}\theta=0$ 是超越方程——所以题目只让估 $\theta$
