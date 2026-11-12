@@ -10,12 +10,13 @@
   var C = window.EXAM_CONF, KEY = C.key + '_exam_v1';
   var $ = function(i){ return document.getElementById(i); };
   var root = $('app');
-  var DEF = { showSol:false, mustAll:false, instant:false, timer:'down', autoEnd:false, showCount:true };
+  var DEF = { showSol:false, mustAll:false, instant:false, timer:'down', autoEnd:false, showCount:true,
+    read:false, autoSol:true, hint:false, kpOpen:false, layer:false, view:'scroll', fs:'m', hide:{} };
 
   function load(){
     var o = {};
     try { o = JSON.parse(localStorage.getItem(KEY)) || {}; } catch(e){}
-    o.set = Object.assign({}, DEF, o.set||{}); o.sess = o.sess||{}; o.hist = o.hist||[];
+    o.set = Object.assign({}, DEF, o.set||{}); o.set.hide = o.set.hide||{}; o.sess = o.sess||{}; o.hist = o.hist||[];
     return o;
   }
   var S = load();
@@ -32,20 +33,38 @@
 
   /* —— 开关 —— */
   var TOGGLES = [
-    ['showSol','每题下面显示「解答」按钮','关着时做题中看不到解答，交卷后才能看。'],
+    ['showSol','做题时每题下面有「看解析」按钮','关着时做题中看不到解析，交卷后才能看。'],
+    ['autoSol','判完自动摊开解析','「练习」模式下选完或点「对答案」后，解析直接出现，不用再点一次。'],
+    ['hint','做题时可以先看「要用的知识点」','卡住时点题目下面的「提示」，只给这题要用的知识点和套路，不给答案。看过的题会记一笔。'],
+    ['kpOpen','知识点卡默认全部展开','解析顶上「这题要用到的」那一栏：开着时每张卡的公式、结论直接摊开；关着时只列标题，点哪张开哪张。'],
+    ['layer','解析分两层揭开','先只给读题和思路，合上自己写；写完再点一下看每一步和考场卷面。'],
     ['mustAll','必须全部答完才能交卷','有题没答时交卷按钮只列出缺的题，不让交。解答题写在纸上的，点「已写完」就算答过。'],
-    ['instant','当场结算','选完立刻判对错、累计得分，答案锁定。填空和解答题写完就能对答案、当场登分。关着时等交卷统一结算。'],
     ['showCount','显示距考试倒计时','顶栏一直显示还剩多少天。'],
     ['autoEnd','时间到自动交卷','倒计时走完直接交卷，不看有没有答完。关着时只提醒，可继续写。']
   ];
+  var MODES = [['exam','考试','整卷做完再交，交卷后统一判分、看解析。'],['practice','练习','做一题对一题：选完立刻判对错，填空和解答写完点「对答案」。'],['read','读解析','不用作答，每题的解析直接摊开，适合二刷和考前翻看。']];
+  var HIDES = [['read','读题圈画'],['sk','草图'],['think','思路'],['steps','每一步'],['omit','考场可省的步骤'],['fast','秒杀'],['paper','考场卷面'],['note','批注'],['vary','举一反三']];
+  function modeOf(){ return S.set.read?'read':S.set.instant?'practice':'exam'; }
+  function segHtml(attr, list, on){ return '<span class="seg" role="group">'+list.map(function(o){ return '<button data-'+attr+'="'+o[0]+'" class="'+(on===o[0]?'on':'')+'">'+o[1]+'</button>'; }).join('')+'</span>'; }
   function togglesHtml(){
-    var h = TOGGLES.map(function(t){
+    var md=modeOf(), mdDesc=MODES.filter(function(m){ return m[0]===md; })[0][2];
+    var h = '<div class="tg tg-sel tg-mode"><span class="tx"><b>模式</b><small>'+mdDesc+'</small></span>'+segHtml('mode',MODES,md)+'</div>'
+      + '<div class="tg tg-sel"><span class="tx"><b>计时</b><small>考试时长 '+C.minutes+' 分钟，可以中途暂停。</small></span>'+segHtml('timer',[['down','倒计时'],['up','正计时'],['off','不计时']],S.set.timer)+'</div>'
+      + '<div class="tg tg-sel"><span class="tx"><b>看题方式</b><small>一题一屏时只显示当前这题，用底部按钮或 ← → 键翻题。</small></span>'+segHtml('view',[['scroll','整卷往下翻'],['one','一题一屏']],S.set.view)+'</div>'
+      + '<div class="tg tg-sel"><span class="tx"><b>字号</b><small>题面和解析一起放大缩小。</small></span>'+segHtml('fs',[['s','小'],['m','中'],['l','大'],['xl','特大']],S.set.fs)+'</div>';
+    h += TOGGLES.map(function(t){
       return '<label class="tg"><input type="checkbox" data-set="'+t[0]+'"'+(S.set[t[0]]?' checked':'')+'><span class="sw"></span><span class="tx"><b>'+t[1]+'</b><small>'+t[2]+'</small></span></label>';
     }).join('');
-    h += '<div class="tg tg-sel"><span class="tx"><b>计时</b><small>考试时长 '+C.minutes+' 分钟，可以中途暂停。</small></span><span class="seg" role="group">'
-      + [['down','倒计时'],['up','正计时'],['off','不计时']].map(function(o){ return '<button data-timer="'+o[0]+'" class="'+(S.set.timer===o[0]?'on':'')+'">'+o[1]+'</button>'; }).join('')
-      + '</span></div>';
+    h += '<div class="tg tg-sel tg-wide"><span class="tx"><b>解析里显示哪几块</b><small>点一下划掉就不显示。比如二刷时只留「思路」和「考场卷面」。</small></span><span class="chips">'
+      + HIDES.map(function(o){ return '<button data-hide="'+o[0]+'" class="'+(S.set.hide[o[0]]?'':'on')+'">'+o[1]+'</button>'; }).join('')+'</span></div>';
     return h;
+  }
+  function refreshToggles(){ document.querySelectorAll('.tgbox').forEach(function(el){ el.innerHTML=togglesHtml(); }); }
+  function applySet(){
+    var de=document.documentElement;
+    de.setAttribute('data-fs', S.set.fs||'m');
+    HIDES.forEach(function(o){ de.classList.toggle('hide-'+o[0], !!S.set.hide[o[0]]); });
+    document.body.classList.toggle('one', !!cur && S.set.view==='one');
   }
   document.addEventListener('change', function(e){
     var k = e.target.getAttribute && e.target.getAttribute('data-set');
@@ -55,16 +74,27 @@
     if (cur) redrawPaper();
   });
   document.addEventListener('click', function(e){
-    var b = e.target.closest && e.target.closest('[data-timer]');
-    if (!b) return;
-    S.set.timer = b.getAttribute('data-timer'); save();
-    document.querySelectorAll('[data-timer]').forEach(function(x){ x.classList.toggle('on', x===b||x.getAttribute('data-timer')===S.set.timer); });
-    tick();
+    var t=e.target, b;
+    if (!t.closest) return;
+    if ((b=t.closest('button[data-timer]'))) { S.set.timer=b.getAttribute('data-timer'); save(); refreshToggles(); tick(); return; }
+    if ((b=t.closest('button[data-mode]'))) {
+      var m=b.getAttribute('data-mode');
+      S.set.read=m==='read'; S.set.instant=m==='practice';
+      if (m==='exam') S.set.showSol=false; else S.set.showSol=true;
+      save(); refreshToggles(); if (cur) redrawPaper(); return;
+    }
+    if ((b=t.closest('button[data-view]'))) {
+      S.set.view=b.getAttribute('data-view'); save(); refreshToggles(); applySet();
+      if (cur) { setCur(curNo()); if (S.set.view==='one') window.scrollTo(0,0); else go(ss.at); }
+      return;
+    }
+    if ((b=t.closest('button[data-fs]'))) { S.set.fs=b.getAttribute('data-fs'); save(); refreshToggles(); applySet(); return; }
+    if ((b=t.closest('button[data-hide]'))) { var hk=b.getAttribute('data-hide'); S.set.hide[hk]=!S.set.hide[hk]; save(); refreshToggles(); applySet(); return; }
   });
 
   /* —— 首页 —— */
   function home(){
-    stopTimer(); cur=null; document.title = C.title;
+    stopTimer(); cur=null; document.title = C.title; applySet();
     var left = daysLeft();
     var rows = C.years.slice().reverse().map(function(y){
       var hs = S.hist.filter(function(h){ return h.y===y; });
@@ -84,8 +114,9 @@
       + '<div class="hero"><div class="cd"><i>距 '+esc(C.examName)+'</i><strong>'+(left>0?left:0)+'</strong><i>天</i></div>'
       + '<div class="hero-t"><h1>'+esc(C.heading)+'</h1><p>'+C.lead+'</p><p class="cdx" id="cdx">'+esc(countText())+'　·　'+esc(C.examWhen)+'</p></div></div>'
       + (C.plan?'<h2>按这个顺序做</h2><div id="plan">'+planHtml()+'</div>':'')
-      + '<h2>开关</h2><div class="tgs">'+togglesHtml()+'</div>'
+      + '<h2>模式与开关</h2><div class="tgs tgbox">'+togglesHtml()+'</div>'
       + '<h2>选一年</h2><div class="yrs">'+rows+'</div>'
+      + (window.EXAM_KP?'<h2>知识点与套路速查</h2><p class="kpent"><a href="#kp">翻开速查本 →</a><span>精解里出现过的 '+Object.keys(window.EXAM_KP).length+' 张卡：公式、常用结论、跨年套路，每张标着真题里在哪出现过。可以搜。</span></p>':'')
       + (hist?'<h2>做过的卷子</h2><div class="tabw"><table class="hst"><thead><tr><th>年份</th><th>得分</th><th>用时</th><th>日期</th></tr></thead><tbody>'+hist+'</tbody></table></div>':'')
       + (C.footHtml?'<div class="foot">'+C.footHtml+'</div>':'')
       + '</div>';
@@ -168,7 +199,7 @@
       if (r.opts) q.opts=r.opts;
       if (r.ans) q.ansText=r.ans;
       if (r.tpl) q.tpl=r.tpl;
-      if (r.sol) { q.rich=r.sol; if(q.solImg){ q.solOrig=q.solImg; delete q.solImg; } if(q.sol){ q.solBook=q.sol; delete q.sol; } if(q.more){ q.moreBook=q.more; delete q.more; } }
+      if (r.sol) { q.rich=r.sol.replace(/⛳\s*/g,''); if(q.solImg){ q.solOrig=q.solImg; delete q.solImg; } if(q.sol){ q.solBook=q.sol; delete q.sol; } if(q.more){ q.moreBook=q.more; delete q.more; } }
     });
   }
   function deepOf(no){ var D=cur&&window.EXAM_DEEP&&window.EXAM_DEEP[cur]; return D&&D.q&&D.q[no]; }
@@ -214,12 +245,45 @@
   }
   function judged(q){ return ss.done || (S.set.instant && (q.type==='choice' ? !!ss.a[q.no] : !!ss.open[q.no])); }
 
+  /* 这题要用到的知识点、套路：q.tpl ＋ 精解里出现过的 data-kp，按出现顺序去重 */
+  function kpIds(q){
+    if (q._kp) return q._kp;
+    var K=window.EXAM_KP||{}, ids=[], seen={};
+    (q.tpl||[]).forEach(function(t){ if(K[t]&&!seen[t]){ seen[t]=1; ids.push(t); } });
+    String(q.rich||'').replace(/data-kp="([^"]+)"/g, function(_,id){ id=id.replace(/&amp;/g,'&'); if(K[id]&&!seen[id]){ seen[id]=1; ids.push(id); } });
+    return (q._kp=ids);
+  }
+  function kpCard(id, open, skipNo, from){
+    var K=window.EXAM_KP[id], u=K.u||(window.EXAM_TPL_USES&&window.EXAM_TPL_USES[id])||[];
+    u=u.filter(function(x){ return !(x[0]===cur&&x[1]===skipNo); });
+    return '<details class="kc'+(K.k==='tpl'?' tpl':'')+'"'+(open?' open':'')+'><summary><i>'+(K.k==='tpl'?'套路':'知识点')+'</i><b>'+K.t+'</b>'+(from||'')+'</summary><div class="kpc">'+K.h+'</div>'
+      + (u.length?'<div class="kpu"><i>'+(skipNo?'别的真题里也用到':'真题里出现在')+'</i>'+u.map(function(x){ return '<a href="#y='+x[0]+'&q='+x[1]+'">'+x[0]+' 第 '+x[1]+' 题</a>'; }).join('')+'</div>':'')+'</details>';
+  }
+  function kpPanel(q, hint){
+    var ids=kpIds(q); if(!ids.length) return '';
+    return '<div class="kpall'+(hint?' kpall-h':'')+'"><div class="kpa-h"><b>'+(hint?'提示：这题要用到的':'这题要用到的')+'</b><small>'+ids.length+' 张卡，点标题展开</small><button class="kpa-x" data-kpall>全部展开 / 收起</button></div>'
+      + ids.map(function(id){ return kpCard(id, S.set.kpOpen, q.no); }).join('')+'</div>';
+  }
+  var WHY = C.whyTags || ['概念没记牢','没思路','计算失误','审题漏条件','时间不够','蒙的、不确定'];
+  function whyHtml(q){
+    var w=ss.why[q.no];
+    return '<div class="why"><span>这题的问题出在</span>'+WHY.map(function(x){ return '<button data-why="'+q.no+'" data-w="'+esc(x)+'" class="'+(w===x?'on':'')+'">'+esc(x)+'</button>'; }).join('')+'</div>';
+  }
+  function notes(){ var o={}; try{ o=JSON.parse(localStorage.getItem(C.key+'_notes'))||{}; }catch(e){} return o; }
+  function noteHtml(q){
+    var v=notes()[cur+'-'+q.no]||'';
+    return '<div class="mynote"><i>我的批注</i><textarea data-note="'+q.no+'" rows="2" placeholder="错在哪一步；下次看到什么，就该想到什么。写在这里，重做这张卷时还在。">'+esc(v)+'</textarea></div>';
+  }
   function solHtml(q){
     var h='';
     if (q.type==='choice' && q.ans) h+='<div class="ansline">答案 <b>'+q.ans+'</b></div>';
     else if (q.ansText) h+='<div class="ansline">答案 <b>'+q.ansText+'</b></div>';
-    if (q.tpl) h+='<div class="tplrow"><i>用到的套路</i>'+q.tpl.map(function(t){ var K=window.EXAM_KP&&window.EXAM_KP[t]; return '<button class="kpb tplb" data-kp="'+esc(t)+'">'+(K?K.t:esc(t))+'</button>'; }).join('')+'</div>';
-    if (q.rich) h+='<div class="rich"><div class="rlegend"><span><span class="omit">灰底</span> 考场可省</span><span><span class="fast">橙</span> 秒杀</span><span><span class="kpb">蓝虚线</span> 点开看知识点</span><span><span class="r">红</span> 必记</span><span>举一反三的答案点一下才显示</span></div>'+q.rich+'</div>';
+    h+=kpPanel(q);
+    if (q.rich) {
+      var lay = S.set.layer && !ss.done && !ss.lay[q.no] && q.rich.indexOf('rb-steps')>0;
+      h+='<div class="rich'+(lay?' lay':'')+'">'+q.rich+'</div>';
+      if (lay) h+='<button class="laybtn" data-lay="'+q.no+'">合上自己写一遍，写完再点这里看每一步和考场卷面 ↓</button>';
+    }
     if (q.solImg) h+=q.solImg.map(function(s){ return '<img class="pimg" loading="lazy" src="'+s+'" alt="解答">'; }).join('');
     if (q.sol) h+='<div class="sol-b">'+q.sol+'</div>';
     if (q.more) h+='<details class="more"><summary>详解与辨析</summary><div class="sol-b">'+q.more+'</div></details>';
@@ -231,6 +295,12 @@
     var bk=q.back||(D&&D.back);
     if (bk && ss.done) h+='<a class="bk" href="'+bk.href+'">'+esc(bk.text)+'</a>';
     return h;
+  }
+  function solShown(q){
+    var rev=ss.show&&ss.show[q.no], jd=judged(q);
+    if (ss.done || S.set.read) return rev!==false;
+    if (jd && q.type==='choice') return !!rev;
+    return !!(jd||rev);
   }
   var DEEP_ROWS=[['k','考什么'],['core','本质'],['how','怎么出的'],['vary','举一反三'],['link','联想搭配']];
   var LV={3:['★★★','吃透：错了要重做，举一反三逐条口答'],2:['★★','看懂：读本质和怎么出的'],1:['★','扫过：看一眼本质']};
@@ -250,10 +320,11 @@
     return '<div class="self"><span>自评得分</span><input type="number" inputmode="numeric" min="0" max="'+q.score+'" data-selfn="'+q.no+'" value="'+(v==null?'':v)+'" placeholder="0–'+q.score+'"><span>/ '+q.score+'</span></div>';
   }
   function qHtml(q){
-    var ans = ss.a[q.no], jd = judged(q), rev = ss.show && ss.show[q.no];
-    var h = '<article class="q'+(ss.flag[q.no]?' fl':'')+'" id="q'+q.no+'" data-no="'+q.no+'"><div class="qh"><span class="no">'+q.no+'</span>'
+    var ans = ss.a[q.no], jd = judged(q);
+    var h = '<article class="q'+(ss.flag[q.no]?' fl':'')+(ss.at===q.no?' cur':'')+'" id="q'+q.no+'" data-no="'+q.no+'"><div class="qh"><span class="no">'+q.no+'</span>'
       + '<span class="sc">'+q.score+' 分</span>'+(ss.done&&q.subj&&C.subjects?'<span class="sb">'+esc(C.subjects[q.subj]||q.subj)+'</span>':'')
       + (P.flagNote&&P.flagNote[q.no]?'<span class="wn">'+esc(P.flagNote[q.no])+'</span>':'')
+      + (ss.hint[q.no]?'<span class="hn">看过提示</span>':'')
       + '<button class="flag" data-flag="'+q.no+'" title="标记">'+(ss.flag[q.no]?'★ 已标记':'☆ 标记')+'</button></div>';
     if (q.img) h += '<img class="pimg qi" src="'+q.img+'" alt="第 '+q.no+' 题题面">';
     if (q.stem) h += '<div class="stem">'+q.stem+'</div>';
@@ -274,14 +345,19 @@
       h += '<div class="inw inw-e"><textarea data-txt="'+q.no+'" rows="4" placeholder="过程写在纸上就行，这里可以记要点"'+(ss.done?' disabled':'')+'>'+esc(ans&&ans!=='✓'?ans:'')+'</textarea><button class="wrote'+(ans==='✓'?' on':'')+'" data-wrote="'+q.no+'"'+(ss.done?' disabled':'')+'>已写完</button></div>';
     }
     /* 解答区 */
-    var canShowBtn = !ss.done && S.set.showSol;
-    var showNow = ss.done ? rev!==false : (jd && q.type==='choice') ? !!rev : (jd || rev);
+    var canShowBtn = !ss.done && (S.set.showSol || S.set.read);
+    var showNow = solShown(q), acts='';
     if (!ss.done && S.set.instant && q.type!=='choice' && !ss.open[q.no] && isDone(q)) {
-      h += '<button class="solb pri" data-reveal="'+q.no+'">写完了，对答案</button>';
+      acts += '<button class="solb pri" data-reveal="'+q.no+'">写完了，对答案</button>';
     } else if (canShowBtn || (jd && q.type==='choice' && !ss.done) || ss.done) {
-      h += '<button class="solb" data-sol="'+q.no+'">'+(showNow?'收起解答':'解答')+'</button>';
+      acts += '<button class="solb" data-sol="'+q.no+'">'+(showNow?'收起解析':'看解析')+'</button>';
     }
-    if (showNow) h += '<div class="sol">'+solHtml(q)+(jd||ss.done?selfHtml(q):'')+'</div>';
+    var canHint = !ss.done && S.set.hint && !showNow && kpIds(q).length;
+    if (canHint) acts += '<button class="solb hintb" data-hint="'+q.no+'">'+(ss.hint[q.no]===2?'收起提示':'提示：要用的知识点')+'</button>';
+    if (acts) h += '<div class="acts">'+acts+'</div>';
+    if (canHint && ss.hint[q.no]===2) h += kpPanel(q, 1);
+    if (showNow) h += '<div class="sol"><span class="soltab">解析</span>'+solHtml(q)+(jd||ss.done?selfHtml(q)+whyHtml(q):'')+noteHtml(q)
+      + '<div class="solend"><button class="solb" data-sol="'+q.no+'">收起解析</button><button class="solb" data-step="1">下一题 →</button></div></div>';
     return h + '</article>';
   }
   function sheet(){
@@ -295,31 +371,40 @@
         else if (judged(q)&&qScore(q)!=null) c=qScore(q)>=q.score?'ok':qScore(q)>0?'mid':'no';
         else if (ss.done&&!isDone(q)) c='no';
         else if (isDone(q)) c='dn';
-        return '<a href="javascript:;" data-go="'+q.no+'" class="'+c+(ss.flag[q.no]?' fl':'')+'">'+q.no+'</a>';
+        return '<a href="javascript:;" data-go="'+q.no+'" class="'+c+(ss.flag[q.no]?' fl':'')+(ss.at===q.no?' cur':'')+'">'+q.no+'</a>';
       }).join('')+'</div></div>';
     }).join('');
   }
   function drawPaper(){
+    ss.hint=ss.hint||{}; ss.why=ss.why||{}; ss.lay=ss.lay||{}; ss.show=ss.show||{};
     var answered = P.q.filter(isDone).length;
     root.innerHTML = '<div class="bar"><a class="bk0" href="#">← 选卷</a><b class="ttl">'+cur+'</b>'
       + '<span class="timer" id="timer"></span><button class="ghost" id="pause"></button>'
       + '<span class="prog" id="prog"></span><span class="live" id="live"></span>'
       + '<span class="cdb" id="cdb"></span>'
-      + '<span class="rt"><button class="ghost" id="night">夜</button><button class="ghost" id="gear">开关</button><button class="ghost sh-b" id="shb">答题卡</button><button class="sub" id="submit">'+(ss.done?'成绩':'交卷')+'</button></span></div>'
-      + '<div class="gearp" id="gearp" hidden>'+togglesHtml()+'</div>'
+      + '<span class="rt"><button class="ghost" id="night">夜</button><button class="ghost" id="gear">模式 · 开关</button><button class="ghost sh-b" id="shb">答题卡</button><button class="sub" id="submit">'+(ss.done?'成绩':'交卷')+'</button></span></div>'
+      + '<div class="gearp tgbox" id="gearp" hidden>'+togglesHtml()+'</div>'
       + '<div class="pp"><main id="pm"></main><aside id="sheet"></aside></div>'
       + '<div class="pause-m" id="pm-o" hidden><div><b>已暂停</b><p>卷面先遮住，回来继续。</p><button class="sub" id="resume">继续</button></div></div>'
+      + '<div class="onenav" id="onenav"><button class="ghost" data-step="-1">← 上一题</button><span id="onepos"></span><button class="ghost" data-step="1">下一题 →</button></div>'
       + '<div class="modal" id="modal" hidden></div>';
+    applySet();
     redrawPaper();
     startTimer();
     if (location.hash.indexOf('q=')>0) go(+location.hash.split('q=')[1]);
     else window.scrollTo(0,0);
+  }
+  function legendHtml(){
+    return '<details class="lgd"><summary>解析里的记号怎么读 · 快捷键</summary><div class="lgd-b">'
+      + '<p><span class="rq">黄色划线</span> 题目里该圈出来的话　<span class="ra">蓝色楷体</span> 读到这句该想到什么　<span class="circ">红圈</span> 关键量　<span class="wavy">波浪线</span> 容易看漏　<span class="omit">灰色</span> 考场上可以不写　<span class="fast">橙色</span> 秒杀做法　<span class="pt">2 分</span> 采分点　<button class="kpb" type="button">蓝色虚线</button> 点开是知识点　<button class="kpb tplb" type="button">紫框</button> 点开是跨年套路</p>'
+      + '<p class="keys">键盘：<kbd>←</kbd><kbd>→</kbd> 或 <kbd>K</kbd><kbd>J</kbd> 上一题、下一题　<kbd>A</kbd><kbd>B</kbd><kbd>C</kbd><kbd>D</kbd> 选当前题　<kbd>S</kbd> 看 / 收起解析　<kbd>H</kbd> 提示　<kbd>F</kbd> 标记　<kbd>Esc</kbd> 关掉知识点卡</p></div></details>';
   }
   function redrawPaper(){
     if (!$('pm')) return;
     var y=window.scrollY, h='', last=null, nm=P.secName||{};
     if (ss.done) h += reportHtml();
     if (P.note) h += '<div class="pnote">'+P.note+'</div>';
+    h += legendHtml();
     var filter = ss.filter||'all';
     P.q.forEach(function(q){
       if (q.type!==last) { h+='<h3 class="sech">'+esc(nm[q.type]||'')+'</h3>'; last=q.type; }
@@ -330,25 +415,53 @@
     });
     if (!ss.done) h += '<button class="sub sub-end" id="submit2">交卷</button>';
     $('pm').innerHTML = h;
-    typeset();
-    updateSide();
+    typeset($('pm'));
+    var vis=visNos(); if (vis.indexOf(ss.at)<0) ss.at=vis[0];
+    setCur(ss.at);
     window.scrollTo(0,y);
   }
-  function typeset(){ if (window.renderMathInElement && $('pm')) try{ window.renderMathInElement($('pm'),{throwOnError:false}); }catch(e){} }
+  /* 公式排版：任何往页面里塞 HTML 的地方都要过一遍，否则 <span class="m"> 里的 TeX 会原样露出来 */
+  function typeset(el){ if (window.renderMathInElement && el) try{ window.renderMathInElement(el,{throwOnError:false}); }catch(e){} }
+  function qOf(no){ return P.q.filter(function(x){ return x.no===no; })[0]; }
   function redrawQ(no){
-    var el=$('q'+no), q=P.q.filter(function(x){ return x.no===no; })[0];
-    if (el&&q) { var t=document.createElement('div'); t.innerHTML=qHtml(q); el.parentNode.replaceChild(t.firstChild,el); }
+    var el=$('q'+no), q=qOf(no);
+    if (el&&q) { var t=document.createElement('div'); t.innerHTML=qHtml(q); var nu=t.firstChild; el.parentNode.replaceChild(nu,el); typeset(nu); }
     updateSide();
   }
+  function visNos(){ return [].map.call(document.querySelectorAll('#pm .q'), function(el){ return +el.getAttribute('data-no'); }); }
+  function curNo(){
+    var vis=visNos();
+    if (S.set.view==='one') return vis.indexOf(ss.at)>=0?ss.at:vis[0];
+    var els=document.querySelectorAll('#pm .q');
+    for (var i=0;i<els.length;i++) if (els[i].getBoundingClientRect().bottom>110) return +els[i].getAttribute('data-no');
+    return vis[vis.length-1];
+  }
+  function setCur(no){
+    if (no==null) return;
+    ss.at=no;
+    document.querySelectorAll('#pm .q').forEach(function(el){ el.classList.toggle('cur', +el.getAttribute('data-no')===no); });
+    document.querySelectorAll('#sheet [data-go]').forEach(function(a){ a.classList.toggle('cur', +a.getAttribute('data-go')===no); });
+    var vis=visNos(), op=$('onepos'); if (op) op.textContent='第 '+no+' 题 · '+(vis.indexOf(no)+1)+' / '+vis.length;
+  }
+  function step(d){ var vis=visNos(), i=vis.indexOf(curNo()), n=vis[i+d]; if (n!=null) go(n); }
+  var scT; window.addEventListener('scroll', function(){
+    if (!cur||!ss||S.set.view==='one') return;
+    clearTimeout(scT); scT=setTimeout(function(){ if(cur&&$('pm')) setCur(curNo()); },120);
+  }, {passive:true});
   function updateSide(){
-    if ($('sheet')) $('sheet').innerHTML='<div class="sh-t">答题卡</div>'+sheet()+'<div class="shl"><i class="k dn"></i>已答 <i class="k fl"></i>标记'+(S.set.instant||ss.done?' <i class="k ok"></i>对 <i class="k no"></i>错':'')+'</div>';
+    if ($('sheet')) $('sheet').innerHTML='<div class="sh-t">答题卡</div>'+sheet()+'<div class="shl"><i class="k cu"></i>当前 <i class="k dn"></i>已答 <i class="k fl"></i>标记'+(S.set.instant||ss.done?' <i class="k ok"></i>对 <i class="k no"></i>错':'')+'</div>';
     var n=P.q.filter(isDone).length;
     if ($('prog')) $('prog').textContent='已答 '+n+' / '+P.q.length;
     if ($('live')) $('live').textContent=(S.set.instant||ss.done)?'得分 '+liveScore():'';
     if ($('cdb')) { $('cdb').textContent=S.set.showCount?countText():''; }
     if ($('submit')) $('submit').textContent=ss.done?'成绩':'交卷';
   }
-  function go(no){ var el=$('q'+no); if(el){ var y=el.getBoundingClientRect().top+window.scrollY-64; window.scrollTo({top:y,behavior:'smooth'}); } document.body.classList.remove('sh-open'); }
+  function go(no){
+    var el=$('q'+no);
+    if (!el && ss && ss.done && ss.filter && ss.filter!=='all') { ss.filter='all'; redrawPaper(); el=$('q'+no); }
+    if (el) { setCur(no); var y=el.getBoundingClientRect().top+window.scrollY-64; window.scrollTo({top:y,behavior:S.set.view==='one'?'auto':'smooth'}); }
+    document.body.classList.remove('sh-open');
+  }
 
   /* —— 计时 —— */
   function startTimer(){ stopTimer(); lastTick=Date.now(); tm=setInterval(tick,1000); tick(); }
@@ -419,9 +532,44 @@
     return '<section class="rep" id="report"><div class="rep-h"><div class="big"><strong>'+score+'</strong><span>/ '+full+'</span></div><div><b>'+cur+' 年真题'+(C.target?'，目标 '+C.target:'')+'</b><br>用时 '+fmt(ss.secs)+(pend?'<br><em>还有 '+pend+' 题没登分，在下面每题解答下自评，分数会跟着变</em>':'')+'</div></div>'
       + '<div class="tabw"><table class="rp"><tbody>'+rows+'</tbody></table></div>'
       + (wrong.length?'<p class="wr">失分题：'+wrong.map(function(q){ return '<a href="javascript:;" data-go="'+q.no+'">'+q.no+'</a>'; }).join(' ')+'</p>':'')
-      + studyHtml()
+      + whyStat() + studyHtml() + kpListHtml(wrong)
       + '<div class="rep-a"><span class="seg">'+[['all','全部'],['wrong','只看失分'],['flag','只看标记']].concat(curDeep()&&curDeep().core?[['core','只看必吃透']]:[]).map(function(o){ return '<button data-filter="'+o[0]+'" class="'+((ss.filter||'all')===o[0]?'on':'')+'">'+o[1]+'</button>'; }).join('')+'</span><button class="ghost" id="redo">重做这一年</button></div></section>';
   }
+  function whyStat(){
+    var c={}, n=0; P.q.forEach(function(q){ var w=ss.why[q.no]; if(w){ c[w]=(c[w]||[]); c[w].push(q.no); n++; } });
+    if (!n) return '';
+    return '<p class="whys"><b>失分原因</b>'+Object.keys(c).sort(function(a,b){ return c[b].length-c[a].length; }).map(function(w){
+      return '<span>'+esc(w)+' ×'+c[w].length+'（'+c[w].map(function(x){ return '<a href="javascript:;" data-go="'+x+'">'+x+'</a>'; }).join(' ')+'）</span>'; }).join('')+'</p>';
+  }
+  /* 交卷后：把失分题（没有失分就整卷）牵涉的知识点、套路汇成一张清单，每张标着来自哪几题 */
+  function kpListHtml(wrong){
+    var src=wrong.length?wrong:P.q, map={}, order=[];
+    src.forEach(function(q){ kpIds(q).forEach(function(id){ if(!map[id]){ map[id]=[]; order.push(id); } map[id].push(q.no); }); });
+    if (!order.length) return '';
+    order.sort(function(a,b){ return map[b].length-map[a].length; });
+    return '<details class="kplist"><summary><b>'+(wrong.length?'失分题牵涉的知识点与套路':'这张卷用到的知识点与套路')+'</b>　'+order.length+' 张，复盘前先过一遍</summary><div class="kpall"><div class="kpa-h"><small>出现次数多的排前面</small><button class="kpa-x" data-kpall>全部展开 / 收起</button></div>'
+      + order.map(function(id){ return kpCard(id, false, null, '<em>第 '+map[id].join('、')+' 题</em>'); }).join('')+'</div></details>';
+  }
+  /* 首页进来的速查本：全部卡片，可搜 */
+  function kpBook(){
+    stopTimer(); cur=null; applySet(); document.title='知识点与套路速查 · '+C.title;
+    var K=window.EXAM_KP||{}, ids=Object.keys(K);
+    var grp=function(tpl){ return ids.filter(function(id){ return (K[id].k==='tpl')===tpl; }).map(function(id){ return kpCard(id,false,null); }).join(''); };
+    root.innerHTML='<div class="hm kpbook"><div class="hm-top"><a href="#">← 选卷</a><span>知识点与套路速查</span><button class="ghost" id="night">夜</button></div>'
+      + '<p class="kpb-lead">精解里点得开的卡片都在这里。先看标题自己回忆，想不起来再点开。</p>'
+      + '<input class="kpq" id="kpq" type="search" placeholder="搜：泰勒、特征值、缺页、滑动窗口…" autocomplete="off">'
+      + '<h2>套路（跨年反复出现的做法）</h2><div class="kpall" id="kpg1">'+grp(true)+'</div>'
+      + '<h2>知识点 · 公式 · 常用结论</h2><div class="kpall" id="kpg2">'+grp(false)+'</div></div>';
+    root.querySelectorAll('.kc>summary').forEach(typeset);   /* 标题里的公式先排，卡片正文等展开再排 */
+    window.scrollTo(0,0);
+  }
+  document.addEventListener('input', function(e){
+    if (e.target.id!=='kpq') return;
+    var v=e.target.value.trim().toLowerCase();
+    document.querySelectorAll('.kpbook .kc').forEach(function(d){ d.hidden=!!v && d.textContent.toLowerCase().indexOf(v)<0; });
+  });
+  /* 折叠卡是懒排版的：展开时再排公式（速查本有几百张卡，一次排完太慢） */
+  document.addEventListener('toggle', function(e){ var d=e.target; if (d.open && d.classList && d.classList.contains('kc')) typeset(d); }, true);
   function curDeep(){ return cur&&window.EXAM_DEEP&&window.EXAM_DEEP[cur]; }
   function studyHtml(){
     var D=curDeep();
@@ -449,7 +597,7 @@
     o.innerHTML='<div class="kph"><i>'+(K.k==='tpl'?'套路':'知识点')+'</i><b>'+K.t+'</b><button class="kpx" data-kpx>×</button></div><div class="kpc">'+K.h+'</div>'
       +(u&&u.length?'<div class="kpu"><i>真题里出现在</i>'+u.map(function(x){ return '<a href="#y='+x[0]+'&q='+x[1]+'">'+x[0]+' 第 '+x[1]+' 题</a>'; }).join('')+'</div>':'');
     document.body.appendChild(o);
-    if (window.renderMathInElement) try{ window.renderMathInElement(o); }catch(x){}
+    typeset(o);
     var r=btn.getBoundingClientRect(), W=Math.min(460, window.innerWidth-24);
     o.style.width=W+'px';
     var left=Math.max(12, Math.min(r.left+window.scrollX, window.scrollX+window.innerWidth-W-12));
@@ -458,7 +606,20 @@
     if (r.bottom+o.offsetHeight+12>window.innerHeight && r.top>o.offsetHeight+12) top=r.top+window.scrollY-o.offsetHeight-6;
     o.style.top=top+'px';
   }
-  document.addEventListener('keydown', function(e){ if(e.key==='Escape') kpClose(); });
+  document.addEventListener('keydown', function(e){
+    if (e.key==='Escape') { kpClose(); return; }
+    if (!cur||!ss||e.metaKey||e.ctrlKey||e.altKey) return;
+    var tg=e.target.tagName; if (tg==='INPUT'||tg==='TEXTAREA'||tg==='SELECT') return;
+    var m=$('modal'); if ((m&&!m.hidden)||paused) return;
+    var k=e.key.length===1?e.key.toLowerCase():e.key, no=curNo(), q=qOf(no), el=$('q'+no), b;
+    if (k==='ArrowRight'||k==='j') { e.preventDefault(); step(1); }
+    else if (k==='ArrowLeft'||k==='k') { e.preventDefault(); step(-1); }
+    else if (!el||!q) return;
+    else if ('abcd'.indexOf(k)>=0 && k.length===1 && q.type==='choice') { b=el.querySelector('[data-k="'+k.toUpperCase()+'"]'); if(b&&!b.disabled) b.click(); }
+    else if (k==='s') { b=el.querySelector('[data-sol],[data-reveal]'); if(b) b.click(); }
+    else if (k==='h') { b=el.querySelector('[data-hint]'); if(b) b.click(); }
+    else if (k==='f') { b=el.querySelector('[data-flag]'); if(b) b.click(); }
+  });
   /* —— 事件 —— */
   document.addEventListener('click', function(e){
     var t=e.target, b;
@@ -473,20 +634,38 @@
       if (judged(q)&&q.type==='choice') return;
       ss.a[no]=ss.a[no]===b.getAttribute('data-k')?undefined:b.getAttribute('data-k');
       if(ss.a[no]===undefined) delete ss.a[no];
-      save(); redrawQ(no); return;
+      setCur(no); save();
+      if (judged(q)) { if (S.set.autoSol) ss.show[no]=true; redrawQ(no); }
+      else {   /* 还没判分：只换选中态，不重画整题（解析、展开的卡片都留在原处） */
+        b.parentNode.querySelectorAll('.op').forEach(function(x){ x.classList.toggle('sel', x.getAttribute('data-k')===ss.a[no]); });
+        updateSide();
+      }
+      return;
     }
-    if ((b=t.closest('[data-flag]'))) { var fn=+b.getAttribute('data-flag'); ss.flag[fn]=!ss.flag[fn]; save(); redrawQ(fn); return; }
+    if ((b=t.closest('[data-flag]'))) {
+      var fn=+b.getAttribute('data-flag'); ss.flag[fn]=!ss.flag[fn]; save();
+      b.textContent=ss.flag[fn]?'★ 已标记':'☆ 标记'; b.closest('.q').classList.toggle('fl', !!ss.flag[fn]); updateSide(); setCur(ss.at); return;
+    }
+    if ((b=t.closest('[data-step]'))) { var art=b.closest('.q'); if (art) setCur(+art.getAttribute('data-no')); step(+b.getAttribute('data-step')); return; }
+    if ((b=t.closest('[data-kpall]'))) { var ds=b.closest('.kpall').querySelectorAll('details.kc'), any=[].some.call(ds,function(d){ return !d.open; }); ds.forEach(function(d){ d.open=any; }); return; }
+    if ((b=t.closest('[data-hint]'))) { var hn=+b.getAttribute('data-hint'); ss.hint[hn]=ss.hint[hn]===2?1:2; save(); redrawQ(hn); return; }
+    if ((b=t.closest('[data-lay]'))) { var ln=+b.getAttribute('data-lay'); ss.lay[ln]=1; var rc=b.previousElementSibling; if(rc) rc.classList.remove('lay'); b.remove(); return; }
+    if ((b=t.closest('[data-why]'))) { var yn=+b.getAttribute('data-why'), w=b.getAttribute('data-w'); if(ss.why[yn]===w) delete ss.why[yn]; else ss.why[yn]=w; save(); b.parentNode.querySelectorAll('button').forEach(function(x){ x.classList.toggle('on', x.getAttribute('data-w')===ss.why[yn]); }); return; }
     if ((b=t.closest('[data-go]'))) { go(+b.getAttribute('data-go')); if(b.hasAttribute('data-close')) $('modal').hidden=true; return; }
     if ((b=t.closest('[data-close]'))) { $('modal').hidden=true; return; }
     if ((b=t.closest('[data-sol]'))) {
       var sn=+b.getAttribute('data-sol'); ss.show=ss.show||{};
-      var q2=P.q.filter(function(x){ return x.no===sn; })[0], now=ss.done?ss.show[sn]!==false:(judged(q2)&&q2.type==='choice')?!!ss.show[sn]:(judged(q2)||ss.show[sn]);
-      ss.show[sn]=!now; if(judged(q2)&&q2.type!=='choice'&&!ss.done) ss.open[sn]=ss.show[sn];
-      redrawQ(sn); return;
+      var q2=qOf(sn), now=solShown(q2);
+      ss.show[sn]=!now; if(judged(q2)&&q2.type!=='choice'&&!ss.done&&!S.set.read) ss.open[sn]=ss.show[sn];
+      setCur(sn); redrawQ(sn);
+      if (now) { var qe=$('q'+sn); if (qe && qe.getBoundingClientRect().top<0) go(sn); }   /* 从解析底下收起时，别把人甩到下一题中间 */
+      return;
     }
     if ((b=t.closest('[data-reveal]'))) { var rn=+b.getAttribute('data-reveal'); ss.open[rn]=1; ss.show=ss.show||{}; ss.show[rn]=true; save(); redrawQ(rn); return; }
     if ((b=t.closest('[data-wrote]'))) { var wn=+b.getAttribute('data-wrote'); if(ss.a[wn]==='✓') delete ss.a[wn]; else ss.a[wn]='✓'; save(); redrawQ(wn); return; }
-    if ((b=t.closest('[data-self]'))) { var fn2=+b.getAttribute('data-self'); ss.self[fn2]=+b.getAttribute('data-v'); if(ss.done) recordHist(); save(); ss.done?redrawPaper():redrawQ(fn2); return; }
+    if ((b=t.closest('[data-self]'))) { var fn2=+b.getAttribute('data-self'); ss.self[fn2]=+b.getAttribute('data-v'); if(ss.done) recordHist(); save();
+      b.parentNode.querySelectorAll('button').forEach(function(x){ var on=x===b; x.classList.toggle('ok', on&&+x.getAttribute('data-v')>0); x.classList.toggle('no', on&&+x.getAttribute('data-v')===0); });
+      updateSide(); setCur(ss.at); var bg=document.querySelector('.rep .big strong'); if(bg) bg.textContent=liveScore(); return; }
     if ((b=t.closest('[data-filter]'))) { ss.filter=b.getAttribute('data-filter'); redrawPaper(); return; }
     if (t.id==='submit'||t.id==='submit2') { askSubmit(); return; }
     if (t.id==='confirm') { doSubmit(); return; }
@@ -503,6 +682,7 @@
   document.addEventListener('input', function(e){
     var t=e.target, k;
     if (!cur) return;
+    if ((k=t.getAttribute('data-note'))) { var o=notes(); if(t.value.trim()) o[cur+'-'+k]=t.value; else delete o[cur+'-'+k]; try{ localStorage.setItem(C.key+'_notes',JSON.stringify(o)); }catch(x){} return; }
     if ((k=t.getAttribute('data-txt'))) { if(t.value.trim()) ss.a[k]=t.value; else delete ss.a[k]; lazySave(); updateSide(); return; }
     if ((k=t.getAttribute('data-selfn'))) {
       var q=P.q.filter(function(x){ return x.no===+k; })[0];
@@ -518,7 +698,8 @@
   function route(){
     var m=location.hash.match(/y=(\d{4})/);
     warned=false; paused=false;
-    if (m) open(+m[1]); else home();
+    document.body.classList.remove('sh-open'); kpClose();
+    if (m) open(+m[1]); else if (location.hash==='#kp') kpBook(); else home();
   }
   window.addEventListener('hashchange', route);
   try { var nt=localStorage.getItem(C.key+'_night'); if(nt) document.documentElement.setAttribute('data-theme',nt); } catch(e){}

@@ -157,3 +157,110 @@ html[data-theme="night"] .rb-sk svg{filter:invert(.9) hue-rotate(180deg)}
 .kph{display:flex;gap:8px;align-items:baseline;font-family:var(--head);border-bottom:1px solid var(--hair);padding-bottom:4px;margin-bottom:4px}.kph i{font-style:normal;font-size:12px;color:var(--bg);background:var(--ink);padding:0 6px}.kpop.tpl .kph i{background:var(--tp)}.kph b{flex:1;font-size:15px}.kpx{font-size:20px;line-height:1;color:var(--ink3)}
 .kpc p{margin:.3em 0}.kpc ol,.kpc ul{margin:.3em 0;padding-left:1.4em}.kpc .m.md{display:block;text-align:center;margin:4px 0;overflow-x:auto}
 .kpu{margin-top:6px;border-top:1px dashed var(--hair);padding-top:4px;font:13px var(--head);display:flex;flex-wrap:wrap;gap:3px 10px}.kpu i{font-style:normal;color:var(--ink3);width:100%}.kpu a{color:var(--tp)}
+/* ═══════════ 手写笔记版（2026-11-12）：解析区改成一页笔记，记号都按纸笔来 ═══════════ */
+:root{--hand:"Hannotate SC","HanziPen SC","Kaiti SC","STKaiti","KaiTi","楷体",cursive;--kai:"Kaiti SC","STKaiti","KaiTi","楷体",var(--body);
+  --note:#fdfbf3;--stk:#fff6c9;--stk2:#f1e7ff;--marg:rgba(196,52,52,.34);--pencil:#7d8188;--tape:rgba(214,196,140,.6);--shadow:rgba(40,30,10,.13)}
+html[data-skin="paper"]{--note:#fcf9ee}
+html[data-theme="night"]{--note:#1a1a18;--stk:#2d2a1a;--stk2:#272133;--marg:rgba(255,120,120,.3);--pencil:#9a9ea6;--tape:rgba(150,135,90,.45);--shadow:rgba(0,0,0,.5)}
+/* 字号 */
+html[data-fs="s"] #pm{zoom:.92}html[data-fs="l"] #pm{zoom:1.1}html[data-fs="xl"] #pm{zoom:1.22}
+/* 开关面板 */
+.tg-mode .seg button{padding:4px 14px;font-weight:700}.tg-wide{grid-column:1/-1}
+.chips{display:flex;flex-wrap:wrap;gap:6px}.chips button{font:13px var(--head);border:1px solid var(--hair);padding:2px 10px;border-radius:14px;color:var(--ink3);text-decoration:line-through}.chips button.on{border-color:var(--ink);color:var(--ink);text-decoration:none}
+.gearp{box-shadow:0 8px 18px var(--shadow)}
+.kpent{display:flex;gap:14px;align-items:baseline;flex-wrap:wrap;font-family:var(--head);font-size:14px;margin:0}.kpent a{font-weight:900;font-size:16px}.kpent span{color:var(--ink3);font-size:13px}
+/* 当前题、一题一屏 */
+.shs a.cur{outline:2px solid var(--ac);outline-offset:1px}.k.cu{outline:2px solid var(--ac);outline-offset:-1px;border-color:transparent}
+.onenav{display:none}
+body.one #pm .q:not(.cur),body.one #pm .sech,body.one #submit2{display:none}
+body.one #pm .q.cur{border-bottom:0;min-height:62vh;padding-bottom:70px}
+body.one .onenav{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:28;justify-content:center;align-items:center;gap:14px;padding:8px 12px calc(8px + env(safe-area-inset-bottom));background:var(--bg);border-top:var(--bw) solid var(--line);font-family:var(--head);font-size:13.5px}
+.onenav .ghost{padding:5px 16px;font-size:14px}#onepos{min-width:9em;text-align:center;color:var(--ink2)}
+/* 选项：选中是笔圈，不再整条涂黑；判完在右边打勾打叉 */
+.op.sel{background:var(--hl);color:inherit;border-color:var(--ink)}
+.op.sel b,.op.ok b,.op.no b{position:relative}.op.sel b:after,.op.ok b:after,.op.no b:after{content:"";position:absolute;left:-7px;right:-7px;top:-3px;bottom:-3px;border:1.8px solid currentColor;border-radius:52% 48% 55% 45%/48% 56% 44% 52%;transform:rotate(-8deg)}
+.op.ok:after,.op.no:after{margin-left:auto;padding-left:10px;font:700 21px/1 var(--hand);align-self:center}.op.ok:after{content:"✓";color:var(--ok)}.op.no:after{content:"✗";color:var(--no)}
+.hn{font:12px var(--hand);color:var(--pencil);border-bottom:1px dashed var(--pencil)}
+/* 题目下面的一排按钮 */
+.acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:9px}.acts .solb{margin-top:0}
+.solb{border-radius:3px;padding:3px 14px}.hintb{border-style:dashed;color:var(--pen);border-color:var(--pen)}.hintb:hover{background:var(--pen);color:var(--bg)}
+.solend{display:flex;justify-content:space-between;gap:8px;margin-top:14px;padding-top:8px;border-top:1px dashed var(--hair)}.solend .solb{margin-top:0}
+/* 解析＝一页笔记：米色纸、左边一道红页边线、顶上一截胶带 */
+.sol{position:relative;margin:16px 0 4px;padding:16px 16px 12px 26px;border:0;background:var(--note) linear-gradient(90deg,transparent 14px,var(--marg) 14px,var(--marg) 15.2px,transparent 15.2px);box-shadow:0 0 0 1px var(--hair),3px 4px 10px var(--shadow)}
+.soltab{position:absolute;top:-11px;left:34px;background:var(--tape);font:700 13px/22px var(--hand);padding:0 16px;transform:rotate(-2.2deg);color:var(--ink2);letter-spacing:2px}
+.ansline{font:15px var(--hand);color:var(--ink2);margin-bottom:2px}.ansline b{display:inline-block;font-size:21px;color:var(--ac);padding:0 10px;margin-left:4px;border:2px solid var(--ac);border-radius:54% 46% 52% 48%/46% 54% 46% 54%;transform:rotate(-3deg)}
+.ansline b .katex{font-size:.9em}
+/* 每一块：不再是框，标题是手写字加一道荧光笔 */
+.rich{font-size:15.5px}
+.rich .rb{margin:16px 0 0;padding:0;background:none;border:0;border-left:0;position:relative}
+.rich .rb h5{display:inline-block;margin:0 0 4px -2px;padding:0 9px 0 3px;font:700 16.5px/1.45 var(--hand);background:linear-gradient(transparent 56%,var(--mk,var(--hl)) 56%,var(--mk,var(--hl)) 93%,transparent 93%);transform:rotate(-.7deg);transform-origin:left}
+.rich .rb h5 i{display:none}
+.rb-read{--mk:rgba(255,214,64,.55)}.rb-think{--mk:rgba(90,150,255,.3)}.rb-steps{--mk:rgba(120,120,120,.22)}.rb-fast{--mk:rgba(240,150,50,.4)}.rb-paper{--mk:rgba(60,170,100,.28)}.rb-note{--mk:rgba(220,60,60,.22)}.rb-vary{--mk:rgba(150,100,220,.26)}
+/* 读题：左边是题目原话（荧光笔），右边是旁批（蓝色钢笔字） */
+.rd{border-bottom:0;padding:4px 0;gap:2px 16px}
+.rq{background:linear-gradient(transparent 34%,var(--hl) 34%,var(--hl) 90%,transparent 90%);border-radius:3px 8px 4px 9px;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.ra{font-family:var(--kai);font-size:1.03em;color:var(--pen);line-height:1.7}.ra:before{content:"↳ ";color:var(--pen);opacity:.6}
+.rb-think ol,.rb-think ul{font-family:var(--kai);font-size:1.04em}.rb-think .katex{font-size:1.05em}
+/* 步骤：手画的圈号 */
+.steps>li{border-bottom:0;padding:4px 0 4px 32px}
+.steps>li:before{top:6px;width:22px;height:22px;border:1.7px solid var(--ink);border-radius:52% 48% 46% 54%/50% 44% 56% 50%;font:700 12.5px/19px var(--hand);transform:rotate(-5deg)}
+.steps>li:nth-child(2n):before{transform:rotate(4deg);border-radius:46% 54% 52% 48%/54% 50% 50% 46%}
+.steps>li.omit-s{color:var(--pencil);background:none;padding-right:74px}.steps>li.omit-s:before{border-color:var(--pencil);border-style:dashed}
+.steps>li.omit-s:after{content:"考场可省";right:0;top:6px;font:12.5px var(--hand);color:var(--pencil);border:0;border-bottom:1px dashed var(--pencil);padding:0;background:none;transform:rotate(-3deg)}
+.omit{background:none;color:var(--pencil);border-bottom:1px dashed var(--pencil)}
+/* 秒杀：一圈橙色蜡笔框 */
+.rich .rb.rb-fast{margin-top:18px;padding:8px 14px 8px;background:var(--fab)!important;border:1.8px solid var(--fa);border-radius:18px 5px 16px 6px/6px 16px 5px 18px}
+.fast{background:linear-gradient(transparent 30%,var(--fab) 30%,var(--fab) 92%,transparent 92%);font-weight:700;border-radius:0;padding:0 2px}.fast:before{content:none}
+/* 考场卷面：一张白答题纸，印刷字，不手写 */
+.rich .rb.rb-paper{margin-top:20px;padding:12px 16px 10px;background:var(--bg)!important;border:1px solid var(--hair);box-shadow:2px 3px 0 var(--hair);font-family:var(--body)}
+.rich .rb.rb-paper h5{position:absolute;top:-13px;left:10px;background:var(--bg);padding:0 8px}
+.pt{font:700 13px/1.5 var(--hand);color:var(--ac);border:1.5px solid var(--ac);border-radius:56% 44% 50% 50%/50% 58% 42% 50%;padding:0 7px;margin:0 4px;transform:rotate(-4deg)}.pt:before{content:"+"}
+/* 批注：红笔写在页边的话 */
+.rb-note ul,.rb-note ol{list-style:none;padding-left:1.4em!important;font-family:var(--kai);font-size:1.04em}.rb-note li{position:relative}.rb-note li:before{content:"※";position:absolute;left:-1.3em;color:var(--ac);font-family:var(--hand)}
+.dock{border:0;color:var(--ac);padding:0;text-decoration:underline wavy var(--ac);text-underline-offset:4px;text-decoration-thickness:1.2px;font-size:1em}.dock:before{content:"✗ 扣分 ";font:700 .88em var(--hand);text-decoration:none;display:inline-block}
+.hand{font-family:var(--hand)}
+.circ{border-width:1.7px;border-radius:58% 42% 52% 48%/46% 58% 42% 54%;padding:0 6px}
+/* 举一反三：一张便利贴 */
+.rich .rb.rb-vary{margin-top:24px;padding:14px 16px 10px;background:var(--stk2)!important;box-shadow:2px 3px 7px var(--shadow)}
+.rich .rb.rb-vary:before{content:"";position:absolute;top:-9px;left:42%;width:78px;height:18px;background:var(--tape);transform:rotate(-2.5deg)}
+.va{filter:blur(5px);border-left:0;padding-left:0;font-family:var(--kai)}.va:before{content:"答 ";font-family:var(--hand);font-weight:700}
+.rb-sk figcaption{font-family:var(--kai);font-size:14px}
+/* 知识点：按钮是蓝笔虚线，卡片是黄便利贴 */
+.kpb:after{content:"?";font:700 .68em var(--hand);vertical-align:super;margin-left:1px;opacity:.8}
+.kpb.tplb{border:1.4px solid var(--tp);border-radius:12px 4px 11px 5px/5px 11px 4px 12px;background:var(--tpb);padding:0 8px}.kpb.tplb:after{content:none}
+.kpop,.kpop.tpl{background:var(--stk);border:0;box-shadow:0 0 0 1px var(--hair),4px 8px 22px rgba(0,0,0,.24);padding:14px 16px 12px}
+.kpop.tpl{background:var(--stk2)}
+.kpop:before{content:"";position:absolute;top:-8px;left:calc(50% - 40px);width:80px;height:17px;background:var(--tape);transform:rotate(-1.6deg)}
+.kph{border-bottom:1px dashed var(--pencil)}.kph i,.kpop.tpl .kph i{background:none;color:var(--pen);font:700 13px var(--hand);padding:0}.kpop.tpl .kph i{color:var(--tp)}.kph b{font:700 16px var(--hand)}
+@media (max-width:640px){.kpop{position:fixed!important;left:0!important;right:0!important;bottom:0!important;top:auto!important;width:auto!important;max-height:62vh;border-radius:14px 14px 0 0;padding-bottom:calc(14px + env(safe-area-inset-bottom))}.kpop:before{content:none}}
+/* 「这题要用到的」：一摞索引卡 */
+.kpall{margin:10px 0 4px}.kpall-h{margin-top:12px}
+.kpa-h{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:4px}.kpa-h b{font:700 16px var(--hand);background:linear-gradient(transparent 56%,rgba(90,150,255,.3) 56%,rgba(90,150,255,.3) 93%,transparent 93%);padding:0 6px 0 2px}.kpa-h small{color:var(--ink3);font:12.5px var(--head)}
+.kpa-x{margin-left:auto;font:12.5px var(--head);color:var(--pen);border-bottom:1px dashed var(--pen)}
+.kc{background:var(--stk);margin:5px 0;box-shadow:1px 2px 4px var(--shadow);border-left:4px solid var(--pen)}.kc.tpl{background:var(--stk2);border-left-color:var(--tp)}
+.kc>summary{cursor:pointer;list-style:none;padding:5px 12px;display:flex;gap:9px;align-items:baseline;flex-wrap:wrap}.kc>summary::-webkit-details-marker{display:none}
+.kc>summary i{flex:none;font:700 12.5px var(--hand);color:var(--pen)}.kc.tpl>summary i{color:var(--tp)}.kc>summary b{font:700 15px/1.5 var(--hand);min-width:0;flex:1 1 12em}.kc>summary em{font:12px var(--head);color:var(--ink3);font-style:normal}
+.kc>summary:after{content:"展开";font:12px var(--head);color:var(--ink3)}.kc[open]>summary:after{content:"收起"}.kc[open]>summary{border-bottom:1px dashed var(--pencil)}
+.kc .kpc{padding:6px 14px 4px;font-size:15px;line-height:1.75}.kc .kpu{margin:4px 14px 0;padding-bottom:8px}
+.kpc .r{color:var(--ac);font-weight:700}.kpc table{border-collapse:collapse;font-size:14px;display:block;overflow-x:auto;max-width:100%}.kpc td,.kpc th{border:1px solid var(--pencil);padding:2px 8px}
+.kplist{margin:10px 0 2px;font-size:14.5px}.kplist>summary{cursor:pointer;font-family:var(--head)}.kplist .kpall{margin-top:6px}
+.kpbook h2{margin-top:20px}.kpb-lead{color:var(--ink2);margin:14px 0 8px}.kpq{width:100%;font:16px var(--head);padding:8px 12px;border:1.5px solid var(--ink);background:var(--bg);color:var(--ink);border-radius:3px}
+/* 分层揭开 */
+.rich.lay .rb-steps,.rich.lay .rb-steps~*{display:none}
+.laybtn{display:block;width:100%;margin-top:14px;padding:9px 12px;font:700 15px var(--hand);color:var(--pen);border:1.6px dashed var(--pen);border-radius:14px 5px 13px 6px/6px 13px 5px 14px}.laybtn:hover{background:var(--tpb)}
+/* 解析里隐藏哪几块 */
+.hide-read .rb-read,.hide-sk .rb-sk,.hide-think .rb-think,.hide-steps .rb-steps,.hide-fast .rb-fast,.hide-paper .rb-paper,.hide-note .rb-note,.hide-vary .rb-vary,.hide-omit .steps>li.omit-s{display:none!important}
+/* 自评、错因、我的批注 */
+.self{border-top:1px dashed var(--pencil);margin-top:14px}.self button{border-radius:3px}
+.why{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:9px;font:13.5px var(--head)}.why span{color:var(--ink3);margin-right:2px}
+.why button{font:14px var(--hand);border:1.3px solid var(--pencil);color:var(--ink2);padding:1px 11px;border-radius:13px 5px 12px 6px/6px 12px 5px 13px}.why button.on{border-color:var(--ac);color:var(--ac);background:var(--nob);font-weight:700}
+.mynote{margin-top:12px;position:relative}.mynote i{font:700 14px var(--hand);color:var(--ac);font-style:normal;display:block;margin-bottom:2px}
+.mynote textarea{width:100%;font:16px/28px var(--hand);color:var(--pen);border:0;border-radius:0;resize:vertical;padding:0 8px;min-height:56px;background:var(--stk) repeating-linear-gradient(transparent,transparent 27px,rgba(120,120,120,.28) 27px,rgba(120,120,120,.28) 28px);background-attachment:local;box-shadow:1px 2px 4px var(--shadow)}.mynote textarea:focus{outline:1.5px dashed var(--pen);outline-offset:2px}.mynote textarea::placeholder{color:var(--pencil);font-size:14px}
+.whys{font:14px var(--head);margin:8px 0 2px;display:flex;flex-wrap:wrap;gap:4px 14px}.whys b{font-weight:900}
+/* 图例 */
+.lgd{font-size:13.5px;color:var(--ink2);margin:8px 0 4px}.lgd summary{cursor:pointer;font-family:var(--head);color:var(--ink3)}.lgd-b{background:var(--note);padding:6px 12px;margin-top:5px;box-shadow:0 0 0 1px var(--hair);line-height:2.1}.lgd-b p{margin:2px 0}.lgd .kpb{cursor:default}
+kbd{font:12px var(--mono);border:1px solid var(--pencil);border-bottom-width:2px;border-radius:4px;padding:0 5px;margin:0 2px;background:var(--bg)}
+@media (max-width:900px){.keys{display:none}.sol{padding:14px 10px 10px 22px}.gearp{box-shadow:none}}
+@media (max-width:520px){.sol{margin-left:-6px;margin-right:-6px;padding-left:20px;background-image:linear-gradient(90deg,transparent 10px,var(--marg) 10px,var(--marg) 11px,transparent 11px)}.steps>li.omit-s{padding-right:0}.steps>li.omit-s:after{position:static;display:inline-block;margin-left:6px}.solend .solb,.acts .solb{padding:5px 14px}}
+.kpb.tplb{display:inline;-webkit-box-decoration-break:clone;box-decoration-break:clone;line-height:1.9}
+html[data-theme="night"] .rb-sk svg,html[data-theme="night"] .optsvg{filter:invert(.9) hue-rotate(180deg)}
