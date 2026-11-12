@@ -2,12 +2,12 @@
 <html lang="zh-CN" data-skin="paper"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>真题套卷 · 重读报</title>
-<link rel="stylesheet" href="assets/exam/exam.css?v=4">
+<link rel="stylesheet" href="assets/exam/exam.css?v=5">
 <link rel="stylesheet" href="assets/katex/katex.min.css">
 </head><body><div id="app"></div>
 <script src="assets/katex/katex.min.js"></script>
 <script src="assets/exam/deep/index.js?v=1"></script>
-<script src="assets/exam/rich/kp.js?v=1"></script>
+<script src="assets/exam/rich/kp.js?v=2"></script>
 <script>
 /* 精研卡、精解、题面里的公式：<span class="m">tex</span>（md＝独占一行），引擎每次重绘后调用 */
 window.renderMathInElement=function(root){ if(!window.katex) return; root.querySelectorAll('.m:not([data-k])').forEach(function(el){ try{ katex.render(el.textContent,el,{throwOnError:false,strict:false,displayMode:el.classList.contains('md')}); }catch(e){} el.setAttribute('data-k',1); }); };
@@ -19,7 +19,7 @@ window.EXAM_CONF={
   yearNote:{2010:'选填已进实战',2011:'选填已进实战',2012:'选填已进实战',2013:'选填已进实战',2014:'选填已进实战',2015:'选填已进实战'},
   minutes:180,examAt:'2026-12-20T08:30:00+08:00',examName:'数学开考',examWhen:'2026 年 12 月 20 日 8:30（业务课一）',
   target:120,essayName:'解答',dataPath:'assets/exam/y{Y}.js',ver:1,
-  deepPath:'assets/exam/deep/d{Y}.js',deepVer:1,richPath:'assets/exam/rich/r{Y}.js',richVer:1,deepYears:window.EXAM_DEEP_YEARS||[],
+  deepPath:'assets/exam/deep/d{Y}.js',deepVer:1,richPath:'assets/exam/rich/r{Y}.js',richVer:2,deepYears:window.EXAM_DEEP_YEARS||[],
   plan:{
     cut:'2026-12-16',pace:1.5,
     order:[[2021,'core','第一张：新题型第一年，一张「定义卷」'],[2022,'core'],[2023,'core'],
@@ -43,5 +43,5 @@ window.EXAM_CONF={
   footHtml:'做题记录只存在这个浏览器里，交卷后成绩同步到套卷台的账本。'
 };
 </script>
-<script src="assets/exam/engine.js?v=4"></script>
+<script src="assets/exam/engine.js?v=5"></script>
 </body></html>

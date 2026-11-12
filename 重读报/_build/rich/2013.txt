@@ -1,0 +1,1293 @@
+// 2013 数学一 · 精解（整卷 23 题：8 选 6 填 9 解）
+// 本年新建的卡（汇总时提到全局）：@tpl 以 T 开头，@kp 为知识点
+
+@tpl T代特征值 | 已知 $\lambda_0$ 是特征值（或 $A\sim B$、$B$ 的特征值已知）且含参数：$|\lambda_0E-A|=0$ 一个方程定一个参数；迹、行列式给不出信息时就靠它
+1. 实对称 $A$ 与对角阵相似 ⟺ 特征值相同（[[实对称矩阵]]），所以「相似的充要条件」= 「特征值对上」。
+2. 先试迹、行列式（[[T相似定参数]]）；若它们恒等成立（如 2013 第 6 题 $|A|\equiv0$、迹 $\equiv2+b$），就把一个**具体**的已知特征值代进 $|\lambda E-A|=0$。
+3. 算出参数后回头验证：剩下的特征值也要对上。
+例：$A=\begin{pmatrix}1&a\\a&1\end{pmatrix}$ 有特征值 3 ⟹ $|3E-A|=4-a^2=0$，$a=\pm2$。
+
+@tpl T余子式关系 | 题设「$a_{ij}+A_{ij}=0$」或「$a_{ij}=A_{ij}$」：翻译成 $A^*=\mp A^T$，再用 $AA^*=|A|E$ 两边取行列式
+1. $A^*$ 的 $(i,j)$ 元是 $A_{ji}$ ⟹「$a_{ij}=-A_{ij}$ 对所有 $i,j$」⟺ $A^*=-A^T$（==转置别漏==）。
+2. 代入 $AA^*=|A|E$：$-AA^T=|A|E$；取行列式：$(-1)^n|A|^2=|A|^n$。
+3. 「$A\ne O$」用来排除 $|A|=0$：若 $|A|=0$，则 $AA^T=O$，看对角元 $\sum_ja_{ij}^2=0$ ⟹ $A=O$，矛盾。
+结论（$n=3$）：$a_{ij}=-A_{ij}$ ⟹ $|A|=-1$；$a_{ij}=A_{ij}$ ⟹ $|A|=1$。
+
+@tpl T变限积分被积 | 被积函数里有变限积分 $f(x)=\int_a^xg(t)dt$：分部积分，让 $f$ 去求导（$f'=g$），另一个因子去积分；下限 $a$ 常让一端的边界项为 0
+1. $\int_p^q h(x)f(x)dx=\big[H(x)f(x)\big]_p^q-\int_p^qH(x)g(x)dx$，$H$ 是 $h$ 的原函数。
+2. 题目选的下限 $a$ 往往就是积分端点之一 ⟹ $f(a)=0$，那一端的边界项自动消失；另一端要看 $H\cdot f$ 的极限（瑕点处别漏）。
+3. 等价做法：把 $f$ 写成积分，化成二重积分后**交换积分次序**（[[T换序先画域]]），结果相同。
+
+@tpl T凑导数定义 | 极限里是「函数差 ÷ 自变量差」的样子（如 $n\left[f\left(\tfrac1n\right)-f(0)\right]$）：凑成导数定义，问题变成求 $f'(x_0)$
+1. 先核对「减掉的那个常数」是不是 $f(x_0)$：不是就先算 $f(x_0)$（隐函数要代方程，[[T隐函数先定点]]）。
+2. $n\left[f\left(\frac1n\right)-f(0)\right]=\dfrac{f(\frac1n)-f(0)}{\frac1n}\to f'(0)$（$f$ 在 0 可导时，让 $h=\frac1n\to0$ 取值即可）。
+3. 变形：$n[f(\frac an)-f(0)]\to af'(0)$；$n^2\left[f(\frac1n)-f(0)-\frac{f'(0)}n\right]\to\frac{f''(0)}2$（泰勒）。
+
+@tpl T旋转曲面 | 曲线绕 $z$ 轴旋转一周：同一高度 $z$ 上的点到 $z$ 轴的距离不变 ⟹ $x^2+y^2=x_0(z)^2+y_0(z)^2$
+1. 把曲线写成以 $z$ 为参数：$x=x_0(z)$、$y=y_0(z)$（直线先写点向式再解出 $x,y$）。
+2. 曲面上的点 $(x,y,z)$ 与曲线上**同高度**的点 $(x_0,y_0,z)$ 在同一个水平圆上：$x^2+y^2=x_0^2+y_0^2$。
+3. 直线与 $z$ 轴异面 ⟹ 单叶双曲面；相交 ⟹ 圆锥面；平行 ⟹ 圆柱面。
+
+@tpl T矩阵设元 | 未知矩阵两边都有（$AC-CA=B$、$AX=XB$）：没法「除过去」，把未知矩阵的元素设成未知数，展开成线性方程组
+1. $2\times2$ 设 4 个未知数 $x_1,\dots,x_4$，按位置逐个写方程。
+2. 问「何时有解」= 系数矩阵与增广矩阵秩相等；含参数时先用不含参数的行当主元消元。
+3. 有解时写通解：特解 + 齐次通解，最后**拼回矩阵**并注明 $k_1,k_2$ 任意。
+4. 先验必要条件省时间：$\mathrm{tr}(AC-CA)=0$ ⟹ $\mathrm{tr}B$ 必须为 0。
+
+@tpl T截断变量 | $Y$ 由 $X$ 分段给出、某几段被压成常数（如 $X\le1$ 时 $Y=2$）：先算每个「被压成的点」的概率（= 跳跃高度），中间段照搬 $X$ 的分布，最后按 $y$ 分段写 $F_Y$
+1. 列表：$X$ 的哪一段 ⟹ $Y$ 取什么 ⟹ 概率多少。被压成常数的段给 $Y$ 一个**点概率**，$F_Y$ 在那里跳。
+2. 中间 $Y=X$ 的一段：$P(Y\le y)$ 里这一段的贡献就是 $P(\text{这一段且 }X\le y)$。
+3. 涉及 $X$、$Y$ 联合的事件（如 $X\le Y$）：直接按 $X$ 的各段逐段判断事件真假——$Y$ 是 $X$ 的函数，给定 $X$ 时事件是确定的。别去「对 $Y$ 条件化」再把 $X$ 当独立的算。
+4. 这种 $Y$ 既不是离散型也不是连续型，**没有密度**，只能写分布函数。
+
+@kp 正弦级数 | 正弦级数（奇延拓）
+$f$ 定义在 $[0,l]$ 上，$b_n=\frac2l\int_0^lf(x)\sin\frac{n\pi x}ldx$，$S(x)=\sum b_n\sin\frac{n\pi x}l$。
+- $S$ 是把 $f$ **奇延拓**到 $[-l,l]$、再以 $2l$ 为周期延拓后的傅里叶级数；$S$ 是奇函数、周期 $2l$。
+- 求 $S(x_0)$：周期挪进 $[-l,l]$ → 奇性挪到 $[0,l]$ → 连续点取 $f$、间断点取左右平均（[[狄利克雷定理]]）。$x=0$、$x=\pm l$ 处 $S=0$。
+- 例：$l=1$ 时 $b_n=2\int_0^1f(x)\sin n\pi x\,dx$，周期 2。
+
+@kp t分布 | $t$ 分布与 $F$ 分布的关系
+$Z\sim N(0,1)$、$V\sim\chi^2(n)$ 独立 ⟹ $T=\frac{Z}{\sqrt{V/n}}\sim t(n)$。
+- $t$ 分布的密度关于 0 对称：$P(T\gt c)=P(T\lt-c)$，$P(|T|\gt c)=2P(T\gt c)$。
+- $T^2=\frac{Z^2/1}{V/n}\sim F(1,n)$；所以 $T^2$ 与任一 $Y\sim F(1,n)$ **同分布**，概率可以互换。
+- 分位数：$t_\alpha(n)^2=F_{2\alpha}(1,n)$。
+
+@kp 伴随矩阵 | 伴随矩阵的基本关系
+$A^*=(A_{ji})$——第 $i$ 行第 $j$ 列放的是 $a_{ji}$ 的代数余子式（**转置**着放）。
+- $AA^*=A^*A=|A|E$（任何方阵都成立，不要求可逆）；可逆时 $A^*=|A|A^{-1}$。
+- $|A^*|=|A|^{n-1}$；$r(A^*)=n,1,0$ 分别对应 $r(A)=n$、$n-1$、$\le n-2$。
+
+@kp 无记忆性 | 指数分布的无记忆性
+$Y\sim E(\lambda)$，$s,t\gt0$：$P(Y\gt s+t\mid Y\gt s)=P(Y\gt t)=e^{-\lambda t}$。
+- 意思：已经「活过」$s$，再活 $t$ 的概率与从头开始一样——条件分布就是原分布平移 $s$。
+- 等价写法：$P(Y\le s+t\mid Y\gt s)=P(Y\le t)=1-e^{-\lambda t}$；$E(Y\mid Y\gt s)=s+\frac1\lambda$。
+- 连续型里只有指数分布有这个性质（离散型里是几何分布）。
+
+@kp 分布函数 | 分布函数的性质
+$F(x)=P(X\le x)$：单调不减、右连续、$F(-\infty)=0$、$F(+\infty)=1$。
+- 点概率 = 跳跃高度：$P(X=a)=F(a)-F(a^-)$。$F$ 在 $a$ 连续 ⟺ $P(X=a)=0$。
+- 分段写 $F$ 时，**等号放在左端点**（$1\le y\lt2$），这是右连续的体现。
+
+@kp 二次型的矩阵 | 二次型的矩阵
+$f=x^TAx$ 且 **$A$ 对称**，这个 $A$ 才叫 $f$ 的矩阵（唯一）；对角元是 $x_i^2$ 的系数，$a_{ij}=a_{ji}=\frac12\times$（$x_ix_j$ 的系数）。
+- 写成 $x^TMx$ 而 $M$ 不对称时，$f$ 的矩阵是 $\frac{M+M^T}2$。
+- 例：$(\alpha^Tx)^2=x^T\alpha\alpha^Tx$，且 $\alpha\alpha^T$ 对称 ⟹ 矩阵就是 $\alpha\alpha^T$。
+
+@kp 旋转曲面 | 旋转曲面的方程
+- $yOz$ 面上的曲线 $f(y,z)=0$ 绕 $z$ 轴：$f(\pm\sqrt{x^2+y^2},z)=0$；绕 $y$ 轴：$f(y,\pm\sqrt{x^2+z^2})=0$。
+- 空间曲线 $x=x_0(z),y=y_0(z)$ 绕 $z$ 轴：$x^2+y^2=x_0(z)^2+y_0(z)^2$。
+- 例：直线 $x=1,y=z$ 与 $z$ 轴异面，旋转得单叶双曲面 $x^2+y^2-z^2=1$。
+
+#1
+@stem
+已知极限 $\displaystyle\lim_{x\to0}\frac{x-\arctan x}{x^k}=c$，其中 $k,c$ 为常数，且 $c\ne0$，则（　）.
+@A $k=2,\ c=-\dfrac12$
+@B $k=2,\ c=\dfrac12$
+@C $k=3,\ c=-\dfrac13$
+@D $k=3,\ c=\dfrac13$
+@ans D
+@tpl T同阶无穷小, T极限
+::read
+「$\lim\limits_{x\to0}\frac{x-\arctan x}{x^k}=c$，$c\ne0$」 >> 极限是非零常数 ⟹ 分子与 $x^k$ {{圈|同阶}}：问的就是「$x-\arctan x$ 是几阶无穷小、首项系数是多少」（[[T同阶无穷小]]）
+「$x-\arctan x$」 >> 两个等价无穷小相减，一阶项抵消——{{波|减法里不能直接用等价代换}}（$x-x=0$ 是错的），要泰勒展开到第一个不抵消的项（[[泰勒常用]]）
+「$\arctan x$」 >> 必背：$\arctan x=x-\frac{x^3}3+o(x^3)$，和 $\tan x=x+\frac{x^3}3$ 只差一个符号
+选项 >> $k$ 只有 2、3 两种，$c$ 只有正负两种 ⟹ 定出阶数和符号就选完了
+::sk 340 200 看 | $y=x$（红）与 $y=\arctan x$（黑）在 0 附近贴得很紧：缝隙 $x-\arctan x\approx\frac{x^3}3$，是三阶小、而且是正的
+ox,oy=30,178;X=lambda x:ox+x*120;Y=lambda y:oy-y*75
+s.axes(ox,oy,14,325,192,8,xl='x',yl='y')
+s.line(X(0),Y(0),X(2.1),Y(2.1),'r',1.2)
+s.plot(lambda x:math.atan(x),0,2.4,X,Y,n=12)
+for xx in (0.6,1.0,1.4):
+    s.line(X(xx),Y(math.atan(xx)),X(xx),Y(xx),'b',1.0,dash='2 3')
+s.text(X(2.1)+4,Y(2.1)+14,'y=x',11,'r')
+s.text(X(2.25),Y(math.atan(2.25))+16,'y=arctan x',11,'k','middle')
+s.text(X(1.42)+6,Y(1.2),'缝 ≈ x³/3 ＞0',11,'b')
+s.text(X(0.25),Y(2.25),'x−(x−x³/3+x⁵/5−…)=x³/3−…',10,'p')
+::think
+1. 泰勒：$x-\arctan x=x-\left(x-\frac{x^3}3+o(x^3)\right)=\frac{x^3}3+o(x^3)$。
+2. 所以 $x-\arctan x\sim\frac{x^3}3$，除以 $x^k$ 得非零常数只能 $k=3$，$c=\frac13$。
+::fast
+{{秒|看符号}}：$x\gt0$ 时 $\arctan x\lt x$（图上 $\arctan$ 在直线下方），分子为正、$x^3$ 为正 ⟹ $c\gt0$，A、C 先排除；再由「两等价量相减至少差到三阶」⟹ $k=3$，选 D。
+::steps
+$x\to0$ 时分子 $x-\arctan x\to0$、分母 $x^k\to0$（$k\gt0$），是 $\frac00$ 型（[[T极限]]：先代入 → 定型 → 选工具）。
+分子是「两个等价无穷小之差」，等价代换失效，选泰勒展开：$\arctan x=x-\dfrac{x^3}{3}+o(x^3)$（[[泰勒常用]]）。
+  $x-\arctan x=x-x+\dfrac{x^3}{3}-o(x^3)=\dfrac{x^3}{3}+o(x^3)$。
+代回极限：$\displaystyle\lim_{x\to0}\frac{\frac{x^3}{3}+o(x^3)}{x^k}$。
+  $k\lt3$ 时极限为 $0$（与 $c\ne0$ 矛盾）；$k\gt3$ 时极限为 $\infty$（不是常数）；只有 $k=3$ 时极限 $=\frac13$。
+所以 $k=3$，$c=\frac13$，选 **D**。
+~另法（洛必达）：$\displaystyle\lim\frac{1-\frac1{1+x^2}}{kx^{k-1}}=\lim\frac{x^2}{k(1+x^2)x^{k-1}}=\frac1k\lim x^{3-k}$，非零有限 ⟹ $k=3$，$c=\frac13$。
+::note
+- {{扣|把 $x-\arctan x$ 直接等价成 $x-x=0$}}：加减法里等价代换只有在「替换后不抵消」时才安全；首项抵消就必须展开到下一项。
+- 记忆对：$x-\sin x\sim\frac{x^3}6$、$\tan x-x\sim\frac{x^3}3$、$x-\arctan x\sim\frac{x^3}3$、$x-\ln(1+x)\sim\frac{x^2}2$——四个都是正的（$x\gt0$ 时）。
+- 洛必达也行，但要先假设 $k$ 的范围，泰勒一步到位更稳。
+::vary
+$\lim\limits_{x\to0}\frac{x-\sin x}{x^k}=c\ne0$ >> $k=3$，$c=\frac16$
+$\lim\limits_{x\to0}\frac{\tan x-\sin x}{x^k}=c\ne0$ >> $\tan x-\sin x=\tan x(1-\cos x)\sim x\cdot\frac{x^2}2$ ⟹ $k=3$，$c=\frac12$
+$\lim\limits_{x\to0}\frac{x-\ln(1+x)}{x^k}=c\ne0$ >> 二阶：$k=2$，$c=\frac12$（$\ln(1+x)$ 的二次项不抵消）
+$\arctan x-\sin x$ 是几阶无穷小 >> 两者的一次项抵消、三次项 $-\frac13-(-\frac16)=-\frac16$ ⟹ 三阶，$\sim-\frac{x^3}6$
+
+#2
+@stem
+曲面 $x^2+\cos(xy)+yz+x=0$ 在点 $(0,1,-1)$ 处的切平面方程为（　）.
+@A $x-y+z=-2$
+@B $x+y+z=0$
+@C $x-2y+z=-3$
+@D $x-y-z=0$
+@ans A
+@tpl T举反例
+::read
+「曲面 $x^2+\cos(xy)+yz+x=0$」 >> 隐式曲面 $F(x,y,z)=0$ ⟹ 法向量 $\boldsymbol n=(F_x',F_y',F_z')$（[[切平面]]）
+「在点 $(0,1,-1)$ 处」 >> 先验点在曲面上：$0+\cos0+1\cdot(-1)+0=0$ ✓。四个选项都应该过这个点——{{圈|代点能先排除}}
+「切平面方程」 >> 点法式：$F_x'(x-x_0)+F_y'(y-y_0)+F_z'(z-z_0)=0$
+::sk 330 190 看 | 切平面（平行四边形）贴在曲面的 $M_0$ 处，法向量 $\boldsymbol n=(1,-1,1)$ 垂直于它；四个选项代点全都通过，代点排除不了
+s.poly([(40,120),(230,150),(300,90),(110,62),(40,120)],'k',1.2)
+s.curve([(55,150),(120,112),(175,104),(240,118),(300,148)],'p',1.0,dash='4 3')
+s.dot(170,106,2.8,'r');s.text(150,128,'M₀(0, 1, −1)',11,'r','middle')
+s.arrow(170,106,196,30,'r',1.4)
+s.text(204,30,'n=(F_{x}, F_{y}, F_{z})=(1,−1,1)',11,'r')
+s.text(268,112,'切平面',11,'k')
+s.text(20,178,'代点：A 0−1−1=−2 ✓  B 0+1−1=0 ✓  C 0−2−1=−3 ✓  D 0−1+1=0 ✓',9,'p')
+::think
+1. $F=x^2+\cos(xy)+yz+x$，$F_x=2x-y\sin(xy)+1$，$F_y=-x\sin(xy)+z$，$F_z=y$。
+2. 在 $(0,1,-1)$：$\boldsymbol n=(1,-1,1)$。
+3. 切平面 $1\cdot(x-0)-(y-1)+(z+1)=0$，即 $x-y+z=-2$，选 A。
+::fast
+{{秒|只看法向量方向}}：四个选项代点**全都**通过（见图），所以代点排除不了，只能比法向量。$F_z'=y=1$、$F_x'=2x-y\sin xy+1=1$ ⟹ 法向量形如 $(1,?,1)$，只剩 A、C；再算 $F_y'=-x\sin xy+z=-1$ ⟹ A。
+::steps
+令 $F(x,y,z)=x^2+\cos(xy)+yz+x$，曲面即 $F=0$；验证 $F(0,1,-1)=0+1-1+0=0$，点在曲面上。
+求三个偏导（$\cos(xy)$ 对 $x$ 求导时 $y$ 当常数，链式出一个 $y$）：
+  $F_x'=2x-y\sin(xy)+1$，$F_y'=-x\sin(xy)+z$，$F_z'=y$。
+代入 $(0,1,-1)$：$F_x'=0-0+1=1$，$F_y'=0+(-1)=-1$，$F_z'=1$ ⟹ $\boldsymbol n=(1,-1,1)$（[[切平面]]）。
+点法式：$1\cdot(x-0)+(-1)(y-1)+1\cdot(z+1)=0$ ⟹ $x-y+1+z+1=0$ ⟹ $x-y+z=-2$。
+选 **A**。
+::note
+- {{扣|$\cos(xy)$ 求偏导漏掉链式因子}}：$\frac{\partial}{\partial x}\cos(xy)=-y\sin(xy)$，不是 $-\sin(xy)$。本题在 $x=0$ 处 $\sin0=0$，这一项恰好消失，但在别的点会出错。
+- 这道题的选项**都过该点**，命题人有意让「代点法」失效，必须真算法向量。选择题里先代点只是排除手段，不是万能。
+- 如果曲面写成 $z=g(x,y)$，法向量是 $(g_x',g_y',-1)$；隐式形式更通用。
+::vary
+曲面 $xyz+z^3=3$ 在 $(1,2,1)$ 处的切平面 >> $\boldsymbol n=(yz,xz,xy+3z^2)=(2,1,5)$ ⟹ $2x+y+5z=9$
+曲面 $e^z-z+xy=3$ 在 $(2,1,0)$ 处的法线方程 >> $\boldsymbol n=(y,x,e^z-1)=(1,2,0)$ ⟹ $\frac{x-2}1=\frac{y-1}2$，$z=0$
+本题曲面在 $(0,1,-1)$ 处的法线方程 >> $\frac{x}{1}=\frac{y-1}{-1}=\frac{z+1}{1}$
+若题目给的点是 $(-1,0,z_0)$ >> 代原方程：$1+1+0-1=1\ne0$，不论 $z_0$ 取何值都不在曲面上 ⟹ 根本没有切平面；先验点是必要步骤
+
+#3
+@stem
+设 $f(x)=\left|x-\dfrac12\right|$，$b_n=2\displaystyle\int_0^1f(x)\sin n\pi x\,dx\ (n=1,2,\cdots)$. 令 $S(x)=\displaystyle\sum_{n=1}^{\infty}b_n\sin n\pi x$，则 $S\left(-\dfrac94\right)=$（　）.
+@A $\dfrac34$
+@B $\dfrac14$
+@C $-\dfrac14$
+@D $-\dfrac34$
+@ans C
+@tpl T周期奇偶挪点
+::read
+「$b_n=2\int_0^1f(x)\sin n\pi x\,dx$」 >> $l=1$ 的{{圈|正弦级数}}系数：$S$ 是把 $f$ 从 $[0,1]$ **奇延拓**到 $[-1,1]$、再以 2 为周期延拓后的傅里叶级数（[[正弦级数]]）
+「$S(x)=\sum b_n\sin n\pi x$」 >> 每一项 $\sin n\pi x$ 都是奇函数、周期 2 ⟹ $S$ 也是{{波|奇函数、周期 2}}
+「$S\left(-\frac94\right)$」 >> 远处的点：先用周期挪近，再用奇性挪到 $[0,1]$，最后看是不是间断点（[[T周期奇偶挪点]]、[[狄利克雷定理]]）
+「$f=|x-\frac12|$」 >> 在 $[0,1]$ 上连续，奇延拓后只在 $x=0,\pm1$（整数点）处可能跳；$\frac14$ 不是整数 ⟹ 连续点，直接取函数值
+::sk 400 210 画 | 奇延拓 + 周期 2 后的 $S(x)$：$(0,1)$ 上是 $|x-\frac12|$ 的 V 形，$(-1,0)$ 上是它关于原点的倒影；$-\frac94\to-\frac14\to$ 值 $-\frac14$
+ox,oy=250,105;X=lambda x:ox+x*88;Y=lambda y:oy-y*120
+s.axes(ox,oy,18,392,200,10,xl='x',yl='y')
+def Sv(v):
+    w=(v+1)%2-1
+    return abs(w-0.5) if w>0 else -abs(-w-0.5)
+for k in range(-3,2):
+    lo,hi=max(k,-2.6)+0.01,min(k+1,1.6)-0.01
+    if hi>lo: s.plot(Sv,lo,hi,X,Y,n=10,c='k' if k==0 else ('b' if k==-1 else 'p'))
+for k in (-2,-1,0,1):
+    s.dot(X(k),Y(0.5),2.0,'k',hollow=True);s.dot(X(k),Y(-0.5),2.0,'k',hollow=True);s.dot(X(k),Y(0),2.2,'r')
+s.dot(X(-2.25),Y(-0.25),2.8,'r');s.dot(X(-0.25),Y(-0.25),2.8,'r');s.dot(X(0.25),Y(0.25),2.8,'r')
+s.bend(X(-2.25),Y(-0.25)+8,X(-0.25),Y(-0.25)+8,-16,'r',1.0)
+s.text(X(-1.25),Y(-0.25)+40,'周期 2：右移 2',10,'r','middle')
+s.bend(X(-0.25),Y(-0.25)-6,X(0.25),Y(0.25)+6,22,'b',1.0)
+s.text(X(0.0)-4,Y(0.35)-8,'奇',10,'b','end')
+s.text(X(-2.25)-6,Y(-0.25)-8,'−9/4',10,'r','end');s.text(X(0.25)+8,Y(0.25)-6,'f(1/4)=1/4',10,'r')
+s.text(X(1),oy+14,'1',10,'k','middle');s.text(X(-1),oy-6,'−1',10,'k','middle')
+s.text(X(0.5),Y(0.62),'|x−½|',10,'k','middle')
+s.text(X(-2.5),Y(0.62),'整数点跳：S 取平均 0（红点）',10,'p')
+::think
+1. $S$ 周期 2：$S(-\frac94)=S(-\frac94+2)=S(-\frac14)$。
+2. $S$ 奇：$S(-\frac14)=-S(\frac14)$。
+3. $\frac14$ 是连续点：$S(\frac14)=f(\frac14)=|\frac14-\frac12|=\frac14$ ⟹ $S(-\frac94)=-\frac14$，选 C。
+::fast
+{{秒|画一眼图}}：$-\frac94$ 往右挪一个周期到 $-\frac14$，落在倒影 V 上，倒影在 $(-1,0)$ 是负的 ⟹ 只能选 C 或 D；$|{-\frac14}+\frac12|$ 的倒影值是 $-\frac14$ ⟹ C。
+::steps
+$b_n=2\int_0^1f(x)\sin n\pi x\,dx=\frac21\int_0^1 f(x)\sin\frac{n\pi x}1dx$，正是 $l=1$ 的正弦级数系数 ⟹ $S(x)$ 是 $f$ 的奇延拓（周期 2）的傅里叶级数（[[正弦级数]]）。
+记延拓后的函数为 $F(x)$：在 $(0,1)$ 上 $F=|x-\frac12|$，在 $(-1,0)$ 上 $F(x)=-f(-x)=-\left|-x-\frac12\right|=-\left|x+\frac12\right|$，再以 2 为周期延拓到全轴。
+由狄利克雷定理（[[狄利克雷定理]]），$S(x)$ 在 $F$ 的连续点处等于 $F(x)$，在间断点处等于左右极限的平均。
+周期 2：$S\left(-\frac94\right)=S\left(-\frac94+2\right)=S\left(-\frac14\right)$。
+$-\frac14\in(-1,0)$，不是整数，是 $F$ 的连续点 ⟹ $S\left(-\frac14\right)=F\left(-\frac14\right)=-\left|-\frac14+\frac12\right|=-\frac14$。
+  {{省|（等价地：奇性 $S(-\frac14)=-S(\frac14)=-f(\frac14)=-\frac14$。）}}
+选 **C**。
+::note
+- {{扣|把正弦级数当成「$f$ 自己周期延拓」}}：$f$ 只给在 $[0,1]$ 上，正弦级数对应的是**奇**延拓，周期是 $2l=2$ 而不是 1。若当成周期 1，$S(-\frac94)=S(-\frac14+0)$…会去算 $f(\frac34)=\frac14$，碰巧绝对值一样但符号是正——正好掉进 B。
+- 整数点处 $F$ 跳（$x=0$ 处左极限 $-\frac12$、右极限 $\frac12$），$S$ 取平均 0；本题问的点不在那里，但这是变式最爱考的地方。
+- 顺序固定：**周期 → 奇偶 → 连续/间断**，三步缺一不可。
+::vary
+同题求 $S(0)$、$S(1)$ >> 都是间断点：$S(0)=\frac{-\frac12+\frac12}2=0$；$S(1)=\frac{f(1^-)+F(1^+)}2=\frac{\frac12+(-\frac12)}2=0$
+同题求 $S\left(\frac54\right)$ >> 周期挪到 $-\frac34$：$S=-f(\frac34)=-\frac14$
+若改成余弦级数 $\frac{a_0}2+\sum a_n\cos n\pi x$，$a_n=2\int_0^1f\cos n\pi x\,dx$，求 $S(-\frac94)$ >> 偶延拓：$S(-\frac94)=S(-\frac14)=S(\frac14)=f(\frac14)=\frac14$，选 B
+同题求 $S\left(\frac72\right)$ >> $\frac72-4=-\frac12$，$S=-f(\frac12)=0$（$\frac12$ 是 V 的谷底、连续点）
+
+#4
+@stem
+设 $L_1:x^2+y^2=1$，$L_2:x^2+y^2=2$，$L_3:x^2+2y^2=2$，$L_4:2x^2+y^2=2$ 为四条逆时针方向的平面曲线. 记 $I_i=\displaystyle\oint_{L_i}\left(y+\frac{y^3}6\right)dx+\left(2x-\frac{x^3}3\right)dy\ (i=1,2,3,4)$，则 $\max\{I_1,I_2,I_3,I_4\}=$（　）.
+@A $I_1$
+@B $I_2$
+@C $I_3$
+@D $I_4$
+@ans D
+@tpl T保号性取区域
+::read
+「四条逆时针方向的平面曲线」，都是封闭曲线 >> 正向闭曲线上的第二类曲线积分 ⟹ {{圈|格林公式}}化成二重积分（[[格林公式]]）
+「$P=y+\frac{y^3}6$，$Q=2x-\frac{x^3}3$」 >> $\frac{\partial Q}{\partial x}-\frac{\partial P}{\partial y}=2-x^2-1-\frac{y^2}2=1-x^2-\frac{y^2}2$；$P,Q$ 是多项式，没有奇点，格林公式放心用
+「$\max\{I_1,\dots,I_4\}$」 >> 被积函数相同、区域不同 ⟹ 「哪个区域使 $\iint g$ 最大」：把 {{波|$g\gt0$ 的地方全收进来、$g\lt0$ 的全扔掉}}（[[T保号性取区域]]）
+「$1-x^2-\frac{y^2}2\gt0$」 >> 即 $2x^2+y^2\lt2$——恰好是 $L_4$ 围成的椭圆！⟹ 不用算就选 D
+::sk 360 230 画 | 四条曲线；$g=1-x^2-\frac{y^2}2$ 在 $L_4$（红，竖椭圆）里为正、外为负。别的区域要么少收了正的（$L_1$、$L_3$ 没包住上下尖），要么多收了负的（$L_2$、$L_3$ 伸到左右）
+ox,oy=180,115;U=62
+s.axes(ox,oy,40,325,225,8,xl='x',yl='y')
+el=[(ox+U*math.cos(2*math.pi*i/40),oy-U*math.sqrt(2)*math.sin(2*math.pi*i/40)) for i in range(40)]
+s.hatch(el,8,'r',0.6)
+s.circle(ox,oy,U,'k',1.1)
+s.circle(ox,oy,U*math.sqrt(2),'p',1.1)
+s.circle(ox,oy,U*math.sqrt(2),'b',1.1,ry=U)
+s.circle(ox,oy,U,'r',1.6,ry=U*math.sqrt(2))
+s.text(ox+U*0.5,oy-U*0.45,'L₁',11,'k')
+s.text(ox+U*1.05,oy-U*1.1,'L₂',11,'p')
+s.text(ox+U*1.42+4,oy+16,'L₃',11,'b')
+s.text(ox-10,oy-U*1.42-4,'L₄',12,'r','end')
+s.text(ox-U*1.5,oy-U*1.3,'g＞0 ⟺ 2x²+y²＜2',11,'r','middle')
+s.text(ox+U*1.9,oy+U*1.25,'L₄ 外 g＜0',10,'p','middle')
+::think
+1. 格林：$I_i=\iint_{D_i}\left(1-x^2-\frac{y^2}2\right)d\sigma$，$D_i$ 是 $L_i$ 围成的区域。
+2. 被积函数 $g$ 在 $D_4=\{2x^2+y^2\le2\}$ 内 $\ge0$、外 $\lt0$。
+3. 任何别的区域 $D$：$\iint_Dg=\iint_{D\cap D_4}g+\iint_{D\setminus D_4}g\le\iint_{D_4}g$ ⟹ $I_4$ 最大，选 D。
+::fast
+{{秒|保号性}}：$g\gt0$ 的区域恰是 $L_4$ 内部，直接选 D，零计算。
+::steps
+四条曲线都是正向（逆时针）闭曲线，$P=y+\frac{y^3}6$、$Q=2x-\frac{x^3}3$ 在全平面有连续偏导，由格林公式（[[格林公式]]）：
+$$I_i=\iint_{D_i}\left(\frac{\partial Q}{\partial x}-\frac{\partial P}{\partial y}\right)d\sigma=\iint_{D_i}\left[(2-x^2)-\left(1+\frac{y^2}2\right)\right]d\sigma=\iint_{D_i}\left(1-x^2-\frac{y^2}2\right)d\sigma.$$
+记 $g(x,y)=1-x^2-\frac{y^2}2$，$D_0=\{g\ge0\}=\{2x^2+y^2\le2\}$，这正是 $L_4$ 围成的区域 $D_4$。
+对任一区域 $D$：$\iint_Dg=\iint_{D\cap D_4}g+\iint_{D\setminus D_4}g$，后一项 $g\lt0$ ⟹ $\le0$；而 $\iint_{D\cap D_4}g\le\iint_{D_4}g$（少收了 $g\ge0$ 的部分）（[[二重积分性质]]）。
+  所以 $\iint_Dg\le\iint_{D_4}g$，即 $I_4$ 最大。
+~核对数值（极坐标/广义极坐标）：$I_1=\frac{5\pi}8$，$I_2=\frac\pi2$，$I_3=\frac{3\sqrt2}8\pi\approx0.53\pi$，$I_4=\frac{\sqrt2}2\pi\approx0.71\pi$。
+  例如 $I_4$：令 $x=r\cos\theta$，$y=\sqrt2r\sin\theta$，$d\sigma=\sqrt2r\,drd\theta$，$g=1-r^2$ ⟹ $I_4=\sqrt2\int_0^{2\pi}d\theta\int_0^1(1-r^2)r\,dr=\sqrt2\cdot2\pi\cdot\frac14=\frac{\sqrt2}2\pi$。
+选 **D**。
+::note
+- {{扣|四个积分硬算}}：能算，但 $L_3$、$L_4$ 要用广义极坐标，考场上至少 5 分钟；认出 $g\gt0$ 的区域就是 $L_4$，十秒钟。
+- 这类题的「信号」：**同一个被积式、几个不同区域比大小** ⟹ 先画 $g=0$ 的曲线。命题人一般让它恰好是某个选项的边界。
+- 前提：$P,Q$ 在区域内无奇点（有奇点要挖洞，[[T格林挖洞]]）。
+::vary
+若四条曲线都改成顺时针，求 $\min$ >> 每个 $I_i$ 变号，最小的是 $-I_4$，仍对应 $L_4$
+若 $Q$ 改成 $x-\frac{x^3}3$（其余不变），哪个最大 >> $g=-x^2-\frac{y^2}2\le0$ 处处，区域越小积分越大；$D_1$（单位圆）含于其余三个区域（如 $x^2+2y^2\le2(x^2+y^2)\le2$）⟹ $I_1=-\frac{3\pi}8$ 最大
+求 $\max_{D}\iint_D(4-x^2-y^2)d\sigma$（$D$ 任取） >> 取 $D=\{x^2+y^2\le4\}$，最大值 $\int_0^{2\pi}\int_0^2(4-r^2)r\,dr\,d\theta=8\pi$
+本题求 $I_4$ 的具体值 >> $\frac{\sqrt2}2\pi$（广义极坐标 $x=r\cos\theta,y=\sqrt2r\sin\theta$）
+
+#5
+@stem
+设 $A,B,C$ 均为 $n$ 阶矩阵，若 $AB=C$，且 $B$ 可逆，则（　）.
+@A 矩阵 $C$ 的行向量组与矩阵 $A$ 的行向量组等价
+@B 矩阵 $C$ 的列向量组与矩阵 $A$ 的列向量组等价
+@C 矩阵 $C$ 的行向量组与矩阵 $B$ 的行向量组等价
+@D 矩阵 $C$ 的列向量组与矩阵 $B$ 的列向量组等价
+@ans B
+@tpl T行左列右, T举反例
+::read
+「$AB=C$」 >> 右乘：{{圈|$C$ 的每一列是 $A$ 的列的线性组合}}，组合系数是 $B$ 的那一列。$C=(\gamma_1,\dots,\gamma_n)$，$\gamma_j=A\beta_j=b_{1j}\alpha_1+\cdots+b_{nj}\alpha_n$
+「$B$ 可逆」 >> 能倒回去：$A=CB^{-1}$ ⟹ $A$ 的列也是 $C$ 的列的组合 ⟹ 两组列向量{{波|互相}}线性表示 = 等价（[[向量组等价]]）
+「行向量组 / 列向量组」 >> 右乘管列、左乘管行（[[T行左列右]]）：本题是右乘 $B$，结论只能是关于**列**的 ⟹ A、C 先存疑
+「与 $B$ 的……等价」 >> $B$ 是「系数」，不是被组合的对象；$C$ 与 $B$ 没有直接关系（$A$ 换成零矩阵就看出来）
+::sk 360 150 列 | $AB=C$ 按列拆：$C$ 的第 $j$ 列 = $A$ 的列以 $B$ 的第 $j$ 列为系数的组合；$B$ 可逆 ⟹ 能拆回去
+s.cells(18,40,[['α₁','α₂','…','αₙ']],cw=30,ch=34,size=12)
+s.text(146,62,'×',14,'k','middle')
+s.cells(160,40,[['β₁','…','!βⱼ','…']],cw=26,ch=34,size=12)
+s.text(276,62,'=',14,'k','middle')
+s.cells(288,40,[['γ₁','!γⱼ','…']],cw=22,ch=34,size=12)
+s.text(180,112,'γⱼ = b₁ⱼα₁ + b₂ⱼα₂ + … + bₙⱼαₙ',12,'r','middle')
+s.text(180,136,'B 可逆：A = CB⁻¹，αⱼ 也是 γ 的组合 ⟹ 列向量组等价',11,'b','middle')
+s.text(80,28,'A 的列',10,'p','middle');s.text(212,28,'系数',10,'p','middle');s.text(321,28,'C 的列',10,'p','middle')
+::think
+1. 写成列：$C=AB$ ⟹ $\gamma_j=A\beta_j$，$C$ 的列向量组可由 $A$ 的列向量组线性表示。
+2. $B$ 可逆 ⟹ $A=CB^{-1}$ ⟹ $A$ 的列向量组也可由 $C$ 的列向量组线性表示。
+3. 互相表示 ⟹ 等价，选 B。
+::fast
+{{秒|反例砸行}}：取 $A=\begin{pmatrix}1&0\\0&0\end{pmatrix}$、$B=\begin{pmatrix}0&1\\1&0\end{pmatrix}$（可逆，交换两列）⟹ $C=\begin{pmatrix}0&1\\0&0\end{pmatrix}$。$A$ 的非零行 $(1,0)$、$C$ 的非零行 $(0,1)$ 不能互相表示 ⟹ A 错；$B$ 的行向量组秩 2、$C$ 的秩 1 ⟹ C、D 都错（[[T举反例]]）。只剩 B。
+::steps
+记 $A=(\alpha_1,\dots,\alpha_n)$，$B=(\beta_1,\dots,\beta_n)=(b_{ij})$，$C=(\gamma_1,\dots,\gamma_n)$（按列分块）。
+$AB=C$ 按列写：$A\beta_j=\gamma_j$，即 $\gamma_j=b_{1j}\alpha_1+b_{2j}\alpha_2+\cdots+b_{nj}\alpha_n$（$j=1,\dots,n$）。
+  ⟹ $C$ 的列向量组可由 $A$ 的列向量组线性表示。
+$B$ 可逆，两边右乘 $B^{-1}$：$A=CB^{-1}$；同理按列写 ⟹ $A$ 的列向量组可由 $C$ 的列向量组线性表示。
+两组列向量可以互相线性表示 ⟹ 等价（[[向量组等价]]），B 对。
+~排除其余：反例 $A=\begin{pmatrix}1&0\\0&0\end{pmatrix}$，$B=\begin{pmatrix}0&1\\1&0\end{pmatrix}$，$C=AB=\begin{pmatrix}0&1\\0&0\end{pmatrix}$。
+  A：$A$ 的行向量组 $\{(1,0),(0,0)\}$ 与 $C$ 的 $\{(0,1),(0,0)\}$ 不能互相表示 ⟹ 不等价。
+  C、D：$r(B)=2$，$r(C)=1$，秩都不等，行、列向量组都不可能与 $C$ 的等价。
+选 **B**。
+::note
+- {{扣|记成「乘可逆矩阵不改变行向量组」}}：右乘可逆矩阵 = 一串**列**变换，保住的是**列**向量组（列空间）；改的恰恰是行向量之间的位置关系。左乘才保行（[[T行左列右]]）。
+- 等价要求「互相表示」，只有 $C$ 由 $A$ 表示是不够的——$B$ 可逆就是为了倒回去用的条件。$B$ 不可逆时只能说 $r(C)\le r(A)$。
+- 秩相等**不是**等价的充分条件（反例中 $A$、$C$ 秩都是 1，行向量组却不等价）。
+::vary
+若条件改为 $BA=C$（$B$ 可逆） >> 左乘：$C$ 的行向量组与 $A$ 的行向量组等价（对应选项 A）
+若 $AB=C$ 但 $B$ 不一定可逆 >> 只能说 $C$ 的列向量组可由 $A$ 的列向量组线性表示，$r(C)\le r(A)$，不一定等价
+$AB=C$、$B$ 可逆，$Ax=0$ 与 $Cx=0$ 同解吗 >> 不一定：$Cx=0$ ⟺ $A(Bx)=0$，解集是 $B^{-1}\cdot\{Ax=0\text{ 的解}\}$；同解对应的是 $PA=C$（左乘可逆）
+$A$ 经初等列变换化为 $C$ 的充要条件 >> 存在可逆 $Q$ 使 $AQ=C$ ⟺ $A$、$C$ 的列向量组等价（同型）
+
+#6
+@stem
+矩阵 $\begin{pmatrix}1&a&1\\a&b&a\\1&a&1\end{pmatrix}$ 与 $\begin{pmatrix}2&0&0\\0&b&0\\0&0&0\end{pmatrix}$ 相似的充分必要条件为（　）.
+@A $a=0,\ b=2$
+@B $a=0,\ b$ 为任意常数
+@C $a=2,\ b=0$
+@D $a=2,\ b$ 为任意常数
+@ans B
+@tpl T代特征值, T相似定参数
+::read
+「矩阵 $A$ 对称、$B$ 是对角阵」 >> 两个都是实对称矩阵 ⟹ 都能正交对角化 ⟹ {{圈|相似 ⟺ 特征值相同}}（[[实对称矩阵]]）
+「$B$ 的特征值」 >> 对角线直接读：$2,\ b,\ 0$
+「先试迹、行列式」 >> $\mathrm{tr}A=2+b=\mathrm{tr}B$ 恒成立；$A$ 第 1、3 行相同 ⟹ $|A|=0=|B|$ 恒成立 ⟹ {{波|两个必要条件都给不出信息}}（[[T相似定参数]]失效）
+「那就代具体特征值」 >> 2 必须是 $A$ 的特征值 ⟹ $|2E-A|=0$（[[T代特征值]]）
+选项 >> $a$ 只有 0、2 两种；$b$ 要么定死要么任意 ⟹ 定出 $a$、再判断 $b$ 受不受限
+::sk 360 160 列 | 三把尺子量一遍：迹和行列式都是恒等式，只有「代特征值 2」给出方程
+s.cells(14,18,[['条件','A 一侧','B 一侧','结论'],['迹','2+b','2+b','恒成立'],['行列式','0（1、3 行同）','0','恒成立'],['!|2E−A|=0','!−4a²','!—','!a=0']],cw=[80,104,60,74],ch=26,size=11)
+s.text(180,150,'a=0 时 A 的特征值正是 2、b、0（b 任意）',11,'b','middle')
+::think
+1. 两个都是实对称矩阵，相似 ⟺ 特征值相同；$B$ 的特征值是 $2,b,0$。
+2. 迹、行列式都恒等，用 $|2E-A|=0$：算得 $-4a^2=0$ ⟹ $a=0$。
+3. 回验：$a=0$ 时 $A=\begin{pmatrix}1&0&1\\0&b&0\\1&0&1\end{pmatrix}$，特征值 $b$ 与 $\begin{pmatrix}1&1\\1&1\end{pmatrix}$ 的 $2,0$ ⟹ 恰为 $2,b,0$，对任意 $b$ 都成立，选 B。
+::fast
+{{秒|代 $a=0$ 一眼看}}：$a=0$ 时 $A$ 是分块对角：中间一个 $b$，四角拼成 $\begin{pmatrix}1&1\\1&1\end{pmatrix}$（特征值 2、0）⟹ 特征值 $\{2,b,0\}$，与 $b$ 无关 ⟹ B；$a=2$ 时 $|2E-A|=-16\ne0$，2 不是特征值，C、D 错。
+::steps
+$A=\begin{pmatrix}1&a&1\\a&b&a\\1&a&1\end{pmatrix}$、$B=\mathrm{diag}(2,b,0)$ 都是实对称矩阵，都可相似于对角阵；两者相似 ⟺ 特征值完全相同（[[实对称矩阵]]、[[相似不变量]]）。$B$ 的特征值为 $2,\ b,\ 0$。
+**必要性**：2 是 $B$ 的特征值 ⟹ 也必须是 $A$ 的特征值 ⟹ $|2E-A|=0$（[[T代特征值]]）。
+$$|2E-A|=\begin{vmatrix}1&-a&-1\\-a&2-b&-a\\-1&-a&1\end{vmatrix}\xrightarrow{r_3+r_1}\begin{vmatrix}1&-a&-1\\-a&2-b&-a\\0&-2a&0\end{vmatrix}.$$
+  按第 3 行展开：只剩 $(3,2)$ 元 $-2a$，代数余子式符号 $(-1)^{3+2}=-1$：$|2E-A|=(-2a)\cdot(-1)\cdot\begin{vmatrix}1&-1\\-a&-a\end{vmatrix}=2a\cdot(-a-a)=-4a^2$。
+  令 $-4a^2=0$ ⟹ $a=0$。
+**充分性**：$a=0$ 时 $A=\begin{pmatrix}1&0&1\\0&b&0\\1&0&1\end{pmatrix}$，$|\lambda E-A|=(\lambda-b)\begin{vmatrix}\lambda-1&-1\\-1&\lambda-1\end{vmatrix}=(\lambda-b)\lambda(\lambda-2)$ ⟹ 特征值 $2,b,0$，与 $B$ 相同 ⟹ $A\sim B$，对任意 $b$ 成立。
+所以充要条件是 $a=0$、$b$ 任意，选 **B**。
+::note
+- {{扣|看到 $b$ 也出现在 $A$ 里就以为要解出 $b$}}：$b$ 在两边对角线同一位置，自然抵消；选项 A「$b=2$」是给「列方程时多凑了一个条件」的人准备的。
+- {{扣|只用迹和行列式}}：本题两个都是恒等式，算完什么也得不到，必须代具体的特征值。
+- 实对称（或都能对角化）时「特征值相同 ⟹ 相似」才成立；一般矩阵还要比 $r(A-\lambda E)$（[[T相似看秩]]）。
+::vary
+若 $B$ 改成 $\mathrm{diag}(2,2,0)$，求 $a,b$ >> 仍由 $|2E-A|=0$ 得 $a=0$，再由特征值相同得 $b=2$（此时对应选项 A）
+同一个 $A$，取 $a=1$、$b=0$ 时的特征值 >> $|\lambda E-A|=\lambda(\lambda^2-2\lambda-2)$ ⟹ $0,\ 1\pm\sqrt3$；2 不是特征值，不可能与 $B$ 相似
+$A=\begin{pmatrix}1&a\\a&1\end{pmatrix}$ 与 $\mathrm{diag}(3,-1)$ 相似的充要条件 >> 迹 $2=2$ 恒成立；$|3E-A|=4-a^2=0$ ⟹ $a=\pm2$（行列式 $1-a^2=-3$ 也给出同样结果）
+为什么本题 $|A|$ 恒为 0 >> 第 1 行与第 3 行完全相同；这也说明 0 一定是 $A$ 的特征值，与 $B$ 的 0 自动对上
+
+#7
+@stem
+设 $X_1,X_2,X_3$ 是随机变量，且 $X_1\sim N(0,1)$，$X_2\sim N(0,2^2)$，$X_3\sim N(5,3^2)$，$p_i=P\{-2\le X_i\le2\}\ (i=1,2,3)$，则（　）.
+@A $p_1\gt p_2\gt p_3$
+@B $p_2\gt p_1\gt p_3$
+@C $p_3\gt p_1\gt p_2$
+@D $p_1\gt p_3\gt p_2$
+@ans A
+@tpl T正态标准化
+::read
+「$X_1\sim N(0,1)$，$X_2\sim N(0,2^2)$」 >> 两个都以 0 为中心，$X_2$ 更「胖」 ⟹ 同一区间 $[-2,2]$ 里，{{圈|瘦的装得多}}：$p_1\gt p_2$
+「$X_3\sim N(5,3^2)$」 >> 中心在 5，区间 $[-2,2]$ 在它的左尾巴上 ⟹ $p_3$ 很小
+「$p_i=P\{-2\le X_i\le2\}$」 >> 全部标准化成 $\Phi$（[[T正态标准化]]）：$P(a\le X\le b)=\Phi\left(\frac{b-\mu}\sigma\right)-\Phi\left(\frac{a-\mu}\sigma\right)$
+::sk 380 200 画 | 三条密度曲线与同一个区间 $[-2,2]$（灰）：$N(0,1)$ 几乎全装进去，$N(0,4)$ 装进约 68%，$N(5,9)$ 只有左尾巴擦到
+ox,oy=120,178;X=lambda x:ox+x*22;Y=lambda y:oy-y*390
+s.axes(ox,oy,16,372,186,8,xl='x',yl='')
+pdf=lambda m,sg:(lambda x:math.exp(-(x-m)**2/(2*sg*sg))/(sg*math.sqrt(2*math.pi)))
+s.line(X(-2),oy,X(-2),Y(0.42),'p',0.9,dash='3 3');s.line(X(2),oy,X(2),Y(0.42),'p',0.9,dash='3 3')
+s.hatch([(X(-2),oy),(X(2),oy),(X(2),Y(0.41)),(X(-2),Y(0.41))],10,'g',0.5)
+s.plot(pdf(0,1),-4,4,X,Y,n=20,c='k')
+s.plot(pdf(0,2),-4.5,7,X,Y,n=18,c='b')
+s.plot(pdf(5,3),-4.5,11,X,Y,n=18,c='r')
+s.text(X(0.6),Y(0.40),'N(0,1)：p₁=2Φ(2)−1≈0.954',10,'k')
+s.text(X(3.0),Y(0.29),'N(0,4)：p₂=2Φ(1)−1≈0.683',10,'b')
+s.text(X(5.4),Y(0.15),'N(5,9)：p₃=Φ(−1)−Φ(−7/3)≈0.149',10,'r')
+s.text(X(-2),oy+14,'−2',10,'k','middle');s.text(X(2),oy+14,'2',10,'k','middle');s.text(X(5),oy+14,'5',10,'r','middle')
+::think
+1. $p_1=\Phi(2)-\Phi(-2)=2\Phi(2)-1$。
+2. $p_2=\Phi\left(\frac22\right)-\Phi\left(\frac{-2}2\right)=2\Phi(1)-1$。
+3. $p_3=\Phi\left(\frac{2-5}3\right)-\Phi\left(\frac{-2-5}3\right)=\Phi(-1)-\Phi(-\frac73)$。
+4. $\Phi$ 单增 ⟹ $p_1\gt p_2$；$p_3\lt\Phi(-1)=1-\Phi(1)$，而 $p_2=2\Phi(1)-1$，$p_2-p_3\gt3\Phi(1)-2\gt0$ ⟹ 选 A。
+::fast
+{{秒|看图}}：同中心的两个，瘦的装得多 ⟹ $p_1\gt p_2$；中心远在 5 的那个只擦到尾巴 ⟹ $p_3$ 最小。A。
+::steps
+标准化（[[T正态标准化]]）：$X\sim N(\mu,\sigma^2)$ ⟹ $P\{a\le X\le b\}=\Phi\left(\dfrac{b-\mu}{\sigma}\right)-\Phi\left(\dfrac{a-\mu}{\sigma}\right)$。
+$p_1=\Phi(2)-\Phi(-2)=2\Phi(2)-1$（用 $\Phi(-x)=1-\Phi(x)$）。
+$p_2=\Phi(1)-\Phi(-1)=2\Phi(1)-1$。
+$p_3=\Phi\left(\dfrac{2-5}{3}\right)-\Phi\left(\dfrac{-2-5}{3}\right)=\Phi(-1)-\Phi\left(-\dfrac73\right)$。
+比 $p_1,p_2$：$\Phi$ 严格单增，$\Phi(2)\gt\Phi(1)$ ⟹ $p_1\gt p_2$。
+比 $p_2,p_3$：$p_3\lt\Phi(-1)=1-\Phi(1)$；$p_2-p_3\gt(2\Phi(1)-1)-(1-\Phi(1))=3\Phi(1)-2$，而 $\Phi(1)\gt\Phi(0.75)\gt\frac23$（$\Phi(1)\approx0.841$）⟹ $p_2\gt p_3$。
+  ~数值：$p_1\approx0.954$，$p_2\approx0.683$，$p_3\approx0.159-0.010=0.149$。
+$p_1\gt p_2\gt p_3$，选 **A**。
+::note
+- {{扣|标准化时忘了除以 $\sigma$}}：$N(0,2^2)$ 的 $\sigma=2$，$\frac{2-0}{2}=1$，不是 $\frac{2}{4}$；题目写的是方差 $2^2$。
+- 「$3\sigma$ 原则」三个数背下来就够用：$\pm1\sigma$ 约 68.3%，$\pm2\sigma$ 约 95.4%，$\pm3\sigma$ 约 99.7%。
+- $p_3$ 要比的话只用一个粗估：它小于整条左尾 $\Phi(-1)\approx0.16$，远小于 0.68。
+::vary
+若 $X_3\sim N(0,3^2)$，排序 >> $p_3=2\Phi(\frac23)-1\approx0.495$ ⟹ $p_1\gt p_2\gt p_3$ 不变（同中心，越胖装得越少）
+若 $X_2\sim N(1,1)$，$p_2$ 与 $p_1$ 谁大 >> $p_2=\Phi(1)-\Phi(-3)\approx0.840\lt p_1\approx0.954$：同样胖瘦，中心偏离区间中点，装得少
+$X\sim N(\mu,\sigma^2)$，$P\{|X-\mu|\lt\sigma\}$ 随 $\sigma$ 增大如何变 >> $=2\Phi(1)-1$，与 $\sigma$ 无关（[[T正态标准化]] 第 3 条）
+$X\sim N(0,\sigma^2)$，$P\{-2\le X\le2\}$ 随 $\sigma$ 增大如何变 >> $=2\Phi(\frac2\sigma)-1$，单调减小
+
+#8
+@stem
+设随机变量 $X\sim t(n)$，$Y\sim F(1,n)$，给定 $\alpha\ (0\lt\alpha\lt0.5)$，常数 $c$ 满足 $P\{X\gt c\}=\alpha$，则 $P\{Y\gt c^2\}=$（　）.
+@A $\alpha$
+@B $1-\alpha$
+@C $2\alpha$
+@D $1-2\alpha$
+@ans C
+@tpl T抽样分布拼装
+::read
+「$X\sim t(n)$，$Y\sim F(1,n)$」 >> 认关系：$t(n)$ 的平方是 $F(1,n)$（[[t分布]]）⟹ $X^2$ 与 $Y$ {{圈|同分布}}，$P\{Y\gt c^2\}=P\{X^2\gt c^2\}$
+「$0\lt\alpha\lt0.5$，$P\{X\gt c\}=\alpha$」 >> $\alpha\lt\frac12$ 且 $t$ 分布关于 0 对称 ⟹ $c\gt0$（右尾）。这个条件就是为了保证 $c\gt0$
+「$P\{Y\gt c^2\}$」 >> $X^2\gt c^2$ ⟺ $|X|\gt c$ ⟺ {{波|两条尾巴}}：$P\{X\gt c\}+P\{X\lt-c\}=2\alpha$
+::sk 360 180 画 | $t(n)$ 的密度关于 0 对称：$X^2\gt c^2$ 是左右两条尾巴（红），各占 $\alpha$
+ox,oy=180,150;X=lambda x:ox+x*42;Y=lambda y:oy-y*300
+s.axes(ox,oy,14,350,160,8,xl='x',yl='')
+f=lambda x:0.39*(1+x*x/4)**(-2.5)
+c=1.9
+s.hatch([(X(c),oy)]+[(X(c+i*0.2),Y(f(c+i*0.2))) for i in range(10)]+[(X(c+1.8),oy)],5,'r',0.7)
+s.hatch([(X(-c),oy)]+[(X(-c-i*0.2),Y(f(-c-i*0.2))) for i in range(10)]+[(X(-c-1.8),oy)],5,'r',0.7)
+s.plot(f,-3.9,3.9,X,Y,n=18)
+s.line(X(c),oy,X(c),Y(f(c))-4,'r',1.0);s.line(X(-c),oy,X(-c),Y(f(-c))-4,'r',1.0)
+s.text(X(c),oy+14,'c',11,'r','middle');s.text(X(-c),oy+14,'−c',11,'r','middle')
+s.text(X(2.9),Y(0.08),'α',12,'r','middle');s.text(X(-2.9),Y(0.08),'α',12,'r','middle')
+s.text(X(0),Y(0.43),'X²＞c² ⟺ |X|＞c：两尾 = 2α',11,'k','middle')
+::think
+1. $X\sim t(n)$ ⟹ $X^2\sim F(1,n)$，与 $Y$ 同分布 ⟹ $P\{Y\gt c^2\}=P\{X^2\gt c^2\}$。
+2. $P\{X^2\gt c^2\}=P\{X\gt c\}+P\{X\lt-c\}$，对称 ⟹ $=2\alpha$，选 C。
+::fast
+{{秒|一句话}}：$t^2=F(1,n)$，平方把两条尾巴折到一起 ⟹ $2\alpha$。
+::steps
+$t$ 分布的构造：$X=\dfrac{Z}{\sqrt{V/n}}$，$Z\sim N(0,1)$，$V\sim\chi^2(n)$，两者独立（[[t分布]]）。
+平方：$X^2=\dfrac{Z^2/1}{V/n}$，其中 $Z^2\sim\chi^2(1)$，与 $V$ 独立 ⟹ $X^2\sim F(1,n)$（[[卡方分布]]）。
+$Y\sim F(1,n)$ 与 $X^2$ 同分布（题目没说 $Y=X^2$，但概率只依赖分布）⟹ $P\{Y\gt c^2\}=P\{X^2\gt c^2\}$。
+$\alpha\lt0.5$ 且 $t$ 分布密度关于 0 对称、$P\{X\gt0\}=\frac12$ ⟹ $P\{X\gt c\}=\alpha\lt\frac12$ 推出 $c\gt0$。
+$c\gt0$ 时 $\{X^2\gt c^2\}=\{X\gt c\}\cup\{X\lt-c\}$（互斥）⟹ $P\{X^2\gt c^2\}=P\{X\gt c\}+P\{X\lt-c\}=\alpha+\alpha=2\alpha$（对称性 $P\{X\lt-c\}=P\{X\gt c\}$）。
+选 **C**。
+::note
+- {{扣|直接写 $P\{Y\gt c^2\}=P\{X\gt c\}=\alpha$}}：平方后两条尾巴都在 $Y\gt c^2$ 里，漏了左尾——这正是选项 A 的来源。
+- 「$0\lt\alpha\lt0.5$」不是随手写的：它保证 $c\gt0$，否则 $\{X^2\gt c^2\}$ 不等于 $\{X\gt c\}\cup\{X\lt-c\}$ 的那种「对称两尾」。
+- 分位数语言：$t_\alpha(n)^2=F_{2\alpha}(1,n)$，是本题的另一种说法。
+::vary
+同题求 $P\{|X|\lt c\}$ >> $1-2\alpha$
+同题求 $P\{X\lt-c\}$ >> $\alpha$（对称）
+同题求 $P\left\{\frac1Y\lt\frac1{c^2}\right\}$ >> $\frac1Y\sim F(n,1)$；事件等价于 $Y\gt c^2$ ⟹ $2\alpha$
+若 $X\sim N(0,1)$、$Y\sim\chi^2(1)$，$P\{X\gt c\}=\alpha$，求 $P\{Y\gt c^2\}$ >> 同理 $X^2\sim\chi^2(1)$ ⟹ $2\alpha$
+
+#9
+@stem
+设函数 $y=f(x)$ 由方程 $y-x=e^{x(1-y)}$ 确定，则 $\displaystyle\lim_{n\to\infty}n\left[f\left(\frac1n\right)-1\right]=$ ______.
+@ans $1$
+@tpl T凑导数定义, T隐函数先定点
+::read
+「$\lim n\left[f\left(\frac1n\right)-1\right]$」 >> 「$n\times$（函数差）」= $\dfrac{f(\frac1n)-1}{\frac1n}$：{{圈|差商}}，自变量增量 $\frac1n\to0$ ⟹ 凑导数定义（[[T凑导数定义]]、[[导数定义]]）
+「减去的是 1」 >> 必须核对 $1=f(0)$——不是的话极限是 $\infty$ 或要另算。$x=0$ 代入方程：$y-0=e^0=1$ ⟹ $f(0)=1$ ✓（[[T隐函数先定点]]）
+「$y=f(x)$ 由方程确定」 >> 隐函数求导：两边对 $x$ 求导，$y$ 当 $x$ 的函数（[[隐函数求导]]）；只要 $x=0$ 一个点的导数
+::sk 340 200 看 | 曲线 $y=f(x)$ 过 $(0,1)$、切线斜率 1（红）；$n[f(\frac1n)-1]$ 是到 $(\frac1n,f(\frac1n))$ 的割线斜率，$n\to\infty$ 时转成切线
+ox,oy=110,180;X=lambda x:ox+x*160;Y=lambda y:oy-y*95
+s.axes(ox,oy,14,330,194,8,xl='x',yl='y')
+def yv(x):
+    y=1+x
+    for _ in range(40):
+        g=y-x-math.exp(x*(1-y));y-=g/(1+x*math.exp(x*(1-y)))
+    return y
+s.plot(yv,-0.55,1.25,X,Y,n=14)
+s.line(X(-0.5),Y(0.5),X(0.75),Y(1.75),'r',1.1,dash='5 4')
+s.dot(X(0),Y(1),2.8,'r');s.text(X(0)-8,Y(1)-6,'(0, 1)',11,'r','end')
+h=0.6;s.dot(X(h),Y(yv(h)),2.4,'b');s.line(X(0),Y(1),X(h),Y(yv(h)),'b',1.0)
+s.text(X(h)+6,Y(yv(h))+14,'(1/n, f(1/n))',10,'b')
+s.text(X(0.78),Y(1.8),'切线 y=1+x',10,'r')
+s.text(X(0.55),Y(0.62),'y−x=e^{x(1−y)}',10,'k')
+::think
+1. $x=0$ ⟹ $f(0)=1$，所求 $=\lim\dfrac{f(\frac1n)-f(0)}{\frac1n}=f'(0)$。
+2. 方程两边求导：$y'-1=e^{x(1-y)}\,[(1-y)-xy']$；代 $x=0,y=1$：$y'-1=1\cdot(0-0)=0$ ⟹ $f'(0)=1$。
+::fast
+{{秒|看指数}}：在 $(0,1)$ 附近指数 $x(1-y)$ 是二阶小量（$x$ 小、$1-y$ 也小）⟹ $e^{x(1-y)}=1+o(x)$ ⟹ $y=x+1+o(x)$，斜率 1。
+::steps
+先定点：$x=0$ 代入方程，$y-0=e^{0}=1$ ⟹ $f(0)=1$（[[T隐函数先定点]]）。
+所求极限化成导数定义（[[T凑导数定义]]）：$n\left[f\left(\frac1n\right)-1\right]=\dfrac{f\left(\frac1n\right)-f(0)}{\frac1n}$。
+  $f$ 在 0 处可导（隐函数存在定理：$F=y-x-e^{x(1-y)}$，$F_y'=1+xe^{x(1-y)}$ 在 $(0,1)$ 处为 $1\ne0$），令 $h=\frac1n\to0^+$，极限 $=f'(0)$。
+方程 $y-x=e^{x(1-y)}$ 两边对 $x$ 求导（$y=y(x)$，[[隐函数求导]]）：
+$$y'-1=e^{x(1-y)}\cdot\big[(1-y)+x\cdot(-y')\big].$$
+代入 $x=0$、$y=1$：右边 $=e^0\cdot[0-0]=0$ ⟹ $y'(0)-1=0$ ⟹ $f'(0)=1$。
+所以极限 $=1$。
+::note
+- {{扣|没验证 $f(0)=1$ 就直接说是导数}}：若方程换一个使 $f(0)\ne1$，「$n[f(\frac1n)-1]$」就是 $\infty$。卷面填空虽不看过程，但这一步是判断题型的关键。
+- 数列极限 $\lim\limits_{n\to\infty}$ 化导数时，是用「函数极限 ⟹ 数列极限」（海涅），方向是对的；反过来（只知道数列极限）推不出可导。
+- 指数函数对 $x$ 求导：$\big(e^{u}\big)'=e^uu'$，$u=x(1-y)$，$u'=(1-y)-xy'$，乘积求导别漏 $-xy'$。
+::vary
+同题求 $f''(0)$ >> 再求导并代 $x=0,y=1,y'=1$：$y''=e^{u}u'^2+e^{u}u''$，$u'(0)=0$，$u''=-2y'-xy''$ ⟹ $u''(0)=-2$ ⟹ $f''(0)=-2$
+同题求 $\lim\limits_{n\to\infty}n^2\left[f\left(\frac1n\right)-1-\frac1n\right]$ >> 泰勒：$f(h)=1+h+\frac{f''(0)}2h^2+o(h^2)$ ⟹ $\frac{f''(0)}2=-1$
+同题求 $\lim\limits_{n\to\infty}n\left[f\left(\frac2n\right)-1\right]$ >> $2f'(0)=2$
+若改成 $\lim\limits_{x\to0}\frac{f(x)-1}{\sin x}$ >> 分母 $\sin x\sim x$ ⟹ 仍为 $f'(0)=1$
+
+#10
+@stem
+已知 $y_1=e^{3x}-xe^{2x}$，$y_2=e^x-xe^{2x}$，$y_3=-xe^{2x}$ 是某二阶常系数非齐次线性微分方程的 3 个解，则该方程的通解为 $y=$ ______.
+@ans $y=C_1e^{3x}+C_2e^{x}-xe^{2x}$
+@tpl T两解反推方程
+::read
+「某二阶常系数非齐次线性微分方程的 3 个解」 >> 线性方程解的结构（[[线性方程解的结构]]）：{{圈|两个非齐次解之差是齐次解}}（[[T两解反推方程]]）
+「$y_1,y_2,y_3$ 都含 $-xe^{2x}$」 >> 公共部分 $-xe^{2x}$ 就是 $y_3$ 本身——作差时它整块消掉，剩下 $e^{3x}$、$e^{x}$
+「二阶」 >> 齐次通解要 2 个线性无关的解：$e^{3x}$、$e^x$（比值 $e^{2x}$ 不是常数，线性无关）
+「通解」 >> = 齐次通解 + 任一个特解；特解挑最简单的 $y_3=-xe^{2x}$
+::sk 340 130 列 | 三个解两两作差，公共的 $-xe^{2x}$ 抵消，剩下的就是齐次解
+s.cells(14,14,[['','式子','是什么'],['y₁−y₃','e^{3x}','齐次解'],['y₂−y₃','e^{x}','齐次解'],['y₃','−xe^{2x}','!非齐次特解']],cw=[60,90,90],ch=24,size=12)
+s.text(258,52,'特征根 3、1',11,'b')
+s.text(258,76,'⟹ y″−4y′+3y',11,'b')
+s.text(258,100,'= xe^{2x}',11,'b')
+::think
+1. $y_1-y_3=e^{3x}$、$y_2-y_3=e^x$ 是对应齐次方程的两个线性无关解。
+2. 齐次通解 $C_1e^{3x}+C_2e^x$，加特解 $y_3=-xe^{2x}$ ⟹ $y=C_1e^{3x}+C_2e^x-xe^{2x}$。
+::fast
+{{秒|划掉公共项}}：三个解都带 $-xe^{2x}$，它就是特解；剩下的 $e^{3x}$、$e^x$ 做齐次解，一行写完。
+::steps
+设方程为 $y''+py'+qy=f(x)$。由线性方程解的结构（[[线性方程解的结构]]），两个非齐次解之差满足齐次方程 $y''+py'+qy=0$。
+$y_1-y_3=e^{3x}$，$y_2-y_3=e^{x}$ ⟹ 都是齐次方程的解。
+$\dfrac{e^{3x}}{e^{x}}=e^{2x}$ 不是常数 ⟹ 两者线性无关 ⟹ 齐次通解 $Y=C_1e^{3x}+C_2e^x$。
+非齐次通解 = 齐次通解 + 任一特解，取 $y^*=y_3=-xe^{2x}$：
+$$y=C_1e^{3x}+C_2e^{x}-xe^{2x}\quad(C_1,C_2\text{ 为任意常数}).$$
+~附：方程本身。特征根 $3,1$ ⟹ 特征方程 $r^2-4r+3=0$，左边 $y''-4y'+3y$；把 $y_3=-xe^{2x}$ 代入：$y_3'=-(1+2x)e^{2x}$，$y_3''=-(4+4x)e^{2x}$，$y_3''-4y_3'+3y_3=(-4-4x+4+8x-3x)e^{2x}=xe^{2x}$ ⟹ 方程是 $y''-4y'+3y=xe^{2x}$。
+::note
+- {{扣|把 $y_1,y_2,y_3$ 直接线性组合当通解}}：$C_1y_1+C_2y_2+C_3y_3$ 一般不是解（非齐次方程的解的线性组合要系数和为 1 才是非齐次解）。
+- {{扣|特解写成 $e^{3x}-xe^{2x}$}}：也对（$y_1$ 也是特解），但不如 $y_3$ 简洁；答案形式不唯一，填空题按最简形写。
+- 本题若再问「方程是什么」，按附注代入定右端；$2$ 不是特征根，所以特解形式是 $(ax+b)e^{2x}$，与 $-xe^{2x}$ 吻合（$a=-1$，$b=0$）。
+::vary
+同题求该方程 >> $y''-4y'+3y=xe^{2x}$
+已知 $y_1=xe^x+e^{2x}$、$y_2=xe^x+e^{-x}$、$y_3=xe^x+e^{2x}-e^{-x}$ 是二阶线性非齐次方程的解，求通解 >> $y_1-y_3=e^{-x}$，$y_1-y_2=e^{2x}-e^{-x}$ ⟹ 齐次解 $e^{2x},e^{-x}$ ⟹ $y=C_1e^{2x}+C_2e^{-x}+xe^x$
+若只给 $y_1$、$y_3$ 两个解，能写出通解吗 >> 只得一个齐次解 $e^{3x}$，缺一个；必须再知道方程（或另一个解）
+一阶：$y_1=e^x$、$y_2=e^x+e^{-x}$ 是 $y'+p(x)y=q(x)$ 的解，求 $p,q$ >> $y_2-y_1=e^{-x}$ ⟹ $p=1$；代 $y_1$：$q=e^x+e^x=2e^x$
+
+#11
+@stem
+设 $\begin{cases}x=\sin t,\\ y=t\sin t+\cos t\end{cases}$（$t$ 为参数），则 $\left.\dfrac{d^2y}{dx^2}\right|_{t=\frac\pi4}=$ ______.
+@ans $\sqrt2$
+@tpl T参数方程二阶导
+::read
+「参数方程求二阶导」 >> {{圈|二阶导 = 一阶导对 $t$ 求导，再除一次 $x'(t)$}}（[[T参数方程二阶导]]、[[参数方程求导]]）——最常见的错是「对 $t$ 求导后忘了再除」
+「$y=t\sin t+\cos t$」 >> $y'(t)=\sin t+t\cos t-\sin t=t\cos t$：$\sin t$ {{波|抵消}}——命题人设计好的
+「$x=\sin t$」 >> $x'(t)=\cos t$ ⟹ $\frac{dy}{dx}=\frac{t\cos t}{\cos t}=t$，一阶导化简成 $t$，二阶导立刻是 $\frac{1}{\cos t}$
+::sk 330 190 看 | 曲线 $x=\sin t,\ y=t\sin t+\cos t$：在 $t=\frac\pi4$ 处切线斜率 $=t=\frac\pi4$，曲线向上弯（$y''=\sqrt2\gt0$）
+ox,oy=165,182;X=lambda x:ox+x*140;Y=lambda y:oy-y*100
+s.axes(ox,oy,14,322,190,8,xl='x',yl='y')
+pts=[(X(math.sin(t)),Y(t*math.sin(t)+math.cos(t))) for t in [-1.4+0.2*i for i in range(15)]]
+s.curve(pts,'k',1.35)
+t0=math.pi/4;x0,y0=math.sin(t0),t0*math.sin(t0)+math.cos(t0)
+s.dot(X(x0),Y(y0),2.8,'r')
+s.line(X(x0-0.45),Y(y0-0.45*t0),X(x0+0.25),Y(y0+0.25*t0),'r',1.0,dash='4 3')
+s.text(X(x0)+8,Y(y0)+16,'t=π/4：(√2/2, √2/2·(1+π/4))',10,'r')
+s.text(X(-0.95),Y(1.62),'dy/dx = t',11,'b')
+s.text(X(0),Y(1)+16,'t=0',10,'p','middle');s.dot(X(0),Y(1),2.2,'p')
+::think
+1. $\frac{dy}{dt}=t\cos t$，$\frac{dx}{dt}=\cos t$ ⟹ $\frac{dy}{dx}=t$。
+2. $\frac{d^2y}{dx^2}=\frac{\frac{d}{dt}(t)}{\frac{dx}{dt}}=\frac1{\cos t}$。
+3. $t=\frac\pi4$：$\frac1{\cos\frac\pi4}=\sqrt2$。
+::fast
+{{秒|先化简再求导}}：$\frac{dy}{dx}=t$ 一出来，$\frac{d^2y}{dx^2}=\frac{1}{x'(t)}=\frac1{\cos t}$，代 $\frac\pi4$ 得 $\sqrt2$。
+::steps
+$\dfrac{dx}{dt}=\cos t$；$\dfrac{dy}{dt}=(\sin t+t\cos t)-\sin t=t\cos t$（乘积求导，$\sin t$ 两项抵消）。
+一阶导（[[参数方程求导]]）：$\dfrac{dy}{dx}=\dfrac{dy/dt}{dx/dt}=\dfrac{t\cos t}{\cos t}=t$（$t=\frac\pi4$ 附近 $\cos t\ne0$）。
+二阶导：把 $\frac{dy}{dx}=t$ 看成 $t$ 的函数，对 $x$ 求导要先对 $t$ 求导、再除以 $\frac{dx}{dt}$（[[T参数方程二阶导]]）：
+$$\frac{d^2y}{dx^2}=\frac{\frac{d}{dt}\left(\frac{dy}{dx}\right)}{\frac{dx}{dt}}=\frac{1}{\cos t}.$$
+代入 $t=\frac\pi4$：$\dfrac{1}{\cos\frac\pi4}=\dfrac{1}{\frac{\sqrt2}2}=\sqrt2$。
+::note
+- {{扣|二阶导写成 $\frac{d}{dt}\left(\frac{dy}{dx}\right)=1$}}：忘了除以 $x'(t)$，填 1——这是本题最大的坑。
+- {{扣|用公式 $\frac{y''x'-x''y'}{x'^3}$ 硬算}}：也对，但要算 $y''(t)=\cos t-t\sin t$、$x''=-\sin t$，在 $\frac\pi4$ 处代入 $\frac{(\cos t-t\sin t)\cos t+\sin t\cdot t\cos t}{\cos^3t}=\frac{1}{\cos t}$，绕远路且容易错号。
+- 一阶导先化简（本题化成 $t$）再求导，是参数方程题的标准提速。
+::vary
+同题求 $t=\frac\pi3$ 处的二阶导 >> $\frac1{\cos\frac\pi3}=2$
+$x=\cos t$，$y=t\cos t-\sin t$，求 $\frac{d^2y}{dx^2}$ >> $\frac{dy}{dt}=-t\sin t$，$\frac{dx}{dt}=-\sin t$ ⟹ $\frac{dy}{dx}=t$ ⟹ $\frac{d^2y}{dx^2}=\frac{1}{-\sin t}=-\frac1{\sin t}$
+同题曲线在 $t=\frac\pi4$ 处的切线方程 >> 斜率 $\frac\pi4$，切点 $\left(\frac{\sqrt2}2,\frac{\sqrt2}2(1+\frac\pi4)\right)$
+同题曲线在 $-\frac\pi2\lt t\lt\frac\pi2$ 上的凹凸性 >> $\frac{d^2y}{dx^2}=\frac1{\cos t}\gt0$，处处凹（向上弯）
+
+#12
+@stem
+$\displaystyle\int_1^{+\infty}\frac{\ln x}{(1+x)^2}\,dx=$ ______.
+@ans $\ln2$
+@tpl T分部反对幂
+::read
+「$\int_1^{+\infty}$」 >> 无穷限反常积分（[[反常积分]]）：先求原函数，再取极限；$\ln x$ 增长远慢于 $(1+x)^2$，收敛没悬念
+「$\ln x\cdot\frac{1}{(1+x)^2}$」 >> 对数 × 有理函数 ⟹ {{圈|分部积分，$\ln x$ 留着求导}}（[[T分部反对幂]]）；$\frac1{(1+x)^2}$ 的原函数是 $-\frac1{1+x}$
+「原函数选哪一个」 >> $\frac1{(1+x)^2}$ 的原函数可以加常数：选 $-\frac1{1+x}$ 让 $x\to+\infty$ 那端的边界项 {{波|$\to0$}}；若选 $\frac{x}{1+x}$，无穷远处 $\ln x\cdot\frac x{1+x}\to\infty$，拆不开
+::sk 340 170 看 | 被积函数 $\frac{\ln x}{(1+x)^2}$：从 $x=1$ 的 0 起，涨到约 $x\approx3.6$ 后慢慢回落，面积（灰）$=\ln2$
+ox,oy=20,150;X=lambda x:ox+x*24;Y=lambda y:oy-y*1800
+s.axes(ox,oy,10,335,162,8,xl='x',yl='')
+g=lambda x:math.log(x)/(1+x)**2
+s.hatch([(X(1),oy)]+[(X(1+i*0.5),Y(g(1+i*0.5))) for i in range(25)]+[(X(13),oy)],7,'g',0.6)
+s.plot(g,1,13.2,X,Y,n=16)
+s.text(X(1),oy+14,'1',10,'k','middle')
+s.text(X(4.3),Y(g(3.6))+2,'峰值 ≈0.06',10,'p')
+s.text(X(8.5),Y(0.036),'∫ = ln 2',12,'r','middle')
+s.text(X(8.5),Y(0.074),'分部：u=ln x，dv=dx/(1+x)²',10,'b','middle')
+::think
+1. 分部：$\int\frac{\ln x}{(1+x)^2}dx=-\frac{\ln x}{1+x}+\int\frac{dx}{x(1+x)}$。
+2. $\frac1{x(1+x)}=\frac1x-\frac1{1+x}$ ⟹ $\int=\ln\frac{x}{1+x}$。
+3. 原函数 $G(x)=-\frac{\ln x}{1+x}+\ln\frac x{1+x}$；$G(+\infty)=0$，$G(1)=-\ln2$ ⟹ 结果 $\ln2$。
+::fast
+{{秒|倒代换对称}}：$x=\frac1u$ 得 $\int_0^1\frac{-\ln u}{(1+u)^2}du$，所以 $\int_0^{+\infty}\frac{\ln x}{(1+x)^2}dx=0$，所求 $=-\int_0^1\frac{\ln x}{(1+x)^2}dx$，而后者用原函数 $\frac{x}{1+x}$ 一步得 $-\ln2$ ⟹ 答案 $\ln2$。（考场还是直接分部更稳。）
+::steps
+分部积分（[[分部积分]]、[[T分部反对幂]]）：取 $u=\ln x$，$dv=\dfrac{dx}{(1+x)^2}$，$v=-\dfrac1{1+x}$：
+$$\int\frac{\ln x}{(1+x)^2}dx=-\frac{\ln x}{1+x}+\int\frac{1}{1+x}\cdot\frac1x\,dx.$$
+裂项：$\dfrac1{x(1+x)}=\dfrac1x-\dfrac1{1+x}$ ⟹ $\displaystyle\int\frac{dx}{x(1+x)}=\ln x-\ln(1+x)=\ln\frac{x}{1+x}$（$x\ge1$，无需绝对值）。
+所以原函数 $G(x)=-\dfrac{\ln x}{1+x}+\ln\dfrac{x}{1+x}$。
+上限：$x\to+\infty$ 时，$\dfrac{\ln x}{1+x}\to0$（对数比幂慢），$\dfrac{x}{1+x}\to1$ ⟹ $\ln\frac x{1+x}\to0$ ⟹ $G(+\infty)=0$。
+下限：$G(1)=-\dfrac{0}{2}+\ln\dfrac12=-\ln2$。
+$\displaystyle\int_1^{+\infty}\frac{\ln x}{(1+x)^2}dx=G(+\infty)-G(1)=0-(-\ln2)=\ln2$。
+::note
+- {{扣|把两项分开取极限}}：反常积分分部后，若边界项和剩下的积分各自发散（比如选了 $v=\frac{x}{1+x}$），不能拆。选 $v=-\frac1{1+x}$ 就是为了让每一块都收敛。
+- {{扣|裂项后写成 $\ln x-\ln(1+x)$ 再分别代 $+\infty$}}：$\infty-\infty$，必须先合并成 $\ln\frac{x}{1+x}$ 再取极限。
+- 结果为正有道理：被积函数在 $(1,+\infty)$ 上为正。
+::vary
+$\int_0^1\frac{\ln x}{(1+x)^2}dx$ >> 选 $v=\frac{x}{1+x}$（在 0 处为 0，压住 $\ln x$）：$\left[\frac{x\ln x}{1+x}\right]_0^1-\int_0^1\frac{dx}{1+x}=-\ln2$
+$\int_0^{+\infty}\frac{\ln x}{(1+x)^2}dx$ >> 上两题相加 $=0$（也可由 $x\to\frac1x$ 对称直接看出）
+$\int_1^{+\infty}\frac{\ln x}{x^2}dx$ >> 分部：$\left[-\frac{\ln x}{x}\right]_1^{\infty}+\int_1^\infty\frac{dx}{x^2}=0+1=1$
+$\int_1^{+\infty}\frac{\ln x}{1+x^2}dx$ 收敛吗 >> 收敛（被积函数 $\lt\frac{\ln x}{x^2}$）；且 $x\to\frac1x$ 得 $\int_0^{+\infty}\frac{\ln x}{1+x^2}dx=0$
+
+#13
+@stem
+设 $A=(a_{ij})$ 是 3 阶非零矩阵，$|A|$ 为 $A$ 的行列式，$A_{ij}$ 为 $a_{ij}$ 的代数余子式. 若 $a_{ij}+A_{ij}=0\ (i,j=1,2,3)$，则 $|A|=$ ______.
+@ans $-1$
+@tpl T余子式关系
+::read
+「$a_{ij}+A_{ij}=0$」 >> 每个元素等于自己代数余子式的相反数 ⟹ 把 $A_{ij}$ 排成矩阵就是 $-A$ ⟹ {{圈|$A^*=-A^T$}}（伴随矩阵是余子式**转置**着放，[[伴随矩阵]]、[[T余子式关系]]）
+「求 $|A|$」 >> 万能关系 $AA^*=|A|E$ ⟹ $-AA^T=|A|E$，两边取行列式
+「3 阶」 >> $|-AA^T|=(-1)^3|A|^2=-|A|^2$；$||A|E|=|A|^3$
+「非零矩阵」 >> 是用来{{波|排除 $|A|=0$}}的：若 $|A|=0$，则 $AA^T=O$，于是 $A=O$，矛盾
+::sk 340 170 看 | 推理链：条件翻译成矩阵等式 → 取行列式 → 用「非零」排除 0
+s.text(20,26,'a_{ij}=−A_{ij}（全部 i, j）',12,'k')
+s.arrow(60,34,60,52,'k',1.0)
+s.text(20,68,'A* = −Aᵀ（A* 第 i 行第 j 列放 A_{ji}）',12,'k')
+s.arrow(60,76,60,94,'k',1.0)
+s.text(20,110,'AA* = |A|E ⟹ −AAᵀ = |A|E',12,'k')
+s.arrow(60,118,60,136,'k',1.0)
+s.text(20,152,'取行列式：−|A|² = |A|³ ⟹ |A|=0 或 −1',12,'k')
+s.text(250,60,'|A|=0 ⟹ AAᵀ=O',11,'r','middle')
+s.text(250,80,'⟹ 对角元 Σa²=0 ⟹ A=O',11,'r','middle')
+s.text(250,100,'与「非零」矛盾',11,'r','middle')
+s.text(300,152,'⟹ |A| = −1',13,'r','middle')
+::think
+1. $a_{ij}=-A_{ij}$ ⟹ $A^*=(A_{ji})=(-a_{ji})=-A^T$。
+2. $AA^*=|A|E$ ⟹ $-AA^T=|A|E$ ⟹ 取行列式 $-|A|^2=|A|^3$ ⟹ $|A|^2(|A|+1)=0$。
+3. $A\ne O$ ⟹ $|A|\ne0$ ⟹ $|A|=-1$。
+::fast
+{{秒|按一行展开}}：$|A|=a_{11}A_{11}+a_{12}A_{12}+a_{13}A_{13}=-(a_{11}^2+a_{12}^2+a_{13}^2)\le0$，且某一行非零（$A\ne O$）⟹ $|A|\lt0$；再由 $|A^*|=|A|^2$ 与 $|A^*|=|-A^T|=-|A|$ 得 $|A|^2=-|A|$ ⟹ $|A|=-1$。
+::steps
+伴随矩阵 $A^*$ 的第 $i$ 行第 $j$ 列元素是 $A_{ji}$（[[伴随矩阵]]）。由 $A_{ji}=-a_{ji}$：$A^*=(A_{ji})=(-a_{ji})=-A^T$。
+代入 $AA^*=|A|E$：$A(-A^T)=|A|E$，即 $AA^T=-|A|E$。  (1)
+两边取行列式：$|AA^T|=|A|\cdot|A^T|=|A|^2$；$|-|A|E|=(-|A|)^3=-|A|^3$ ⟹ $|A|^2=-|A|^3$ ⟹ $|A|^2(1+|A|)=0$ ⟹ $|A|=0$ 或 $|A|=-1$。
+排除 $|A|=0$：若 $|A|=0$，由 (1) $AA^T=O$；$AA^T$ 的第 $i$ 个对角元是 $a_{i1}^2+a_{i2}^2+a_{i3}^2$，都为 0 ⟹ 所有 $a_{ij}=0$，$A=O$，与「非零矩阵」矛盾。
+  {{省|（更快：由按行展开 $|A|=\sum_ja_{1j}A_{1j}=-\sum_ja_{1j}^2$；选一非零行展开即得 $|A|\lt0$。）}}
+所以 $|A|=-1$。
+::note
+- {{扣|写成 $A^*=-A$}}：伴随矩阵要转置，$A^*=-A^T$；本题取行列式时转置不影响结果，但写进卷面就是错。
+- {{扣|算到 $|A|^2(1+|A|)=0$ 就填 $0$ 或 $-1$}}：「非零矩阵」就是给你排除 0 用的，这一步是题眼。
+- 由 (1) 还能得到更多：$AA^T=E$ ⟹ $A$ 是**正交矩阵**且 $|A|=-1$（如 $A=-E$ 就满足条件：$a_{ii}=-1$，$A_{ii}=1$）。
+::vary
+若条件改为 $a_{ij}=A_{ij}$（$A$ 为 3 阶非零矩阵） >> $A^*=A^T$，$AA^T=|A|E$，$|A|^2=|A|^3$ ⟹ $|A|=1$
+同题求 $A^{-1}$ >> $AA^T=E$ ⟹ $A^{-1}=A^T$（$A$ 是正交矩阵）
+若改为 4 阶非零矩阵、$a_{ij}+A_{ij}=0$ >> $AA^T=-|A|E$，对角元 $\sum_ja_{ij}^2=-|A|$ 且某行非零 ⟹ $|A|\lt0$；取行列式 $|A|^2=|A|^4$ ⟹ $|A|=-1$
+举一个满足 $a_{ij}+A_{ij}=0$ 的具体矩阵 >> $A=-E$；或 $A=-Q$，$Q$ 为任一行列式为 1 的正交矩阵
+
+#14
+@stem
+设随机变量 $Y$ 服从参数为 1 的指数分布，$a$ 为常数且大于零，则 $P\{Y\le a+1\mid Y\gt a\}=$ ______.
+@ans $1-e^{-1}$
+@tpl T条件概率化无条件
+::read
+「$Y$ 服从参数为 1 的指数分布」 >> $f(y)=e^{-y}$（$y\gt0$），$P\{Y\gt y\}=e^{-y}$（[[指数分布]]）
+「$P\{Y\le a+1\mid Y\gt a\}$」 >> 指数分布 + 条件「已经超过 $a$」⟹ {{圈|无记忆性}}：等于 $P\{Y\le1\}$（[[无记忆性]]）
+「$a\gt0$」 >> 结果与 $a$ 无关——这正是无记忆性的样子；若算出含 $a$ 的式子就是算错了
+::sk 340 170 画 | 指数密度 $e^{-y}$：$(a,a+1]$ 那一条（红）占 $y\gt a$ 部分（灰+红）的比例，和 $(0,1]$ 占全部的比例一样
+ox,oy=24,150;X=lambda x:ox+x*70;Y=lambda y:oy-y*125
+s.axes(ox,oy,10,335,162,8,xl='y',yl='')
+g=lambda y:math.exp(-y)
+a=1.5
+s.hatch([(X(a),oy)]+[(X(a+i*0.1),Y(g(a+i*0.1))) for i in range(11)]+[(X(a+1),oy)],5,'r',0.8)
+s.hatch([(X(a+1),oy)]+[(X(a+1+i*0.2),Y(g(a+1+i*0.2))) for i in range(10)]+[(X(4.4),oy)],8,'g',0.6)
+s.plot(g,0,4.4,X,Y,n=14)
+s.line(X(a),oy,X(a),Y(g(a)),'p',0.9,dash='3 3');s.line(X(a+1),oy,X(a+1),Y(g(a+1)),'p',0.9,dash='3 3')
+s.text(X(a),oy+14,'a',11,'k','middle');s.text(X(a+1),oy+14,'a+1',11,'k','middle')
+s.text(X(0.15),Y(1.02),'e^{−y}',11,'k')
+s.text(X(2.5),Y(0.7),'(e^{−a}−e^{−a−1})/e^{−a} = 1−e^{−1}',10,'r','middle')
+::think
+1. $P\{Y\le a+1\mid Y\gt a\}=\dfrac{P\{a\lt Y\le a+1\}}{P\{Y\gt a\}}$。
+2. 分子 $e^{-a}-e^{-(a+1)}$，分母 $e^{-a}$ ⟹ $1-e^{-1}$。
+::fast
+{{秒|无记忆性}}：$=P\{Y\le1\}=1-e^{-1}$，一步。
+::steps
+$Y\sim E(1)$：分布函数 $F(y)=1-e^{-y}$（$y\ge0$），$P\{Y\gt y\}=e^{-y}$（[[指数分布]]）。
+由条件概率定义（[[条件概率]]）：$P\{Y\le a+1\mid Y\gt a\}=\dfrac{P\{Y\le a+1,\ Y\gt a\}}{P\{Y\gt a\}}=\dfrac{P\{a\lt Y\le a+1\}}{P\{Y\gt a\}}$。
+分子：$F(a+1)-F(a)=\left(1-e^{-(a+1)}\right)-\left(1-e^{-a}\right)=e^{-a}-e^{-(a+1)}$。
+分母：$1-F(a)=e^{-a}$。
+相除：$\dfrac{e^{-a}-e^{-a-1}}{e^{-a}}=1-e^{-1}$。
+::note
+- {{扣|写成 $P\{Y\le a+1\}=1-e^{-(a+1)}$}}：忘了条件。条件概率一律先化成「交 ÷ 条件」。
+- 无记忆性可以直接用，但填空题之外的大题里要写出上面的定义式推导，别只写「由无记忆性」。
+- 「参数为 1」：本书记号 $E(\lambda)$ 中 $\lambda$ 是率参数，$EY=\frac1\lambda=1$；若题目说「均值为 $\theta$」则 $\lambda=\frac1\theta$。
+::vary
+$Y\sim E(\lambda)$，求 $P\{Y\le a+2\mid Y\gt a\}$ >> $1-e^{-2\lambda}$
+同题求 $E(Y\mid Y\gt a)$ >> $a+1$（条件分布是原分布右移 $a$）
+$Y\sim E(1)$，求 $P\{Y\gt 2a\mid Y\gt a\}$ >> $\frac{e^{-2a}}{e^{-a}}=e^{-a}$（这次「再活」的长度是 $a$，结果才含 $a$）
+若 $Y\sim U(0,3)$，$a=1$，求 $P\{Y\le2\mid Y\gt1\}$ >> $\frac{1/3}{2/3}=\frac12\ne P\{Y\le1\}=\frac13$：均匀分布没有无记忆性
+
+#15
+@stem
+（本题满分 10 分）计算 $\displaystyle\int_0^1\frac{f(x)}{\sqrt x}\,dx$，其中 $f(x)=\displaystyle\int_1^x\frac{\ln(t+1)}{t}\,dt$.
+@tpl T变限积分被积, T根式整体换元, T分部反对幂
+::read
+「$f(x)=\int_1^x\frac{\ln(t+1)}t\,dt$」 >> 变限积分，原函数不是初等函数（$\frac{\ln(1+t)}t$ 积不出来）⟹ {{圈|别想先把 $f$ 求出来}}；能用的只有 $f'(x)=\frac{\ln(1+x)}{x}$ 和 $f(1)=0$（[[变限积分求导]]）
+「下限是 1」 >> $f(1)=0$：分部积分时 $x=1$ 那端的边界项会自动消失——命题人特意选的
+「$\int_0^1\frac{f(x)}{\sqrt x}dx$」 >> 被积函数里含变限积分 ⟹ {{波|分部积分，让 $f$ 去求导}}，$\frac1{\sqrt x}$ 去积分成 $2\sqrt x$（[[T变限积分被积]]）
+「$\frac1{\sqrt x}$，下限 0」 >> $x=0$ 是瑕点：边界项 $2\sqrt xf(x)$ 在 $0^+$ 处要取极限；$f(0^+)$ 有限吗？$\frac{\ln(1+t)}t\to1$（$t\to0$），被积函数在 $[0,1]$ 上有界 ⟹ $f(0)$ 有限 ⟹ 边界项 $\to0$
+「求导后出现 $\frac{\ln(1+x)}{\sqrt x}$」 >> 再分部一次（[[T分部反对幂]]）；遇到 $\frac{\sqrt x}{1+x}$ 就令 $\sqrt x=t$（[[T根式整体换元]]）
+::sk 330 200 画 | 换序视角：$f(x)=-\int_x^1\frac{\ln(1+t)}t\,dt$，二重积分的区域是三角形 $0\le x\le t\le1$；先对 $x$ 积分，$\int_0^t\frac{dx}{\sqrt x}=2\sqrt t$
+ox,oy=60,178;U=150;X=lambda x:ox+x*U;Y=lambda y:oy-y*U
+s.axes(ox,oy,30,300,195,10,xl='x',yl='t')
+s.hatch([(X(0),Y(0)),(X(1),Y(1)),(X(0),Y(1))],8,'b',0.7)
+s.line(X(0),Y(0),X(1),Y(1),'k',1.3);s.line(X(0),Y(1),X(1),Y(1),'k',1.3)
+s.line(X(1),oy,X(1),Y(1),'p',0.8,dash='3 3')
+s.text(X(1),oy+14,'1',10,'k','middle');s.text(ox-8,Y(1)+4,'1',10,'k','end')
+s.text(X(0.62),Y(0.5),'t=x',11,'k')
+s.line(X(0.35),Y(0.35),X(0.35),Y(1),'r',1.0,dash='3 2');s.text(X(0.35)+4,Y(0.68),'原序：x 固定，t 从 x 到 1',10,'r')
+s.line(X(0),Y(0.82),X(0.82),Y(0.82),'b',1.0,dash='3 2');s.text(X(0.86),Y(0.82)+4,'换序：t 固定，x 从 0 到 t',10,'b')
+::think
+1. 分部：$\int_0^1\frac{f}{\sqrt x}dx=\left[2\sqrt xf(x)\right]_0^1-2\int_0^1\sqrt x\cdot\frac{\ln(1+x)}{x}dx=-2\int_0^1\frac{\ln(1+x)}{\sqrt x}dx$（$f(1)=0$，$f(0)$ 有限）。
+2. 再分部：$\int_0^1\frac{\ln(1+x)}{\sqrt x}dx=\left[2\sqrt x\ln(1+x)\right]_0^1-2\int_0^1\frac{\sqrt x}{1+x}dx=2\ln2-2\int_0^1\frac{\sqrt x}{1+x}dx$。
+3. 令 $\sqrt x=t$：$\int_0^1\frac{\sqrt x}{1+x}dx=\int_0^1\frac{2t^2}{1+t^2}dt=2-\frac\pi2$。
+4. 合起来：$-2\left[2\ln2-4+\pi\right]=8-2\pi-4\ln2$。
+::steps
+**看清 $f$**：$g(t)=\frac{\ln(1+t)}{t}$ 在 $(0,1]$ 上连续，且 $\lim\limits_{t\to0^+}g(t)=1$ ⟹ $g$ 在 $[0,1]$ 上（补定义后）连续有界 ⟹ $f(x)=\int_1^xg(t)dt$ 在 $[0,1]$ 上连续，$f(0)=-\int_0^1g(t)dt$ 是有限数。
+  $f(1)=0$；$x\in(0,1]$ 时 $f'(x)=\dfrac{\ln(1+x)}{x}$（[[变限积分求导]]）。
+**第一次分部**（[[T变限积分被积]]）：$u=f(x)$，$dv=\frac{dx}{\sqrt x}$，$v=2\sqrt x$。$x=0$ 是瑕点，按反常积分在 $[\varepsilon,1]$ 上做再令 $\varepsilon\to0^+$：
+$$\int_0^1\frac{f(x)}{\sqrt x}dx=\Big[2\sqrt x\,f(x)\Big]_{0^+}^{1}-\int_0^12\sqrt x\cdot\frac{\ln(1+x)}{x}dx.$$
+  上端 $2\cdot1\cdot f(1)=0$；下端 $\lim\limits_{x\to0^+}2\sqrt xf(x)=0\cdot f(0)=0$ ⟹ 边界项为 0。
+  $2\sqrt x\cdot\frac{\ln(1+x)}{x}=\frac{2\ln(1+x)}{\sqrt x}$ ⟹ 原式 $=-2\displaystyle\int_0^1\frac{\ln(1+x)}{\sqrt x}dx$。  (1)
+**第二次分部**（[[T分部反对幂]]，$\ln$ 留着求导）：$u=\ln(1+x)$，$dv=\frac{dx}{\sqrt x}$，$v=2\sqrt x$：
+$$\int_0^1\frac{\ln(1+x)}{\sqrt x}dx=\Big[2\sqrt x\ln(1+x)\Big]_0^1-\int_0^1\frac{2\sqrt x}{1+x}dx=2\ln2-2\int_0^1\frac{\sqrt x}{1+x}dx.\quad(2)$$
+  （这一步 $\frac{\ln(1+x)}{\sqrt x}\sim\sqrt x\to0$，其实不是瑕积分。）
+**换元**（[[T根式整体换元]]）：令 $\sqrt x=t$，$x=t^2$，$dx=2t\,dt$，$x:0\to1$ 对应 $t:0\to1$：
+$$\int_0^1\frac{\sqrt x}{1+x}dx=\int_0^1\frac{t}{1+t^2}\cdot2t\,dt=2\int_0^1\left(1-\frac{1}{1+t^2}\right)dt=2\left(1-\frac\pi4\right)=2-\frac\pi2.\quad(3)$$
+**回代**：(3) 代入 (2)：$2\ln2-2\left(2-\frac\pi2\right)=2\ln2-4+\pi$；再代入 (1)：
+$$\int_0^1\frac{f(x)}{\sqrt x}dx=-2(2\ln2-4+\pi)=8-2\pi-4\ln2.$$
+~核对符号：$x\in(0,1)$ 时 $f(x)=-\int_x^1g\lt0$，所以结果应为负；$8-2\pi-4\ln2\approx8-6.283-2.773=-1.056\lt0$ ✓。
+~另法（换序，[[T换序先画域]]）：$\int_0^1\frac{f(x)}{\sqrt x}dx=-\int_0^1\frac{dx}{\sqrt x}\int_x^1g(t)dt=-\int_0^1g(t)dt\int_0^t\frac{dx}{\sqrt x}=-\int_0^1\frac{\ln(1+t)}{t}\cdot2\sqrt t\,dt$，与 (1) 相同。
+::paper
+解　记 $g(t)=\dfrac{\ln(1+t)}{t}$. 因 $\lim\limits_{t\to0^+}g(t)=1$，$g$ 在 $(0,1]$ 上连续有界，故 $f(x)$ 在 $[0,1]$ 上连续，$f(1)=0$，且 $f'(x)=\dfrac{\ln(1+x)}{x}\ (0\lt x\le1)$. ⛳1
+由分部积分，
+$$\int_0^1\frac{f(x)}{\sqrt x}dx=\Big[2\sqrt x\,f(x)\Big]_{0^+}^{1}-2\int_0^1\sqrt x\,f'(x)\,dx=-2\int_0^1\frac{\ln(1+x)}{\sqrt x}dx,\qquad(1)$$
+其中 $f(1)=0$，$\lim\limits_{x\to0^+}\sqrt xf(x)=0$. ⛳3
+再分部积分，
+$$\int_0^1\frac{\ln(1+x)}{\sqrt x}dx=\Big[2\sqrt x\ln(1+x)\Big]_0^1-2\int_0^1\frac{\sqrt x}{1+x}dx=2\ln2-2\int_0^1\frac{\sqrt x}{1+x}dx.\qquad(2)$$ ⛳2
+令 $\sqrt x=t$，则
+$$\int_0^1\frac{\sqrt x}{1+x}dx=\int_0^1\frac{2t^2}{1+t^2}dt=2\int_0^1\left(1-\frac1{1+t^2}\right)dt=2-\frac\pi2.\qquad(3)$$ ⛳2
+将 (3) 代入 (2)、再代入 (1)，得
+$$\int_0^1\frac{f(x)}{\sqrt x}dx=-2\left(2\ln2-4+\pi\right)=8-2\pi-4\ln2.$$ ⛳2
+::note
+- {{扣|边界项 $[2\sqrt xf(x)]_0^1$ 不交代下端}}：$x=0$ 是 $\frac1{\sqrt x}$ 的瑕点，下端是 $\lim\limits_{x\to0^+}$，要说明 $f(0)$ 有限（因为 $\frac{\ln(1+t)}t\to1$）。原书解析直接写 $2\sqrt xf(x)\big|_0^1$ 省掉了这一句，卷面上补一句更稳。
+- {{扣|分部时把 $f$ 放进 $dv$}}：$f$ 的原函数求不出来，必须让 $f$ 求导。口诀：**变限积分永远站在 $u$ 那一边**。
+- 提速：$\int_0^1\frac{t^2}{1+t^2}dt=1-\frac\pi4$ 背下来；$\int_0^1\frac{dt}{1+t^2}=\frac\pi4$。
+- 跨章：同一题用「换序」做就是二重积分题（第 25 期），区域是三角形 $0\le x\le t\le1$——两种方法互相验算。
+::vary
+设 $f(x)=\int_1^xe^{t^2}dt$，求 $\int_0^1f(x)dx$ >> 分部：$[xf]_0^1-\int_0^1xe^{x^2}dx=0-\frac{e-1}2=\frac{1-e}2$
+设 $f(x)=\int_1^x\frac{\sin t}{t}dt$，求 $\int_0^1f(x)dx$ >> $[xf]_0^1-\int_0^1\sin x\,dx=\cos1-1$
+若本题 $f(x)=\int_x^1\frac{\ln(1+t)}t\,dt$（上下限对调） >> $f$ 变号，结果 $2\pi+4\ln2-8$
+设 $f(x)=\int_0^x\frac{\ln(1+t)}t\,dt$（下限改 0），求 $\int_0^1\frac{f(x)}{\sqrt x}dx$ >> 此时边界项在 $x=1$ 不为 0：$=2f(1)-2\int_0^1\frac{\ln(1+x)}{\sqrt x}dx=2f(1)+8-2\pi-4\ln2$，而 $f(1)=\frac{\pi^2}{12}$ ⟹ $\frac{\pi^2}6+8-2\pi-4\ln2$
+
+#16
+@stem
+（本题满分 10 分）设数列 $\{a_n\}$ 满足条件：$a_0=3$，$a_1=1$，$a_{n-2}-n(n-1)a_n=0\ (n\ge2)$，$S(x)$ 是幂级数 $\displaystyle\sum_{n=0}^{\infty}a_nx^n$ 的和函数.
+(I) 证明 $S''(x)-S(x)=0$；
+(II) 求 $S(x)$ 的表达式.
+@tpl T递推求和函数, T凑已知展开
+::read
+「$a_{n-2}-n(n-1)a_n=0$」 >> $n(n-1)a_n$ 正是 $S''$ 的系数：$S''=\sum n(n-1)a_nx^{n-2}$ ⟹ 递推翻译成 $S''$ 的系数 $=a_{n-2}$，下标一挪就是 $S$ 本身（[[T递推求和函数]]）
+「$S(x)$ 是和函数」 >> 要对幂级数逐项求导，{{圈|先得知道收敛域}}——这一步原书没写，卷面要补（[[阿贝尔定理]]、[[幂级数收敛域]]）
+「$a_0=3$，$a_1=1$」 >> 二阶方程要两个初值：$S(0)=a_0=3$、$S'(0)=a_1=1$——{{波|初值就是前两个系数}}
+「证明 $S''-S=0$，再求 $S$」 >> 二阶常系数齐次方程（[[特征方程]]）：$r^2-1=0$
+::sk 360 160 列 | 把递推一步步推开：每次「隔一项、除以 $n(n-1)$」，偶数项是 $\frac{3}{n!}$、奇数项是 $\frac1{n!}$ ⟹ $3\cosh x+\sinh x$
+s.cells(14,20,[['n','0','1','2','3','4','5'],['aₙ','!3','!1','3/2','1/6','1/8','1/120'],['=','3/0!','1/1!','3/2!','1/3!','3/4!','1/5!']],cw=[34,40,40,46,46,46,52],ch=26,size=12)
+s.text(180,116,'aₙ = aₙ₋₂ ÷ n(n−1)：隔一项、除以 n(n−1)',11,'b','middle')
+s.text(180,140,'S = 3cosh x + sinh x = 2eˣ + e⁻ˣ',12,'r','middle')
+::think
+1. 先定收敛域：$a_{2k}=\frac{3}{(2k)!}$、$a_{2k+1}=\frac1{(2k+1)!}$ ⟹ $|a_n|\le\frac3{n!}$ ⟹ 全实轴收敛，可逐项求导。
+2. $S''=\sum_{n\ge2}n(n-1)a_nx^{n-2}=\sum_{n\ge2}a_{n-2}x^{n-2}=\sum_{m\ge0}a_mx^m=S$。
+3. $S=C_1e^x+C_2e^{-x}$，$S(0)=3$、$S'(0)=1$ ⟹ $C_1=2$、$C_2=1$。
+::fast
+{{秒|直接认展开}}：$a_{2k}=\frac3{(2k)!}$、$a_{2k+1}=\frac1{(2k+1)!}$ ⟹ $S=3\sum\frac{x^{2k}}{(2k)!}+\sum\frac{x^{2k+1}}{(2k+1)!}=3\cosh x+\sinh x=2e^x+e^{-x}$（[[T凑已知展开]]、[[cos展开]]）——(II) 的答案可以拿来验算。
+::steps
+**收敛域**：由递推 $a_n=\dfrac{a_{n-2}}{n(n-1)}$（$n\ge2$），从 $a_0=3$ 得 $a_2=\frac3{2\cdot1}$，$a_4=\frac{a_2}{4\cdot3}=\frac{3}{4!}$……归纳得 $a_{2k}=\dfrac{3}{(2k)!}$；从 $a_1=1$ 得 $a_{2k+1}=\dfrac{1}{(2k+1)!}$。
+  于是 $0\lt a_n\le\dfrac{3}{n!}$；$\sum\frac{3|x|^n}{n!}=3e^{|x|}$ 对一切 $x$ 收敛 ⟹ 由比较判别法，$\sum a_nx^n$ 对一切 $x$ 绝对收敛，收敛域 $(-\infty,+\infty)$（[[幂级数收敛域]]）。
+  幂级数在收敛区间内可逐项求导任意次，且收敛半径不变。
+**(I)** 逐项求导两次：
+$$S'(x)=\sum_{n=1}^\infty na_nx^{n-1},\qquad S''(x)=\sum_{n=2}^{\infty}n(n-1)a_nx^{n-2}.$$
+  由条件 $n(n-1)a_n=a_{n-2}$（$n\ge2$）：$S''(x)=\displaystyle\sum_{n=2}^\infty a_{n-2}x^{n-2}$。
+  令 $m=n-2$（$n=2$ 时 $m=0$）：$S''(x)=\displaystyle\sum_{m=0}^\infty a_mx^m=S(x)$ ⟹ $S''(x)-S(x)=0$。
+**(II)** 特征方程 $r^2-1=0$，$r=\pm1$ ⟹ $S(x)=C_1e^x+C_2e^{-x}$（[[特征方程]]）。
+  初值：$S(0)=a_0=3$；$S'(0)=1\cdot a_1=1$（$S'$ 的常数项是 $a_1$）。
+  $\begin{cases}C_1+C_2=3\\C_1-C_2=1\end{cases}$ ⟹ $C_1=2$，$C_2=1$。
+  所以 $S(x)=2e^x+e^{-x}$，$x\in(-\infty,+\infty)$。
+~验算：$2e^x+e^{-x}=3\cdot\frac{e^x+e^{-x}}2+\frac{e^x-e^{-x}}2=3\cosh x+\sinh x$，偶数项系数 $\frac3{(2k)!}$、奇数项 $\frac1{(2k+1)!}$，与递推一致 ✓。
+::paper
+解　(I) 由 $a_n=\dfrac{a_{n-2}}{n(n-1)}\ (n\ge2)$ 及 $a_0=3$，$a_1=1$，归纳得 $a_{2k}=\dfrac{3}{(2k)!}$，$a_{2k+1}=\dfrac1{(2k+1)!}$，故 $0\lt a_n\le\dfrac3{n!}$. 因 $\sum\limits_{n=0}^\infty\dfrac{3|x|^n}{n!}$ 对一切 $x$ 收敛，由比较判别法知幂级数 $\sum a_nx^n$ 的收敛域为 $(-\infty,+\infty)$，在其内可逐项求导. ⛳2
+$$S''(x)=\sum_{n=2}^\infty n(n-1)a_nx^{n-2}\qquad(1)$$ ⛳1
+由 $n(n-1)a_n=a_{n-2}$，(1) 式化为
+$$S''(x)=\sum_{n=2}^\infty a_{n-2}x^{n-2}=\sum_{n=0}^\infty a_nx^n=S(x),$$ ⛳2
+即 $S''(x)-S(x)=0$.
+(II) $S''-S=0$ 的特征方程 $r^2-1=0$ 的根为 $r=\pm1$，故 $S(x)=C_1e^x+C_2e^{-x}$. ⛳2
+由 $S(0)=a_0=3$，$S'(0)=a_1=1$，得 $C_1+C_2=3$，$C_1-C_2=1$，解得 $C_1=2$，$C_2=1$. ⛳2
+所以 $S(x)=2e^x+e^{-x}$，$x\in(-\infty,+\infty)$. ⛳1
+::note
+- {{扣|不说收敛域就逐项求导}}：逐项求导只在收敛区间内成立，这是 (I) 的前提。原书解析直接写「由逐项可导性」，没交代收敛半径；卷面上补「$|a_n|\le\frac3{n!}$ ⟹ $R=+\infty$」一句（或用 $\frac{a_n}{a_{n-2}}=\frac1{n(n-1)}\to0$ 说明奇、偶两部分都处处收敛）。
+- {{扣|$S'(0)$ 写成 0}}：$S'(x)=a_1+2a_2x+\cdots$，常数项是 $a_1=1$。
+- {{扣|下标平移时起点写错}}：$n=2$ 对应 $m=0$，平移后求和从 0 开始，正好是整个 $S$。
+- 最后一行写上 $x\in(-\infty,+\infty)$——和函数要带定义域。
+::vary
+若递推改为 $a_{n-1}=na_n\ (n\ge1)$，$a_0=2$ >> $S'=\sum na_nx^{n-1}=\sum a_{n-1}x^{n-1}=S$ ⟹ $S=2e^x$
+若递推改为 $a_{n-2}+n(n-1)a_n=0$，$a_0=1$，$a_1=0$ >> $S''=-S$，$S(0)=1$、$S'(0)=0$ ⟹ $S=\cos x$
+若 $a_0=a_1=1$，其余不变 >> $C_1+C_2=1$、$C_1-C_2=1$ ⟹ $S=e^x$（此时 $a_n=\frac1{n!}$）
+本题求 $\sum\limits_{n=0}^\infty a_n$ >> $S(1)=2e+e^{-1}$
+
+#17
+@stem
+（本题满分 10 分）求函数 $f(x,y)=\left(y+\dfrac{x^3}{3}\right)e^{x+y}$ 的极值.
+@tpl T二元极值
+::read
+「求极值」，$f$ 在全平面可微 >> 无条件极值：驻点 → $A,B,C$ → $AC-B^2$（[[T二元极值]]、[[二元极值充分条件]]）；可微函数没有不可导点，极值只能在驻点
+「$\left(y+\frac{x^3}3\right)e^{x+y}$」 >> 「多项式 × $e^{x+y}$」：求偏导后 $e^{x+y}$ 是公因子、永不为 0 ⟹ {{圈|驻点方程里直接约掉}}
+「$e^{x+y}$ 对 $x$、对 $y$ 求导都出它自己」 >> $f_x$、$f_y$ 结构相同：$(\text{括号对该变量求导}+\text{括号})e^{x+y}$，两式一减消掉 $y$
+「极值」 >> {{波|每个驻点都要判}}，判出「不是极值」的那个也要写结论
+::sk 340 215 看 | 两条驻点曲线 $f_x=0$（红）与 $f_y=0$（蓝）交于 $x=\pm1$；黑线 $y=-\frac{x^3}3$ 是 $f=0$ 的分界，上方 $f\gt0$、下方 $f\lt0$
+ox,oy=180,90;X=lambda x:ox+x*70;Y=lambda y:oy-y*28
+s.axes(ox,oy,20,330,208,10,xl='x',yl='y')
+s.plot(lambda x:-x**3/3,-2.25,1.65,X,Y,n=12,c='k')
+s.plot(lambda x:-x*x-x**3/3,-2.25,1.45,X,Y,n=12,c='r')
+s.plot(lambda x:-1-x**3/3,-2.2,1.6,X,Y,n=12,c='b')
+s.dot(X(1),Y(-4/3),3,'r');s.dot(X(-1),Y(-2/3),3,'p')
+s.text(X(1)-10,Y(-4/3)+18,'(1,−4/3) 极小',10,'r','end')
+s.text(X(-1)-6,Y(-2/3)+16,'(−1,−2/3) 鞍点',10,'p','end')
+s.text(X(-2.2),Y(2.4),'f_{y}=0：y=−1−x³/3',10,'b')
+s.text(X(0.25),Y(-3.6),'f_{x}=0：y=−x²−x³/3',10,'r')
+s.text(X(-2.25),Y(1.0)+4,'f=0',10,'k')
+s.text(X(0.9),Y(0.9),'f＞0',10,'k');s.text(X(-0.4),Y(-1.9),'f＜0',10,'k')
+::think
+1. $f_x=\left(x^2+y+\frac{x^3}3\right)e^{x+y}$，$f_y=\left(1+y+\frac{x^3}3\right)e^{x+y}$。
+2. 两式（约去 $e^{x+y}$）相减：$x^2-1=0$ ⟹ $x=\pm1$，再代回得 $y=-\frac43$、$-\frac23$。
+3. 求 $f_{xx},f_{xy},f_{yy}$，在两点分别判：$(1,-\frac43)$ 极小，$(-1,-\frac23)$ 不是极值。
+::steps
+$f$ 在全平面有任意阶连续偏导，极值点必为驻点（[[极值必要条件]]）。
+一阶偏导（乘积求导，$\left(e^{x+y}\right)_x=\left(e^{x+y}\right)_y=e^{x+y}$）：
+  $f_x=x^2e^{x+y}+\left(y+\frac{x^3}3\right)e^{x+y}=\left(x^2+y+\frac{x^3}3\right)e^{x+y}$；
+  $f_y=1\cdot e^{x+y}+\left(y+\frac{x^3}3\right)e^{x+y}=\left(1+y+\frac{x^3}3\right)e^{x+y}$。
+令 $f_x=f_y=0$，约去 $e^{x+y}\ne0$：$\begin{cases}x^2+y+\frac{x^3}3=0\\1+y+\frac{x^3}3=0\end{cases}$，两式相减 $x^2-1=0$ ⟹ $x=1$ 或 $x=-1$。
+  $x=1$：$y=-1-\frac13=-\frac43$；$x=-1$：$y=-1+\frac13=-\frac23$。驻点 $\left(1,-\frac43\right)$、$\left(-1,-\frac23\right)$。
+二阶偏导（对 $f_x$ 再对 $x$ 求导：括号求导 $2x+x^2$，再加括号本身）：
+  $f_{xx}=\left(2x+2x^2+\frac{x^3}3+y\right)e^{x+y}$，$f_{xy}=\left(1+x^2+\frac{x^3}3+y\right)e^{x+y}$，$f_{yy}=\left(2+y+\frac{x^3}3\right)e^{x+y}$。
+**在 $\left(1,-\frac43\right)$**：$x+y=-\frac13$，$\frac{x^3}3+y=\frac13-\frac43=-1$。
+  $A=(2+2-1)e^{-1/3}=3e^{-1/3}$，$B=(1+1-1)e^{-1/3}=e^{-1/3}$，$C=(2-1)e^{-1/3}=e^{-1/3}$。
+  $AC-B^2=3e^{-2/3}-e^{-2/3}=2e^{-2/3}\gt0$，$A\gt0$ ⟹ 极小值点（[[二元极值充分条件]]），极小值 $f\left(1,-\frac43\right)=\left(-\frac43+\frac13\right)e^{-1/3}=-e^{-1/3}$。
+**在 $\left(-1,-\frac23\right)$**：$x+y=-\frac53$，$\frac{x^3}3+y=-\frac13-\frac23=-1$。
+  $A=(-2+2-1)e^{-5/3}=-e^{-5/3}$，$B=(1+1-1)e^{-5/3}=e^{-5/3}$，$C=(2-1)e^{-5/3}=e^{-5/3}$。
+  $AC-B^2=-e^{-10/3}-e^{-10/3}=-2e^{-10/3}\lt0$ ⟹ 不是极值点。
+结论：$f$ 只有极小值 $-e^{-1/3}$（在 $(1,-\frac43)$ 处取得），没有极大值。
+::paper
+解　$f$ 在全平面具有二阶连续偏导数.
+$$f_x'=\left(x^2+y+\frac{x^3}3\right)e^{x+y},\qquad f_y'=\left(1+y+\frac{x^3}3\right)e^{x+y}.$$ ⛳2
+令 $f_x'=0$，$f_y'=0$，两式相减得 $x^2=1$，解得驻点 $\left(1,-\dfrac43\right)$，$\left(-1,-\dfrac23\right)$. ⛳2
+$$f_{xx}''=\left(2x+2x^2+\frac{x^3}3+y\right)e^{x+y},\ f_{xy}''=\left(1+x^2+\frac{x^3}3+y\right)e^{x+y},\ f_{yy}''=\left(2+y+\frac{x^3}3\right)e^{x+y}.$$ ⛳2
+在 $\left(1,-\dfrac43\right)$ 处，$A=3e^{-\frac13}$，$B=e^{-\frac13}$，$C=e^{-\frac13}$，$AC-B^2=2e^{-\frac23}\gt0$ 且 $A\gt0$，由二元函数极值的充分条件，$\left(1,-\dfrac43\right)$ 是极小值点，极小值为 $f\left(1,-\dfrac43\right)=-e^{-\frac13}$. ⛳2
+在 $\left(-1,-\dfrac23\right)$ 处，$A=-e^{-\frac53}$，$B=e^{-\frac53}$，$C=e^{-\frac53}$，$AC-B^2=-2e^{-\frac{10}3}\lt0$，故 $\left(-1,-\dfrac23\right)$ 不是极值点. ⛳2
+综上，$f(x,y)$ 的极小值为 $-e^{-\frac13}$，无极大值.
+::note
+- {{扣|只判一个驻点}}：$(-1,-\frac23)$ 判出 $AC-B^2\lt0$ 也要写「不是极值点」，否则少 2 分。
+- {{扣|求 $f_{xx}$ 时漏项}}：$\frac{\partial}{\partial x}\left[\left(x^2+y+\frac{x^3}3\right)e^{x+y}\right]=\left(2x+x^2\right)e^{x+y}+\left(x^2+y+\frac{x^3}3\right)e^{x+y}$，$x^2$ 出现两次合成 $2x^2$。
+- 提速：两个驻点处 $\frac{x^3}3+y$ 都等于 $-1$（由 $f_y=0$ 直接读出），代入二阶偏导时先把它换掉，$A,B,C$ 心算即得。
+- {{扣|把极小值说成最小值}}：极小值只是局部的。沿曲线 $y=-\frac{x^3}3-1$ 有 $f=-e^{x-\frac{x^3}3-1}$，取 $x=-3$ 得 $f(-3,8)=-e^5\ll-e^{-1/3}$，$x\to-\infty$ 时 $f\to-\infty$ ⟹ $f$ 根本没有最小值。
+::vary
+求 $f(x,y)=\left(y+\frac{x^2}2\right)e^{x+y}$ 的极值 >> 驻点方程相减 $x-1=0$ ⟹ 唯一驻点 $(1,-\frac32)$；$A=2e^{-1/2}$，$B=C=e^{-1/2}$，$AC-B^2=e^{-1}\gt0$ ⟹ 极小值 $-e^{-1/2}$
+求 $f(x,y)=x^3-3x+y^2$ 的极值 >> 驻点 $(\pm1,0)$：$(1,0)$ 处 $A=6,C=2,B=0$ 极小值 $-2$；$(-1,0)$ 处 $A=-6$，$AC-B^2\lt0$ 非极值
+本题驻点 $(-1,-\frac23)$ 处，沿直线 $y=-\frac23$ 和沿 $x=-1$ 看 $f$ 的变化 >> $f(-1,y)=(y-\frac13)e^{y-1}$，对 $y$ 在 $-\frac23$ 处取极小；$f(x,-\frac23)$ 在 $x=-1$ 处 $f_{xx}=A\lt0$ 取极大 ⟹ 鞍点
+若 $AC-B^2=0$ 怎么办 >> 充分条件失效，回到定义：沿不同路径看 $f-f(P_0)$ 的符号（[[T二元极值]] 第 3 条）
+
+#18
+@stem
+（本题满分 10 分）设奇函数 $f(x)$ 在 $[-1,1]$ 上具有二阶导数，且 $f(1)=1$. 证明：
+(I) 存在 $\xi\in(0,1)$，使得 $f'(\xi)=1$；
+(II) 存在 $\eta\in(-1,1)$，使得 $f''(\eta)+f'(\eta)=1$.
+@tpl T认导数
+::read
+「奇函数」 >> 两条隐藏信息：{{圈|$f(0)=0$}}（$f(-0)=-f(0)$）；{{圈|$f'$ 是偶函数}}（对 $f(-x)=-f(x)$ 求导）（[[奇偶性]]）
+「$[-1,1]$ 上具有二阶导数」 >> $f$、$f'$ 都可导（从而连续）⟹ 对 $f$ 和对含 $f'$ 的函数都能用罗尔、拉格朗日
+「$f(1)=1$」，配上 $f(0)=0$ >> 连接 $(0,0)$ 与 $(1,1)$ 的弦斜率是 1 ⟹ (I) 就是{{波|拉格朗日中值定理}}（[[拉格朗日中值定理]]），或对 $f(x)-x$ 用罗尔
+「$f''(\eta)+f'(\eta)=1$」 >> 改写 $(f'-1)'+(f'-1)=0$：「$g'+g$」= $e^{-x}(e^xg)'$ ⟹ 辅助函数 $F=e^x[f'(x)-1]$（[[T认导数]]）
+「$\eta\in(-1,1)$」，区间对称 >> 要 $F$ 的两个零点：(I) 给了 $f'(\xi)=1$，$f'$ 偶 ⟹ $f'(-\xi)=1$，两个零点 $\pm\xi$ 白送
+::sk 340 210 画 | 奇函数 $f$（黑）过原点和 $(1,1)$、$(-1,-1)$；弦 $y=x$（红）；在 $\pm\xi$ 处切线都平行于弦（$f'$ 是偶函数）
+ox,oy=170,105;U=88;X=lambda x:ox+x*U;Y=lambda y:oy-y*U
+s.axes(ox,oy,40,320,200,10,xl='x',yl='y')
+f=lambda x:x*(1.6-0.6*x*x)
+s.plot(f,-1.12,1.12,X,Y,n=14)
+s.line(X(-1.15),Y(-1.15),X(1.15),Y(1.15),'r',1.0,dash='5 4')
+xi=1/math.sqrt(3)
+for sg in (1,-1):
+    x0=sg*xi;y0=f(x0)
+    s.line(X(x0-0.35),Y(y0-0.35),X(x0+0.35),Y(y0+0.35),'b',1.1)
+    s.dot(X(x0),Y(y0),2.6,'b')
+s.text(X(xi)+12,Y(f(xi))+20,'ξ：f′=1',10,'b')
+s.text(X(-xi)-12,Y(f(-xi))-12,'−ξ：f′=1',10,'b','end')
+s.dot(X(1),Y(1),2.4,'k');s.text(X(1)+6,Y(1)+4,'(1,1)',10,'k')
+s.dot(X(-1),Y(-1),2.4,'k');s.text(X(-1)-6,Y(-1)+4,'(−1,−1)',10,'k','end')
+s.text(X(0.12),Y(-0.92),'F=eˣ(f′−1)：F(±ξ)=0',10,'r')
+::think
+1. (I) $f(0)=0$，在 $[0,1]$ 上：拉格朗日 $f'(\xi)=\frac{f(1)-f(0)}{1-0}=1$。
+2. (II) $f'$ 偶 ⟹ $f'(-\xi)=f'(\xi)=1$。令 $F(x)=e^x[f'(x)-1]$，$F(\pm\xi)=0$。
+3. 罗尔：$\exists\eta\in(-\xi,\xi)$，$F'(\eta)=e^\eta[f''(\eta)+f'(\eta)-1]=0$。
+::steps
+**奇函数的两个推论**：$f(-x)=-f(x)$ 中令 $x=0$ ⟹ $f(0)=-f(0)$ ⟹ $f(0)=0$。
+  对 $f(-x)=-f(x)$ 两边求导（左边链式出 $-1$）：$-f'(-x)=-f'(x)$ ⟹ $f'(-x)=f'(x)$，$f'$ 是偶函数（[[奇偶性]]）。
+**(I)** 令 $\varphi(x)=f(x)-x$。$f$ 在 $[-1,1]$ 上二阶可导 ⟹ $\varphi$ 在 $[0,1]$ 上连续、在 $(0,1)$ 内可导。
+  $\varphi(0)=f(0)-0=0$，$\varphi(1)=f(1)-1=0$。
+  由罗尔定理（[[罗尔定理]]），$\exists\xi\in(0,1)$，$\varphi'(\xi)=f'(\xi)-1=0$，即 $f'(\xi)=1$。
+  {{省|（等价：对 $f$ 在 $[0,1]$ 上用拉格朗日中值定理，$f'(\xi)=\frac{f(1)-f(0)}{1}=1$。）}}
+**(II)** 目标 $f''+f'-1=0$，记 $g=f'-1$，即 $g'+g=0$；$g'+g=e^{-x}(e^xg)'$ ⟹ 构造 $F(x)=e^x[f'(x)-1]$（[[T认导数]]）。
+  找两个零点：由 (I) $f'(\xi)=1$；$f'$ 偶 ⟹ $f'(-\xi)=f'(\xi)=1$ ⟹ $F(\xi)=F(-\xi)=0$，且 $-1\lt-\xi\lt0\lt\xi\lt1$。
+  $f$ 二阶可导 ⟹ $f'$ 可导 ⟹ $F$ 在 $[-\xi,\xi]$ 上可导（从而连续）。
+  由罗尔定理，$\exists\eta\in(-\xi,\xi)\subset(-1,1)$，使 $F'(\eta)=0$。
+  $F'(x)=e^x[f'(x)-1]+e^xf''(x)=e^x[f''(x)+f'(x)-1]$，$e^\eta\ne0$ ⟹ $f''(\eta)+f'(\eta)=1$。
+::paper
+证　(I) 因 $f$ 为奇函数，$f(-x)=-f(x)$，令 $x=0$ 得 $f(0)=0$. ⛳1
+令 $\varphi(x)=f(x)-x$，则 $\varphi$ 在 $[0,1]$ 上连续，在 $(0,1)$ 内可导，且 $\varphi(0)=0$，$\varphi(1)=f(1)-1=0$. ⛳1
+由罗尔定理，存在 $\xi\in(0,1)$，使 $\varphi'(\xi)=0$，即 $f'(\xi)=1$. ⛳2
+(II) 由 $f(-x)=-f(x)$ 两边求导得 $f'(-x)=f'(x)$，即 $f'(x)$ 为偶函数，故 $f'(-\xi)=f'(\xi)=1$. ⛳2
+令 $F(x)=e^x[f'(x)-1]$. 因 $f$ 二阶可导，$F$ 在 $[-\xi,\xi]$ 上连续，在 $(-\xi,\xi)$ 内可导，且 $F(-\xi)=F(\xi)=0$. ⛳2
+由罗尔定理，存在 $\eta\in(-\xi,\xi)\subset(-1,1)$，使 $F'(\eta)=0$. ⛳1
+而 $F'(x)=e^x[f''(x)+f'(x)-1]$，$e^\eta\ne0$，故 $f''(\eta)+f'(\eta)=1$. 证毕. ⛳1
+::note
+- {{扣|(II) 直接说「$f'(-\xi)=1$」不给理由}}：要写「$f'$ 是偶函数」并说明它从奇函数求导而来——这是第二问的第一个采分点。
+- {{扣|罗尔定理不验条件}}：「$F$ 在 $[-\xi,\xi]$ 上连续、在 $(-\xi,\xi)$ 内可导」要写，依据是「$f$ 二阶可导」。
+- 辅助函数的来路：$f''+f'=1$ ⟹ $(f'-1)'+(f'-1)=0$，「$g'+kg$」型乘 $e^{kx}$。同理 $g'-g$ 乘 $e^{-x}$，$xg'+kg$ 乘 $x^{k-1}$。
+- (I) 的结论被 (II) 用了**两次**（$\xi$ 和 $-\xi$）——这类「第一问是第二问的零件」的题，第二问卡住时先回头看第一问给了什么。
+::vary
+改证：存在 $\eta\in(-1,1)$ 使 $f''(\eta)-f'(\eta)=-1$ >> 即 $(f'-1)'-(f'-1)=0$，取 $F=e^{-x}[f'(x)-1]$，$F(\pm\xi)=0$，罗尔
+若 $f$ 只是偶函数、$f(1)=1$，(I) 还成立吗 >> 不一定：偶函数 $f(0)$ 未知，如 $f\equiv1$ 时 $f'\equiv0$；$f'$ 此时是奇函数，$f'(0)=0$
+同样条件，证存在 $\zeta\in(-1,1)$ 使 $f''(\zeta)+2f'(\zeta)=2$ >> 即 $(f'-1)'+2(f'-1)=0$，取 $F=e^{2x}[f'(x)-1]$，仍用 $F(\pm\xi)=0$ 与罗尔
+若改为 $f(1)=2$（其余不变），两问各变成什么 >> (I) 对 $\varphi=f(x)-2x$ 用罗尔得 $f'(\xi)=2$；(II) 取 $F=e^x[f'(x)-2]$ 得 $f''(\eta)+f'(\eta)=2$
+
+#19
+@stem
+（本题满分 10 分）设直线 $L$ 过 $A(1,0,0)$，$B(0,1,1)$ 两点，将 $L$ 绕 $z$ 轴旋转一周得到曲面 $\Sigma$，$\Sigma$ 与平面 $z=0$，$z=2$ 所围成的立体为 $\Omega$.
+(I) 求曲面 $\Sigma$ 的方程；
+(II) 求 $\Omega$ 的形心坐标.
+@tpl T旋转曲面, T形心截面
+::read
+「直线 $L$ 过 $A(1,0,0)$、$B(0,1,1)$」 >> 方向向量 $\overrightarrow{AB}=(-1,1,1)$，点向式 $\frac{x-1}{-1}=\frac y1=\frac z1$（[[直线点向式]]）；参数 $=z$：$x=1-z$，$y=z$
+「绕 $z$ 轴旋转一周」 >> {{圈|同一高度 $z$ 的点到 $z$ 轴距离不变}}：$x^2+y^2=(1-z)^2+z^2$（[[T旋转曲面]]、[[旋转曲面]]）
+「$L$ 与 $z$ 轴」 >> 既不相交也不平行（异面）⟹ 旋转出来是{{波|单叶双曲面}}（腰最细处 $z=\frac12$），不是圆锥
+「$\Sigma$ 与 $z=0$、$z=2$ 所围」 >> 每个高度的截面都是圆盘，半径平方 $2z^2-2z+1$ ⟹ 截面法「先二后一」（[[T形心截面]]）
+「形心坐标」 >> 绕 $z$ 轴对称 ⟹ $\bar x=\bar y=0$，只算 $\bar z=\frac{\iiint z\,dV}{V}$（[[形心]]）
+::sk 340 240 看 | 直线 $L$（红）绕 $z$ 轴转出单叶双曲面：$z=0$ 处半径 1，$z=\frac12$ 处最细（$\frac{\sqrt2}2$），$z=2$ 处半径 $\sqrt5$；每个截面是圆盘
+cx,cy,k,kz=170,212,38,92
+P=lambda x,y,z:(cx+k*y-0.42*k*x,cy-kz*z+0.32*k*x)
+R=lambda z:math.sqrt(2*z*z-2*z+1)
+def ell(z,c,w,dash=None):
+    pts=[P(R(z)*math.cos(2*math.pi*i/40),R(z)*math.sin(2*math.pi*i/40),z) for i in range(41)]
+    s.poly(pts,c,w,dash=dash,amp=.3)
+zs=[i*0.1 for i in range(21)]
+L,Rr=[],[]
+for z in zs:
+    us=[P(R(z)*math.cos(2*math.pi*i/90),R(z)*math.sin(2*math.pi*i/90),z) for i in range(90)]
+    L.append(min(us));Rr.append(max(us))
+s.poly(L,'k',1.3);s.poly(Rr,'k',1.3)
+ell(0,'k',1.1);ell(2,'k',1.2);ell(0.5,'b',0.9,dash='3 3');ell(1,'p',0.8,dash='2 3')
+s.arrow(*P(0,0,0),*P(0,0,2.45),'k',1.0);s.text(P(0,0,2.45)[0]+8,P(0,0,2.45)[1]+4,'z',12,'k')
+s.line(*P(1,0,0),*P(-1,2,2),'r',1.4)
+a=P(1,0,0);b=P(0,1,1)
+s.dot(*a,2.6,'r');s.dot(*b,2.6,'r')
+s.text(a[0]-6,a[1]+12,'A(1,0,0)',10,'r','end');s.text(b[0]+8,b[1]+4,'B(0,1,1)',10,'r')
+s.text(P(-1,2,2)[0]+6,P(-1,2,2)[1]-4,'L',12,'r')
+s.text(cx+70,P(0,0,0.5)[1]+4,'z=½：r=√2/2 最细',10,'b')
+s.text(cx-150,P(0,0,1.75)[1],'r²=2z²−2z+1',11,'k')
+::think
+1. $L$：$x=1-z$，$y=z$。同高度距离不变 ⟹ $\Sigma$：$x^2+y^2=(1-z)^2+z^2=2z^2-2z+1$。
+2. 截面面积 $S(z)=\pi(2z^2-2z+1)$，$V=\int_0^2S\,dz=\frac{10}3\pi$，$\iiint z\,dV=\int_0^2zS\,dz=\frac{14}3\pi$。
+3. $\bar z=\frac{14/3}{10/3}=\frac75$，形心 $\left(0,0,\frac75\right)$。
+::steps
+**(I)** 方向向量 $\overrightarrow{AB}=(0-1,\,1-0,\,1-0)=(-1,1,1)$，$L$：$\dfrac{x-1}{-1}=\dfrac{y}{1}=\dfrac{z}{1}$（[[直线点向式]]）。
+  以 $z$ 为参数：$x=1-z$，$y=z$。
+  设 $M(x,y,z)\in\Sigma$，它是 $L$ 上**同一高度**的点 $M_0(x_0,y_0,z)$ 转过来的：$x_0=1-z$，$y_0=z$。
+  旋转时 $M$、$M_0$ 在以 $T(0,0,z)$ 为圆心的同一水平圆上：$|MT|=|M_0T|$ ⟹ $x^2+y^2=x_0^2+y_0^2$（[[T旋转曲面]]）。
+  代入：$x^2+y^2=(1-z)^2+z^2=2z^2-2z+1$。所以 $\Sigma$：$x^2+y^2=2z^2-2z+1$。
+  ~认形状：$x^2+y^2-2\left(z-\frac12\right)^2=\frac12$，单叶双曲面，腰在 $z=\frac12$，半径 $\frac{\sqrt2}2$。
+**(II)** $\Omega=\{(x,y,z):0\le z\le2,\ x^2+y^2\le2z^2-2z+1\}$，关于 $xOz$、$yOz$ 面对称 ⟹ $\bar x=\bar y=0$（[[形心]]）。
+  高度 $z$ 处截面 $D_z$：圆盘，面积 $S(z)=\pi(2z^2-2z+1)$（$2z^2-2z+1=2(z-\frac12)^2+\frac12\gt0$，截面恒非空）。
+  体积（[[T形心截面]]）：$V=\displaystyle\int_0^2\pi(2z^2-2z+1)dz=\pi\left[\frac{2z^3}3-z^2+z\right]_0^2=\pi\left(\frac{16}3-4+2\right)=\frac{10}3\pi$。
+  一阶矩：$\displaystyle\iiint_\Omega z\,dV=\int_0^2z\cdot\pi(2z^2-2z+1)dz=\pi\left[\frac{z^4}2-\frac{2z^3}3+\frac{z^2}2\right]_0^2=\pi\left(8-\frac{16}3+2\right)=\frac{14}3\pi$。
+  $\bar z=\dfrac{\frac{14}3\pi}{\frac{10}3\pi}=\dfrac75$。形心 $\left(0,0,\dfrac75\right)$。
+~合理性：截面越往上越大（$z=2$ 处面积 $5\pi$，$z=0$ 处 $\pi$），重心应偏上半部，$\frac75\gt1$ ✓。
+::paper
+解　(I) 直线 $L$ 的方向向量为 $\overrightarrow{AB}=(-1,1,1)$，$L$ 的方程为 $\dfrac{x-1}{-1}=\dfrac y1=\dfrac z1$. ⛳1
+设 $M(x,y,z)$ 为 $\Sigma$ 上任一点，它由 $L$ 上的点 $M_0(x_0,y_0,z)$ 旋转得到，则 $x_0=1-z$，$y_0=z$. ⛳1
+由于旋转过程中到 $z$ 轴的距离不变，$x^2+y^2=x_0^2+y_0^2$，⛳2
+故 $\Sigma$ 的方程为 $x^2+y^2=(1-z)^2+z^2$，即 $x^2+y^2=2z^2-2z+1$. ⛳1
+(II) 设 $\Omega$ 的形心为 $(\bar x,\bar y,\bar z)$. 由对称性，$\bar x=\bar y=0$. ⛳1
+用截面法，记 $D_z:x^2+y^2\le2z^2-2z+1$，
+$$\iiint_\Omega dV=\int_0^2dz\iint_{D_z}dxdy=\pi\int_0^2(2z^2-2z+1)dz=\frac{10}3\pi,$$ ⛳1
+$$\iiint_\Omega z\,dV=\int_0^2z\,dz\iint_{D_z}dxdy=\pi\int_0^2(2z^3-2z^2+z)dz=\frac{14}3\pi,$$ ⛳1
+故 $\bar z=\dfrac{\iiint_\Omega z\,dV}{\iiint_\Omega dV}=\dfrac75$. ⛳1
+所以 $\Omega$ 的形心坐标为 $\left(0,0,\dfrac75\right)$. ⛳1
+::note
+- {{扣|把旋转曲面写成「把 $y$ 换成 $\sqrt{x^2+y^2}$」}}：那是**平面曲线**绕坐标轴的公式；空间直线不在坐标面上，要用「同高度距离相等」。若误写 $\left(\frac{x-1}{-1}\right)$ 之类的替换会得到错的方程。
+- {{扣|形心只写 $\bar z$}}：「形心坐标」要三个分量，$\bar x=\bar y=0$ 要写并注明「由对称性」。
+- 提速：$\int_0^2(2z^2-2z+1)dz$ 与 $\int_0^2(2z^3-2z^2+z)dz$ 心算：$\frac{16}3-4+2=\frac{10}3$；$8-\frac{16}3+2=\frac{14}3$。
+- 跨章：同类题还有「绕 $z$ 轴旋转后求曲面面积 / 体积 / 转动惯量」，全部用截面圆盘 $\pi r(z)^2$。
+::vary
+直线 $x=1$，$y=z$ 绕 $z$ 轴旋转所得曲面 >> $x^2+y^2=1+z^2$（单叶双曲面，腰半径 1 在 $z=0$）
+直线 $x=0$，$y=z$ 绕 $z$ 轴旋转 >> 与 $z$ 轴相交于原点 ⟹ 圆锥面 $x^2+y^2=z^2$
+本题若只取 $0\le z\le1$ 的部分，体积 >> $\pi\int_0^1(2z^2-2z+1)dz=\frac23\pi$；此时上下关于 $z=\frac12$ 对称 ⟹ $\bar z=\frac12$
+求本题 $\Sigma$ 最细处的半径 >> $r^2=2(z-\frac12)^2+\frac12$ 最小 $\frac12$ ⟹ $z=\frac12$ 处 $r=\frac{\sqrt2}2$（恰是 $L$ 与 $z$ 轴之间的距离，即公垂线长）
+
+#20
+@stem
+（本题满分 11 分）设 $A=\begin{pmatrix}1&a\\1&0\end{pmatrix}$，$B=\begin{pmatrix}0&1\\1&b\end{pmatrix}$. 当 $a,b$ 为何值时，存在矩阵 $C$ 使得 $AC-CA=B$，并求所有矩阵 $C$.
+@tpl T矩阵设元, T齐次解结构
+::read
+「存在矩阵 $C$ 使得 $AC-CA=B$」 >> 未知矩阵 $C$ 一个在右、一个在左，{{圈|没法提出来、也没法乘逆}} ⟹ 设 $C=\begin{pmatrix}x_1&x_2\\x_3&x_4\end{pmatrix}$，展开成 4 个未知数的线性方程组（[[T矩阵设元]]）
+「当 $a,b$ 为何值时存在」 >> 就是「方程组何时有解」：系数矩阵与增广矩阵秩相等（[[方程组解与秩]]）
+「并求所有矩阵 $C$」 >> 有解时写通解 = 特解 + 齐次通解（[[T齐次解结构]]），最后{{波|拼回 $2\times2$ 矩阵}}
+「先验一个必要条件」 >> $\mathrm{tr}(AC-CA)=\mathrm{tr}(AC)-\mathrm{tr}(CA)=0$ ⟹ $\mathrm{tr}B=b$ 必须为 0——还没设元就知道 $b=0$
+::sk 360 160 列 | 增广矩阵行变换后的样子：后两行左边全 0，右端（红）必须也为 0 ⟹ $a=-1$、$b=0$
+s.cells(30,22,[['x₁','x₂','x₃','x₄','右端'],['1','0','−1','−1','1'],['0','1','−a','0','1+a'],['0','0','0','0','!1+a'],['0','0','0','0','!b']],cw=[40,40,40,40,56],ch=24,size=12)
+s.text(268,98,'1+a=0',12,'r');s.text(268,122,'b=0',12,'r')
+s.text(268,48,'r(D)=2',11,'b')
+::think
+1. 设 $C$，算 $AC-CA=\begin{pmatrix}-x_2+ax_3&-ax_1+x_2+ax_4\\x_1-x_3-x_4&x_2-ax_3\end{pmatrix}$，令它 $=B$ 得 4 个方程。
+2. 增广矩阵行变换：出现两行「$0=1+a$」「$0=b$」⟹ 有解 ⟺ $a=-1$，$b=0$。
+3. 此时方程组 $x_1-x_3-x_4=1$，$x_2+x_3=0$，自由变量 $x_3,x_4$ ⟹ $C=\begin{pmatrix}1+k_1+k_2&-k_1\\k_1&k_2\end{pmatrix}$。
+::fast
+{{秒|迹先定 $b$}}：$\mathrm{tr}(AC-CA)=0$ ⟹ $b=0$；再看 (1)+(4) 与 (2)+$a\cdot$(3) 两个组合，左边相同、右边分别是 $b$ 和 $1+a$ ⟹ $1+a=b=0$。
+::steps
+设 $C=\begin{pmatrix}x_1&x_2\\x_3&x_4\end{pmatrix}$（[[T矩阵设元]]）。
+$AC=\begin{pmatrix}1&a\\1&0\end{pmatrix}\begin{pmatrix}x_1&x_2\\x_3&x_4\end{pmatrix}=\begin{pmatrix}x_1+ax_3&x_2+ax_4\\x_1&x_2\end{pmatrix}$。
+$CA=\begin{pmatrix}x_1&x_2\\x_3&x_4\end{pmatrix}\begin{pmatrix}1&a\\1&0\end{pmatrix}=\begin{pmatrix}x_1+x_2&ax_1\\x_3+x_4&ax_3\end{pmatrix}$。
+$AC-CA=\begin{pmatrix}-x_2+ax_3&-ax_1+x_2+ax_4\\x_1-x_3-x_4&x_2-ax_3\end{pmatrix}$，令其等于 $B=\begin{pmatrix}0&1\\1&b\end{pmatrix}$，逐个位置：
+$$\begin{cases}-x_2+ax_3=0,&(1)\\-ax_1+x_2+ax_4=1,&(2)\\x_1-x_3-x_4=1,&(3)\\x_2-ax_3=b.&(4)\end{cases}$$
+增广矩阵（行顺序调成 (3)(1)(2)(4)）：
+$$\bar D=\begin{pmatrix}1&0&-1&-1&1\\0&-1&a&0&0\\-a&1&0&a&1\\0&1&-a&0&b\end{pmatrix}\xrightarrow{r_3+ar_1}\begin{pmatrix}1&0&-1&-1&1\\0&-1&a&0&0\\0&1&-a&0&1+a\\0&1&-a&0&b\end{pmatrix}.$$
+  第 3 行逐项：$(-a+a,\ 1+0,\ 0-a,\ a-a,\ 1+a)=(0,1,-a,0,1+a)$。
+$$\xrightarrow{r_3+r_2,\ r_4+r_2}\begin{pmatrix}1&0&-1&-1&1\\0&-1&a&0&0\\0&0&0&0&1+a\\0&0&0&0&b\end{pmatrix}.$$
+系数矩阵的秩为 2；方程组有解 ⟺ 增广矩阵的秩也为 2 ⟺ $1+a=0$ 且 $b=0$ ⟹ $a=-1$，$b=0$（[[方程组解与秩]]）。
+$a=-1$，$b=0$ 时，方程组化为 $\begin{cases}x_1-x_3-x_4=1\\-x_2-x_3=0\end{cases}$，即 $x_1=1+x_3+x_4$，$x_2=-x_3$。
+  自由未知量 $x_3=k_1$，$x_4=k_2$：$(x_1,x_2,x_3,x_4)^T=(1,0,0,0)^T+k_1(1,-1,1,0)^T+k_2(1,0,0,1)^T$（[[T齐次解结构]]：$4-2=2$ 个基础解）。
+所以 $C=\begin{pmatrix}1+k_1+k_2&-k_1\\k_1&k_2\end{pmatrix}$，$k_1,k_2$ 为任意常数。
+~验算（$k_1=k_2=0$，$C=\begin{pmatrix}1&0\\0&0\end{pmatrix}$，$A=\begin{pmatrix}1&-1\\1&0\end{pmatrix}$）：$AC=\begin{pmatrix}1&0\\1&0\end{pmatrix}$，$CA=\begin{pmatrix}1&-1\\0&0\end{pmatrix}$，$AC-CA=\begin{pmatrix}0&1\\1&0\end{pmatrix}=B$ ✓。
+::paper
+解　设 $C=\begin{pmatrix}x_1&x_2\\x_3&x_4\end{pmatrix}$，则
+$$AC-CA=\begin{pmatrix}x_1+ax_3&x_2+ax_4\\x_1&x_2\end{pmatrix}-\begin{pmatrix}x_1+x_2&ax_1\\x_3+x_4&ax_3\end{pmatrix}=\begin{pmatrix}-x_2+ax_3&-ax_1+x_2+ax_4\\x_1-x_3-x_4&x_2-ax_3\end{pmatrix}.$$ ⛳2
+由 $AC-CA=B$ 得线性方程组
+$$\begin{cases}-x_2+ax_3=0,\\-ax_1+x_2+ax_4=1,\\x_1-x_3-x_4=1,\\x_2-ax_3=b.\end{cases}\qquad(*)$$ ⛳2
+对其增广矩阵作初等行变换：
+$$\bar D=\begin{pmatrix}0&-1&a&0&0\\-a&1&0&a&1\\1&0&-1&-1&1\\0&1&-a&0&b\end{pmatrix}\to\begin{pmatrix}1&0&-1&-1&1\\0&1&-a&0&0\\0&0&0&0&1+a\\0&0&0&0&b\end{pmatrix}.$$ ⛳2
+方程组 $(*)$ 有解当且仅当 $1+a=0$ 且 $b=0$，即当 $a=-1$，$b=0$ 时存在矩阵 $C$ 使 $AC-CA=B$. ⛳2
+此时 $\bar D\to\begin{pmatrix}1&0&-1&-1&1\\0&1&1&0&0\\0&0&0&0&0\\0&0&0&0&0\end{pmatrix}$，$(*)$ 的通解为
+$$(x_1,x_2,x_3,x_4)^T=k_1(1,-1,1,0)^T+k_2(1,0,0,1)^T+(1,0,0,0)^T.$$ ⛳2
+故所求矩阵 $C=\begin{pmatrix}1+k_1+k_2&-k_1\\k_1&k_2\end{pmatrix}$，其中 $k_1,k_2$ 为任意常数. ⛳1
+::note
+- {{扣|$AC$、$CA$ 乘错一个位置}}：整题全错。两个乘积各写出来再相减，别心算合并。
+- {{扣|最后只写向量形式的通解}}：题目问的是「所有矩阵 $C$」，必须拼回矩阵，并写「$k_1,k_2$ 为任意常数」。
+- 卷面消元时第 2 行用的是 (1) 式乘 $-1$，所以中间第 2 行写成 $(0,1,-a,0,0)$；与原书 $(0,1,-a,0,1+a)$ 差在用哪一行当主元——只要最后两行的右端是 $1+a$、$b$ 就对。
+- 提速：迹的必要条件（$\mathrm{tr}B=0$）十秒钟就定出 $b=0$，可以用来检查消元结果。
+::vary
+若题目改为 $AC-CA=O$（$a=-1$），求所有与 $A$ 可交换的 $C$ >> 齐次方程组，通解 $C=\begin{pmatrix}k_1+k_2&-k_1\\k_1&k_2\end{pmatrix}=k_2E+k_1A$（$A=\begin{pmatrix}1&-1\\1&0\end{pmatrix}$）
+同题 $a=2$、$b=0$ 时为什么无解 >> 消元后第 3 行为 $0=1+a=3$，矛盾
+设 $A=\begin{pmatrix}1&0\\0&2\end{pmatrix}$，求满足 $AC=CA$ 的所有 $C$ >> $x_2=2x_2$、$2x_3=x_3$ ⟹ $x_2=x_3=0$，$C$ 为任意对角阵
+存在 $C$ 使 $AC-CA=E$ 吗（任意 $n$ 阶 $A$） >> 不存在：左边迹为 0，右边迹为 $n$
+
+#21
+@stem
+（本题满分 11 分）设二次型 $f(x_1,x_2,x_3)=2(a_1x_1+a_2x_2+a_3x_3)^2+(b_1x_1+b_2x_2+b_3x_3)^2$，记 $\alpha=\begin{pmatrix}a_1\\a_2\\a_3\end{pmatrix}$，$\beta=\begin{pmatrix}b_1\\b_2\\b_3\end{pmatrix}$.
+(I) 证明二次型 $f$ 对应的矩阵为 $2\alpha\alpha^T+\beta\beta^T$；
+(II) 若 $\alpha,\beta$ 正交且均为单位向量，证明 $f$ 在正交变换下的标准形为 $2y_1^2+y_2^2$.
+@tpl T秩一矩阵, T标准形缺项, T正交对角化
+::read
+「$a_1x_1+a_2x_2+a_3x_3$」 >> 就是 $\alpha^Tx$（也等于 $x^T\alpha$），{{圈|一个数}}；平方 $=(\alpha^Tx)^2=x^T\alpha\,\alpha^Tx=x^T(\alpha\alpha^T)x$（[[T秩一矩阵]] 第 4 条的反向）
+「对应的矩阵」 >> 二次型的矩阵必须是{{波|对称}}的（[[二次型的矩阵]]）：写成 $x^TMx$ 之后还要验 $M^T=M$——这是 (I) 的采分点
+「$\alpha,\beta$ 正交且均为单位向量」 >> $\alpha^T\alpha=\beta^T\beta=1$，$\alpha^T\beta=\beta^T\alpha=0$ ⟹ $A\alpha=2\alpha(\alpha^T\alpha)+\beta(\beta^T\alpha)=2\alpha$，$A\beta=\beta$：$\alpha$、$\beta$ 就是特征向量
+「正交变换下的标准形」 >> 系数 = 特征值（[[实对称矩阵]]）；已有 2、1，第三个：$r(A)\le2$ ⟹ 0 是特征值（[[T标准形缺项]] 反过来用）
+::sk 330 200 看 | 三个两两正交的方向：$A$ 把 $\alpha$ 拉长成 $2\alpha$（红）、$\beta$ 原样不动（蓝）、与两者都垂直的 $\gamma$ 压成 0 ⟹ 特征值 2、1、0
+ox,oy=130,140
+s.arrow(ox,oy,ox+70,oy,'k',1.2);s.arrow(ox,oy,ox+140,oy,'r',1.0,dash='4 3')
+s.arrow(ox,oy,ox,oy-75,'b',1.4)
+s.arrow(ox,oy,ox-52,oy+40,'p',1.2)
+s.text(ox+70,oy+16,'α',13,'k','middle');s.text(ox+150,oy+4,'Aα=2α',11,'r')
+s.text(ox+8,oy-80,'β = Aβ',12,'b')
+s.text(ox-60,oy+56,'γ ⟂ α, β：Aγ = 0',11,'p','middle')
+s.text(18,24,'A = 2αα^{T} + ββ^{T}',12,'k')
+s.text(18,44,'αᵀα = βᵀβ = 1，αᵀβ = 0',11,'p')
+s.dot(ox,oy,2.4,'k')
+::think
+1. (I) $f=2(\alpha^Tx)^2+(\beta^Tx)^2=x^T(2\alpha\alpha^T+\beta\beta^T)x$，且 $2\alpha\alpha^T+\beta\beta^T$ 对称 ⟹ 它就是 $f$ 的矩阵。
+2. (II) $A\alpha=2\alpha$、$A\beta=\beta$；$r(A)\le r(\alpha\alpha^T)+r(\beta\beta^T)=2\lt3$ ⟹ 0 是特征值；特征值 $2,1,0$ ⟹ 标准形 $2y_1^2+y_2^2$。
+::steps
+**(I)** 记 $x=(x_1,x_2,x_3)^T$。$a_1x_1+a_2x_2+a_3x_3=\alpha^Tx=x^T\alpha$（一个数，转置等于自己）。
+  $(\alpha^Tx)^2=(x^T\alpha)(\alpha^Tx)=x^T(\alpha\alpha^T)x$；同理 $(\beta^Tx)^2=x^T(\beta\beta^T)x$。
+  所以 $f=2x^T\alpha\alpha^Tx+x^T\beta\beta^Tx=x^T(2\alpha\alpha^T+\beta\beta^T)x$。
+  记 $A=2\alpha\alpha^T+\beta\beta^T$，$A^T=2(\alpha^T)^T\alpha^T+(\beta^T)^T\beta^T=2\alpha\alpha^T+\beta\beta^T=A$，对称 ⟹ $A$ 是 $f$ 的矩阵（[[二次型的矩阵]]）。
+**(II)** 条件：$\alpha^T\alpha=1$，$\beta^T\beta=1$，$\alpha^T\beta=\beta^T\alpha=0$。
+  $A\alpha=2\alpha(\alpha^T\alpha)+\beta(\beta^T\alpha)=2\alpha\cdot1+\beta\cdot0=2\alpha$，$\alpha\ne0$ ⟹ 2 是特征值，$\alpha$ 是特征向量。
+  $A\beta=2\alpha(\alpha^T\beta)+\beta(\beta^T\beta)=0+\beta=\beta$，$\beta\ne0$ ⟹ 1 是特征值。
+  秩：$r(A)\le r(2\alpha\alpha^T)+r(\beta\beta^T)\le1+1=2\lt3$（[[秩的性质]]）⟹ $|A|=0$ ⟹ 0 是特征值。
+  三个特征值 $2,1,0$ 互不相同，已经是全部。
+  $A$ 实对称 ⟹ 存在正交矩阵 $Q$，经正交变换 $x=Qy$，$f=y^T(Q^TAQ)y=2y_1^2+1\cdot y_2^2+0\cdot y_3^2=2y_1^2+y_2^2$（[[T正交对角化]]）。
+~第三个特征向量：$\gamma=\alpha\times\beta$（与 $\alpha,\beta$ 都正交）⟹ $A\gamma=2\alpha(\alpha^T\gamma)+\beta(\beta^T\gamma)=0$，直接验证 0 是特征值；$Q=(\alpha,\beta,\gamma)$ 就是所求正交矩阵。
+::paper
+证　(I) 记 $x=(x_1,x_2,x_3)^T$，则 $a_1x_1+a_2x_2+a_3x_3=\alpha^Tx=x^T\alpha$，$b_1x_1+b_2x_2+b_3x_3=\beta^Tx=x^T\beta$，于是
+$$f=2x^T\alpha\alpha^Tx+x^T\beta\beta^Tx=x^T(2\alpha\alpha^T+\beta\beta^T)x.$$ ⛳2
+又 $(2\alpha\alpha^T+\beta\beta^T)^T=2\alpha\alpha^T+\beta\beta^T$，即该矩阵为对称矩阵，故二次型 $f$ 对应的矩阵为 $2\alpha\alpha^T+\beta\beta^T$. ⛳2
+(II) 记 $A=2\alpha\alpha^T+\beta\beta^T$. 由 $\alpha^T\alpha=\beta^T\beta=1$，$\alpha^T\beta=\beta^T\alpha=0$，得
+$$A\alpha=2\alpha(\alpha^T\alpha)+\beta(\beta^T\alpha)=2\alpha,\qquad A\beta=2\alpha(\alpha^T\beta)+\beta(\beta^T\beta)=\beta,$$ ⛳2
+而 $\alpha,\beta$ 为非零向量，故 $2,1$ 是 $A$ 的特征值. ⛳1
+又 $r(A)\le r(\alpha\alpha^T)+r(\beta\beta^T)\le2\lt3$，故 $|A|=0$，$0$ 是 $A$ 的特征值. ⛳2
+因此 $A$ 的特征值为 $2,1,0$. 由于 $A$ 为实对称矩阵，存在正交变换 $x=Qy$，使 $f$ 化为标准形 $2y_1^2+y_2^2$. 证毕. ⛳2
+::note
+- {{扣|(I) 不验对称性}}：任何 $f$ 都能写成 $x^TMx$ 的形式（$M$ 可以不对称），只有对称的那个才叫「$f$ 的矩阵」。这一句值 2 分。
+- {{扣|(II) 只写 $A\alpha=2\alpha$、$A\beta=\beta$ 就下结论}}：三阶矩阵要三个特征值，第三个 0 要单独论证（秩或 $\alpha\times\beta$）。
+- {{扣|标准形写成 $2y_1^2+y_2^2+0y_3^2$ 而不说正交变换存在}}：要点名「$A$ 实对称 ⟹ 可正交对角化」。
+- 跨章：$\alpha\alpha^T$ 是秩一矩阵（[[T秩一矩阵]]）；本题的 $A$ 就是「两个正交的秩一投影的加权和」，这种结构在 $A=\sum\lambda_iq_iq_i^T$（谱分解）里会再见到。
+::vary
+若 $\alpha,\beta$ 正交但不是单位向量 >> $A\alpha=2|\alpha|^2\alpha$、$A\beta=|\beta|^2\beta$ ⟹ 标准形 $2|\alpha|^2y_1^2+|\beta|^2y_2^2$（如 $\alpha=(1,1,0)^T,\beta=(1,-1,0)^T$：$4y_1^2+2y_2^2$）
+若 $\alpha,\beta$ 是单位向量但不正交（$\beta\ne\pm\alpha$），标准形还是 $2y_1^2+y_2^2$ 吗 >> 不是：$\alpha,\beta$ 不再是特征向量；特征值之和仍为 $\mathrm{tr}A=2+1=3$、仍有一个 0，但两个非零特征值不再是 2 和 1
+$f=2(\alpha^Tx)^2-(\beta^Tx)^2$（$\alpha,\beta$ 正交单位） >> 特征值 $2,-1,0$ ⟹ 标准形 $2y_1^2-y_2^2$，正、负惯性指数各 1
+本题条件下 $f$ 是正定的吗 >> 不是：有特征值 0（取 $x=\alpha\times\beta\ne0$，$f=0$），只是半正定
+
+#22
+@stem
+（本题满分 11 分）设随机变量 $X$ 的概率密度为 $f(x)=\begin{cases}\dfrac19x^2,&0\lt x\lt3,\\0,&\text{其他}.\end{cases}$ 令随机变量 $Y=\begin{cases}2,&X\le1,\\X,&1\lt X\lt2,\\1,&X\ge2.\end{cases}$
+(I) 求 $Y$ 的分布函数；
+(II) 求概率 $P\{X\le Y\}$.
+@tpl T截断变量, T分布函数法
+::read
+「$f(x)=\frac19x^2$，$0\lt x\lt3$」 >> 分布函数 $F_X(x)=\frac{x^3}{27}$（$0\le x\le3$），以后的概率都用它，免得反复积分
+「$Y=2$（$X\le1$）、$X$（$1\lt X\lt2$）、$1$（$X\ge2$）」 >> 两头被{{圈|压成常数}}：$Y$ 在 1 和 2 处各有一块点概率，中间连续 ⟹ $Y$ 是混合型，没有密度，只能求分布函数（[[T截断变量]]、[[分布函数]]）
+「注意方向是反的」 >> 小的 $X$（$\le1$）变成大的 $Y=2$，大的 $X$（$\ge2$）变成小的 $Y=1$ ⟹ $Y$ 的取值永远在 $[1,2]$ 里
+「$P\{X\le Y\}$」 >> $Y$ 是 $X$ 的函数，给定 $X$ 就知道事件成不成立：{{波|按 $X$ 的三段逐段判断}}，不要对 $Y$ 去做条件概率
+::sk 380 200 画 | 左：$Y=g(X)$ 的图（三段，红点为被压成的常数）；右：$F_Y(y)$，在 $y=1$ 处跳 $\frac{19}{27}$，在 $y=2$ 处跳 $\frac1{27}$
+ox,oy=26,170;X=lambda x:ox+x*48;Y=lambda y:oy-y*60
+s.axes(ox,oy,10,180,182,8,xl='X',yl='Y')
+s.line(X(0),Y(2),X(1),Y(2),'r',1.6);s.line(X(1),Y(1),X(2),Y(2),'k',1.4);s.line(X(2),Y(1),X(3),Y(1),'r',1.6)
+s.dot(X(1),Y(2),2.4,'r');s.dot(X(1),Y(1),2.2,'k',hollow=True);s.dot(X(2),Y(2),2.2,'k',hollow=True);s.dot(X(2),Y(1),2.4,'r')
+s.line(X(0),Y(0),X(2.4),Y(2.4),'b',0.9,dash='4 3');s.text(X(2.4)+2,Y(2.4)+4,'Y=X',10,'b')
+for v in (1,2,3): s.text(X(v),oy+14,str(v),10,'k','middle')
+s.text(ox-6,Y(1)+4,'1',10,'k','end');s.text(ox-6,Y(2)+4,'2',10,'k','end')
+s.text(X(0.5),Y(2)-8,'X≤1 → 2',9,'r','middle');s.text(X(2.5),Y(1)-8,'X≥2 → 1',9,'r','middle')
+qx,qy=210,170;U=X2=lambda y:qx+(y-0.4)*65;V=lambda p:qy-p*140
+s.axes(qx,qy,200,372,182,8,xl='y',yl='F',o=False)
+s.line(qx,V(0),U(1),V(0),'k',1.4)
+s.plot(lambda y:(y**3+18)/27,1,2,U,V,n=8)
+s.line(U(2),V(1),U(2.35),V(1),'k',1.4)
+s.dot(U(1),V(0),2.2,'k',hollow=True);s.dot(U(1),V(19/27),2.6,'k')
+s.dot(U(2),V(26/27),2.2,'k',hollow=True);s.dot(U(2),V(1),2.6,'k')
+s.text(U(1)-4,V(19/27)-4,'19/27',9,'r','end');s.text(U(2)+4,V(26/27)+10,'26/27',9,'p')
+s.text(U(1),qy+14,'1',10,'k','middle');s.text(U(2),qy+14,'2',10,'k','middle')
+s.text(U(1.5),V(0.92)-10,'(y³+18)/27',10,'k','middle')
+::think
+1. 点概率：$P\{Y=1\}=P\{X\ge2\}=1-\frac8{27}=\frac{19}{27}$；$P\{Y=2\}=P\{X\le1\}=\frac1{27}$。
+2. $Y\in[1,2]$：$y\lt1$ 时 $F_Y=0$；$y\ge2$ 时 $F_Y=1$；$1\le y\lt2$ 时 $F_Y=P\{Y=1\}+P\{1\lt X\le y\}=\frac{19}{27}+\frac{y^3-1}{27}=\frac{y^3+18}{27}$。
+3. $X\le1$ 时 $Y=2\ge X$ ✓；$1\lt X\lt2$ 时 $Y=X$ ✓；$X\ge2$ 时 $Y=1\lt X$ ✗ ⟹ $P\{X\le Y\}=P\{X\lt2\}=\frac8{27}$。
+::fast
+{{秒|一句话做 (II)}}：只有 $X\ge2$ 那段事件不成立 ⟹ $P\{X\le Y\}=1-P\{X\ge2\}=1-\frac{19}{27}=\frac8{27}$。
+::steps
+$X$ 的分布函数：$0\le x\le3$ 时 $F_X(x)=\int_0^x\frac{t^2}9dt=\frac{x^3}{27}$；$x\lt0$ 为 0，$x\gt3$ 为 1。
+**列表**（[[T截断变量]]）：
+
+| $X$ 的范围 | $Y$ 的值 | 概率 |
+|---|---|---|
+| $X\le1$ | $Y=2$ | $F_X(1)=\frac1{27}$ |
+| $1\lt X\lt2$ | $Y=X\in(1,2)$ | $F_X(2)-F_X(1)=\frac{7}{27}$ |
+| $X\ge2$ | $Y=1$ | $1-F_X(2)=\frac{19}{27}$ |
+
+  所以 $Y$ 只在 $[1,2]$ 取值，$P\{Y=1\}=\frac{19}{27}$，$P\{Y=2\}=\frac1{27}$，$P\{1\lt Y\lt2\}=\frac7{27}$。
+**(I)** $F_Y(y)=P\{Y\le y\}$（[[分布函数]]），按 $y$ 分段：
+  $y\lt1$：$Y\ge1$，$\{Y\le y\}$ 不可能 ⟹ $F_Y(y)=0$。
+  $1\le y\lt2$：$\{Y\le y\}=\{Y=1\}\cup\{1\lt Y\le y\}=\{X\ge2\}\cup\{1\lt X\le y\}$（$Y=2$ 不在其中，因为 $y\lt2$）：
+$$F_Y(y)=\frac{19}{27}+\int_1^y\frac{x^2}9dx=\frac{19}{27}+\frac{y^3-1}{27}=\frac{y^3+18}{27}.$$
+  $y\ge2$：$Y\le2\le y$ 必然 ⟹ $F_Y(y)=1$。
+$$F_Y(y)=\begin{cases}0,&y\lt1,\\\dfrac{y^3+18}{27},&1\le y\lt2,\\1,&y\ge2.\end{cases}$$
+  ~检查跳跃：$y=1$ 处从 0 跳到 $\frac{19}{27}$ = $P\{Y=1\}$ ✓；$y=2$ 处从 $\frac{26}{27}$ 跳到 1，跳 $\frac1{27}=P\{Y=2\}$ ✓。
+**(II)** 按 $X$ 的三段逐段判断 $\{X\le Y\}$：
+  $X\le1$：$Y=2\ge1\ge X$ ⟹ 成立；$1\lt X\lt2$：$Y=X$ ⟹ 成立；$X\ge2$：$Y=1\lt2\le X$ ⟹ 不成立。
+  所以 $\{X\le Y\}=\{X\lt2\}$，$P\{X\le Y\}=F_X(2)=\dfrac{8}{27}$。
+::paper
+解　由题设，$X$ 的分布函数在 $[0,3]$ 上为 $F_X(x)=\dfrac{x^3}{27}$.
+(I) $P\{Y=1\}=P\{X\ge2\}=\displaystyle\int_2^3\frac{x^2}9dx=\frac{19}{27}$，$P\{Y=2\}=P\{X\le1\}=\displaystyle\int_0^1\frac{x^2}9dx=\frac1{27}$. ⛳2
+$Y$ 的分布函数 $F_Y(y)=P\{Y\le y\}$.
+当 $y\lt1$ 时，$F_Y(y)=0$； ⛳1
+当 $1\le y\lt2$ 时，$F_Y(y)=P\{Y=1\}+P\{1\lt Y\le y\}=\dfrac{19}{27}+\displaystyle\int_1^y\frac{x^2}9dx=\frac{y^3+18}{27}$； ⛳3
+当 $y\ge2$ 时，$F_Y(y)=1$. ⛳1
+故 $F_Y(y)=\begin{cases}0,&y\lt1,\\\dfrac{y^3+18}{27},&1\le y\lt2,\\1,&y\ge2.\end{cases}$
+(II) 当 $X\le1$ 时 $Y=2\ge X$；当 $1\lt X\lt2$ 时 $Y=X$；当 $X\ge2$ 时 $Y=1\lt X$. 故 $\{X\le Y\}=\{X\lt2\}$， ⛳2
+$$P\{X\le Y\}=P\{X\lt2\}=\int_0^2\frac{x^2}9dx=\frac8{27}.$$ ⛳2
+::note
+- {{扣|(I) 写成 $1\lt y\lt2$ 或漏掉 $y=1$ 的点概率}}：$1\le y$ 时 $\{Y=1\}$ 已经计入，$F_Y(1)=\frac{19}{27}$；等号放左端点（右连续）。
+- {{扣|求 $Y$ 的密度}}：$Y$ 有点概率，不是连续型，没有密度。题目问「分布函数」正是因此。
+- ⚠️ **原书 (II) 的算式是错的，只是数值碰巧对**：它写 $P\{X\le Y\}=\frac{19}{27}P\{X\le1\}+\frac1{27}P\{X\le2\}+\frac7{27}P\{X\le Y\}$，把 $X$ 当成与 $Y$ 独立去代——实际上 $Y=1$ 时必有 $X\ge2$，$P\{X\le Y,Y=1\}=0$，不是 $\frac{19}{27}\cdot\frac1{27}$；$Y=2$ 时必有 $X\le1$，贡献是 $\frac1{27}$，不是 $\frac1{27}\cdot\frac8{27}$；第三项右边还出现了要求的 $P\{X\le Y\}$ 本身（循环）。三项凑巧 $\frac{19}{729}+\frac8{729}+\frac7{27}=\frac8{27}$。用全概率的话，正确写法是 $0\cdot\frac{19}{27}+1\cdot\frac1{27}+1\cdot\frac7{27}=\frac8{27}$。
+- 提速：先写出 $F_X(x)=\frac{x^3}{27}$，所有概率都是 $F_X$ 在 1、2 两点的值，心算即可。
+::vary
+同题求 $EY$ >> $2\cdot\frac1{27}+\int_1^2x\cdot\frac{x^2}9dx+1\cdot\frac{19}{27}=\frac{2}{27}+\frac5{12}+\frac{19}{27}=\frac{43}{36}$
+同题求 $P\{Y=X\}$ 与 $P\{Y\lt X\}$ >> $P\{Y=X\}=P\{1\lt X\lt2\}=\frac7{27}$；$P\{Y\lt X\}=P\{X\ge2\}=\frac{19}{27}$
+若改为 $Y=\begin{cases}1,&X\le1\\X,&1\lt X\lt2\\2,&X\ge2\end{cases}$（正向截断），$F_Y$ >> $1\le y\lt2$ 时 $F_Y=P\{X\le y\}=\frac{y^3}{27}$；在 1 处跳 $\frac1{27}$、在 2 处跳 $\frac{19}{27}$
+同题 $Y$ 是连续型随机变量吗、离散型吗 >> 都不是：$F_Y$ 有跳跃（不连续）又在 $(1,2)$ 上连续增长（不是阶梯）
+
+#23
+@stem
+（本题满分 11 分）设总体 $X$ 的概率密度为 $f(x;\theta)=\begin{cases}\dfrac{\theta^2}{x^3}e^{-\frac\theta x},&x\gt0,\\0,&\text{其他},\end{cases}$ 其中 $\theta$ 为未知参数且大于零. $X_1,X_2,\cdots,X_n$ 为来自总体 $X$ 的简单随机样本.
+(I) 求 $\theta$ 的矩估计量；
+(II) 求 $\theta$ 的最大似然估计量.
+@tpl T最大似然, T函数期望
+::read
+「求 $\theta$ 的矩估计量」 >> 一个参数 ⟹ 一阶矩 $EX=\bar X$（[[矩估计]]）；先算 $EX=\int_0^{+\infty}x\cdot\frac{\theta^2}{x^3}e^{-\theta/x}dx$
+「$\frac{\theta^2}{x^3}e^{-\theta/x}$」 >> 指数里是 $\frac\theta x$ ⟹ {{圈|换元 $t=\frac\theta x$}}，积分立刻变成 $\int e^{-t}$ 型；这个分布就是「$\frac1X$ 服从 $\Gamma(2,\theta)$」
+「求最大似然估计量」 >> 连乘 → 取对数 → 求导令 0 → 写估计量（大写）（[[T最大似然]]、[[最大似然估计]]）
+「$\theta\gt0$」 >> $\ln\theta$ 有意义；似然方程有唯一正根，二阶导 $-\frac{2n}{\theta^2}\lt0$ 确认是最大
+::sk 340 190 看 | $\theta=1$ 时的密度 $\frac{1}{x^3}e^{-1/x}$：峰在 $x=\frac13$，右边拖着 $\frac1{x^3}$ 的长尾——均值 $\theta=1$ 存在，但二阶矩是无穷
+ox,oy=24,170;X=lambda x:ox+x*72;Y=lambda y:oy-y*105
+s.axes(ox,oy,10,335,182,8,xl='x',yl='')
+g=lambda x:x**-3*math.exp(-1/x)
+s.plot(g,0.08,4.2,X,Y,n=26)
+s.line(X(1),oy,X(1),Y(g(1)),'r',1.0,dash='4 3')
+s.text(X(1)+4,oy+14,'EX=θ=1',10,'r')
+s.dot(X(1/3),Y(g(1/3)),2.4,'b');s.text(X(1/3)+8,Y(g(1/3))+4,'峰 x=θ/3',10,'b')
+s.text(X(2.3),Y(0.6),'θ²/x³ · e^{−θ/x}',11,'k','middle')
+s.text(X(2.3),Y(0.38),'1/X ~ Γ(2, θ)：E(1/X)=2/θ',10,'p','middle')
+::think
+1. $EX=\int_0^{+\infty}\frac{\theta^2}{x^2}e^{-\theta/x}dx$，令 $t=\frac\theta x$ ⟹ $=\theta\int_0^{+\infty}e^{-t}dt=\theta$ ⟹ 矩估计 $\hat\theta=\bar X$。
+2. $\ln L=2n\ln\theta-3\sum\ln x_i-\theta\sum\frac1{x_i}$，$\frac{d}{d\theta}\ln L=\frac{2n}\theta-\sum\frac1{x_i}=0$ ⟹ $\hat\theta=\dfrac{2n}{\sum\frac1{X_i}}$。
+::steps
+**(I)** 一阶矩（[[矩估计]]）：
+$$EX=\int_0^{+\infty}x\cdot\frac{\theta^2}{x^3}e^{-\frac\theta x}dx=\int_0^{+\infty}\frac{\theta^2}{x^2}e^{-\frac\theta x}dx.$$
+  令 $t=\dfrac\theta x$，$x=\dfrac\theta t$，$dx=-\dfrac{\theta}{t^2}dt$；$x:0^+\to+\infty$ 对应 $t:+\infty\to0^+$；$\dfrac{\theta^2}{x^2}=t^2$：
+$$EX=\int_{+\infty}^{0}t^2e^{-t}\cdot\left(-\frac{\theta}{t^2}\right)dt=\theta\int_0^{+\infty}e^{-t}dt=\theta.$$
+  {{省|（或者凑微分：$\frac{\theta^2}{x^2}dx=-\theta\,d\!\left(\frac\theta x\right)$，一步到位。）}}
+  令 $EX=\bar X$ ⟹ $\theta$ 的矩估计量 $\hat\theta=\bar X=\dfrac1n\sum_{i=1}^nX_i$。
+**(II)** 似然函数（[[最大似然估计]]）：设样本值 $x_1,\dots,x_n$ 都 $\gt0$，
+$$L(\theta)=\prod_{i=1}^n\frac{\theta^2}{x_i^3}e^{-\frac\theta{x_i}}=\frac{\theta^{2n}}{(x_1x_2\cdots x_n)^3}\,e^{-\theta\sum_{i=1}^n\frac1{x_i}}.$$
+  取对数：$\ln L(\theta)=2n\ln\theta-3\displaystyle\sum_{i=1}^n\ln x_i-\theta\sum_{i=1}^n\frac1{x_i}$。
+  求导令 0：$\dfrac{d\ln L}{d\theta}=\dfrac{2n}{\theta}-\displaystyle\sum_{i=1}^n\frac1{x_i}=0$ ⟹ $\theta=\dfrac{2n}{\sum_{i=1}^n\frac1{x_i}}$。
+  $\dfrac{d^2\ln L}{d\theta^2}=-\dfrac{2n}{\theta^2}\lt0$ ⟹ 唯一驻点就是最大值点。
+  最大似然估计值 $\hat\theta=\dfrac{2n}{\sum_{i=1}^n\frac1{x_i}}$，最大似然估计量 $\hat\theta=\dfrac{2n}{\sum_{i=1}^n\frac1{X_i}}$。
+~合理性：$E\frac1X=\int_0^\infty\frac1x\cdot\frac{\theta^2}{x^3}e^{-\theta/x}dx=\frac2\theta$（同样换元得 $\frac1\theta\int t^2e^{-t}dt=\frac2\theta$），所以 $\frac{2n}{\sum1/X_i}=\frac{2}{\overline{1/X}}\approx\frac{2}{2/\theta}=\theta$ ✓。
+::paper
+解　(I) $EX=\displaystyle\int_{-\infty}^{+\infty}xf(x;\theta)dx=\int_0^{+\infty}\frac{\theta^2}{x^2}e^{-\frac\theta x}dx\xlongequal{t=\frac\theta x}\theta\int_0^{+\infty}e^{-t}dt=\theta.$ ⛳3
+令 $EX=\bar X$，得 $\theta$ 的矩估计量为 $\hat\theta=\bar X$. ⛳2
+(II) 设 $x_1,x_2,\cdots,x_n$ 为样本值（$x_i\gt0$），似然函数为
+$$L(\theta)=\prod_{i=1}^nf(x_i;\theta)=\frac{\theta^{2n}}{(x_1x_2\cdots x_n)^3}e^{-\theta\sum\limits_{i=1}^n\frac1{x_i}},$$ ⛳2
+$$\ln L(\theta)=2n\ln\theta-3\sum_{i=1}^n\ln x_i-\theta\sum_{i=1}^n\frac1{x_i}.$$ ⛳1
+令 $\dfrac{d\ln L(\theta)}{d\theta}=\dfrac{2n}{\theta}-\displaystyle\sum_{i=1}^n\frac1{x_i}=0$，⛳1
+得 $\theta$ 的最大似然估计值为 $\hat\theta=\dfrac{2n}{\sum\limits_{i=1}^n\frac1{x_i}}$， ⛳1
+最大似然估计量为 $\hat\theta=\dfrac{2n}{\sum\limits_{i=1}^n\frac1{X_i}}$. ⛳1
+::note
+- {{扣|估计量写成小写 $x_i$}}：估计值用 $x_i$、估计量用 $X_i$，最后一行要换成大写。
+- {{扣|换元时上下限没换顺序}}：$t=\frac\theta x$ 是递减的，$x\to0^+$ 对应 $t\to+\infty$；漏了负号会得到 $-\theta$。
+- {{扣|矩估计写成 $\hat\theta=\frac1n\sum x_i$}}：同样要大写。
+- 本题的总体二阶矩 $EX^2=\theta^2\int_0^\infty\frac{1}{x}e^{-\theta/x}dx=+\infty$（发散）——所以只能用一阶矩，也提醒「矩估计不一定能用高阶矩」。
+- 跨章：似然方程里出现 $\sum\frac1{x_i}$，说明 MLE 依赖的是 $\frac1{X_i}$；$\frac1X\sim\Gamma(2,\theta)$，$E\frac1X=\frac2\theta$ 可用来检验答案（[[T函数期望]]）。
+::vary
+同题求 $\frac1\theta$ 的最大似然估计量 >> 由不变性，$\widehat{\frac1\theta}=\frac{1}{2n}\sum\frac1{X_i}$；且 $E\left(\frac1{2n}\sum\frac1{X_i}\right)=\frac1{2n}\cdot n\cdot\frac2\theta=\frac1\theta$，是无偏的
+同题的矩估计 $\bar X$ 是 $\theta$ 的无偏估计吗 >> 是：$E\bar X=EX=\theta$
+若密度为 $\frac{\theta}{x^2}e^{-\theta/x}$（$x\gt0$），求 $\theta$ 的最大似然估计量 >> $\ln L=n\ln\theta-2\sum\ln x_i-\theta\sum\frac1{x_i}$ ⟹ $\hat\theta=\frac{n}{\sum\frac1{X_i}}$（此分布 $EX=+\infty$，矩估计用不了）
+若改为两参数 $f=\frac{\theta^k}{\Gamma(k)x^{k+1}}e^{-\theta/x}$，$k$ 已知，求 $\theta$ 的 MLE >> $\frac{k n}{\theta}-\sum\frac1{x_i}=0$ ⟹ $\hat\theta=\frac{kn}{\sum\frac1{X_i}}$（本题 $k=2$）

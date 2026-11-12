@@ -43,7 +43,7 @@
     ['autoEnd','时间到自动交卷','倒计时走完直接交卷，不看有没有答完。关着时只提醒，可继续写。']
   ];
   var MODES = [['exam','考试','整卷做完再交，交卷后统一判分、看解析。'],['practice','练习','做一题对一题：选完立刻判对错，填空和解答写完点「对答案」。'],['read','读解析','不用作答，每题的解析直接摊开，适合二刷和考前翻看。']];
-  var HIDES = [['read','读题圈画'],['sk','草图'],['think','思路'],['steps','每一步'],['omit','考场可省的步骤'],['fast','秒杀'],['paper','考场卷面'],['note','批注'],['vary','举一反三']];
+  var HIDES = [['read','读题圈画'],['sk','草稿图（考场上画的、列的）'],['see','示意图（看懂就行、考场不画的）'],['think','思路'],['steps','每一步'],['omit','考场可省的步骤'],['fast','秒杀'],['paper','考场卷面'],['note','批注'],['vary','举一反三']];
   function modeOf(){ return S.set.read?'read':S.set.instant?'practice':'exam'; }
   function segHtml(attr, list, on){ return '<span class="seg" role="group">'+list.map(function(o){ return '<button data-'+attr+'="'+o[0]+'" class="'+(on===o[0]?'on':'')+'">'+o[1]+'</button>'; }).join('')+'</span>'; }
   function togglesHtml(){
@@ -55,7 +55,7 @@
     h += TOGGLES.map(function(t){
       return '<label class="tg"><input type="checkbox" data-set="'+t[0]+'"'+(S.set[t[0]]?' checked':'')+'><span class="sw"></span><span class="tx"><b>'+t[1]+'</b><small>'+t[2]+'</small></span></label>';
     }).join('');
-    h += '<div class="tg tg-sel tg-wide"><span class="tx"><b>解析里显示哪几块</b><small>点一下划掉就不显示。比如二刷时只留「思路」和「考场卷面」。</small></span><span class="chips">'
+    h += '<div class="tg tg-sel tg-wide"><span class="tx"><b>解析里显示哪几块</b><small>点一下划掉就不显示。时间紧就点「精简」：去掉考场可省的步骤、举一反三和考场不画的示意图。</small></span><span class="chips"><button data-preset="full" class="pre">完整</button><button data-preset="lite" class="pre">精简</button>'
       + HIDES.map(function(o){ return '<button data-hide="'+o[0]+'" class="'+(S.set.hide[o[0]]?'':'on')+'">'+o[1]+'</button>'; }).join('')+'</span></div>';
     return h;
   }
@@ -89,6 +89,7 @@
       return;
     }
     if ((b=t.closest('button[data-fs]'))) { S.set.fs=b.getAttribute('data-fs'); save(); refreshToggles(); applySet(); return; }
+    if ((b=t.closest('button[data-preset]'))) { S.set.hide = b.getAttribute('data-preset')==='lite' ? {omit:true,vary:true,see:true} : {}; save(); refreshToggles(); applySet(); return; }
     if ((b=t.closest('button[data-hide]'))) { var hk=b.getAttribute('data-hide'); S.set.hide[hk]=!S.set.hide[hk]; save(); refreshToggles(); applySet(); return; }
   });
 
@@ -296,9 +297,15 @@
     if (bk && ss.done) h+='<a class="bk" href="'+bk.href+'">'+esc(bk.text)+'</a>';
     return h;
   }
+  /* 交卷后哪些题值得花时间：失分、没登分、标记过、看过提示、选了错因、精研卡点名必吃透 */
+  function needRev(q){
+    var v=qScore(q), D=curDeep();
+    return v==null || v<q.score || !!ss.flag[q.no] || !!ss.hint[q.no] || !!ss.why[q.no] || !!(D&&D.core&&D.core.indexOf(q.no)>=0);
+  }
   function solShown(q){
     var rev=ss.show&&ss.show[q.no], jd=judged(q);
-    if (ss.done || S.set.read) return rev!==false;
+    if (ss.done) return rev!==undefined ? !!rev : needRev(q);   /* 交卷后：只有要复盘的题默认摊开 */
+    if (S.set.read) return rev!==false;
     if (jd && q.type==='choice') return !!rev;
     return !!(jd||rev);
   }
@@ -356,6 +363,7 @@
     if (canHint) acts += '<button class="solb hintb" data-hint="'+q.no+'">'+(ss.hint[q.no]===2?'收起提示':'提示：要用的知识点')+'</button>';
     if (acts) h += '<div class="acts">'+acts+'</div>';
     if (canHint && ss.hint[q.no]===2) h += kpPanel(q, 1);
+    if (ss.done && !showNow) { var G=deepOf(q.no); h += '<div class="gist"><i>做对了，过一眼这行就走</i>'+(G&&G.core?G.core:'想再看一遍就点「看解析」。')+'</div>'; }
     if (showNow) h += '<div class="sol"><span class="soltab">解析</span>'+solHtml(q)+(jd||ss.done?selfHtml(q)+whyHtml(q):'')+noteHtml(q)
       + '<div class="solend"><button class="solb" data-sol="'+q.no+'">收起解析</button><button class="solb" data-step="1">下一题 →</button></div></div>';
     return h + '</article>';
@@ -396,7 +404,7 @@
   }
   function legendHtml(){
     return '<details class="lgd"><summary>解析里的记号怎么读 · 快捷键</summary><div class="lgd-b">'
-      + '<p><span class="rq">黄色划线</span> 题目里该圈出来的话　<span class="ra">蓝色楷体</span> 读到这句该想到什么　<span class="circ">红圈</span> 关键量　<span class="wavy">波浪线</span> 容易看漏　<span class="omit">灰色</span> 考场上可以不写　<span class="fast">橙色</span> 秒杀做法　<span class="pt">2 分</span> 采分点　<button class="kpb" type="button">蓝色虚线</button> 点开是知识点　<button class="kpb tplb" type="button">紫框</button> 点开是跨年套路</p>'
+      + '<p><span class="rq">黄色划线</span> 题目里该圈出来的话　<span class="ra">蓝色楷体</span> 读到这句该想到什么　<span class="circ">红圈</span> 关键量　<span class="wavy">波浪线</span> 容易看漏　<span class="omit">灰色</span> 考场上可以不写　图注开头写着「考场上画 / 草稿上列 / 看懂就行」，前两种才需要自己动笔　<span class="fast">橙色</span> 秒杀做法　<span class="pt">2 分</span> 采分点　<button class="kpb" type="button">蓝色虚线</button> 点开是知识点　<button class="kpb tplb" type="button">紫框</button> 点开是跨年套路</p>'
       + '<p class="keys">键盘：<kbd>←</kbd><kbd>→</kbd> 或 <kbd>K</kbd><kbd>J</kbd> 上一题、下一题　<kbd>A</kbd><kbd>B</kbd><kbd>C</kbd><kbd>D</kbd> 选当前题　<kbd>S</kbd> 看 / 收起解析　<kbd>H</kbd> 提示　<kbd>F</kbd> 标记　<kbd>Esc</kbd> 关掉知识点卡</p></div></details>';
   }
   function redrawPaper(){
@@ -416,6 +424,7 @@
     if (!ss.done) h += '<button class="sub sub-end" id="submit2">交卷</button>';
     $('pm').innerHTML = h;
     typeset($('pm'));
+    updateSide();
     var vis=visNos(); if (vis.indexOf(ss.at)<0) ss.at=vis[0];
     setCur(ss.at);
     window.scrollTo(0,y);
@@ -533,6 +542,7 @@
       + '<div class="tabw"><table class="rp"><tbody>'+rows+'</tbody></table></div>'
       + (wrong.length?'<p class="wr">失分题：'+wrong.map(function(q){ return '<a href="javascript:;" data-go="'+q.no+'">'+q.no+'</a>'; }).join(' ')+'</p>':'')
       + whyStat() + studyHtml() + kpListHtml(wrong)
+      + '<p class="repn">下面只把<b>失分、标记过、看过提示、必吃透</b>的题摊开；做对的题收成一行「本质」，要看再点开。解析太长就在「模式 · 开关」里点「精简」。</p>'
       + '<div class="rep-a"><span class="seg">'+[['all','全部'],['wrong','只看失分'],['flag','只看标记']].concat(curDeep()&&curDeep().core?[['core','只看必吃透']]:[]).map(function(o){ return '<button data-filter="'+o[0]+'" class="'+((ss.filter||'all')===o[0]?'on':'')+'">'+o[1]+'</button>'; }).join('')+'</span><button class="ghost" id="redo">重做这一年</button></div></section>';
   }
   function whyStat(){

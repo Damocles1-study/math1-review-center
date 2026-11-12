@@ -24,7 +24,9 @@ _build/rich/YYYY.txt（一年一个）：
   ::paper              考场卷面（只给解答题）
   ::note               批注：扣分点、边界、提速
   ::vary               举一反三：一行一条，「变式 >> 答案或要点」
-  ::sk 宽 高 | 图注    手绘草图，下面是 Python（变量 s 是 Sk 画板，见 sk.py），到下一个 :: 为止
+  ::sk 宽 高 画 | 图注  手绘草图，下面是 Python（变量 s 是 Sk 画板，见 sk.py），到下一个 :: 为止
+                       宽高后面必须标用途（不标构建报错）：画＝考场上真会画、1 分钟内徒手画得出；
+                       列＝草稿上列的式子或表；看＝只为看懂，考场不画（页面上可一键隐藏）
   ::                   单独一行，结束当前块
   块按源文件顺序显示，推荐顺序：read → sk → think → fast → steps → paper → note → vary
 行内：
@@ -133,19 +135,22 @@ def fit_svg(svg, w, h):
 HEAD = {'read': ('📖', '读题 · 圈画'), 'think': ('💭', '思路'), 'fast': ('⚡', '秒杀 · 考场快法'), 'steps': ('🧮', '详解（每一步）'),
         'paper': ('✍️', '考场卷面'), 'note': ('📌', '批注'), 'vary': ('🔁', '举一反三'), 'sk': ('✏️', '草图')}
 
+SK_USE = {'画': 'draw', '列': 'list', '看': 'see'}
+
 def block_html(kind, arg, lines, where, ids, seed):
     ic, nm = HEAD[kind]
     if kind == 'sk':
-        m = re.match(r'(\d+)\s+(\d+)\s*(?:\|\s*(.*))?$', arg or '')
-        if not m: err(where, '::sk 要写「宽 高 | 图注」'); return ''
-        w, h, cap = int(m.group(1)), int(m.group(2)), m.group(3) or ''
+        m = re.match(r'(\d+)\s+(\d+)\s*(画|列|看)?\s*(?:\|\s*(.*))?$', arg or '')
+        if not m: err(where, '::sk 要写「宽 高 画|列|看 | 图注」'); return ''
+        w, h, use, cap = int(m.group(1)), int(m.group(2)), m.group(3), m.group(4) or ''
+        if not use: err(where, '::sk 没标用途：宽高后面写 画（考场上真会画）/ 列（草稿上列的式子或表）/ 看（只为看懂，考场不画）'); return ''
         s = Sk(w, h, seed=seed)
         try:
             import math, random  # noqa: F401  给草图代码用
             exec('\n'.join(lines), {'s': s, 'math': math, 'random': random, 'Sk': Sk})
         except Exception as e:
             err(where, '草图代码出错：%r' % e); return ''
-        return '<figure class="rb rb-sk">%s%s</figure>' % (fit_svg(s.svg(cls='sk', alt=cap), w, h), ('<figcaption>%s</figcaption>' % inline(cap, where, ids)) if cap else '')
+        return '<figure class="rb rb-sk sk-%s">%s%s</figure>' % (SK_USE[use], fit_svg(s.svg(cls='sk', alt=cap), w, h), ('<figcaption>%s</figcaption>' % inline(cap, where, ids)) if cap else '')
     title = inline(arg, where, ids) if arg else nm
     if kind == 'read':
         body = ''

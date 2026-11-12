@@ -249,7 +249,7 @@ body.one .onenav{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:28;
 .rich.lay .rb-steps,.rich.lay .rb-steps~*{display:none}
 .laybtn{display:block;width:100%;margin-top:14px;padding:9px 12px;font:700 15px var(--hand);color:var(--pen);border:1.6px dashed var(--pen);border-radius:14px 5px 13px 6px/6px 13px 5px 14px}.laybtn:hover{background:var(--tpb)}
 /* 解析里隐藏哪几块 */
-.hide-read .rb-read,.hide-sk .rb-sk,.hide-think .rb-think,.hide-steps .rb-steps,.hide-fast .rb-fast,.hide-paper .rb-paper,.hide-note .rb-note,.hide-vary .rb-vary,.hide-omit .steps>li.omit-s{display:none!important}
+.hide-read .rb-read,.hide-think .rb-think,.hide-steps .rb-steps,.hide-fast .rb-fast,.hide-paper .rb-paper,.hide-note .rb-note,.hide-vary .rb-vary,.hide-omit .steps>li.omit-s{display:none!important}
 /* 自评、错因、我的批注 */
 .self{border-top:1px dashed var(--pencil);margin-top:14px}.self button{border-radius:3px}
 .why{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:9px;font:13.5px var(--head)}.why span{color:var(--ink3);margin-right:2px}
@@ -264,3 +264,11 @@ kbd{font:12px var(--mono);border:1px solid var(--pencil);border-bottom-width:2px
 @media (max-width:520px){.sol{margin-left:-6px;margin-right:-6px;padding-left:20px;background-image:linear-gradient(90deg,transparent 10px,var(--marg) 10px,var(--marg) 11px,transparent 11px)}.steps>li.omit-s{padding-right:0}.steps>li.omit-s:after{position:static;display:inline-block;margin-left:6px}.solend .solb,.acts .solb{padding:5px 14px}}
 .kpb.tplb{display:inline;-webkit-box-decoration-break:clone;box-decoration-break:clone;line-height:1.9}
 html[data-theme="night"] .rb-sk svg,html[data-theme="night"] .optsvg{filter:invert(.9) hue-rotate(180deg)}
+/* 草图三类：考场上画 / 草稿上列 / 看懂就行（构建时由 ::sk 的用途标签决定） */
+.rb-sk figcaption:before{font:700 13px var(--hand);margin-right:6px;padding:0 6px;border-radius:10px 4px 9px 5px/5px 9px 4px 10px;border:1.3px solid currentColor;white-space:nowrap}
+.sk-draw figcaption:before{content:"考场上画";color:var(--ok)}.sk-list figcaption:before{content:"草稿上列";color:var(--pen)}.sk-see figcaption:before{content:"看懂就行 · 考场不画";color:var(--pencil)}
+.sk-see svg{max-width:min(100%,380px)}.sk-see{opacity:.88}
+.hide-see .sk-see{display:none!important}.hide-sk .sk-draw,.hide-sk .sk-list{display:none!important}
+.chips button.pre{text-decoration:none;color:var(--bg);background:var(--ink);border-color:var(--ink);font-weight:700}
+.gist{margin-top:8px;padding:4px 10px 4px 12px;border-left:3px solid var(--ok);font-size:14.5px;color:var(--ink2);line-height:1.7}.gist i{display:block;font:700 12.5px var(--hand);color:var(--ok);font-style:normal}
+.repn{font-size:13px;color:var(--ink3);margin:8px 0 0}
