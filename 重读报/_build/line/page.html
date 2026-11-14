@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>一条线 · 重读报</title>
+<link rel="stylesheet" href="assets/katex/katex.min.css">
+<link rel="stylesheet" href="assets/paper.css">
+<style>
+.ln-wrap{max-width:860px;margin:0 auto}
+.ln-wrap p,.ln-wrap li{line-height:1.75;overflow-wrap:anywhere}
+.ln-bar{position:sticky;top:0;z-index:9;background:var(--paper);border-bottom:2px solid var(--rule);padding:6px 0;display:flex;gap:8px;align-items:center;font-family:var(--sans);font-size:12.5px}
+.ln-toc{flex:1;display:flex;gap:10px;overflow-x:auto;white-space:nowrap;scrollbar-width:none}
+.ln-toc::-webkit-scrollbar{display:none}
+.ln-toc a{text-decoration:none;color:var(--ink2)}
+.ln-toc b a{color:var(--red)}
+.ln-toc a.on{color:var(--ink);font-weight:700;border-bottom:2px solid var(--red)}
+.ln-btn{font:inherit;border:1.5px solid var(--rule);background:var(--paper);color:var(--ink);padding:3px 9px;cursor:pointer;flex:none}
+body.test .ln-btn{background:var(--ink);color:var(--paper)}
+.ln-part{margin:2.4em 0 .6em;border-top:5px solid var(--rule);padding-top:.5em}
+.ln-part h2{font-family:var(--head);font-weight:900;font-size:clamp(24px,4vw,32px);margin:0}
+.ln-part p{color:var(--ink2);margin:.3em 0 0}
+.ln-st{border-left:3px solid var(--rule);padding:0 0 .2em 14px;margin:1.5em 0 0;scroll-margin-top:48px}
+.ln-part{scroll-margin-top:48px}
+.ln-st h3{font-family:var(--head);font-size:21px;margin:0 0 .3em;display:flex;flex-wrap:wrap;align-items:baseline;gap:.4em}
+.ln-st .no{display:inline-block;min-width:1.6em;text-align:center;background:var(--ink);color:var(--paper);font-family:var(--sans);font-size:14px;padding:1px 4px;margin-left:-31px}
+.ln-st .fq{font-family:var(--sans);font-size:11.5px;font-weight:400;color:var(--red);border:1px solid var(--red);padding:0 6px}
+.ln-pic{background:var(--paper2);padding:.55em .8em;margin:.4em 0;border-radius:2px}
+.ln-pic::before{content:"画面　";font-family:var(--sans);font-size:11.5px;color:var(--ochre);font-weight:700}
+.ln-next{color:var(--blue);margin:.9em 0 0;font-size:.95em}
+.ln-next::before{content:"↓ 接下来　";font-family:var(--sans);font-size:11.5px;font-weight:700}
+.ln-mem,.ln-cue,.ln-open,.ln-trap{margin:.7em 0}
+.ln-wrap h4{font-family:var(--sans);font-size:12px;letter-spacing:.08em;margin:0 0 .2em;color:var(--ink3)}
+.ln-open h4{color:var(--red)}.ln-trap h4{color:var(--ochre)}.ln-cue h4{color:var(--blue)}
+.ln-wrap ul,.ln-wrap ol{margin:0;padding-left:1.25em}
+.ln-mem li{border-bottom:1px dotted var(--hair);padding:.12em 0}
+.ln-mem li,.ln-cue li,.ln-open li,.ln-trap li,.ln-pic,.ln-part p{overflow-x:auto;overflow-y:hidden}
+.ln-mem .q{color:var(--ink2);margin-right:.6em}
+.ln-mem .q::after{content:" ＝"}
+.ln-mem .a{font-weight:600}
+body.test .ln-mem .a{filter:blur(7px);cursor:pointer;user-select:none;background:var(--fill)}
+body.test .ln-mem .a.show{filter:none;background:none}
+.ln-cue .sig{color:var(--ink2)}
+.ln-cue .sig::after{content:" ⟶ ";color:var(--blue);font-weight:700}
+.ln-open{border:1.5px solid var(--red);padding:.5em .8em}
+.ln-open li{margin:.1em 0}
+.ln-trap li{color:var(--ink2)}
+.ln-wrap mark{background:var(--fill2);color:inherit;padding:0 2px}
+.tabwrap{overflow-x:auto;margin:.6em 0}
+table.ln-t{border-collapse:collapse;width:100%;font-size:.93em}
+table.ln-t th,table.ln-t td{border:1px solid var(--hair);padding:.3em .5em;text-align:left;vertical-align:top}
+table.ln-t th{font-family:var(--sans);font-size:12px;background:var(--paper2);white-space:nowrap}
+table.ln-t td:first-child{white-space:nowrap;font-weight:700}
+.ln-how{border:2px solid var(--rule);padding:.6em .9em;margin:.8em 0}
+.ln-wrap .m .katex{font-size:1.04em}
+@media(max-width:600px){.ln-st{padding-left:10px}.ln-st .no{margin-left:-27px}table.ln-t td:first-child{white-space:normal}}
+</style>
+</head><body class="front">
+<div class="front-wrap"><div class="ln-wrap">
+<div class="front-top"><span>一条线</span><span>{{nav}}</span></div>
+<h1 class="pg-h" style="border-top:5px solid var(--rule);padding-top:.2em">一条线</h1>
+<p class="sub-lead">把 2010–2023 十四年真题考过的东西倒推回来，排成一条从上往下读的线。一页，只用上下滑。每做一张卷之前滑一遍。</p>
+<div class="ln-bar"><div class="ln-toc" id="toc">{{toc}}</div><button class="ln-btn" id="tb" onclick="LNTest()">自测</button></div>
+{{body}}
+<script src="assets/katex/katex.min.js"></script><script src="assets/data.js"></script><script src="assets/paper.js"></script>
+<script>
+CDRender(document);
+function LNTest(){var on=document.body.classList.toggle('test');document.getElementById('tb').textContent=on?'退出自测':'自测';
+  document.querySelectorAll('.ln-mem .a.show').forEach(function(e){e.classList.remove('show')});try{localStorage.setItem('cd_line_test',on?'1':'')}catch(e){}}
+document.addEventListener('click',function(e){var a=e.target.closest&&e.target.closest('.ln-mem .a');if(a&&document.body.classList.contains('test'))a.classList.toggle('show')});
+try{if(localStorage.getItem('cd_line_test'))LNTest()}catch(e){}
+(function(){var links=[].slice.call(document.querySelectorAll('#toc a')),cur=null;
+  var io=new IntersectionObserver(function(es){es.forEach(function(en){if(!en.isIntersecting)return;var l=links.filter(function(a){return a.getAttribute('href')==='#'+en.target.id})[0];
+    if(!l||l===cur)return;if(cur)cur.classList.remove('on');cur=l;l.classList.add('on');var t=document.getElementById('toc');t.scrollLeft=l.offsetLeft-t.clientWidth/2+l.offsetWidth/2})},{rootMargin:'-50px 0px -75% 0px'});
+  document.querySelectorAll('.ln-st,.ln-part').forEach(function(s){io.observe(s)})})();
+</script>
+</div></div></body></html>
