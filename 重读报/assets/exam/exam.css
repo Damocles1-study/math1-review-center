@@ -294,3 +294,37 @@ html[data-theme="night"] .rb-sk svg,html[data-theme="night"] .optsvg{filter:inve
 @media (max-width:700px){.qtm{order:9}}
 details.cue{margin:8px 0 2px;font-size:13.5px;line-height:1.6}details.cue>summary{cursor:pointer;font:700 13px var(--head);color:var(--tp)}
 .cue-r{display:flex;gap:8px;padding:5px 0;border-top:1px dashed var(--hair)}.cue-r>a{flex:none;font:12px var(--mono);white-space:nowrap;padding-top:2px}.cue-r>div{min-width:0;overflow-wrap:anywhere}.cue-t{margin:2px 0 0;color:var(--ink2);font-size:13px}
+/* —— 🧩 本题知识点（2026-11-16）：便利贴一页，题眼铅笔、关键一步荧光笔、坑红笔、口诀胶带 —— */
+.kqb{border-style:dashed;color:var(--pen);border-color:var(--pen)}.kqb:hover,.kqb.on{background:var(--pen);color:var(--bg)}
+.kq{position:relative;margin:12px 0 4px;padding:12px 14px 10px;background:var(--stk);box-shadow:1px 3px 7px var(--shadow);border-radius:2px 3px 2px 4px}
+.kq:before{content:"";position:absolute;top:-9px;left:42%;width:92px;height:18px;background:var(--tape);transform:rotate(-2deg)}
+.kq-h{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:6px}
+.kq-h b{font:700 17px var(--hand);background:linear-gradient(transparent 56%,rgba(90,150,255,.3) 56%,rgba(90,150,255,.3) 93%,transparent 93%)}
+.kq-h small{flex:1 1 14em;font:12.5px var(--hand);color:var(--pencil)}
+.kq-x{font:13px var(--hand);color:var(--ink3);border:0;border-bottom:1px dashed var(--ink3);padding:0 2px;background:none}
+.kq-r{display:grid;grid-template-columns:5.6em minmax(0,1fr);gap:4px 10px;padding:6px 0;border-top:1px dashed var(--pencil);font-size:15px;line-height:1.75}
+.kq-r>i{font:700 14px/1.75 var(--hand);font-style:normal;color:var(--pen)}
+.kq-r>div{min-width:0;overflow-wrap:anywhere}.kq-r>div p{margin:0}.kq-r>div p+p{margin-top:4px}
+.kq-cue>div{font-family:var(--kai);font-size:1.05em}
+.kq-use>i{color:var(--fa)}.kq-use>div{background:linear-gradient(transparent 0,var(--fab) 0)}
+.kq-trap>i{color:var(--ac)}.kq-trap>div{color:var(--ink2);text-decoration:underline wavy var(--ac);text-decoration-thickness:1px;text-underline-offset:5px}
+.kq-take>i{color:var(--ok)}
+.kq-mn>i{color:var(--tp)}.kq-mn>div{font-family:var(--hand);font-size:1.08em;color:var(--tp)}
+.kmn{margin:2px 14px 8px;padding:4px 10px;font:15px/1.7 var(--hand);color:var(--tp);background:var(--tpb);border-radius:10px 4px 9px 5px/5px 9px 4px 10px;overflow-wrap:anywhere}.kmn i{font-style:normal;font-weight:700;margin-right:8px}
+.kq-cards{border-top:1px dashed var(--pencil);padding-top:6px;margin-top:2px}
+.kq-ch{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}.kq-ch b{font:700 14px var(--hand);color:var(--pen)}.kq-ch small{color:var(--ink3);font-size:12px}
+.kq-ep{display:flex;flex-wrap:wrap;gap:8px;border-top:1px dashed var(--pencil);padding-top:8px;margin-top:6px}
+.epgo{font:700 14.5px var(--hand);color:var(--ink);border:1.5px solid var(--ink);padding:3px 12px;border-radius:14px 5px 13px 6px/6px 13px 5px 14px;background:var(--bg);text-align:left;max-width:100%;white-space:normal}
+.epgo:after{content:" →"}.epgo small{font:12.5px var(--head);color:var(--ink3);margin-left:8px}.epgo:hover{background:var(--ink);color:var(--bg)}.epgo:hover small{color:var(--bg)}
+.epgo.lab{border-style:dashed;color:var(--pen);border-color:var(--pen)}
+.kq-none{font:14px var(--hand);color:var(--pencil);margin:4px 0}
+.epm{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.5);display:flex;align-items:stretch;justify-content:center;padding:18px}
+.epm-b{background:var(--bg);border:var(--bw) solid var(--line);width:min(980px,100%);display:flex;flex-direction:column;box-shadow:4px 4px 0 var(--line)}
+.epm-h{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:8px 12px;border-bottom:1px solid var(--hair)}
+.epm-h b{flex:1 1 12em;font:700 15px var(--hand);min-width:0;overflow-wrap:anywhere}.epm-h a{font:13px var(--head);color:var(--ink2)}
+.epm-x{font:700 14px var(--hand);border:1.5px solid var(--ac);color:var(--ac);padding:2px 12px;border-radius:12px 5px 11px 6px/6px 11px 5px 12px;background:var(--bg)}.epm-x:before{content:"← "}
+.epm iframe{flex:1;width:100%;border:0;background:#fff}
+body.epm-on{overflow:hidden}
+.yrs-m .yr{border-style:dashed}
+@media (max-width:600px){.epm{padding:0}.epm-b{border:0;box-shadow:none}.kq{padding:10px 10px 8px}.kq-r{grid-template-columns:1fr;gap:0}.kq-r>i{line-height:1.5}}
+.kq-a{display:block}.kq-a+.kq-a{margin-top:5px}.kq-a .rq{margin-right:6px}
