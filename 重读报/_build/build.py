@@ -408,8 +408,10 @@ def main():
                 title=strip_tags(i['meta']['title']), kicker=i['meta']['kicker'], deck=strip_tags(i['meta']['deck']),
                 mins=i['mins'], ex=i['ctx'].ex, nq=len(i['qs']), w=W.get(i['no'], 0)) for i in issues]
     exam = {y: dict(m=EX.MAP[y], s=EX.scores(y), n=len(EX.OLD if y <= 2020 else EX.NEW)) for y in EX.MAP}
+    exam.update({y: dict(m=EX.MOCK[y], s=EX.scores(y), n=len(EX.NEW)) for y in EX.MOCK})   # 模拟卷：同样逐题归期
     data = 'window.CD=' + json.dumps({'issues': idx, 'thm': THM, 'recall': RECALL, 'prac': PRAC, 'exam': exam,
-                                      'paperYears': EX.PAPER_YEARS, 'drillYears': EX.DRILL_YEARS}, ensure_ascii=False) + ';\n'
+                                      'paperYears': EX.PAPER_YEARS, 'drillYears': EX.DRILL_YEARS,
+                                      'mockYears': EX.MOCK_YEARS, 'mockName': EX.MOCK_NAME}, ensure_ascii=False) + ';\n'
     open(os.path.join(ROOT, 'assets', 'data.js'), 'w', encoding='utf-8').write(data)
     PG.write_all(ROOT, idx, issues, THM, inline, esc, EX, TRAPS)
     print(f'{len(issues)} 期 · {tot} 分钟 ≈ {tot/60:.1f} 小时 · 例题 {sum(i["ctx"].ex for i in issues)} · 定理 {len(THM)} · 自测 {len(RECALL)} · 实战 {len(PRAC)}')

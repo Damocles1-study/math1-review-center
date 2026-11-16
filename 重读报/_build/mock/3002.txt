@@ -1,0 +1,841 @@
+// 数学一模拟卷二（标准卷）。语法见 _build/mock_build.py 开头。答案复算：_build/mock/chk/check.py
+@paper 模拟二 · 标准卷 | 难度对齐 2021–2023。选择题多了「数个数」「找反例」型，解答题换了一批座位：一阶线性方程、极坐标、幂级数求和、挖洞的格林公式、含参对角化、二维均匀分布。
+
+#1
+@at 8
+@src 自编
+@stem
+曲线 $y=x\ln\Bigl(e+\dfrac1x\Bigr)$ 的渐近线条数为（　）.
+@A $1$
+@B $2$
+@C $3$
+@D $0$
+@ans B
+@tpl T渐近线三查
+::rev
+- **该花** 3 分钟。
+- **卡点** 只盯着 $x=0$ 找铅直渐近线，漏了 $x=-\frac1e$。
+- **错了说明** 铅直渐近线要从**定义域的边界点**去找，不是只看分母为 0。
+- **带走** 渐近线三查：铅直（定义域边界、无定义点）→ 水平 → 斜，正负无穷各查一次。
+::read
+$\ln(e+\frac1x)$ >> 定义域要 $e+\frac1x\gt0$：$x\gt0$ 或 $x\lt-\frac1e$，边界点 $0$ 和 $-\frac1e$ 都要查
+「条数」 >> [[T渐近线三查|三类逐一查]]，$\pm\infty$ 分开
+::think
+1. 铅直：在 $-\frac1e$ 左侧，$e+\frac1x\to0^+$，对数 $\to-\infty$，乘以负的 $x$ 得 $+\infty$——是铅直渐近线。在 $0^+$ 处 $x\ln(\cdot)\sim x\ln\frac1x\to0$，不是。
+2. 斜：$\frac yx=\ln(e+\frac1x)\to1$，$y-x=x\ln\bigl(1+\frac1{ex}\bigr)\to\frac1e$。正负无穷一样，算一条。
+::fast
+{{秒|定义域边界}}：$x=-\frac1e$ 一条铅直；$y\approx x+\frac1e$ 一条斜。共 2 条，选 B。
+::steps
+定义域：$e+\frac1x\gt0\iff\frac{ex+1}{x}\gt0\iff x\gt0$ 或 $x\lt-\frac1e$。
+$x\to\bigl(-\frac1e\bigr)^-$：$e+\frac1x\to0^+$，$\ln(e+\frac1x)\to-\infty$，而 $x\to-\frac1e\lt0$，所以 $y\to+\infty$ ⟹ $x=-\frac1e$ 是铅直渐近线。
+$x\to0^+$：$y=x\ln\frac{ex+1}{x}=x\ln(ex+1)-x\ln x\to0$，不是铅直渐近线。
+$x\to\pm\infty$：$y\to\pm\infty$，无水平渐近线。
+$k=\lim\dfrac yx=\lim\ln\Bigl(e+\dfrac1x\Bigr)=1$；$b=\lim(y-x)=\lim x\ln\Bigl(1+\dfrac{1}{ex}\Bigr)=\lim x\cdot\dfrac1{ex}=\dfrac1e$（$\pm\infty$ 相同）。
+斜渐近线 $y=x+\frac1e$。共 2 条，选 B。
+::note
+**口诀**：铅直看边界，水平看无穷，斜线先 $k$ 后 $b$。
+::vary
+$y=\frac{x^2}{x+1}$ 的渐近线？ >> $x=-1$ 和 $y=x-1$，两条。
+$y=xe^{1/x}$ 的渐近线？ >> $x=0$（$0^+$ 时 $\to+\infty$）和 $y=x+1$，两条。
+
+#2
+@at 4
+@src 自编
+@stem
+函数 $f(x)=(x^2-3x+2)\,\vert x^3-4x\vert$ 的不可导点的个数为（　）.
+@A $0$
+@B $1$
+@C $2$
+@D $3$
+@ans C
+@tpl T绝对值可导
+::rev
+- **该花** 2 分钟。
+- **卡点** $\vert x^3-4x\vert$ 有三个零点就选 3。
+- **错了说明** 「$g(x)\vert x-a\vert$ 在 $a$ 处可导 ⟺ $g(a)=0$」没记住。
+- **带走** 把绝对值里拆成一次因式，每个零点处看「剩下的部分」在该点是不是 0。
+::read
+$\vert x^3-4x\vert=\vert x\vert\vert x-2\vert\vert x+2\vert$ >> 可疑点 $0,2,-2$
+前面的 $(x^2-3x+2)=(x-1)(x-2)$ >> 在 $x=2$ 处能「补上」一个零
+::think
+$g(x)\vert x-a\vert$ 在 $a$ 处的左右导数是 $\mp g(a)$，相等 ⟺ $g(a)=0$。逐个可疑点算「去掉这个绝对值后剩下的东西」在该点的值。
+::fast
+{{秒|口诀}}「绝对值的零点被前面的因子消掉才可导」：$x=2$ 被 $(x-2)$ 消掉，$0$ 和 $-2$ 消不掉 ⟹ 2 个，选 C。
+::steps
+$f(x)=(x-1)(x-2)\cdot\vert x\vert\cdot\vert x-2\vert\cdot\vert x+2\vert$，可疑点 $x=0,\pm2$，其余点处可导。
+$x=0$：$g(x)=(x-1)(x-2)\vert x-2\vert\vert x+2\vert$，$g(0)=(-1)(-2)\cdot2\cdot2=8\ne0$ ⟹ 不可导。
+$x=2$：$f=(x-2)\vert x-2\vert\cdot h(x)$，$\frac{f(x)-f(2)}{x-2}=\vert x-2\vert h(x)\to0$ ⟹ 可导。
+$x=-2$：$g(x)=(x-1)(x-2)\vert x\vert\vert x-2\vert$，$g(-2)=(-3)(-4)\cdot2\cdot4=96\ne0$ ⟹ 不可导。
+不可导点 2 个，选 C。
+::note
+**口诀**：绝对值里有零点，外面同样有零就可导。
+::vary
+$f(x)=(x^2-x-2)\vert x^3-x\vert$ 的不可导点？ >> $0$、$1$ 两个（$x=-1$ 被 $x+1$ 消掉）。
+$f(x)=\vert x\vert\sin x$ 在 0 处？ >> 可导，$\sin0=0$。
+
+#3
+@at 24
+@src 自编（与重读报第 24 期例题同型）
+@stem
+函数 $u=x^2y+yz^3$ 在点 $(1,1,1)$ 处方向导数的最大值为（　）.
+@A $\sqrt{17}$
+@B $7$
+@C $3$
+@D $\sqrt{13}$
+@ans A
+@tpl T最大方向导数
+::rev
+- **该花** 1 分半。
+- **卡点** 把三个偏导数加起来选了 7。
+- **错了说明** 「最大方向导数 = 梯度的模」没记住。
+- **带走** 求梯度、取模，一步。
+::read
+「方向导数的最大值」 >> [[T最大方向导数|梯度的模]]
+::think
+方向导数 $=\nabla u\cdot e=\vert\nabla u\vert\cos\theta$，$\theta=0$（沿梯度方向）时最大。
+::fast
+{{秒|梯度取模}}：$\nabla u=(2,2,3)$，$\sqrt{4+4+9}=\sqrt{17}$，选 A。
+::steps
+$u_x=2xy$，$u_y=x^2+z^3$，$u_z=3yz^2$。
+在 $(1,1,1)$：$\nabla u=(2,2,3)$。
+最大方向导数 $=\vert\nabla u\vert=\sqrt{2^2+2^2+3^2}=\sqrt{17}$，选 A。
+::note
+7 是把分量相加（错），3 是只取最大分量（错），$\sqrt{13}$ 是漏了一个 2。
+**口诀**：最快的方向是梯度，最大的变化率是模。
+::vary
+同一点沿 $(1,2,2)$ 方向的方向导数？ >> $\frac{2+4+6}{3}=4$。
+在哪个方向上方向导数为 0？ >> 与 $(2,2,3)$ 垂直的方向。
+
+#4
+@at 12
+@src 自编
+@stem
+反常积分 $\displaystyle\int_0^{+\infty}\frac{dx}{x^p(1+x)}$ 收敛的充要条件是（　）.
+@A $p\gt1$
+@B $p\lt1$
+@C $0\lt p\lt1$
+@D $p\gt0$
+@ans C
+::rev
+- **该花** 2 分钟。
+- **卡点** 只看了 $+\infty$ 端（得 $p\gt0$）或只看了 $0$ 端（得 $p\lt1$）。
+- **错了说明** 两端都有问题的反常积分要从中间劈开，**两段都收敛**才收敛。
+- **带走** 劈开 → 每段找主导项 → 和 $p$ 积分比较 → 取交集。
+::read
+下限 0、上限 $+\infty$ >> 两端都可能出问题，[[R.pint|从 1 劈开]]
+::think
+$0$ 附近 $1+x\approx1$，被积函数 $\sim\frac1{x^p}$，要 $p\lt1$；$+\infty$ 附近 $\sim\frac1{x^{p+1}}$，要 $p+1\gt1$ 即 $p\gt0$。
+::fast
+{{秒|两端各看一眼}}：零端要 $p\lt1$，无穷端要 $p\gt0$，交集 $0\lt p\lt1$，选 C。
+::steps
+$\displaystyle\int_0^{+\infty}=\int_0^1+\int_1^{+\infty}$，两段都收敛原积分才收敛。
+$\int_0^1$：$x\to0^+$ 时 $\dfrac{1}{x^p(1+x)}\sim\dfrac1{x^p}$，收敛 ⟺ $p\lt1$。
+$\int_1^{+\infty}$：$x\to+\infty$ 时 $\dfrac{1}{x^p(1+x)}\sim\dfrac1{x^{p+1}}$，收敛 ⟺ $p+1\gt1$ ⟺ $p\gt0$。
+取交集：$0\lt p\lt1$，选 C。
+::note
+**口诀**：$p$ 积分，瑕点要小于一，无穷要大于一。
+::vary
+$\int_0^{+\infty}\frac{\ln(1+x)}{x^p}dx$ 收敛的条件？ >> 零端 $\sim x^{1-p}$ 要 $p\lt2$，无穷端要 $p\gt1$：$1\lt p\lt2$。
+$\int_0^1\frac{dx}{x^p}$ 当 $p=1$？ >> 发散。
+
+#5
+@at 17
+@src 自编
+@stem
+设 $A$ 为 $m\times n$ 矩阵，$r(A)=m\lt n$，$b$ 为任意 $m$ 维列向量，则（　）.
+@A $Ax=0$ 只有零解
+@B $Ax=b$ 有唯一解
+@C $Ax=b$ 有无穷多解
+@D $A^Tx=0$ 有非零解
+@ans C
+::rev
+- **该花** 1 分半。
+- **卡点** D 里转置后的矩阵大小没想清。
+- **错了说明** 行满秩、列满秩各意味着什么没对上号。
+- **带走** 行满秩 ⟹ $Ax=b$ 总有解；列满秩 ⟹ $Ax=0$ 只有零解。
+::read
+$r(A)=m$（行数） >> 行满秩：加一列 $b$ 秩也不会超过 $m$ ⟹ [[R.nonhomo|总有解]]
+$m\lt n$ >> 未知数比秩多 ⟹ 有自由未知量
+::think
+$r(A\mid b)$ 夹在 $r(A)=m$ 和行数 $m$ 之间，只能等于 $m$ ⟹ 有解；$n-m\gt0$ 个自由量 ⟹ 无穷多解。
+::fast
+{{秒|夹逼秩}}：$m\le r(A\mid b)\le m$ ⟹ 有解，$n\gt m$ ⟹ 无穷多，选 C。
+::steps
+$(A\mid b)$ 是 $m\times(n+1)$ 矩阵，$m=r(A)\le r(A\mid b)\le m$，所以 $r(A\mid b)=r(A)=m$，$Ax=b$ 有解。
+$r(A)=m\lt n$，解中有 $n-m\ge1$ 个自由未知量 ⟹ 无穷多解。C 对，B 错。
+$Ax=0$：$r(A)\lt n$ ⟹ 有非零解，A 错。
+$A^T$ 是 $n\times m$，$r(A^T)=m$ = 列数 ⟹ $A^Tx=0$ 只有零解，D 错。
+∴ 选 C。
+::note
+**口诀**：行满秩方程总有解，列满秩齐次只有零。
+::vary
+$r(A)=n\lt m$ 时？ >> $Ax=0$ 只有零解；$Ax=b$ 可能无解。
+$A$ 为 $3\times4$，$r(A)=3$，$Ax=0$ 基础解系有几个向量？ >> $4-3=1$。
+
+#6
+@at 19
+@src 自编
+@stem
+设 $A$ 为 $3$ 阶矩阵，$A^2=A$，$r(A)=2$，则 $\vert A+E\vert=$（　）.
+@A $2$
+@B $4$
+@C $8$
+@D $1$
+@ans B
+@tpl T矩阵方程定特征值
+::rev
+- **该花** 2 分钟。
+- **卡点** 知道特征值是 0 或 1，不知道各几个。
+- **错了说明** $A^2=A$ 的矩阵能对角化，秩 = 特征值 1 的个数，这一步没接上。
+- **带走** 矩阵满足 $g(A)=O$ ⟹ 特征值满足 $g(\lambda)=0$；再用秩或迹定个数。
+::read
+$A^2=A$ >> [[T矩阵方程定特征值|特征值满足 $\lambda^2=\lambda$]]：只能是 0 或 1
+$r(A)=2$ >> 定出 1 有两个、0 有一个
+::think
+$A^2=A$ ⟹ $A(A-E)=O$ ⟹ $r(A)+r(A-E)\le3$，又 $r(A)+r(E-A)\ge r(E)=3$，所以 $r(A)+r(A-E)=3$：两个特征值的特征向量加起来正好 3 个，能对角化，$A\sim\mathrm{diag}(1,1,0)$。
+::fast
+{{秒|代入}}：特征值 $1,1,0$，$A+E$ 的特征值 $2,2,1$，行列式 $4$，选 B。
+::steps
+设 $A\xi=\lambda\xi$（$\xi\ne0$），则 $A^2\xi=\lambda^2\xi=A\xi=\lambda\xi$ ⟹ $\lambda^2=\lambda$ ⟹ $\lambda=0$ 或 $1$。
+由 $A(A-E)=O$：$r(A)+r(A-E)\le3$；由 $A+(E-A)=E$：$r(A)+r(E-A)\ge3$。故 $r(A-E)=3-r(A)=1$。
+$\lambda=1$ 的无关特征向量个数 $3-r(A-E)=2$，$\lambda=0$ 的个数 $3-r(A)=1$，共 3 个 ⟹ $A\sim\mathrm{diag}(1,1,0)$。
+$A+E$ 的特征值 $2,2,1$，$\vert A+E\vert=4$，选 B。
+::note
+幂等矩阵的秩 = 迹 = 特征值 1 的个数，这一条值得背。
+**口诀**：$A^2=A$，特征值非零即一，秩是几就有几个一。
+::vary
+同样条件 $\vert A-2E\vert=$？ >> 特征值 $-1,-1,-2$：$-2$。
+$A^2=E$，$r(A+E)=1$（3 阶），$\vert A\vert=$？ >> 特征值 $-1$ 有 $3-r(A+E)=2$ 个，$1$ 有一个：$\vert A\vert=1$。
+
+#7
+@at 21
+@src 自编
+@stem
+与矩阵 $A=\begin{pmatrix}1&2\\2&1\end{pmatrix}$ 合同的矩阵是（　）.
+@A $\begin{pmatrix}1&0\\0&1\end{pmatrix}$
+@B $\begin{pmatrix}-1&0\\0&-1\end{pmatrix}$
+@C $\begin{pmatrix}2&1\\1&2\end{pmatrix}$
+@D $\begin{pmatrix}0&1\\1&0\end{pmatrix}$
+@ans D
+@tpl T惯性指数
+::rev
+- **该花** 2 分钟。
+- **卡点** 只在对角阵里找，忽略了 D。
+- **错了说明** 合同的判据是**正负惯性指数相同**，跟长得像不像对角阵无关。
+- **带走** 实对称矩阵合同 ⟺ 特征值正负个数一样。
+::read
+「合同」 >> [[R.inertia|惯性定理]]：比正、负特征值的个数
+::think
+$A$ 的特征值：迹 2、行列式 $-3$ ⟹ $3$ 和 $-1$，一正一负。逐个看选项的正负个数。
+::fast
+{{秒|看行列式}}：二阶对称阵，行列式 $\lt0$ ⟺ 一正一负。$A$ 的行列式 $-3$，四个选项只有 D 的行列式 $-1\lt0$，选 D。
+::steps
+$A$：$\mathrm{tr}A=2$，$\vert A\vert=-3$，特征值 $3,-1$，正惯性指数 1，负惯性指数 1。
+A：特征值 $1,1$，正 2 负 0。
+B：特征值 $-1,-1$，正 0 负 2。
+C：特征值 $3,1$，正 2 负 0。
+D：特征值满足 $\lambda^2-1=0$，即 $1,-1$，正 1 负 1，与 $A$ 相同 ⟹ 合同。
+∴ 选 D。
+::note
+D 恰好也和 $A$ **相似**吗？不：$A$ 的特征值 $3,-1$，D 的 $1,-1$，特征值不同，不相似但合同。
+**口诀**：相似比特征值，合同只比正负号的个数。
+::vary
+与 $A$ 相似的是？ >> $\mathrm{diag}(3,-1)$。
+$\begin{pmatrix}1&a\\a&1\end{pmatrix}$ 正定的条件？ >> $\vert a\vert\lt1$。
+
+#8
+@at 33
+@src 自编
+@stem
+设随机变量 $X$ 服从参数为 $1$ 的指数分布，则 $P\{X\gt2\mid X\gt1\}=$（　）.
+@A $e^{-1}$
+@B $e^{-2}$
+@C $1-e^{-1}$
+@D $e^{-1/2}$
+@ans A
+::rev
+- **该花** 1 分钟。
+- **卡点** 直接算 $P(X\gt2)=e^{-2}$。
+- **错了说明** 条件概率没写定义，也不知道指数分布的「无记忆性」。
+- **带走** 指数分布：$P(X\gt s+t\mid X\gt s)=P(X\gt t)$。
+::read
+指数分布、条件是「已经活过 1」 >> [[R.dists|无记忆性]]：再活 1 的概率与已活多久无关
+::think
+打个比方：一个灯泡如果寿命服从指数分布，它「不会老」——已经亮了 1 小时，再亮 1 小时的概率和新灯泡亮 1 小时一样。
+::fast
+{{秒|无记忆}}：$P(X\gt2\mid X\gt1)=P(X\gt1)=e^{-1}$，选 A。
+::steps
+$P(X\gt t)=e^{-t}$（$t\ge0$）。
+$P(X\gt2\mid X\gt1)=\dfrac{P(X\gt2,\,X\gt1)}{P(X\gt1)}=\dfrac{P(X\gt2)}{P(X\gt1)}=\dfrac{e^{-2}}{e^{-1}}=e^{-1}$。
+选 A。
+::note
+**口诀**：指数分布不记仇，已过多久不算数。
+::vary
+参数为 $\lambda$ 的指数分布，$P(X\gt5\mid X\gt3)=$？ >> $e^{-2\lambda}$。
+几何分布也有无记忆性吗？ >> 有（离散版本）。
+
+#9
+@at 36
+@src 自编
+@stem
+设 $X_1,X_2,\dots,X_{100}$ 相互独立，都服从参数为 $1$ 的泊松分布，$\Phi(x)$ 为标准正态分布函数. 由中心极限定理，$P\Bigl\{\displaystyle\sum_{i=1}^{100}X_i\le110\Bigr\}\approx$（　）.
+@A $\Phi(0.1)$
+@B $\Phi(1)$
+@C $\Phi(10)$
+@D $\Phi(11)$
+@ans B
+@tpl T中心极限
+::rev
+- **该花** 1 分半。
+- **卡点** 标准化时除以方差（100）而不是标准差（10）。
+- **错了说明** 标准化要除以 $\sqrt{D}$。
+- **带走** 和的近似：均值 $n\mu$，方差 $n\sigma^2$，$\frac{S-n\mu}{\sqrt n\sigma}\approx N(0,1)$。
+::read
+「由中心极限定理」「和的概率」 >> [[T中心极限|先求和的均值与方差，再标准化]]
+::think
+泊松(1)：期望 1，方差 1。和 $S$：期望 100，方差 100，标准差 10。
+::fast
+{{秒|标准化}}：$\frac{110-100}{10}=1$，选 B。
+::steps
+$EX_i=DX_i=1$，$S=\sum X_i$：$ES=100$，$DS=100$。
+由中心极限定理，$\dfrac{S-100}{10}$ 近似服从 $N(0,1)$。
+$P(S\le110)=P\Bigl(\dfrac{S-100}{10}\le1\Bigr)\approx\Phi(1)$，选 B。
+::note
+A 是除错了（除以方差 100），C 是没除，D 是忘了减均值（$110\div10$）。
+**口诀**：中心极限三步：均值、方差、除以根号。
+::vary
+同样的 $S$，$P(90\lt S\le110)\approx$？ >> $2\Phi(1)-1$。
+若 $X_i\sim B(1,0.5)$，$P(\sum X_i\le55)\approx$？ >> $\Phi\bigl(\frac{55-50}{5}\bigr)=\Phi(1)$。
+
+#10
+@at 37
+@src 自编
+@stem
+在假设检验中，若在显著性水平 $\alpha=0.05$ 下拒绝了原假设 $H_0$，则在显著性水平 $\alpha=0.01$ 下（　）.
+@A 必拒绝 $H_0$
+@B 必接受 $H_0$
+@C 可能拒绝 $H_0$，也可能接受 $H_0$
+@D 犯第一类错误的概率增大
+@ans C
+@tpl T拒绝域包含
+::rev
+- **该花** 1 分钟。
+- **卡点** 分不清 $\alpha$ 变小时拒绝域是变大还是变小。
+- **错了说明** $\alpha$ 是「拒真」的概率上限，越小越不敢拒绝，拒绝域越小。
+- **带走** $\alpha$ 小 ⟹ 拒绝域小（包含在大 $\alpha$ 的拒绝域里）。
+::read
+从 $0.05$ 换到 $0.01$ >> $\alpha$ 变小，[[T拒绝域包含|拒绝域缩小]]：原来在拒绝域里，现在可能已在外面
+::think
+打个比方：$\alpha$ 是「冤枉好人的容忍度」。容忍度从 5% 降到 1%，定罪标准更严，原来能定罪的案子现在不一定能定。
+::fast
+{{秒|拒绝域缩小}}：小 $\alpha$ 的拒绝域 ⊂ 大 $\alpha$ 的拒绝域。在大的里面，不一定在小的里面，选 C。
+::steps
+$\alpha$ 是犯第一类错误（拒真）概率的上限。$\alpha$ 越小，临界值越远，拒绝域越小：$W_{0.01}\subset W_{0.05}$。
+样本落在 $W_{0.05}$ 内，可能也在 $W_{0.01}$ 内（拒绝），也可能不在（接受）。C 对，A、B 错。
+$\alpha$ 从 0.05 降到 0.01，第一类错误的概率上限变小，D 错。
+∴ 选 C。
+::note
+反过来：在 0.01 下拒绝 ⟹ 在 0.05 下必拒绝。
+**口诀**：$\alpha$ 越小越不敢拒；小 $\alpha$ 拒了，大 $\alpha$ 必拒。
+::vary
+在 $\alpha=0.05$ 下接受 $H_0$，在 $\alpha=0.10$ 下？ >> 可能拒绝也可能接受。
+在 $\alpha=0.05$ 下接受 $H_0$，在 $\alpha=0.01$ 下？ >> 必接受。
+
+#11
+@at 11
+@src 自编
+@stem
+$\displaystyle\lim_{n\to\infty}\sum_{k=1}^n\frac{n}{n^2+k^2}=$ ______.
+@ans $\dfrac\pi4$
+@tpl T黎曼和
+::rev
+- **该花** 2 分钟。
+- **卡点** 不知道怎么凑出 $\frac kn$。
+- **错了说明** 和式极限 → 定积分的固定动作「提出 $\frac1n$」没练。
+- **带走** 分子分母同除 $n^2$，凑成 $\frac1n\sum f(\frac kn)$。
+::read
+$\sum_{k=1}^n$、每项分母里 $n^2+k^2$ >> [[T黎曼和|黎曼和]]：凑 $\frac1n f\bigl(\frac kn\bigr)$
+::think
+$\frac{n}{n^2+k^2}=\frac1n\cdot\frac{1}{1+(k/n)^2}$，$f(x)=\frac1{1+x^2}$，区间 $[0,1]$。
+::fast
+{{秒|同除 $n^2$}}：$\int_0^1\frac{dx}{1+x^2}=\frac\pi4$。
+::steps
+$\dfrac{n}{n^2+k^2}=\dfrac1n\cdot\dfrac{1}{1+\bigl(\frac kn\bigr)^2}$。
+原式 $=\lim\limits_{n\to\infty}\dfrac1n\displaystyle\sum_{k=1}^n\dfrac{1}{1+(k/n)^2}=\int_0^1\dfrac{dx}{1+x^2}$（[[R.defint|定积分定义]]，右端点）。
+$=\arctan x\big\vert_0^1=\dfrac\pi4$。
+::note
+**口诀**：和式极限三步：提 $\frac1n$，认 $\frac kn$，写积分。
+::vary
+$\lim\sum_{k=1}^n\frac{1}{n+k}=$？ >> $\int_0^1\frac{dx}{1+x}=\ln2$。
+$\lim\sum_{k=1}^n\frac{k}{n^2+k^2}=$？ >> $\int_0^1\frac{x}{1+x^2}dx=\frac12\ln2$。
+
+#12
+@at 14
+@src 自编（与重读报第 14 期「共振」例题同型）
+@stem
+微分方程 $y''-2y'+y=e^x$ 的通解为 $y=$ ______.
+@ans $(C_1+C_2x)e^x+\dfrac12x^2e^x$
+::rev
+- **该花** 2 分半。
+- **卡点** 特解只设 $Axe^x$（一重共振）。
+- **错了说明** 特征根 1 是**二重根**，特解要乘 $x^2$。
+- **带走** $e^{\lambda x}$ 型右端：$\lambda$ 不是根乘 $1$，单根乘 $x$，二重根乘 $x^2$。
+::read
+右端 $e^x$，特征方程 $r^2-2r+1=(r-1)^2$ >> $1$ 是二重根 ⟹ [[R.undet|特解设 $Ax^2e^x$]]
+::think
+齐次通解 $(C_1+C_2x)e^x$；特解 $y^*=Ax^2e^x$，代入求 $A$。
+::fast
+{{秒|二重根公式}}：$\lambda$ 是二重根时 $y^*=\frac{1}{2}x^2e^{\lambda x}$（右端系数 1），直接写。
+::steps
+特征方程 $r^2-2r+1=0$，$r=1$（二重），齐次通解 $(C_1+C_2x)e^x$。
+设 $y^*=Ax^2e^x$：$y^{*\prime}=A(2x+x^2)e^x$，$y^{*\prime\prime}=A(2+4x+x^2)e^x$。
+代入：$A\bigl[(2+4x+x^2)-2(2x+x^2)+x^2\bigr]e^x=2Ae^x=e^x$ ⟹ $A=\dfrac12$。
+通解 $y=(C_1+C_2x)e^x+\dfrac12x^2e^x$。
+::note
+**口诀**：右端 $e^{\lambda x}$，看 $\lambda$ 是几重根，就乘 $x$ 的几次方。
+::vary
+$y''-3y'+2y=e^x$ 的特解形式？ >> $Axe^x$（单根），$A=-1$。
+$y''+y=e^x$ 的特解？ >> $\frac12e^x$。
+
+#13
+@at 25
+@src 自编
+@stem
+设 $D=\{(x,y)\mid x^2+y^2\le1\}$，则 $\displaystyle\iint_D(x+y)^2\,dx\,dy=$ ______.
+@ans $\dfrac\pi2$
+@tpl T对称零期望
+::rev
+- **该花** 1 分半。
+- **卡点** 把 $2xy$ 那项也用极坐标硬算。
+- **错了说明** 对称性没先用。
+- **带走** 展开后先用[[R.symint|对称性]]消掉奇函数项。
+::read
+圆盘、被积函数展开有 $2xy$ >> 关于 $x$（或 $y$）是奇函数，积分为 0
+::think
+$(x+y)^2=x^2+y^2+2xy$，$\iint 2xy=0$，剩下 $\iint(x^2+y^2)$ 用极坐标。
+::fast
+{{秒|对称}}：$\iint(x^2+y^2)=\int_0^{2\pi}\int_0^1r^3dr\,d\theta=\frac\pi2$。
+::steps
+$(x+y)^2=x^2+y^2+2xy$。
+$D$ 关于 $y$ 轴对称，$2xy$ 关于 $x$ 是奇函数 ⟹ $\iint_D2xy\,d\sigma=0$。
+$\iint_D(x^2+y^2)d\sigma=\displaystyle\int_0^{2\pi}d\theta\int_0^1r^2\cdot r\,dr=2\pi\cdot\frac14=\frac\pi2$。
+原式 $=\dfrac\pi2$。
+::note
+**口诀**：区域对称看奇偶，奇的一项直接扔。
+::vary
+$\iint_D(x+2y)^2d\sigma=$？ >> 交叉项 $4xy$ 积分为 0；轮换对称 $\iint x^2=\iint y^2=\frac\pi4$，答案 $\frac\pi4+4\cdot\frac\pi4=\frac{5\pi}4$。
+$\iint_D x^2d\sigma=$？ >> $\frac\pi4$（轮换对称）。
+
+#14
+@at 28
+@src 自编
+@stem
+设 $L$ 为圆周 $x^2+y^2=1$，取逆时针方向，则 $\displaystyle\oint_L(x^3-y)\,dx+(x+y^3)\,dy=$ ______.
+@ans $2\pi$
+::rev
+- **该花** 1 分半。
+- **卡点** 被 $x^3$、$y^3$ 吓到去参数化。
+- **错了说明** 格林公式里 $P$ 只对 $y$ 求导、$Q$ 只对 $x$ 求导，三次方项直接消失。
+- **带走** 封闭曲线先格林，$\frac{\partial Q}{\partial x}-\frac{\partial P}{\partial y}$ 常常是常数。
+::read
+封闭、逆时针 >> [[R.green|格林公式]]：$\oint P\,dx+Q\,dy=\iint(Q_x-P_y)d\sigma$
+::think
+$Q_x=1$，$P_y=-1$，差是 2，积分 = 2 × 面积。
+::fast
+{{秒|面积}}：$2\times\pi=2\pi$。
+::steps
+$P=x^3-y$，$Q=x+y^3$，$\dfrac{\partial Q}{\partial x}=1$，$\dfrac{\partial P}{\partial y}=-1$。
+由格林公式：原式 $=\displaystyle\iint_{x^2+y^2\le1}(1-(-1))d\sigma=2\cdot\pi=2\pi$。
+::note
+**口诀**：格林公式「Q 对 x 减 P 对 y」，顺序别反。
+::vary
+顺时针呢？ >> $-2\pi$。
+$\oint_L-y\,dx+x\,dy$（同一圆）？ >> $2\pi$，等于 2 倍面积。
+
+#15
+@at 19
+@src 自编
+@stem
+设 $\alpha=(1,1,1)^T$，$\beta=(1,2,0)^T$，$A=\alpha\beta^T$，则 $A^5$ 的迹 $\mathrm{tr}(A^5)=$ ______.
+@ans $243$
+@tpl T秩一矩阵
+::rev
+- **该花** 2 分钟。
+- **卡点** 去真算 $A^5$。
+- **错了说明** 秩 1 矩阵的乘方公式 $A^n=(\beta^T\alpha)^{n-1}A$ 没背。
+- **带走** $\alpha\beta^T$：特征值 $\beta^T\alpha$ 和 0，乘方只乘一个数。
+::read
+$A=\alpha\beta^T$ >> [[R.rank1eig|秩 1 矩阵]]：$\beta^T\alpha$ 是一个数
+::think
+$A^2=\alpha(\beta^T\alpha)\beta^T=(\beta^T\alpha)A$，以此类推。$\beta^T\alpha=1+2+0=3$。
+::fast
+{{秒|特征值}}：$A$ 的特征值 $3,0,0$，$A^5$ 的特征值 $243,0,0$，迹 243。
+::steps
+$\beta^T\alpha=1\cdot1+2\cdot1+0\cdot1=3$。
+$A^2=\alpha(\beta^T\alpha)\beta^T=3A$，于是 $A^5=3^4A=81A$。
+$\mathrm{tr}A=\beta^T\alpha=3$（对角元 $1\cdot1,\ 1\cdot2,\ 1\cdot0$ 之和）。
+$\mathrm{tr}(A^5)=81\times3=243$。
+::note
+**口诀**：秩一矩阵，迹就是 $\beta^T\alpha$，$n$ 次方乘 $\mathrm{tr}^{n-1}$。
+::vary
+同一 $A$，$\vert A+E\vert=$？ >> 特征值 $4,1,1$：$4$。
+$A$ 能否对角化？ >> 能：$\lambda=0$ 的特征向量有 $3-r(A)=2$ 个，加上 $\lambda=3$ 的一个。
+
+#16
+@at 35
+@src 自编
+@stem
+设随机变量 $X$ 与 $Y$ 相互独立，且都服从区间 $(0,1)$ 上的均匀分布，则 $E\vert X-Y\vert=$ ______.
+@ans $\dfrac13$
+@tpl T函数期望
+::rev
+- **该花** 2 分半。
+- **卡点** 先去求 $X-Y$ 的分布。
+- **错了说明** 求 $Eg(X,Y)$ 直接对联合密度积分，不必先求分布。
+- **带走** 绝对值按 $x\gt y$、$x\lt y$ 劈区域，对称就只算一半乘 2。
+::read
+$E\vert X-Y\vert$ >> [[T函数期望|直接积分]]：$\iint\vert x-y\vert\cdot1\,dx\,dy$
+::think
+正方形关于 $y=x$ 对称，$\vert x-y\vert$ 也对称，算 $y\lt x$ 那一半再乘 2。
+::fast
+{{秒|对称一半}}：$2\int_0^1\int_0^x(x-y)dy\,dx=2\int_0^1\frac{x^2}2dx=\frac13$。
+::steps
+联合密度 $f(x,y)=1$（$0\lt x,y\lt1$）。
+$E\vert X-Y\vert=\displaystyle\iint_{[0,1]^2}\vert x-y\vert\,dx\,dy=2\int_0^1dx\int_0^x(x-y)dy$（关于 $y=x$ 对称）。
+内层 $\displaystyle\int_0^x(x-y)dy=\frac{x^2}2$，外层 $2\displaystyle\int_0^1\frac{x^2}{2}dx=\frac13$。
+::note
+**口诀**：绝对值劈对角线，对称算一半。
+::vary
+$E\max(X,Y)=$？ >> $\frac23$。
+$E\min(X,Y)=$？ >> $\frac13$；注意 $\vert X-Y\vert=\max-\min$，$\frac23-\frac13=\frac13$ 正好验算本题。
+
+#17
+@at 13
+@src 自编（第 (1) 问与重读报第 13 期「线性」例题同型）
+@stem
+（本题满分 10 分）设 $y=y(x)$（$x\gt0$）是微分方程 $xy'-2y=x^3e^x$ 满足 $y(1)=0$ 的解.
+(1) 求 $y(x)$；
+(2) 求曲线 $y=y(x)$ 与直线 $x=1$ 及 $x$ 轴所围平面图形（$0\lt x\le1$）的面积.
+@ans (1) $y=x^2(e^x-e)$；(2) $2-\dfrac{2e}{3}$
+@tpl T一阶线性, T分部反对幂
+::rev
+- **该花** 12 分钟。
+- **保底** ==第 (1) 问先把方程除以 $x$ 写成标准形 $y'-\frac2xy=x^2e^x$，再写出通解公式，就有 3 分==；算出积分因子 $\frac1{x^2}$ 再拿 2 分。
+- **卡点** 第 (2) 问面积不知道 $y$ 的正负，或者 $\int x^2e^x$ 分部积分出错。
+- **错了说明** 面积要加绝对值（先判正负），$\int x^2e^x$ 的表格法没练。
+- **带走** 一阶线性：先化标准形 → 积分因子 $e^{-\int P}$ 的倒数乘两边 → 积分。
+::read
+$xy'-2y=x^3e^x$ >> 除以 $x$：$y'-\frac2xy=x^2e^x$，[[T一阶线性|一阶线性]]，$P=-\frac2x$
+「所围平面图形的面积」 >> $\int_0^1\vert y\vert dx$，先判断 $y$ 在 $(0,1)$ 上的正负
+::think
+1. 标准形后，$e^{\int P\,dx}=e^{-2\ln x}=\frac1{x^2}$，两边乘它：$\bigl(\frac{y}{x^2}\bigr)'=e^x$。这一步写出来，后面就是积分。
+2. 初值 $y(1)=0$ 定常数：$C=-e$。
+3. 面积：$0\lt x\lt1$ 时 $e^x\lt e$，$y\lt0$，面积 $=\int_0^1x^2(e-e^x)dx$。$\int x^2e^x$ 用[[T分部反对幂|分部积分]]两次（表格法）。
+::steps
+(1) 方程除以 $x$（$x\gt0$）：$y'-\dfrac2xy=x^2e^x$。
+积分因子：$e^{\int(-\frac2x)dx}=e^{-2\ln x}=\dfrac1{x^2}$。两边乘 $\dfrac1{x^2}$：$\dfrac{y'}{x^2}-\dfrac{2y}{x^3}=e^x$，即 $\Bigl(\dfrac{y}{x^2}\Bigr)'=e^x$。
+积分：$\dfrac{y}{x^2}=e^x+C$，$y=x^2(e^x+C)$。
+$y(1)=e+C=0$ ⟹ $C=-e$，$y=x^2(e^x-e)$。
+~代回检验：$y'=2x(e^x-e)+x^2e^x$，$xy'-2y=2x^2(e^x-e)+x^3e^x-2x^2(e^x-e)=x^3e^x$ ✓。
+(2) $0\lt x\lt1$ 时 $e^x\lt e$，$y\lt0$，面积 $S=\displaystyle\int_0^1\bigl[0-y(x)\bigr]dx=\int_0^1x^2(e-e^x)dx$。
+$\displaystyle\int_0^1ex^2dx=\frac e3$。
+$\displaystyle\int x^2e^xdx=(x^2-2x+2)e^x+C$（分部积分两次），$\displaystyle\int_0^1x^2e^xdx=(1-2+2)e-2=e-2$。
+$S=\dfrac e3-(e-2)=2-\dfrac{2e}{3}$。
+~数值检查：$2-\frac{2\times2.718}{3}\approx0.188\gt0$ ✓。
+::paper
+解 (1) 当 $x\gt0$ 时，方程化为 $y'-\dfrac2xy=x^2e^x$，这是一阶线性微分方程. ⛳2
+其通解为
+$$y=e^{\int\frac2xdx}\Bigl(\int x^2e^x\,e^{-\int\frac2xdx}dx+C\Bigr)=x^2\Bigl(\int x^2e^x\cdot\frac1{x^2}dx+C\Bigr)=x^2(e^x+C).$$⛳3
+由 $y(1)=0$ 得 $C=-e$，故 $y(x)=x^2(e^x-e)$. ⛳1
+(2) 当 $0\lt x\lt1$ 时，$e^x\lt e$，故 $y(x)\lt0$，所求面积 ⛳1
+$$S=\int_0^1\bigl[-y(x)\bigr]dx=\int_0^1ex^2\,dx-\int_0^1x^2e^x\,dx.\quad(1)$$⛳1
+其中 $\displaystyle\int_0^1ex^2dx=\frac e3$，$\displaystyle\int_0^1x^2e^xdx=\bigl[(x^2-2x+2)e^x\bigr]_0^1=e-2$. ⛳1
+代入 (1) 式，$S=\dfrac e3-(e-2)=2-\dfrac{2e}3$. ⛳1
+::note
+- {{扣|面积要先判断正负}}：直接写 $\int_0^1y\,dx$ 会得到负数，结论错就丢最后 2 分。
+- 通解公式里两个指数**一正一负**：$e^{-\int P}$ 在外、$e^{\int P}$ 在里。这里 $P=-\frac2x$，外面是 $x^2$。
+- 分部积分表格法：$x^2\to2x\to2\to0$ 对 $e^x$，符号 $+,-,+$，得 $(x^2-2x+2)e^x$。
+- 第 (1) 问最后一定代回原方程检验——10 秒，能保住后面所有分。
+::vary
+同一方程满足 $y(1)=1$ 的解？ >> $C=1-e$，$y=x^2(e^x+1-e)$。
+$y'+\frac1xy=\frac{\sin x}{x}$，$y(\pi)=1$？ >> $y=\frac{\pi-1-\cos x}{x}$（重读报第 13 期例题）。
+
+#18
+@at 25
+@src 第 (1)(2) 问即重读报第 25 期例题；第 (3) 问自编
+@stem
+（本题满分 12 分）设 $D=\{(x,y)\mid x^2+y^2\le2x\}$.
+(1) 写出 $D$ 在极坐标下的表示；
+(2) 计算 $I_1=\displaystyle\iint_D\sqrt{x^2+y^2}\,dx\,dy$；
+(3) 计算 $I_2=\displaystyle\iint_Dx\,dx\,dy$.
+@ans (1) $-\dfrac\pi2\le\theta\le\dfrac\pi2$，$0\le r\le2\cos\theta$；(2) $\dfrac{32}{9}$；(3) $\pi$
+@tpl T点火递推, T形心截面
+::rev
+- **该花** 14 分钟。
+- **保底** ==第 (1) 问只要把 $x=r\cos\theta$、$y=r\sin\theta$ 代进 $x^2+y^2\le2x$ 得 $r\le2\cos\theta$，再写出 $\theta$ 的范围，就是 3 分==；第 (2) 问写出累次积分 $\int_{-\pi/2}^{\pi/2}d\theta\int_0^{2\cos\theta}r^2dr$ 再拿 2 分。
+- **卡点** $\int\cos^3\theta\,d\theta$ 或 $\int\cos^4\theta\,d\theta$ 算错。
+- **错了说明** 点火公式（华里士）没背熟。
+- **带走** 偏心圆：$r=2a\cos\theta$，$\theta\in[-\frac\pi2,\frac\pi2]$；$\cos^n$ 用点火公式。
+::read
+$x^2+y^2\le2x$ >> 圆心 $(1,0)$、半径 1 的圆，过原点 ⟹ [[R.polar|极坐标]] $r\le2\cos\theta$
+$\iint_Dx\,d\sigma$ >> 可以直接算，也可以用[[R.centroid|形心]]：$\bar x\cdot$ 面积
+::sk 220 170 画 | $x^2+y^2=2x$ 过原点，射线从原点出发，在 $r=2\cos\theta$ 处穿出
+s.axes(30,85,-0.2,2.4,-1.2,1.2)
+s.circle(30+60,85,60)
+s.line(30,85,30+60*1.5,85-60*0.866,'r',1.2)
+s.text(30+60*1.5+4,85-60*0.866-4,'r = 2cosθ',12,'r')
+s.text(30+60*2+4,98,'2',12)
+::think
+1. 第 (1) 问：代入 $x=r\cos\theta$：$r^2\le2r\cos\theta$ ⟹ $r\le2\cos\theta$，要 $\cos\theta\ge0$ ⟹ $\theta\in[-\frac\pi2,\frac\pi2]$。
+2. 第 (2) 问：$\sqrt{x^2+y^2}=r$，加上面积元的 $r$，被积 $r^2$。内层积出 $\frac83\cos^3\theta$，外层用偶函数 + 点火公式。
+3. 第 (3) 问：$x=r\cos\theta$，内层 $\int r^2\cos\theta\,dr$，外层 $\cos^4\theta$。或者：$D$ 的形心是圆心 $(1,0)$，面积 $\pi$，$I_2=1\cdot\pi$——一步验算。
+::steps
+(1) $x=r\cos\theta$，$y=r\sin\theta$ 代入：$r^2\le2r\cos\theta$ ⟹ $0\le r\le2\cos\theta$，需 $\cos\theta\ge0$，即 $-\frac\pi2\le\theta\le\frac\pi2$。
+(2) $I_1=\displaystyle\int_{-\pi/2}^{\pi/2}d\theta\int_0^{2\cos\theta}r\cdot r\,dr=\int_{-\pi/2}^{\pi/2}\frac{8\cos^3\theta}{3}d\theta$。
+$\cos^3\theta$ 是偶函数：$=\dfrac{16}{3}\displaystyle\int_0^{\pi/2}\cos^3\theta\,d\theta=\frac{16}{3}\cdot\frac23=\frac{32}{9}$（点火公式 $\int_0^{\pi/2}\cos^3=\frac23\cdot1$）。
+(3) $I_2=\displaystyle\int_{-\pi/2}^{\pi/2}d\theta\int_0^{2\cos\theta}r\cos\theta\cdot r\,dr=\int_{-\pi/2}^{\pi/2}\cos\theta\cdot\frac{8\cos^3\theta}{3}d\theta=\frac{16}{3}\int_0^{\pi/2}\cos^4\theta\,d\theta$。
+点火：$\displaystyle\int_0^{\pi/2}\cos^4\theta\,d\theta=\frac34\cdot\frac12\cdot\frac\pi2=\frac{3\pi}{16}$，所以 $I_2=\dfrac{16}3\cdot\dfrac{3\pi}{16}=\pi$。
+~验算：$D$ 是圆心 $(1,0)$ 的单位圆，面积 $\pi$，形心横坐标 1，$I_2=\bar x\cdot S=\pi$ ✓。
+::paper
+解 (1) 令 $x=r\cos\theta$，$y=r\sin\theta$，则 $x^2+y^2\le2x$ 化为 $r\le2\cos\theta$，故 ⛳2
+$$D=\Bigl\{(r,\theta)\Bigm\vert-\frac\pi2\le\theta\le\frac\pi2,\ 0\le r\le2\cos\theta\Bigr\}.$$⛳1
+(2) $I_1=\displaystyle\int_{-\frac\pi2}^{\frac\pi2}d\theta\int_0^{2\cos\theta}r^2\,dr=\frac83\int_{-\frac\pi2}^{\frac\pi2}\cos^3\theta\,d\theta$ ⛳2
+$=\dfrac{16}{3}\displaystyle\int_0^{\frac\pi2}\cos^3\theta\,d\theta=\frac{16}3\cdot\frac23=\frac{32}9$. ⛳3
+(3) $I_2=\displaystyle\int_{-\frac\pi2}^{\frac\pi2}d\theta\int_0^{2\cos\theta}r^2\cos\theta\,dr=\frac{16}3\int_0^{\frac\pi2}\cos^4\theta\,d\theta$ ⛳2
+$=\dfrac{16}{3}\cdot\dfrac34\cdot\dfrac12\cdot\dfrac\pi2=\pi$. ⛳2
+::note
+- {{扣|极坐标别漏面积元里的 $r$}}：$dx\,dy=r\,dr\,d\theta$，漏了整题错。
+- 用偶函数化成 $2\int_0^{\pi/2}$ 时，卷面上写一句「被积函数为偶函数」。
+- 点火公式：$\int_0^{\pi/2}\cos^n=\frac{n-1}{n}\cdot\frac{n-3}{n-2}\cdots$，$n$ 偶数最后乘 $\frac\pi2$，奇数最后乘 1。
+- 第 (3) 问的形心验算 5 秒，考场上一定做。
+::vary
+$\iint_Dy\,d\sigma=$？ >> 0（关于 $x$ 轴对称）。
+$\iint_D(x^2+y^2)d\sigma=$？ >> $\int\int_0^{2\cos\theta}r^3dr\,d\theta=4\int_{-\pi/2}^{\pi/2}\cos^4\theta\,d\theta=\frac{3\pi}2$。
+
+#19
+@at 31
+@src 自编
+@stem
+（本题满分 12 分）设幂级数 $\displaystyle\sum_{n=1}^\infty\frac{x^n}{n(n+1)}$.
+(1) 求该幂级数的收敛域；
+(2) 求其和函数 $S(x)$；
+(3) 求数项级数 $\displaystyle\sum_{n=1}^\infty\frac{1}{n(n+1)2^n}$ 的和.
+@ans (1) $[-1,1]$；(2) $S(x)=1+\dfrac{(1-x)\ln(1-x)}{x}$（$x\in[-1,0)\cup(0,1)$），$S(0)=0$，$S(1)=1$；(3) $1-\ln2$
+@tpl T拆项求和, T凑已知展开
+::rev
+- **该花** 16 分钟。
+- **保底** ==第 (1) 问是标准的「求半径 + 判端点」：写出 $\lim\frac{a_{n+1}}{a_n}=1$ 得 $R=1$，再判 $x=\pm1$ 都收敛，就是 3 分==；第 (2) 问写出拆项 $\frac1{n(n+1)}=\frac1n-\frac1{n+1}$ 再拿 2 分。
+- **卡点** $\sum\frac{x^n}{n+1}$ 不会处理，或忘了 $x=0$、$x=1$ 单独写。
+- **错了说明** 「$\frac{x^n}{n+1}$ 先乘 $x$ 凑成 $\frac{x^{n+1}}{n+1}$」没练；和函数要写全定义域。
+- **带走** 拆项 → 每一项凑成已知展开（$-\ln(1-x)$）→ 除以 $x$ 时 $x=0$ 单独写 → 端点用连续性。
+::read
+系数 $\frac1{n(n+1)}$ >> [[T拆项求和|拆项]]：$\frac1n-\frac1{n+1}$
+$\sum\frac{x^n}{n}$ >> [[R.powtable|已知展开]]：$-\ln(1-x)$，$-1\le x\lt1$
+第 (3) 问 $\frac1{2^n}$ >> 就是 $S\bigl(\frac12\bigr)$
+::think
+1. 第 (1) 问：$\frac{a_{n+1}}{a_n}\to1$，$R=1$；端点处 $\bigl\vert\frac{(\pm1)^n}{n(n+1)}\bigr\vert\le\frac1{n^2}$，都绝对收敛。
+2. 第 (2) 问：$S=\sum\frac{x^n}{n}-\sum\frac{x^n}{n+1}$。第一个是 $-\ln(1-x)$。第二个乘 $x$：$x\sum\frac{x^n}{n+1}=\sum_{n\ge1}\frac{x^{n+1}}{n+1}=-\ln(1-x)-x$，所以 $x\ne0$ 时 $=\frac{-\ln(1-x)-x}{x}$。
+3. 拆开后的两个级数在 $x=1$ 都发散，所以先在 $(-1,1)$ 内求，$x=1$ 由和函数在端点的连续性（阿贝尔定理）取极限。
+4. 第 (3) 问代 $x=\frac12$。
+::steps
+(1) $a_n=\dfrac{1}{n(n+1)}$，$\lim\limits_{n\to\infty}\dfrac{a_{n+1}}{a_n}=\lim\dfrac{n}{n+2}=1$，$R=1$。
+$x=\pm1$：$\Bigl\vert\dfrac{(\pm1)^n}{n(n+1)}\Bigr\vert\le\dfrac1{n^2}$，绝对收敛。收敛域 $[-1,1]$。
+(2) 当 $x\in(-1,1)$：$S(x)=\displaystyle\sum_{n=1}^\infty\frac{x^n}{n}-\sum_{n=1}^\infty\frac{x^n}{n+1}$（两个级数在 $(-1,1)$ 内都收敛，可以拆）。
+$\displaystyle\sum_{n=1}^\infty\frac{x^n}n=-\ln(1-x)$。
+$x\ne0$ 时 $\displaystyle\sum_{n=1}^\infty\frac{x^n}{n+1}=\frac1x\sum_{n=1}^\infty\frac{x^{n+1}}{n+1}=\frac1x\Bigl[\sum_{m=1}^\infty\frac{x^m}{m}-x\Bigr]=\frac{-\ln(1-x)-x}{x}$。
+所以 $S(x)=-\ln(1-x)+\dfrac{\ln(1-x)}{x}+1=1+\dfrac{(1-x)\ln(1-x)}{x}$，$x\in(-1,0)\cup(0,1)$。
+$x=0$：$S(0)=0$（每项都是 0）。
+$x=-1$：上式对 $x=-1$ 同样成立（$\sum\frac{(-1)^n}{n}=-\ln2$ 收敛，拆项合法），$S(-1)=1-2\ln2$。
+$x=1$：$S(1)=\displaystyle\sum\frac1{n(n+1)}=\sum\Bigl(\frac1n-\frac1{n+1}\Bigr)=1$（裂项相消）；也等于 $\lim\limits_{x\to1^-}\Bigl[1+\dfrac{(1-x)\ln(1-x)}{x}\Bigr]=1$。
+(3) $\displaystyle\sum\frac{1}{n(n+1)2^n}=S\Bigl(\frac12\Bigr)=1+\frac{\frac12\ln\frac12}{\frac12}=1-\ln2$。
+::paper
+解 (1) 由 $\lim\limits_{n\to\infty}\dfrac{n(n+1)}{(n+1)(n+2)}=1$ 得收敛半径 $R=1$. ⛳1
+当 $x=\pm1$ 时，$\Bigl\vert\dfrac{(\pm1)^n}{n(n+1)}\Bigr\vert\le\dfrac1{n^2}$，级数绝对收敛. 故收敛域为 $[-1,1]$. ⛳2
+(2) 当 $x\in[-1,1)$ 时，由 $\dfrac1{n(n+1)}=\dfrac1n-\dfrac1{n+1}$， ⛳1
+$$S(x)=\sum_{n=1}^\infty\frac{x^n}n-\sum_{n=1}^\infty\frac{x^n}{n+1}.\quad(1)$$
+其中 $\displaystyle\sum_{n=1}^\infty\frac{x^n}{n}=-\ln(1-x)$；当 $x\ne0$ 时，$\displaystyle\sum_{n=1}^\infty\frac{x^n}{n+1}=\frac1x\sum_{n=1}^\infty\frac{x^{n+1}}{n+1}=\frac{-\ln(1-x)-x}{x}$. ⛳2
+代入 (1) 式得 $S(x)=1+\dfrac{(1-x)\ln(1-x)}{x}$，$x\in[-1,0)\cup(0,1)$. ⛳1
+又 $S(0)=0$，$S(1)=\displaystyle\sum_{n=1}^\infty\Bigl(\frac1n-\frac1{n+1}\Bigr)=1$. 故 ⛳1
+$$S(x)=\begin{cases}1+\dfrac{(1-x)\ln(1-x)}{x}, & x\in[-1,0)\cup(0,1),\\ 0, & x=0,\\ 1, & x=1.\end{cases}$$⛳1
+(3) $\displaystyle\sum_{n=1}^\infty\frac1{n(n+1)2^n}=S\Bigl(\frac12\Bigr)=1+\frac{\frac12\ln\frac12}{\frac12}=1-\ln2$. ⛳3
+::note
+- {{扣|和函数要分段写全}}：$x=0$（除以 $x$ 时排除的点）和 $x=1$（拆开后两项都发散的点）单独写，漏一个扣 1 分。
+- 拆项前要说「两个级数都收敛」，否则「级数相减」不合法——在 $x=1$ 处正是这个问题。
+- 第 (3) 问 3 分只需要代一个数，**哪怕第 (2) 问没完全写对，只要和函数式子对，第 (3) 问就能拿满**。
+::vary
+$\sum_{n=1}^\infty\frac{x^{n}}{n(n+1)}$ 在 $x=-1$ 的值？ >> $1-2\ln2$。
+$\sum_{n=1}^\infty\frac{x^{2n-1}}{2n-1}$ 的和函数？ >> $\frac12\ln\frac{1+x}{1-x}$，$(-1,1)$（重读报第 31 期例题）。
+
+#20
+@at 28
+@src 改编自重读报第 28 期「挖洞」例题（把一般闭曲线换成椭圆，加了两问）
+@stem
+（本题满分 12 分）设 $I=\displaystyle\oint_L\frac{x\,dy-y\,dx}{x^2+y^2}$，其中 $L$ 为椭圆 $\dfrac{x^2}4+y^2=1$，取逆时针方向.
+(1) 记 $P=\dfrac{-y}{x^2+y^2}$，$Q=\dfrac{x}{x^2+y^2}$，验证当 $(x,y)\ne(0,0)$ 时 $\dfrac{\partial Q}{\partial x}=\dfrac{\partial P}{\partial y}$；
+(2) 能否由格林公式直接得到 $I=0$？说明理由；
+(3) 计算 $I$.
+@ans (1) 两者都等于 $\dfrac{y^2-x^2}{(x^2+y^2)^2}$；(2) 不能，$P,Q$ 在椭圆内部的原点处无定义；(3) $2\pi$
+@tpl T格林挖洞
+::rev
+- **该花** 15 分钟。
+- **保底** ==第 (1) 问就是两次求偏导，算对就是 3 分==；第 (2) 问写一句「原点在 $L$ 内部，$P,Q$ 在原点无定义，不满足格林公式的条件」就是 2 分。前两问 5 分不用任何技巧。
+- **卡点** 第 (3) 问挖的小曲线方向搞反，或不知道挖成什么形状。
+- **错了说明** 「按分母挖洞」：分母是 $x^2+y^2$ 就挖小圆 $x^2+y^2=\varepsilon^2$。
+- **带走** 奇点在里面：挖一个形状跟分母一样的小洞，两条曲线之间用格林得 0，原积分 = 小洞上的积分。
+::read
+分母 $x^2+y^2$、椭圆把原点围在里面 >> 奇点在内部，[[T格林挖洞|挖洞]]，不能直接格林
+$Q_x=P_y$ >> 除了原点处处满足 ⟹ 绕原点一圈的积分都相等
+::sk 240 150 画 | 在椭圆里挖一个顺时针的小圆 $l$，两者之间的环形区域 $D$ 不含原点
+s.circle(120,75,100,ry=50)
+s.circle(120,75,18,dash='4,3',c='r')
+s.dot(120,75)
+s.text(124,70,'O',11)
+s.arrow(220,80,220,66)
+s.text(208,40,'L',13)
+s.text(140,64,'l（顺时针）',11,'r')
+s.text(60,80,'D',13)
+::think
+1. 第 (1) 问纯计算：$Q_x=\frac{(x^2+y^2)-x\cdot2x}{(x^2+y^2)^2}=\frac{y^2-x^2}{(x^2+y^2)^2}$，$P_y$ 同理。
+2. 第 (2) 问：格林公式要求 $P,Q$ 在 $L$ 围成的**整个**区域上有连续偏导。原点在椭圆内，$P,Q$ 在那里没定义，条件不成立——这正是挖洞的理由。
+3. 第 (3) 问：取 $\varepsilon$ 足够小，小圆 $l:x^2+y^2=\varepsilon^2$ 取顺时针。$L+l$ 围成的环形 $D$ 里没有奇点，格林公式成立，积分 $=\iint_D(Q_x-P_y)=0$。所以 $\oint_L=-\oint_l=\oint_{l\text{ 逆}}$。
+4. 小圆上 $x^2+y^2=\varepsilon^2$，分母变常数，再用格林或参数化：$\frac{1}{\varepsilon^2}\oint x\,dy-y\,dx=\frac{1}{\varepsilon^2}\cdot2\cdot\pi\varepsilon^2=2\pi$。
+::steps
+(1) $Q=\dfrac{x}{x^2+y^2}$：$\dfrac{\partial Q}{\partial x}=\dfrac{(x^2+y^2)-2x^2}{(x^2+y^2)^2}=\dfrac{y^2-x^2}{(x^2+y^2)^2}$。
+$P=\dfrac{-y}{x^2+y^2}$：$\dfrac{\partial P}{\partial y}=\dfrac{-(x^2+y^2)+2y^2}{(x^2+y^2)^2}=\dfrac{y^2-x^2}{(x^2+y^2)^2}$。两者相等（$(x,y)\ne(0,0)$）。
+(2) 不能。格林公式要求 $P,Q$ 在 $L$ 所围闭区域上具有一阶连续偏导数；原点在椭圆内部，$P,Q$ 在原点无定义，条件不满足。
+(3) 取 $0\lt\varepsilon\lt1$，作小圆 $l:x^2+y^2=\varepsilon^2$，取顺时针方向，它在椭圆内部。
+$L$ 与 $l$ 围成的区域 $D$ 不含原点，$L+l$ 是 $D$ 的正向边界，由格林公式和 (1)：$\displaystyle\oint_{L+l}P\,dx+Q\,dy=\iint_D\Bigl(\frac{\partial Q}{\partial x}-\frac{\partial P}{\partial y}\Bigr)d\sigma=0$。
+所以 $I=-\displaystyle\oint_lP\,dx+Q\,dy=\oint_{l^-}\frac{x\,dy-y\,dx}{\varepsilon^2}$，$l^-$ 表示逆时针。
+$l^-$ 所围圆盘 $D_\varepsilon$ 上用格林公式：$\displaystyle\oint_{l^-}x\,dy-y\,dx=\iint_{D_\varepsilon}(1+1)d\sigma=2\pi\varepsilon^2$。
+$I=\dfrac{2\pi\varepsilon^2}{\varepsilon^2}=2\pi$。
+~直接验算：$x=2\cos t$，$y=\sin t$，$x\,dy-y\,dx=2\,dt$，$I=\int_0^{2\pi}\frac{2\,dt}{4\cos^2t+\sin^2t}=2\cdot\frac{2\pi}{2\cdot1}=2\pi$ ✓（$\int_0^{2\pi}\frac{dt}{a^2\cos^2t+b^2\sin^2t}=\frac{2\pi}{ab}$）。
+::paper
+解 (1) 当 $(x,y)\ne(0,0)$ 时，
+$$\frac{\partial Q}{\partial x}=\frac{y^2-x^2}{(x^2+y^2)^2}=\frac{\partial P}{\partial y}.$$⛳3
+(2) 不能. 因为原点 $O$ 在 $L$ 所围区域内部，$P,Q$ 在 $O$ 处无定义，不满足格林公式要求的「在闭区域上具有一阶连续偏导数」. ⛳2
+(3) 取 $\varepsilon$（$0\lt\varepsilon\lt1$），作圆 $l:x^2+y^2=\varepsilon^2$，取顺时针方向，则 $L$ 与 $l$ 围成区域 $D$ 不含原点. ⛳2
+在 $D$ 上用格林公式，由 (1)， ⛳1
+$$\oint_{L+l}\frac{x\,dy-y\,dx}{x^2+y^2}=\iint_D\Bigl(\frac{\partial Q}{\partial x}-\frac{\partial P}{\partial y}\Bigr)d\sigma=0.$$⛳1
+故 $I=\displaystyle\oint_{l^-}\frac{x\,dy-y\,dx}{x^2+y^2}=\frac1{\varepsilon^2}\oint_{l^-}x\,dy-y\,dx$，其中 $l^-$ 为逆时针方向. ⛳1
+再由格林公式，$\displaystyle\oint_{l^-}x\,dy-y\,dx=\iint_{x^2+y^2\le\varepsilon^2}2\,d\sigma=2\pi\varepsilon^2$，故 $I=2\pi$. ⛳2
+::note
+- {{扣|小圆的方向必须写}}：取顺时针，$L+l$ 才是环形区域的正向边界。方向写反，结论差一个负号。
+- 小圆上**先把分母换成 $\varepsilon^2$** 再用格林——这是「曲面（曲线）代入」的老规矩：积分在曲线上，曲线方程能用就先用。
+- 挖洞形状跟着分母走：分母 $x^2+4y^2$ 就挖小椭圆 $x^2+4y^2=\varepsilon^2$。
+- 结论可以背：**分母是 $x^2+y^2$ 的这一个积分，绕原点逆时针一圈是 $2\pi$，不绕是 $0$**。
+::vary
+$L$ 换成圆 $(x-3)^2+y^2=1$（不绕原点）？ >> $0$，直接格林。
+$\oint_L\frac{x\,dy-y\,dx}{4x^2+y^2}$，$L$ 为单位圆逆时针？ >> 挖小椭圆 $4x^2+y^2=\varepsilon^2$，面积 $\frac{\pi\varepsilon^2}{2}$，答案 $\frac{2\cdot\pi\varepsilon^2/2}{\varepsilon^2}=\pi$。
+
+#21
+@at 20
+@src 自编
+@stem
+（本题满分 12 分）设矩阵 $A=\begin{pmatrix}1&2&0\\8&1&a\\0&0&5\end{pmatrix}$.
+(1) 求 $A$ 的特征值；
+(2) 若 $A$ 可相似对角化，求 $a$；
+(3) 在 (2) 的条件下，求可逆矩阵 $P$ 与对角矩阵 $\Lambda$，使 $P^{-1}AP=\Lambda$.
+@ans (1) $5,5,-3$；(2) $a=0$；(3) $P=\begin{pmatrix}1&0&1\\2&0&-2\\0&1&0\end{pmatrix}$，$\Lambda=\mathrm{diag}(5,5,-3)$（$P$ 不唯一）
+@tpl T对角化判别
+::rev
+- **该花** 15 分钟。
+- **保底** ==第 (1) 问按第三行展开行列式：$\vert\lambda E-A\vert=(\lambda-5)\bigl[(\lambda-1)^2-16\bigr]$，算对特征值就是 4 分==——不需要任何技巧，只是展开一个行列式。
+- **卡点** 第 (2) 问不知道「可对角化」翻译成什么式子。
+- **错了说明** 二重根要配两个无关特征向量 ⟺ $r(A-5E)=1$。
+- **带走** 含参对角化：特征值不含参数 → 盯住重根 → $r(A-\lambda E)=n-k$ 定参数。
+::read
+第三行只有一个非零元 >> 按第三行展开，[[R.eigdef|特征多项式]]立刻分解
+「可相似对角化」 >> [[T对角化判别|重根 $5$ 要有 2 个无关特征向量]]：$r(A-5E)=1$
+::think
+1. 特征值和 $a$ 无关（$a$ 不在展开用到的位置），这是题目给的方便。
+2. 二重根 $\lambda=5$：$A-5E=\begin{pmatrix}-4&2&0\\8&-4&a\\0&0&0\end{pmatrix}$。第二行是第一行的 $-2$ 倍加上 $(0,0,a)$，所以秩为 1 ⟺ $a=0$。
+3. $a=0$ 后求特征向量：$\lambda=5$ 解 $-4x_1+2x_2=0$（$x_3$ 自由）；$\lambda=-3$ 解 $(A+3E)x=0$。
+::steps
+(1) 按第三行展开：$\vert\lambda E-A\vert=(\lambda-5)\begin{vmatrix}\lambda-1&-2\\-8&\lambda-1\end{vmatrix}=(\lambda-5)\bigl[(\lambda-1)^2-16\bigr]=(\lambda-5)^2(\lambda+3)$。
+特征值 $\lambda_1=\lambda_2=5$，$\lambda_3=-3$。
+(2) $A$ 可对角化 ⟺ 二重根 5 对应 2 个线性无关的特征向量 ⟺ $3-r(A-5E)=2$ ⟺ $r(A-5E)=1$。
+$A-5E=\begin{pmatrix}-4&2&0\\8&-4&a\\0&0&0\end{pmatrix}\to\begin{pmatrix}-4&2&0\\0&0&a\\0&0&0\end{pmatrix}$（第二行加第一行的 2 倍）。
+秩为 1 ⟺ $a=0$。
+(3) $a=0$。$\lambda=5$：$(A-5E)x=0$ 即 $-4x_1+2x_2=0$，基础解系 $\xi_1=(1,2,0)^T$，$\xi_2=(0,0,1)^T$。
+$\lambda=-3$：$A+3E=\begin{pmatrix}4&2&0\\8&4&0\\0&0&8\end{pmatrix}\to\begin{pmatrix}2&1&0\\0&0&1\\0&0&0\end{pmatrix}$，基础解系 $\xi_3=(1,-2,0)^T$。
+$P=(\xi_1,\xi_2,\xi_3)=\begin{pmatrix}1&0&1\\2&0&-2\\0&1&0\end{pmatrix}$，$\Lambda=\mathrm{diag}(5,5,-3)$。
+~验算：$A\xi_3=(1-4,\ 8-2,\ 0)^T=(-3,6,0)^T=-3\xi_3$ ✓；$A\xi_1=(5,10,0)^T=5\xi_1$ ✓。
+::paper
+解 (1) $\vert\lambda E-A\vert=\begin{vmatrix}\lambda-1&-2&0\\-8&\lambda-1&-a\\0&0&\lambda-5\end{vmatrix}=(\lambda-5)\bigl[(\lambda-1)^2-16\bigr]=(\lambda-5)^2(\lambda+3)$， ⛳3
+故 $A$ 的特征值为 $\lambda_1=\lambda_2=5$，$\lambda_3=-3$. ⛳1
+(2) 由于 $A$ 可相似对角化，二重特征值 5 应有 2 个线性无关的特征向量，即 $r(A-5E)=1$. ⛳1
+$A-5E=\begin{pmatrix}-4&2&0\\8&-4&a\\0&0&0\end{pmatrix}\to\begin{pmatrix}-4&2&0\\0&0&a\\0&0&0\end{pmatrix}$，故 $a=0$. ⛳2
+(3) 当 $\lambda=5$ 时，解 $(A-5E)x=0$，得基础解系 $\xi_1=(1,2,0)^T$，$\xi_2=(0,0,1)^T$； ⛳2
+当 $\lambda=-3$ 时，解 $(A+3E)x=0$，得基础解系 $\xi_3=(1,-2,0)^T$. ⛳1
+令 $P=(\xi_1,\xi_2,\xi_3)=\begin{pmatrix}1&0&1\\2&0&-2\\0&1&0\end{pmatrix}$，则 $P$ 可逆，且 $P^{-1}AP=\Lambda=\begin{pmatrix}5&&\\&5&\\&&-3\end{pmatrix}$. ⛳2
+::note
+- {{扣|$P$ 的列和 $\Lambda$ 的对角元顺序要一致}}：$\xi_3$ 放第三列，$-3$ 就放第三个。
+- 第 (2) 问的依据要写出来：「二重特征值应有 2 个线性无关特征向量」——这是判断的定理，不写就只剩计算分。
+- 提速：特征多项式按「只有一个非零元」的那一行（列）展开，几乎不用算。
+- $P$ 不唯一：特征向量可以乘非零常数、重根的两个向量可以换成它们的任意无关组合，只要和 $\Lambda$ 对得上都给分。
+::vary
+$a=1$ 时 $A$ 能否对角化？ >> 不能，$r(A-5E)=2$，二重根只有 1 个特征向量。
+$a=0$ 时 $A^n=$？ >> $P\Lambda^nP^{-1}$，$\Lambda^n=\mathrm{diag}(5^n,5^n,(-3)^n)$。
+
+#22
+@at 34
+@src 自编（与重读报第 34 期「连续型全套」例题同型）
+@stem
+（本题满分 12 分）设二维随机变量 $(X,Y)$ 在区域 $D=\{(x,y)\mid0\lt y\lt x\lt1\}$ 上服从均匀分布.
+(1) 求 $X$ 与 $Y$ 的边缘概率密度；
+(2) 判断 $X$ 与 $Y$ 是否相互独立，说明理由；
+(3) 求协方差 $\mathrm{Cov}(X,Y)$；
+(4) 求 $P\{X+Y\le1\}$.
+@ans (1) $f_X(x)=2x$（$0\lt x\lt1$），$f_Y(y)=2(1-y)$（$0\lt y\lt1$）；(2) 不独立；(3) $\dfrac1{36}$；(4) $\dfrac12$
+@tpl T支撑判独立
+::rev
+- **该花** 15 分钟。
+- **保底** ==先写联合密度 $f(x,y)=2$（面积 $\frac12$ 的倒数），再写出 $f_X(x)=\int_0^x2\,dy=2x$——这两行就有 3 分==；第 (2) 问写「$f(x,y)\ne f_X(x)f_Y(y)$」再拿 2 分。
+- **卡点** 边缘密度的积分限写错（$Y$ 的边缘应从 $y$ 积到 1）。
+- **错了说明** 求边缘密度前没画区域。
+- **带走** 二维连续型全套：画区域 → 联合密度 → 边缘（画竖线 / 横线定限）→ 独立看乘积 → 数字特征直接积分。
+::read
+「在区域 $D$ 上服从均匀分布」 >> 密度 = 面积的倒数：三角形面积 $\frac12$，$f=2$
+「是否相互独立」 >> [[T支撑判独立|支撑不是矩形 ⟹ 不独立]]
+::sk 180 170 画 | $D$ 是下三角：求 $f_X$ 画竖线（$y$ 从 0 到 $x$），求 $f_Y$ 画横线（$x$ 从 $y$ 到 1）
+s.axes(30,140,0,1.2,0,1.2)
+s.poly([(30,140),(150,140),(150,20),(30,140)])
+s.hatch([(30,140),(150,140),(150,20)],gap=9)
+s.line(110,140,110,100,'r',1.5)
+s.line(70,100,150,100,'b',1.5,dash='4,3')
+s.text(152,148,'1',12)
+s.text(112,154,'x',11,'r')
+s.text(8,104,'y',11,'b')
+s.poly([(30,140),(150,20)],c='k')
+s.text(76,60,'y = x',12)
+::think
+1. 区域是 $y=x$ 下方的三角形。$f_X$：固定 $x$，竖线上 $y\in(0,x)$；$f_Y$：固定 $y$，横线上 $x\in(y,1)$。
+2. 独立性：$f_X(x)f_Y(y)=4x(1-y)$ 与 $2$ 不等；或者更快：支撑是三角形不是矩形，必不独立。
+3. 协方差 $E(XY)-EX\cdot EY$：$EX$、$EY$ 用边缘密度，$E(XY)$ 用联合密度。
+4. $P(X+Y\le1)$：$D$ 中 $x+y\le1$ 的部分是三角形 $(0,0),(1,0),(\frac12,\frac12)$，面积 $\frac14$，乘密度 2。
+::steps
+$D$ 的面积为 $\frac12$，联合密度 $f(x,y)=2$（$(x,y)\in D$），其余为 0。
+(1) $0\lt x\lt1$ 时 $f_X(x)=\displaystyle\int_0^x2\,dy=2x$；其余为 0。
+$0\lt y\lt1$ 时 $f_Y(y)=\displaystyle\int_y^12\,dx=2(1-y)$；其余为 0。
+(2) 在 $D$ 内取点，例如 $(\frac12,\frac14)$：$f=2$，而 $f_X(\frac12)f_Y(\frac14)=1\cdot\frac32=\frac32\ne2$。$f(x,y)\ne f_X(x)f_Y(y)$，不独立。
+(3) $EX=\displaystyle\int_0^1x\cdot2x\,dx=\frac23$，$EY=\int_0^1y\cdot2(1-y)dy=1-\frac23=\frac13$。
+$E(XY)=\displaystyle\int_0^1dx\int_0^x2xy\,dy=\int_0^1x\cdot x^2dx=\frac14$。
+$\mathrm{Cov}(X,Y)=\dfrac14-\dfrac23\cdot\dfrac13=\dfrac14-\dfrac29=\dfrac1{36}$。
+(4) $\{X+Y\le1\}\cap D$ 是以 $(0,0)$，$(1,0)$，$(\frac12,\frac12)$ 为顶点的三角形，面积 $\frac12\cdot1\cdot\frac12=\frac14$。
+$P\{X+Y\le1\}=2\times\dfrac14=\dfrac12$。
+::paper
+解 $D$ 的面积为 $\frac12$，故 $(X,Y)$ 的概率密度为 $f(x,y)=\begin{cases}2,&(x,y)\in D,\\0,&\text{其他}.\end{cases}$ ⛳1
+(1) $f_X(x)=\displaystyle\int_{-\infty}^{+\infty}f(x,y)dy=\begin{cases}\displaystyle\int_0^x2\,dy=2x,&0\lt x\lt1,\\0,&\text{其他};\end{cases}$ ⛳2
+$f_Y(y)=\begin{cases}\displaystyle\int_y^12\,dx=2(1-y),&0\lt y\lt1,\\0,&\text{其他}.\end{cases}$ ⛳1
+(2) 在 $D$ 内，$f_X(x)f_Y(y)=4x(1-y)$ 不恒等于 $f(x,y)=2$（如在点 $(\frac12,\frac14)$ 处前者为 $\frac32$），故 $X$ 与 $Y$ 不相互独立. ⛳2
+(3) $EX=\displaystyle\int_0^12x^2dx=\frac23$，$EY=\displaystyle\int_0^12y(1-y)dy=\frac13$， ⛳1
+$E(XY)=\displaystyle\int_0^1dx\int_0^x2xy\,dy=\int_0^1x^3dx=\frac14$， ⛳1
+故 $\mathrm{Cov}(X,Y)=E(XY)-EX\cdot EY=\dfrac14-\dfrac29=\dfrac1{36}$. ⛳2
+(4) $P\{X+Y\le1\}=\displaystyle\iint_{x+y\le1}f(x,y)\,dx\,dy=2\int_0^{\frac12}dy\int_y^{1-y}dx=2\int_0^{\frac12}(1-2y)dy=\frac12$. ⛳2
+::note
+- {{扣|边缘密度要写「其他为 0」}}：分段函数只写一段，阅卷会扣 1 分。
+- 判不独立要**落到一个具体的点**（或写「不恒等」），只写「支撑不是矩形」在卷面上不够正式，可以作为草稿上的速判。
+- 第 (4) 问用几何面积最快，但卷面上写出积分式更稳。
+::vary
+$\rho_{XY}=$？ >> $DX=\frac12-\frac49=\frac1{18}$，$DY=\frac16-\frac19=\frac1{18}$，$\rho=\frac{1/36}{1/18}=\frac12$。
+$Z=X-Y$ 的密度？ >> $f_Z(z)=2(1-z)$，$0\lt z\lt1$。

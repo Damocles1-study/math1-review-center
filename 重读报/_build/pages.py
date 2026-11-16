@@ -26,6 +26,10 @@ def top(name):
 
 def write_all(root, idx, issues, THM, inline, esc, EX, TRAPS):
     w = lambda name, s: open(os.path.join(root, name), 'w', encoding='utf-8').write(s)
+    bq = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'bigq.html')   # 「大题能不能每问都写」一页回答
+    if os.path.exists(bq):
+        w('大题每问.html', HEAD.format(title='大题能不能每问都写 · 重读报') + top('大题每问') + '<div class="bq">' + open(bq, encoding='utf-8').read() + '</div>'
+          + FOOT.format(script='<script>CDRender(document)</script>'))
     w('index.html', front(idx, esc, EX))
     w('定理索引.html', theorems(idx, THM, esc))
     w('温故.html', recall_page())
@@ -212,6 +216,7 @@ def exams(idx, EX):
     return HEAD.format(title='套卷台 · 重读报') + top('套卷台') + f'''
 <h1 class="pg-h" style="border-top:5px solid var(--rule);padding-top:.2em">读完报，上真题</h1>
 <p class="sub-lead"><a href="真题套卷.html" style="font-weight:700">→ 打开在线套卷：不用 PDF，网页上直接做，交卷后成绩自动进下面的账本</a></p>
+<p class="sub-lead"><a href="大题每问.html" style="font-weight:700">→ 只会选填和第一题极限，能练到大题每问都写吗？（一页回答：36 道真题大题的第一步、每天怎么练、自检判据）</a></p>
 <p class="sub-lead" id="sum"></p>
 <div class="xm-grid">
  <section>
@@ -240,6 +245,8 @@ def exams(idx, EX):
 <div id="papers" class="xm-list"></div>
 <h2 class="xm-h">解答题专练 · 2010–2015 <small>这六年的选填已拆进每期实战，解答题没有用过</small></h2>
 <div id="drills" class="xm-list"></div>
+<h2 class="xm-h">模拟卷 · 3 套 <small>按 2021–2026 结构组卷，题目是讲义例题改编和自编，没有 2010–2026 真题；在线做，交卷后成绩自动进账本</small></h2>
+<div id="mocks" class="xm-list"></div>
 <div id="card"></div>
 <h2 class="xm-h">失分回到哪几期</h2>
 <div id="loss"><p class="hint">登过分之后，这里按失分从多到少列出该回去看的期。</p></div>
@@ -257,16 +264,16 @@ def exams(idx, EX):
  const full=y=>range(y).reduce((a,i)=>a+D.exam[y].s[i],0);
  function list(el,ys){
   const r=get();
-  el.innerHTML=ys.map(y=>{const o=r[y],f=full(y);return `<div class="xm-it ${o?'dn':''}"><b>${y}</b><a href="${pdf(y)}" target="_blank">卷子</a><a href="${sol(y)}" target="_blank">解析</a><button data-y="${y}">${o?'改分':'登分'}</button><span>${o?`${o.tot} / ${f}`:''}</span></div>`}).join('');
+  el.innerHTML=ys.map(y=>{const o=r[y],f=full(y),mk=D.mockName&&D.mockName[y];return `<div class="xm-it ${o?'dn':''}"><b>${mk||y}</b>${mk?`<a href="真题套卷.html#y=${y}">在线做</a>`:`<a href="${pdf(y)}" target="_blank">卷子</a><a href="${sol(y)}" target="_blank">解析</a>`}<button data-y="${y}">${o?'改分':'登分'}</button><span>${o?`${o.tot} / ${f}`:''}</span></div>`}).join('');
  }
  function draw(){
-  list($('papers'),D.paperYears);list($('drills'),D.drillYears);
+  list($('papers'),D.paperYears);list($('drills'),D.drillYears);if(D.mockYears)list($('mocks'),D.mockYears);
   const r=get(),done=D.paperYears.filter(y=>r[y]);
   const last=done.slice(-3).map(y=>r[y].tot),avg=last.length?Math.round(last.reduce((a,b)=>a+b,0)/last.length):null;
   const left=Math.ceil((new Date('2026-12-19T08:30:00+08:00')-Date.now())/864e5);
   $('sum').textContent=(left>0?`距初试 ${left} 天。`:'')+(done.length?`整卷做了 ${done.length} / ${D.paperYears.length} 套，最近 ${last.length} 套平均 ${avg} 分，目标 120。`:'目标 120，能更高就更高。先把报读完，再从 2016 开始。');
   const loss={},tag={};
-  Object.keys(r).forEach(y=>{const e=D.exam[y],o=r[y];range(+y).forEach(i=>{const lost=e.s[i]-(o.s[i]??0);if(lost>0){loss[e.m[i]]=(loss[e.m[i]]||0)+lost;if(o.t[i])tag[o.t[i]]=(tag[o.t[i]]||0)+lost}})});
+  Object.keys(r).forEach(y=>{const e=D.exam[y],o=r[y];if(!e)return;range(+y).forEach(i=>{const lost=e.s[i]-(o.s[i]??0);if(lost>0){loss[e.m[i]]=(loss[e.m[i]]||0)+lost;if(o.t[i])tag[o.t[i]]=(tag[o.t[i]]||0)+lost}})});
   const k=Object.entries(loss).sort((a,b)=>b[1]-a[1]).slice(0,10);
   if(k.length){const mx=k[0][1];
    $('loss').innerHTML='<div class="xm-loss">'+k.map(([n,v])=>`<a href="q${pad(+n)}.html"><span>第 ${n} 期 · ${issue(+n).kicker}</span><i style="width:${100*v/mx}%"></i><em>${v} 分</em></a>`).join('')+'</div>'
@@ -283,7 +290,7 @@ def exams(idx, EX):
    const sel=`<select data-t="${i}"><option value="">失分原因</option>${TAGS.map(t=>`<option ${o.t[i]===t?'selected':''}>${t}</option>`).join('')}</select>`;
    const where=get()[y]?`<a class="wh" href="q${pad(e.m[i])}.html">第 ${e.m[i]} 期</a>`:'';
    return `<div class="xr" data-r="${i}"><b>${n}</b><span class="xs">${inp}</span>${sel}${where}</div>`};
-  $('card').innerHTML=`<div class="xm-card"><div class="xm-card-h"><b>${y} 年答题卡</b><span>共 ${full(y)} 分</span><button id="xclose">收起</button></div><div class="xrows">${idx.map(row).join('')}</div><div class="xm-card-f"><span id="xtot"></span><button id="xsave" class="lead-go">交卷，看失分</button></div></div>`;
+  $('card').innerHTML=`<div class="xm-card"><div class="xm-card-h"><b>${(D.mockName&&D.mockName[y])||y+' 年'}答题卡</b><span>共 ${full(y)} 分</span><button id="xclose">收起</button></div><div class="xrows">${idx.map(row).join('')}</div><div class="xm-card-f"><span id="xtot"></span><button id="xsave" class="lead-go">交卷，看失分</button></div></div>`;
   const box=$('card');
   const collect=()=>{const s={},t={};box.querySelectorAll('input[data-i]').forEach(x=>{if(x.value!=='')s[x.dataset.i]=Math.max(0,Math.min(+x.max,+x.value))});box.querySelectorAll('.tk.ok,.tk.no').forEach(x=>{s[x.dataset.i]=+x.dataset.v});box.querySelectorAll('select').forEach(x=>{if(x.value)t[x.dataset.t]=x.value});return{s,t}};
   const tot=()=>{const c=collect();$('xtot').textContent=`已登 ${Object.keys(c.s).length} / ${idx.length} 题，${Object.values(c.s).reduce((a,b)=>a+b,0)} 分`};

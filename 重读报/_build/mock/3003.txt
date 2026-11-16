@@ -1,0 +1,824 @@
+// 数学一模拟卷三（押题卷）。语法见 _build/mock_build.py 开头。答案复算：_build/mock/chk/check.py
+@paper 模拟三 · 押题卷 | 按 2021–2026 的考点统计押题：解答题押近三年没以大题出现、但十几年里反复出现的座位（二阶常系数方程、闭区域最值、补面高斯、泰勒证明、含参二次型、max 与 min 的分布）。选择题略难于前两套。
+
+#1
+@at 7
+@src 自编
+@stem
+当 $x\to0$ 时，$f(x)=e^x-\dfrac{1+ax}{1+bx}$ 是 $x$ 的三阶无穷小，则（　）.
+@A $a=\dfrac12$，$b=-\dfrac12$
+@B $a=-\dfrac12$，$b=\dfrac12$
+@C $a=1$，$b=0$
+@D $a=\dfrac32$，$b=\dfrac12$
+@ans A
+@tpl T同阶无穷小
+::rev
+- **该花** 3 分钟。
+- **卡点** 分式 $\frac{1+ax}{1+bx}$ 不知道怎么展开。
+- **错了说明** $\frac1{1+u}=1-u+u^2-\cdots$ 没用起来。
+- **带走** 「$k$ 阶无穷小求参数」：两边都展到 $x^k$，低于 $k$ 次的系数全为 0，$x^k$ 的系数不为 0。
+::read
+「三阶无穷小」 >> [[T同阶无穷小|展开到 $x^3$]]：$x,x^2$ 的系数为 0，$x^3$ 的系数不为 0
+$\frac{1+ax}{1+bx}$ >> 用 $\frac{1}{1+bx}=1-bx+b^2x^2-b^3x^3+\cdots$ 乘出来
+::think
+两个未知数，正好由 $x$、$x^2$ 两个系数为 0 定出来；最后还要验 $x^3$ 的系数不为 0（否则就是四阶以上了）。
+::fast
+{{秒|代选项}}：$e^x=1+x+\frac{x^2}2+\cdots$。$\frac{1+ax}{1+bx}=1+(a-b)x-b(a-b)x^2+\cdots$，一次系数要 $a-b=1$（排除 B），二次要 $-b=\frac12$ ⟹ 只有 A。
+::steps
+$\dfrac{1+ax}{1+bx}=(1+ax)\bigl(1-bx+b^2x^2-b^3x^3+o(x^3)\bigr)=1+(a-b)x-b(a-b)x^2+b^2(a-b)x^3+o(x^3)$。
+$e^x=1+x+\dfrac{x^2}2+\dfrac{x^3}6+o(x^3)$（[[R.mclaurin|麦克劳林展开]]）。
+$f(x)=\bigl[1-(a-b)\bigr]x+\Bigl[\dfrac12+b(a-b)\Bigr]x^2+\Bigl[\dfrac16-b^2(a-b)\Bigr]x^3+o(x^3)$。
+三阶无穷小：$1-(a-b)=0$，$\frac12+b(a-b)=0$ ⟹ $a-b=1$，$b=-\frac12$，$a=\frac12$。
+检验 $x^3$ 系数：$\dfrac16-\dfrac14\cdot1=-\dfrac1{12}\ne0$，确是三阶。选 A。
+::note
+C（$a=1,b=0$）是 $e^x-1-x\sim\frac{x^2}2$，只有二阶——给只凑了一次项的人准备的。
+**口诀**：几阶无穷小，就展到几阶；低阶全清零，本阶不为零。
+::vary
+$e^x-\frac{1+ax}{1+bx}$ 的等价无穷小（$a,b$ 取本题的值）？ >> $-\frac{1}{12}x^3$。
+$\cos x-\frac{1+ax^2}{1+bx^2}$ 为 $x^4$ 的高阶无穷小，求 $a,b$？ >> $a=-\frac5{12}$，$b=\frac1{12}$。
+
+#2
+@at 9
+@src 自编
+@stem
+方程 $x^3-3x+k=0$ 有三个不同实根的充要条件是（　）.
+@A $k\gt2$
+@B $-2\lt k\lt2$
+@C $k\lt-2$
+@D $-2\le k\le2$
+@ans B
+::rev
+- **该花** 2 分钟。
+- **卡点** 端点 $k=\pm2$ 拿不准。
+- **错了说明** 等号时有重根，「不同」的根只剩两个。
+- **带走** 三次方程根的个数：看极大值 $\gt0$、极小值 $\lt0$ 同时成立。
+::read
+「三个不同实根」 >> [[R.extjudge|求极值]]，极大值在 $x$ 轴上方、极小值在下方
+::think
+画 $g(x)=x^3-3x+k$ 的草图：先升、后降、再升。三次穿过 $x$ 轴 ⟺ 极大值 $\gt0$ 且极小值 $\lt0$。
+::fast
+{{秒|上下平移}}：$x^3-3x$ 的极大值 2、极小值 $-2$，加 $k$ 后要跨过 0：$-2\lt k\lt2$，选 B。
+::steps
+$g(x)=x^3-3x+k$，$g'(x)=3x^2-3=0$ ⟹ $x=\pm1$。
+$x=-1$ 为极大值点，$g(-1)=2+k$；$x=1$ 为极小值点，$g(1)=-2+k$。
+$x\to-\infty$ 时 $g\to-\infty$，$x\to+\infty$ 时 $g\to+\infty$，$g$ 在 $(-\infty,-1)$、$(-1,1)$、$(1,+\infty)$ 上各自单调。
+三个不同实根 ⟺ 三段各有一个零点 ⟺ $2+k\gt0$ 且 $-2+k\lt0$ ⟺ $-2\lt k\lt2$。选 B。
+::note
+$k=2$ 时 $g(1)=0$，$x=1$ 是重根，只有两个不同实根；$k=-2$ 时 $x=-1$ 是重根。D 错在等号。
+**口诀**：三次三根，极大正、极小负。
+::vary
+$k=2$ 时有几个不同实根？ >> 2 个：$x^3-3x+2=(x-1)^2(x+2)$，$x=1$ 二重、$x=-2$。
+$x^3-3x+k=0$ 只有一个实根的条件？ >> $k\gt2$ 或 $k\lt-2$。
+
+#3
+@at 24
+@src 自编
+@stem
+设 $f(x,y)$ 在点 $(0,0)$ 处连续，且 $\displaystyle\lim_{(x,y)\to(0,0)}\frac{f(x,y)}{\vert x\vert+\vert y\vert}=1$，则（　）.
+@A $f_x'(0,0)$ 存在
+@B $f(x,y)$ 在 $(0,0)$ 处可微
+@C $(0,0)$ 是 $f(x,y)$ 的极小值点
+@D $(0,0)$ 不是 $f(x,y)$ 的极值点
+@ans C
+@tpl T极限反推
+::rev
+- **该花** 3 分钟。
+- **卡点** 以为极值点一定要偏导为 0，看到偏导不存在就选 D。
+- **错了说明** 极值的定义只比函数值，不要求可导。
+- **带走** 极限条件 ⟹ 先反推 $f(0,0)$，再用保号性比较附近的函数值。
+::read
+「连续」＋分母 $\to0$、极限有限 >> [[T极限反推|分子 $\to0$]] ⟹ $f(0,0)=0$
+极限为 1 $\gt0$ >> [[R.limprop|保号性]]：附近 $\frac{f}{\vert x\vert+\vert y\vert}\gt0$ ⟹ $f\gt0=f(0,0)$
+::think
+打个比方：$f$ 在原点附近长得像一个「倒立的四棱锥」$\vert x\vert+\vert y\vert$——尖底朝下，最低点在原点，但尖底处没有切平面，所以偏导不存在、不可微，却仍是极小值点。
+::fast
+{{秒|像谁}}：$f\approx\vert x\vert+\vert y\vert$，原点是尖底：极小值，偏导不存在。选 C。
+::steps
+由极限存在且分母 $\to0$，得 $\lim f(x,y)=0$，又 $f$ 在原点连续，所以 $f(0,0)=0$。
+由保号性，存在去心邻域使 $\dfrac{f(x,y)}{\vert x\vert+\vert y\vert}\gt\dfrac12\gt0$，即 $f(x,y)\gt0=f(0,0)$ ⟹ $(0,0)$ 是极小值点。C 对，D 错。
+偏导：$\dfrac{f(x,0)-f(0,0)}{x}=\dfrac{f(x,0)}{\vert x\vert}\cdot\dfrac{\vert x\vert}{x}$，前一个因子 $\to1$，后一个在 $x\to0^\pm$ 时为 $\pm1$ ⟹ 左右极限 $\mp1$ 不等，$f_x'(0,0)$ 不存在。A 错。
+偏导不存在 ⟹ 不可微，B 错。选 C。
+::note
+**口诀**：极值只比高低，不问光滑；尖底也是谷底。
+::vary
+把分母换成 $x^2+y^2$，偏导存在吗？ >> 存在且为 0，可微，仍是极小值点。
+把极限换成 $-1$？ >> 极大值点。
+
+#4
+@at 30
+@src 自编
+@stem
+设级数 $\displaystyle\sum_{n=1}^\infty a_n$ 条件收敛，则（　）.
+@A $\displaystyle\sum_{n=1}^\infty a_n^2$ 收敛
+@B $\displaystyle\sum_{n=1}^\infty a_{2n}$ 收敛
+@C $\displaystyle\sum_{n=1}^\infty\frac{a_n+\vert a_n\vert}{2}$ 发散
+@D $\displaystyle\sum_{n=1}^\infty(-1)^na_n$ 收敛
+@ans C
+@tpl T级数反例
+::rev
+- **该花** 3 分钟。
+- **卡点** C 不知道怎么证。
+- **错了说明** 「收敛 + 收敛 = 收敛」的反证用法没想到。
+- **带走** 条件收敛 = 正部、负部各自都发散，只是相互抵消。
+::read
+「条件收敛」 >> [[R.absconv|$\sum a_n$ 收敛但 $\sum\vert a_n\vert$ 发散]]
+$\frac{a_n+\vert a_n\vert}2$ >> 正部：$a_n\gt0$ 时是 $a_n$，否则是 0
+::think
+用最常见的条件收敛级数 $\frac{(-1)^n}{n}$、$\frac{(-1)^n}{\sqrt n}$ 去试 A、B、D；C 用反证：若正部收敛，$\vert a_n\vert=2\cdot$正部 $-a_n$ 也收敛，矛盾。
+::fast
+{{秒|拿 $\frac{(-1)^n}{n}$ 试}}：B 变成 $\sum\frac1{2n}$ 发散，D 变成 $\sum\frac1n$ 发散；A 用 $\frac{(-1)^n}{\sqrt n}$ 平方得 $\sum\frac1n$ 发散。只剩 C。
+::steps
+C：若 $\sum\dfrac{a_n+\vert a_n\vert}2$ 收敛，则 $\vert a_n\vert=2\cdot\dfrac{a_n+\vert a_n\vert}2-a_n$，$\sum\vert a_n\vert$ 为两个收敛级数之差，收敛，与「条件收敛」矛盾。故 C 中级数发散。
+A 的反例：$a_n=\frac{(-1)^n}{\sqrt n}$ 条件收敛，$\sum a_n^2=\sum\frac1n$ 发散。
+B 的反例：$a_n=\frac{(-1)^n}{n}$，$\sum a_{2n}=\sum\frac1{2n}$ 发散。
+D 的反例：$a_n=\frac{(-1)^n}{n}$，$\sum(-1)^na_n=\sum\frac1n$ 发散。
+∴ 选 C。
+::note
+同理 $\sum\frac{a_n-\vert a_n\vert}2$（负部）也发散。
+**口诀**：条件收敛，正负两部各自发散，靠抵消才收敛。
+::vary
+$\sum a_n$ 绝对收敛时，$\sum a_n^2$？ >> 必收敛（$\vert a_n\vert\lt1$ 后 $a_n^2\le\vert a_n\vert$）。
+$\sum a_n$ 条件收敛，$\sum(a_n+a_{n+1})$？ >> 收敛（两个收敛级数相加）。
+
+#5
+@at 18
+@src 自编
+@stem
+设向量组 $\alpha_1,\alpha_2,\alpha_3$ 线性无关，则下列向量组中线性无关的是（　）.
+@A $\alpha_1-\alpha_2,\ \alpha_2-\alpha_3,\ \alpha_3-\alpha_1$
+@B $\alpha_1+\alpha_2,\ \alpha_2+\alpha_3,\ \alpha_3-\alpha_1$
+@C $\alpha_1+\alpha_2,\ \alpha_2+\alpha_3,\ \alpha_3+\alpha_1$
+@D $\alpha_1,\ \alpha_1+\alpha_2,\ 2\alpha_1+\alpha_2$
+@ans C
+::rev
+- **该花** 2 分钟。
+- **卡点** 一个个去找线性组合，费时间。
+- **错了说明** 「新组 = 旧组 × 系数矩阵 $C$，无关 ⟺ $\vert C\vert\ne0$」没用。
+- **带走** 用旧向量组表示新向量组时，只算系数矩阵的行列式。
+::read
+新向量都由 $\alpha_1,\alpha_2,\alpha_3$ 表示 >> $(\beta_1,\beta_2,\beta_3)=(\alpha_1,\alpha_2,\alpha_3)C$，[[R.linthm|无关 ⟺ $\vert C\vert\ne0$]]
+::think
+A、B、D 都能一眼看出组合：A 三个加起来为 0；B 是 $\beta_1-\beta_2+\beta_3=0$；D 是 $\beta_3=\beta_1+\beta_2$。C 的系数矩阵行列式为 2。
+::fast
+{{秒|看系数行列式}}：C 的 $C=\begin{pmatrix}1&0&1\\1&1&0\\0&1&1\end{pmatrix}$，$\vert C\vert=2\ne0$。选 C。
+::steps
+A：$(\alpha_1-\alpha_2)+(\alpha_2-\alpha_3)+(\alpha_3-\alpha_1)=0$，相关。
+B：$(\alpha_1+\alpha_2)-(\alpha_2+\alpha_3)+(\alpha_3-\alpha_1)=0$，相关。
+D：$2\alpha_1+\alpha_2=\alpha_1+(\alpha_1+\alpha_2)$，相关。
+C：$(\beta_1,\beta_2,\beta_3)=(\alpha_1,\alpha_2,\alpha_3)\begin{pmatrix}1&0&1\\1&1&0\\0&1&1\end{pmatrix}$，$\vert C\vert=1\cdot(1-0)-0+1\cdot(1-0)=2\ne0$，$C$ 可逆，秩不变，线性无关。选 C。
+::note
+「首尾相加」型：三个是 $\vert C\vert=2$（无关），四个是 $\vert C\vert=0$（相关）——奇数个无关、偶数个相关。
+**口诀**：新组看系数阵，行列式不为零就无关。
+::vary
+$\alpha_1+\alpha_2,\alpha_2+\alpha_3,\alpha_3+\alpha_4,\alpha_4+\alpha_1$ 呢？ >> 相关：第一、三个之和 = 第二、四个之和。
+$\alpha_1+2\alpha_2,\ 2\alpha_2+3\alpha_3,\ 3\alpha_3+\alpha_1$？ >> $\vert C\vert=12\ne0$，无关。
+
+#6
+@at 17
+@src 自编
+@stem
+设 $A$ 为 $3$ 阶非零矩阵，$B=\begin{pmatrix}1&2&1\\2&4&2\\1&t&1\end{pmatrix}$，且 $AB=O$，则（　）.
+@A $t=2$ 时，$r(A)=1$
+@B $t=2$ 时，$r(A)=2$
+@C $t\ne2$ 时，$r(A)=1$
+@D $t\ne2$ 时，$r(A)=2$
+@ans C
+@tpl T含参秩
+::rev
+- **该花** 2 分半。
+- **卡点** $t=2$ 时选了 A 或 B。
+- **错了说明** $r(A)\le2$ 时 $r(A)$ 可以是 1 也可以是 2，题目条件定不下来。
+- **带走** $AB=O$ ⟹ $r(A)+r(B)\le n$；再加 $A\ne O$ ⟹ $r(A)\ge1$。
+::read
+$AB=O$ >> [[R.rankprop|$r(A)+r(B)\le3$]]
+$B$ 含参数 $t$ >> 先讨论 $r(B)$：第一、二行成比例，第三行只有 $t=2$ 时才与它们成比例
+::think
+$t\ne2$：$r(B)=2$ ⟹ $r(A)\le1$，又 $A\ne O$ ⟹ $r(A)=1$，定死了。$t=2$：$r(B)=1$ ⟹ $r(A)\le2$，1 和 2 都可能，A、B 都不是「一定」。
+::fast
+{{秒|夹逼}}：$t\ne2$ 时 $1\le r(A)\le3-2=1$。选 C。
+::steps
+$B$ 的第二行 = 第一行 × 2。第三行 $(1,t,1)$ 与第一行 $(1,2,1)$ 成比例 ⟺ $t=2$。
+$t=2$：$r(B)=1$；$t\ne2$：$r(B)=2$。
+$AB=O$ ⟹ $r(A)+r(B)\le3$；$A\ne O$ ⟹ $r(A)\ge1$。
+$t\ne2$：$1\le r(A)\le1$ ⟹ $r(A)=1$，C 对，D 错。
+$t=2$：$1\le r(A)\le2$，两种都有可能（例如 $A$ 的行都取与 $B$ 的列正交的向量，可以取一个或两个无关的），A、B 都不一定成立。选 C。
+::note
+**口诀**：$AB=O$，秩和不超过阶数；非零矩阵秩至少一。
+::vary
+$t\ne2$ 时 $Ax=0$ 的基础解系有几个向量？ >> $3-1=2$ 个（$B$ 的两列无关的列都是解）。
+$t=2$ 且 $r(A)=2$ 时，$Ax=0$ 的通解？ >> $k(1,2,1)^T$。
+
+#7
+@at 21
+@src 自编
+@stem
+设 $A$ 为 $n$ 阶正定矩阵，$B$ 为 $n$ 阶实矩阵，则（　）.
+@A $B^TAB$ 一定正定
+@B $B^TAB$ 正定的充要条件是 $B$ 可逆
+@C $B^TAB$ 正定的充要条件是 $B$ 为对称矩阵
+@D $B^TAB$ 一定不正定
+@ans B
+::rev
+- **该花** 2 分钟。
+- **卡点** 以为合同变换总保持正定。
+- **错了说明** 只有**可逆**的合同变换才保持惯性指数。
+- **带走** 判正定用定义：$x^T(B^TAB)x=(Bx)^TA(Bx)$，看 $Bx$ 会不会为 0。
+::read
+$B^TAB$ >> 先看对称（$(B^TAB)^T=B^TAB$ ✓），再用[[R.posdef|正定的定义]]
+::think
+$x\ne0$ 时 $(Bx)^TA(Bx)\ge0$，等于 0 ⟺ $Bx=0$。所以正定 ⟺ $Bx=0$ 只有零解 ⟺ $B$ 可逆。
+::fast
+{{秒|定义一行}}：$x^TB^TABx=(Bx)^TA(Bx)\gt0\iff Bx\ne0$ 对所有 $x\ne0$ ⟺ $B$ 可逆。选 B。
+::steps
+$(B^TAB)^T=B^TA^TB=B^TAB$，是实对称矩阵。
+对任意 $x\ne0$：$x^T(B^TAB)x=(Bx)^TA(Bx)$。$A$ 正定 ⟹ 当 $Bx\ne0$ 时 $\gt0$，当 $Bx=0$ 时 $=0$。
+$B$ 可逆 ⟹ $x\ne0$ 时 $Bx\ne0$ ⟹ $B^TAB$ 正定。
+$B$ 不可逆 ⟹ 存在 $x_0\ne0$ 使 $Bx_0=0$ ⟹ $x_0^TB^TABx_0=0$ ⟹ 不正定。
+所以正定 ⟺ $B$ 可逆。选 B。A 错（$B=O$），C 错（$B=O$ 对称），D 错（$B=E$）。
+::note
+**口诀**：正定夹在中间，两边乘可逆才保正定。
+::vary
+$B$ 为 $m\times n$ 实矩阵，$B^TB$ 正定的条件？ >> $r(B)=n$（列满秩）。
+$A$ 正定，$A^{-1}$、$A^*$、$A^2$ 正定吗？ >> 都正定（特征值 $\frac1\lambda$、$\frac{\vert A\vert}\lambda$、$\lambda^2$ 都正）。
+
+#8
+@at 33
+@src 自编（经典概念题）
+@stem
+设随机变量 $X\sim N(\mu,\sigma^2)$，则随 $\sigma$ 的增大，概率 $P\{\vert X-\mu\vert\lt\sigma\}$（　）.
+@A 单调增大
+@B 单调减小
+@C 保持不变
+@D 增减不定
+@ans C
+::rev
+- **该花** 1 分钟。
+- **卡点** 以为 $\sigma$ 大、分布扁，概率就变小。
+- **错了说明** 区间宽度也跟着 $\sigma$ 变，标准化后正好约掉。
+- **带走** 正态概率先标准化：$\frac{X-\mu}{\sigma}\sim N(0,1)$。
+::read
+区间是 $(\mu-\sigma,\mu+\sigma)$ >> 跟着 $\sigma$ 一起伸缩，[[R.normal|标准化]]后与 $\sigma$ 无关
+::think
+打个比方：分布变宽多少，量它的尺子也变长多少，量出来的「一个标准差内的比例」永远是那 68%。
+::fast
+{{秒|标准化}}：$P(\vert\frac{X-\mu}{\sigma}\vert\lt1)=2\Phi(1)-1$，与 $\sigma$ 无关。选 C。
+::steps
+$P\{\vert X-\mu\vert\lt\sigma\}=P\Bigl\{\Bigl\vert\dfrac{X-\mu}{\sigma}\Bigr\vert\lt1\Bigr\}$。
+$\dfrac{X-\mu}{\sigma}\sim N(0,1)$，所以上式 $=\Phi(1)-\Phi(-1)=2\Phi(1)-1\approx0.683$，与 $\sigma$（和 $\mu$）都无关。选 C。
+::note
+**口诀**：正态概率，区间按 $\sigma$ 量就不变。
+::vary
+$P\{\vert X-\mu\vert\lt1\}$ 随 $\sigma$ 增大？ >> 单调减小：$2\Phi(\frac1\sigma)-1$。
+$P\{X\lt\mu+2\sigma\}=$？ >> $\Phi(2)$。
+
+#9
+@at 35
+@src 自编
+@stem
+设随机变量 $X,Y$ 满足 $DX=4$，$DY=1$，相关系数 $\rho_{XY}=0.5$，则 $D(X-2Y)=$（　）.
+@A $4$
+@B $8$
+@C $12$
+@D $6$
+@ans A
+::rev
+- **该花** 1 分半。
+- **卡点** 协方差项的符号或系数写错。
+- **错了说明** $D(aX+bY)=a^2DX+b^2DY+2ab\,\mathrm{Cov}$ 没背熟。
+- **带走** 先由 $\rho$ 求 $\mathrm{Cov}=\rho\sqrt{DX}\sqrt{DY}$，再套公式。
+::read
+给了 $\rho$ >> [[R.cov|$\mathrm{Cov}=\rho\sqrt{DX\,DY}$]] $=0.5\times2\times1=1$
+::think
+$D(X-2Y)=DX+4DY-2\cdot2\,\mathrm{Cov}(X,Y)$。
+::fast
+{{秒|代公式}}：$4+4-4\times1=4$，选 A。
+::steps
+$\mathrm{Cov}(X,Y)=\rho_{XY}\sqrt{DX}\sqrt{DY}=0.5\times2\times1=1$。
+$D(X-2Y)=DX+(-2)^2DY+2\cdot1\cdot(-2)\,\mathrm{Cov}(X,Y)=4+4-4=4$。选 A。
+::note
+B（8）是忘了协方差，C（12）是把 $-4$ 写成了 $+4$。
+**口诀**：方差系数要平方，协方差项带 $2ab$。
+::vary
+$D(X+2Y)=$？ >> $4+4+4=12$。
+$\mathrm{Cov}(X-2Y,\,X)=$？ >> $DX-2\mathrm{Cov}=4-2=2$。
+
+#10
+@at 36
+@src 自编
+@stem
+设 $X_1,\dots,X_n$（$n\ge2$）是来自总体 $N(\mu,\sigma^2)$ 的简单随机样本，$S^2$ 为样本方差，则 $D(S^2)=$（　）.
+@A $\dfrac{2\sigma^4}{n}$
+@B $\dfrac{2\sigma^4}{n-1}$
+@C $\dfrac{\sigma^4}{n-1}$
+@D $\dfrac{2\sigma^4}{n+1}$
+@ans B
+@tpl T抽样分布拼装
+::rev
+- **该花** 2 分钟。
+- **卡点** 想直接展开 $S^2$ 求方差。
+- **错了说明** 没想到借 $\chi^2(n-1)$ 的方差 $2(n-1)$。
+- **带走** 关于 $S^2$ 的期望、方差：先化成 $\frac{(n-1)S^2}{\sigma^2}\sim\chi^2(n-1)$。
+::read
+正态总体、$S^2$ >> [[R.normsample|$\frac{(n-1)S^2}{\sigma^2}\sim\chi^2(n-1)$]]，$\chi^2(m)$ 的方差 $2m$
+::think
+把 $S^2$ 写成 $\frac{\sigma^2}{n-1}\chi^2$，方差提出系数的平方。
+::fast
+{{秒|借卡方}}：$D(S^2)=\frac{\sigma^4}{(n-1)^2}\cdot2(n-1)=\frac{2\sigma^4}{n-1}$，选 B。
+::steps
+$\dfrac{(n-1)S^2}{\sigma^2}\sim\chi^2(n-1)$，其方差为 $2(n-1)$。
+$S^2=\dfrac{\sigma^2}{n-1}\cdot\dfrac{(n-1)S^2}{\sigma^2}$ ⟹ $D(S^2)=\dfrac{\sigma^4}{(n-1)^2}\cdot2(n-1)=\dfrac{2\sigma^4}{n-1}$。选 B。
+::note
+顺带 $E(S^2)=\frac{\sigma^2}{n-1}\cdot(n-1)=\sigma^2$——无偏的另一种证法。
+**口诀**：$S^2$ 求矩，先化卡方；卡方期望 $m$、方差 $2m$。
+::vary
+$D\bigl(\frac1n\sum(X_i-\bar X)^2\bigr)=$？ >> $\frac{2(n-1)\sigma^4}{n^2}$。
+$\mu$ 已知时 $D\bigl(\frac1n\sum(X_i-\mu)^2\bigr)=$？ >> $\frac{2\sigma^4}n$（$\chi^2(n)$）。
+
+#11
+@at 7
+@src 自编
+@stem
+$\displaystyle\lim_{x\to0}\frac{(1+x)^{\frac1x}-e}{x}=$ ______.
+@ans $-\dfrac e2$
+@tpl T泰勒读系数
+::rev
+- **该花** 3 分钟。
+- **卡点** 洛必达去求 $(1+x)^{1/x}$ 的导数，越算越乱。
+- **错了说明** 幂指函数先写成 $e^{\ln}$，指数部分用泰勒。
+- **带走** $(1+x)^{1/x}=e^{\frac{\ln(1+x)}{x}}=e\cdot e^{-\frac x2+o(x)}$。
+::read
+$(1+x)^{1/x}-e$ >> 幂指型，写成 $e^{\frac{\ln(1+x)}x}$ 再提出 $e$
+::think
+$\frac{\ln(1+x)}{x}=1-\frac x2+o(x)$，所以 $(1+x)^{1/x}=e\cdot e^{-\frac x2+o(x)}$，而 $e^u-1\sim u$。
+::fast
+{{秒|结论}}：$(1+x)^{1/x}=e\bigl(1-\frac x2+o(x)\bigr)$，直接读出 $-\frac e2$。
+::steps
+$(1+x)^{\frac1x}=e^{\frac{\ln(1+x)}{x}}$，$\dfrac{\ln(1+x)}x=\dfrac{x-\frac{x^2}2+o(x^2)}{x}=1-\dfrac x2+o(x)$。
+$(1+x)^{\frac1x}-e=e\bigl(e^{-\frac x2+o(x)}-1\bigr)$，$e^u-1\sim u$ ⟹ $\sim e\cdot\Bigl(-\dfrac x2\Bigr)$。
+原式 $=\lim\dfrac{-\frac e2x}{x}=-\dfrac e2$。
+::note
+这个展开 $(1+x)^{1/x}=e-\frac e2x+\frac{11e}{24}x^2+\cdots$ 的前两项值得背。
+**口诀**：幂指先取对数，提出 $e$ 再等价。
+::vary
+$\lim\limits_{x\to0}\frac{(1+x)^{1/x}-e}{\sin x}=$？ >> $-\frac e2$。
+$\lim\limits_{n\to\infty}n\bigl[(1+\frac1n)^n-e\bigr]=$？ >> $-\frac e2$（令 $x=\frac1n$）。
+
+#12
+@at 5
+@src 自编
+@stem
+设 $y=y(x)$ 由参数方程 $\begin{cases}x=\arctan t,\\ y=\ln(1+t^2)\end{cases}$ 确定，则 $\dfrac{d^2y}{dx^2}\Big\vert_{t=1}=$ ______.
+@ans $4$
+@tpl T参数方程二阶导
+::rev
+- **该花** 2 分钟。
+- **卡点** 二阶导写成 $\frac{d^2y/dt^2}{d^2x/dt^2}$。
+- **错了说明** 二阶导是「一阶导对 $t$ 求导，再除以 $x'(t)$」。
+- **带走** $\frac{d^2y}{dx^2}=\frac{\frac{d}{dt}\bigl(\frac{dy}{dx}\bigr)}{x'(t)}$。
+::read
+参数方程、二阶导 >> [[T参数方程二阶导|对 $t$ 求导后再除一次 $x'(t)$]]
+::think
+$\frac{dy}{dx}=\frac{2t/(1+t^2)}{1/(1+t^2)}=2t$，很干净；再对 $t$ 求导得 2，除以 $x'(t)=\frac1{1+t^2}$。
+::fast
+{{秒|两步}}：$\frac{dy}{dx}=2t$，$\frac{d^2y}{dx^2}=2(1+t^2)$，$t=1$ 时为 4。
+::steps
+$x'(t)=\dfrac1{1+t^2}$，$y'(t)=\dfrac{2t}{1+t^2}$，$\dfrac{dy}{dx}=\dfrac{y'(t)}{x'(t)}=2t$。
+$\dfrac{d^2y}{dx^2}=\dfrac{\frac{d}{dt}(2t)}{x'(t)}=\dfrac{2}{1/(1+t^2)}=2(1+t^2)$。
+$t=1$：$2\times2=4$。
+::note
+**口诀**：参数二阶，导完再除 $x'$。
+::vary
+$x=t-\sin t$，$y=1-\cos t$，$\frac{d^2y}{dx^2}$ 在 $t=\frac\pi2$？ >> $\frac{dy}{dx}=\frac{\sin t}{1-\cos t}$，二阶 $=\frac{-1}{(1-\cos t)^2}$，$t=\frac\pi2$ 时 $-1$。
+本题 $\frac{dy}{dx}$ 在 $t=1$？ >> $2$。
+
+#13
+@at 25
+@src 自编
+@stem
+$\displaystyle\int_0^1dx\int_x^1e^{y^2}\,dy=$ ______.
+@ans $\dfrac{e-1}{2}$
+::rev
+- **该花** 2 分钟。
+- **卡点** 硬积 $\int e^{y^2}dy$。
+- **错了说明** $e^{y^2}$ 没有初等原函数，看到它就该交换次序。
+- **带走** 内层积不出来 ⟹ 交换积分次序。
+::read
+内层 $\int e^{y^2}dy$ >> 积不出来 ⟹ [[R.iint|交换次序]]
+区域 $0\le x\le1$，$x\le y\le1$ >> 也就是 $0\le y\le1$，$0\le x\le y$
+::think
+换成先 $x$ 后 $y$，内层只是 $\int_0^ydx=y$，外层 $\int ye^{y^2}dy$ 凑微分。
+::fast
+{{秒|换序}}：$\int_0^1ye^{y^2}dy=\frac12(e-1)$。
+::steps
+积分区域 $D=\{0\le x\le1,\ x\le y\le1\}=\{0\le y\le1,\ 0\le x\le y\}$。
+原式 $=\displaystyle\int_0^1dy\int_0^ye^{y^2}dx=\int_0^1ye^{y^2}dy$。
+$=\dfrac12e^{y^2}\Big\vert_0^1=\dfrac{e-1}{2}$。
+::note
+同类「积不出来」的：$e^{y^2}$、$e^{-y^2}$、$\frac{\sin y}{y}$、$\sin y^2$。
+**口诀**：内层积不动，换个次序再动。
+::vary
+$\int_0^1dy\int_y^1\frac{\sin x}{x}dx=$？ >> $\int_0^1\sin x\,dx=1-\cos1$。
+$\int_0^1dx\int_{\sqrt x}^1e^{y^3}dy=$？ >> $\int_0^1y^2e^{y^3}dy=\frac{e-1}{3}$。
+
+#14
+@at 31
+@src 自编
+@stem
+设 $f(x)=x^2$（$-\pi\le x\le\pi$）的傅里叶级数为 $\dfrac{a_0}2+\displaystyle\sum_{n=1}^\infty(a_n\cos nx+b_n\sin nx)$，则 $a_2=$ ______.
+@ans $1$
+::rev
+- **该花** 3 分钟。
+- **卡点** $\int x^2\cos nx$ 分部积分两次出错。
+- **错了说明** 表格法与 $\sin n\pi=0$、$\cos n\pi=(-1)^n$ 没用熟。
+- **带走** 偶函数只有 $a_n$：$a_n=\frac2\pi\int_0^\pi f\cos nx\,dx$。
+::read
+$x^2$ 是偶函数 >> $b_n=0$，[[R.fourier|$a_n=\frac2\pi\int_0^\pi x^2\cos nx\,dx$]]
+::think
+表格法：$x^2\to2x\to2$ 对 $\cos nx\to\frac{\sin nx}{n}\to-\frac{\cos nx}{n^2}\to-\frac{\sin nx}{n^3}$，代 $0$、$\pi$ 后只剩中间一项。
+::fast
+{{秒|公式}}：$x^2$ 的傅里叶系数 $a_n=\frac{4(-1)^n}{n^2}$，$n=2$ 时为 1。
+::steps
+$f$ 为偶函数，$a_n=\dfrac2\pi\displaystyle\int_0^\pi x^2\cos nx\,dx$。
+分部积分（表格法）：$\displaystyle\int x^2\cos nx\,dx=\frac{x^2\sin nx}{n}+\frac{2x\cos nx}{n^2}-\frac{2\sin nx}{n^3}+C$。
+代 $0$ 到 $\pi$：$\sin n\pi=0$，只剩 $\dfrac{2\pi\cos n\pi}{n^2}=\dfrac{2\pi(-1)^n}{n^2}$。
+$a_n=\dfrac2\pi\cdot\dfrac{2\pi(-1)^n}{n^2}=\dfrac{4(-1)^n}{n^2}$，$a_2=\dfrac{4}{4}=1$。
+::note
+由这个级数在 $x=0$、$x=\pi$ 代值，可得 $\sum\frac{(-1)^{n+1}}{n^2}=\frac{\pi^2}{12}$、$\sum\frac1{n^2}=\frac{\pi^2}6$。
+**口诀**：偶函数只算余弦，奇函数只算正弦。
+::vary
+$a_0=$？ >> $\frac2\pi\int_0^\pi x^2dx=\frac{2\pi^2}{3}$。
+傅里叶级数在 $x=\pi$ 处收敛于？ >> $\pi^2$（周期延拓后连续）。
+
+#15
+@at 16
+@src 自编
+@stem
+设 $\alpha_1,\alpha_2,\alpha_3$ 是 $3$ 维线性无关的列向量，$3$ 阶矩阵 $A$ 满足 $A\alpha_1=\alpha_1+\alpha_2$，$A\alpha_2=\alpha_2+\alpha_3$，$A\alpha_3=\alpha_3+\alpha_1$，则 $\vert A\vert=$ ______.
+@ans $2$
+@tpl T构造P相似
+::rev
+- **该花** 2 分钟。
+- **卡点** 想先把 $A$ 求出来。
+- **错了说明** 「拼成 $AP=PC$」这一步没想到。
+- **带走** 给出 $A\alpha_i$ 用 $\alpha$ 表示：拼成 $AP=PC$，$P$ 可逆 ⟹ $A\sim C$，$\vert A\vert=\vert C\vert$。
+::read
+$A\alpha_i$ 都用 $\alpha_1,\alpha_2,\alpha_3$ 表示 >> [[T构造P相似|拼成 $A(\alpha_1,\alpha_2,\alpha_3)=(\alpha_1,\alpha_2,\alpha_3)C$]]
+::think
+$P=(\alpha_1,\alpha_2,\alpha_3)$ 可逆（列无关），$A=PCP^{-1}$，行列式相等。$C$ 的第 $j$ 列是 $A\alpha_j$ 的坐标。
+::fast
+{{秒|写 $C$}}：$C=\begin{pmatrix}1&0&1\\1&1&0\\0&1&1\end{pmatrix}$，$\vert C\vert=2$。
+::steps
+$A(\alpha_1,\alpha_2,\alpha_3)=(\alpha_1+\alpha_2,\ \alpha_2+\alpha_3,\ \alpha_3+\alpha_1)=(\alpha_1,\alpha_2,\alpha_3)\begin{pmatrix}1&0&1\\1&1&0\\0&1&1\end{pmatrix}$。
+记 $P=(\alpha_1,\alpha_2,\alpha_3)$，可逆，则 $AP=PC$，两边取行列式：$\vert A\vert\vert P\vert=\vert P\vert\vert C\vert$ ⟹ $\vert A\vert=\vert C\vert$。
+$\vert C\vert=1\cdot(1\cdot1-0\cdot1)-0+1\cdot(1\cdot1-1\cdot0)=2$。
+::note
+$C$ 的第 $j$ **列**写 $A\alpha_j$ 的系数——写成行就转置了（本题行列式不受影响，但求特征向量会错）。
+**口诀**：$A\alpha$ 用 $\alpha$ 表示，拼成 $AP=PC$，$A$ 与 $C$ 相似。
+::vary
+本题 $A$ 的特征值？ >> $C$ 的特征值：$2$ 和 $\frac12\pm\frac{\sqrt3}2i$（实特征值只有 2）。
+若 $A\alpha_3=\alpha_3-\alpha_1$，$\vert A\vert=$？ >> $\vert C\vert=1\cdot1+(-1)\cdot1=0$。
+
+#16
+@at 35
+@src 自编
+@stem
+设随机变量 $X$ 服从参数为 $\lambda$ 的泊松分布，且 $P\{X=1\}=P\{X=2\}$，则 $E(X^2)=$ ______.
+@ans $6$
+::rev
+- **该花** 1 分半。
+- **卡点** 用 $E(X^2)=DX$ 忘了加 $(EX)^2$。
+- **错了说明** $E(X^2)=DX+(EX)^2$ 是最常用的变形。
+- **带走** 泊松：期望、方差都是 $\lambda$。
+::read
+$P\{X=1\}=P\{X=2\}$ >> 列方程定 $\lambda$
+$E(X^2)$ >> [[R.distmom|$DX+(EX)^2$]]
+::think
+$\lambda e^{-\lambda}=\frac{\lambda^2}{2}e^{-\lambda}$ ⟹ $\lambda=2$，$E(X^2)=2+4$。
+::fast
+{{秒|两行}}：$\lambda=2$，$E X^2=\lambda+\lambda^2=6$。
+::steps
+$P\{X=k\}=\dfrac{\lambda^k}{k!}e^{-\lambda}$，由 $\lambda e^{-\lambda}=\dfrac{\lambda^2}2e^{-\lambda}$ 且 $\lambda\gt0$ 得 $\lambda=2$。
+$EX=DX=\lambda=2$。
+$E(X^2)=DX+(EX)^2=2+4=6$。
+::note
+**口诀**：泊松均值方差都是 $\lambda$，二阶矩是 $\lambda+\lambda^2$。
+::vary
+$P\{X=0\}=$？ >> $e^{-2}$。
+$E(X^2-2X)=$？ >> $6-4=2$。
+
+#17
+@at 14
+@src 改编自重读报第 14 期「共振」例题（右端换成 $2e^x$，加初值与极限）
+@stem
+（本题满分 10 分）已知微分方程 $y''-3y'+2y=2e^x$.
+(1) 求对应齐次方程的通解；
+(2) 求原方程的一个特解，并写出原方程的通解；
+(3) 设 $y(x)$ 是原方程满足 $y(0)=0$，$y'(0)=0$ 的解，求 $\displaystyle\lim_{x\to0}\frac{y(x)}{x^2}$.
+@ans (1) $C_1e^x+C_2e^{2x}$；(2) $y^*=-2xe^x$，通解 $C_1e^x+C_2e^{2x}-2xe^x$；(3) $1$
+@tpl T极限
+::rev
+- **该花** 12 分钟。
+- **保底** ==第 (1) 问写出特征方程 $r^2-3r+2=0$、解出 $r=1,2$，再写通解，就是 3 分==——不需要会特解。
+- **卡点** 特解设成 $Ae^x$（代入后左边是 0）。
+- **错了说明** 没先看 $\lambda=1$ 是不是特征根。
+- **带走** 设特解前先比对：右端 $e^{\lambda x}$ 的 $\lambda$ 与特征根撞了几次，就乘几次 $x$。
+::read
+$y''-3y'+2y$ >> 特征方程 $r^2-3r+2=0$，$r=1,2$（[[R.charroot|常系数齐次通解]]）
+右端 $2e^x$，$\lambda=1$ 是单根 >> [[R.undet|特解设 $Axe^x$]]
+$\lim\frac{y}{x^2}$，$y(0)=y'(0)=0$ >> 洛必达两次或泰勒：极限 $=\frac{y''(0)}{2}$
+::think
+1. 第 (1) 问纯套公式。
+2. 第 (2) 问共振：$y^*=Axe^x$，代入得 $-A=2$。
+3. 第 (3) 问可以先求出 $y$ 再代，但更快：$y(0)=y'(0)=0$，由原方程 $y''(0)=3y'(0)-2y(0)+2e^0=2$，所以 $y\approx\frac{y''(0)}2x^2=x^2$，极限为 1——**连 $C_1,C_2$ 都不用求**。
+::steps
+(1) 特征方程 $r^2-3r+2=0$，$r_1=1$，$r_2=2$。齐次通解 $Y=C_1e^x+C_2e^{2x}$。
+(2) $\lambda=1$ 是单特征根，设 $y^*=Axe^x$：$y^{*\prime}=A(1+x)e^x$，$y^{*\prime\prime}=A(2+x)e^x$。
+代入：$A\bigl[(2+x)-3(1+x)+2x\bigr]e^x=-Ae^x=2e^x$ ⟹ $A=-2$，$y^*=-2xe^x$。
+通解 $y=C_1e^x+C_2e^{2x}-2xe^x$。
+(3) 由 $y(0)=0$，$y'(0)=0$ 及原方程：$y''(0)=3y'(0)-2y(0)+2=2$。
+$\lim\limits_{x\to0}\dfrac{y(x)}{x^2}\overset{\frac00}{=}\lim\dfrac{y'(x)}{2x}$，又 $y'(0)=0$，由导数定义 $=\dfrac12\lim\dfrac{y'(x)-y'(0)}{x-0}=\dfrac{y''(0)}{2}=1$。
+~也可以求出特解：$C_1+C_2=0$，$C_1+2C_2-2=0$ ⟹ $C_2=2$，$C_1=-2$，$y=-2e^x+2e^{2x}-2xe^x$，泰勒展开 $y=x^2+o(x^2)$，同样得 1。
+::paper
+解 (1) 特征方程为 $r^2-3r+2=0$，特征根 $r_1=1$，$r_2=2$，故齐次方程的通解为 $Y=C_1e^x+C_2e^{2x}$. ⛳3
+(2) 因 $\lambda=1$ 是特征方程的单根，设特解 $y^*=Axe^x$，代入原方程得 $-Ae^x=2e^x$，$A=-2$， ⛳2
+故 $y^*=-2xe^x$，原方程的通解为 $y=C_1e^x+C_2e^{2x}-2xe^x$. ⛳2
+(3) 由原方程及 $y(0)=y'(0)=0$ 得 $y''(0)=3y'(0)-2y(0)+2=2$. ⛳1
+于是 $\displaystyle\lim_{x\to0}\frac{y(x)}{x^2}=\lim_{x\to0}\frac{y'(x)}{2x}=\frac12\lim_{x\to0}\frac{y'(x)-y'(0)}{x}=\frac{y''(0)}2=1.$ ⛳2
+::note
+- {{扣|第二次不能洛必达}}：$y$ 二阶可导，但不知道 $y''$ 连续——这里 $y$ 是方程的解，其实无穷次可导，洛必达两次也行；但按导数定义写最稳，是标准写法。
+- 通解里「$Y$+$y^*$」的结构要写出来，阅卷找的就是它。
+- 第 (3) 问的捷径：**由方程本身读出 $y''(0)$**，不用解出 $C_1,C_2$。
+::vary
+右端换成 $2e^{3x}$，特解？ >> $\lambda=3$ 不是根，设 $Ae^{3x}$：$2A=2$，$y^*=e^{3x}$。
+右端换成 $x e^x$，特解形式？ >> $x(ax+b)e^x$（重读报第 14 期例题）。
+
+#18
+@at 24
+@src 自编（与重读报第 24 期「闭区域最值」例题同型）
+@stem
+（本题满分 12 分）设 $f(x,y)=x^2+y^2-xy$，$D=\{(x,y)\mid x^2+y^2\le2\}$.
+(1) 求 $f$ 在 $D$ 内部的驻点及该点处的函数值；
+(2) 用拉格朗日乘数法求 $f$ 在边界 $x^2+y^2=2$ 上的最大值与最小值；
+(3) 求 $f$ 在 $D$ 上的最大值与最小值.
+@ans (1) $(0,0)$，$f=0$；(2) 边界上最大值 $3$（$(1,-1)$，$(-1,1)$），最小值 $1$（$(1,1)$，$(-1,-1)$）；(3) 最大值 $3$，最小值 $0$
+@tpl T条件极值
+::rev
+- **该花** 15 分钟。
+- **保底** ==第 (1) 问令 $f_x'=2x-y=0$、$f_y'=2y-x=0$ 解出 $(0,0)$，就是 3 分==；第 (2) 问写出拉格朗日函数和三个方程，就再拿 3 分（方程组哪怕没解完）。
+- **卡点** 拉格朗日方程组不会解。
+- **错了说明** 「两式相减消 $\lambda$」的技巧没练。
+- **带走** 对称的拉格朗日方程组：两式相减，提公因式 $(x-y)$，分两种情况。
+::read
+「$D$ 内部的驻点」 >> 两个偏导为 0
+「边界上用拉格朗日乘数法」 >> [[R.lagmul|$L=f+\lambda(x^2+y^2-2)$]]
+「$D$ 上的最值」 >> 内部驻点值与边界最值放在一起比
+::think
+1. 内部只有 $(0,0)$。
+2. 边界：$L_x=2x-y+2\lambda x=0$，$L_y=2y-x+2\lambda y=0$。两式相减得 $3(x-y)+2\lambda(x-y)=0$，即 $(x-y)(3+2\lambda)=0$：要么 $x=y$，要么 $\lambda=-\frac32$。
+3. 快法验算：边界上 $x^2+y^2=2$，$f=2-xy$，$xy\in[-1,1]$（因为 $\vert xy\vert\le\frac{x^2+y^2}2=1$），所以 $f\in[1,3]$。
+::steps
+(1) $f_x'=2x-y=0$，$f_y'=2y-x=0$ ⟹ $x=y=0$。驻点 $(0,0)$ 在 $D$ 内，$f(0,0)=0$。
+(2) 令 $L(x,y,\lambda)=x^2+y^2-xy+\lambda(x^2+y^2-2)$：
+  $L_x=2x-y+2\lambda x=0$ (1)，$L_y=2y-x+2\lambda y=0$ (2)，$x^2+y^2=2$ (3)。
+(1)−(2)：$3(x-y)+2\lambda(x-y)=0$，即 $(x-y)(3+2\lambda)=0$。
+若 $x=y$：由 (3) $x=y=\pm1$，点 $(1,1)$、$(-1,-1)$，$f=1+1-1=1$。
+若 $\lambda=-\frac32$：(1) 变为 $2x-y-3x=0$，即 $y=-x$，由 (3) 得 $(1,-1)$、$(-1,1)$，$f=1+1+1=3$。
+边界上最大值 3，最小值 1。
+~验算：$x^2+y^2=2$ 时 $f=2-xy$，$\vert xy\vert\le1$，$f\in[1,3]$ ✓。
+(3) 比较 $f(0,0)=0$ 与边界上的 $1$、$3$：最大值 $3$（在 $(1,-1)$、$(-1,1)$），最小值 $0$（在 $(0,0)$）。
+::paper
+解 (1) 由 $f_x'=2x-y=0$，$f_y'=2y-x=0$ 得 $D$ 内唯一驻点 $(0,0)$，$f(0,0)=0$. ⛳3
+(2) 作拉格朗日函数 $L(x,y,\lambda)=x^2+y^2-xy+\lambda(x^2+y^2-2)$，令 ⛳1
+$$\begin{cases}L_x'=2x-y+2\lambda x=0,&(1)\\ L_y'=2y-x+2\lambda y=0,&(2)\\ x^2+y^2=2.&(3)\end{cases}$$⛳2
+(1)$-$(2) 得 $(x-y)(3+2\lambda)=0$. ⛳1
+若 $x=y$，由 (3) 得 $(1,1)$，$(-1,-1)$，$f=1$；
+若 $\lambda=-\frac32$，由 (1) 得 $y=-x$，由 (3) 得 $(1,-1)$，$(-1,1)$，$f=3$. ⛳2
+故 $f$ 在边界上的最大值为 $3$，最小值为 $1$.
+(3) 比较 $f(0,0)=0$ 与边界上的最值，$f$ 在 $D$ 上的最大值为 $3$，在 $(1,-1)$，$(-1,1)$ 处取得；最小值为 $0$，在 $(0,0)$ 处取得. ⛳3
+::note
+- {{扣|方程组要编号}}：写「(1)−(2)」比写「两式相减」清楚，阅卷一眼看到采分点。
+- 闭区域最值**不需要**判断驻点是不是极值点，直接比较函数值。
+- 考场提速：边界是圆、$f$ 含 $x^2+y^2$ 时先代入化简（这里变成 $2-xy$），能当验算，也能在拉格朗日解不出来时救命。
+::vary
+同一 $f$ 在单位圆周上的最值？ >> $f=1-xy$，$xy\in[-\frac12,\frac12]$：最大 $\frac32$，最小 $\frac12$。
+$f$ 是二次型，它的矩阵与特征值？ >> $\begin{pmatrix}1&-\frac12\\-\frac12&1\end{pmatrix}$，特征值 $\frac12,\frac32$——单位圆上的最值就是它们。
+
+#19
+@at 29
+@src 改编自重读报第 29 期「补面」例题（把 $z\,dxdy$ 换成 $z^2dxdy$，散度不再是常数）
+@stem
+（本题满分 12 分）设 $\Sigma$ 为旋转抛物面 $z=x^2+y^2$（$0\le z\le1$），取下侧.
+(1) 计算 $I_1=\displaystyle\iint_\Sigma z^2\,dx\,dy$；
+(2) 计算 $I=\displaystyle\iint_\Sigma x\,dy\,dz+y\,dz\,dx+z^2\,dx\,dy$.
+@ans (1) $-\dfrac\pi3$；(2) $\dfrac{2\pi}3$
+@tpl T高斯对称
+::rev
+- **该花** 16 分钟。
+- **保底** ==第 (1) 问就是投影法：写出「下侧取负号，$I_1=-\iint_{D}(x^2+y^2)^2d\sigma$」就有 2 分==，极坐标算出 $-\frac\pi3$ 拿满 4 分。第 (2) 问写出补面 $\Sigma_1:z=1$（上侧）和高斯公式再拿 3 分。
+- **卡点** 下侧的符号；补面后 $\Omega$ 的外侧是不是 $\Sigma$ 的下侧没想清。
+- **错了说明** 没画图看 $\Omega$ 在曲面的哪一边。
+- **带走** 补面前先画 $\Omega$：抛物面在 $\Omega$ 的下面，所以 $\Omega$ 的外侧在抛物面上是**朝下**的。
+::read
+$z=x^2+y^2$，下侧，只有 $dx\,dy$ >> [[R.surf2|投影法]]，下侧取负号，$z$ 用曲面方程代掉
+第 (2) 问三项、曲面不封闭 >> 补顶面 $z=1$（取上侧）用[[R.gauss|高斯公式]]
+::sk 240 170 画 | $\Omega$ 夹在抛物面（下）与平面 $z=1$（上）之间：抛物面取下侧、顶面取上侧，合起来是 $\Omega$ 的外侧
+s.circle(120,30,80,ry=14)
+s.plot(lambda u:u*u,-1,1,lambda u:120+80*u,lambda v:150-120*v,n=11)
+s.arrow(120,30,120,6)
+s.text(126,14,'Σ₁ 上侧',11,'b')
+s.arrow(150,128,160,160)
+s.text(166,160,'Σ 下侧',11,'r')
+s.text(112,90,'Ω',14)
+::think
+1. 第 (1) 问：投影区域 $D:x^2+y^2\le1$。下侧 ⟹ 负号。$z^2=(x^2+y^2)^2=r^4$。
+2. 第 (2) 问：$\Omega=\{x^2+y^2\le z\le1\}$，在抛物面上方。$\Sigma$ 下侧正是 $\Omega$ 的外侧（朝外 = 朝下）；补 $\Sigma_1:z=1$ 取上侧。
+3. 散度 $1+1+2z=2+2z$，用「先二后一」：截面 $D_z$ 是半径 $\sqrt z$ 的圆，面积 $\pi z$。
+4. 顶面上 $dy\,dz=dz\,dx=0$，$z^2=1$：$\iint_{\Sigma_1}=\iint_{D}1\,d\sigma=\pi$。
+::steps
+(1) $\Sigma$ 在 $xOy$ 面上的投影 $D:x^2+y^2\le1$，取下侧：$I_1=-\displaystyle\iint_D(x^2+y^2)^2d\sigma$。
+$=-\displaystyle\int_0^{2\pi}d\theta\int_0^1r^4\cdot r\,dr=-2\pi\cdot\frac16=-\frac\pi3$。
+(2) 补 $\Sigma_1:z=1$（$x^2+y^2\le1$），取上侧。$\Sigma+\Sigma_1$ 围成 $\Omega=\{(x,y,z)\mid x^2+y^2\le z\le1\}$，取外侧（抛物面在 $\Omega$ 下方，外侧朝下 = $\Sigma$ 的下侧）。
+$P=x$，$Q=y$，$R=z^2$，散度 $1+1+2z=2+2z$。
+高斯公式：$\displaystyle\oiint_{\Sigma+\Sigma_1}=\iiint_\Omega(2+2z)dV$。
+先二后一：$D_z=\{x^2+y^2\le z\}$，面积 $\pi z$，$\displaystyle\iiint_\Omega(2+2z)dV=\int_0^1(2+2z)\pi z\,dz=\pi\Bigl(1+\frac23\Bigr)=\frac{5\pi}3$。
+$\Sigma_1$ 上：$z=1$，$dy\,dz=dz\,dx=0$，$\displaystyle\iint_{\Sigma_1}=\iint_{x^2+y^2\le1}1^2\,d\sigma=\pi$。
+$I=\dfrac{5\pi}3-\pi=\dfrac{2\pi}3$。
+~直接验算（转换投影）：下侧法向量取 $(2x,2y,-1)$，$I=\iint_D\bigl[x\cdot2x+y\cdot2y-(x^2+y^2)^2\bigr]d\sigma=\iint_D[2r^2-r^4]r\,dr\,d\theta=2\pi\bigl(\frac12-\frac16\bigr)=\frac{2\pi}3$ ✓。
+::paper
+解 (1) $\Sigma$ 在 $xOy$ 面上的投影区域为 $D=\{(x,y)\mid x^2+y^2\le1\}$，$\Sigma$ 取下侧，故 ⛳2
+$$I_1=-\iint_D(x^2+y^2)^2\,dx\,dy=-\int_0^{2\pi}d\theta\int_0^1r^5\,dr=-\frac\pi3.$$⛳2
+(2) 补平面 $\Sigma_1:z=1$（$x^2+y^2\le1$），取上侧，则 $\Sigma$ 与 $\Sigma_1$ 围成区域 $\Omega=\{(x,y,z)\mid x^2+y^2\le z\le1\}$，取外侧. ⛳1
+由高斯公式， ⛳1
+$$\oiint_{\Sigma+\Sigma_1}x\,dydz+y\,dzdx+z^2dxdy=\iiint_\Omega(2+2z)\,dV=\int_0^1(2+2z)\cdot\pi z\,dz=\frac{5\pi}3.\quad(1)$$⛳3
+在 $\Sigma_1$ 上 $z=1$，且 $\Sigma_1$ 在 $yOz$、$zOx$ 面上的投影面积为零，故 ⛳1
+$$\iint_{\Sigma_1}x\,dydz+y\,dzdx+z^2dxdy=\iint_{x^2+y^2\le1}dx\,dy=\pi.\quad(2)$$⛳1
+由 (1)(2)，$I=\dfrac{5\pi}3-\pi=\dfrac{2\pi}3$. ⛳1
+::note
+- {{扣|三重积分「先二后一」要写截面面积}}：$\iint_{D_z}d\sigma=\pi z$ 这一步是采分点，别心算跳过。
+- 补面的方向要和 $\Sigma$ 一起构成**外侧**：先判 $\Sigma$ 的下侧是不是 $\Omega$ 的外侧，再定 $\Sigma_1$ 取上侧。
+- 时间多的话用「转换投影」直接算一遍验证（本题 3 行）。
+- 第 (1) 问不是白给：它就是第 (2) 问里 $z^2dxdy$ 那一项在 $\Sigma$ 上的值，前两项另算 $x\,dydz+y\,dzdx=\iint 2r^2\cdot r\,dr\,d\theta=\pi$，$\pi-\frac\pi3=\frac{2\pi}3$——三种算法互相印证。
+::vary
+$\Sigma$ 改为上侧，$I=$？ >> $-\frac{2\pi}{3}$。
+$\iint_\Sigma x\,dydz+y\,dzdx+z\,dxdy$（下侧）？ >> $\frac{3\pi}2-\pi=\frac\pi2$（重读报第 29 期例题）。
+
+#20
+@at 9
+@src 第 (1)(2) 问自编；第 (3) 问为经典题型（教材习题常见，非 2010–2026 真题）
+@stem
+（本题满分 12 分）设 $f(x)$ 在 $[0,1]$ 上二阶可导，$f(0)=0$，$f(1)=1$，$f'(0)=0$. 证明：
+(1) 存在 $\xi\in(0,1)$，使得 $f'(\xi)=1$；
+(2) 存在 $\eta\in(0,1)$，使得 $f''(\eta)=2$；
+(3) 若又有 $f'(1)=0$，则存在 $\zeta\in(0,1)$，使得 $\vert f''(\zeta)\vert\ge4$.
+@ans 证明题（见卷面）
+@tpl T泰勒中值证明
+::rev
+- **该花** 16 分钟（第 (3) 问可放）。
+- **保底** ==第 (1) 问就是一次拉格朗日中值定理：写出条件和 $f'(\xi)=\frac{f(1)-f(0)}{1-0}=1$，就是 4 分==。第 (2) 问写出「在 $x=0$ 处带拉格朗日余项的泰勒公式」再拿 3 分。前两问 7 分都是模板。
+- **卡点** 第 (3) 问不知道在哪个点展开。
+- **错了说明** 「两端各给一个导数条件 ⟹ 都展到中点 $\frac12$」没练。
+- **带走** 给 $f'(0)$ 用在 0 处展开；两端都给导数，就从两端分别展开到中点再相减。
+::read
+「存在 $\xi$，$f'(\xi)=1$」、两端函数值已知 >> [[R.lagrange|拉格朗日中值定理]]
+「二阶可导」「$f''(\eta)$」、给了 $f'(0)$ >> [[T泰勒中值证明|在 0 处泰勒展开到二阶]]
+两端都给导数、证 $\vert f''\vert\ge4$ >> 两端分别展开到 $\frac12$，相减
+::think
+1. 第 (1) 问：$\frac{f(1)-f(0)}{1-0}=1$，拉格朗日一步。
+2. 第 (2) 问：$f(1)=f(0)+f'(0)\cdot1+\frac{f''(\eta)}{2}\cdot1^2$，代入三个已知值：$1=\frac{f''(\eta)}2$。
+3. 第 (3) 问：在 0 处展开到 $x=\frac12$：$f(\frac12)=\frac{f''(\eta_1)}{8}$；在 1 处展开到 $\frac12$：$f(\frac12)=1+\frac{f''(\eta_2)}{8}$。两式相减：$f''(\eta_1)-f''(\eta_2)=8$，两个数之差为 8，绝对值大的那个至少 4。
+4. 打个比方：从 0 出发时速度为 0，到 1 时速度又为 0，中间要走完 1 的路程——必须先猛加速再猛减速，加速度（二阶导）总有一刻不小于 4。
+::steps
+(1) $f$ 在 $[0,1]$ 上连续、在 $(0,1)$ 内可导（二阶可导保证）。由拉格朗日中值定理，存在 $\xi\in(0,1)$，$f'(\xi)=\dfrac{f(1)-f(0)}{1-0}=1$。
+(2) 由泰勒公式（拉格朗日余项），在 $x_0=0$ 处展开、取 $x=1$：存在 $\eta\in(0,1)$，
+  $f(1)=f(0)+f'(0)(1-0)+\dfrac{f''(\eta)}2(1-0)^2$。
+代入 $f(0)=0$，$f'(0)=0$，$f(1)=1$：$1=\dfrac{f''(\eta)}{2}$，即 $f''(\eta)=2$。
+(3) 在 $0$ 处展开、取 $x=\frac12$：存在 $\eta_1\in(0,\frac12)$，$f\bigl(\frac12\bigr)=f(0)+f'(0)\cdot\frac12+\dfrac{f''(\eta_1)}2\cdot\dfrac14=\dfrac{f''(\eta_1)}8$。
+在 $1$ 处展开、取 $x=\frac12$：存在 $\eta_2\in(\frac12,1)$，$f\bigl(\frac12\bigr)=f(1)+f'(1)\cdot\bigl(-\frac12\bigr)+\dfrac{f''(\eta_2)}2\cdot\dfrac14=1+\dfrac{f''(\eta_2)}8$。
+两式相减：$\dfrac{f''(\eta_1)-f''(\eta_2)}{8}=1$，即 $f''(\eta_1)-f''(\eta_2)=8$。
+$8\le\vert f''(\eta_1)\vert+\vert f''(\eta_2)\vert\le2\max\{\vert f''(\eta_1)\vert,\vert f''(\eta_2)\vert\}$，取 $\zeta$ 为使绝对值较大的那个 $\eta_i$，则 $\vert f''(\zeta)\vert\ge4$。
+::paper
+证 (1) 由于 $f(x)$ 在 $[0,1]$ 上连续，在 $(0,1)$ 内可导，由拉格朗日中值定理，存在 $\xi\in(0,1)$，使 ⛳2
+$$f'(\xi)=\frac{f(1)-f(0)}{1-0}=1.$$⛳2
+(2) 由泰勒公式，存在 $\eta\in(0,1)$，使 $f(1)=f(0)+f'(0)+\dfrac{f''(\eta)}{2}$. ⛳2
+将 $f(0)=0$，$f'(0)=0$，$f(1)=1$ 代入得 $f''(\eta)=2$. ⛳1
+(3) 将 $f\bigl(\frac12\bigr)$ 分别在 $x=0$ 与 $x=1$ 处展开：存在 $\eta_1\in\bigl(0,\frac12\bigr)$，$\eta_2\in\bigl(\frac12,1\bigr)$，使 ⛳1
+$$f\Bigl(\frac12\Bigr)=f(0)+\frac12f'(0)+\frac{f''(\eta_1)}{8}=\frac{f''(\eta_1)}8,\quad(1)$$⛳1
+$$f\Bigl(\frac12\Bigr)=f(1)-\frac12f'(1)+\frac{f''(\eta_2)}{8}=1+\frac{f''(\eta_2)}8.\quad(2)$$⛳1
+(1)$-$(2) 得 $f''(\eta_1)-f''(\eta_2)=8$，从而 $\vert f''(\eta_1)\vert+\vert f''(\eta_2)\vert\ge8$. ⛳1
+记 $\zeta$ 为 $\eta_1,\eta_2$ 中使 $\vert f''\vert$ 较大者，则 $\zeta\in(0,1)$，且 $\vert f''(\zeta)\vert\ge4$. ⛳1
+证毕.
+::note
+- {{扣|泰勒公式要写「存在 $\eta$ 介于 … 之间」}}：余项里的点的范围是证明的一部分。
+- 第 (3) 问是全卷最难的一问（3–5 分），**考场上前两问 7 分先写满再决定碰不碰它**。
+- 证明题第一问几乎都是「零点定理 / 拉格朗日 / 罗尔」三选一，先把条件抄上去，分就有了一半。
+::vary
+只给 $f(0)=0$、$f(1)=1$，能证存在 $\eta$ 使 $f''(\eta)=2$ 吗？ >> 不能，$f(x)=x$ 时 $f''\equiv0$——$f'(0)=0$ 是必需的。
+设 $f(0)=f(1)=0$，$\max\limits_{[0,1]}f=2$，证存在 $\xi$ 使 $f''(\xi)\le-16$？ >> 在最大值点 $c$ 处（$f'(c)=0$）分别展开到 0 和 1：$f''(\eta_1)=-\frac4{c^2}$，$f''(\eta_2)=-\frac4{(1-c)^2}$，$c$ 与 $1-c$ 中较小者 $\le\frac12$。
+
+#21
+@at 21
+@src 自编
+@stem
+（本题满分 12 分）设二次型 $f(x_1,x_2,x_3)=ax_1^2+ax_2^2+ax_3^2+2x_1x_2+2x_1x_3-2x_2x_3$.
+(1) 写出二次型 $f$ 的矩阵 $A$，并求 $A$ 的特征值；
+(2) 若 $f$ 正定，求 $a$ 的取值范围；
+(3) 当 $a=2$ 时，求正交变换 $x=Qy$，把 $f$ 化为标准形；
+(4) 当 $a=2$ 时，说明方程 $f(x_1,x_2,x_3)=1$ 表示什么曲面.
+@ans (1) $A=\begin{pmatrix}a&1&1\\1&a&-1\\1&-1&a\end{pmatrix}$，特征值 $a+1,a+1,a-2$；(2) $a\gt2$；(3) $f=3y_1^2+3y_2^2$；(4) 圆柱面
+@tpl T正交对角化, T施密特
+::rev
+- **该花** 16 分钟。
+- **保底** ==第 (1) 问写对矩阵就有 1 分，特征值用「$A=aE+B$」算出来再拿 2 分==；第 (2) 问「特征值全正」或「顺序主子式全正」写出来，又是 3 分。
+- **卡点** 特征多项式带参数，硬展开很乱。
+- **错了说明** 没把参数拆出去：$A=aE+B$，$B$ 的特征值加 $a$ 就是 $A$ 的。
+- **带走** 对角元全是同一个参数 ⟹ 写成 $aE+B$，只求不含参数的 $B$ 的特征值。
+::read
+对角元都是 $a$ >> $A=aE+B$，特征值 = $B$ 的特征值 $+a$
+「正定」 >> [[R.posdef|特征值全为正]]
+$a=2$ 时有 0 特征值 >> 标准形少一项，$f=1$ 是[[R.surfaces|柱面]]
+::think
+1. $B=\begin{pmatrix}0&1&1\\1&0&-1\\1&-1&0\end{pmatrix}$ 不含参数。试 $B-E=\begin{pmatrix}-1&1&1\\1&-1&-1\\1&-1&-1\end{pmatrix}$：三行成比例，秩 1 ⟹ $B$ 的特征值 $1$ 是二重根。
+2. $\mathrm{tr}B=0$ ⟹ 第三个特征值是 $-2$。所以 $A$ 的特征值 $a+1,a+1,a-2$。
+3. 试的时候要把 $B\pm E$ **真的写出来看一眼**：$B+E=\begin{pmatrix}1&1&1\\1&1&-1\\1&-1&1\end{pmatrix}$ 秩是 3，不是它。
+4. $a=2$：特征值 $3,3,0$。$\lambda=0$ 的特征向量满足 $Ax=0$；$\lambda=3$ 的满足 $x_1-x_2-x_3=0$，两个要施密特。
+::steps
+(1) $A=\begin{pmatrix}a&1&1\\1&a&-1\\1&-1&a\end{pmatrix}=aE+B$，$B=\begin{pmatrix}0&1&1\\1&0&-1\\1&-1&0\end{pmatrix}$。
+$B-E=\begin{pmatrix}-1&1&1\\1&-1&-1\\1&-1&-1\end{pmatrix}$，秩 1 ⟹ $B$ 有二重特征值 $1$；$\mathrm{tr}B=0$ ⟹ 第三个特征值 $-2$。
+$A$ 的特征值：$a+1$（二重），$a-2$。
+~直接展开验证：$\vert\lambda E-A\vert=(\lambda-a-1)^2(\lambda-a+2)$。
+(2) $f$ 正定 ⟺ $a+1\gt0$ 且 $a-2\gt0$ ⟺ $a\gt2$。
+~顺序主子式验证：$a\gt0$，$a^2-1\gt0$，$\vert A\vert=(a+1)^2(a-2)\gt0$，同样得 $a\gt2$。
+(3) $a=2$：$A=\begin{pmatrix}2&1&1\\1&2&-1\\1&-1&2\end{pmatrix}$，特征值 $3,3,0$。
+$\lambda=0$：$Ax=0$，化简得 $x_1=-x_3$，$x_2=x_3$，$\xi_3=(-1,1,1)^T$。
+$\lambda=3$：$(3E-A)x=0$ 即 $x_1-x_2-x_3=0$，取 $\xi_1=(1,1,0)^T$，$\xi_2=(1,0,1)^T$。
+施密特：$\beta_1=\xi_1$，$\beta_2=\xi_2-\dfrac{(\xi_2,\beta_1)}{(\beta_1,\beta_1)}\beta_1=(1,0,1)^T-\dfrac12(1,1,0)^T=\dfrac12(1,-1,2)^T$。
+单位化：$q_1=\dfrac1{\sqrt2}(1,1,0)^T$，$q_2=\dfrac1{\sqrt6}(1,-1,2)^T$，$q_3=\dfrac1{\sqrt3}(-1,1,1)^T$。
+$Q=(q_1,q_2,q_3)$，$x=Qy$ 下 $f=3y_1^2+3y_2^2$。
+(4) 正交变换保持图形形状，$3y_1^2+3y_2^2=1$ 中不含 $y_3$，是母线平行于 $y_3$ 轴（即 $q_3$ 方向）的**圆柱面**。
+::paper
+解 (1) $A=\begin{pmatrix}a&1&1\\1&a&-1\\1&-1&a\end{pmatrix}$. ⛳1
+$\vert\lambda E-A\vert=(\lambda-a-1)^2(\lambda-a+2)$，故 $A$ 的特征值为 $\lambda_1=\lambda_2=a+1$，$\lambda_3=a-2$. ⛳2
+(2) $f$ 正定 ⟺ $A$ 的特征值全大于零 ⟺ $a+1\gt0$ 且 $a-2\gt0$，故 $a\gt2$. ⛳3
+(3) 当 $a=2$ 时，特征值为 $3,3,0$. ⛳1
+对 $\lambda=3$，解 $(3E-A)x=0$ 得 $\xi_1=(1,1,0)^T$，$\xi_2=(1,0,1)^T$；对 $\lambda=0$，解 $Ax=0$ 得 $\xi_3=(-1,1,1)^T$. ⛳1
+正交化：$\beta_1=\xi_1$，$\beta_2=\xi_2-\dfrac{(\xi_2,\beta_1)}{(\beta_1,\beta_1)}\beta_1=\dfrac12(1,-1,2)^T$. ⛳1
+单位化得 $q_1=\dfrac1{\sqrt2}(1,1,0)^T$，$q_2=\dfrac1{\sqrt6}(1,-1,2)^T$，$q_3=\dfrac1{\sqrt3}(-1,1,1)^T$. 令 $Q=(q_1,q_2,q_3)$，则 $Q$ 为正交矩阵，在正交变换 $x=Qy$ 下 ⛳1
+$$f=3y_1^2+3y_2^2.$$⛳1
+(4) 正交变换不改变曲面的形状，$3y_1^2+3y_2^2=1$ 表示圆柱面，故 $f(x_1,x_2,x_3)=1$ 表示圆柱面. ⛳1
+::note
+- {{扣|写「$Q$ 为正交矩阵」}}：正交变换题的标准句式。
+- $B+E$ 与 $B-E$ 一字之差：秩 1 的那个要写出来确认，别心算——这就是考场上的验算习惯。
+- (4) 的判断：标准形里正项个数 = 2、零项 1 个 ⟹ 柱面；两个系数相等 ⟹ 圆柱面。
+::vary
+$a=-1$ 时，$f=1$ 是什么曲面？ >> 特征值 $0,0,-3$：$-3y_3^2=1$ 无实点（空集）。
+$a=0$ 时 $f$ 的正、负惯性指数？ >> 特征值 $1,1,-2$：正 2，负 1。
+
+#22
+@at 34
+@src 自编（与重读报第 34 期「max 与 min」例题同型，总体换成指数分布）
+@stem
+（本题满分 12 分）设随机变量 $X_1,X_2$ 相互独立，都服从参数为 $1$ 的指数分布. 记 $Y=\max\{X_1,X_2\}$，$Z=\min\{X_1,X_2\}$.
+(1) 求 $P\{Z\gt1\}$；
+(2) 求 $Z$ 与 $Y$ 的概率密度；
+(3) 求 $EY$ 与 $E(Y-Z)$.
+@ans (1) $e^{-2}$；(2) $f_Z(z)=2e^{-2z}$（$z\gt0$），$f_Y(y)=2e^{-y}-2e^{-2y}$（$y\gt0$）；(3) $EY=\dfrac32$，$E(Y-Z)=1$
+@tpl T分布函数法
+::rev
+- **该花** 14 分钟。
+- **保底** ==第 (1) 问：$\{Z\gt1\}=\{X_1\gt1\}\cap\{X_2\gt1\}$，由独立性 $=e^{-1}\cdot e^{-1}$——两行就是 3 分==。第 (2) 问写出 $F_Z(z)=1-[1-F(z)]^2$、$F_Y(y)=[F(y)]^2$ 再拿 3 分。
+- **卡点** max 和 min 的分布函数公式记混。
+- **错了说明** 「最小值大于 $z$ ⟺ 全都大于 $z$」「最大值小于 $y$ ⟺ 全都小于 $y$」没想通。
+- **带走** min 看「都大于」，max 看「都小于」，独立就相乘。
+::read
+$\min$、$\max$ 的分布 >> [[R.conv|max 与 min]]：$P(Z\gt z)=P(X_1\gt z)P(X_2\gt z)$，$P(Y\le y)=P(X_1\le y)P(X_2\le y)$
+$E(Y-Z)$ >> 期望线性：$EY-EZ$；也可以注意 $Y-Z=\vert X_1-X_2\vert$
+::think
+1. $E(1)$：$F(x)=1-e^{-x}$，$P(X\gt x)=e^{-x}$（$x\gt0$）。
+2. min：$P(Z\gt z)=e^{-2z}$，正好是参数 2 的指数分布 ⟹ $EZ=\frac12$。
+3. max：$F_Y=(1-e^{-y})^2$，求导得密度；$EY=EX_1+EX_2-EZ=2-\frac12$（因为 $Y+Z=X_1+X_2$）——一步验算。
+4. 打个比方：两个灯泡同时点亮，$Z$ 是第一个灭的时刻，$Y$ 是第二个灭的时刻，$Y-Z$ 是「剩下那个还要亮多久」——由无记忆性，它又是一个 $E(1)$，期望正好是 1。
+::steps
+$X_i$ 的分布函数 $F(x)=1-e^{-x}$（$x\gt0$），$F(x)=0$（$x\le0$）。
+(1) $P\{Z\gt1\}=P\{X_1\gt1,X_2\gt1\}=P\{X_1\gt1\}P\{X_2\gt1\}=e^{-1}\cdot e^{-1}=e^{-2}$。
+(2) $z\gt0$ 时 $F_Z(z)=1-P\{Z\gt z\}=1-[1-F(z)]^2=1-e^{-2z}$，$z\le0$ 时 $F_Z(z)=0$。
+$f_Z(z)=2e^{-2z}$（$z\gt0$），其余为 0。
+$y\gt0$ 时 $F_Y(y)=P\{X_1\le y,X_2\le y\}=[F(y)]^2=(1-e^{-y})^2$，$y\le0$ 时为 0。
+$f_Y(y)=2(1-e^{-y})e^{-y}=2e^{-y}-2e^{-2y}$（$y\gt0$），其余为 0。
+(3) $EY=\displaystyle\int_0^{+\infty}y\bigl(2e^{-y}-2e^{-2y}\bigr)dy=2\cdot1-2\cdot\frac14=\frac32$（$\int_0^{+\infty}ye^{-ky}dy=\frac1{k^2}$）。
+$EZ=\displaystyle\int_0^{+\infty}z\cdot2e^{-2z}dz=\frac12$。
+$E(Y-Z)=EY-EZ=\dfrac32-\dfrac12=1$。
+~验算：$Y+Z=X_1+X_2$ ⟹ $EY+EZ=2$ ✓。
+::paper
+解 $X_i$ 的分布函数为 $F(x)=\begin{cases}1-e^{-x},&x\gt0,\\0,&x\le0.\end{cases}$
+(1) 由独立性，$P\{Z\gt1\}=P\{X_1\gt1\}P\{X_2\gt1\}=e^{-1}\cdot e^{-1}=e^{-2}$. ⛳3
+(2) $F_Z(z)=1-[1-F(z)]^2=\begin{cases}1-e^{-2z},&z\gt0,\\0,&z\le0,\end{cases}$ 故 $f_Z(z)=\begin{cases}2e^{-2z},&z\gt0,\\0,&z\le0;\end{cases}$ ⛳2
+$F_Y(y)=[F(y)]^2=\begin{cases}(1-e^{-y})^2,&y\gt0,\\0,&y\le0,\end{cases}$ 故 $f_Y(y)=\begin{cases}2e^{-y}-2e^{-2y},&y\gt0,\\0,&y\le0.\end{cases}$ ⛳3
+(3) $EY=\displaystyle\int_0^{+\infty}y\bigl(2e^{-y}-2e^{-2y}\bigr)dy=2-\frac12=\frac32$， ⛳2
+$EZ=\displaystyle\int_0^{+\infty}2ze^{-2z}dz=\frac12$，故 $E(Y-Z)=EY-EZ=1$. ⛳2
+::note
+- {{扣|分布函数、密度都要写分段（含「其他为 0」）}}。
+- $\int_0^{+\infty}x^ne^{-kx}dx=\frac{n!}{k^{n+1}}$ 是概率大题里最常用的积分，背下来能省半分钟一次。
+- 验算：$Y+Z=X_1+X_2$ 永远成立，$EY+EZ=EX_1+EX_2$ 是 max/min 题的免费验算。
+::vary
+$P\{Y\le1\}=$？ >> $(1-e^{-1})^2$。
+$n$ 个独立 $E(1)$ 的最小值服从？ >> $E(n)$，期望 $\frac1n$。

@@ -8,18 +8,19 @@
 <script src="assets/katex/katex.min.js"></script>
 <script src="assets/exam/deep/index.js?v=1"></script>
 <script src="assets/exam/rich/kp.js?v=4"></script>
-<script src="assets/exam/tier.js?v=1"></script>
+<script src="assets/exam/mock_kp.js?v=1"></script>
+<script src="assets/exam/tier.js?v=2"></script>
 <script>
 /* 精研卡、精解、题面里的公式：<span class="m">tex</span>（md＝独占一行），引擎每次重绘后调用 */
 window.renderMathInElement=function(root){ if(!window.katex) return; root.querySelectorAll('.m:not([data-k])').forEach(function(el){ try{ katex.render(el.textContent,el,{throwOnError:false,strict:false,displayMode:el.classList.contains('md')}); }catch(e){} el.setAttribute('data-k',1); }); };
 window.EXAM_CONF={
   key:'cd_online',title:'真题套卷 · 重读报',heading:'读完报，上真题。目标 120 分。',
-  lead:'2010–2026 每年一整套。<b>重制过的年份题面是文字、解析是逐步精解</b>（读题圈画 · 手绘草图 · 每一步 · 灰色＝考场可省 · 橙色＝秒杀 · 蓝虚线点开看知识点），原卷原书裁图收在每题下面备查；2010–2023 已全部重制，2024–2026 留作考前模考、仍是裁图。<b>2016 年以后没拆进报纸，留作整卷。</b>选择题自动判分，填空和解答题对照解析自评。交卷后每题下面多一张<b>精研卡</b>（考什么 · 本质 · 怎么出的 · 举一反三 · 联想搭配），卷首给出复盘限时和必吃透题。<b>每题标着分档和限时，成绩单给出保底、正常、冲刺三条线；证明题里标着「取舍」的那一问，卡住 3 分钟就走。</b>',
+  lead:'2010–2026 每年一整套。<b>重制过的年份题面是文字、解析是逐步精解</b>（读题圈画 · 手绘草图 · 每一步 · 灰色＝考场可省 · 橙色＝秒杀 · 蓝虚线点开看知识点），原卷原书裁图收在每题下面备查；2010–2023 已全部重制，2024–2026 留作考前模考、仍是裁图。<b>2016 年以后没拆进报纸，留作整卷。</b>选择题自动判分，填空和解答题对照解析自评。交卷后每题下面多一张<b>精研卡</b>（考什么 · 本质 · 怎么出的 · 举一反三 · 联想搭配），卷首给出复盘限时和必吃透题。<b>每题标着分档和限时，成绩单给出保底、正常、冲刺三条线；证明题里标着「取舍」的那一问，卡住 3 分钟就走。</b><br><b>最上面的 3001、3002、3003 是三套模拟卷，不是年份</b>（引擎只认四位编号）：按 2021–2026 的结构组卷，题目来自讲义例题改编和自编，没有一道 2010–2026 真题；解答题每一问都从入门问开始，解析里标着「哪怕只会这一步也能拿几分」。成绩同样进套卷台的账本、失分回到期。建议做完精研卷 2021–2023 后插在主力卷之间，每周一套。<a href="大题每问.html">大题只会第一题怎么办 →</a>',
   backHref:'套卷.html',backText:'套卷台',
-  years:[2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025,2026],
-  yearNote:{2010:'选填已进实战',2011:'选填已进实战',2012:'选填已进实战',2013:'选填已进实战',2014:'选填已进实战',2015:'选填已进实战'},
+  years:[2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025,2026,3001,3002,3003],
+  yearNote:{3001:'模拟一 · 基础卷（不是年份）',3002:'模拟二 · 标准卷（不是年份）',3003:'模拟三 · 押题卷（不是年份）',2010:'选填已进实战',2011:'选填已进实战',2012:'选填已进实战',2013:'选填已进实战',2014:'选填已进实战',2015:'选填已进实战'},
   minutes:180,examAt:'2026-12-20T08:30:00+08:00',examName:'数学开考',examWhen:'2026 年 12 月 20 日 8:30（业务课一）',
-  target:120,essayName:'解答',dataPath:'assets/exam/y{Y}.js',ver:1,
+  target:120,essayName:'解答',dataPath:'assets/exam/y{Y}.js',ver:2,
   deepPath:'assets/exam/deep/d{Y}.js',deepVer:1,richPath:'assets/exam/rich/r{Y}.js',richVer:3,deepYears:window.EXAM_DEEP_YEARS||[],
   plan:{
     cut:'2026-12-16',pace:1.5,
