@@ -645,8 +645,7 @@
     if (C.onScore) try{ C.onScore(cur,P,ss,liveScore()); }catch(e){}
     save();
   }
-  function reportHtml(){
-    var score=liveScore(), full=fullScore();
+  function repRows(){
     var groups={};
     P.q.forEach(function(q){
       var g=(C.subjects&&q.subj)?C.subjects[q.subj]:({choice:'选择',blank:'填空',essay:'解答'})[q.type];
@@ -654,8 +653,10 @@
       groups[g].f+=q.score; var v=qScore(q);
       if(v==null) groups[g].p++; else { groups[g].s+=v; if(v<q.score) groups[g].w++; }
     });
-    var pend=P.q.filter(function(q){ return qScore(q)==null; }).length;
-    var rows=Object.keys(groups).map(function(g){ var o=groups[g]; return '<tr><td>'+g+'</td><td><b>'+o.s+'</b> / '+o.f+'</td><td><i class="gb"><i style="width:'+(100*o.s/o.f)+'%"></i></i></td><td>'+(o.w?'失分 '+o.w+' 题':'全对')+(o.p?'，待评 '+o.p:'')+'</td></tr>'; }).join('');
+    return Object.keys(groups).map(function(g){ var o=groups[g]; return '<tr><td>'+g+'</td><td><b>'+o.s+'</b> / '+o.f+'</td><td><i class="gb"><i style="width:'+(100*o.s/o.f)+'%"></i></i></td><td>'+(o.w?'失分 '+o.w+' 题':'全对')+(o.p?'，待评 '+o.p:'')+'</td></tr>'; }).join('');
+  }
+  function reportHtml(){
+    var score=liveScore(), full=fullScore(), rows=repRows(), pend=P.q.filter(function(q){ return qScore(q)==null; }).length;
     var wrong=P.q.filter(function(q){ var v=qScore(q); return v!=null&&v<q.score; });
     return '<section class="rep" id="report"><div class="rep-h"><div class="big"><strong>'+score+'</strong><span>/ '+full+'</span></div><div><b>'+esc(isMock(cur)?nameOf(cur):cur+' 年真题')+(C.target?'，目标 '+C.target:'')+'</b><br>用时 '+fmt(ss.secs)+(pend?'<br><em>还有 '+pend+' 题没登分，在下面每题解答下自评，分数会跟着变</em>':'')+'</div></div>'
       + '<div class="tabw"><table class="rp"><tbody>'+rows+'</tbody></table></div>'
@@ -843,8 +844,12 @@
       if (t.value==='') delete ss.self[k]; else ss.self[k]=Math.max(0,Math.min(q.score,+t.value));
       if (ss.done) recordHist();
       lazySave(); updateSide();
-      var big=document.querySelector('.rep .big strong'); if(big) big.textContent=liveScore(); refreshTier();
+      var big=document.querySelector('.rep .big strong'); if(big) big.textContent=liveScore(); var rt=document.querySelector('.rep table.rp tbody'); if(rt) rt.innerHTML=repRows(); refreshTier();
     }
+  });
+  document.addEventListener('change', function(e){   /* 自评分超出 0–满分时，框里显示的数跟着改成实际记下的分 */
+    var t=e.target, k=t.getAttribute&&t.getAttribute('data-selfn');
+    if (k && cur && ss && ss.self[k]!=null && String(ss.self[k])!==t.value) t.value=ss.self[k];
   });
   var lz; function lazySave(){ clearTimeout(lz); lz=setTimeout(save,400); }
   window.addEventListener('pagehide', save);
